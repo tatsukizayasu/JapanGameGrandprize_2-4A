@@ -6,8 +6,8 @@
 //スティック
 struct Stick
 {
-	short thumb_x;	//横軸値
-	short thumb_y;	//縦軸値
+	short x;	//横軸値
+	short y;	//縦軸値
 };
 
 class PAD_INPUT
@@ -35,12 +35,12 @@ public:
 		}
 
 		//右スティック
-		r_stick.thumb_x = input.ThumbRX;
-		r_stick.thumb_y = input.ThumbRY;
+		r_stick.x = input.ThumbRX;
+		r_stick.y = input.ThumbRY;
 
 		//左スティック
-		l_stick.thumb_x = input.ThumbLX;
-		l_stick.thumb_y = input.ThumbLY;
+		l_stick.x = input.ThumbLX;
+		l_stick.y = input.ThumbLY;
 	}
 
 	//ボタンを押された瞬間
