@@ -156,6 +156,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="PadInput.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="Title.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PadInput.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Title.cpp" />
