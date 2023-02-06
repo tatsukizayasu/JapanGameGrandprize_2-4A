@@ -1,9 +1,13 @@
 #pragma once
-#define MAP_CHIP_SIZE 40
+#include "MapChip.h"
+#include <vector>
 
 class Stage
 {
 private:
+	//MapHipオブジェクト
+	std::vector<MapChip*> mapchip;
+
 	//背景画像
 	int background_images;
 	//ブロック画像
