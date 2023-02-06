@@ -2,8 +2,8 @@
 #include "DxLib.h"
 
 Stage::Stage() {
-	if (LoadDivGraph("Resource/Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) {
-		throw "Resource/Images/Stage/map_chips_test.png";
+	if (LoadDivGraph("Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) {
+		throw "Images/Stage/map_chips_test.png";
 	}
 }
 
