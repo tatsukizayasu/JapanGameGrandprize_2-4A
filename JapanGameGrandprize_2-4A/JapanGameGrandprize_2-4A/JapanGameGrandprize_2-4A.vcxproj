@@ -155,6 +155,8 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="FpsController.h" />
+    <ClInclude Include="GameMain.h" />
+    <ClInclude Include="MapChip.h" />
     <ClInclude Include="PadInput.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SphereCollider.h" />
@@ -165,6 +167,7 @@
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="PadInput.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
