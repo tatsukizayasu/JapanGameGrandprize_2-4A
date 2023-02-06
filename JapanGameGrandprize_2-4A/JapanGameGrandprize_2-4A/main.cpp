@@ -3,6 +3,7 @@
 #include"SceneManager.h"
 #include"FpsController.h"
 #include"Title.h"
+#include "GameMain.h"
 #include "PadInput.h"
 
 
@@ -28,7 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	try
 	{
-		sceneMng = new SceneManager((AbstractScene*)new Title());
+		sceneMng = new SceneManager((AbstractScene*)new GameMain());
 
 	}
 	catch (const char* err)

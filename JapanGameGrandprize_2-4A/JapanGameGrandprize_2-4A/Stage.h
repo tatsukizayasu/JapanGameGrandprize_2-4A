@@ -1,4 +1,6 @@
 #pragma once
+#define MAP_CHIP_SIZE 40
+
 class Stage
 {
 private:
