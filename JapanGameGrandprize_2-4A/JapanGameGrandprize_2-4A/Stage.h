@@ -2,7 +2,10 @@
 class Stage
 {
 private:
+	//”wŒi‰æ‘œ
 	int background_images;
+	//ƒuƒƒbƒN‰æ‘œ
+	int block_images[100];
 
 public:
 	/// <summary>
