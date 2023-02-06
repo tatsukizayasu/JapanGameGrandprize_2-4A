@@ -1,0 +1,22 @@
+#include "Stage.h"
+
+Stage::Stage() {
+
+}
+
+
+Stage::~Stage() {
+
+}
+
+void Stage::Update()
+{
+}
+
+void Stage::Draw()
+{
+}
+
+void Stage::LoadMap()
+{
+}
