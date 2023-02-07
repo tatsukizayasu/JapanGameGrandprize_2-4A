@@ -6,8 +6,10 @@ Stage::Stage() {
 		throw "Images/Stage/map_chips_test.png";
 	}
 
-	for (int i = 0; i < 32;i++) {
-		mapchip.push_back(new MapChip(&block_images[0], { i * MAP_CHIP_SIZE,680 }, { 40,40 }));
+	for (float y = 0; y < 18; y++) {
+		for (float x = 0; x < 32; x++) {
+			mapchip.push_back(new MapChip(&block_images[0], { x * MAP_CHIP_SIZE,y * MAP_CHIP_SIZE}, { 40,40 }));
+		}
 	}
 }
 
@@ -19,16 +21,15 @@ Stage::~Stage() {
 
 void Stage::Update()
 {
-	for (int i = 0; i < 32; i++) {
-		mapchip[i]->Update();
+	for (int i = 0; i < mapchip.size(); i++) {		
+		mapchip.at(i)->Update();
 	}
-	
 }
 
 void Stage::Draw()
 {
-	for (int i = 0; i < 32; i++) {
-		mapchip[i]->Draw();
+	for (int i = 0; i < mapchip.size(); i++) {
+		mapchip.at(i)->Draw();
 	}
 	
 	
