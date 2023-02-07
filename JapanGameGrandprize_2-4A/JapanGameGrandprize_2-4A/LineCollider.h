@@ -3,7 +3,8 @@
 class LineCollider
 {
 protected:
-	Location location[2];	//線の端の座標
+	Location location[2];	//線の端の座標(0:始点,1:終点)
+
 public:
 
 	//SphereColliderとの当たり判定
