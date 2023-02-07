@@ -1,14 +1,24 @@
 #include "Stage.h"
 #include "DxLib.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+#define STAGE_NAME	"sample_stage";
 
 Stage::Stage() {
-	if (LoadDivGraph("Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) {
-		throw "Images/Stage/map_chips_test.png";
+	if (LoadDivGraph("Resource/Images/Stage/map_chips.png", 100, 10, 10, 40, 40, block_images) == -1) {
+		throw "Resource/Images/Stage/map_chips.png";
 	}
 
-	for (float y = 0; y < 18; y++) {
-		for (float x = 0; x < 32; x++) {
-			mapchip.push_back(new MapChip(&block_images[0], { x * MAP_CHIP_SIZE,y * MAP_CHIP_SIZE}, { 40,40 }));
+	LoadMap();
+
+	for (float y = 0; y < map_data.size() - 1; y++) {
+		for (float x = 0; x < map_data.at(0).size(); x++) {
+			int i = map_data.at(y).at(x);
+			//printfDx("%d", i);
+			mapchip.push_back(new MapChip(&block_images[i], { x * MAP_CHIP_SIZE,y * MAP_CHIP_SIZE}, { 40,40 }));
 		}
 	}
 }
@@ -37,4 +47,36 @@ void Stage::Draw()
 
 void Stage::LoadMap()
 {
+	const char* stage_name = STAGE_NAME;
+
+
+	char buf[37];
+	sprintf_s(buf, sizeof(buf), "Resource/Map_Data/%s.csv", stage_name);
+
+	int FileHandle;
+	if ((FileHandle = FileRead_open(buf)) == 0) {
+		exit(1);
+	}
+
+	char str[500];		//ˆês‚Ì’·‚³
+	char* context;
+	int i = 0, j = 0;
+
+	while (FileRead_gets(str, sizeof(str), FileHandle) != -1) {
+
+		char* tmp = strtok_s(str, ",", &context);
+
+		map_data.push_back(std::vector<int>());
+		while (tmp != NULL) {
+
+			map_data[i].push_back(std::stoi(tmp));
+
+			tmp = strtok_s(NULL, ",", &context);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+
+	FileRead_close(FileHandle);
 }

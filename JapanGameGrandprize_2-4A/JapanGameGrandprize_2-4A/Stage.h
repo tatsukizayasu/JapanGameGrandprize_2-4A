@@ -8,6 +8,9 @@ private:
 	//MapHipオブジェクト
 	std::vector<MapChip*> mapchip;
 
+	//マップ配列データ
+	std::vector<std::vector<int>> map_data;
+
 	//背景画像
 	int background_images;
 	//ブロック画像
