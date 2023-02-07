@@ -13,7 +13,7 @@ public:
 	//描画以外の更新を実行
 	virtual void Update()override;
 	//描画
-	virtual void Draw()const override ;
+	virtual void Draw()const override;
 
 
 };
