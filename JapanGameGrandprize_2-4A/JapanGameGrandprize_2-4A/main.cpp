@@ -5,6 +5,7 @@
 #include"Title.h"
 #include "GameMain.h"
 #include "PadInput.h"
+#include"GameMain.h"
 
 
 #define FRAMERATE 60.0 //フレームレート
