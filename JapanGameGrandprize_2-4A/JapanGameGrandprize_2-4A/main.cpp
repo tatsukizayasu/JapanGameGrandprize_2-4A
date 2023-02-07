@@ -4,6 +4,7 @@
 #include"FpsController.h"
 #include"Title.h"
 #include "PadInput.h"
+#include"GameMain.h"
 
 
 #define FRAMERATE 60.0 //フレームレート
@@ -28,7 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	try
 	{
-		sceneMng = new SceneManager((AbstractScene*)new Title());
+		sceneMng = new SceneManager((AbstractScene*)new GameMain());
 
 	}
 	catch (const char* err)
