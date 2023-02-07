@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="BoxCollider.cpp" />
+    <ClCompile Include="BULLET.cpp" />
+    <ClCompile Include="FpsController.cpp" />
+    <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapChip.cpp" />
+    <ClCompile Include="PadInput.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SphereCollider.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -92,5 +92,18 @@
     <ClCompile Include="EnemyGhost.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClInclude Include="AbstractScene.h" />
+    <ClInclude Include="BoxCollider.h" />
+    <ClInclude Include="BULLET.h" />
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="FpsController.h" />
+    <ClInclude Include="GameMain.h" />
+    <ClInclude Include="MapChip.h" />
+    <ClInclude Include="PadInput.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SphereCollider.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
 </Project>
