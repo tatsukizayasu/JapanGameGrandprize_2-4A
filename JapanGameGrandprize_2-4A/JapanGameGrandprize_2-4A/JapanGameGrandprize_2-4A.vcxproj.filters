@@ -78,6 +78,9 @@
     <ClInclude Include="Title.h">
       <Filter>ソースファイル</Filter>
     </ClInclude>
+    <ClInclude Include="StageBuillder\Debug.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

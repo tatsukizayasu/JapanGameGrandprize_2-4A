@@ -154,6 +154,7 @@
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="BULLET.h" />
+    <ClInclude Include="StageBuillder\Debug.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="GameMain.h" />

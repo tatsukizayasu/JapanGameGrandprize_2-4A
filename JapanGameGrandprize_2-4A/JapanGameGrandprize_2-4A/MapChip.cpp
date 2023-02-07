@@ -66,6 +66,7 @@ void MapChip::Update()
 void MapChip::Draw()const
 {
 	DrawExtendGraphF(location.x, location.y, location.x + ex_rate * MAP_CHIP_SIZE, location.y + ex_rate * MAP_CHIP_SIZE, image, TRUE);
+	DrawCollision();
 }
 
 //-----------------------------------
