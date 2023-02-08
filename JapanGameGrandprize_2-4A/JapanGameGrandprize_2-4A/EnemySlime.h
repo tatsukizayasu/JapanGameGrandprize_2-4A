@@ -1,12 +1,17 @@
 #pragma once
 #include"EnemyBase.h"
+#include"SphereCollider.h"
 
-class EnemySlime : public EnemyBase
+class EnemySlime : public EnemyBase , public SphereCollider
 {
 private:
 	int slime_x;
 	int slime_y;
 
+	int draw_x;
+	int draw_y;
+
+	int a;
 public:
 	EnemySlime();
 	~EnemySlime() {};
@@ -18,4 +23,6 @@ public:
 
 	/*void SetSlimeX(int a);
 	int SetSlimeX();*/
+
+	void Hit();
 };
