@@ -8,16 +8,15 @@
 #define STAGE_NAME	"sample_stage";
 
 Stage::Stage() {
-	if (LoadDivGraph("Resource/Images/Stage/map_chips.png", 100, 10, 10, 40, 40, block_images) == -1) {
+	if (LoadDivGraph("Resource/Images/Stage/map_chips.png", 100, 10, 10, 40, 40, block_images + 1) == -1) {
 		throw "Resource/Images/Stage/map_chips.png";
 	}
 
 	LoadMap();
 
-	for (float y = 0; y < map_data.size() - 1; y++) {
+	for (float y = 0; y < map_data.size(); y++) {
 		for (float x = 0; x < map_data.at(0).size(); x++) {
 			int i = map_data.at(y).at(x);
-			//printfDx("%d", i);
 			mapchip.push_back(new MapChip(&block_images[i], { x * MAP_CHIP_SIZE,y * MAP_CHIP_SIZE}, { 40,40 }));
 		}
 	}
@@ -58,7 +57,7 @@ void Stage::LoadMap()
 		exit(1);
 	}
 
-	char str[500];		//ˆês‚Ì’·‚³
+	char str[900];		//ˆês‚Ì’·‚³
 	char* context;
 	int i = 0, j = 0;
 
