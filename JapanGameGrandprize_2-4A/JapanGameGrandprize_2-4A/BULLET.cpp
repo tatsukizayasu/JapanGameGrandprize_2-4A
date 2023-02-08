@@ -30,4 +30,3 @@ void BULLET::Update()
 		delete_flg = true;
 	}
 }
-
