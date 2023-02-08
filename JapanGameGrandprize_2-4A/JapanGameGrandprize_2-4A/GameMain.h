@@ -2,7 +2,7 @@
 #include "AbstractScene.h"
 #include "Player.h"
 
-#include "Stage.h"
+#include "Stage/Stage.h"
 
 class GameMain :
     public AbstractScene
