@@ -170,6 +170,8 @@ bool BoxCollider::HitLine(LineCollider* line_collider)
 			}
 		}
 	}
+
+	return ret;
 }
 //’†SÀ•W‚Ìæ“¾
 Location BoxCollider::GetLocation()const

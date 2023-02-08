@@ -4,6 +4,8 @@
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 
+
+//SphereColliderとの当たり判定
 bool LineCollider::HitSphere(class SphereCollider* sphere_collider)
 {
 
@@ -59,6 +61,7 @@ bool LineCollider::HitSphere(class SphereCollider* sphere_collider)
 	return ret;
 }
 
+//BoxColliderとの当たり判定
 bool LineCollider::HitBox(class BoxCollider* box_collider)
 {
 	bool ret = false; //返り値
@@ -160,6 +163,7 @@ bool LineCollider::HitBox(class BoxCollider* box_collider)
 	return ret;
 }
 
+//LineColliderとの当たり判定
 bool LineCollider::HitLine(LineCollider* line_collider)
 {
 
@@ -196,4 +200,16 @@ bool LineCollider::HitLine(LineCollider* line_collider)
 	}
 
 	return ret;
+}
+
+//線の端の座標の取得
+Location  LineCollider::GetLocation(int i)const
+{
+	return location[i];
+}
+
+//中心座標の設定
+void  LineCollider::SetLocation(Location location, int i)
+{
+	this->location[i] = location;
 }
