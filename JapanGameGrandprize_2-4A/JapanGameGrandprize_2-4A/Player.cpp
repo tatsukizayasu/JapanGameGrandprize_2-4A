@@ -12,13 +12,24 @@ Player::Player()
 	image_size_y = 80;
 	bullet_count = 0;
 	count = 0;
+	jump = 10;
+	jump_power = 0;
 	for (int i = 0; i < 30; i++)
 	{
+		bullet = new BULLET * [30];
 		bullet[i] = nullptr;
 	}
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
+Player::~Player()
+{
+	for (int i = 0; i < 30; i++)
+	{
+		delete bullet[i];
+	}
+	delete[] bullet;
+}
 
 void Player::Draw() const
 {
@@ -46,11 +57,26 @@ void Player::Update()
 
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B))
 	{
-		location.y -= 5;
+		jump_power = jump - GRAVITY;
+		jump++;
+
+		if (jump > 10)
+		{
+			jump = 10;
+		}
+
+		if (location.y > 0)
+		{
+			location.y -= jump;
+		}
 	}
-	else if (location.y >= 500)
+	else
 	{
-		location.y += 5;
+		location.y += GRAVITY;
+		if (location.y > 600)
+		{
+			location.y = 600;
+		}
 	}
 
 	Shoot_Gun();
@@ -60,32 +86,40 @@ void Player::Shoot_Gun()
 {
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		bullet[bullet_count++] = new BULLET(location.x,location.y);
-		if (bullet_count >= 30)
+		if (count % 30 == 0)
 		{
-			bullet_count = 30;
+			bullet[bullet_count++] = new BULLET(location.x, location.y);
+			if (bullet_count >= 30)
+			{
+				bullet_count = 30;
+			}
 		}
+		count++;
 	}
 
 	for (int i = 0; i < bullet_count; i++)
 	{
-		if (bullet[i]->GetDeleteFlg())
-		{
-			delete bullet[i];
-		}
-		else
-		{
-			bullet[i]->Update();
-		}
+
+			if (bullet[i]->GetDeleteFlg())
+			{
+				bullet[i] = nullptr;
+			}
+			else
+			{
+				bullet[i]->Update();
+			}
 	}
 
 	for (int i = 0; i < bullet_count; i++)
 	{
-		if (bullet[i] == nullptr)
+		if (bullet[i] == nullptr && bullet[i + 1] != nullptr)
 		{
 			bullet[i] = bullet[i + 1];
-			delete bullet[i + 1];
-			bullet_count--;
+			bullet[i + 1] = nullptr;
 		}
+	}
+	if (bullet[bullet_count - 1] == nullptr && bullet_count > 0)
+	{
+		bullet_count--;
 	}
 }
