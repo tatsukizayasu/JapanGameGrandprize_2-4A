@@ -1,17 +1,36 @@
 #pragma once
 #include "AbstractScene.h"
 
-//タイトルメニュー
-enum class TITLE_MENU
-{
-  
-};
+
 
 class Title :
     public AbstractScene
     
 {
 private:
+
+    //タイトルメニュー
+    enum class TITLE_MENU
+    {
+        PLAY,
+        OPTION,
+        HELP,
+        END
+    };
+
+    //背景用グラフィックハンドル
+    int background_image;
+
+    //タイトル名用フォントハンドル
+    int title_font;
+
+    //BGM用サウンドハンドル
+    int bgm;
+
+    //選択SE用サウンドハンドル
+    int select_se;
+    //決定SE用サウンドハンドル
+    int decision_se;
     
 
 public:

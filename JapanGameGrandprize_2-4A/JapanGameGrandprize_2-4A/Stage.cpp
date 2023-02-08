@@ -12,8 +12,10 @@ Stage::Stage() {
 		throw "Resource/Images/Stage/map_chips.png";
 	}
 
+	//マップデータの読み込み
 	LoadMap();
 
+	//マップチップの描画情報をセット
 	for (float y = 0; y < map_data.size(); y++) {
 		for (float x = 0; x < map_data.at(0).size(); x++) {
 			int i = map_data.at(y).at(x);
@@ -25,7 +27,14 @@ Stage::Stage() {
 
 Stage::~Stage() {
 
-	//delete mapchip;
+	//マップチップの描画情報をデリーと
+	for (int i = 0; i < mapchip.size(); i++) {
+		delete[] mapchip.at(i);
+	}
+
+	mapchip.clear();
+	mapchip.shrink_to_fit();
+
 }
 
 void Stage::Update()
