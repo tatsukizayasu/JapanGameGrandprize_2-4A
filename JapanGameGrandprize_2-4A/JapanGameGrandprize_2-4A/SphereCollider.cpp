@@ -27,6 +27,10 @@ bool SphereCollider::HitBox(class BoxCollider* box_collider)
 	float sphere_x; //‰~‚ÌÀ•W(x)
 	float sphere_y; //‰~‚ÌÀ•W(y)
 
+	//‘ŠŽè‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ
+	float sub_x[2];
+	float sub_y[2];
+
 	//Šp“x‚ÌŒvŽZ
 	rad = atan2f(box_collider->GetLocation().y - location.y, box_collider->GetLocation().x - location.x);
 
@@ -34,16 +38,14 @@ bool SphereCollider::HitBox(class BoxCollider* box_collider)
 	sphere_x = location.x + (radius * cosf(rad));
 	sphere_y = location.y - (radius * sinf(rad));
 
-	//Ž©•ª‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ
-	//float px1 = location.x - (box_collider.GetErea().width / 2);
-	//float py1 = location.y - (box_collider.GetErea().height / 2);
-	float px1 = box_collider->GetLocation().x;
-	float py1 = box_collider->GetLocation().y;
-	float px2 = px1 + box_collider->GetArea().width;
-	float py2 = py1 + box_collider->GetArea().height;
+	//‘ŠŽè‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ‚ÌŒvŽZ
+	sub_x[0] = box_collider->GetLocation().x - (box_collider->GetArea().width / 2);
+	sub_y[0] = box_collider->GetLocation().y - (box_collider->GetArea().height / 2);
+	sub_x[1] = sub_x[0] + box_collider->GetArea().width;
+	sub_y[1] = sub_y[0] + box_collider->GetArea().height;
 
 
-	if ((px1 < sphere_x) && (sphere_x < px2) && (py1 < sphere_y) && (sphere_y < py2)) //“–‚½‚è”»’è
+	if ((sub_x[0] < sphere_x) && (sphere_x < sub_x[1]) && (sub_y[0] < sphere_y) && (sphere_y < sub_y[1])) //“–‚½‚è”»’è
 	{
 		ret = true;
 	}
