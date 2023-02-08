@@ -157,7 +157,9 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="Element_DamageWall.h" />
+    <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="FpsController.h" />
+    <ClInclude Include="LineCollider.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="PadInput.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Undead.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
@@ -174,6 +177,7 @@
     <ClCompile Include="Element_DamageWall.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="PadInput.cpp" />
@@ -182,6 +186,7 @@
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Undead.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
