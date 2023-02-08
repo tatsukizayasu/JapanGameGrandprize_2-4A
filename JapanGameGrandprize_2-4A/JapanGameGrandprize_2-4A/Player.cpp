@@ -12,13 +12,17 @@ Player::Player()
 	image_size_y = 80;
 	bullet_count = 0;
 	count = 0;
-	jump = 10;
-	jump_power = 0;
+	jump = 10.0;
+	jump_power = 0.0;
+	not_jet_count = 0.0;
+	fuel = 100.0;
 	for (int i = 0; i < 30; i++)
 	{
 		bullet = new BULLET * [30];
 		bullet[i] = nullptr;
 	}
+
+
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
@@ -42,10 +46,13 @@ void Player::Draw() const
 			bullet[i]->Draw();
 		}
 	}
+
+	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power,fuel);
 }
 
 void Player::Update()
-{	
+{
+	count++;
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
 		location.x += 5;
@@ -55,71 +62,107 @@ void Player::Update()
 		location.x -= 5;
 	}
 
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B))
+	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		jump_power = jump - GRAVITY;
-		jump++;
+		Shoot_Gun();
+	}
 
-		if (jump > 10)
+
+	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B) && fuel > 0)
+	{
+		not_jet_count = 0;
+		jump_power = jump - GRAVITY;
+
+		jump += 0.25;
+		fuel -= 0.25;
+
+
+		if (jump_power > 10)
 		{
-			jump = 10;
+			jump_power = 10.0;
+		}
+
+		if (fuel < 0)
+		{
+			fuel = 0;
 		}
 
 		if (location.y > 0)
 		{
-			location.y -= jump;
+			location.y -= jump_power;
 		}
 	}
 	else
 	{
-		location.y += GRAVITY;
-		if (location.y > 600)
+		jump_power = 0;
+		jump = 10;
+		location.y += 10;
+
+
+		if (location.y > 400)
 		{
-			location.y = 600;
+			location.y = 400;
+		}
+
+		if (not_jet_count++ >= 120)
+		{
+			if (fuel < 100)
+			{
+				fuel += 2.5;
+			}
+			else
+			{
+				fuel = 100;
+			}
+		}
+
+		if (not_jet_count >= 120)
+		{
+			not_jet_count = 120;
 		}
 	}
+	 
 
-	Shoot_Gun();
+
+	for (int i = 0; i < bullet_count; i++)
+	{
+		if (bullet[i]->GetDeleteFlg())
+		{
+			bullet[i] = nullptr;
+			SortBullet(i);
+		}
+		else
+		{
+			bullet[i]->Update();
+		}
+	}
 }
 
 void Player::Shoot_Gun()
 {
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
+	if (count % 30 == 0)
 	{
-		if (count % 30 == 0)
+		bullet[bullet_count++] = new BULLET(location.x, location.y);
+		if (bullet_count >= 30)
 		{
-			bullet[bullet_count++] = new BULLET(location.x, location.y);
-			if (bullet_count >= 30)
-			{
-				bullet_count = 30;
-			}
-		}
-		count++;
-	}
-
-	for (int i = 0; i < bullet_count; i++)
-	{
-
-			if (bullet[i]->GetDeleteFlg())
-			{
-				bullet[i] = nullptr;
-			}
-			else
-			{
-				bullet[i]->Update();
-			}
-	}
-
-	for (int i = 0; i < bullet_count; i++)
-	{
-		if (bullet[i] == nullptr && bullet[i + 1] != nullptr)
-		{
-			bullet[i] = bullet[i + 1];
-			bullet[i + 1] = nullptr;
+			bullet_count = 30;
 		}
 	}
-	if (bullet[bullet_count - 1] == nullptr && bullet_count > 0)
+}
+
+void Player::SortBullet(int delete_bullet)
+{
+	for (int i = delete_bullet + 1; i < 30; i++)
 	{
-		bullet_count--;
+		if (bullet[i] == nullptr)
+		{
+			bullet_count--;
+			break;
+		}
+		if (bullet[i - 1] == nullptr)
+		{
+			bullet[i - 1] = bullet[i];
+			bullet[i] = nullptr;
+		}
 	}
 }
