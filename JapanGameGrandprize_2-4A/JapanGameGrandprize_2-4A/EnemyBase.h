@@ -32,7 +32,7 @@ class EnemyBase
 {
 public:
 	//コンストラクタ
-	EnemyBase();
+	EnemyBase() {};
 
 	//デストラクタ
 	~EnemyBase() {};

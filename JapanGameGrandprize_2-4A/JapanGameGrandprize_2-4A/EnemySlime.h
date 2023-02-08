@@ -9,11 +9,13 @@ private:
 
 public:
 	EnemySlime();
+	~EnemySlime() {};
 
 	//描画以外の更新を実行
 	virtual void Update()override;
 	//描画
 	virtual void Draw()const override;
 
-
+	/*void SetSlimeX(int a);
+	int SetSlimeX();*/
 };

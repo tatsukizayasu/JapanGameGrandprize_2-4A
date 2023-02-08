@@ -37,6 +37,12 @@
     <ClCompile Include="Title.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySlime.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -79,10 +85,10 @@
       <Filter>ソースファイル</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBase.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="EnemySlime.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,12 +114,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="SphereCollider.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyBase.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemySlime.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <Filter Include="ソースファイル">
