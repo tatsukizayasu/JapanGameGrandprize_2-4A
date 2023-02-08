@@ -15,6 +15,8 @@ public:
 	//BoxCollider“–‚½‚è”»’è
 	bool HitBox(class BoxCollider* box_collider);
 
+	bool HitLine(class LineCollider* line_collider);
+
 	//’†SÀ•W‚Ìæ“¾
 	Location GetLocation() const 
 	{
