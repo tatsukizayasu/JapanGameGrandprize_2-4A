@@ -26,7 +26,7 @@ void KeyManager::Update()
 }
 
 
-//キーボード入力　引数：INPUT_KEY_anyKey
+//キーボード入力　引数：KEY_INPUT_anyKey
 
 //----------------
 // キークリック

@@ -6,10 +6,18 @@
 //------------------------------------
 StageBuilder::StageBuilder()
 {
+	mouse = new SphereCollider();
 	if (LoadDivGraph("Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) {
 		throw "Images/Stage/map_chips_test.png";
 	}
-	mouse_pos = {};
+	mode = BRUSH_MODE;
+
+	menu_cursor = 0;
+	arrow[0] = '>';
+	for (int i = 1; i < MENU_NUM; i++)
+	{
+		arrow[i] = ' ';
+	}
 }
 
 //------------------------------------
@@ -17,6 +25,7 @@ StageBuilder::StageBuilder()
 //------------------------------------
 StageBuilder::~StageBuilder()
 {
+	delete mouse;
 	for (int i = 0; i < map_chips.size(); i++)
 	{
 		delete map_chips[i];
@@ -30,10 +39,22 @@ StageBuilder::~StageBuilder()
 void StageBuilder::Update()
 {
 	KeyManager::Update(); //StageBuilder上でしか使わないため、ソースコードの散らばりを避けています。
-	MouseUpdate();
-	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+	UpdateMouse();
+	
+	if (KeyManager::OnKeyClicked(KEY_INPUT_ESCAPE))mode = MENU_MODE;
+	switch (mode)
 	{
-		MakeMapChip();
+	case MENU_MODE:
+		UpdateMenu();
+		break;
+	
+	case BRUSH_MODE:
+		UpdateBrush();
+		break;
+	
+	case MODULATION_MODE:
+		UpdateModulation();
+		break;
 	}
 }
 
@@ -51,17 +72,109 @@ void StageBuilder::Draw()const
 	}
 
 	DrawFrame();
+	if (mode == MENU_MODE)DrawMenu();
+}
+
+//------------------------------------
+// メニューモードの更新
+//------------------------------------
+void StageBuilder::UpdateMenu()
+{
+	if (KeyManager::OnKeyClicked(KEY_INPUT_S) || KeyManager::OnKeyClicked(KEY_INPUT_DOWN))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+		menu_cursor++;
+
+		if (menu_cursor > MENU_NUM - 1)
+		{
+			menu_cursor = 0;
+		}
+
+		arrow[menu_cursor] = tmp;
+	}
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_W) || KeyManager::OnKeyClicked(KEY_INPUT_UP))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+		menu_cursor--;
+		if (menu_cursor < 0)
+		{
+			menu_cursor = MENU_NUM - 1;
+		}
+
+		arrow[menu_cursor] = tmp;
+	}
+	
+	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+		mode = menu_cursor;
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+	}
+}
+
+//------------------------------------
+// ブラシモードの更新
+//------------------------------------
+void StageBuilder::UpdateBrush()
+{
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+	{
+		MakeMapChip();
+	}
+}
+
+//------------------------------------
+// モデュレーションモードの更新
+//------------------------------------
+void StageBuilder::UpdateModulation()
+{
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+	{
+		mouse->SetLocation(mouse_pos);
+		for (int i = 0; i < map_chips.size(); i++)
+		{
+			if (mouse->HitBox(map_chips[i]))
+			{
+				delete map_chips[i];
+				map_chips.erase(map_chips.begin() + i);
+				break;
+			}
+		}
+	}
 }
 
 //------------------------------------
 // マウスの更新
 //------------------------------------
-void StageBuilder::MouseUpdate()
+void StageBuilder::UpdateMouse()
 {
 	int x, y;
 	GetMousePoint(&x, &y);
 	mouse_pos.x = (float)x;
 	mouse_pos.y = (float)y;
+}
+
+//------------------------------------
+// メニューの描画
+//------------------------------------
+void StageBuilder::DrawMenu()const
+{
+	int font_size = 20;
+	int current = 0;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+	DrawBoxAA(0, 0, 320, font_size * MENU_NUM,0x000000,TRUE);
+	DrawBoxAA(0, 0, 320, font_size * MENU_NUM,0xFFFFFF,FALSE,2);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	SetFontSize(font_size);
+	DrawFormatString(0, font_size * current, 0xFFFFFF, " %c BRUSH_MODE", arrow[current]);
+	current++;
+	DrawFormatString(0, font_size * current, 0xFFFFFF, " %c MODULATION_MODE", arrow[current]);
+	current++;
 }
 
 //------------------------------------
@@ -87,8 +200,12 @@ void StageBuilder::DrawFrame()const
 //------------------------------------
 void StageBuilder::MakeMapChip()
 {
+	float pos_x = (int)(mouse_pos.x / MAP_CHIP_SIZE)
+		* MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2;
+	float pos_y = (int)(mouse_pos.y / MAP_CHIP_SIZE) 
+		* MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2;
 	map_chips.push_back(new MapChip(&block_images[0],
-		{ mouse_pos.x,mouse_pos.y },
+		{ pos_x,pos_y },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
 
