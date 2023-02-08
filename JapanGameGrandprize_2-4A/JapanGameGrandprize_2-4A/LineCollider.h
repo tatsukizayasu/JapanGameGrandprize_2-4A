@@ -17,9 +17,15 @@ public:
 	bool HitLine(LineCollider* line_collider);
 
 	//線の端の座標の取得
-	Location GetLocation(int i)const;
+	Location GetLocation(int i)const
+	{
+		return location[i];
+	}
 
 	//中心座標の設定
-	void SetLocation(Location location);
+	void SetLocation(Location location, int i)
+	{
+		this->location[i] = location;
+	}
 };
 

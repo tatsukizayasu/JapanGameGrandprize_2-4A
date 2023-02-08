@@ -15,7 +15,7 @@ bool LineCollider::HitSphere(class SphereCollider* sphere_collider)
 	float unit_vector;	//単位ベクトル
 	float shortest_distance; //線分と円の最短の距離
 
-	float inner_product[2]; //内積(0:x,1:y)
+	float inner_product[2]; //内積
 	float center_distance[2]; //円の中心との距離(0:線分の始点　1:線分の終点)
 
 	//自分のLineColliderの始点と終点とのベクトルの計算
