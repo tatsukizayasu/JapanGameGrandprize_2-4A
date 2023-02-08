@@ -7,8 +7,6 @@
 #include "PadInput.h"
 #include"GameMain.h"
 
-#include "StageBuillder/StageBuilder.h"
-
 #define FRAMERATE 60.0 //フレームレート
 
 /***********************************************
@@ -54,9 +52,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	while ((ProcessMessage() == 0) && (sceneMng->Update() != nullptr)) {
 
 		ClearDrawScreen();		// 画面の初期化
-#ifdef STAGE_BUILDER
-		KeyManager::Update();
-#endif
 		PAD_INPUT::UpdateKey();
 		sceneMng->Draw();
 		FPSC.All();

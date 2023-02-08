@@ -41,9 +41,5 @@ public:
 	/// ステージの読み込み
 	/// </summary>
 	void LoadMap();
-
-#ifdef STAGE_BUILDER
-	void MakeMapChip();
-#endif
 };
 

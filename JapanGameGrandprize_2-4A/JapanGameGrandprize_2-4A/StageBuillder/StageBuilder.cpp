@@ -17,7 +17,11 @@ StageBuilder::StageBuilder()
 //------------------------------------
 StageBuilder::~StageBuilder()
 {
-
+	for (int i = 0; i < map_chips.size(); i++)
+	{
+		delete map_chips[i];
+	}
+	map_chips.clear();
 }
 
 //------------------------------------
@@ -25,11 +29,11 @@ StageBuilder::~StageBuilder()
 //------------------------------------
 void StageBuilder::Update()
 {
+	KeyManager::Update(); //StageBuilder上でしか使わないため、ソースコードの散らばりを避けています。
+	MouseUpdate();
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 	{
-		int x, y;
-		GetMousePoint(&x, &y);
-		mouse_pos.x = (float)x;
-		mouse_pos.y = (float)y;
+		MakeMapChip();
 	}
 }
 
@@ -40,22 +44,53 @@ void StageBuilder::Draw()const
 {
 	DrawCircleAA(mouse_pos.x, mouse_pos.y, 2, 10, 0xFFFFFF);
 	DrawCircleAA(mouse_pos.x, mouse_pos.y, 1, 10, 0x000000);
+
+	for (int i = 0; i < map_chips.size(); i++)
+	{
+		map_chips[i]->Draw();
+	}
+
+	DrawFrame();
+}
+
+//------------------------------------
+// マウスの更新
+//------------------------------------
+void StageBuilder::MouseUpdate()
+{
+	int x, y;
+	GetMousePoint(&x, &y);
+	mouse_pos.x = (float)x;
+	mouse_pos.y = (float)y;
+}
+
+//------------------------------------
+// 格子の描画
+//------------------------------------
+void StageBuilder::DrawFrame()const
+{
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 127);
+	for (int i = 0; i * MAP_CHIP_SIZE < SCREEN_HEIGHT; i++)
+	{
+		DrawLine(0, i * MAP_CHIP_SIZE, SCREEN_WIDTH, i * MAP_CHIP_SIZE, 0xFFFFFF);
+	}
+
+	for (int i = 0; i * MAP_CHIP_SIZE < SCREEN_WIDTH; i++)
+	{
+		DrawLine(i * MAP_CHIP_SIZE, 0, i * MAP_CHIP_SIZE, SCREEN_HEIGHT, 0xFFFFFF);
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 //------------------------------------
 // マップチップの作成
 //------------------------------------
-MapChip* StageBuilder::MakeMapChip()
+void StageBuilder::MakeMapChip()
 {
-	return new MapChip(&block_images[0],
+	map_chips.push_back(new MapChip(&block_images[0],
 		{ mouse_pos.x,mouse_pos.y },
-		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE });
+		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
-
-//------------------------------------
-// 
-//------------------------------------
-
 
 //------------------------------------
 // 

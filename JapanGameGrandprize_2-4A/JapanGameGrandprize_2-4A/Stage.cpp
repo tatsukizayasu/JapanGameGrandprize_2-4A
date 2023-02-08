@@ -31,20 +31,19 @@ Stage::~Stage() {
 
 void Stage::Update()
 {
-	for (int i = 0; i < 32; i++) {
-		mapchip[i]->Update();
+	for (int i = 0; i < mapchip.size(); i++) {
+		mapchip.at(i)->Update();
 	}
 
 #ifdef STAGE_BUILDER
 	stage_builder->Update();
-	MakeMapChip();
 #endif
 }
 
 void Stage::Draw()
 {
-	for (int i = 0; i < 32; i++) {
-		mapchip[i]->Draw();
+	for (int i = 0; i < mapchip.size(); i++) {
+		mapchip.at(i)->Draw();
 	}
 
 #ifdef STAGE_BUILDER
@@ -56,14 +55,3 @@ void Stage::Draw()
 void Stage::LoadMap()
 {
 }
-
-
-#ifdef STAGE_BUILDER
-void Stage::MakeMapChip()
-{
-	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
-	{
-		mapchip.push_back(stage_builder->MakeMapChip());
-	}
-}
-#endif
