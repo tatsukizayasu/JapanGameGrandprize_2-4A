@@ -13,6 +13,8 @@
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Element.cpp" />
+    <ClCompile Include="Element_DamageWall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h" />
@@ -28,5 +30,7 @@
     <ClInclude Include="SphereCollider.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Element.h" />
+    <ClInclude Include="Element_DamageWall.h" />
   </ItemGroup>
 </Project>
