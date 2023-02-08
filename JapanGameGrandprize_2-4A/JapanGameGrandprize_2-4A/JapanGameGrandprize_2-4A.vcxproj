@@ -154,6 +154,8 @@
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="BULLET.h" />
+    <ClInclude Include="StageBuillder\KeyManager.h" />
+    <ClInclude Include="StageBuillder\StageBuilder.h" />
     <ClInclude Include="StageBuillder\Debug.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="FpsController.h" />
@@ -178,6 +180,8 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StageBuillder\KeyManager.cpp" />
+    <ClCompile Include="StageBuillder\StageBuilder.cpp" />
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

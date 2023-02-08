@@ -2,11 +2,17 @@
 #include "MapChip.h"
 #include <vector>
 
+#include "StageBuillder/StageBuilder.h"
+
 class Stage
 {
 private:
 	//MapHipオブジェクト
 	std::vector<MapChip*> mapchip;
+
+#ifdef STAGE_BUILDER
+	StageBuilder* stage_builder;
+#endif
 
 	//背景画像
 	int background_images;
@@ -35,5 +41,9 @@ public:
 	/// ステージの読み込み
 	/// </summary>
 	void LoadMap();
+
+#ifdef STAGE_BUILDER
+	void MakeMapChip();
+#endif
 };
 
