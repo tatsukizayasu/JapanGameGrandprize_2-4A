@@ -95,8 +95,8 @@ bool BoxCollider::HitLine(LineCollider* line_collider)
 	//Ž©•ª‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ‚ÌŒvŽZ
 	my_x[0] = location.x - (area.width / 2);
 	my_y[0] = location.y - (area.height / 2);
-	my_x[1] = sub_x[0] + area.width;
-	my_y[1] = sub_y[0] + area.height;
+	my_x[1] = my_x[0] + area.width;
+	my_y[1] = my_y[0] + area.height;
 
 	//‘ŠŽè‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ‚ÌŒvŽZ
 	if (line_collider->GetLocation(0).x <= line_collider->GetLocation(1).x)
