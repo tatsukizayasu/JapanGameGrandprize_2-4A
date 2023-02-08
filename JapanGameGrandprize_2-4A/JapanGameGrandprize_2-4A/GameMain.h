@@ -4,6 +4,8 @@
 
 #include "Stage.h"
 
+#include"EnemyGhost.h"
+
 class GameMain :
     public AbstractScene
 {
@@ -11,6 +13,7 @@ private:
     Player* player;
     //stage�I�u�W�F�N�g
     Stage* stage;
+    EnemyGhost* enemyghost;
 
 public:
     //�R���X�g���N�^

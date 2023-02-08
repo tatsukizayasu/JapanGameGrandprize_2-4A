@@ -5,6 +5,7 @@ GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
+	enemyghost = new EnemyGhost();
 }
 
 GameMain::~GameMain()
@@ -17,6 +18,7 @@ AbstractScene* GameMain::Update()
 
 	player->Update();
 	stage->Update();
+	enemyghost->Update();
 	return this;
 }
 
@@ -24,5 +26,6 @@ void GameMain::Draw()const
 {
 	player->Draw();
 	stage->Draw();
+	enemyghost->Draw();
 }
 
