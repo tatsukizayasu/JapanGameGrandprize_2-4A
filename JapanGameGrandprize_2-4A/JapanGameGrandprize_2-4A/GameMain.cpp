@@ -1,18 +1,22 @@
 #include "DxLib.h"
 #include "GameMain.h"
 #include "Title.h"
+#include "CameraWork.h"
 
 GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
+	camera_work = new CameraWork(100,300);
 
 	input_margin = 0;
 }
 
 GameMain::~GameMain()
 {
+	delete player;
 	delete stage;
+	delete camera_work;
 }
 
 AbstractScene* GameMain::Update()
@@ -27,6 +31,7 @@ AbstractScene* GameMain::Update()
 		input_margin++;
 	}
 
+	camera_work->Update();
 	player->Update();
 	stage->Update();
 	return this;

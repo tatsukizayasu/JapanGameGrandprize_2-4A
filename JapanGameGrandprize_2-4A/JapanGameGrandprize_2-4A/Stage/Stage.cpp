@@ -27,18 +27,23 @@ Stage::Stage() {
 
 Stage::~Stage() {
 
-	//マップチップの描画情報をデリーと
+	//マップチップの描画情報オブジェクトを削除
 	for (int i = 0; i < mapchip.size(); i++) {
-		delete[] mapchip.at(i);
+		delete mapchip.at(i);
 	}
 
 	mapchip.clear();
 	mapchip.shrink_to_fit();
 
+	//マップチップ画像を削除
+	for (int i = 0; i < 100; i++) {
+		DeleteGraph(block_images[i]);
+	}
 }
 
 void Stage::Update()
 {
+
 	for (int i = 0; i < mapchip.size(); i++) {		
 		mapchip.at(i)->Update();
 	}
@@ -46,6 +51,8 @@ void Stage::Update()
 
 void Stage::Draw()
 {
+
+	//マップチップ		描画
 	for (int i = 0; i < mapchip.size(); i++) {
 		mapchip.at(i)->Draw();
 	}

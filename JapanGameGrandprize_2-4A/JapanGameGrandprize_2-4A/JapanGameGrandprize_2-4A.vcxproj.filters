@@ -43,6 +43,7 @@
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="CameraWork.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -90,6 +91,7 @@
     <ClInclude Include="Stage\MapChip.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="CameraWork.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

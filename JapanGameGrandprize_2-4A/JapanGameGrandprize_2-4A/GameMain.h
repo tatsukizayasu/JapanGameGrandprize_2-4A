@@ -8,9 +8,12 @@ class GameMain :
     public AbstractScene
 {
 private:
+
+    //各クラスのオブジェクト
     Player* player;
-    //stage�I�u�W�F�N�g
     Stage* stage;
+    CameraWork* camera_work;
+
 
     //操作間隔時間
     int input_margin;
