@@ -49,6 +49,7 @@
     <ClCompile Include="Undead.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyGhost.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -105,6 +106,7 @@
     <ClInclude Include="Undead.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyGhost.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
