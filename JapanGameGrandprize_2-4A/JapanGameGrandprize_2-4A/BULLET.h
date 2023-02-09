@@ -6,7 +6,7 @@ private:
 	float bullet_x, bullet_y;
 	bool delete_flg;
 
-	EfectExplosion* efect_explosion;
+	EfectExplosion* EfectExplosion;
 public:
 	BULLET();
 	BULLET(float,float);

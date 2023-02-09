@@ -14,7 +14,7 @@ Player::Player()
 	count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
-	not_jet_count = 0;
+	not_jet_count = 0.0;
 	fuel = 100.0;
 	for (int i = 0; i < 30; i++)
 	{

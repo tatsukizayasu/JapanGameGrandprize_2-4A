@@ -12,11 +12,9 @@ private:
 
 public:
 	EfectExplosion();
-	EfectExplosion(float,float);
 	~EfectExplosion() {};
 	void Draw() const;
 	void Update();
 
-	bool GetDeleteFlg() { return delete_flg; }
 };
 
