@@ -12,6 +12,9 @@ private:
     //stage�I�u�W�F�N�g
     Stage* stage;
 
+    //操作間隔時間
+    int input_margin;
+
 public:
     //�R���X�g���N�^
     GameMain();
