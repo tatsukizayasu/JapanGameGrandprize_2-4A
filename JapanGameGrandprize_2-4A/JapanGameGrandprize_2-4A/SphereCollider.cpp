@@ -79,7 +79,7 @@ bool SphereCollider::HitLine(class LineCollider* line_collider)
 	vector_y[2] = location.y - line_collider->GetLocation(1).y;
 
 	//単位ベクトルの計算
-	unit_vector = sqrt(pow(vector_x[0], 2) + pow(vector_y[0], 2));
+	unit_vector = sqrtf(powf(vector_x[0], 2) + powf(vector_y[0], 2));
 
 	//最短距離の計算
 	shortest_distance = (vector_x[1] * (vector_x[0] / unit_vector)) - (vector_y[1] * (vector_y[0] / unit_vector));
