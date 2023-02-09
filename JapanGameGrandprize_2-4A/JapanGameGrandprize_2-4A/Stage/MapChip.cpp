@@ -6,9 +6,8 @@
 //-----------------------------------
 MapChip::MapChip()
 {
-	image = LoadGraph("images/stage/no_image.png");
-	location = {30,30};
-	area = {60,60};
+	location = { 30,30 };
+	area = { 60,60 };
 	image_size = { 600,600 };
 	ex_rate = area.height / image_size.height;
 }
@@ -65,7 +64,11 @@ void MapChip::Update()
 //-----------------------------------
 void MapChip::Draw()const
 {
-	DrawExtendGraphF(location.x, location.y, location.x + ex_rate * MAP_CHIP_SIZE, location.y + ex_rate * MAP_CHIP_SIZE, image, TRUE);
+	//printfDx("camera_x:%f\tcamera_y:%f\n", camera_x, camera_y);
+	int x = location.x/* + camera_x*/;
+	int y = location.y/* + camera_y*/;
+
+	DrawExtendGraphF(x, y, x + ex_rate * MAP_CHIP_SIZE, y + ex_rate * MAP_CHIP_SIZE, image, TRUE);
 }
 
 //-----------------------------------

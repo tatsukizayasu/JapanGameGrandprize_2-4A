@@ -1,5 +1,5 @@
 #pragma once
-#include "BoxCollider.h"
+#include "../BoxCollider.h"
 
 #define MAP_CHIP_SIZE 40.f
 
