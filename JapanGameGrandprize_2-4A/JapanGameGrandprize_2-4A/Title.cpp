@@ -1,7 +1,7 @@
-#include "DxLib.h"
 #include "Title.h"
+#include "DxLib.h"
 #include "GameMain.h"
-#include"PadInput.h"
+#include "PadInput.h"
 
 //-----------------------------------
 // コンストラクタ

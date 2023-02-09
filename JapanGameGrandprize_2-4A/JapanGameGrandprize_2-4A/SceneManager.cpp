@@ -1,7 +1,7 @@
-#include"DxLib.h"
-#include<time.h>
+#include "DxLib.h"
+#include <time.h>
 #include "SceneManager.h"
-#include"FpsController.h"
+#include "FpsController.h"
 
 //-----------------------------------
 // çXêV

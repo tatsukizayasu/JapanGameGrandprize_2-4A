@@ -1,11 +1,11 @@
-#include"DxLib.h"
-#include"Define.h"
-#include"SceneManager.h"
-#include"FpsController.h"
-#include"Title.h"
+#include "DxLib.h"
+#include "Define.h"
+#include "SceneManager.h"
+#include "FpsController.h"
+#include "Title.h"
 #include "GameMain.h"
 #include "PadInput.h"
-#include"GameMain.h"
+#include "GameMain.h"
 
 #define FRAMERATE 60.0 //フレームレート
 

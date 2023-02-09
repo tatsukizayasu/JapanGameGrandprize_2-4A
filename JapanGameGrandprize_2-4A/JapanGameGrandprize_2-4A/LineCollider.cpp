@@ -1,8 +1,9 @@
-#define _USE_MATH_DEFINES
-#include<math.h>
 #include "LineCollider.h"
 #include "BoxCollider.h"
 #include "SphereCollider.h"
+#include <math.h>
+
+#define _USE_MATH_DEFINES
 
 //-----------------------------------
 // SphereCollider‚Æ‚Ì“–‚½‚è”»’è

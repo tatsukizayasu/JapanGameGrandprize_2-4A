@@ -1,5 +1,5 @@
-#include "DxLib.h"
 #include "GameMain.h"
+#include "DxLib.h"
 #include "Title.h"
 #include "CameraWork.h"
 
