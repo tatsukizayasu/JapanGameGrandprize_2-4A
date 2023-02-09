@@ -27,12 +27,14 @@ Title::~Title()
 AbstractScene* Title::Update()
 {
 	//シーン切り替えテスト		デバック
-	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) {
+	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) 
+	{
 		input_margin = 0;
 		return new GameMain();
 	}
 
-	if (input_margin < 30) {
+	if (input_margin < 30) 
+	{
 		input_margin++;
 	}
 
@@ -45,16 +47,19 @@ void Title::Draw()const
 	DrawStringToHandle(GetDrawCenterX("タイトル",title_font), 100, "タイトル", 0x56F590, title_font, 0xFFFFFF);
 }
 
-int Title::GetDrawCenterX(const char* string, int font_handle, int margin)const {
+int Title::GetDrawCenterX(const char* string, int font_handle, int margin)const
+{
 
 	//画面幅
 	const int screenX = 1280;
 
-	if (margin >= screenX || margin <= -screenX) {
+	if (margin >= screenX || margin <= -screenX)
+	{
 		margin = 0;
 	}
 
-	if (font_handle == 0) {
+	if (font_handle == 0) 
+	{
 		font_handle = DX_DEFAULT_FONT_HANDLE;
 	}
 

@@ -31,4 +31,3 @@ public:
     //�`��Ɋւ��邱�Ƃ�����
     void Draw() const override;
 };
-

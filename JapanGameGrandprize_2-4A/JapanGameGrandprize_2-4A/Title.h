@@ -5,7 +5,6 @@
 
 class Title :
     public AbstractScene
-    
 {
 private:
 
@@ -57,4 +56,3 @@ public:
     /// <param name="margin">’†‰›‚ÌXÀ•W‚ÉŠÔŠu‚ğ‹ó‚¯‚é’l</param>
     int GetDrawCenterX(const char* string, int font_handle = 0, int margin = 0) const;
 };
-

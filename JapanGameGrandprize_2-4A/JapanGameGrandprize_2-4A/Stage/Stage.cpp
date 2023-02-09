@@ -7,8 +7,10 @@
 
 #define STAGE_NAME	"sample_stage";
 
-Stage::Stage() {
-	if (LoadDivGraph("Resource/Images/Stage/map_chips.png", 100, 10, 10, 40, 40, block_images + 1) == -1) {
+Stage::Stage()
+{
+	if (LoadDivGraph("Resource/Images/Stage/map_chips.png", 100, 10, 10, 40, 40, block_images + 1) == -1)
+	{
 		throw "Resource/Images/Stage/map_chips.png";
 	}
 
@@ -16,8 +18,10 @@ Stage::Stage() {
 	LoadMap();
 
 	//マップチップの描画情報をセット
-	for (float y = 0; y < map_data.size(); y++) {
-		for (float x = 0; x < map_data.at(0).size(); x++) {
+	for (float y = 0; y < map_data.size(); y++) 
+	{
+		for (float x = 0; x < map_data.at(0).size(); x++) 
+		{
 			int i = map_data.at(y).at(x);
 			mapchip.push_back(new MapChip(&block_images[i], { x * MAP_CHIP_SIZE,y * MAP_CHIP_SIZE}, { 40,40 }));
 		}
@@ -25,10 +29,12 @@ Stage::Stage() {
 }
 
 
-Stage::~Stage() {
+Stage::~Stage()
+{
 
 	//マップチップの描画情報オブジェクトを削除
-	for (int i = 0; i < mapchip.size(); i++) {
+	for (int i = 0; i < mapchip.size(); i++)
+	{
 		delete mapchip.at(i);
 	}
 
@@ -36,7 +42,8 @@ Stage::~Stage() {
 	mapchip.shrink_to_fit();
 
 	//マップチップ画像を削除
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 100; i++) 
+	{
 		DeleteGraph(block_images[i]);
 	}
 }
@@ -44,7 +51,8 @@ Stage::~Stage() {
 void Stage::Update()
 {
 
-	for (int i = 0; i < mapchip.size(); i++) {		
+	for (int i = 0; i < mapchip.size(); i++)
+	{		
 		mapchip.at(i)->Update();
 	}
 }
@@ -53,7 +61,8 @@ void Stage::Draw()
 {
 
 	//マップチップ		描画
-	for (int i = 0; i < mapchip.size(); i++) {
+	for (int i = 0; i < mapchip.size(); i++)
+	{
 		mapchip.at(i)->Draw();
 	}
 	
@@ -69,7 +78,8 @@ void Stage::LoadMap()
 	sprintf_s(buf, sizeof(buf), "Resource/Map_Data/%s.csv", stage_name);
 
 	int FileHandle;
-	if ((FileHandle = FileRead_open(buf)) == 0) {
+	if ((FileHandle = FileRead_open(buf)) == 0) 
+	{
 		exit(1);
 	}
 
@@ -77,12 +87,14 @@ void Stage::LoadMap()
 	char* context;
 	int i = 0, j = 0;
 
-	while (FileRead_gets(str, sizeof(str), FileHandle) != -1) {
+	while (FileRead_gets(str, sizeof(str), FileHandle) != -1)
+	{
 
 		char* tmp = strtok_s(str, ",", &context);
 
 		map_data.push_back(std::vector<int>());
-		while (tmp != NULL) {
+		while (tmp != NULL) 
+		{
 
 			map_data[i].push_back(std::stoi(tmp));
 

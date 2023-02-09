@@ -17,4 +17,3 @@ public:
 
 	bool GetDeleteFlg() { return delete_flg; }
 };
-

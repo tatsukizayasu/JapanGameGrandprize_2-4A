@@ -23,4 +23,3 @@ public:
 	~CameraWork();
 	void Update();
 };
-

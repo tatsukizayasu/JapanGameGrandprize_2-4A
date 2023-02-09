@@ -33,4 +33,3 @@ public:
 	float GetLocationY() { return location.y; }
 
 };
-

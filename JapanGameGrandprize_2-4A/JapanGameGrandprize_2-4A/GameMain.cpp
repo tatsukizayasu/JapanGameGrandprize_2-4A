@@ -22,12 +22,14 @@ GameMain::~GameMain()
 AbstractScene* GameMain::Update()
 {
 	//シーン切り替えテスト		デバック
-	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) {
+	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) 
+	{
 		input_margin = 0;
 		return new Title();
 	}
 
-	if (input_margin < 30) {
+	if (input_margin < 30) 
+	{
 		input_margin++;
 	}
 

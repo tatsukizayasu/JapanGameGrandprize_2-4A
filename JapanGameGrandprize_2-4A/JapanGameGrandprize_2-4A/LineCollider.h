@@ -22,4 +22,3 @@ public:
 	//’†SÀ•W‚Ìİ’è
 	void SetLocation(Location location, int i);
 };
-

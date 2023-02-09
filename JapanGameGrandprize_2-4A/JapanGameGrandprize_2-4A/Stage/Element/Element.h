@@ -4,4 +4,3 @@ class Element :
     public Stage
 {
 };
-
