@@ -23,10 +23,11 @@ void BULLET::Draw() const
 
 void BULLET::Update()
 {
-	bullet_x++;
+	bullet_x += 10;
 
 	if (bullet_x > 1280)
 	{
 		delete_flg = true;
 	}
 }
+

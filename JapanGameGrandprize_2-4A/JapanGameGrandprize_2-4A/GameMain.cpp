@@ -22,6 +22,9 @@ AbstractScene* GameMain::Update()
 
 void GameMain::Draw()const
 {
+	//”wŒi
+	SetBackgroundColor(149, 249, 253);
+
 	player->Draw();
 	stage->Draw();
 }
