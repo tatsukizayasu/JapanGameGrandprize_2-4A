@@ -156,7 +156,6 @@
     <ClInclude Include="BULLET.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="EnemyBase.h" />
-    <ClInclude Include="EnemyGhost.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="MapChip.h" />
@@ -170,7 +169,6 @@
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
-    <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
