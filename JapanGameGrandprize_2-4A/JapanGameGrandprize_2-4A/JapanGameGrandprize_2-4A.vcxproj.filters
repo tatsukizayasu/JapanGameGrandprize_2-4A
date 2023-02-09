@@ -46,7 +46,9 @@
     <ClCompile Include="Undead.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CameraWork.cpp" />
+    <ClCompile Include="CameraWork.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -85,8 +87,6 @@
     <ClInclude Include="EnemyBase.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>ヘッダーファイル</Filter>
     <ClInclude Include="Stage\Stage.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
@@ -105,7 +105,9 @@
     <ClInclude Include="Stage\MapChip.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="CameraWork.h" />
+    <ClInclude Include="CameraWork.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
