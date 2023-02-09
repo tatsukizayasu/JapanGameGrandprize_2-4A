@@ -38,6 +38,7 @@ CameraWork::~CameraWork()
 void CameraWork::Update()
 {
 
+#ifdef _DEBUG
 	if (input_margin < 10) 
 	{
 		input_margin++;
@@ -76,4 +77,5 @@ void CameraWork::Update()
 		}
 		input_margin = 0;
 	}
+#endif
 }

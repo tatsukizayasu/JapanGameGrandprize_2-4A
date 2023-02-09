@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "Title.h"
 #include "CameraWork.h"
+#include "PadInput.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -30,8 +31,9 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+#ifdef _DEBUG
 	//シーン切り替えテスト		デバック
-	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) 
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_RIGHT) && input_margin >= 30)
 	{
 		input_margin = 0;
 		return new Title();
@@ -41,6 +43,7 @@ AbstractScene* GameMain::Update()
 	{
 		input_margin++;
 	}
+#endif
 
 	camera_work->Update();
 	player->Update();
