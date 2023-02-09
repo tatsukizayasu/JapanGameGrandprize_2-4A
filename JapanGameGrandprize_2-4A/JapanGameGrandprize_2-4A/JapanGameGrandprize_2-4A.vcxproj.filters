@@ -52,6 +52,9 @@
     <ClCompile Include="Title.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="EfectExplosion.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -109,6 +112,9 @@
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
     <ClInclude Include="CameraWork.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EfectExplosion.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>

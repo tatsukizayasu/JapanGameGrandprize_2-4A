@@ -156,6 +156,7 @@
     <ClInclude Include="BULLET.h" />
     <ClInclude Include="CameraWork.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="EfectExplosion.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="LineCollider.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="CameraWork.cpp" />
+    <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="LineCollider.cpp" />
