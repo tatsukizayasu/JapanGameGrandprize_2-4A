@@ -12,9 +12,9 @@
 //-----------------------------------
 Stage::Stage()
 {
-	if (LoadDivGraph("Resource/Images/Stage/map_chips.png", 100, 10, 10, 40, 40, block_images + 1) == -1)
+	if (LoadDivGraph("Images/Stage/map_chips.png", 100, 10, 10, 40, 40, block_images + 1) == -1)
 	{
-		throw "Resource/Images/Stage/map_chips.png";
+		throw "Images/Stage/map_chips.png";
 	}
 
 	//マップデータの読み込み
@@ -89,7 +89,7 @@ void Stage::LoadMap()
 
 
 	char buf[37];
-	sprintf_s(buf, sizeof(buf), "Resource/Map_Data/%s.csv", stage_name);
+	sprintf_s(buf, sizeof(buf), "Data/Map_Data/%s.csv", stage_name);
 
 	int FileHandle;
 	if ((FileHandle = FileRead_open(buf)) == 0) 

@@ -29,7 +29,7 @@ EfectExplosion::EfectExplosion(float b_x, float b_y)
 
 	delete_flg = false;
 
-	if ((explosion_image = LoadGraph("Resource/Images/Player/explosion.png")) == -1)
+	if ((explosion_image = LoadGraph("Images/Player/explosion.png")) == -1)
 	{
 		throw "err explosion.png";
 	}
