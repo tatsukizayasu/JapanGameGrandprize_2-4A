@@ -1,8 +1,8 @@
 #pragma once
 #include "AbstractScene.h"
 #include "Player.h"
-
 #include "Stage/Stage.h"
+#include "CameraWork.h"
 
 class GameMain :
     public AbstractScene
