@@ -3,6 +3,9 @@
 #include "SceneManager.h"
 #include"FpsController.h"
 
+//-----------------------------------
+// XV
+//-----------------------------------
 AbstractScene* SceneManager::Update()
 {
 	AbstractScene* NextScene;
@@ -33,8 +36,11 @@ AbstractScene* SceneManager::Update()
 	}
 	return mScene;
 }
+
+//-----------------------------------
+// •`‰æ
+//-----------------------------------
 void SceneManager::Draw() const
 {
 	mScene->Draw();
 }
-

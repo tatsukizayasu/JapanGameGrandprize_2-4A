@@ -1,6 +1,9 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 CameraWork::CameraWork()
 {
 	camera_x = 0;
@@ -10,6 +13,9 @@ CameraWork::CameraWork()
 	scroll_speed = 1;	
 }
 
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 CameraWork::CameraWork(float camera_x, float camera_y)
 {
 	this->camera_x = camera_x;
@@ -19,14 +25,21 @@ CameraWork::CameraWork(float camera_x, float camera_y)
 	scroll_speed = 1;
 }
 
+//-----------------------------------
+// デストラクタ
+//-----------------------------------
 CameraWork::~CameraWork()
 {
 }
 
+//-----------------------------------
+// 更新
+//-----------------------------------
 void CameraWork::Update()
 {
 
-	if (input_margin < 10) {
+	if (input_margin < 10) 
+	{
 		input_margin++;
 	}
 	else

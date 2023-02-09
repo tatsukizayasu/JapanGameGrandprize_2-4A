@@ -1,7 +1,9 @@
 #include "BULLET.h"
 #include "DxLib.h"
 
-
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 BULLET::BULLET()
 {
 	bullet_x = 0.0;
@@ -10,6 +12,9 @@ BULLET::BULLET()
 	efect_explosion = nullptr;
 }
 
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 BULLET::BULLET(float player_x, float player_y)
 {
 	delete_flg = false;
@@ -18,6 +23,9 @@ BULLET::BULLET(float player_x, float player_y)
 	efect_explosion = nullptr;
 }
 
+//-----------------------------------
+// 描画
+//-----------------------------------
 void BULLET::Draw() const
 {
 	if (efect_explosion != nullptr)
@@ -30,6 +38,9 @@ void BULLET::Draw() const
 	}
 }
 
+//-----------------------------------
+// 更新
+//-----------------------------------
 void BULLET::Update()
 {
 	if (bullet_x < 1260)

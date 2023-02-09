@@ -21,7 +21,4 @@ public:
     virtual void Update();
     //•`‰æ
     virtual void Draw() const;
-
-protected:
-
 };

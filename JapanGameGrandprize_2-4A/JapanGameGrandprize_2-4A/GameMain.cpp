@@ -3,6 +3,9 @@
 #include "Title.h"
 #include "CameraWork.h"
 
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 GameMain::GameMain()
 {
 	player = new Player();
@@ -12,6 +15,9 @@ GameMain::GameMain()
 	input_margin = 0;
 }
 
+//-----------------------------------
+// デストラクタ
+//-----------------------------------
 GameMain::~GameMain()
 {
 	delete player;
@@ -19,6 +25,9 @@ GameMain::~GameMain()
 	delete camera_work;
 }
 
+//-----------------------------------
+// 更新
+//-----------------------------------
 AbstractScene* GameMain::Update()
 {
 	//シーン切り替えテスト		デバック
@@ -39,6 +48,9 @@ AbstractScene* GameMain::Update()
 	return this;
 }
 
+//-----------------------------------
+// 描画
+//-----------------------------------
 void GameMain::Draw()const
 {
 	//背景
@@ -47,4 +59,3 @@ void GameMain::Draw()const
 	player->Draw();
 	stage->Draw();
 }
-
