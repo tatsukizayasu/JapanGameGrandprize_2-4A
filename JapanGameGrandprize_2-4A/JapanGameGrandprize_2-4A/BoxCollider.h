@@ -29,11 +29,11 @@ public:
 #ifdef SHOW_COLLISION
 	void DrawCollision()const
 	{
-		float x1 = location.x - area.width / 2;
-		float y1 = location.y - area.height / 2;
+		float x1 = location.x;
+		float y1 = location.y;
 	
-		float x2 = location.x + area.width / 2;
-		float y2 = location.y + area.height / 2;
+		float x2 = location.x + area.width;
+		float y2 = location.y + area.height;
 		DrawBoxAA(x1, y1, x2, y2, 0xE9FF00, FALSE, 3);
 	}
 #endif

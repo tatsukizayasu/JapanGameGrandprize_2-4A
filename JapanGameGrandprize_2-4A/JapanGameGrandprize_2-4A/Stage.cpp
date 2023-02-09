@@ -9,8 +9,7 @@ Stage::Stage() {
 
 	for (int i = 0; i < 32;i++) {
 		mapchip.push_back(new MapChip(&block_images[0],
-			{ (i * MAP_CHIP_SIZE) + (MAP_CHIP_SIZE / 2),
-			SCREEN_HEIGHT - MAP_CHIP_SIZE / 2 }, 
+			{ i * MAP_CHIP_SIZE,SCREEN_HEIGHT - MAP_CHIP_SIZE },
 			{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 	}
 

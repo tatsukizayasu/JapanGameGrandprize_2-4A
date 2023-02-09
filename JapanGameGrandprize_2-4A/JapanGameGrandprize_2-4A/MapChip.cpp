@@ -65,8 +65,12 @@ void MapChip::Update()
 //-----------------------------------
 void MapChip::Draw()const
 {
-	DrawRotaGraphF(location.x, location.y, ex_rate, 0, image, TRUE);
+	DrawExtendGraphF(location.x, location.y,
+		location.x + ex_rate * MAP_CHIP_SIZE, location.y + ex_rate * MAP_CHIP_SIZE
+		, image, TRUE);
+#ifdef SHOW_COLLISION
 	DrawCollision();
+#endif
 }
 
 //-----------------------------------

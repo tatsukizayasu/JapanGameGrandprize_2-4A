@@ -6,10 +6,11 @@
 #include "../SphereCollider.h"
 #include <vector>
 
-#define MENU_NUM 2
+#define MENU_NUM 3
 #define MENU_MODE -1
 #define BRUSH_MODE 0
 #define MODULATION_MODE 1
+#define SAVE_MODE 2
 
 using namespace std;
 
@@ -53,5 +54,8 @@ public:
 
 	//マップチップを作成する
 	void MakeMapChip();
+
+	//CSVファイルへの書き出し
+	void SaveStage();
 };
 
