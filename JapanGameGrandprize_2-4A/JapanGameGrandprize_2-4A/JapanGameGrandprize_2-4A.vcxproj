@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h" />
+    <ClInclude Include="EfectBeam.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="BULLET.h" />
     <ClInclude Include="Define.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Undead.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />

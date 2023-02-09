@@ -5,14 +5,26 @@
 
 EfectExplosion::EfectExplosion()
 {
-	location.x = 0;
-	location.y = 0;
+	location.x = 0.0;
+	location.y = 0.0;
+	trance = 0;
+	magni = 0;
+
+	delete_flg = false;
+
+	explosion_image = 0;
+}
+
+EfectExplosion::EfectExplosion(float b_x, float b_y)
+{
+	location.x = b_x;
+	location.y = b_y;
 	trance = 255;
 	magni = 0;
 
 	delete_flg = false;
 
-	if (explosion_image = LoadGraph("Resouce/Images/Player/explosion.png") == -1)
+	if ((explosion_image = LoadGraph("Resource/Images/Player/explosion.png")) == -1)
 	{
 		throw "err explosion.png";
 	}
@@ -29,7 +41,7 @@ void EfectExplosion::Update()
 {
 	if (trance > 0)
 	{
-		trance--;
+		trance -= 20;
 	}
 	else
 	{
