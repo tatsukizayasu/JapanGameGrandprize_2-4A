@@ -28,9 +28,6 @@
     <ClCompile Include="SphereCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\Stage.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
@@ -42,6 +39,12 @@
     </ClCompile>
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCollider.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Undead.cpp">
+      <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="CameraWork.cpp" />
   </ItemGroup>
@@ -79,6 +82,11 @@
     <ClInclude Include="Title.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>ヘッダーファイル</Filter>
     <ClInclude Include="Stage\Stage.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
@@ -87,6 +95,12 @@
     </ClInclude>
     <ClInclude Include="Stage\Element\Element_DamageWall.h">
       <Filter>ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="LineCollider.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Undead.h">
+      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\MapChip.h">
       <Filter>ヘッダーファイル\Stage</Filter>
