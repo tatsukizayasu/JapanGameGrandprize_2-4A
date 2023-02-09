@@ -40,9 +40,6 @@
     <ClCompile Include="EnemyBase.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="EnemySlime.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -85,9 +82,6 @@
       <Filter>ソースファイル</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBase.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemySlime.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>

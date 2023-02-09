@@ -156,7 +156,6 @@
     <ClInclude Include="BULLET.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="EnemyBase.h" />
-    <ClInclude Include="EnemySlime.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="MapChip.h" />
@@ -178,7 +177,6 @@
     <ClCompile Include="PadInput.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="EnemySlime.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Title.cpp" />
