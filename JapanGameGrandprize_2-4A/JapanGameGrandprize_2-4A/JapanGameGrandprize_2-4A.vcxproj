@@ -158,6 +158,7 @@
     <ClInclude Include="Element.h" />
     <ClInclude Include="Element_DamageWall.h" />
     <ClInclude Include="EnemyBase.h" />
+    <ClInclude Include="EnemySlime.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="LineCollider.h" />
     <ClInclude Include="GameMain.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="Element_DamageWall.cpp" />
+    <ClCompile Include="EnemySlime.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="LineCollider.cpp" />
