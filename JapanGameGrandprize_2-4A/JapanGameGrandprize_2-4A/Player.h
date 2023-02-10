@@ -3,6 +3,10 @@
 #include "BoxCollider.h"
 #include "BULLET.h"
 
+
+
+
+
 #define GRAVITY 10
 
 class Player : public BoxCollider
@@ -13,12 +17,14 @@ private:
 	int bullet_count;				//撃った弾の数
 	int count;                      //処理をカウントする
 	int not_jet_count;              //跳んでない時を数える
+	float player_speed;				//プレイヤーの移動スピード（横）
 	float fuel;						//燃料
-	float jump;                       //ジャンプの値
-	float jump_power;                 //ジャンプの力
+	float jump;                     //ジャンプの値
+	float jump_power;               //ジャンプの力
+	BULLET_TYPE bullet_type;        //撃つ弾の種類
 	
 
-	BULLET** bullet;             //弾の配列
+	BULLET** bullet;                //弾の配列
 
 public:
 	Player();
