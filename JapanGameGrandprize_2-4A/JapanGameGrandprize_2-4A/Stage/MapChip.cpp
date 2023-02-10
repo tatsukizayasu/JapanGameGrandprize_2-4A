@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "MapChip.h"
+#include "../CameraWork.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -47,7 +48,7 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 // デストラクタ
 //-----------------------------------
 MapChip::~MapChip()
-{
+{ 
 
 }
 
@@ -56,7 +57,8 @@ MapChip::~MapChip()
 //-----------------------------------
 void MapChip::Update()
 {
-
+	location.x = location.x + CameraWork::GetCamera().x;
+	location.y = location.y + CameraWork::GetCamera().y;
 }
 
 //-----------------------------------
@@ -65,10 +67,10 @@ void MapChip::Update()
 void MapChip::Draw()const
 {
 	//printfDx("camera_x:%f\tcamera_y:%f\n", camera_x, camera_y);
-	int x = location.x/* + camera_x*/;
-	int y = location.y/* + camera_y*/;
+	//float x = location.x + CameraWork::GetCamera().x;
+	//float y = location.y + CameraWork::GetCamera().y;
 
-	DrawExtendGraphF(x, y, x + ex_rate * MAP_CHIP_SIZE, y + ex_rate * MAP_CHIP_SIZE, image, TRUE);
+	DrawExtendGraphF(location.x, location.y, location.x + ex_rate * MAP_CHIP_SIZE, location.y + ex_rate * MAP_CHIP_SIZE, image, TRUE);
 }
 
 //-----------------------------------

@@ -5,7 +5,9 @@
 #include <sstream>
 #include <string>
 
+#define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage";
+
 
 //-----------------------------------
 // コンストラクタ
@@ -62,6 +64,7 @@ void Stage::Update()
 	for (int i = 0; i < mapchip.size(); i++)
 	{		
 		mapchip.at(i)->Update();
+
 	}
 }
 

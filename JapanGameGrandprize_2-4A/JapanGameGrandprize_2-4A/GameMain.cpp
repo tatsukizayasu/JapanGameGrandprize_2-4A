@@ -10,7 +10,7 @@ GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
-	camera_work = new CameraWork(100,300);
+	camera_work = new CameraWork(0.0f,0.0f);
 
 	input_margin = 0;
 }
@@ -42,6 +42,7 @@ AbstractScene* GameMain::Update()
 		input_margin++;
 	}
 
+	//printfDx("CameraX:%f\tCameraY:%f\n", camera_work->GetCamera().x, camera_work->GetCamera().y);
 	camera_work->Update();
 	player->Update();
 	stage->Update();
