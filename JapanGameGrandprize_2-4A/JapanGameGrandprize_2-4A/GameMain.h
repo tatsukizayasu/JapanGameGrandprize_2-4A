@@ -20,16 +20,15 @@ private:
     int input_margin;
 
 public:
-    //�R���X�g���N�^
+    //コンストラクタ
     GameMain();
 
-    //�f�X�g���N�^
+    //デストラクタ
     ~GameMain();
 
-    //�`��ȊO�̍X�V�����s
+    //更新
     AbstractScene* Update() override;
 
-    //�`��Ɋւ��邱�Ƃ�����
+    //描画
     void Draw() const override;
 };
-

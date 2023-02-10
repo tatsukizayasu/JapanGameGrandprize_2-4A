@@ -1,12 +1,11 @@
-#include"DxLib.h"
-#include"Define.h"
-#include"SceneManager.h"
-#include"FpsController.h"
-#include"Title.h"
+#include "DxLib.h"
+#include "Define.h"
+#include "SceneManager.h"
+#include "FpsController.h"
+#include "Title.h"
 #include "GameMain.h"
 #include "PadInput.h"
-#include"GameMain.h"
-
+#include "GameMain.h"
 
 #define FRAMERATE 60.0 //フレームレート
 
@@ -31,7 +30,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	try
 	{
 		sceneMng = new SceneManager((AbstractScene*)new GameMain());
-
 	}
 	catch (const char* err)
 	{
@@ -50,7 +48,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	FpsController FPSC(FRAMERATE, 800);
 
 	// ゲームループ
-	while ((ProcessMessage() == 0) && (sceneMng->Update() != nullptr)) {
+	while ((ProcessMessage() == 0) && (sceneMng->Update() != nullptr))
+	{
 
 		ClearDrawScreen();		// 画面の初期化
 		PAD_INPUT::UpdateKey();
@@ -62,18 +61,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		{
 			break;
 		}
-
+#ifdef _DEBUG
 		//レイアウト設計用
-		if (CheckHitKey(KEY_INPUT_SPACE)) {
+		if (PAD_INPUT::OnButton(XINPUT_BUTTON_X))
+		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-			for (int x = 0; x < 1280; x += 40) {
+			for (int x = 0; x < 1280; x += 40)
+			{
 				DrawLineAA(x, 0, x, 720, 0x000000, 0.01F);
-				for (int y = 0; y < 720; y += 40) {
+				for (int y = 0; y < 720; y += 40) 
+				{
 					DrawLineAA(0, y, 1280, y, 0x000000, 0.01F);
 				}
 			}
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
+#endif
 
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 	}

@@ -16,6 +16,9 @@
 //歩くスピード
 #define UNDEAD_SPEED 5
 
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 Undead::Undead()
 {
 	/*初期化*/
@@ -36,11 +39,17 @@ Undead::Undead()
 	collider = new LineCollider();
 }
 
+//-----------------------------------
+// デストラクタ
+//-----------------------------------
 Undead::~Undead()
 {
 	delete collider;
 }
 
+//-----------------------------------
+// 更新
+//-----------------------------------
 void Undead::Update()
 {
 	switch (state)
@@ -66,7 +75,9 @@ void Undead::Update()
 	
 }
 
-
+//-----------------------------------
+// 攻撃
+//-----------------------------------
 void Undead::Attack()
 {
 	Location arm; //腕先の座標
@@ -104,6 +115,9 @@ void Undead::DistancePlayer(Player* player)
 	}
 }
 
+//-----------------------------------
+// 描画
+//-----------------------------------
 void Undead::Draw() const
 {
 	DrawBox(location.x, location.y, location.x + area.width, location.y + area.height, 0xffffff, TRUE);

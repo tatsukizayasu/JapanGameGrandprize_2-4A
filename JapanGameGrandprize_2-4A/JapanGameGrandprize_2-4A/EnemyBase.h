@@ -61,4 +61,3 @@ protected:
 	ENEMY_KIND kind; //エネミーの種類
 	ENEMY_TYPE type; //エネミーのタイプ
 };
-

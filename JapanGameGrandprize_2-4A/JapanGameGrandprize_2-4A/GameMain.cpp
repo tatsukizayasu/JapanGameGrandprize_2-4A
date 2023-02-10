@@ -1,9 +1,13 @@
-#include "DxLib.h"
 #include "GameMain.h"
+#include "DxLib.h"
 #include "Title.h"
 #include "CameraWork.h"
+#include "PadInput.h"
 #include "Undead.h"
 
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 GameMain::GameMain()
 {
 	player = new Player();
@@ -14,6 +18,9 @@ GameMain::GameMain()
 	input_margin = 0;
 }
 
+//-----------------------------------
+// デストラクタ
+//-----------------------------------
 GameMain::~GameMain()
 {
 	delete player;
@@ -23,17 +30,24 @@ GameMain::~GameMain()
 	delete camera_work;
 }
 
+//-----------------------------------
+// 更新
+//-----------------------------------
 AbstractScene* GameMain::Update()
 {
+#ifdef _DEBUG
 	//シーン切り替えテスト		デバック
-	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) {
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_RIGHT) && input_margin >= 30)
+	{
 		input_margin = 0;
 		return new Title();
 	}
 
-	if (input_margin < 30) {
+	if (input_margin < 30) 
+	{
 		input_margin++;
 	}
+#endif
 
 	camera_work->Update();
 	player->Update();
@@ -46,6 +60,9 @@ AbstractScene* GameMain::Update()
 	return this;
 }
 
+//-----------------------------------
+// 描画
+//-----------------------------------
 void GameMain::Draw()const
 {
 	//背景

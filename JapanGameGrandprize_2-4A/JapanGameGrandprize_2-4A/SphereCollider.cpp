@@ -1,8 +1,9 @@
-#define _USE_MATH_DEFINES
-#include<math.h>
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 #include "LineCollider.h"
+#include <math.h>
+
+#define _USE_MATH_DEFINES
 
 bool SphereCollider::HitSphere(SphereCollider* sphere_collider)
 {
