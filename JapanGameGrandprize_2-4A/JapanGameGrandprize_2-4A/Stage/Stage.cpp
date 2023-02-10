@@ -29,6 +29,10 @@ Stage::Stage()
 			mapchip.push_back(new MapChip(&block_images[i], { x * MAP_CHIP_SIZE,y * MAP_CHIP_SIZE}, { 40,40 }));
 		}
 	}
+
+#ifdef _STAGE_BUILDER
+	stage_builder = new StageBuilder();
+#endif
 }
 
 //-----------------------------------
@@ -51,6 +55,10 @@ Stage::~Stage()
 	{
 		DeleteGraph(block_images[i]);
 	}
+
+#ifdef _STAGE_BUILDER
+	delete stage_builder;
+#endif
 }
 
 //-----------------------------------
@@ -63,6 +71,10 @@ void Stage::Update()
 	{		
 		mapchip.at(i)->Update();
 	}
+
+#ifdef _STAGE_BUILDER
+	stage_builder->Update();
+#endif
 }
 
 //-----------------------------------
@@ -76,7 +88,11 @@ void Stage::Draw()
 	{
 		mapchip.at(i)->Draw();
 	}
-	
+
+#ifdef _STAGE_BUILDER
+	stage_builder->Draw();
+#endif
+
 	
 }
 
