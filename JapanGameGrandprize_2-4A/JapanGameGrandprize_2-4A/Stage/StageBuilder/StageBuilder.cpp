@@ -249,21 +249,16 @@ void StageBuilder::MakeMapChip()
 // CSVファイルへ書き出す
 //------------------------------------
 void StageBuilder::SaveStage()
-{/*
-	if(_chdir("StageBuilder")==-1)
-	{
-		throw "StageBuilder";
-	}*/
+{
 	FILE* fp = NULL;
-	char* buffer = nullptr;
+	char* main_dir = nullptr;
+	char* stage_name = nullptr;
 	string file_name;
-	buffer = _getcwd(buffer, 256);
-	if (buffer != nullptr)
-	{
-		string path(buffer);
-	}
-	KeyInputSingleCharString(600 + 16, 300 + 32, 8, buffer, FALSE);
-	file_name += buffer;
+	main_dir = _getcwd(main_dir, 256);
+	string path(main_dir);
+	
+	KeyInputSingleCharString(600 + 16, 300 + 32, 8, main_dir, FALSE);
+	file_name += main_dir;
 	file_name += ".csv";
 	//fopen_s(&fp, file_name.c_str(), "a");
 }
