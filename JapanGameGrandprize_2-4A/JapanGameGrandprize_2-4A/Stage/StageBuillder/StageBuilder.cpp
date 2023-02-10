@@ -90,11 +90,25 @@ void StageBuilder::Draw()const
 
 		DrawFormatString(0, i * 20, 0xFFFFFF, "マス x:%d y:%d  座標x:%.0lf y:%.0lf ",
 			frame_x, frame_y,
-			(double)frame_x * MAP_CHIP_SIZE, (double)frame_y * MAP_CHIP_SIZE );
+			(double)frame_x * MAP_CHIP_SIZE, (double)frame_y * MAP_CHIP_SIZE);
 	}
 
 #endif
-	if (mode == MENU_MODE)DrawMenu();
+	if (mode == MENU_MODE)
+	{
+		DrawMenu();
+	}
+	if (mode == SAVE_MODE)
+	{
+		int l_font_size = 16;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+		DrawBox(600, 300,
+			600 + l_font_size * 10, 300 + l_font_size * 4, 0x000000, TRUE);
+		DrawBoxAA(600, 300,
+			600 + l_font_size * 10, 300 + l_font_size * 4, 0xFFFFFF, FALSE, 3);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		DrawString(600 + l_font_size, 300 + l_font_size, "ステージ名の入力", 0xffffff);
+	}
 }
 
 //------------------------------------
@@ -224,10 +238,10 @@ void StageBuilder::DrawFrame()const
 //------------------------------------
 void StageBuilder::MakeMapChip()
 {
-	float pos_x = (int)(mouse_pos.x / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;;
+	float pos_x = (int)(mouse_pos.x / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
 	float pos_y = (int)(mouse_pos.y / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
 	map_chips.push_back(new MapChip(&block_images[0],
-		{ pos_x,pos_y },
+		{ pos_x + MAP_CHIP_SIZE / 2,pos_y + MAP_CHIP_SIZE / 2 },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
 
@@ -248,7 +262,7 @@ void StageBuilder::SaveStage()
 	{
 		string path(buffer);
 	}
-	KeyInputSingleCharString(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 8, buffer, FALSE);
+	KeyInputSingleCharString(600 + 16, 300 + 32, 8, buffer, FALSE);
 	file_name += buffer;
 	file_name += ".csv";
 	//fopen_s(&fp, file_name.c_str(), "a");
