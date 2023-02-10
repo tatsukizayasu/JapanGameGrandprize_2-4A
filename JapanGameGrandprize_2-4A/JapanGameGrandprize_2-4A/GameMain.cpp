@@ -25,7 +25,6 @@ GameMain::~GameMain()
 {
 	delete player;
 	delete stage;
-	delete player;
 	delete enemy;
 	delete camera_work;
 }

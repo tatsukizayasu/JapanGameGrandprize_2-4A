@@ -18,6 +18,9 @@ class Undead :
 private:
     int damage; //ƒ_ƒ[ƒW
     int attack_interval; //Ÿ‚ÌUŒ‚‚Ü‚Å‚ÌŠÔ
+    int attack; //UŒ‚‚µ‚Ä‚¢‚é
+
+    Location arm[2]; //˜r‚Ì“–‚½‚è”»’è
     ENEMY_TYPE attack_type; //UŒ‚‚Ì‘®«
     UNDEAD_STATE state; //ó‘Ô
     LineCollider* collider; //“–‚½‚è”»’è
