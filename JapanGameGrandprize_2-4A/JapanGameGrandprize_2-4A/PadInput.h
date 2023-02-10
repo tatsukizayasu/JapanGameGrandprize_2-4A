@@ -76,4 +76,3 @@ public:
 		return l_stick;
 	}
 };
-

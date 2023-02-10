@@ -17,11 +17,13 @@ private:
 public:
 
     //コンストラクタ
-    FpsController(float RefreshRate, int UpdateTime) {
+    FpsController(float RefreshRate, int UpdateTime) 
+    {
         Init(RefreshRate, UpdateTime);
     }
 
-    FpsController() {
+    FpsController() 
+    {
         Init(60.0f, 800);
     }
 
@@ -32,16 +34,17 @@ public:
     float Get();
    
     //描画処理
-    void Disp() {
+    void Disp() 
+    {
         SetFontSize(10);
         DrawFormatString(10, 10, 0xffffff, "fps:%0.1f", fps);
     }
     //処理をまとめたもの
-    float All() {
+    float All()
+    {
         Get();
         Wait();
         return (fps);
     }
 
 };
-

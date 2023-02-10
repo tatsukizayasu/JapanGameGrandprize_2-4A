@@ -1,7 +1,6 @@
 #pragma once
 #include "define.h"
 
-
 class SphereCollider
 {
 protected:
@@ -14,6 +13,8 @@ public:
 
 	//BoxCollider“–‚½‚è”»’è
 	bool HitBox(class BoxCollider* box_collider);
+
+	bool HitLine(class LineCollider* line_collider);
 
 	//’†SÀ•W‚ÌŽæ“¾
 	Location GetLocation() const 
@@ -32,6 +33,4 @@ public:
 	{
 		this->location = location;
 	}
-
 };
-

@@ -7,12 +7,15 @@
 class Stage
 {
 private:
-	//MapHipオブジェクト
+	//MapChipオブジェクト
 	std::vector<MapChip*> mapchip;
 
 #ifdef STAGE_BUILDER
 	StageBuilder* stage_builder;
 #endif
+
+	//マップ配列データ
+	std::vector<std::vector<int>> map_data;
 
 	//背景画像
 	int background_images;
@@ -42,4 +45,3 @@ public:
 	/// </summary>
 	void LoadMap();
 };
-
