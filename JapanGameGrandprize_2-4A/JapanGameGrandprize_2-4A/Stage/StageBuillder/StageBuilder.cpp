@@ -81,7 +81,7 @@ void StageBuilder::Draw()const
 
 	DrawFrame();
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	SetFontSize(16);
 	for (int i = 0; i < map_chips.size(); i++)
 	{

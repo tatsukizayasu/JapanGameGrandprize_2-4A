@@ -10,7 +10,7 @@ private:
 	//MapChipオブジェクト
 	std::vector<MapChip*> mapchip;
 
-#ifdef STAGE_BUILDER
+#ifdef _STAGE_BUILDER
 	StageBuilder* stage_builder;
 #endif
 
