@@ -176,8 +176,6 @@
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BULLET.cpp" />
-    <ClCompile Include="Element.cpp" />
-    <ClCompile Include="Element_DamageWall.cpp" />
     <ClCompile Include="EnemySlime.cpp" />
     <ClCompile Include="CameraWork.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
