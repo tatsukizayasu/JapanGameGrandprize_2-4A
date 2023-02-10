@@ -1,7 +1,6 @@
 #pragma once
 #include "define.h"
 
-
 class SphereCollider
 {
 protected:
@@ -34,6 +33,4 @@ public:
 	{
 		this->location = location;
 	}
-
 };
-

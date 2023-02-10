@@ -2,7 +2,9 @@
 #include "DxLib.h"
 #include "PadInput.h"
 
-
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 Player::Player()
 {
 	location.x = 0;
@@ -14,7 +16,7 @@ Player::Player()
 	count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
-	not_jet_count = 0.0;
+	not_jet_count = 0;
 	fuel = 100.0;
 	for (int i = 0; i < 30; i++)
 	{
@@ -26,6 +28,9 @@ Player::Player()
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
+//-----------------------------------
+// デストラクタ
+//-----------------------------------
 Player::~Player()
 {
 	for (int i = 0; i < 30; i++)
@@ -35,6 +40,9 @@ Player::~Player()
 	delete[] bullet;
 }
 
+//-----------------------------------
+// 描画
+//-----------------------------------
 void Player::Draw() const
 {
 	DrawBox(location.x, location.y, location.x + image_size_x, location.y + image_size_y, 0x00ff00, TRUE);
@@ -50,6 +58,9 @@ void Player::Draw() const
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power,fuel);
 }
 
+//-----------------------------------
+// 更新
+//-----------------------------------
 void Player::Update()
 {
 	count++;
@@ -138,6 +149,9 @@ void Player::Update()
 	}
 }
 
+//-----------------------------------
+// 弾を発射
+//-----------------------------------
 void Player::Shoot_Gun()
 {
 	if (count % 30 == 0)
@@ -150,6 +164,9 @@ void Player::Shoot_Gun()
 	}
 }
 
+//-----------------------------------
+// 弾を並べ替え
+//-----------------------------------
 void Player::SortBullet(int delete_bullet)
 {
 	for (int i = delete_bullet + 1; i < 30; i++)

@@ -5,7 +5,7 @@
 class Stage
 {
 private:
-	//MapHipオブジェクト
+	//MapChipオブジェクト
 	std::vector<MapChip*> mapchip;
 
 	//マップ配列データ
@@ -39,4 +39,3 @@ public:
 	/// </summary>
 	void LoadMap();
 };
-
