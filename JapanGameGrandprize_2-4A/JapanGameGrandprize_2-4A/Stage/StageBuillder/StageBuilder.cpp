@@ -90,8 +90,7 @@ void StageBuilder::Draw()const
 
 		DrawFormatString(0, i * 20, 0xFFFFFF, "É}ÉX x:%d y:%d  ç¿ïWx:%.0lf y:%.0lf ",
 			frame_x, frame_y,
-			(double)frame_x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-			(double)frame_y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2);
+			(double)frame_x * MAP_CHIP_SIZE, (double)frame_y * MAP_CHIP_SIZE );
 	}
 
 #endif
