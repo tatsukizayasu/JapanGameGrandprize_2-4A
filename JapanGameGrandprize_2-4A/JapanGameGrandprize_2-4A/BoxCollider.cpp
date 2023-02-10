@@ -1,12 +1,13 @@
-#define _USE_MATH_DEFINES
-#include<math.h>
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 #include "LineCollider.h"
+#include <math.h>
 
+#define _USE_MATH_DEFINES
 
-
-//SphereColliderとの当たり判定
+//-----------------------------------
+// SphereColliderとの当たり判定
+//-----------------------------------
 bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
 {
 	bool ret = false;//返り値
@@ -40,7 +41,9 @@ bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
 	return ret;
 }
 
-//BoxColliderとの当たり判定
+//-----------------------------------
+// BoxColliderとの当たり判定
+//-----------------------------------
 bool BoxCollider::HitBox(BoxCollider* box_collider)
 {
 	bool ret = false; //返り値
@@ -72,7 +75,9 @@ bool BoxCollider::HitBox(BoxCollider* box_collider)
 	return ret;
 }
 
-//LineColliderとの当たり判定
+//-----------------------------------
+// LineColliderとの当たり判定
+//-----------------------------------
 bool BoxCollider::HitLine(LineCollider* line_collider)
 {
 	bool ret = false; //返り値
@@ -173,19 +178,25 @@ bool BoxCollider::HitLine(LineCollider* line_collider)
 
 	return ret;
 }
-//中心座標の取得
+//-----------------------------------
+// 中心座標の取得
+//-----------------------------------
 Location BoxCollider::GetLocation()const
 {
 	return location;
 }
 
-//半径の取得
+//-----------------------------------
+// 半径の取得
+//-----------------------------------
 Area BoxCollider::GetArea()const
 {
 	return area;
 }
 
-//中心座標の設定
+//-----------------------------------
+// 中心座標の設定
+//-----------------------------------
 void BoxCollider::SetLocation(Location location)
 {
 	this->location = location;

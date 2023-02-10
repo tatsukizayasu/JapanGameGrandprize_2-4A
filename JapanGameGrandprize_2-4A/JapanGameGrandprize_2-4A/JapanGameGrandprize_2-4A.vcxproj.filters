@@ -7,12 +7,6 @@
     <ClCompile Include="BULLET.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Element.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Element_DamageWall.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="FpsController.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -20,9 +14,6 @@
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MapChip.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="PadInput.cpp">
@@ -37,16 +28,31 @@
     <ClCompile Include="SphereCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Stage.cpp">
-      <Filter>ソースファイル</Filter>
+    <ClCompile Include="Stage\Stage.cpp">
+      <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>ソースファイル</Filter>
+    <ClCompile Include="Stage\Element\Element.cpp">
+      <Filter>ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_DamageWall.cpp">
+      <Filter>ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\MapChip.cpp">
+      <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
     <ClCompile Include="LineCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Undead.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraWork.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EfectExplosion.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="EnemySlime.cpp">
@@ -66,19 +72,10 @@
     <ClInclude Include="Define.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Element.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Element_DamageWall.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="FpsController.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameMain.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="MapChip.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="PadInput.h">
@@ -93,14 +90,20 @@
     <ClInclude Include="SphereCollider.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Stage.h">
+    <ClInclude Include="Title.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="EnemyBase.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>ヘッダーファイル</Filter>
+    <ClInclude Include="Stage\Stage.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_DamageWall.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
     <ClInclude Include="LineCollider.h">
       <Filter>ヘッダーファイル</Filter>
@@ -111,6 +114,15 @@
     <ClInclude Include="EnemySlime.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\MapChip.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraWork.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EfectExplosion.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -118,6 +130,12 @@
     </Filter>
     <Filter Include="ヘッダーファイル">
       <UniqueIdentifier>{d14e2b45-f731-4bcc-8e41-6c75ab1cbcee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Stage">
+      <UniqueIdentifier>{4d417b46-41c8-4dac-92bc-bd26e8ee9929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Stage">
+      <UniqueIdentifier>{1d1d6eeb-efda-4a27-9790-a599605fcd8c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

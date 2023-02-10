@@ -4,4 +4,3 @@ class Element_DamageWall :
     public Element
 {
 };
-
