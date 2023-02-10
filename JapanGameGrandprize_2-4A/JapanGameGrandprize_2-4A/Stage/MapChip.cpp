@@ -68,7 +68,7 @@ void MapChip::Draw()const
 	int x = location.x/* + camera_x*/;
 	int y = location.y/* + camera_y*/;
 
-	DrawExtendGraphF(x, y, x + ex_rate * MAP_CHIP_SIZE, y + ex_rate * MAP_CHIP_SIZE, image, TRUE);
+	DrawRotaGraphF(x, y, ex_rate, 0, image, TRUE);
 #ifdef _SHOW_COLLISION
 	DrawCollision();
 #endif
