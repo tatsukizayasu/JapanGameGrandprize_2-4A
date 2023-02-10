@@ -63,7 +63,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 #ifdef _DEBUG
 		//レイアウト設計用
-		if (PAD_INPUT::OnButton(XINPUT_BUTTON_X))
+		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_X))
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 			for (int x = 0; x < 1280; x += 40)
