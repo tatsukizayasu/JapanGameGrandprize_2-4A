@@ -35,7 +35,7 @@ Player::~Player()
 {
 	for (int i = 0; i < 30; i++)
 	{
-		delete bullet[i];
+		//delete bullet[i];
 	}
 	delete[] bullet;
 }
