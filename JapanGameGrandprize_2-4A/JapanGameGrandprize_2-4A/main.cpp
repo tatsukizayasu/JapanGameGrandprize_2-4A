@@ -61,9 +61,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		{
 			break;
 		}
-#ifdef _DEBUG
+
 		//レイアウト設計用
-		if (PAD_INPUT::OnButton(XINPUT_BUTTON_X))
+		if (CheckHitKey(KEY_INPUT_SPACE)) 
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 			for (int x = 0; x < 1280; x += 40)
@@ -76,7 +76,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
-#endif
 
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 	}
