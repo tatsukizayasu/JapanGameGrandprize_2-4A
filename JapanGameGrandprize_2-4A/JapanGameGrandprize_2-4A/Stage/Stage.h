@@ -2,7 +2,7 @@
 #include "MapChip.h"
 #include <vector>
 
-#include "StageBuillder/StageBuilder.h"
+#include "StageBuilder/StageBuilder.h"
 
 class Stage
 {
