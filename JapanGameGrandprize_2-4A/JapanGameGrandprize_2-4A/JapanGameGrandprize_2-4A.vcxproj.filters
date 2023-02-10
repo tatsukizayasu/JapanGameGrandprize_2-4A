@@ -31,12 +31,6 @@
     <ClCompile Include="Stage\Stage.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\Element\Element.cpp">
-      <Filter>ソースファイル\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Stage\Element\Element_DamageWall.cpp">
-      <Filter>ソースファイル\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>

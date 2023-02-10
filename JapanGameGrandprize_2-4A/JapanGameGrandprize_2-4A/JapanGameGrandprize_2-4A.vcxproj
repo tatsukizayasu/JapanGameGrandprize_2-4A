@@ -176,8 +176,6 @@
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BULLET.cpp" />
-    <ClCompile Include="Element.cpp" />
-    <ClCompile Include="Element_DamageWall.cpp" />
     <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
@@ -189,8 +187,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
-    <ClCompile Include="Stage\Element\Element.cpp" />
-    <ClCompile Include="Stage\Element\Element_DamageWall.cpp" />
     <ClCompile Include="Stage\MapChip.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
     <ClCompile Include="Title.cpp" />
