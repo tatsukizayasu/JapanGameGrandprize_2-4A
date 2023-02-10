@@ -29,8 +29,8 @@ bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
 	//Ž©•ª‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ‚ÌŒvŽZ
 	my_x[0] = location.x - (area.width / 2);
 	my_y[0] = location.y - (area.height / 2);
-	my_x[1] = my_x[0] - area.width;
-	my_y[1] = my_y[0] - area.height;
+	my_x[1] = my_x[0] + area.width;
+	my_y[1] = my_y[0] + area.height;
 
 
 	if ((sphere_x < my_x[0]) && (my_x[1] < sphere_x) && (sphere_y < my_y[0]) && (my_y[1] < sphere_y)) //“–‚½‚è”»’è
