@@ -35,7 +35,7 @@ bool LineCollider::HitSphere(class SphereCollider* sphere_collider)
 	vector_y[2] = sphere_collider->GetLocation().y - location[1].y;
 
 	//単位ベクトルの計算
-	unit_vector = sqrt(pow(vector_x[0], 2) + pow(vector_y[0], 2));
+	unit_vector = sqrtf(powf(vector_x[0], 2) + powf(vector_y[0], 2));
 
 	//最短距離の計算
 	shortest_distance = (vector_x[1] * (vector_x[0] / unit_vector)) - (vector_y[1] * (vector_y[0] / unit_vector));
@@ -50,7 +50,7 @@ bool LineCollider::HitSphere(class SphereCollider* sphere_collider)
 		//円の中心との距離の計算
 		for (int i = 0; i < 2; i++)
 		{
-			center_distance[i] = sqrt(pow(vector_x[i + 1], 2) + pow(vector_y[i + 1], 2));
+			center_distance[i] = sqrtf(powf(vector_x[i + 1], 2) + powf(vector_y[i + 1], 2));
 		}
 
 		if ((inner_product[0] * inner_product[1] <= 0.0f) || (center_distance[0] < sphere_collider->GetRadius()) || 

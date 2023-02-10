@@ -64,7 +64,7 @@ bool BoxCollider::HitBox(BoxCollider* box_collider)
 
 	//‘ŠŽè‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ‚ÌŒvŽZ
 	sub_x[0] = box_collider->GetLocation().x - (box_collider->GetArea().width / 2);
-	sub_y[0] = box_collider->GetLocation().x - (box_collider->GetArea().height / 2);
+	sub_y[0] = box_collider->GetLocation().y - (box_collider->GetArea().height / 2);
 	sub_x[1] = sub_x[0] + box_collider->GetArea().width;
 	sub_y[1] = sub_y[0] + box_collider->GetArea().height;
 

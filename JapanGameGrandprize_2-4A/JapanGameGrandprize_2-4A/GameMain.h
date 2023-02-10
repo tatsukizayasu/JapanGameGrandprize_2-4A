@@ -1,6 +1,7 @@
 #pragma once
 #include "AbstractScene.h"
 #include "Player.h"
+#include "EnemyBase.h"
 #include "Stage/Stage.h"
 #include "CameraWork.h"
 
@@ -13,7 +14,7 @@ private:
     Player* player;
     Stage* stage;
     CameraWork* camera_work;
-
+    EnemyBase* enemy; //敵
 
     //操作間隔時間
     int input_margin;
