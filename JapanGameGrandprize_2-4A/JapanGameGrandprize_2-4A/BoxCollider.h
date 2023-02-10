@@ -1,7 +1,7 @@
 #pragma once
 #include"define.h"
 
-#include"Stage/StageBuilder/Debug.h"
+#include"Stage/StageBuillder/Debug.h"
 #include"DxLib.h"
 
 class BoxCollider
