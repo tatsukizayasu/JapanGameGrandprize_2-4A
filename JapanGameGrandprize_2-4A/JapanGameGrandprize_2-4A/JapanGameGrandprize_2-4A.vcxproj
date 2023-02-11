@@ -154,6 +154,7 @@
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="BULLET.h" />
+    <ClInclude Include="Stage\StageBuilder\Directory.h" />
     <ClInclude Include="EfectBeam.h" />
     <ClInclude Include="Stage\StageBuilder\Debug.h" />
     <ClInclude Include="Stage\StageBuilder\KeyManager.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="CameraWork.cpp" />
+    <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="FpsController.cpp" />

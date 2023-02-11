@@ -64,6 +64,9 @@
     <ClCompile Include="Stage\StageBuilder\StageBuilder.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\StageBuilder\Directory.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -136,6 +139,9 @@
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
     <ClInclude Include="Stage\StageBuilder\StageBuilder.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuilder\Directory.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
   </ItemGroup>

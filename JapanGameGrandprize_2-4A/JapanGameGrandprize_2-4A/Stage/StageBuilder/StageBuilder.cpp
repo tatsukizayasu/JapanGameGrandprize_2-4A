@@ -2,6 +2,8 @@
 #include "StageBuilder.h"
 #include <string>
 #include <direct.h>
+#include "Directory.h"
+
 
 //------------------------------------
 // コンストラクタ
@@ -107,7 +109,8 @@ void StageBuilder::Draw()const
 		DrawBoxAA(600, 300,
 			600 + l_font_size * 10, 300 + l_font_size * 4, 0xFFFFFF, FALSE, 3);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		DrawString(600 + l_font_size, 300 + l_font_size, "ステージ名の入力", 0xffffff);
+		DrawString(600 + l_font_size, 300 + l_font_size, "現在のディレクトリ", 0xffffff);
+		//DrawFormatString(600+l_font_size,300 + l_font_size*2,"%s")
 	}
 }
 
@@ -250,22 +253,25 @@ void StageBuilder::MakeMapChip()
 //------------------------------------
 void StageBuilder::SaveStage()
 {
-	int ret;
-	FILE* fp = NULL;
-	char* main_dir = nullptr;
-	//stage_name = _getcwd(stage_name, 256);
-	main_dir = _getcwd(main_dir, 256);
-	string path(main_dir);
-	path += "\\Stage\\StageBuilder";
-	ret = _chdir(path.c_str());
+//	FILE* fp = NULL;
+//	char* main_dir = nullptr;
+//	main_dir = _getcwd(main_dir, 256);
+//	string path(main_dir);
+//	path += "\\Stage\\StageBuilder";
+//	_chdir(path.c_str());
+//
+//
+//	string file_name;
+//	
+//	file_name += ".csv";
+//	//fopen_s(&fp, file_name.c_str(), "a");
+//
+//	_chdir(main_dir);
 
+	bool ret ;
+	ret = Directory::OpenMain();
+	ret = Directory::Open("\\Stage");
 
-	string file_name;
-	
-	file_name += ".csv";
-	//fopen_s(&fp, file_name.c_str(), "a");
-
-	ret = _chdir(main_dir);
 }
 
 //------------------------------------
