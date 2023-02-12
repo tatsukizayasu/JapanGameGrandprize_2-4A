@@ -115,16 +115,16 @@ void StageBuilder::Draw()const
 		{
 			bool ret;
 			ret = Directory::OpenMain();
-			ret = Directory::Open("\\Stage\\StageBuilder\\dat\\");
+			ret = Directory::Open("\\Stage\\StageBuilder\\dat");
 			test = true;
 		}
 
 		FILEINFO file_info;
 		string file_name(Directory::GetCurrent());
-		file_name += '\\*';
+		file_name += "\\*.csv";
 
 		__int64 find_handle = FileRead_findFirst(
-			"C:\\PG-R4\\C++\\JapanGameGrandprize_2-4A\\JapanGameGrandprize_2-4A\\JapanGameGrandprize_2-4A\\Stage\\StageBuilder\\dat\\*",
+			file_name.c_str(),
 			&file_info);
 		if (find_handle != (__int64)-1)
 		{
@@ -132,7 +132,6 @@ void StageBuilder::Draw()const
 			int y = 0;
 			do
 			{
-			
 				// ファイル名とフォルダかファイルかの情報を描画
 				DrawFormatString(600 + l_font_size, 300 + l_font_size + y, 
 					GetColor(255, 255, 255), "%s %s", file_info.Name, file_info.DirFlag ? "フォルダ" : "ファイル");
