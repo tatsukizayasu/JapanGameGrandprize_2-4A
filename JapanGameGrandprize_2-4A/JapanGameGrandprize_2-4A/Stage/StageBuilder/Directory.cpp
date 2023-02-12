@@ -2,16 +2,17 @@
 #include "DxLib.h"
 #include <string.h>
 
-char Directory::str[10] = "null";
-char* Directory::main_dir = nullptr;
-char* Directory::current_dir = nullptr;
+string Directory::main_dir;
+string Directory::current_dir;
 
 bool Directory::Open(const char* path)
 {
 	bool isSuccess = false;
 
-	strncat(current_dir, path,256);
+	current_dir += path;
 
-	if (_chdir(current_dir) != -1)isSuccess = true;
+	if (_chdir(current_dir.c_str()) != -1)isSuccess = true;
+
+	Update();
 	return isSuccess;
 }

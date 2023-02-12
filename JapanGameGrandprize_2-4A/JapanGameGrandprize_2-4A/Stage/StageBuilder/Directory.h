@@ -1,32 +1,42 @@
 #pragma once
 #include <direct.h>
+#include <string>
+using namespace std;
 class Directory
 {
 private:
-	static char str[10];
-	static char* main_dir; //main関数があるディレクトリ
-	static char* current_dir; //現在のディレクトリ
+	static string main_dir; //main関数があるディレクトリ
+	static string current_dir; //現在のディレクトリ
 
 public:
 	//カレントディレクトリの更新
 	static void Update()
 	{
-		current_dir = _getcwd(current_dir, 256);
+		char* buffer = nullptr;
+		const char* get_current = _getcwd(buffer, 256);
+		current_dir = get_current;
+
 	}
 
 	//初期化 初回はmainディレクトリを取ってくる、それ以降はmainディレクトリを開く
 	static bool Init()
 	{
 		bool isSuccess = false;
-		if (main_dir == nullptr)
+		if (main_dir.empty())
 		{
-			main_dir = _getcwd(main_dir, 256);
-			current_dir = _getcwd(current_dir, 256);
+			char* buffer = nullptr;
+			buffer = _getcwd(buffer, 256);
+			main_dir = buffer;
+			current_dir = buffer;
 			isSuccess = true;
 		}
 		else
 		{
-			if (OpenMain())isSuccess = true;
+			if (OpenMain())
+			{
+				Update();
+				isSuccess = true;
+			}
 		}
 
 		return isSuccess;
@@ -39,10 +49,15 @@ public:
 	static bool OpenMain()
 	{
 		bool isSuccess = false;
-		if (_chdir(main_dir) != -1)isSuccess = true;
+		if (!main_dir.empty())
+		{
+			if (_chdir(main_dir.c_str()) != -1)isSuccess = true;
+
+			Update();
+		}
 		return isSuccess;
 	}
 
-	static char* GetCurrent() { return current_dir; }
+	static const char* GetCurrent() { return current_dir.c_str(); }
 };
 
