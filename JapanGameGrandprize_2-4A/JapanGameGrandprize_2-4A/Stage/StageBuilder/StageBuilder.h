@@ -12,6 +12,8 @@
 #define MODULATION_MODE 1
 #define SAVE_MODE 2
 
+#define ARROW_NUM 16
+
 using namespace std;
 
 class StageBuilder
@@ -26,7 +28,7 @@ private:
 	int mode;
 
 	int menu_cursor;
-	char arrow[MENU_NUM];
+	char arrow[ARROW_NUM];
 
 public:
 	//コンストラクタ
@@ -44,18 +46,24 @@ public:
 	void UpdateBrush();
 	//モデュレーションモードの更新
 	void UpdateModulation();
+	//セーブモードの更新
+	void UpdateSave();
 
 	//マウスの更新
 	void UpdateMouse();
 	//メニューモードの描画
 	void DrawMenu()const;
+	//セーブモードの描画
+	void DrawSave()const;
 	//格子の描画
 	void DrawFrame()const;
 
 	//マップチップを作成する
 	void MakeMapChip();
 
-	//CSVファイルへの書き出し
+	//CSVファイルへの書き出し(新規追加)
 	void SaveStage();
+	//上書き保存
+	void SaveStage(char*);
 };
 
