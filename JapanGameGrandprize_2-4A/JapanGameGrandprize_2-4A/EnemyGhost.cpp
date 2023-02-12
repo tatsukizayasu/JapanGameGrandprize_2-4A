@@ -1,6 +1,12 @@
 #include "EnemyGhost.h"
 #include"DxLib.h"
 
+//ゴーストの画像サイズ
+#define GHOST_SIZE 20
+
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
 EnemyGhost::EnemyGhost()
 {
 	ghost_death = false;
@@ -9,10 +15,14 @@ EnemyGhost::EnemyGhost()
 	ghost_y = 400;
 	action_time = 0;
 	action_type = 0;
-	action_type = GetRand(4);
+	action_type = 0;
 
 }
 
+
+//-----------------------------------
+// 描画以外の処理
+//-----------------------------------
 void EnemyGhost::Update()
 {
 
@@ -21,13 +31,18 @@ void EnemyGhost::Update()
 
 }
 
+//-----------------------------------
+// 描画
+//-----------------------------------
 void EnemyGhost::Draw()const
 {
-
-	DrawCircle(ghost_x, ghost_y, 15, GetColor(255, 0, 255), TRUE);
-
+	DrawBox(ghost_x, ghost_y, ghost_x + GHOST_SIZE, ghost_y + GHOST_SIZE, 0x00ff00, TRUE);
 }
 
+
+//-----------------------------------
+// ゴーストの動き
+//-----------------------------------
 void EnemyGhost::GhostMove()
 {
 
@@ -54,6 +69,10 @@ void EnemyGhost::GhostMove()
 
 }
 
+
+//-----------------------------------
+// ゴーストの攻撃処理
+//-----------------------------------
 void EnemyGhost::GhostAttack()
 {
 

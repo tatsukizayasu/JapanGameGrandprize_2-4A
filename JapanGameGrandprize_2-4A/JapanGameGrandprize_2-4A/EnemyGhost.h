@@ -1,7 +1,8 @@
 #pragma once
 #include"EnemyBase.h"
+#include"BoxCollider.h"
 
-class EnemyGhost : public EnemyBase
+class EnemyGhost : public EnemyBase, public BoxCollider
 {
 private:
 
