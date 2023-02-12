@@ -3,8 +3,8 @@
 
 EnemyGhost::EnemyGhost()
 {
-	ghost_lost = false;
-	ghost_hide = false;
+	ghost_death = false;
+	ghost_vanish = false;  
 	ghost_x = 600;
 	ghost_y = 400;
 	action_time = 0;

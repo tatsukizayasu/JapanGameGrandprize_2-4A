@@ -1,5 +1,6 @@
 #pragma once
 #include"EnemyBase.h"
+
 class EnemyGhost : public EnemyBase
 {
 private:
@@ -8,8 +9,8 @@ private:
 	int ghost_y; //ゴーストのY座標
 	int action_time; //行動時間
 	int action_type; //行動パターン
-	bool ghost_lost; //ゴーストが倒されたらtrue
-	bool ghost_hide; //ゴーストが透明化したらtrue
+	bool ghost_death; //ゴーストが倒されたらtrue
+	bool ghost_vanish; //ゴーストが透明化したらtrue
 
 public:
 
