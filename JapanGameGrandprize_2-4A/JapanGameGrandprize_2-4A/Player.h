@@ -4,7 +4,7 @@
 #include "BULLET.h"
 #include "Stage/Stage.h"
 
-#define GRAVITY 10
+
 
 class Player : public BoxCollider
 {
