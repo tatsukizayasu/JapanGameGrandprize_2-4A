@@ -27,6 +27,7 @@ private:
 private:
     //攻撃
     void Attack();
+
 public:
     //コンストラクタ
     Undead();

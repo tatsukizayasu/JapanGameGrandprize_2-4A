@@ -5,6 +5,8 @@
 #include "PadInput.h"
 #include "Undead.h"
 
+#define _DEBUG
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -13,7 +15,7 @@ GameMain::GameMain()
 	player = new Player();
 	stage = new Stage();
 	enemy = new Undead();
-	camera_work = new CameraWork(100,300);
+	camera_work = new CameraWork(0,0);
 
 	input_margin = 0;
 }
@@ -36,7 +38,7 @@ AbstractScene* GameMain::Update()
 {
 #ifdef _DEBUG
 	//シーン切り替えテスト		デバック
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_RIGHT) && input_margin >= 30)
+	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) 
 	{
 		input_margin = 0;
 		return new Title();

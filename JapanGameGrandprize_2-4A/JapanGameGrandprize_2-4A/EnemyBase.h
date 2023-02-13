@@ -1,4 +1,5 @@
 #pragma once
+#include "Define.h"
 
 //エネミーの種類
 enum class ENEMY_KIND
@@ -47,20 +48,20 @@ public:
 	virtual void Draw() const = 0;
 
 	//HPが0かどうか判断(0になったらtrue)
-	bool CheckHp()
-	{
-		bool ret = false;
-		if (hp < 0)
-		{
-			ret = true;
-		}
-		return ret;
-	}
+	bool CheckHp();
+	//ドロップアイテムの取得
+	ElementItem GetDropItem() const;
 
-protected:
+protected: 
 	int hp;	//体力
 	int speed; //移動速度
 
+	ElementItem drop_item; //ドロップアイテム
+
 	ENEMY_KIND kind; //エネミーの種類
-	ENEMY_TYPE type; //エネミーのタイプ
+	ENEMY_TYPE* type; //エネミーのタイプ
+
+protected:
+	//ドロップアイテムの設定
+	ElementItem DropItem(ENEMY_TYPE enemy_type, int min_drop, int max_drop);
 };

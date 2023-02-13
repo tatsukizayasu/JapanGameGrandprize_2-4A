@@ -1,4 +1,5 @@
 #pragma once
+
 class CameraWork
 {
 private:
@@ -6,14 +7,24 @@ private:
 protected:
 
 	//カメラ座標
-	float camera_x;
-	float camera_y;
+	//static POINT camera;
+
+	struct Camera
+	{
+		float x;
+		float y;
+	};
+
+	static Camera camera;
+
+	/*static float camera_x;
+	static float camera_y;*/
 
 	//入力間隔時間		デバック
 	int input_margin;
 
 	//スクロール速度	デバック
-	int scroll_speed;	
+	float scroll_speed;	
 
 public:
 
@@ -22,4 +33,5 @@ public:
 
 	~CameraWork();
 	void Update();
+	static Camera GetCamera() { return camera; }
 };

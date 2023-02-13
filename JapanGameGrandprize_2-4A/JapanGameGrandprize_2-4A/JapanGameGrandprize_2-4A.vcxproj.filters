@@ -4,7 +4,7 @@
     <ClCompile Include="BoxCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BULLET.cpp">
+    <ClCompile Include="Bullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="FpsController.cpp">
@@ -55,15 +55,15 @@
     <ClCompile Include="EfectExplosion.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="EfectBeam.cpp">
-      <Filter>ソースファイル</Filter>
-      <Filter>ソースファイル\Stage\StageBuilder</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\StageBuillder\KeyManager.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
     <ClCompile Include="Stage\StageBuillder\StageBuilder.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="EfectBeam.cpp" />
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>ソースファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +73,7 @@
     <ClInclude Include="BoxCollider.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="BULLET.h">
+    <ClInclude Include="Bullet.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Define.h">
@@ -129,7 +129,7 @@
     </ClInclude>
     <ClInclude Include="EfectBeam.h">
       <Filter>ヘッダーファイル</Filter>
-	</ClInclude>	
+    </ClInclude>
     <ClInclude Include="Stage\StageBuillder\Debug.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
