@@ -24,29 +24,100 @@
     <ClCompile Include="EfectBeam.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractScene.h" />
-    <ClInclude Include="BoxCollider.h" />
-    <ClInclude Include="BULLET.h" />
-    <ClInclude Include="EfectBeam.h" />
-    <ClInclude Include="Stage\StageBuillder\Debug.h" />
-    <ClInclude Include="Stage\StageBuillder\KeyManager.h" />
-    <ClInclude Include="Stage\StageBuillder\StageBuilder.h" />
-    <ClInclude Include="CameraWork.h" />
-    <ClInclude Include="Define.h" />
-    <ClInclude Include="EfectExplosion.h" />
-    <ClInclude Include="EnemyBase.h" />
-    <ClInclude Include="FpsController.h" />
-    <ClInclude Include="LineCollider.h" />
-    <ClInclude Include="GameMain.h" />
-    <ClInclude Include="PadInput.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="SphereCollider.h" />
-    <ClInclude Include="Stage\Element\Element.h" />
-    <ClInclude Include="Stage\Element\Element_DamageWall.h" />
-    <ClInclude Include="Stage\MapChip.h" />
-    <ClInclude Include="Stage\Stage.h" />
-    <ClInclude Include="Title.h" />
-    <ClInclude Include="Undead.h" />
+    <ClInclude Include="AbstractScene.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BULLET.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsController.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMain.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PadInput.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereCollider.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Stage.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_DamageWall.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="LineCollider.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Undead.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\MapChip.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraWork.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EfectExplosion.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="EfectBeam.h">
+      <Filter>ヘッダーファイル</Filter>
+      </ClInclude>
+    <ClInclude Include="Stage\StageBuillder\Debug.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="EfectBeam.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuillder\KeyManager.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuillder\StageBuilder.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ソースファイル">
+      <UniqueIdentifier>{31dbc098-805f-4e00-80bd-9b4e6413e757}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル">
+      <UniqueIdentifier>{d14e2b45-f731-4bcc-8e41-6c75ab1cbcee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Stage">
+      <UniqueIdentifier>{4d417b46-41c8-4dac-92bc-bd26e8ee9929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Stage">
+      <UniqueIdentifier>{1d1d6eeb-efda-4a27-9790-a599605fcd8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Stage\StageBuilder">
+      <UniqueIdentifier>{cd1e6bc0-e754-43d4-8116-1050f37fb990}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Stage\StageBuilder">
+      <UniqueIdentifier>{d1293583-3d3b-49bc-8e71-328d73336604}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -25,6 +25,8 @@ Player::Player()
 		bullet[i] = nullptr;
 	}
 
+	stage = new Stage();
+
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
@@ -36,7 +38,7 @@ Player::~Player()
 {
 	for (int i = 0; i < 30; i++)
 	{
-		delete bullet[i];
+		//delete bullet[i];
 	}
 	delete[] bullet;
 }
