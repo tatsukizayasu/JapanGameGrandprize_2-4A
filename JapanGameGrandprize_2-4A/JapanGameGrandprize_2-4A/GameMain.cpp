@@ -5,7 +5,7 @@
 #include "PadInput.h"
 #include "Undead.h"
 
-#include _DEBUG
+#define _DEBUG
 
 //-----------------------------------
 // コンストラクタ
@@ -15,7 +15,7 @@ GameMain::GameMain()
 	player = new Player();
 	stage = new Stage();
 	enemy = new Undead();
-	camera_work = new CameraWork(100,300);
+	camera_work = new CameraWork(0,0);
 
 	input_margin = 0;
 }
