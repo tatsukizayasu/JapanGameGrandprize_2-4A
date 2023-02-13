@@ -7,7 +7,8 @@ class EfectBeam
 {
 private:
 	Location location;
-	float filling_radius;
+	float filling_radius_x;
+	float filling_radius_y;
 
 	
 public:
