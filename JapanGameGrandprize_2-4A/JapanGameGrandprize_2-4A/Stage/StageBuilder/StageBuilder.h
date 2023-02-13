@@ -49,7 +49,7 @@ public:
 	void UpdateModulation();
 	//セーブモードの更新
 	void UpdateSave();
-	//セーブモードの更新
+	//ロードモードの更新
 	void UpdateLoad();
 	//マウスの更新
 	void UpdateMouse();
@@ -65,6 +65,7 @@ public:
 
 	//マップチップを作成する
 	void MakeMapChip();
+	void MakeMapChip(float x,float y,float width,float height);
 
 	//ファイルカウント
 	int FileCount(const char* path)const;
@@ -76,5 +77,7 @@ public:
 	void SaveStage(int stage_num);
 	//上書き保存
 	void SaveStage(char* stage_name);
+	//CSVファイルからの読み込み
+	void LoadStage(char* stage_name);
 };
 

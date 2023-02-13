@@ -68,7 +68,7 @@ void StageBuilder::Update()
 		
 	case LOAD_MODE:
 		Directory::Open("\\Stage\\StageBuilder\\dat");
-		UpdateSave();
+		UpdateLoad();
 		break;
 
 		
@@ -206,6 +206,40 @@ void StageBuilder::UpdateSave()
 }
 
 //------------------------------------
+// ロードモードの更新
+//------------------------------------
+void StageBuilder::UpdateLoad()
+{
+
+	int stage_max = 0;
+
+	string file_name(Directory::GetCurrent());
+	file_name += "\\*.csv";
+
+	stage_max = FileCount(file_name.c_str());
+
+
+	Select(stage_max);
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+
+		char stage_argc[16];
+
+		sprintf_s(stage_argc, 16, "stage%d.csv", menu_cursor + 1);
+		LoadStage(stage_argc);
+
+
+		Directory::OpenMain();
+		mode = BRUSH_MODE;
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+	}
+}
+
+//------------------------------------
 // マウスの更新
 //------------------------------------
 void StageBuilder::UpdateMouse()
@@ -253,7 +287,7 @@ void StageBuilder::DrawFileInfo()const
 
 	int l_font_size = 16;
 	scale = FileCount(file_name.c_str());
-	scale++;//新規追加分
+	if (mode == SAVE_MODE)scale++;//新規追加分
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
 
@@ -333,6 +367,15 @@ void StageBuilder::MakeMapChip()
 	map_chips.push_back(new MapChip(&block_images[0],
 		{ pos_x + MAP_CHIP_SIZE / 2,pos_y + MAP_CHIP_SIZE / 2 },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
+}
+
+//------------------------------------
+// マップチップの作成
+//------------------------------------
+void StageBuilder::MakeMapChip(float x, float y, float width, float height)
+{
+	map_chips.push_back(new MapChip(&block_images[0],
+		{ x ,y },{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
 
 //------------------------------------
@@ -446,5 +489,26 @@ void StageBuilder::SaveStage(char* stage_name)
 }
 
 //------------------------------------
-// 
+// CSVファイルからの読み込み
 //------------------------------------
+void StageBuilder::LoadStage(char* stage_name)
+{
+	int file_handle;
+	if ((file_handle = FileRead_open(stage_name)) == 0)
+	{
+		exit(1);
+	}
+
+	char line[256];
+	char* token = NULL;
+	char* next_token = NULL;
+
+	while (FileRead_gets(line, sizeof(line), file_handle) != -1)
+	{
+		token = strtok_s(line, ",", &next_token);
+		while (token != NULL)
+		{
+			token = strtok_s(NULL, ",", &next_token);
+		}
+	}
+}
