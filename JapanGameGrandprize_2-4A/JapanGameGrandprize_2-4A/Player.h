@@ -20,7 +20,7 @@ private:
 	float speed_x;
 	
 
-	BULLET** bullet;             //’e‚Ì”z—ñ
+	Bullet** bullet;             //’e‚Ì”z—ñ
 	Stage* stage;
 
 public:

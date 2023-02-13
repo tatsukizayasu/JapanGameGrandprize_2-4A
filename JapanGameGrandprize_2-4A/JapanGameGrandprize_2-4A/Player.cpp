@@ -21,7 +21,7 @@ Player::Player()
 	fuel = 100.0;
 	for (int i = 0; i < 30; i++)
 	{
-		bullet = new BULLET * [30];
+		bullet = new Bullet * [30];
 		bullet[i] = nullptr;
 	}
 
@@ -174,7 +174,7 @@ void Player::Shoot_Gun()
 {
 	if (count % 30 == 0)
 	{
-		bullet[bullet_count++] = new BULLET(location.x, location.y);
+		bullet[bullet_count++] = new Bullet(location.x, location.y);
 		if (bullet_count >= 30)
 		{
 			bullet_count = 30;
