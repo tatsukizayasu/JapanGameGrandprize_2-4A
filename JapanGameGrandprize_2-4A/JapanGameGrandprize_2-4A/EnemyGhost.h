@@ -1,13 +1,12 @@
 #pragma once
 #include"EnemyBase.h"
 #include"BoxCollider.h"
+#include"Player.h"
 
 class EnemyGhost : public EnemyBase, public BoxCollider
 {
 private:
 
-	int ghost_x; //ゴーストのX座標
-	int ghost_y; //ゴーストのY座標
 	int action_time; //行動時間
 	int action_type; //行動パターン
 	bool ghost_death; //ゴーストが倒されたらtrue
@@ -25,5 +24,7 @@ public:
 
 	void GhostAttack(); //ゴーストのアタック処理
 
-	void GhostMove();  //ゴーストの動き
+	void GhostMove(Player* player);
+
+	bool GhostRange();
 };

@@ -13,6 +13,7 @@ GameMain::GameMain()
 	player = new Player();
 	stage = new Stage();
 	enemy = new Undead();
+	ghost = new EnemyGhost();
 	camera_work = new CameraWork(100,300);
 
 	input_margin = 0;
@@ -27,6 +28,7 @@ GameMain::~GameMain()
 	delete stage;
 	delete enemy;
 	delete camera_work;
+	delete ghost;
 }
 
 //-----------------------------------
@@ -52,6 +54,9 @@ AbstractScene* GameMain::Update()
 	player->Update();
 	stage->Update();
 	enemy->Update();
+	ghost->Update();
+
+	ghost->GhostMove(player);
 
 	Undead* a = dynamic_cast<Undead*>(enemy);
 	a->DistancePlayer(player);
@@ -70,5 +75,6 @@ void GameMain::Draw()const
 	player->Draw();
 	stage->Draw();
 	enemy->Draw();
+	ghost->Draw();
 }
 

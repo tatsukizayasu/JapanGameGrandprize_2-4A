@@ -2,7 +2,8 @@
 #include"DxLib.h"
 
 //ゴーストの画像サイズ
-#define GHOST_SIZE 20
+#define GHOST_SIZE_X 40
+#define GHOST_SIZE_Y 60
 
 //-----------------------------------
 // コンストラクタ
@@ -11,12 +12,12 @@ EnemyGhost::EnemyGhost()
 {
 	ghost_death = false;
 	ghost_vanish = false;  
-	ghost_x = 600;
-	ghost_y = 400;
+	location.x = 600;
+	location.y = 300;
+	area.height = 40;
+	area.width = 40;
 	action_time = 0;
 	action_type = 0;
-	action_type = 0;
-
 }
 
 
@@ -25,9 +26,18 @@ EnemyGhost::EnemyGhost()
 //-----------------------------------
 void EnemyGhost::Update()
 {
+	switch (action_type)
+	{
+	case 1:
+		location.x--;
+		break;
+	case 2:
+		location.x++;
+		break;
+	
 
-	GhostMove();
-	GhostAttack();
+	}
+	
 
 }
 
@@ -36,36 +46,35 @@ void EnemyGhost::Update()
 //-----------------------------------
 void EnemyGhost::Draw()const
 {
-	DrawBox(ghost_x, ghost_y, ghost_x + GHOST_SIZE, ghost_y + GHOST_SIZE, 0x00ff00, TRUE);
+	DrawFormatString(60, 60, GetColor(255, 0, 0), "%d", action_time);
+	DrawBox(location.x, location.y, location.x + GHOST_SIZE_X, location.y + GHOST_SIZE_Y, GetColor(255,0,0), TRUE);
 }
 
 
 //-----------------------------------
 // ゴーストの動き
 //-----------------------------------
-void EnemyGhost::GhostMove()
+void EnemyGhost::GhostMove(Player*player)
 {
-
-	if (action_time++ % 120 == 0) {
-		action_type = GetRand(3);
-	}
-	switch (action_type)
+	int range; //プレイヤーとの距離
+	action_time= location.x - player->GetLocationX();
+	range = location.x - player->GetLocationX();
+	if (range <= 100)
 	{
-	case 0:
-		ghost_x++;
-		ghost_y--;
-		break;
-	case 1:
-		ghost_x--;
-		ghost_y++;
-		break;
-	case 2:
-		ghost_x++;
-		break;
-	case 3:
-		ghost_x--;
-		break;
+		if (location.x> player->GetLocationX())
+		{
+			action_type = 1;
+		}
+		else
+		{
+			action_type = 2;
+		}
 	}
+	else
+	{
+		action_type = 0;
+	}
+	
 
 }
 
@@ -76,6 +85,12 @@ void EnemyGhost::GhostMove()
 void EnemyGhost::GhostAttack()
 {
 
+}
 
-
+//-----------------------------------
+// プレイヤーとの距離
+//-----------------------------------
+bool EnemyGhost::GhostRange()
+{
+	return true;
 }
