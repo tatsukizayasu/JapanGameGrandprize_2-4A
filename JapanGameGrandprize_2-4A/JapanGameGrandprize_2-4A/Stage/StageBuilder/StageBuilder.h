@@ -6,11 +6,12 @@
 #include "../SphereCollider.h"
 #include <vector>
 
-#define MENU_NUM 3
+#define MENU_NUM 4
 #define MENU_MODE -1
 #define BRUSH_MODE 0
 #define MODULATION_MODE 1
 #define SAVE_MODE 2
+#define LOAD_MODE 3
 
 #define ARROW_NUM 16
 
@@ -48,18 +49,28 @@ public:
 	void UpdateModulation();
 	//セーブモードの更新
 	void UpdateSave();
-
+	//セーブモードの更新
+	void UpdateLoad();
 	//マウスの更新
 	void UpdateMouse();
+
 	//メニューモードの描画
 	void DrawMenu()const;
 	//セーブモードの描画
-	void DrawSave()const;
+	void DrawFileInfo()const;
 	//格子の描画
 	void DrawFrame()const;
+	//ファイルの描画
+	void DrawFile(float x,float y,const char* path ,int font_size)const;
 
 	//マップチップを作成する
 	void MakeMapChip();
+
+	//ファイルカウント
+	int FileCount(const char* path)const;
+
+	//メニュー選択
+	void Select(int menu_max);
 
 	//CSVファイルへの書き出し(新規追加)
 	void SaveStage(int stage_num);
