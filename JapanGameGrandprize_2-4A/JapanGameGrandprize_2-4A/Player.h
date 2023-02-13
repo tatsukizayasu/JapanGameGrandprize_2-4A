@@ -19,7 +19,7 @@ private:
 	float jump_power;                 //ジャンプの力
 	
 
-	BULLET** bullet;             //弾の配列
+	Bullet** bullet;             //弾の配列
 	Stage* stage;
 
 public:
