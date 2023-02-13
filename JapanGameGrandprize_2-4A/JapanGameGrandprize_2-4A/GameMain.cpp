@@ -2,6 +2,10 @@
 #include "DxLib.h"
 #include "Title.h"
 #include "CameraWork.h"
+#include "PadInput.h"
+#include "Undead.h"
+
+#include _DEBUG
 
 //-----------------------------------
 // コンストラクタ
@@ -10,7 +14,8 @@ GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
-	camera_work = new CameraWork(0.0f,0.0f);
+	enemy = new Undead();
+	camera_work = new CameraWork(100,300);
 
 	input_margin = 0;
 }
@@ -22,6 +27,7 @@ GameMain::~GameMain()
 {
 	delete player;
 	delete stage;
+	delete enemy;
 	delete camera_work;
 }
 
@@ -30,6 +36,7 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+#ifdef _DEBUG
 	//シーン切り替えテスト		デバック
 	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) 
 	{
@@ -41,11 +48,16 @@ AbstractScene* GameMain::Update()
 	{
 		input_margin++;
 	}
+#endif
 
-	//printfDx("CameraX:%f\tCameraY:%f\n", camera_work->GetCamera().x, camera_work->GetCamera().y);
 	camera_work->Update();
 	player->Update();
 	stage->Update();
+	enemy->Update();
+
+	Undead* a = dynamic_cast<Undead*>(enemy);
+	a->DistancePlayer(player);
+
 	return this;
 }
 
@@ -59,4 +71,6 @@ void GameMain::Draw()const
 
 	player->Draw();
 	stage->Draw();
+	enemy->Draw();
 }
+

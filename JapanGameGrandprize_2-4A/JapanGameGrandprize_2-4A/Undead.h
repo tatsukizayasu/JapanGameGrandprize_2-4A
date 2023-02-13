@@ -1,6 +1,8 @@
 #pragma once
 #include "EnemyBase.h"
 #include "BoxCollider.h"
+#include "LineCollider.h"
+#include "Player.h"
 
 enum class UNDEAD_STATE
 {
@@ -11,13 +13,17 @@ enum class UNDEAD_STATE
 };
 
 class Undead :
-    public EnemyBase
+    public EnemyBase, public BoxCollider
 {
 private:
     int damage; //ダメージ
-    Location location; //中心座標
+    int attack_interval; //次の攻撃までの時間
+    int attack; //攻撃している
+
+    Location arm[2]; //腕の当たり判定
+    ENEMY_TYPE attack_type; //攻撃の属性
     UNDEAD_STATE state; //状態
-    BoxCollider collider; //当たり判定
+    LineCollider* collider; //当たり判定
 private:
     //攻撃
     void Attack();
@@ -31,6 +37,13 @@ public:
     //描画以外の更新
     void Update() override;
 
+    //プレイヤーとの距離
+    void DistancePlayer(Player* player);
+
     //描画
     void Draw() const override;
+
+    //LineColliderの取得
+    LineCollider GetLineCollider() const;
 };
+
