@@ -6,10 +6,10 @@
 class EfectBeam
 {
 private:
-	Location location[3];
-	int shoot_count;
-	int radius[3];
-	float add_loc_y[3];
+	Location location;
+	float filling_radius;
+
+	
 public:
 	EfectBeam();
 	~EfectBeam() {};

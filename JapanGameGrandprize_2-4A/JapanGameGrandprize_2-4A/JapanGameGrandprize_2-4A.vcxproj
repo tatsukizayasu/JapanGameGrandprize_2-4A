@@ -180,6 +180,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="CameraWork.cpp" />
+    <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
