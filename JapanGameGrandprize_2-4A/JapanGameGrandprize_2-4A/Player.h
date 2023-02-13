@@ -3,7 +3,7 @@
 #include "BoxCollider.h"
 #include "BULLET.h"
 
-#define GRAVITY 10
+
 
 class Player : public BoxCollider
 {
