@@ -181,6 +181,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="CameraWork.cpp" />
+    <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="FpsController.cpp" />

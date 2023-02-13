@@ -64,6 +64,7 @@
     <ClCompile Include="Stage\StageBuilder\Directory.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
+    <ClCompile Include="EfectBeam.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
