@@ -10,19 +10,17 @@ BULLET::BULLET()
 	bullet_y = 0.0;
 	delete_flg = false;
 	efect_explosion = nullptr;
-	type = BULLET_TYPE::NORMAL;
 }
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-BULLET::BULLET(float player_x, float player_y,BULLET_TYPE bullet_type)
+BULLET::BULLET(float player_x, float player_y)
 {
 	delete_flg = false;
 	bullet_x = player_x;
 	bullet_y = player_y;
 	efect_explosion = nullptr;
-	type = bullet_type;	
 }
 
 //-----------------------------------
@@ -30,27 +28,13 @@ BULLET::BULLET(float player_x, float player_y,BULLET_TYPE bullet_type)
 //-----------------------------------
 void BULLET::Draw() const
 {
-	switch (type)
+	if (efect_explosion != nullptr)
 	{
-	case BULLET_TYPE::NORMAL:
-		break;
-	case BULLET_TYPE::EXPLOSION:
 		efect_explosion->Draw();
-		break;
-	case BULLET_TYPE::MELT:
-		break;
-	case BULLET_TYPE::WARTER:
-		break;
-	case BULLET_TYPE::POISON:
-		break;
-	case BULLET_TYPE::PARALYSIS:
-		break;
-	case BULLET_TYPE::FROZEN:
-		break;
-	case BULLET_TYPE::SPECIAL:
-		break;
-	default:
-		break;
+	}
+	else 
+	{
+		DrawBox(bullet_x, bullet_y, bullet_x + 20, bullet_y + 10, 0xff00ff, TRUE);
 	}
 }
 
@@ -59,12 +43,25 @@ void BULLET::Draw() const
 //-----------------------------------
 void BULLET::Update()
 {
-	if (bullet_x < 1280)
+	if (bullet_x < 1260)
 	{
 		bullet_x += 10;
 	}
 	else
 	{
-		delete_flg = 0;
+		if (efect_explosion == nullptr)
+		{
+			efect_explosion = new EfectExplosion(bullet_x, bullet_y);
+		}
+		else
+		{
+			efect_explosion->Update();
+		}
+
+		if (efect_explosion->GetDeleteFlg())
+		{
+			delete_flg = true;
+		}
+
 	}
 }

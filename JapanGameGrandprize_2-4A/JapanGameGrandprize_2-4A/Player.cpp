@@ -7,8 +7,8 @@
 //-----------------------------------
 Player::Player()
 {
-	location.x = 0.0;
-	location.y = 420.0;
+	location.x = 0;
+	location.y = 420;
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
@@ -70,7 +70,7 @@ void Player::Update()
 	}
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
-		location.x -= player_speed;
+		location.x -= 5;
 	}
 
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
