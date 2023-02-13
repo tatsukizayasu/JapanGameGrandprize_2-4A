@@ -10,10 +10,13 @@ enum class ENEMY_KIND
 	MAGE,		//メイジ
 	GHOST,		//ゴースト
 	WYVERN,		//ワイバーン
-	
+
 	/*ボス*/
-	GOLEM,		//ゴーレム
+	KING_SLIME, //スライムキング
+	TORRENT,	//トレント
+	GARGOYLE,	//ガーゴイル
 	DRAGON,		//ドラゴン
+	END_BOSS,	//ラスボス
 	NONE
 };
 
