@@ -375,13 +375,13 @@ void StageBuilder::SaveStage(int stage_num)
 	sprintf_s(stage_name, 16, "stage%d.csv", stage_num);
 
 	//ファイルオープン
-	fopen_s(&fp, stage_name, "a");
+	fopen_s(&fp, stage_name, "w");
 	
 	//クラス名, x, y, image_handle
 	for (int i = 0; i < map_chips.size(); i++)
 	{
 
-		fprintf_s(fp, "%s,%lf,%lf,%d",
+		fprintf_s(fp, "%s,%lf,%lf,%d\n",
 			map_chips[i]->GetName(),
 			map_chips[i]->GetLocation().x,
 			map_chips[i]->GetLocation().y,
