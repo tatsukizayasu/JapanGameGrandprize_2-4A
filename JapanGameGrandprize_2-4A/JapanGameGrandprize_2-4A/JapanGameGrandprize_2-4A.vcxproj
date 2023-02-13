@@ -158,7 +158,6 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="EfectExplosion.h" />
     <ClInclude Include="EnemyBase.h" />
-    <ClInclude Include="EnemySlime.h" />
     <ClInclude Include="FpsController.h" />
     <ClInclude Include="LineCollider.h" />
     <ClInclude Include="GameMain.h" />
@@ -176,7 +175,6 @@
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="BULLET.cpp" />
-    <ClCompile Include="EnemySlime.cpp" />
     <ClCompile Include="CameraWork.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="FpsController.cpp" />
