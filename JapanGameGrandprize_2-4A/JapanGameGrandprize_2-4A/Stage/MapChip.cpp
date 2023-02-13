@@ -66,7 +66,7 @@ void MapChip::Update()
 //-----------------------------------
 void MapChip::Draw()const
 {
-	//printfDx("camera_x:%f\tcamera_y:%f\n", camera_x, camera_y);
+	printfDx("camera_x:%f\tcamera_y:%f\n", CameraWork::GetCamera().x, CameraWork::GetCamera().y);
 	//float x = location.x + CameraWork::GetCamera().x;
 	//float y = location.y + CameraWork::GetCamera().y;
 

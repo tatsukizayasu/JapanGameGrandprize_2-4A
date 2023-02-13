@@ -15,18 +15,22 @@ CameraWork::CameraWork()
 
 	input_margin = 0;
 	scroll_speed = 1;
+
+	player = nullptr;
 }
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-CameraWork::CameraWork(float camera_x, float camera_y)
+CameraWork::CameraWork(float camera_x, float camera_y, Player* player)
 {
 	this->camera.x = camera_x;
 	this->camera.y = camera_y;
 
 	input_margin = 0;
 	scroll_speed = 0.5f;
+
+	this->player = player;
 }
 
 //-----------------------------------
@@ -34,6 +38,7 @@ CameraWork::CameraWork(float camera_x, float camera_y)
 //-----------------------------------
 CameraWork::~CameraWork()
 {
+	delete player;
 }
 
 //-----------------------------------
@@ -43,6 +48,11 @@ void CameraWork::Update()
 {
 #ifdef DEBUG
 
+	printfDx("x:%f\ty:%f\n", player->GetLocation().x, player->GetLocation().y);
+
+	if (player->GetLocation().x < 600) {
+		camera.x = 600 - player->GetLocationX();
+	}
 
 
 	if (input_margin < 10)

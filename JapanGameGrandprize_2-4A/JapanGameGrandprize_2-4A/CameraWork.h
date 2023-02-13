@@ -1,4 +1,5 @@
 #pragma once
+#include "Player.h"
 
 class CameraWork
 {
@@ -15,21 +16,20 @@ protected:
 		float y;
 	};
 
+	//オブジェクト
 	static Camera camera;
-
-	/*static float camera_x;
-	static float camera_y;*/
+	Player* player;
 
 	//入力間隔時間		デバック
 	int input_margin;
 
 	//スクロール速度	デバック
-	float scroll_speed;	
+	float scroll_speed;
 
 public:
 
 	CameraWork();
-	CameraWork(float camera_x, float camera_y);
+	CameraWork(float camera_x, float camera_y, Player* player);
 
 	~CameraWork();
 	void Update();

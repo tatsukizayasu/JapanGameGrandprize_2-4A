@@ -15,7 +15,7 @@ GameMain::GameMain()
 	player = new Player();
 	stage = new Stage();
 	enemy = new Undead();
-	camera_work = new CameraWork(0,0);
+	camera_work = new CameraWork(0,0,player);
 
 	input_margin = 0;
 }
