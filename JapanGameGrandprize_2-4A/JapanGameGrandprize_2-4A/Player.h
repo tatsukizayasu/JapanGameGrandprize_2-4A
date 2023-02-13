@@ -2,6 +2,7 @@
 #include "Define.h"
 #include "BoxCollider.h"
 #include "BULLET.h"
+#include "Stage/Stage.h"
 
 #define GRAVITY 10
 
@@ -19,6 +20,7 @@ private:
 	
 
 	BULLET** bullet;             //’e‚Ì”z—ñ
+	Stage* stage;
 
 public:
 	Player();
