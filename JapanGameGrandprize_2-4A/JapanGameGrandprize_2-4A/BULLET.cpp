@@ -4,7 +4,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-BULLET::BULLET()
+Bullet::Bullet()
 {
 	bullet_x = 0.0;
 	bullet_y = 0.0;
@@ -15,7 +15,7 @@ BULLET::BULLET()
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-BULLET::BULLET(float player_x, float player_y)
+Bullet::Bullet(float player_x, float player_y)
 {
 	delete_flg = false;
 	bullet_x = player_x;
@@ -26,7 +26,7 @@ BULLET::BULLET(float player_x, float player_y)
 //-----------------------------------
 // 描画
 //-----------------------------------
-void BULLET::Draw() const
+void Bullet::Draw() const
 {
 	if (efect_explosion != nullptr)
 	{
@@ -41,7 +41,7 @@ void BULLET::Draw() const
 //-----------------------------------
 // 更新
 //-----------------------------------
-void BULLET::Update()
+void Bullet::Update()
 {
 	if (bullet_x < 1260)
 	{

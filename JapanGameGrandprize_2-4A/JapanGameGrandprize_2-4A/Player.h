@@ -1,6 +1,7 @@
 #pragma once
 #include "Define.h"
 #include "BoxCollider.h"
+#include "EfectBeam.h"
 #include "BULLET.h"
 #include "Stage/Stage.h"
 
@@ -14,14 +15,16 @@ private:
 	int bullet_count;				//撃った弾の数
 	int count;                      //処理をカウントする
 	int not_jet_count;              //跳んでない時を数える
+	float gravity_down;				//下降時の値
 	float fuel;						//燃料
 	float jump;                     //ジャンプの値
 	float jump_power;               //ジャンプの力
 	float speed_x;
 	
 
-	BULLET** bullet;             //弾の配列
+	Bullet** bullet;             //弾の配列
 	Stage* stage;
+	EfectBeam* beam;
 
 public:
 	Player();

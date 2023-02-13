@@ -19,11 +19,14 @@ Player::Player()
 	not_jet_count = 0;
 	speed_x = 0.0;
 	fuel = 100.0;
+	gravity_down = 0.0;
 	for (int i = 0; i < 30; i++)
 	{
-		bullet = new BULLET * [30];
+		bullet = new Bullet * [30];
 		bullet[i] = nullptr;
 	}
+
+	beam = nullptr;
 
 	stage = new Stage();
 
@@ -50,14 +53,18 @@ void Player::Draw() const
 {
 	DrawBox(location.x, location.y, location.x + image_size_x, location.y + image_size_y, 0x00ff00, TRUE);
 
-	for (int i = 0; i < bullet_count; i++)
+	/*for (int i = 0; i < bullet_count; i++)
 	{
 		if (bullet[i] != nullptr)
 		{
 			bullet[i]->Draw();
 		}
-	}
+	}*/
 
+	if (beam != nullptr)
+	{
+		beam->Draw();
+	}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power,fuel);
 }
 
@@ -72,7 +79,7 @@ void Player::Update()
 		location.x += speed_x;
 		if (speed_x < 5.0)
 		{
-			speed_x = speed_x + 0.25;
+			speed_x = speed_x + 0.2;
 		}
 	}
 	else if (PAD_INPUT::GetLStick().x <= -10000)
@@ -80,15 +87,27 @@ void Player::Update()
 		location.x += speed_x;
 		if (speed_x > -5.0)
 		{
-			speed_x = speed_x - 0.25;
+			speed_x = speed_x - 0.2;
 		}
 	}
 	else
 	{
 		if (speed_x > 0)
 		{
-			speed_x--;
+			speed_x -= 0.2;
 		}
+
+		if (speed_x < 0)
+		{
+			speed_x += 0.2;
+		}
+
+		if (speed_x > -0.2 && speed_x < 0.2)
+		{
+			speed_x = 0;
+		}
+
+		location.x += speed_x;
 	}
 
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
@@ -101,6 +120,8 @@ void Player::Update()
 	{
 		not_jet_count = 0;
 		jump_power = jump - GRAVITY;
+
+		gravity_down = 0.0;
 
 		jump += 0.25;
 		fuel -= 0.25;
@@ -123,39 +144,53 @@ void Player::Update()
 	}
 	else
 	{
-		jump_power = 0;
-		jump = 10;
-		location.y += 10;
-
-
-		if (location.y > 400)
+		if (jump_power > 0)
 		{
-			location.y = 400;
-		}
-
-		if (not_jet_count++ >= 120)
-		{
-			if (fuel < 100)
+			jump_power -= 0.5;
+			if (location.y > 0)
 			{
-				fuel += 2.5;
+				location.y -= jump_power;
 			}
 			else
 			{
-				fuel = 100;
+				jump_power = 0;
 			}
 		}
-
-		if (not_jet_count >= 120)
+		else
 		{
-			not_jet_count = 120;
+			jump_power = 0;
+			jump = 10;
+			location.y += gravity_down;
+			gravity_down += 0.25;
+
+			if (location.y > 400)
+			{
+				location.y = 400;
+			}
+
+			if (not_jet_count++ >= 120)
+			{
+				if (fuel < 100)
+				{
+					fuel += 2.5;
+				}
+				else
+				{
+					fuel = 100;
+				}
+			}
+
+			if (not_jet_count >= 120)
+			{
+				not_jet_count = 120;
+			}
 		}
 	}
 	 
 
-
 	for (int i = 0; i < bullet_count; i++)
 	{
-		if (bullet[i]->GetDeleteFlg())
+		/*if (bullet[i]->GetDeleteFlg())
 		{
 			bullet[i] = nullptr;
 			SortBullet(i);
@@ -163,8 +198,14 @@ void Player::Update()
 		else
 		{
 			bullet[i]->Update();
-		}
+		}*/
 	}
+
+	if (beam != nullptr)
+	{
+		beam->Update(location.x, location.y);
+	}
+
 }
 
 //-----------------------------------
@@ -172,14 +213,20 @@ void Player::Update()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
-	if (count % 30 == 0)
+	/*if (count % 30 == 0)
 	{
-		bullet[bullet_count++] = new BULLET(location.x, location.y);
+		bullet[bullet_count++] = new Bullet(location.x, location.y);
 		if (bullet_count >= 30)
 		{
 			bullet_count = 30;
 		}
+	}*/
+
+	if (beam == nullptr)
+	{
+		beam = new EfectBeam();
 	}
+
 }
 
 //-----------------------------------
