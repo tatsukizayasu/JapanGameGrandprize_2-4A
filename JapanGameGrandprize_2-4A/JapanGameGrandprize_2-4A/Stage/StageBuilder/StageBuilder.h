@@ -62,8 +62,8 @@ public:
 	void MakeMapChip();
 
 	//CSVファイルへの書き出し(新規追加)
-	void SaveStage();
+	void SaveStage(int stage_num);
 	//上書き保存
-	void SaveStage(char*);
+	void SaveStage(char* stage_name);
 };
 

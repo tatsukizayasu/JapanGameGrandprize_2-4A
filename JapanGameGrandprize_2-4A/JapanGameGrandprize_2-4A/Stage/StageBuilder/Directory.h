@@ -1,6 +1,7 @@
 #pragma once
 #include <direct.h>
 #include <string>
+#define DIRECTORY_BUFFER_SIZE 256
 using namespace std;
 class Directory
 {
@@ -12,9 +13,9 @@ public:
 	//カレントディレクトリの更新
 	static void Update()
 	{
-		char* buffer = nullptr;
-		const char* get_current = _getcwd(buffer, 256);
-		current_dir = get_current;
+		char buffer[DIRECTORY_BUFFER_SIZE];
+		const char* get_current = _getcwd(buffer, DIRECTORY_BUFFER_SIZE);
+		current_dir = buffer;
 
 	}
 
