@@ -55,6 +55,15 @@
     <ClCompile Include="EfectExplosion.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="EfectBeam.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\StageBuillder\KeyManager.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\StageBuillder\StageBuilder.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -117,6 +126,18 @@
     <ClInclude Include="EfectExplosion.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\StageBuillder\Debug.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="EfectBeam.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuillder\KeyManager.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuillder\StageBuilder.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -130,6 +151,12 @@
     </Filter>
     <Filter Include="ヘッダーファイル\Stage">
       <UniqueIdentifier>{1d1d6eeb-efda-4a27-9790-a599605fcd8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Stage\StageBuilder">
+      <UniqueIdentifier>{cd1e6bc0-e754-43d4-8116-1050f37fb990}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Stage\StageBuilder">
+      <UniqueIdentifier>{d1293583-3d3b-49bc-8e71-328d73336604}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

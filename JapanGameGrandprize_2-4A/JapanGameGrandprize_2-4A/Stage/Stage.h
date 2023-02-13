@@ -2,11 +2,17 @@
 #include "MapChip.h"
 #include <vector>
 
+#include "StageBuillder/StageBuilder.h"
+
 class Stage
 {
 private:
 	//MapChipオブジェクト
 	std::vector<MapChip*> mapchip;
+
+#ifdef _STAGE_BUILDER
+	StageBuilder* stage_builder;
+#endif
 
 	//マップ配列データ
 	std::vector<std::vector<int>> map_data;

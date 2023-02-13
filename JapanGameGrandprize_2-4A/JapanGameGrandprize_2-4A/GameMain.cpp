@@ -3,6 +3,7 @@
 #include "Title.h"
 #include "CameraWork.h"
 #include "PadInput.h"
+#include "Undead.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -11,6 +12,7 @@ GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
+	enemy = new Undead();
 	camera_work = new CameraWork(100,300);
 
 	input_margin = 0;
@@ -23,6 +25,7 @@ GameMain::~GameMain()
 {
 	delete player;
 	delete stage;
+	delete enemy;
 	delete camera_work;
 }
 
@@ -48,6 +51,11 @@ AbstractScene* GameMain::Update()
 	camera_work->Update();
 	player->Update();
 	stage->Update();
+	enemy->Update();
+
+	Undead* a = dynamic_cast<Undead*>(enemy);
+	a->DistancePlayer(player);
+
 	return this;
 }
 
@@ -61,4 +69,6 @@ void GameMain::Draw()const
 
 	player->Draw();
 	stage->Draw();
+	enemy->Draw();
 }
+

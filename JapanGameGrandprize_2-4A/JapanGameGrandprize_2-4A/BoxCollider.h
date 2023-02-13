@@ -1,6 +1,8 @@
 #pragma once
 #include"define.h"
 
+#include"Stage/StageBuillder/Debug.h"
+#include"DxLib.h"
 
 class BoxCollider
 {
@@ -26,4 +28,19 @@ public:
 
 	//íÜêSç¿ïWÇÃê›íË
 	void SetLocation(Location location);
+
+#ifdef _SHOW_COLLISION
+	void DrawCollision()const
+	{
+		float x1 = location.x - (area.width / 2);
+		float y1 = location.y - (area.height / 2);
+	
+		float x2 = x1 + area.width;
+		float y2 = y1 + area.height;
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 64);
+		DrawBoxAA(x1, y1, x2, y2, 0xE9FF00, FALSE, 3);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+#endif
 };
