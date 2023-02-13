@@ -378,8 +378,15 @@ void StageBuilder::SaveStage(int stage_num)
 	fopen_s(&fp, stage_name, "a");
 	
 	//ƒNƒ‰ƒX–¼, x, y, image_handle
-	fprintf_s(fp, "default,%lf,%lf,%d", 1.4f, 5.3f,0);
+	for (int i = 0; i < map_chips.size(); i++)
+	{
 
+		fprintf_s(fp, "%s,%lf,%lf,%d",
+			map_chips[i]->GetName(),
+			map_chips[i]->GetLocation().x,
+			map_chips[i]->GetLocation().y,
+			0);
+	}
 
 
 }
