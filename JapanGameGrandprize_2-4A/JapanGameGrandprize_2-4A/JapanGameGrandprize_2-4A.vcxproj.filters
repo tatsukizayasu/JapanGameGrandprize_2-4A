@@ -129,6 +129,7 @@
     </ClInclude>
     <ClInclude Include="EfectBeam.h">
       <Filter>ヘッダーファイル</Filter>
+	</ClInclude>	
     <ClInclude Include="Stage\StageBuillder\Debug.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
