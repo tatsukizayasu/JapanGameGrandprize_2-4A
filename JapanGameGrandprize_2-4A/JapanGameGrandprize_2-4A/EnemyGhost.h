@@ -3,6 +3,15 @@
 #include"BoxCollider.h"
 #include"Player.h"
 
+enum class Ghost_STATE
+{
+	IDOL,   //’ÊíˆÚ“®
+	lOWER_LEFT,   //¶‰º
+	ATTACK,   //UŒ‚
+	DEATH,   //€–S
+};
+
+
 class EnemyGhost : public EnemyBase, public BoxCollider
 {
 private:

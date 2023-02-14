@@ -5,6 +5,8 @@
 #define GHOST_SIZE_X 40
 #define GHOST_SIZE_Y 60
 
+//プレイヤー発見距離
+#define DETECTION_DISTANCE 200
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -28,14 +30,25 @@ void EnemyGhost::Update()
 {
 	switch (action_type)
 	{
-	case 1:
+	case 0:  //通常移動
+		location.x--; 
+		break;
+	case 1:  //左下を目指す
 		location.x--;
+		location.y++;
 		break;
-	case 2:
+	case 2:  //左上を目指す
+		location.x--;
+		location.y--;
+		break;
+	case 3:  //右下を目指す
 		location.x++;
+		location.y++;
 		break;
-	
-
+	case 4:  //右上を目指す。
+		location.x++;
+		location.y--;
+		break;
 	}
 	
 
@@ -59,15 +72,30 @@ void EnemyGhost::GhostMove(Player*player)
 	int range; //プレイヤーとの距離
 	action_time= location.x - player->GetLocationX();
 	range = location.x - player->GetLocationX();
-	if (range <= 100)
+
+	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE)
 	{
-		if (location.x> player->GetLocationX())
+		if (location.x > player->GetLocationX())
 		{
-			action_type = 1;
+			if (player->GetLocationY() > location.y)
+			{
+				action_type = 1;
+			}
+			else
+			{
+				action_type = 2;
+			}
 		}
 		else
 		{
-			action_type = 2;
+			if (player->GetLocationY() > location.y)
+			{
+				action_type = 3;
+			}
+			else
+			{
+				action_type = 4;
+			}
 		}
 	}
 	else
