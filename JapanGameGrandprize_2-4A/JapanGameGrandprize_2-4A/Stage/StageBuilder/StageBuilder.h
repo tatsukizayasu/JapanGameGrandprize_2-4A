@@ -73,6 +73,8 @@ public:
 	//メニュー選択
 	void Select(int menu_max);
 
+	const int* GetImage(int image_index)const;
+
 	//CSVファイルへの書き出し(新規追加)
 	void SaveStage(int stage_num);
 	//上書き保存

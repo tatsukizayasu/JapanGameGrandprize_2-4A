@@ -2,6 +2,8 @@
 #include "StageBuilder.h"
 #include "Directory.h"
 #include <string>
+#include <fstream>
+#include <sstream>
 
 
 //------------------------------------
@@ -282,8 +284,8 @@ void StageBuilder::DrawFileInfo()const
 	int current = 0;
 	file_name += "\\*.csv";
 
-	const float DROW_POS_X = 560.f;
-	const float DROW_POS_Y = 240.f;
+	const float draw_pos_x = 560.f;
+	const float draw_pos_y = 240.f;
 
 	int l_font_size = 16;
 	scale = FileCount(file_name.c_str());
@@ -291,21 +293,21 @@ void StageBuilder::DrawFileInfo()const
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
 
-	DrawBoxAA(DROW_POS_X, DROW_POS_Y,
-		DROW_POS_X + MAP_CHIP_SIZE * 4, DROW_POS_Y + l_font_size * scale, 
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		draw_pos_x + MAP_CHIP_SIZE * 4, draw_pos_y + l_font_size * scale, 
 		0x000000, TRUE);
-	DrawBoxAA(DROW_POS_X, DROW_POS_Y,
-		560.f + MAP_CHIP_SIZE * 4, DROW_POS_Y + l_font_size * scale,
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		560.f + MAP_CHIP_SIZE * 4, draw_pos_y + l_font_size * scale,
 		0xFFFFFF, FALSE, 3);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	DrawFile(DROW_POS_X, DROW_POS_Y, file_name.c_str(),l_font_size);
+	DrawFile(draw_pos_x, draw_pos_y, file_name.c_str(),l_font_size);
 
 	if (mode == SAVE_MODE)
 	{
-		DrawFormatStringF(DROW_POS_X + l_font_size,
-			DROW_POS_Y + l_font_size * (scale-1),
+		DrawFormatStringF(draw_pos_x + l_font_size,
+			draw_pos_y + l_font_size * (scale-1),
 			GetColor(255, 255, 255), "%c %s", arrow[scale-1], "新規追加");
 	}
 }
@@ -438,6 +440,14 @@ void StageBuilder::Select(int menu_max)
 }
 
 //------------------------------------
+// 画像の取得
+//------------------------------------
+const int* StageBuilder::GetImage(int image_index)const
+{
+	return &block_images[image_index];
+}
+
+//------------------------------------
 // CSVファイルへ書き出す
 //------------------------------------
 void StageBuilder::SaveStage(int stage_num)
@@ -461,7 +471,10 @@ void StageBuilder::SaveStage(int stage_num)
 			0);
 	}
 
-
+	if (fp)
+	{
+		fclose(fp);
+	}
 }
 
 //------------------------------------
@@ -474,18 +487,24 @@ void StageBuilder::SaveStage(char* stage_name)
 	//ファイルオープン
 	fopen_s(&fp, stage_name, "w");
 
-	//クラス名, x, y, image_handle
-	for (int i = 0; i < map_chips.size(); i++)
+	if (fp != NULL)
 	{
+		//クラス名, x, y, image_handle
+		for (int i = 0; i < map_chips.size(); i++)
+		{
 
-		fprintf_s(fp, "%s,%lf,%lf,%d\n",
-			map_chips[i]->GetName(),
-			map_chips[i]->GetLocation().x,
-			map_chips[i]->GetLocation().y,
-			0);
+			fprintf_s(fp, "%s,%lf,%lf,%d\n",
+				map_chips[i]->GetName(),
+				map_chips[i]->GetLocation().x,
+				map_chips[i]->GetLocation().y,
+				0);
+		}
 	}
 
-
+	if (fp)
+	{
+		fclose(fp);
+	}
 }
 
 //------------------------------------
@@ -493,22 +512,44 @@ void StageBuilder::SaveStage(char* stage_name)
 //------------------------------------
 void StageBuilder::LoadStage(char* stage_name)
 {
-	int file_handle;
-	if ((file_handle = FileRead_open(stage_name)) == 0)
+	string class_name;
+	float x;
+	float y;
+	float width = MAP_CHIP_SIZE;
+	float height = MAP_CHIP_SIZE;
+	float image;
+
+	string str_conma_buf;
+	string line;
+	ifstream ifstream(stage_name);
+
+	if (!ifstream)
 	{
-		exit(1);
+		std::exit(1);
+		return;
 	}
 
-	char line[256];
-	char* token = NULL;
-	char* next_token = NULL;
-
-	while (FileRead_gets(line, sizeof(line), file_handle) != -1)
+	while(!(getline(ifstream,line).eof()))
 	{
-		token = strtok_s(line, ",", &next_token);
-		while (token != NULL)
-		{
-			token = strtok_s(NULL, ",", &next_token);
-		}
+		istringstream i_stringstream(line);
+
+		getline(i_stringstream, str_conma_buf, ',');
+		class_name = str_conma_buf;
+
+
+		getline(i_stringstream, str_conma_buf, ',');
+		x = atof(str_conma_buf.c_str());
+
+
+		getline(i_stringstream, str_conma_buf, ',');
+		y = atof(str_conma_buf.c_str());
+
+
+		getline(i_stringstream, str_conma_buf, ',');
+		image = atof(str_conma_buf.c_str());
+
+		MakeMapChip(x, y, width, height);
 	}
+
+	ifstream.close();
 }
