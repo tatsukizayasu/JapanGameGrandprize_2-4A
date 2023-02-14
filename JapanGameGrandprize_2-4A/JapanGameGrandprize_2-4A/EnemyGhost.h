@@ -35,5 +35,7 @@ public:
 
 	void GhostMove(Player* player);
 
+	void HitBullet(Bullet* bullet);
+
 	bool GhostRange();
 };

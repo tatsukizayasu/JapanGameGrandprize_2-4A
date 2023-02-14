@@ -122,3 +122,9 @@ bool EnemyGhost::GhostRange()
 {
 	return true;
 }
+
+
+void EnemyGhost::HitBullet(Bullet* bullet)
+{
+
+}
