@@ -1,4 +1,4 @@
-#include "BULLET.h"
+#include "Bullet.h"
 #include "DxLib.h"
 
 //-----------------------------------

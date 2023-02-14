@@ -153,11 +153,12 @@
   <ItemGroup>
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BoxCollider.h" />
-    <ClInclude Include="BULLET.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Stage\StageBuilder\Directory.h" />
     <ClInclude Include="EfectBeam.h" />
-    <ClInclude Include="Stage\StageBuillder\Debug.h" />
-    <ClInclude Include="Stage\StageBuillder\KeyManager.h" />
-    <ClInclude Include="Stage\StageBuillder\StageBuilder.h" />
+    <ClInclude Include="Stage\StageBuilder\Debug.h" />
+    <ClInclude Include="Stage\StageBuilder\KeyManager.h" />
+    <ClInclude Include="Stage\StageBuilder\StageBuilder.h" />
     <ClInclude Include="CameraWork.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="EfectExplosion.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="BULLET.cpp" />
     <ClCompile Include="CameraWork.cpp" />
     <ClCompile Include="EfectBeam.cpp" />
+    <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
@@ -190,8 +192,8 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SphereCollider.cpp" />
-    <ClCompile Include="Stage\StageBuillder\KeyManager.cpp" />
-    <ClCompile Include="Stage\StageBuillder\StageBuilder.cpp" />
+    <ClCompile Include="Stage\StageBuilder\KeyManager.cpp" />
+    <ClCompile Include="Stage\StageBuilder\StageBuilder.cpp" />
     <ClCompile Include="Stage\Element\Element.cpp" />
     <ClCompile Include="Stage\Element\Element_DamageWall.cpp" />
     <ClCompile Include="Stage\MapChip.cpp" />

@@ -21,6 +21,69 @@
     <ClCompile Include="Stage\Stage.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Undead.cpp" />
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsController.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PadInput.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollider.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Stage.cpp">
+      <Filter>ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element.cpp">
+      <Filter>ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_DamageWall.cpp">
+      <Filter>ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\MapChip.cpp">
+      <Filter>ソースファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCollider.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Undead.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraWork.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EfectExplosion.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\StageBuilder\KeyManager.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\StageBuilder\StageBuilder.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\StageBuilder\Directory.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
     <ClCompile Include="EfectBeam.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -30,7 +93,7 @@
     <ClInclude Include="BoxCollider.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="BULLET.h">
+    <ClInclude Include="Bullet.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Define.h">
@@ -84,19 +147,19 @@
     <ClInclude Include="EfectExplosion.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="EfectBeam.h">
-      <Filter>ヘッダーファイル</Filter>
-      </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\Debug.h">
+    <ClInclude Include="Stage\StageBuilder\Debug.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
     <ClInclude Include="EfectBeam.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\KeyManager.h">
+    <ClInclude Include="Stage\StageBuilder\KeyManager.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\StageBuilder.h">
+    <ClInclude Include="Stage\StageBuilder\StageBuilder.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuilder\Directory.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
   </ItemGroup>
