@@ -64,6 +64,9 @@
     <ClCompile Include="Stage\StageBuillder\StageBuilder.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
+    <ClCompile Include="EnemySlime.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -137,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="Stage\StageBuillder\StageBuilder.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySlime.h">
+      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
