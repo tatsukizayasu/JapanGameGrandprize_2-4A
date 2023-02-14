@@ -82,3 +82,11 @@ ElementItem EnemyBase::GetDropItem() const
 	return drop_item; 
 }
 
+//-----------------------------------
+// エネミーの種類の取得
+//-----------------------------------
+ENEMY_KIND EnemyBase::GetEnemyKind() const
+{
+	return kind;
+}
+
