@@ -4,7 +4,7 @@
     <ClCompile Include="BoxCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BULLET.cpp">
+    <ClCompile Include="Bullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="FpsController.cpp">
@@ -55,15 +55,16 @@
     <ClCompile Include="EfectExplosion.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="EfectBeam.cpp">
+    <ClCompile Include="Stage\StageBuilder\KeyManager.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\StageBuillder\KeyManager.cpp">
+    <ClCompile Include="Stage\StageBuilder\StageBuilder.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\StageBuillder\StageBuilder.cpp">
+    <ClCompile Include="Stage\StageBuilder\Directory.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
+    <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="EnemySlime.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -75,7 +76,7 @@
     <ClInclude Include="BoxCollider.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="BULLET.h">
+    <ClInclude Include="Bullet.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Define.h">
@@ -129,16 +130,19 @@
     <ClInclude Include="EfectExplosion.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\Debug.h">
+    <ClInclude Include="Stage\StageBuilder\Debug.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
     <ClInclude Include="EfectBeam.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\KeyManager.h">
+    <ClInclude Include="Stage\StageBuilder\KeyManager.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\StageBuilder.h">
+    <ClInclude Include="Stage\StageBuilder\StageBuilder.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuilder\Directory.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
     <ClInclude Include="EnemySlime.h">

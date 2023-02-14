@@ -2,8 +2,9 @@
 #include "Define.h"
 #include "BoxCollider.h"
 #include "BULLET.h"
+#include "Stage/Stage.h"
 
-#define GRAVITY 10
+
 
 class Player : public BoxCollider
 {
@@ -18,7 +19,8 @@ private:
 	float jump_power;                 //ƒWƒƒƒ“ƒv‚Ì—Í
 	
 
-	BULLET** bullet;             //’e‚Ì”z—ñ
+	Bullet** bullet;             //’e‚Ì”z—ñ
+	Stage* stage;
 
 public:
 	Player();

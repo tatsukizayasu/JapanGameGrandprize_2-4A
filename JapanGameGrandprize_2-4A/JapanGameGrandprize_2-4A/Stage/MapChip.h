@@ -21,4 +21,9 @@ public:
     virtual void Update();
     //•`‰æ
     virtual void Draw() const;
+
+    const char* GetName() { return class_name; }
+
+protected:
+    const char* class_name = "default";
 };

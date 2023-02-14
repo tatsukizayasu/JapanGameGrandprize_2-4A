@@ -2,6 +2,71 @@
 
 #define SCREEN_HEIGHT 720	//‰æ–ÊƒTƒCƒY (c)
 #define SCREEN_WIDTH 1280	//‰æ–ÊƒTƒCƒY (‰¡)
+#define GRAVITY 10
+
+//Œ³‘f\‘¢‘Ì
+struct Element
+{
+	int oxygen;      //_‘f
+	int hydrogen;	 //…‘f
+	int nitrogen;	 //’‚‘f
+	int carbon;		 //’Y‘f
+	int sulfur;		 //—°‰©
+	int chlorine;	 //‰–‘f
+	int uranium;	 //ƒEƒ‰ƒ“
+};
+
+
+//‰»‡•¨\‘¢‘Ì
+struct Compound
+{
+	int warter;				//…
+	int carbon_dioxide;		//“ñ_‰»’Y‘f
+	int ozone;				//ƒIƒ]ƒ“
+	int sulfuric_acid;		//—°_
+	int hydrochloric_acid;	//‰–_
+	int alcohol;			//ƒAƒ‹ƒR[ƒ‹
+	int tear_gas;			//Ã—ÜƒKƒX
+	int suger;				//»“œ
+	int ammonium_chloride;  //‰–‰»ƒAƒ“ƒ‚ƒjƒEƒ€
+	int acetic_acid;		//|_
+	int propane;			//ƒvƒƒpƒ“
+	int uranium;			//ƒEƒ‰ƒ“
+};
+
+struct Explosion
+{
+
+};
+
+struct Melt
+{
+
+};
+
+struct Poison
+{
+
+};
+
+struct Paralysis
+{
+
+};
+
+struct Heal
+{
+
+};
+
+
+
+
+
+
+
+
+
 
 //’†SÀ•W
 struct Location
