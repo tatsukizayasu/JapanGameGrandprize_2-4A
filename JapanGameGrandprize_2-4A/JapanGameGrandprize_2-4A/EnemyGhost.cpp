@@ -7,19 +7,19 @@
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 200
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
 EnemyGhost::EnemyGhost()
 {
-	ghost_death = false;
-	ghost_vanish = false;  
+	ghost_vanish = false;
 	location.x = 600;
 	location.y = 300;
 	area.height = 40;
 	area.width = 40;
 	action_time = 0;
-	action_type = 0;
+	action_type = GHOST_STATE::NORMAL;
 }
 
 
@@ -28,29 +28,32 @@ EnemyGhost::EnemyGhost()
 //-----------------------------------
 void EnemyGhost::Update()
 {
+
 	switch (action_type)
 	{
-	case 0:  //通常移動
-		location.x--; 
+	case GHOST_STATE::NORMAL:  //通常移動
+		location.x--;
 		break;
-	case 1:  //左下を目指す
+	case GHOST_STATE::LEFT_lOWER:  //左下を目指す
 		location.x--;
 		location.y++;
 		break;
-	case 2:  //左上を目指す
+	case GHOST_STATE::LEFT_UPPER:  //左上を目指す
 		location.x--;
 		location.y--;
 		break;
-	case 3:  //右下を目指す
+	case GHOST_STATE::RIGHT_LOWER:  //右下を目指す
 		location.x++;
 		location.y++;
 		break;
-	case 4:  //右上を目指す。
+	case GHOST_STATE::RIGHT_UPPER:  //右上を目指す。
 		location.x++;
 		location.y--;
+		break;
+	case GHOST_STATE::ATTACK:
 		break;
 	}
-	
+
 
 }
 
@@ -59,18 +62,17 @@ void EnemyGhost::Update()
 //-----------------------------------
 void EnemyGhost::Draw()const
 {
-	DrawFormatString(60, 60, GetColor(255, 0, 0), "%d", action_time);
-	DrawBox(location.x, location.y, location.x + GHOST_SIZE_X, location.y + GHOST_SIZE_Y, GetColor(255,0,0), TRUE);
+	DrawBox(location.x, location.y, location.x + GHOST_SIZE_X, 
+		location.y + GHOST_SIZE_Y,GetColor(255, 0, 0), TRUE);
 }
 
 
 //-----------------------------------
 // ゴーストの動き
 //-----------------------------------
-void EnemyGhost::GhostMove(Player*player)
+void EnemyGhost::GhostMove(Player* player)
 {
 	int range; //プレイヤーとの距離
-	action_time= location.x - player->GetLocationX();
 	range = location.x - player->GetLocationX();
 
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE)
@@ -79,30 +81,30 @@ void EnemyGhost::GhostMove(Player*player)
 		{
 			if (player->GetLocationY() > location.y)
 			{
-				action_type = 1;
+				action_type = GHOST_STATE::LEFT_lOWER;
 			}
 			else
 			{
-				action_type = 2;
+				action_type = GHOST_STATE::LEFT_UPPER;
 			}
 		}
 		else
 		{
 			if (player->GetLocationY() > location.y)
 			{
-				action_type = 3;
+				action_type = GHOST_STATE::RIGHT_LOWER;
 			}
 			else
 			{
-				action_type = 4;
+				action_type = GHOST_STATE::RIGHT_UPPER;
 			}
 		}
 	}
 	else
 	{
-		action_type = 0;
+		action_type = GHOST_STATE::NORMAL;
 	}
-	
+
 
 }
 
