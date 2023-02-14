@@ -5,7 +5,7 @@
 #define GRAVITY 10
 
 //Œ³‘f\‘¢‘Ì
-struct Element
+struct ElementItem
 {
 	int oxygen;      //_‘f
 	int hydrogen;	 //…‘f

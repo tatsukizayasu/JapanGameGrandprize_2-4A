@@ -185,6 +185,7 @@
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
+    <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemySlime.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
