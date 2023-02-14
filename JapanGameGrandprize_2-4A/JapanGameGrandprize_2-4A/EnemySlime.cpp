@@ -4,7 +4,7 @@
 #include"EnemySlime.h"
 
 #define JUMP_RANGE_X 60
-#define JUMP_RANGE_Y 30
+#define JUMP_RANGE_Y 15
 
 
 EnemySlime::EnemySlime()
