@@ -74,7 +74,7 @@ void Undead::Update()
 	switch (state)
 	{
 	case UNDEAD_STATE::IDOL:
-		if (location.x < SCREEN_WIDTH)
+		if ((-area.width < location.x) && (location.x < SCREEN_WIDTH))
 		{
 			state = UNDEAD_STATE::MOVE;
 		}
@@ -87,6 +87,10 @@ void Undead::Update()
 		}
 		location.x += speed;
 
+		if ((location.x < -area.width) || (SCREEN_WIDTH < location.x))
+		{
+			state == UNDEAD_STATE::IDOL;
+		}
 		break;
 	case UNDEAD_STATE::ATTACK:
 		Attack();
@@ -101,6 +105,8 @@ void Undead::Update()
 	{
 		attack_interval--;
 	}
+
+	
 }
 
 //-----------------------------------
