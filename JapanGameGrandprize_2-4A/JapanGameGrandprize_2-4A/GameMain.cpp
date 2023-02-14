@@ -68,36 +68,39 @@ void GameMain::EnemyUpdate()
 
 	switch (enemy->GetEnemyKind())
 	{
-	case ENEMY_KIND::SLIME:		//スライム
-		break;
-	case ENEMY_KIND::UNDEAD:	//アンデット
-		Undead* undead = dynamic_cast<Undead*>(enemy);
-		undead->DistancePlayer(player);
-		break;
-	case ENEMY_KIND::HARPY:		//ハーピィ
-		break;
-	case ENEMY_KIND::MAGE:		//メイジ
-		break;
-	case ENEMY_KIND::GHOST:		//ゴースト
-		break;
-	case ENEMY_KIND::WYVERN:	//ワイバーン
-		break;
-	case ENEMY_KIND::KING_SLIME://スライムキング
-		break;
-	case ENEMY_KIND::TORRENT:	//トレント
-		break;
-	case ENEMY_KIND::GARGOYLE:	//ガーゴイル
-		break;
-	case ENEMY_KIND::DRAGON:	//ドラゴン
-		break;
-	case ENEMY_KIND::END_BOSS:	//ラスボス
-		break;
-	case ENEMY_KIND::NONE:
-		break;
+		case ENEMY_KIND::SLIME:		//スライム
+			break;
+		case ENEMY_KIND::UNDEAD:	//アンデット
+			Undead* undead;
+			undead = dynamic_cast<Undead*>(enemy);
+			undead->DistancePlayer(player);
+			break;
+		case ENEMY_KIND::HARPY:		//ハーピィ
+			break;
+		case ENEMY_KIND::MAGE:		//メイジ
+			break;
+		case ENEMY_KIND::GHOST:		//ゴースト
+			break;
+		case ENEMY_KIND::WYVERN:	//ワイバーン
+			break;
+		case ENEMY_KIND::KING_SLIME://スライムキング
+			break;
+		case ENEMY_KIND::TORRENT:	//トレント
+			break;
+		case ENEMY_KIND::GARGOYLE:	//ガーゴイル
+			break;
+		case ENEMY_KIND::DRAGON:	//ドラゴン
+			break;
+		case ENEMY_KIND::END_BOSS:	//ラスボス
+			break;
+		case ENEMY_KIND::NONE:
+			break;
 	default:
 		break;
 	}
+
 }
+
 
 //-----------------------------------
 // 描画
