@@ -1,7 +1,7 @@
 #pragma once
 #include "Define.h"
 #include "BoxCollider.h"
-#include "BULLET.h"
+#include "Bullet.h"
 #include "Stage/Stage.h"
 
 

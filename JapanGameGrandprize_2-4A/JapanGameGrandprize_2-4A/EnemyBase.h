@@ -1,5 +1,6 @@
 #pragma once
 #include "Define.h"
+#include "Bullet.h"
 
 //エネミーの種類
 enum class ENEMY_KIND
@@ -49,8 +50,15 @@ public:
 
 	//HPが0かどうか判断(0になったらtrue)
 	bool CheckHp();
+
+	//プレイヤーの弾との当たり判定
+	virtual void HitBullet(Bullet* bullet) = 0;
+
 	//ドロップアイテムの取得
 	ElementItem GetDropItem() const;
+
+	//エネミーの種類の取得
+	ENEMY_KIND GetEnemyKind() const;
 
 protected: 
 	int hp;	//体力

@@ -41,6 +41,9 @@ public:
     //プレイヤーとの距離
     void DistancePlayer(Player* player);
 
+    //プレイヤーの弾との当たり判定
+    void HitBullet(Bullet* bullet) override;
+
     //描画
     void Draw() const override;
 

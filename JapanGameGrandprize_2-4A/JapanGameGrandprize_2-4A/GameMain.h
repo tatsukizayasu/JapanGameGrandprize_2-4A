@@ -29,6 +29,9 @@ public:
     //更新
     AbstractScene* Update() override;
 
+    //エネミーの更新処理
+    void EnemyUpdate();
+
     //描画
     void Draw() const override;
 };

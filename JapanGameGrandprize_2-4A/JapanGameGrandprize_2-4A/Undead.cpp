@@ -121,6 +121,9 @@ void Undead::Attack()
 
 }
 
+//-----------------------------------
+// プレイヤーとの距離
+//-----------------------------------
 void Undead::DistancePlayer(Player* player)
 {
 	float distance; //離れている距離
@@ -148,6 +151,14 @@ void Undead::DistancePlayer(Player* player)
 	{
 		speed = UNDEAD_SPEED;
 	}
+}
+
+//-----------------------------------
+// プレイヤーの弾との当たり判定
+//-----------------------------------
+void Undead::HitBullet(Bullet* bullet)
+{
+
 }
 
 //-----------------------------------
