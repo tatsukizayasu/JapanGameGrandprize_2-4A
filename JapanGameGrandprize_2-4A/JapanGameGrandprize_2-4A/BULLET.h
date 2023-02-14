@@ -1,6 +1,6 @@
 #pragma once
 #include "EfectExplosion.h"
-class BULLET
+class Bullet
 {
 private:
 	float bullet_x, bullet_y;
@@ -8,9 +8,9 @@ private:
 
 	EfectExplosion* efect_explosion;
 public:
-	BULLET();
-	BULLET(float,float);
-	~BULLET() {};
+	Bullet();
+	Bullet(float,float);
+	~Bullet() {};
 
 	void Draw()const;
 	void Update();

@@ -17,12 +17,15 @@ Player::Player()
 	jump = 10.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
+	speed_x = 0.0;
 	fuel = 100.0;
 	for (int i = 0; i < 30; i++)
 	{
-		bullet = new BULLET * [30];
+		bullet = new Bullet * [30];
 		bullet[i] = nullptr;
 	}
+
+	stage = new Stage();
 
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
@@ -35,7 +38,7 @@ Player::~Player()
 {
 	for (int i = 0; i < 30; i++)
 	{
-		delete bullet[i];
+		//delete bullet[i];
 	}
 	delete[] bullet;
 }
@@ -66,11 +69,26 @@ void Player::Update()
 	count++;
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
-		location.x += 5;
+		location.x += speed_x;
+		if (speed_x < 5.0)
+		{
+			speed_x = speed_x + 0.25;
+		}
 	}
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
-		location.x -= 5;
+		location.x += speed_x;
+		if (speed_x > -5.0)
+		{
+			speed_x = speed_x - 0.25;
+		}
+	}
+	else
+	{
+		if (speed_x > 0)
+		{
+			speed_x--;
+		}
 	}
 
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
@@ -156,7 +174,7 @@ void Player::Shoot_Gun()
 {
 	if (count % 30 == 0)
 	{
-		bullet[bullet_count++] = new BULLET(location.x, location.y);
+		bullet[bullet_count++] = new Bullet(location.x, location.y);
 		if (bullet_count >= 30)
 		{
 			bullet_count = 30;

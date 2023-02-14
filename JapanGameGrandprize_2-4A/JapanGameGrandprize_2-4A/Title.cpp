@@ -32,9 +32,8 @@ Title::~Title()
 //-----------------------------------
 AbstractScene* Title::Update()
 {
-#ifdef _DEBUG
 	//シーン切り替えテスト		デバック
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_RIGHT) && input_margin >= 30)
+	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) 
 	{
 		input_margin = 0;
 		return new GameMain();
@@ -44,7 +43,6 @@ AbstractScene* Title::Update()
 	{
 		input_margin++;
 	}
-#endif
 
 	return this;
 }
