@@ -25,8 +25,8 @@ public:
 		bool isSuccess = false;
 		if (main_dir.empty())
 		{
-			char* buffer = nullptr;
-			buffer = _getcwd(buffer, 256);
+			char buffer[DIRECTORY_BUFFER_SIZE];
+			const char* get_current = _getcwd(buffer, DIRECTORY_BUFFER_SIZE);
 			main_dir = buffer;
 			current_dir = buffer;
 			isSuccess = true;
