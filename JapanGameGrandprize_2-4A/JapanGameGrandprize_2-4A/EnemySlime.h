@@ -48,4 +48,6 @@ public:
 	void HitStage();
 	void AttackJudgement(BoxCollider* boxcollider);
 	void Attack();
+
+	virtual void HitBullet(Bullet* bullet)override {};
 };
