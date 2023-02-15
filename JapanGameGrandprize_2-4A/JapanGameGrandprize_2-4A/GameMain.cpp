@@ -15,7 +15,7 @@ GameMain::GameMain()
 	player = new Player();
 	stage = new Stage();
 	enemy = new Undead();
-	camera_work = new CameraWork(0,0,player);
+	camera_work = new CameraWork(0, 0, player, stage);
 
 	input_margin = 0;
 }
@@ -52,7 +52,7 @@ AbstractScene* GameMain::Update()
 
 	camera_work->Update();
 	player->Update();
-	stage->Update();
+	stage->Update(player);
 	enemy->Update();
 
 	Undead* a = dynamic_cast<Undead*>(enemy);

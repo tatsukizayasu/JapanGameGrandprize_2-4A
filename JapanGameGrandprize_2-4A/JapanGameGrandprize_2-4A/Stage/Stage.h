@@ -1,8 +1,13 @@
 #pragma once
 #include "MapChip.h"
 #include <vector>
+#include <Windows.h>
 
 #include "StageBuillder/StageBuilder.h"
+
+#define CHIP_SIZE		40
+
+class Player;
 
 class Stage
 {
@@ -20,7 +25,7 @@ private:
 	//背景画像
 	int background_images;
 	//ブロック画像
-	int block_images[100];
+	int block_images[110];
 
 public:
 	/// <summary>
@@ -34,7 +39,7 @@ public:
 	/// <summary>
 	/// ステージの更新
 	/// </summary>
-	void Update();
+	void Update(Player* player);
 	/// <summary>
 	/// ステージの描画
 	/// </summary>
@@ -44,4 +49,10 @@ public:
 	/// ステージの読み込み
 	/// </summary>
 	void LoadMap();
+
+	/// <summary>
+	/// マップサイズのGeter
+	/// </summary>
+	/// <returns>構造体型：マップサイズ</returns>	
+	POINT GetMapSize(void) { POINT mapsize{ map_data.size(),map_data.at(0).size(), };  return mapsize; }
 };
