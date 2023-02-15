@@ -74,7 +74,7 @@
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="ElementItem.cpp">
-      <Filter>ソースファイル</Filter>
+      <Filter>ソースファイル\ElementItem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,7 +157,10 @@
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="ElementItem.h">
-      <Filter>ヘッダーファイル</Filter>
+      <Filter>ヘッダーファイル\ElementItem</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumElementItem.h">
+      <Filter>ヘッダーファイル\ElementItem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +187,12 @@
     </Filter>
     <Filter Include="ヘッダーファイル\Enemy">
       <UniqueIdentifier>{1df94681-910c-41c5-8e40-61af91250e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\ElementItem">
+      <UniqueIdentifier>{7903dcd5-28ce-4e13-93c4-e9cd69bd1f7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\ElementItem">
+      <UniqueIdentifier>{57cb677f-baa9-4594-a284-5de08e0a7cdd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
