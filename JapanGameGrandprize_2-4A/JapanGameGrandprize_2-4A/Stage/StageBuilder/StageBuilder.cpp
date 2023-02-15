@@ -25,6 +25,8 @@ StageBuilder::StageBuilder()
 	{
 		arrow[i] = ' ';
 	}
+
+	line = new LineCollider;
 }
 
 //------------------------------------
