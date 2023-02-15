@@ -3,8 +3,9 @@
 #include<math.h>
 #include"EnemySlime.h"
 
-#define JUMP_RANGE_X 60
-#define JUMP_RANGE_Y 15
+#define ATTACK_RANGE_X 60
+#define ATTACK_RANGE_Y 15
+#define ATTACK_SPEED 10
 
 
 EnemySlime::EnemySlime()
@@ -22,7 +23,6 @@ EnemySlime::EnemySlime()
 	a = 0;
 
 	state = SLIME_STATE::MOVE;
-	jump_angle = 0;
 }
 
 EnemySlime::EnemySlime(float x, float y, float height, float width)
@@ -98,9 +98,7 @@ void EnemySlime::AttackJudgement(BoxCollider* boxcollider)
 		if (state == SLIME_STATE::MOVE)
 		{
 			state = SLIME_STATE::ATTACK;
-			if (direction == left)jump_angle = 0;
-			else jump_angle = -180;
-			attack_start.x = location.x + ((JUMP_RANGE_X / 2) * direction);
+			attack_start.x = location.x;
 			attack_start.y = location.y;
 		}
 	}
@@ -109,11 +107,6 @@ void EnemySlime::AttackJudgement(BoxCollider* boxcollider)
 
 void EnemySlime::Attack()
 {
-	location.y = (sin(jump_angle * M_PI / 180) * JUMP_RANGE_Y) + attack_start.y;
-	location.x = (cos(jump_angle * M_PI / 180) * JUMP_RANGE_X) + attack_start.x;
-	jump_angle += (5 * direction);
-
-	if (jump_angle > 180)state = SLIME_STATE::MOVE;
 
 }
 

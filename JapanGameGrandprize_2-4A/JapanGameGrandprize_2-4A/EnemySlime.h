@@ -2,13 +2,6 @@
 #include"EnemyBase.h"
 #include"BoxCollider.h"
 
-
-struct ATTACK_START
-{
-	float x;	//èc
-	float y;	//â°
-};
-
 enum DIRECTION
 {
 	left = -1,
@@ -29,9 +22,10 @@ private:
 	int color;
 	int a;
 	int direction;
-	int jump_angle;
 
-	ATTACK_START attack_start;
+	Location attack_start;
+	Location attack_speed;
+
 	SLIME_STATE state;
 
 public:
