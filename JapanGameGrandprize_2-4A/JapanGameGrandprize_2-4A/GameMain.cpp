@@ -101,7 +101,6 @@ void GameMain::EnemyUpdate()
 
 }
 
-
 //-----------------------------------
 // •`‰æ
 //-----------------------------------
@@ -114,4 +113,3 @@ void GameMain::Draw()const
 	stage->Draw();
 	enemy->Draw();
 }
-
