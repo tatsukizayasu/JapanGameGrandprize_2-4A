@@ -191,7 +191,7 @@ void Player::SortBullet(int delete_bullet)
 	{
 		if (bullet[i] == nullptr)
 		{
-			bullet_count--;
+			bullet_count--;                                     
 			break;
 		}
 		if (bullet[i - 1] == nullptr)

@@ -4,6 +4,8 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 #include "Undead.h"
+#include"EnemyGhost.h"
+
 
 #define _DEBUG
 
@@ -14,9 +16,10 @@ GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
-	enemy = new Undead();
-	ghost = new EnemyGhost();
-	camera_work = new CameraWork(0,0);
+	enemy = new EnemyBase * [2];
+	enemy[0] = new EnemyGhost();
+	enemy[1] = new Undead();
+	camera_work = new CameraWork(0, 0);
 
 	input_margin = 0;
 }
@@ -28,9 +31,12 @@ GameMain::~GameMain()
 {
 	delete player;
 	delete stage;
-	delete enemy;
+	for (int i = 0; i < 2; i++)
+	{
+		delete enemy[i];
+	}
+	delete[] enemy;
 	delete camera_work;
-	delete ghost;
 }
 
 //-----------------------------------
@@ -40,13 +46,13 @@ AbstractScene* GameMain::Update()
 {
 #ifdef _DEBUG
 	//シーン切り替えテスト		デバック
-	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) 
+	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30)
 	{
 		input_margin = 0;
 		return new Title();
 	}
 
-	if (input_margin < 30) 
+	if (input_margin < 30)
 	{
 		input_margin++;
 	}
@@ -55,7 +61,7 @@ AbstractScene* GameMain::Update()
 	camera_work->Update();
 	player->Update();
 	stage->Update();
-	
+
 	EnemyUpdate();
 
 	return this;
@@ -66,18 +72,18 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	enemy->Update();
-	ghost->Update();
-
-	ghost->GhostMove(player);
-
-	switch (enemy->GetEnemyKind())
+	for (int i = 0; i < 2; i++)
 	{
+		enemy[i]->Update();
+
+
+		switch (enemy[i]->GetEnemyKind())
+		{
 		case ENEMY_KIND::SLIME:		//スライム
 			break;
 		case ENEMY_KIND::UNDEAD:	//アンデット
 			Undead* undead;
-			undead = dynamic_cast<Undead*>(enemy);
+			undead = dynamic_cast<Undead*>(enemy[i]);
 			undead->DistancePlayer(player);
 			break;
 		case ENEMY_KIND::HARPY:		//ハーピィ
@@ -85,7 +91,12 @@ void GameMain::EnemyUpdate()
 		case ENEMY_KIND::MAGE:		//メイジ
 			break;
 		case ENEMY_KIND::GHOST:		//ゴースト
+		{
+			EnemyGhost* ghost;
+			ghost = dynamic_cast<EnemyGhost*>(enemy[i]);
+			ghost->GhostMove(player);
 			break;
+		}
 		case ENEMY_KIND::WYVERN:	//ワイバーン
 			break;
 		case ENEMY_KIND::KING_SLIME://スライムキング
@@ -100,10 +111,10 @@ void GameMain::EnemyUpdate()
 			break;
 		case ENEMY_KIND::NONE:
 			break;
-	default:
-		break;
+		default:
+			break;
+		}
 	}
-
 }
 
 
@@ -117,7 +128,9 @@ void GameMain::Draw()const
 
 	player->Draw();
 	stage->Draw();
-	enemy->Draw();
-	ghost->Draw();
+	for (int i = 0; i < 2; i++)
+	{
+		enemy[i]->Draw();
+	}
 }
 
