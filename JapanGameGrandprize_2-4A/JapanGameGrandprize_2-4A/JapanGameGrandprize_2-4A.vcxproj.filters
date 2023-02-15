@@ -1,26 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="BoxCollider.cpp" />
-    <ClCompile Include="BULLET.cpp" />
-    <ClCompile Include="CameraWork.cpp" />
-    <ClCompile Include="EfectExplosion.cpp" />
-    <ClCompile Include="FpsController.cpp" />
-    <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="LineCollider.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="PadInput.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="SphereCollider.cpp" />
-    <ClCompile Include="Stage\StageBuillder\KeyManager.cpp" />
-    <ClCompile Include="Stage\StageBuillder\StageBuilder.cpp" />
-    <ClCompile Include="Stage\Element\Element.cpp" />
-    <ClCompile Include="Stage\Element\Element_DamageWall.cpp" />
-    <ClCompile Include="Stage\MapChip.cpp" />
-    <ClCompile Include="Stage\Stage.cpp" />
-    <ClCompile Include="Title.cpp" />
-    <ClCompile Include="Undead.cpp" />
     <ClCompile Include="BoxCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -84,7 +64,63 @@
     <ClCompile Include="Stage\StageBuilder\Directory.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="EfectBeam.cpp" />
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BULLET.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraWork.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EfectBeam.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EfectExplosion.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_DamageWall.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsController.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCollider.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\MapChip.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PadInput.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollider.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Stage.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Undead.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
