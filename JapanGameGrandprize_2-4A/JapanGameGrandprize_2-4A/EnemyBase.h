@@ -1,4 +1,6 @@
 #pragma once
+#include "Define.h"
+#include "Bullet.h"
 
 //エネミーの種類
 enum class ENEMY_KIND
@@ -10,10 +12,13 @@ enum class ENEMY_KIND
 	MAGE,		//メイジ
 	GHOST,		//ゴースト
 	WYVERN,		//ワイバーン
-	
+
 	/*ボス*/
-	GOLEM,		//ゴーレム
+	KING_SLIME, //スライムキング
+	TORRENT,	//トレント
+	GARGOYLE,	//ガーゴイル
 	DRAGON,		//ドラゴン
+	END_BOSS,	//ラスボス
 	NONE
 };
 
@@ -44,20 +49,27 @@ public:
 	virtual void Draw() const = 0;
 
 	//HPが0かどうか判断(0になったらtrue)
-	bool CheckHp()
-	{
-		bool ret = false;
-		if (hp < 0)
-		{
-			ret = true;
-		}
-		return ret;
-	}
+	bool CheckHp();
 
-protected:
+	//プレイヤーの弾との当たり判定
+	virtual void HitBullet(Bullet* bullet) = 0;
+
+	//ドロップアイテムの取得
+	ElementItem GetDropItem() const;
+
+	//エネミーの種類の取得
+	ENEMY_KIND GetEnemyKind() const;
+
+protected: 
 	int hp;	//体力
 	int speed; //移動速度
 
+	ElementItem drop_item; //ドロップアイテム
+
 	ENEMY_KIND kind; //エネミーの種類
-	ENEMY_TYPE type; //エネミーのタイプ
+	ENEMY_TYPE* type; //エネミーのタイプ
+
+protected:
+	//ドロップアイテムの設定
+	ElementItem DropItem(ENEMY_TYPE enemy_type, int min_drop, int max_drop);
 };

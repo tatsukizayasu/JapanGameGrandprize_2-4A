@@ -7,9 +7,6 @@ class MapChip :
     public BoxCollider
 {
 private:
-    int image;
-    Area image_size;
-    float ex_rate;
 public:
     //コンストラクタ
     MapChip();
@@ -21,4 +18,13 @@ public:
     virtual void Update();
     //描画
     virtual void Draw() const;
+
+    const char* GetName() { return class_name; }
+
+protected:
+    const char* class_name = "default";
+    int image;
+    Area image_size;
+    float ex_rate;
+    
 };

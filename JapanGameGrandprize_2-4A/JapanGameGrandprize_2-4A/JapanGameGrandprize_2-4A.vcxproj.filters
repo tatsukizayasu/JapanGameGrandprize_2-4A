@@ -55,11 +55,20 @@
     <ClCompile Include="EfectExplosion.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\StageBuillder\KeyManager.cpp">
+    <ClCompile Include="Stage\StageBuilder\KeyManager.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\StageBuillder\StageBuilder.cpp">
+    <ClCompile Include="Stage\StageBuilder\StageBuilder.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\StageBuilder\Directory.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="EfectBeam.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>ソースファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -123,19 +132,19 @@
     <ClInclude Include="EfectExplosion.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="EfectBeam.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\Debug.h">
+    <ClInclude Include="Stage\StageBuilder\Debug.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
     <ClInclude Include="EfectBeam.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\KeyManager.h">
+    <ClInclude Include="Stage\StageBuilder\KeyManager.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\StageBuilder.h">
+    <ClInclude Include="Stage\StageBuilder\StageBuilder.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuilder\Directory.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
   </ItemGroup>

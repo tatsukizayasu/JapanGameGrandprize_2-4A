@@ -17,6 +17,7 @@ Player::Player()
 	jump = 10.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
+	speed_x = 0.0;
 	fuel = 100.0;
 	for (int i = 0; i < 30; i++)
 	{
@@ -68,11 +69,26 @@ void Player::Update()
 	count++;
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
-		location.x += 5;
+		location.x += speed_x;
+		if (speed_x < 5.0)
+		{
+			speed_x = speed_x + 0.25;
+		}
 	}
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
-		location.x -= 5;
+		location.x += speed_x;
+		if (speed_x > -5.0)
+		{
+			speed_x = speed_x - 0.25;
+		}
+	}
+	else
+	{
+		if (speed_x > 0)
+		{
+			speed_x--;
+		}
 	}
 
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))

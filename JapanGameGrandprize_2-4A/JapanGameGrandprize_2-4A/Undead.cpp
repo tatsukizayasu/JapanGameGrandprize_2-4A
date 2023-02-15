@@ -16,6 +16,12 @@
 //歩くスピード
 #define UNDEAD_SPEED -2
 
+//ドロップ量(最小)
+#define UNDEAD_MIN_DROP 0
+//ドロップ量(最大)
+#define UNDEAD_MAX_DROP 5
+
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -26,27 +32,28 @@ Undead::Undead()
 	attack_interval = 0;
 	attack = 0;
 	speed = UNDEAD_SPEED;
+	kind = ENEMY_KIND::UNDEAD;
+	type = new ENEMY_TYPE;
+	*type = ENEMY_TYPE::SOIL;
+	attack_type = ENEMY_TYPE::NORMAL;
+	state = UNDEAD_STATE::IDOL;
+	collider = new LineCollider();
 
-
+	/*当たり判定の設定*/
 	location.x = 1270.0f;
 	location.y = 430.0f;
 	area.width = 40;
 	area.height = 80;
 
-	
+	//ドロップアイテムの設定
+	drop_item = DropItem(*type, UNDEAD_MIN_DROP, UNDEAD_MAX_DROP);
 
-	kind = ENEMY_KIND::UNDEAD;
-	type = ENEMY_TYPE::SOIL;
-	attack_type = ENEMY_TYPE::NORMAL;
-	state = UNDEAD_STATE::IDOL;
-
-	collider = new LineCollider();
+	//腕の当たり判定の設定
 	for (int i = 0; i < 2; i++)
 	{
 		arm[i].x = 1270.0f - (50 * i);
 		arm[i].y = 460.0f;
 		collider->SetLocation(arm[i], i);
-
 	}	
 }
 
@@ -55,6 +62,7 @@ Undead::Undead()
 //-----------------------------------
 Undead::~Undead()
 {
+	delete type;
 	delete collider;
 }
 
@@ -113,6 +121,9 @@ void Undead::Attack()
 
 }
 
+//-----------------------------------
+// プレイヤーとの距離
+//-----------------------------------
 void Undead::DistancePlayer(Player* player)
 {
 	float distance; //離れている距離
@@ -140,6 +151,14 @@ void Undead::DistancePlayer(Player* player)
 	{
 		speed = UNDEAD_SPEED;
 	}
+}
+
+//-----------------------------------
+// プレイヤーの弾との当たり判定
+//-----------------------------------
+void Undead::HitBullet(Bullet* bullet)
+{
+
 }
 
 //-----------------------------------
