@@ -2,7 +2,7 @@
 #include "Define.h"
 #include "BoxCollider.h"
 #include "EfectBeam.h"
-#include "BULLET.h"
+#include "Bullet.h"
 #include "Stage/Stage.h"
 
 
