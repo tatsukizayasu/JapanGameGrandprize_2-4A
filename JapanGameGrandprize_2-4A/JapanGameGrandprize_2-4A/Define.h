@@ -4,18 +4,6 @@
 #define SCREEN_WIDTH 1280	//‰æ–ÊƒTƒCƒY (‰¡)
 #define GRAVITY 10
 
-//Œ³‘f\‘¢‘Ì
-struct ElementItem
-{
-	int oxygen;      //_‘f
-	int hydrogen;	 //…‘f
-	int nitrogen;	 //’‚‘f
-	int carbon;		 //’Y‘f
-	int sulfur;		 //—°‰©
-	int chlorine;	 //‰–‘f
-	int uranium;	 //ƒEƒ‰ƒ“
-};
-
 
 //‰»‡•¨\‘¢‘Ì
 struct Compound
