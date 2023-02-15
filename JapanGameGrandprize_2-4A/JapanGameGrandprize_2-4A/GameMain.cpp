@@ -52,7 +52,7 @@ AbstractScene* GameMain::Update()
 
 	camera_work->Update();
 	player->Update();
-	stage->Update();
+	stage->Update(player);
 	
 	EnemyUpdate();
 

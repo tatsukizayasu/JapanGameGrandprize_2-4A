@@ -7,10 +7,6 @@ class Player;
 class MapChip :
     public BoxCollider
 {
-private:
-    int image;
-    Area image_size;
-    float ex_rate;
 public:
     //コンストラクタ
     MapChip();
