@@ -2,6 +2,8 @@
 #include "StageBuilder.h"
 #include "Directory.h"
 #include <string>
+#include <fstream>
+#include <sstream>
 
 
 //------------------------------------
@@ -65,6 +67,13 @@ void StageBuilder::Update()
 		Directory::Open("\\Stage\\StageBuilder\\dat");
 		UpdateSave();
 		break;
+		
+	case LOAD_MODE:
+		Directory::Open("\\Stage\\StageBuilder\\dat");
+		UpdateLoad();
+		break;
+
+		
 	}
 }
 
@@ -92,7 +101,7 @@ void StageBuilder::Draw()const
 
 		DrawFormatString(0, i * 20, 0xFFFFFF, "マス x:%d y:%d  座標x:%.0lf y:%.0lf ",
 			frame_x, frame_y,
-			(double)frame_x * MAP_CHIP_SIZE, (double)frame_y * MAP_CHIP_SIZE);
+			(double)frame_x * MAP_CHIP_SIZE + 20, (double)frame_y * MAP_CHIP_SIZE) + 20;
 	}
 
 #endif
@@ -100,9 +109,9 @@ void StageBuilder::Draw()const
 	{
 		DrawMenu();
 	}
-	if (mode == SAVE_MODE)
+	if (mode == SAVE_MODE || mode == LOAD_MODE)
 	{
-		DrawSave();
+		DrawFileInfo();
 	}
 }
 
@@ -111,32 +120,7 @@ void StageBuilder::Draw()const
 //------------------------------------
 void StageBuilder::UpdateMenu()
 {
-	if (KeyManager::OnKeyClicked(KEY_INPUT_S) || KeyManager::OnKeyClicked(KEY_INPUT_DOWN))
-	{
-		char tmp = arrow[menu_cursor];
-		arrow[menu_cursor] = ' ';
-		menu_cursor++;
-
-		if (menu_cursor > MENU_NUM - 1)
-		{
-			menu_cursor = 0;
-		}
-
-		arrow[menu_cursor] = tmp;
-	}
-
-	if (KeyManager::OnKeyClicked(KEY_INPUT_W) || KeyManager::OnKeyClicked(KEY_INPUT_UP))
-	{
-		char tmp = arrow[menu_cursor];
-		arrow[menu_cursor] = ' ';
-		menu_cursor--;
-		if (menu_cursor < 0)
-		{
-			menu_cursor = MENU_NUM - 1;
-		}
-
-		arrow[menu_cursor] = tmp;
-	}
+	Select(MENU_NUM);
 	
 	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
 	{
@@ -188,62 +172,24 @@ void StageBuilder::UpdateSave()
 
 	if (stage_max == 0)
 	{
-		FILEINFO file_info;
 		string file_name(Directory::GetCurrent());
 		file_name += "\\*.csv";
 
-		__int64 find_handle = FileRead_findFirst(file_name.c_str(), &file_info);
-		if (find_handle != (__int64)-1)
-		{
-			do
-			{
-				stage_max++;
-				// 検索に引っかかる次のファイルの情報を取得、無かったらループを抜ける
-			} while (FileRead_findNext(find_handle, &file_info) >= 0);
-
-			// 検索ハンドルの後始末
-			FileRead_findClose(find_handle);
-		}
+		stage_max = FileCount(file_name.c_str());
 		stage_max++;//新規追加分
 	}
 
-
-	if (KeyManager::OnKeyClicked(KEY_INPUT_S) || KeyManager::OnKeyClicked(KEY_INPUT_DOWN))
-	{
-		char tmp = arrow[menu_cursor];
-		arrow[menu_cursor] = ' ';
-		menu_cursor++;
-
-		if (menu_cursor > stage_max - 1)
-		{
-			menu_cursor = 0;
-		}
-
-		arrow[menu_cursor] = tmp;
-	}
-
-	if (KeyManager::OnKeyClicked(KEY_INPUT_W) || KeyManager::OnKeyClicked(KEY_INPUT_UP))
-	{
-		char tmp = arrow[menu_cursor];
-		arrow[menu_cursor] = ' ';
-		menu_cursor--;
-		if (menu_cursor < 0)
-		{
-			menu_cursor = stage_max - 1;
-		}
-		arrow[menu_cursor] = tmp;
-	}
+	Select(stage_max);
 
 	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
 	{
 		char tmp = arrow[menu_cursor];
 		arrow[menu_cursor] = ' ';
-		mode = BRUSH_MODE;
-		
 
 		char stage_argc[16];
 		if (menu_cursor != stage_max - 1)
 		{
+
 			sprintf_s(stage_argc, 16, "stage%d.csv", menu_cursor + 1);
 			SaveStage(stage_argc);
 		}
@@ -252,8 +198,44 @@ void StageBuilder::UpdateSave()
 			SaveStage(stage_max);
 			stage_max++;
 		}
+		
 
 		Directory::OpenMain();
+		mode = BRUSH_MODE;
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+	}
+}
+
+//------------------------------------
+// ロードモードの更新
+//------------------------------------
+void StageBuilder::UpdateLoad()
+{
+
+	int stage_max = 0;
+
+	string file_name(Directory::GetCurrent());
+	file_name += "\\*.csv";
+
+	stage_max = FileCount(file_name.c_str());
+
+
+	Select(stage_max);
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+
+		char stage_argc[16];
+
+		sprintf_s(stage_argc, 16, "stage%d.csv", menu_cursor + 1);
+		LoadStage(stage_argc);
+
+
+		Directory::OpenMain();
+		mode = BRUSH_MODE;
 		menu_cursor = 0;
 		arrow[menu_cursor] = tmp;
 	}
@@ -288,50 +270,46 @@ void StageBuilder::DrawMenu()const
 	current++;
 	DrawFormatString(0, font_size * current, 0xFFFF00, " %c SAVE", arrow[current]);
 	current++;
+	DrawFormatString(0, font_size * current, 0xFFFF00, " %c LOAD", arrow[current]);
+	current++;
 }
 
 //------------------------------------
 // セーブモードの描画
 //------------------------------------
-void StageBuilder::DrawSave()const
+void StageBuilder::DrawFileInfo()const
 {
-
-	int l_font_size = 16;
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
-	DrawBoxAA(560.f, 240.f,
-		560.f + MAP_CHIP_SIZE * 4, 240.f + MAP_CHIP_SIZE * 3, 0x000000, TRUE);
-	DrawBoxAA(560.f, 240.f,
-		560.f + MAP_CHIP_SIZE * 4, 240.f + MAP_CHIP_SIZE * 3, 0xFFFFFF, FALSE, 3);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-
-	FILEINFO file_info;
 	string file_name(Directory::GetCurrent());
-	int y = 1;
+	int scale = 0;
 	int current = 0;
 	file_name += "\\*.csv";
 
-	__int64 find_handle = FileRead_findFirst(file_name.c_str(), &file_info);
-	if (find_handle != (__int64)-1)
+	const float draw_pos_x = 560.f;
+	const float draw_pos_y = 240.f;
+
+	int l_font_size = 16;
+	scale = FileCount(file_name.c_str());
+	if (mode == SAVE_MODE)scale++;//新規追加分
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		draw_pos_x + MAP_CHIP_SIZE * 4, draw_pos_y + l_font_size * scale, 
+		0x000000, TRUE);
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		560.f + MAP_CHIP_SIZE * 4, draw_pos_y + l_font_size * scale,
+		0xFFFFFF, FALSE, 3);
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	DrawFile(draw_pos_x, draw_pos_y, file_name.c_str(),l_font_size);
+
+	if (mode == SAVE_MODE)
 	{
-		do
-		{
-			// ファイル名とフォルダかファイルかの情報を描画
-			DrawFormatString(560 + l_font_size, 240 + l_font_size * y,
-				GetColor(255, 255, 255), "%c %s",arrow[current], file_info.Name);
-
-			// 描画y座標をずらす
-			y++;
-			current++;
-			// 検索に引っかかる次のファイルの情報を取得、無かったらループを抜ける
-		} while (FileRead_findNext(find_handle, &file_info) >= 0);
-
-		// 検索ハンドルの後始末
-		FileRead_findClose(find_handle);
+		DrawFormatStringF(draw_pos_x + l_font_size,
+			draw_pos_y + l_font_size * (scale-1),
+			GetColor(255, 255, 255), "%c %s", arrow[scale-1], "新規追加");
 	}
-
-	DrawFormatString(560 + l_font_size, 240 + l_font_size * y,
-		GetColor(255, 255, 255), "%c %s", arrow[current], "新規追加");
 }
 
 //------------------------------------
@@ -353,6 +331,35 @@ void StageBuilder::DrawFrame()const
 }
 
 //------------------------------------
+// ファイルの描画
+//------------------------------------
+void StageBuilder::DrawFile(float x, float y, const char* path, int font_size)const
+{
+	FILEINFO file_info;
+	int count_y = 0;
+
+	__int64 find_handle = FileRead_findFirst(path, &file_info);
+	if (find_handle != (__int64)-1)
+	{
+		do
+		{
+			// ファイル名の描画
+			DrawFormatString(x + font_size, y + font_size * count_y ,
+				GetColor(255, 255, 255), "%c %s", arrow[count_y], file_info.Name);
+
+			// 描画y座標をずらす
+			count_y++;
+
+			// 検索に引っかかる次のファイルの情報を取得、無かったらループを抜ける
+		} while (FileRead_findNext(find_handle, &file_info) >= 0);
+
+		// 検索ハンドルの後始末
+		FileRead_findClose(find_handle);
+	}
+
+}
+
+//------------------------------------
 // マップチップの作成
 //------------------------------------
 void StageBuilder::MakeMapChip()
@@ -362,6 +369,82 @@ void StageBuilder::MakeMapChip()
 	map_chips.push_back(new MapChip(&block_images[0],
 		{ pos_x + MAP_CHIP_SIZE / 2,pos_y + MAP_CHIP_SIZE / 2 },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
+}
+
+//------------------------------------
+// マップチップの作成
+//------------------------------------
+void StageBuilder::MakeMapChip(float x, float y, float width, float height)
+{
+	map_chips.push_back(new MapChip(&block_images[0],
+		{ x ,y },{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
+}
+
+//------------------------------------
+// ファイルカウント
+//------------------------------------
+int StageBuilder::FileCount(const char* path)const
+{
+	int count = 0;
+
+	FILEINFO file_info;
+
+	__int64 find_handle = FileRead_findFirst(path, &file_info);
+	if (find_handle != (__int64)-1)
+	{
+		do
+		{
+			count++;
+			// 検索に引っかかる次のファイルの情報を取得、無かったらループを抜ける
+		} while (FileRead_findNext(find_handle, &file_info) >= 0);
+
+		// 検索ハンドルの後始末
+		FileRead_findClose(find_handle);
+	}
+
+	return count;
+}
+
+//------------------------------------
+// メニュー選択
+//------------------------------------
+void StageBuilder::Select(int menu_max)
+{
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_S) || KeyManager::OnKeyClicked(KEY_INPUT_DOWN))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+		menu_cursor++;
+
+		if (menu_cursor > menu_max - 1)
+		{
+			menu_cursor = 0;
+		}
+
+		arrow[menu_cursor] = tmp;
+	}
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_W) || KeyManager::OnKeyClicked(KEY_INPUT_UP))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+		menu_cursor--;
+		if (menu_cursor < 0)
+		{
+			menu_cursor = menu_max - 1;
+		}
+		arrow[menu_cursor] = tmp;
+	}
+
+}
+
+//------------------------------------
+// 画像の取得
+//------------------------------------
+const int* StageBuilder::GetImage(int image_index)const
+{
+	return &block_images[image_index];
 }
 
 //------------------------------------
@@ -375,13 +458,23 @@ void StageBuilder::SaveStage(int stage_num)
 	sprintf_s(stage_name, 16, "stage%d.csv", stage_num);
 
 	//ファイルオープン
-	fopen_s(&fp, stage_name, "a");
+	fopen_s(&fp, stage_name, "w");
 	
 	//クラス名, x, y, image_handle
-	fprintf_s(fp, "default,%lf,%lf,%d", 1.4f, 5.3f,0);
+	for (int i = 0; i < map_chips.size(); i++)
+	{
 
+		fprintf_s(fp, "%s,%lf,%lf,%d\n",
+			map_chips[i]->GetName(),
+			map_chips[i]->GetLocation().x,
+			map_chips[i]->GetLocation().y,
+			0);
+	}
 
-
+	if (fp)
+	{
+		fclose(fp);
+	}
 }
 
 //------------------------------------
@@ -389,9 +482,74 @@ void StageBuilder::SaveStage(int stage_num)
 //------------------------------------
 void StageBuilder::SaveStage(char* stage_name)
 {
-	;
+	FILE* fp = NULL;
+
+	//ファイルオープン
+	fopen_s(&fp, stage_name, "w");
+
+	if (fp != NULL)
+	{
+		//クラス名, x, y, image_handle
+		for (int i = 0; i < map_chips.size(); i++)
+		{
+
+			fprintf_s(fp, "%s,%lf,%lf,%d\n",
+				map_chips[i]->GetName(),
+				map_chips[i]->GetLocation().x,
+				map_chips[i]->GetLocation().y,
+				0);
+		}
+	}
+
+	if (fp)
+	{
+		fclose(fp);
+	}
 }
 
 //------------------------------------
-// 
+// CSVファイルからの読み込み
 //------------------------------------
+void StageBuilder::LoadStage(char* stage_name)
+{
+	string class_name;
+	float x;
+	float y;
+	float width = MAP_CHIP_SIZE;
+	float height = MAP_CHIP_SIZE;
+	float image;
+
+	string str_conma_buf;
+	string line;
+	ifstream ifstream(stage_name);
+
+	if (!ifstream)
+	{
+		std::exit(1);
+		return;
+	}
+
+	while(!(getline(ifstream,line).eof()))
+	{
+		istringstream i_stringstream(line);
+
+		getline(i_stringstream, str_conma_buf, ',');
+		class_name = str_conma_buf;
+
+
+		getline(i_stringstream, str_conma_buf, ',');
+		x = atof(str_conma_buf.c_str());
+
+
+		getline(i_stringstream, str_conma_buf, ',');
+		y = atof(str_conma_buf.c_str());
+
+
+		getline(i_stringstream, str_conma_buf, ',');
+		image = atof(str_conma_buf.c_str());
+
+		MakeMapChip(x, y, width, height);
+	}
+
+	ifstream.close();
+}

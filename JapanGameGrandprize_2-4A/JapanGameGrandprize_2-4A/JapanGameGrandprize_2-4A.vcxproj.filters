@@ -64,6 +64,7 @@
     <ClCompile Include="Stage\StageBuilder\Directory.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
+
     <ClCompile Include="BoxCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -119,6 +120,11 @@
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="Undead.cpp">
+
+    <ClCompile Include="EfectBeam.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBase.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
   </ItemGroup>
