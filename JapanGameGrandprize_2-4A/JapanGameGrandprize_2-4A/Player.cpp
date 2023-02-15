@@ -26,6 +26,21 @@ Player::Player()
 		bullet[i] = nullptr;
 	}
 
+	attribute[0] = Attribute::normal;
+	attribute[1] = Attribute::explosion;
+	attribute[2] = Attribute::melt;
+	attribute[3] = Attribute::poison;
+	attribute[4] = Attribute::paralysis;
+	attribute[5] = Attribute::heal;
+
+	for (int i = 0; i < 6; i++)
+	{
+		attribute_c[i] = i;
+	}
+
+
+	display_attribute = 1;
+
 	beam = nullptr;
 
 	stage = new Stage();
@@ -66,6 +81,31 @@ void Player::Draw() const
 		beam->Draw();
 	}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power,fuel);
+
+	SetFontSize(30);
+
+	//è„ÇÃëIëéà
+	if (display_attribute - 1 < 0)
+	{
+		DrawFormatString(1000, 10, 0x778877, "%d", attribute_c[display_attribute + 5]);
+
+	}
+	else 
+	{
+		DrawFormatString(1000, 10, 0x778877, "%d", attribute_c[display_attribute - 1]);
+	}
+	//â∫ÇÃëIëéà
+	if (display_attribute + 1 > 5)
+	{
+		DrawFormatString(1000, 90, 0x778877, "%d", attribute_c[display_attribute - 5]);
+
+	}
+	else
+	{
+		DrawFormatString(1000, 90, 0x778877, "%d", attribute_c[display_attribute + 1]);
+	}
+	//åªç›ÇÃëIëéà
+	DrawFormatString(1000, 50, 0x778877, "%d", attribute_c[display_attribute]);
 }
 
 //-----------------------------------
@@ -163,11 +203,6 @@ void Player::Update()
 			location.y += gravity_down;
 			gravity_down += 0.25;
 
-			if (location.y > 400)
-			{
-				location.y = 400;
-			}
-
 			if (not_jet_count++ >= 120)
 			{
 				if (fuel < 100)
@@ -206,6 +241,7 @@ void Player::Update()
 		beam->Update(location.x, location.y);
 	}
 
+	Element_Update();
 }
 
 //-----------------------------------
@@ -247,4 +283,34 @@ void Player::SortBullet(int delete_bullet)
 			bullet[i] = nullptr;
 		}
 	}
+}
+
+void Player::Element_Update()
+{
+	if (PAD_INPUT::GetRStick().y > 10000)
+	{
+		if (select_count % 30 == 0)
+		{
+			display_attribute--;
+			if (display_attribute < 0)
+			{
+				display_attribute = 5;
+			}
+		}
+	}
+
+	if (PAD_INPUT::GetRStick().y < -10000)
+	{
+		if (select_count % 30 == 0)
+		{
+			display_attribute++;
+			if (display_attribute > 5)
+			{
+				display_attribute = 0;
+			}
+		}
+	}
+
+	select_count++;
+
 }
