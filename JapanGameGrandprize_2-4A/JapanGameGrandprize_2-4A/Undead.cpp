@@ -164,7 +164,7 @@ void Undead::DistancePlayer(Player* player)
 //-----------------------------------
 void Undead::HitBullet(Bullet* bullet)
 {
-
+	
 }
 
 //-----------------------------------
@@ -174,7 +174,6 @@ void Undead::Draw() const
 {
 	DrawBox(location.x, location.y, location.x + area.width, location.y + area.height, 0xffffff, TRUE);
 	DrawLine(arm[0].x, arm[0].y, arm[1].x, arm[1].y, 0xffffff, 5);
-	DrawFormatString(100, 100, 0x000000, "%d", static_cast<int>(state));
 }
 
 LineCollider Undead::GetLineCollider() const
