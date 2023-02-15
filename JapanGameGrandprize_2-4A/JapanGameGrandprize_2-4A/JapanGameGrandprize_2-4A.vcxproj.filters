@@ -70,6 +70,7 @@
     <ClCompile Include="EnemyBase.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="ColliderBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -147,6 +148,7 @@
     <ClInclude Include="Stage\StageBuilder\Directory.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
+    <ClInclude Include="ColliderBase.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
