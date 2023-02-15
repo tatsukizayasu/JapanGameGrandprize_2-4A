@@ -34,15 +34,39 @@ struct Compound
 	int uranium;			//ƒEƒ‰ƒ“
 };
 
-enum class Attribute
+struct Explosion
 {
-	normal = 0,
-	explosion,
-	melt,
-	poison,
-	paralysis,
-	heal
+
 };
+
+struct Melt
+{
+
+};
+
+struct Poison
+{
+
+};
+
+struct Paralysis
+{
+
+};
+
+struct Heal
+{
+
+};
+
+
+
+
+
+
+
+
+
 
 //’†SÀ•W
 struct Location

@@ -20,12 +20,8 @@ private:
 	float jump;                     //ジャンプの値
 	float jump_power;               //ジャンプの力
 	float speed_x;
-	int select_count;
-
-	Attribute attribute[6];         //弾の属性
-	int attribute_c[6];
-	int display_attribute; //画面に表示させる属性
 	
+
 	Bullet** bullet;             //弾の配列
 	Stage* stage;
 	EfectBeam* beam;
@@ -35,11 +31,11 @@ public:
 	~Player();
 	void Draw()const;
 	void Update();
-	void Element_Update();
 
 	void Shoot_Gun();
 	void SortBullet(int);
 
-	Bullet* GetBullet(int i) { return bullet[i]; }
+	float GetLocationX() { return location.x; }
+	float GetLocationY() { return location.y; }
 
 };

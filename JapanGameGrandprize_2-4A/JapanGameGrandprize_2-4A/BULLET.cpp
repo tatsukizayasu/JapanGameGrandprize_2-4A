@@ -6,8 +6,8 @@
 //-----------------------------------
 Bullet::Bullet()
 {
-	location.x = 0.0;
-	location.y = 0.0;
+	bullet_x = 0.0;
+	bullet_y = 0.0;
 	delete_flg = false;
 	efect_explosion = nullptr;
 }
@@ -18,8 +18,8 @@ Bullet::Bullet()
 Bullet::Bullet(float player_x, float player_y)
 {
 	delete_flg = false;
-	location.x = player_x;
-	location.y = player_y;
+	bullet_x = player_x;
+	bullet_y = player_y;
 	efect_explosion = nullptr;
 }
 
@@ -34,7 +34,7 @@ void Bullet::Draw() const
 	}
 	else 
 	{
-		DrawBox(location.x, location.y, location.x + 20, location.y + 10, 0xff00ff, TRUE);
+		DrawBox(bullet_x, bullet_y, bullet_x + 20, bullet_y + 10, 0xff00ff, TRUE);
 	}
 }
 
@@ -43,15 +43,15 @@ void Bullet::Draw() const
 //-----------------------------------
 void Bullet::Update()
 {
-	if (location.x < 1260)
+	if (bullet_x < 1260)
 	{
-		location.x += 10;
+		bullet_x += 10;
 	}
 	else
 	{
 		if (efect_explosion == nullptr)
 		{
-			efect_explosion = new EfectExplosion(location.x, location.y);
+			efect_explosion = new EfectExplosion(bullet_x, bullet_y);
 		}
 		else
 		{

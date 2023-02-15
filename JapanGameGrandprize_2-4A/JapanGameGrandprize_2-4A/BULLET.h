@@ -1,10 +1,9 @@
 #pragma once
 #include "EfectExplosion.h"
-#include "SphereCollider.h"
-class Bullet : SphereCollider
+class Bullet
 {
 private:
-	Location location;
+	float bullet_x, bullet_y;
 	bool delete_flg;
 
 	EfectExplosion* efect_explosion;
