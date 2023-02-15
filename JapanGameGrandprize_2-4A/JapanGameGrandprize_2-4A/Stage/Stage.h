@@ -3,7 +3,7 @@
 #include <vector>
 #include <Windows.h>
 
-#include "StageBuillder/StageBuilder.h"
+#include "StageBuilder/StageBuilder.h"
 
 #define CHIP_SIZE		40
 

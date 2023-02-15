@@ -11,7 +11,6 @@ private:
     int image;
     Area image_size;
     float ex_rate;
-
 public:
     //コンストラクタ
     MapChip();
@@ -22,5 +21,14 @@ public:
     //更新
     void Update(Player* player);
     //描画
-    void Draw() const;
+    virtual void Draw() const;
+
+    const char* GetName() { return class_name; }
+
+protected:
+    const char* class_name = "default";
+    int image;
+    Area image_size;
+    float ex_rate;
+    
 };
