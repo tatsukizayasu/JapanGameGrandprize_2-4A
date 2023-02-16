@@ -3,6 +3,7 @@
 #include<math.h>
 #include "Undead.h"
 #include "Define.h"
+#include "CameraWork.h"
 
 //çUåÇÇÇ∑ÇÈîÕàÕ
 #define ATTACK_DISTANCE 50
@@ -191,9 +192,14 @@ void Undead::HitBullet(Bullet* bullet)
 //-----------------------------------
 void Undead::Draw() const
 {
+	Location draw_location; //ï`âÊópÇÃç¿ïW
+
+	draw_location.x = location.x - CameraWork::GetCamera().x;
+	draw_location.y = location.y - CameraWork::GetCamera().y;
+
 	if (state != UNDEAD_STATE::DEATH)
 	{
-		DrawBox(location.x, location.y, location.x + area.width, location.y + area.height, 0xffffff, TRUE);
+		DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, 0xffffff, TRUE);
 	}
 	else
 	{
