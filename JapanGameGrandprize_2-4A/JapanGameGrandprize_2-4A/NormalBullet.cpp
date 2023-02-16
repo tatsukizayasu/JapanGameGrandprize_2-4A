@@ -1,4 +1,5 @@
 #include "NormalBullet.h"
+#include "CameraWork.h"
 #include "Define.h"
 
 //-----------------------------------
@@ -40,11 +41,11 @@ NormalBullet::NormalBullet(float player_x, float player_y)
 		dot_location_y[i] = 0;
 	}
 
-	speed_x = 0;
-	speed_y[0] = 1.0;
-	speed_y[1] = 0.8;
-	speed_y[2] = 0.6;
-	speed_y[3] = 0.4;
+	speed_x = 1;
+	speed_y[0] = 10;
+	speed_y[1] = 8;
+	speed_y[2] = 6;
+	speed_y[3] = 4;
 	
 }
 
@@ -61,11 +62,9 @@ void NormalBullet::Draw() const
 	{
 		for (int i = 0; i < PIXEL_MAX; i++)
 		{
-			//DrawPixel(dot_location_x[i], dot_location_y[i], 0xeeeeee);
-			DrawCircle(dot_location_x[i], dot_location_y[i], 5, 0x000000, TRUE);
+			DrawCircle(dot_location_x[i], dot_location_y[i], 2, 0x000000, TRUE);
 		}
 	}
-
 }
 
 //-----------------------------------
@@ -73,22 +72,25 @@ void NormalBullet::Draw() const
 //-----------------------------------
 void NormalBullet::Update()
 {
-	if (location.x < 1260 && !delete_flg)
+	if (location.x - CameraWork::GetCamera().x < 1260 && !delete_flg)
 	{
 		location.x += 10;
 	}
 	else
 	{
+		if (!delete_flg)
+		{
+			for (int i = 0; i < PIXEL_MAX; i++)
+			{
+				dot_location_x[i] = location.x;
+				dot_location_y[i] = location.y;
+			}
+		}
 		delete_flg = true;
 	}
 
 	if (delete_flg)
-	{
-		for (int i = 0; i < PIXEL_MAX; i++)
-		{
-			dot_location_x[i] = location.x;
-			dot_location_y[i] = location.y;
-		}
+	{		
 		NormalBulletEfect();
 	}
 }
@@ -98,16 +100,18 @@ bool NormalBullet::NormalBulletEfect()
 
 	if (!efect_end)
 	{
-		if (++efect_count % 300 != 0)
+		if (++efect_count % 30 != 0)
 		{
 			for (int i = 0; i < PIXEL_MAX; i++)
 			{
 				dot_location_x[i] -= speed_x;
-				dot_location_y[i] -= speed_y[i];
+				dot_location_y[i] += speed_y[i];
 			}
 		}
 		else
 		{
+			location.x++;
+			location.y++;
 			efect_end = true;
 			return true;
 		}

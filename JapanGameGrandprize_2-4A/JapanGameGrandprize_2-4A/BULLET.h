@@ -18,5 +18,5 @@ public:
 	virtual void Update() = 0;
 
 
-	bool GetEfectFlg() { return delete_flg; }
+	bool GetEfectFlg();
 };
