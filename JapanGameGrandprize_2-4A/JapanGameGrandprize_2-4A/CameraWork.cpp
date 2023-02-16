@@ -74,19 +74,36 @@ CameraWork::~CameraWork()
 //-----------------------------------
 void CameraWork::Update()
 {
+	//printfDx("state:%d\n", state);
+
 	//clsDx();
 	Camera player_p;
 	player_p = { player->GetLocation().x, player->GetLocation().y };
 	//float player_x = player->GetLocation().x;
 
+	//プレイヤーが移動開始ラインを超えたらカメラの状態を移動にする
 	if (player_p.x > moveing_line) { state = STATE::MOVE; }
 
+
+	//カメラの状態が移動の場合
 	if (state == STATE::MOVE) {
 
+		//移動開始ラインの変動
+
+		float player_speed_w = player_p.x - old_player.x;
+		if (player_dir == true) {
+			if (moveing_line > 400 ) { moveing_line -= player_speed_w; }
+		}
+		else {
+			if (moveing_line < 800) { moveing_line -= player_speed_w; }
+		}
 		
 
 		//マップの右端に着いたら止める
-		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) < ceilf(player->GetLocation().x)) {return;}
+		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) < ceilf(player->GetLocation().x)) {
+			state = STATE::FIXED;
+			return;
+		}
 
 		//float player_speed = player_p.x - old_player.x;
 		float player_speed = 1.0f;
@@ -101,6 +118,7 @@ void CameraWork::Update()
 
 			// カメラの範囲がマップ外に出ないように調整
 			if (camera.x < 0) {
+				state = STATE::FIXED;
 				camera.x = 0;
 			}
 			/*else if (camera.x > stage->GetMapSize().x * CHIP_SIZE - moveing_line) {
@@ -112,33 +130,11 @@ void CameraWork::Update()
 			else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - 700) {
 				camera.y = stage->GetMapSize().y * CHIP_SIZE - 700;
 			}
-
-
-			////左・右端で止める
-			//if ((stage->GetMapSize().x > player->GetLocation().x) && (stage->GetMapSize().x < player->GetLocation().x)) { return; }
-
-			//float player_x = player->GetLocation().x;
-
-			//if (count < 60) { count++; }
-			//else { old_player.x = player->GetLocation().x; count = 0; }
-
-			//printfDx("x:%f\ty:%f\n", player->GetLocation().x, player->GetLocation().y);
-
-			//if (player->GetLocation().x < 500 && speed < 1.0) {
-			//	speed = fmod(player_x, 50) * 0.1;
-			//}
-			//else if ((player->GetLocation().x > 620 && player->GetLocation().x < 1200) && old_player.x != player_x) {
-			//	camera.x += speed * 0.01;
-			//}
-
-			////プレイヤーの旧座標を代入
 		}
-		old_player.x = player_p.x;
-		old_player.y = player_p.y;
 
 
 		{	//プレイヤーの向き
-
+			float player_speed = player_p.x - old_player.x;
 			if (player_speed < 0) {
 				player_dir = false;
 			}
@@ -147,6 +143,10 @@ void CameraWork::Update()
 			}
 
 		}
+
+
+		old_player.x = player_p.x;
+		old_player.y = player_p.y;
 	}
 
 #ifdef DEBUG
