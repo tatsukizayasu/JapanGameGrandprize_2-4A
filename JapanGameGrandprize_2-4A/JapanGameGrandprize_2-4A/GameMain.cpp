@@ -4,8 +4,7 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 #include "Undead.h"
-
-#define _DEBUG
+#include "Item.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -14,7 +13,7 @@ GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
-	enemy = new Undead();
+	enemy = new Undead(player);
 	camera_work = new CameraWork(0, 0, player, stage);
 
 	input_margin = 0;
@@ -64,6 +63,7 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
+	//Item** drop_item; //ドロップアイテム
 	enemy->Update();
 
 	switch (enemy->GetEnemyKind())
@@ -71,34 +71,57 @@ void GameMain::EnemyUpdate()
 		case ENEMY_KIND::SLIME:		//スライム
 			break;
 		case ENEMY_KIND::UNDEAD:	//アンデット
+		{
 			Undead* undead;
 			undead = dynamic_cast<Undead*>(enemy);
-			undead->DistancePlayer(player);
+			if (undead->GetState() == UNDEAD_STATE::ATTACK)
+			{
+				if (undead->HitBox(player))
+				{
+
+				}
+			}
 			break;
+		}
 		case ENEMY_KIND::HARPY:		//ハーピィ
+		{
 			break;
+		}
 		case ENEMY_KIND::MAGE:		//メイジ
+		{
 			break;
+		}
 		case ENEMY_KIND::GHOST:		//ゴースト
 			break;
 		case ENEMY_KIND::WYVERN:	//ワイバーン
+		{
 			break;
+		}
 		case ENEMY_KIND::KING_SLIME://スライムキング
+		{
 			break;
+		}
 		case ENEMY_KIND::TORRENT:	//トレント
+		{
 			break;
+		}
 		case ENEMY_KIND::GARGOYLE:	//ガーゴイル
+		{
 			break;
+		}
 		case ENEMY_KIND::DRAGON:	//ドラゴン
+		{
 			break;
+		}
 		case ENEMY_KIND::END_BOSS:	//ラスボス
+		{
 			break;
+		}
 		case ENEMY_KIND::NONE:
 			break;
 	default:
 		break;
 	}
-
 }
 
 //-----------------------------------

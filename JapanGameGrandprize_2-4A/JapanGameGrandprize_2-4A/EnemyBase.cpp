@@ -8,7 +8,7 @@
 bool EnemyBase::CheckHp()
 {
 	bool ret = false;
-	if (hp < 0)
+	if (hp <= 0)
 	{
 		ret = true;
 	}
@@ -16,70 +16,45 @@ bool EnemyBase::CheckHp()
 }
 
 //-----------------------------------
-//ドロップアイテムの設定
+//アイテムの生成
 //-----------------------------------
-ElementItem EnemyBase::DropItem(ENEMY_TYPE enemy_type, int min_drop, int max_drop)
+void EnemyBase::CreateDropItem(int drop_num,Location location)
 {
-	ElementItem drop;	//ドロップアイテム
-
-	//初期化
-	drop.oxygen = 0;
-	drop.hydrogen = 0;
-	drop.nitrogen = 0;
-	drop.carbon = 0;
-	drop.sulfur = 0;
-	drop.chlorine = 0;
-	drop.uranium = 0;
-
-
-	//ドロップアイテム設定
-	switch (enemy_type)
+	int volume = 0; //生成数
+	int j = 0;
+	for (int i = 0; i < drop_num; i++)
 	{
-	case ENEMY_TYPE::NORMAL:
-		break;
-	case ENEMY_TYPE::FIRE:
-		drop.oxygen = min_drop + GetRand(max_drop);
-		drop.nitrogen = min_drop + GetRand(max_drop);
-		drop.carbon = min_drop + GetRand(max_drop);
-		break;
-	case ENEMY_TYPE::WATER:
-		drop.oxygen = min_drop + GetRand(max_drop);
-		drop.hydrogen = min_drop + GetRand(max_drop);
-		drop.sulfur = min_drop + GetRand(max_drop);
-		drop.chlorine = min_drop + GetRand(max_drop);
-		break;
-	case ENEMY_TYPE::WIND:
-		drop.oxygen = min_drop + GetRand(max_drop);
-		drop.hydrogen = min_drop + GetRand(max_drop);
-		drop.nitrogen = min_drop + GetRand(max_drop);
-		break;
-	case ENEMY_TYPE::SOIL:
-		drop.nitrogen = min_drop + GetRand(max_drop);
-		drop.carbon = min_drop + GetRand(max_drop);
-		drop.sulfur = min_drop + GetRand(max_drop);
-		drop.chlorine = min_drop + GetRand(max_drop);
-		break;
-	case ENEMY_TYPE::THUNDER:
-		drop.oxygen = min_drop + GetRand(max_drop);
-		drop.hydrogen = min_drop + GetRand(max_drop);
-		drop.nitrogen = min_drop + GetRand(max_drop);
-		drop.carbon = min_drop + GetRand(max_drop);
-		drop.sulfur = min_drop + GetRand(max_drop);
-		drop.chlorine = min_drop + GetRand(max_drop);
-		break;
-	default:
-		break;
+		volume = drop_element[i]->GetVolume();
+		while (0 < volume)
+		{
+			drop_item[j++] = new Item(drop_element[i]->GetType(), location);
+			volume--;
+		}
 	}
-
-	return drop;
 }
 
 //-----------------------------------
+//アイテムの並び替え
+//-----------------------------------
+void EnemyBase::SortDropitem(int item_num)
+{
+	//弾の中身をソートする
+	for (int i = item_num + 1; i < drop_volume; i++)
+	{
+		if ((drop_item[i] == nullptr))
+		{
+			break;
+		}
+		drop_item[i - 1] = drop_item[i];
+		drop_item[i] = nullptr;
+	}
+}
+//-----------------------------------
 // ドロップアイテムの取得
 //-----------------------------------
-ElementItem EnemyBase::GetDropItem() const
+ElementItem EnemyBase::GetDropItem(int i) const
 { 
-	return drop_item; 
+	return *drop_element[i]; 
 }
 
 //-----------------------------------
@@ -89,4 +64,3 @@ ENEMY_KIND EnemyBase::GetEnemyKind() const
 {
 	return kind;
 }
-
