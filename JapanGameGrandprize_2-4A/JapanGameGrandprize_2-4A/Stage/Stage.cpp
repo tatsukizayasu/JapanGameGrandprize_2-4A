@@ -90,6 +90,7 @@ void Stage::Update(Player* player)
 #endif
 }
 
+
 //-----------------------------------
 // •`‰æ
 //-----------------------------------
@@ -105,9 +106,6 @@ void Stage::Draw()
 #ifdef _STAGE_BUILDER
 	stage_builder->Draw();
 #endif
-
-	DrawLine(500, 0, 500, 720, 0x0000FF);
-	DrawLine(620, 0, 620, 720, 0xFF0000);
 	
 }
 

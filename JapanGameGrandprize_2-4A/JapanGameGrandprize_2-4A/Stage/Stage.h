@@ -54,5 +54,5 @@ public:
 	/// マップサイズのGeter
 	/// </summary>
 	/// <returns>構造体型：マップサイズ</returns>	
-	POINT GetMapSize(void) { POINT mapsize{ map_data.size(),map_data.at(0).size(), };  return mapsize; }
+	POINT GetMapSize(void) { POINT mapsize{ map_data.at(0).size(),map_data.size() };  return mapsize; }
 };

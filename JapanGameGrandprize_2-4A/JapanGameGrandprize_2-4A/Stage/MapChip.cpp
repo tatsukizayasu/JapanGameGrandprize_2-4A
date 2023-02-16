@@ -61,16 +61,7 @@ void MapChip::Update(Player* player)
 {
 
 
-
-	// カメラの座標を基準に、描画位置を計算
-	//int draw_x = x * CHIP_SIZE - camera.x;
-	//int draw_y = y * CHIP_SIZE - camera.y;
-
-	//printfDx("player_x:%f\tcamera_y:%f\n", player->GetLocation().x, player->GetLocation().y);
-
-
-	location.x = location.x + CameraWork::GetCamera().x * 0.01;
-	location.y = location.y + -CameraWork::GetCamera().y * 0.01;
+	
 
 		// カメラ位置に合わせてMapChipオブジェクトの位置を更新
 	//location.x = location.x + CameraWork::GetCamera().x;
@@ -82,7 +73,7 @@ void MapChip::Update(Player* player)
 	//float dy = cameraPos.y - oldCameraPos.y;
 
 
-	printfDx("location_x:%f\tlocation_y:%f\n", location.x, location.y);
+	//printfDx("location_x:%f\tlocation_y:%f\n", location.x, location.y);
 }
 
 //-----------------------------------
@@ -94,21 +85,11 @@ void MapChip::Draw()const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	DrawRotaGraphF(location.x, location.y, ex_rate, 0, image, TRUE);
+	DrawRotaGraphF(x, y, ex_rate, 0, image, TRUE);
 #ifdef _SHOW_COLLISION
 	DrawCollision();
 #endif
 }
-
-//-----------------------------------
-// 
-//-----------------------------------
-
-
-//-----------------------------------
-// 
-//-----------------------------------
-
 
 //-----------------------------------
 // 
