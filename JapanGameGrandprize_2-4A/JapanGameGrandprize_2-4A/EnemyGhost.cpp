@@ -90,7 +90,9 @@ void EnemyGhost::Update()
 		break;
 	}
 
-	GhostAttack(); //
+	GhostAttack(); //UŒ‚
+
+	
 
 }
 
@@ -99,7 +101,6 @@ void EnemyGhost::Update()
 //-----------------------------------
 void EnemyGhost::Draw()const
 {
-	DrawFormatString(100, 400, 0x000000, "%d", bullet_x);
 	if (action_type == GHOST_STATE::MAGIC_ATTACK) //–‚–@UŒ‚‚Ìƒ‚[ƒVƒ‡ƒ“
 	{
 		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
@@ -177,7 +178,13 @@ void EnemyGhost::GhostMove(Player* player)
 		player_y = player->GetLocationY();
 		action_type = GHOST_STATE::MAGIC_ATTACK;
 	}
+
+	if (HitBox(player) != false) 
+	{
+		action_type = GHOST_STATE::PHYSICAL_ATTACK;
+	}
 }
+
 
 
 //-----------------------------------
@@ -231,3 +238,4 @@ void EnemyGhost::HitBullet(Bullet* bullet)
 {
 
 }
+

@@ -2,6 +2,7 @@
 #include"EnemyBase.h"
 #include"BoxCollider.h"
 #include"Player.h"
+#include"Stage/Stage.h"
 
 enum class GHOST_STATE
 {
@@ -48,5 +49,6 @@ public:
 	void GhostMove(Player* player);
 
 	void HitBullet(Bullet* bullet);
+
 
 };
