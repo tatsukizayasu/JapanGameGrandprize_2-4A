@@ -85,20 +85,16 @@ void CameraWork::Update()
 	if (player_p.x > moveing_line) { state = STATE::MOVE; }
 
 
-	//移動開始ラインの変動
-	if (player_dir == true) {
-		moveing_line = 400.0f;
-	}
-	else {
-		moveing_line = 800.0f;
-	}
-
-	printfDx("player_dir:%d\n", player_dir);
-
-
 	//カメラの状態が移動の場合
 	if (state == STATE::MOVE) {
 
+		//移動開始ラインの変動
+		if (player_dir == true) {
+			if (moveing_line > 400 ) { moveing_line -= 2.0f; }
+		}
+		else {
+			if (moveing_line < 800) { moveing_line += 2.0f; }
+		}
 		
 
 		//マップの右端に着いたら止める
