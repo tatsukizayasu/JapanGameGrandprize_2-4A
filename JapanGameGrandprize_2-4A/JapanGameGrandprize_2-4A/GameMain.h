@@ -17,7 +17,6 @@ private:
     CameraWork* camera_work;
     EnemyBase* enemy; //敵
 
-
     //操作間隔時間
     int input_margin;
 

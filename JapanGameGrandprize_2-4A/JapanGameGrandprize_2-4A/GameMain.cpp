@@ -16,7 +16,6 @@ GameMain::GameMain()
 	stage = new Stage();
 	enemy = new Undead(player);
 	camera_work = new CameraWork(0, 0, player, stage);
-
 	input_margin = 0;
 }
 
@@ -94,10 +93,10 @@ void GameMain::EnemyUpdate()
 		}
 		case ENEMY_KIND::GHOST:		//ゴースト
 		{
-			/*EnemyGhost* ghost;
+			EnemyGhost* ghost;
 			ghost = dynamic_cast<EnemyGhost*>(enemy);
 			ghost->GhostMove(player);
-			break;*/
+			break;
 		}
 		case ENEMY_KIND::WYVERN:	//ワイバーン
 		{
