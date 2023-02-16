@@ -67,7 +67,7 @@ void GameMain::EnemyUpdate()
 	//Item** drop_item; //ドロップアイテム
 	enemy->Update();
 
-		switch (enemy[i]->GetEnemyKind())
+		switch (enemy->GetEnemyKind())
 		{
 		case ENEMY_KIND::SLIME:		//スライム
 			break;
@@ -94,10 +94,10 @@ void GameMain::EnemyUpdate()
 		}
 		case ENEMY_KIND::GHOST:		//ゴースト
 		{
-			EnemyGhost* ghost;
-			ghost = dynamic_cast<EnemyGhost*>(enemy[i]);
+			/*EnemyGhost* ghost;
+			ghost = dynamic_cast<EnemyGhost*>(enemy);
 			ghost->GhostMove(player);
-			break;
+			break;*/
 		}
 		case ENEMY_KIND::WYVERN:	//ワイバーン
 		{
