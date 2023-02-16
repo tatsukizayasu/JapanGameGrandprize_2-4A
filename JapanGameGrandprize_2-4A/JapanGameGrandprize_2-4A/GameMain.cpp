@@ -36,7 +36,7 @@ AbstractScene* GameMain::Update()
 {
 #ifdef _DEBUG
 	//シーン切り替えテスト		デバック
-	if (CheckHitKey(KEY_INPUT_Z) && input_margin >= 30) 
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_RIGHT) && input_margin >= 30)
 	{
 		input_margin = 0;
 		return new Title();
@@ -116,7 +116,6 @@ void GameMain::EnemyUpdate()
 	}
 }
 
-
 //-----------------------------------
 // 描画
 //-----------------------------------
@@ -129,4 +128,3 @@ void GameMain::Draw()const
 	stage->Draw();
 	enemy->Draw();
 }
-
