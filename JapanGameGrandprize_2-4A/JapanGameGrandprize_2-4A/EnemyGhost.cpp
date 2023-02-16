@@ -93,7 +93,10 @@ void EnemyGhost::Update()
 
 	GhostAttack(); //UŒ‚
 
+	if (CheckHp() == true)
+	{
 
+	}
 
 }
 
