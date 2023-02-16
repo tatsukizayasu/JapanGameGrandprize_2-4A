@@ -70,17 +70,17 @@
     <ClCompile Include="Undead.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>ソースファイル\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="ElementItem.cpp">
       <Filter>ソースファイル\ElementItem</Filter>
     </ClCompile>
     <ClCompile Include="NormalBullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>ソースファイル\Item</Filter>
+    </ClCompile>
     <ClCompile Include="ItemController.cpp">
-      <Filter>ソースファイル\Enemy</Filter>
+      <Filter>ソースファイル\Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +159,6 @@
     <ClInclude Include="Undead.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>ヘッダーファイル\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="ElementItem.h">
       <Filter>ヘッダーファイル\ElementItem</Filter>
     </ClInclude>
@@ -171,8 +168,11 @@
     <ClInclude Include="NormalBullet.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>ヘッダーファイル\Item</Filter>
+    </ClInclude>
     <ClInclude Include="ItemController.h">
-      <Filter>ヘッダーファイル\Enemy</Filter>
+      <Filter>ヘッダーファイル\Item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +208,9 @@
     </Filter>
     <Filter Include="ヘッダーファイル\Item">
       <UniqueIdentifier>{945fe1fc-bac4-441a-9119-5de3fe12c36e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Item">
+      <UniqueIdentifier>{11f43874-be68-48cd-8a1b-1e881e5c319b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
