@@ -22,16 +22,17 @@ class EnemyGhost : public EnemyBase, public BoxCollider
 private:
 
 	int standby_time; //硬直時間
+	int ghost_hp; //ゴーストのHP
 	float bullet_x; //弾丸
 	float bullet_y; //弾丸
-	float bullet_speed_x;
-	float bullet_speed_y;
-	float player_x; //
-	float player_y; //
+	float bullet_speed_x; //弾丸スピード
+	float bullet_speed_y; //弾丸スピード
+	float player_x; //プレイヤーの座標を保存
+	float player_y; //プレイヤーの座標を保存
 	bool magic_attack; //魔法攻撃
 	bool ghost_vanish; //ゴーストが透明化したらtrue
 	bool physical_attack; //物理攻撃に入る（true)なら
-	bool setting; //初期処理
+	bool setting; //弾丸初期処理
 	GHOST_STATE action_type; //行動パターン
 
 public:
@@ -44,10 +45,13 @@ public:
 	//描画
 	void Draw()const override;
 
-	void GhostAttack(); //ゴーストのアタック処理
+	//ゴーストのアタック処理
+	void GhostAttack();
 
+	//ゴーストの動きを決める
 	void GhostMove(Player* player);
 
+	//プレイヤーの弾丸との当たり判定
 	void HitBullet(Bullet* bullet);
 
 

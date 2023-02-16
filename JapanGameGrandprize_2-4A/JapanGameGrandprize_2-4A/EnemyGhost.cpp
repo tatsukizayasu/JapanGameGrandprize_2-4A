@@ -28,7 +28,7 @@
 //-----------------------------------
 EnemyGhost::EnemyGhost()
 {
-
+	hp = 10;
 	location.x = 600;
 	location.y = 300;
 	area.height = 40;
@@ -36,6 +36,8 @@ EnemyGhost::EnemyGhost()
 	standby_time = 0;
 	bullet_x = 0;
 	bullet_y = 0;
+	player_x = 0;
+	player_y = 0;
 	bullet_speed_x = 0;
 	bullet_speed_y = 0;
 	physical_attack = false;
@@ -81,7 +83,7 @@ void EnemyGhost::Update()
 			standby_time = 0;
 		}
 		break;
-	case GHOST_STATE::PHYSICAL_ATTACK:
+	case GHOST_STATE::PHYSICAL_ATTACK: //ê⁄ãﬂçUåÇ
 		if (++standby_time % 60 == 0)
 		{
 			physical_attack = true;
@@ -92,7 +94,7 @@ void EnemyGhost::Update()
 
 	GhostAttack(); //çUåÇ
 
-	
+
 
 }
 
@@ -140,12 +142,12 @@ void EnemyGhost::GhostMove(Player* player)
 			if (player->GetLocationY() > location.y)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
-				
+
 			}
 			else
 			{
 				action_type = GHOST_STATE::LEFT_UPPER;
-				
+
 			}
 		}
 		else //âEÇ…à⁄ìÆ
@@ -153,12 +155,12 @@ void EnemyGhost::GhostMove(Player* player)
 			if (player->GetLocationY() > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
-				
+
 			}
 			else
 			{
 				action_type = GHOST_STATE::RIGHT_UPPER;
-				
+
 			}
 		}
 	}
@@ -179,7 +181,7 @@ void EnemyGhost::GhostMove(Player* player)
 		action_type = GHOST_STATE::MAGIC_ATTACK;
 	}
 
-	if (HitBox(player) != false) 
+	if (HitBox(player) != false)
 	{
 		action_type = GHOST_STATE::PHYSICAL_ATTACK;
 	}
@@ -192,7 +194,7 @@ void EnemyGhost::GhostMove(Player* player)
 //-----------------------------------
 void EnemyGhost::GhostAttack()
 {
-	
+
 	if (magic_attack == true) //ñÇñ@çUåÇ
 	{
 		if (setting == false)
@@ -234,6 +236,9 @@ void EnemyGhost::GhostAttack()
 	}
 }
 
+//-----------------------------------
+// ÉvÉåÉCÉÑÅ[ÇÃíeä€Ç∆ÇÃìñÇΩÇËîªíË
+//-----------------------------------
 void EnemyGhost::HitBullet(Bullet* bullet)
 {
 
