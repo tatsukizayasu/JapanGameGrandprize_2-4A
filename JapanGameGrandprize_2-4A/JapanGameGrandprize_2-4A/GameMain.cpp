@@ -4,6 +4,7 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 #include "Undead.h"
+#include "Item.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -12,7 +13,7 @@ GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
-	enemy = new Undead();
+	enemy = new Undead(player);
 	camera_work = new CameraWork(0,0);
 
 	input_margin = 0;
@@ -62,6 +63,7 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
+	//Item** drop_item; //ドロップアイテム
 	enemy->Update();
 
 	switch (enemy->GetEnemyKind())
@@ -72,7 +74,13 @@ void GameMain::EnemyUpdate()
 		{
 			Undead* undead;
 			undead = dynamic_cast<Undead*>(enemy);
-			undead->DistancePlayer(player);
+			if (undead->GetState() == UNDEAD_STATE::ATTACK)
+			{
+				if (undead->HitBox(player))
+				{
+
+				}
+			}
 			break;
 		}
 		case ENEMY_KIND::HARPY:		//ハーピィ

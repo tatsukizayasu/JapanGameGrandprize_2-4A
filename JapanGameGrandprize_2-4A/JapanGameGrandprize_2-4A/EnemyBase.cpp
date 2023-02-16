@@ -64,4 +64,3 @@ ENEMY_KIND EnemyBase::GetEnemyKind() const
 {
 	return kind;
 }
-

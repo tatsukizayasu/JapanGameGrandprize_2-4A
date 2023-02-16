@@ -24,12 +24,16 @@
 //ドロップする種類数
 #define UNDEAD_DROP 4
 
+//体力
+#define UNDEAD_HP 100
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Undead::Undead()
+Undead::Undead(Player* player)
 {
 	/*初期化*/
+	hp = 0;
 	damage = 0;
 	attack_interval = 0;
 	attack = 0;
@@ -39,7 +43,6 @@ Undead::Undead()
 	*type = ENEMY_TYPE::SOIL;
 	attack_type = ENEMY_TYPE::NORMAL;
 	state = UNDEAD_STATE::IDOL;
-	collider = new LineCollider();
 	drop_volume = 0;
 
 	/*当たり判定の設定*/
@@ -67,13 +70,7 @@ Undead::Undead()
 		drop_item[i] = nullptr;
 	}
 
-	//腕の当たり判定の設定
-	for (int i = 0; i < 2; i++)
-	{
-		arm[i].x = 1270.0f - (50 * i);
-		arm[i].y = 460.0f;
-		collider->SetLocation(arm[i], i);
-	}	
+	this->player = player;
 }
 
 //-----------------------------------
@@ -94,7 +91,6 @@ Undead::~Undead()
 	delete[] drop_item;
 
 	delete type;
-	delete collider;
 }
 
 //-----------------------------------
@@ -111,11 +107,8 @@ void Undead::Update()
 		}
 		break;
 	case UNDEAD_STATE::MOVE:
-		for (int i = 0; i < 2; i++)
-		{
-			arm[i].x += speed;
-			collider->SetLocation(arm[i], i);
-		}
+		DistancePlayer();
+
 		location.x += speed;
 
 		if ((location.x < -area.width) || (SCREEN_WIDTH < location.x))
@@ -124,9 +117,17 @@ void Undead::Update()
 		}
 		break;
 	case UNDEAD_STATE::ATTACK:
-		Attack();
 		break;
 	case UNDEAD_STATE::DEATH:
+		for (int i = 0; i < drop_volume; i++)
+		{
+			if (drop_item[i] == nullptr)
+			{
+				break;
+			}
+
+			drop_item[i]->Update(player);
+		}
 		break;
 	default:
 		break;
@@ -144,28 +145,11 @@ void Undead::Update()
 	}
 }
 
-//-----------------------------------
-// 攻撃
-//-----------------------------------
-void Undead::Attack()
-{
-	
-	arm[1].x += 5 * cosf(attack * (180 / 30));
-	arm[1].y += 5 * sinf(attack * (180 / 30));
-
-	collider->SetLocation(arm[1], 1);
-	if (++attack % 30 == 0)
-	{
-		state = UNDEAD_STATE::IDOL;
-		attack_interval = ATTACK_INTERVAL;
-	}
-
-}
 
 //-----------------------------------
 // プレイヤーとの距離
 //-----------------------------------
-void Undead::DistancePlayer(Player* player)
+void Undead::DistancePlayer()
 {
 	float distance; //離れている距離
 
@@ -210,7 +194,6 @@ void Undead::Draw() const
 	if (state != UNDEAD_STATE::DEATH)
 	{
 		DrawBox(location.x, location.y, location.x + area.width, location.y + area.height, 0xffffff, TRUE);
-		DrawLine(arm[0].x, arm[0].y, arm[1].x, arm[1].y, 0xffffff, 5);
 	}
 	else
 	{
@@ -225,7 +208,10 @@ void Undead::Draw() const
 	}
 }
 
-LineCollider Undead::GetLineCollider() const
+//-----------------------------------
+//状態の取得
+//-----------------------------------
+UNDEAD_STATE Undead::GetState() const
 {
-	return *collider;
+	return state;
 }
