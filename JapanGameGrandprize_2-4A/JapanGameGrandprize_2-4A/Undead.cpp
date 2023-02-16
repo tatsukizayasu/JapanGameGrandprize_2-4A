@@ -54,13 +54,13 @@ Undead::Undead(Player* player)
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [UNDEAD_DROP];
 
-	unsigned int drop_volume = 0;
+	int volume = 0;
 	for (int i = 0; i < UNDEAD_DROP; i++)
 	{
-		drop_volume = UNDEAD_MIN_DROP + GetRand(UNDEAD_MAX_DROP);
+		volume = UNDEAD_MIN_DROP + GetRand(UNDEAD_MAX_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
-		drop_element[i]->SetVolume(drop_volume);
-		this->drop_volume += drop_volume;
+		drop_element[i]->SetVolume(volume);
+		drop_volume += volume;
 	}
 
 	//ドロップアイテムの初期化
