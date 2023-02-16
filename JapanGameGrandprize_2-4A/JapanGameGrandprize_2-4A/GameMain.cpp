@@ -6,17 +6,17 @@
 #include "Undead.h"
 #include"EnemySlime.h"
 #include "Item.h"
+#include"EnemyGhost.h"
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
 GameMain::GameMain()
 {
-	player = new Player();
 	stage = new Stage();
+	player = new Player(stage);
 	enemy = new Undead(player);
 	camera_work = new CameraWork(0, 0, player, stage);
-
 	input_margin = 0;
 }
 
@@ -67,8 +67,8 @@ void GameMain::EnemyUpdate()
 	//Item** drop_item; //ドロップアイテム
 	enemy->Update();
 
-	switch (enemy->GetEnemyKind())
-	{
+		switch (enemy->GetEnemyKind())
+		{
 		case ENEMY_KIND::SLIME:		//スライム
 		{			
 			EnemySlime* slime;
@@ -99,7 +99,12 @@ void GameMain::EnemyUpdate()
 			break;
 		}
 		case ENEMY_KIND::GHOST:		//ゴースト
+		{
+			EnemyGhost* ghost;
+			ghost = dynamic_cast<EnemyGhost*>(enemy);
+			ghost->GhostMove(player);
 			break;
+		}
 		case ENEMY_KIND::WYVERN:	//ワイバーン
 		{
 			break;

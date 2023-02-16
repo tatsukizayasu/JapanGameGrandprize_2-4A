@@ -9,7 +9,7 @@
 #define ATTACK_DISTANCE 50
 
 //次の攻撃までの時間
-#define ATTACK_INTERVAL 20
+#define ATTACK_INTERVAL 30
 
 //追いかける範囲
 #define TRACKING_DISTANCE 340
@@ -34,7 +34,7 @@
 Undead::Undead(Player* player)
 {
 	/*初期化*/
-	hp = 0;
+	hp = UNDEAD_HP;
 	damage = 0;
 	attack_interval = 0;
 	attack = 0;
@@ -45,7 +45,8 @@ Undead::Undead(Player* player)
 	attack_type = ENEMY_TYPE::NORMAL;
 	state = UNDEAD_STATE::IDOL;
 	drop_volume = 0;
-
+	image = 0xffffff;
+	attack_time = 0;
 	/*当たり判定の設定*/
 	location.x = 640.0f;
 	location.y = 430.0f;
@@ -99,10 +100,14 @@ Undead::~Undead()
 //-----------------------------------
 void Undead::Update()
 {
+	float screen_x; //画面スクロールを考慮したX座標
+
+	screen_x = location.x - CameraWork::GetCamera().x;
+
 	switch (state)
 	{
 	case UNDEAD_STATE::IDOL:
-		if ((-area.width < location.x) && (location.x < SCREEN_WIDTH))
+		if ((-area.width < screen_x) && (screen_x < SCREEN_WIDTH + area.width))
 		{
 			state = UNDEAD_STATE::MOVE;
 		}
@@ -112,12 +117,19 @@ void Undead::Update()
 
 		location.x += speed;
 
-		if ((location.x < -area.width) || (SCREEN_WIDTH < location.x))
+		if ((screen_x < -area.width) || (SCREEN_WIDTH + area.width < screen_x))
 		{
 			state = UNDEAD_STATE::IDOL;
 		}
 		break;
 	case UNDEAD_STATE::ATTACK:
+		attack_time--;
+		if (attack_time < 0)
+		{
+			state = UNDEAD_STATE::MOVE;
+			image = 0xffffff;
+			attack_interval = ATTACK_INTERVAL;
+		}
 		break;
 	case UNDEAD_STATE::DEATH:
 		for (int i = 0; i < drop_volume; i++)
@@ -161,6 +173,8 @@ void Undead::DistancePlayer()
 	if ((distance < ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
 		state = UNDEAD_STATE::ATTACK;
+		attack_time = 20;
+		image = 0xff0000;
 	}
 	else if(distance < TRACKING_DISTANCE) //一定範囲内だとプレイヤーを追いかける
 	{
@@ -199,7 +213,7 @@ void Undead::Draw() const
 
 	if (state != UNDEAD_STATE::DEATH)
 	{
-		DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, 0xffffff, TRUE);
+		DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
 	}
 	else
 	{
