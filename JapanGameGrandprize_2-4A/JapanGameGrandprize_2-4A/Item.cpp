@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include<math.h>
 #include "Item.h"
+#include "CameraWork.h"
 
 //êF
 #define WHITE_COLOR 0xffffff
@@ -102,7 +103,12 @@ void Item::Update(Player* player)
 //-----------------------------------
 void Item::Draw()const
 {
+	Location draw_location; //ï`âÊópÇÃç¿ïW
+
+	draw_location.x = location.x - CameraWork::GetCamera().x;
+	draw_location.y = location.y - CameraWork::GetCamera().y;
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	DrawCircle(static_cast<int>(location.x), static_cast<int>(location.y), radius, color, TRUE);
+	DrawCircle(static_cast<int>(draw_location.x), static_cast<int>(draw_location.y), radius, color, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
