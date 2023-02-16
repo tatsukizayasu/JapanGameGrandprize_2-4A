@@ -72,7 +72,7 @@ void GameMain::EnemyUpdate()
 		case ENEMY_KIND::SLIME:		//ƒXƒ‰ƒCƒ€
 		{			
 			EnemySlime* slime;
-			slime = dynamic_cast<EnemySlime*>(enemy[i]);
+			slime = dynamic_cast<EnemySlime*>(enemy);
 			slime->HitPlayer(player);
 			slime->AttackJudgement(player);
 			break;
