@@ -26,7 +26,8 @@ StageBuilder::StageBuilder()
 		arrow[i] = ' ';
 	}
 
-	line = new LineCollider;
+	
+	
 }
 
 //------------------------------------
@@ -49,7 +50,7 @@ void StageBuilder::Update()
 {
 	KeyManager::Update(); //StageBuilder上でしか使わないため、ソースコードの散らばりを避けています。
 	UpdateMouse();
-	
+
 	if (KeyManager::OnKeyClicked(KEY_INPUT_ESCAPE))mode = MENU_MODE;
 	switch (mode)
 	{
@@ -106,6 +107,7 @@ void StageBuilder::Draw()const
 			(double)frame_x * MAP_CHIP_SIZE + 20, (double)frame_y * MAP_CHIP_SIZE) + 20;
 	}
 
+
 #endif
 	if (mode == MENU_MODE)
 	{
@@ -115,6 +117,7 @@ void StageBuilder::Draw()const
 	{
 		DrawFileInfo();
 	}
+
 }
 
 //------------------------------------
@@ -152,7 +155,6 @@ void StageBuilder::UpdateModulation()
 {
 	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 	{
-		mouse->SetLocation(mouse_pos);
 		for (int i = 0; i < map_chips.size(); i++)
 		{
 			if (mouse->HitBox(map_chips[i]))
@@ -252,6 +254,8 @@ void StageBuilder::UpdateMouse()
 	GetMousePoint(&x, &y);
 	mouse_pos.x = (float)x;
 	mouse_pos.y = (float)y;
+
+	mouse->SetLocation(mouse_pos);
 }
 
 //------------------------------------

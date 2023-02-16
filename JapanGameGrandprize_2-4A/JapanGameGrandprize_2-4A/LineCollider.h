@@ -7,11 +7,6 @@ protected:
 	Location location[2];	//線の端の座標(0:始点,1:終点)
 
 public:
-	LineCollider(Location location1,Location location2)
-	{
-		location[0] = location1;
-		location[1] = location2;
-	}
 
 	//SphereColliderとの当たり判定
 	bool HitSphere(class SphereCollider* sphere_collider);
