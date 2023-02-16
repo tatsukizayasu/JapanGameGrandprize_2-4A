@@ -3,15 +3,16 @@
 #include<math.h>
 #include"EnemySlime.h"
 
-#define ATTACK_RANGE_X 60
-#define ATTACK_RANGE_Y 15
-#define ATTACK_SPEED 10
+#define ATTACK_DISTANCE_Y 15
+#define ATTACK_SPEED 5
 
 
 EnemySlime::EnemySlime()
 {
+	kind = ENEMY_KIND::SLIME;
+
 	location.x = 1100;
-	location.y = 400;
+	location.y = 494;
 	area.height = 40;
 	area.width = 40;
 
@@ -20,9 +21,13 @@ EnemySlime::EnemySlime()
 
 	color = GetColor(0, 0, 255);
 	direction = left;
-	a = 0;
+
+	type = new ENEMY_TYPE;
+	*type = ENEMY_TYPE::WATER;
 
 	state = SLIME_STATE::MOVE;
+
+	slime_image = LoadGraph("Images/Enemy/Slime.png");
 }
 
 EnemySlime::EnemySlime(float x, float y, float height, float width)
@@ -31,21 +36,22 @@ EnemySlime::EnemySlime(float x, float y, float height, float width)
 	location.y = y;
 	area.height = height;
 	area.width = width;
-
-	hp = 5;
-	speed = 2;
-
-	color = GetColor(0, 0, 255);
-	direction = left;
-
-	state = SLIME_STATE::MOVE;
 }
 
 void EnemySlime::Update()
 {
+	if (CheckHp())state = SLIME_STATE::DEATH;
+
 	switch (state)
 	{
 	case SLIME_STATE::IDOL:
+		static int idol_time;
+		if (idol_time++ >= 20)
+		{
+			idol_time = 0;
+			state = SLIME_STATE::ATTACK;
+		}
+
 		break;
 
 	case SLIME_STATE::MOVE:
@@ -57,49 +63,64 @@ void EnemySlime::Update()
 
 	case SLIME_STATE::ATTACK:
 		Attack();
-		if (location.x >= 1260)direction = left;
-		if (location.x <= 20)direction = right;
 		break;
+
+	case SLIME_STATE::BOUNCE:
+		Attack();
+		break;
+
 	case SLIME_STATE::DEATH:
+		//DropItem(*type, 0, 2).
+
 		break;
 	default:
 		break;
 	}
-
-
-
-
-	
 }
-
 
 void EnemySlime::Draw()const
 {
 	DrawCircle(location.x, location.y, 20, color, 1, 1);
-	DrawFormatString(0, 20, 0xffffff, "%d", a);
+	DrawCircle(location.x, location.y + 8, 7, 0x000000, 1, 1);
+	DrawCircle(location.x - 7, location.y - 6, 4, 0xffffff, 1, 1);
+	DrawCircle(location.x + 7, location.y - 6, 4, 0xffffff, 1, 1);
+	DrawCircle(location.x - 7 + (1 * direction), location.y - 6, 2, 0x000000, 1, 1);
+	DrawCircle(location.x + 7 + (1 * direction), location.y - 6, 2, 0x000000, 1, 1);
+
+	DrawFormatString(0, 100, 0xffffff, "%f = player.y", location.y);
+
 	DrawBox(location.x - (area.width / 2), location.y - (area.height / 2), location.x - (area.width / 2) + area.width, location.y - (area.height / 2) + area.height, 0xffffff, 0);
 }
 
-void EnemySlime::Hit()
+void EnemySlime::HitPlayer(BoxCollider* boxcollider)
 {
-	a++;
+	if (HitBox(boxcollider))
+	{
+		//hp--;
+
+		if (state == SLIME_STATE::ATTACK)
+		{
+			jump_distance.y = 0;
+			state = SLIME_STATE::BOUNCE;
+		}
+	}
 }
 
 void EnemySlime::HitStage()
 {
+
 }
 
 void EnemySlime::AttackJudgement(BoxCollider* boxcollider)
 {
-
 	if (boxcollider->HitBox(new EnemySlime(location.x + (60 * direction), location.y - 20, 80, 80)))
 	{
 		color = GetColor(255, 0, 0);
+
 		if (state == SLIME_STATE::MOVE)
 		{
-			state = SLIME_STATE::ATTACK;
-			attack_start.x = location.x;
-			attack_start.y = location.y;
+			jump_distance.y = ATTACK_DISTANCE_Y;
+			state = SLIME_STATE::IDOL;
 		}
 	}
 	else color = GetColor(0, 0, 255);
@@ -107,6 +128,15 @@ void EnemySlime::AttackJudgement(BoxCollider* boxcollider)
 
 void EnemySlime::Attack()
 {
-
+	int bounce_direction = 1;
+	if (state == SLIME_STATE::BOUNCE)bounce_direction = -1;
+	location.y -= (jump_distance.y / 3);
+	jump_distance.y -= 1;
+	location.x += (ATTACK_SPEED * (direction * bounce_direction));
+	if (location.y >= 490)
+	{
+		jump_distance.y = ATTACK_DISTANCE_Y;
+		state = SLIME_STATE::MOVE;
+	}
 }
 

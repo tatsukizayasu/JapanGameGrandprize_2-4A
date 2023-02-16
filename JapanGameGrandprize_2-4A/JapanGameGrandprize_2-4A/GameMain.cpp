@@ -4,6 +4,7 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 #include "Undead.h"
+#include"EnemySlime.h"
 
 #define _DEBUG
 
@@ -14,7 +15,9 @@ GameMain::GameMain()
 {
 	player = new Player();
 	stage = new Stage();
-	enemy = new Undead();
+	enemy = new EnemyBase * [2];
+	enemy[0] = new EnemySlime();
+	enemy[1] = new Undead();
 	camera_work = new CameraWork(0,0);
 
 	input_margin = 0;
@@ -27,7 +30,12 @@ GameMain::~GameMain()
 {
 	delete player;
 	delete stage;
-	delete enemy;
+	for (int i = 0; i < 2; i++)
+	{
+		delete enemy[i];
+	}
+	delete[] enemy;
+
 	delete camera_work;
 }
 
@@ -64,15 +72,23 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	enemy->Update();
-
-	switch (enemy->GetEnemyKind())
+	for (int i = 0; i < 2; i++)
 	{
+		enemy[i]->Update();
+
+		switch (enemy[i]->GetEnemyKind())
+		{
 		case ENEMY_KIND::SLIME:		//スライム
+		{			
+			EnemySlime* slime;
+			slime = dynamic_cast<EnemySlime*>(enemy[i]);
+			slime->HitPlayer(player);
+			slime->AttackJudgement(player);
 			break;
+		}
 		case ENEMY_KIND::UNDEAD:	//アンデット
 			Undead* undead;
-			undead = dynamic_cast<Undead*>(enemy);
+			undead = dynamic_cast<Undead*>(enemy[i]);
 			undead->DistancePlayer(player);
 			break;
 		case ENEMY_KIND::HARPY:		//ハーピィ
@@ -95,10 +111,10 @@ void GameMain::EnemyUpdate()
 			break;
 		case ENEMY_KIND::NONE:
 			break;
-	default:
-		break;
+		default:
+			break;
+		}
 	}
-
 }
 
 
@@ -112,6 +128,9 @@ void GameMain::Draw()const
 
 	player->Draw();
 	stage->Draw();
-	enemy->Draw();
+	for (int i = 0; i < 2; i++)
+	{
+		enemy[i]->Draw();
+	}
 }
 

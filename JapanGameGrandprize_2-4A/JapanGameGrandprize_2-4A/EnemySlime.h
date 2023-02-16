@@ -13,6 +13,7 @@ enum class SLIME_STATE
 	IDOL,   //ƒAƒCƒhƒ‹ó‘Ô
 	MOVE,   //ˆÚ“®
 	ATTACK, //UŒ‚
+	BOUNCE, //•ÇA“G‚É’µ‚Ë•Ô‚é
 	DEATH,  //€–S
 };
 
@@ -20,11 +21,13 @@ class EnemySlime : public EnemyBase, public BoxCollider
 {
 private:
 	int color;
-	int a;
 	int direction;
 
-	Location attack_start;
-	Location attack_speed;
+	int slime_image;
+
+	Location jump_distance;
+
+	ElementItem drop_item;
 
 	SLIME_STATE state;
 
@@ -38,7 +41,7 @@ public:
 	//•`‰æ
 	virtual void Draw()const override;
 
-	void Hit();
+	void HitPlayer(BoxCollider* boxcollider);
 	void HitStage();
 	void AttackJudgement(BoxCollider* boxcollider);
 	void Attack();

@@ -5,6 +5,7 @@
 #include "Stage/Stage.h"
 #include "CameraWork.h"
 
+
 class GameMain :
     public AbstractScene
 {
@@ -14,7 +15,7 @@ private:
     Player* player;
     Stage* stage;
     CameraWork* camera_work;
-    EnemyBase* enemy; //敵
+    EnemyBase** enemy; //敵
 
     //操作間隔時間
     int input_margin;
