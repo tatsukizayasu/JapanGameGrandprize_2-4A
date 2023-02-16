@@ -62,7 +62,7 @@ void NormalBullet::Draw() const
 		for (int i = 0; i < PIXEL_MAX; i++)
 		{
 			//DrawPixel(dot_location_x[i], dot_location_y[i], 0xeeeeee);
-			DrawCircle(dot_location_x[i], dot_location_y[i], 2, 0xeeeeee, TRUE);
+			DrawCircle(dot_location_x[i], dot_location_y[i], 5, 0x000000, TRUE);
 		}
 	}
 
@@ -84,6 +84,11 @@ void NormalBullet::Update()
 
 	if (delete_flg)
 	{
+		for (int i = 0; i < PIXEL_MAX; i++)
+		{
+			dot_location_x[i] = location.x;
+			dot_location_y[i] = location.y;
+		}
 		NormalBulletEfect();
 	}
 }
@@ -91,9 +96,9 @@ void NormalBullet::Update()
 bool NormalBullet::NormalBulletEfect()
 {
 
-	if (delete_flg && !efect_end)
+	if (!efect_end)
 	{
-		if (++efect_count % 60 != 0)
+		if (++efect_count % 300 != 0)
 		{
 			for (int i = 0; i < PIXEL_MAX; i++)
 			{
@@ -104,6 +109,7 @@ bool NormalBullet::NormalBulletEfect()
 		else
 		{
 			efect_end = true;
+			return true;
 		}
 	}
 	return false;
