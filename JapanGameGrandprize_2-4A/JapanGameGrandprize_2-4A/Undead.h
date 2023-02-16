@@ -20,17 +20,16 @@ private:
     int attack_interval; //次の攻撃までの時間
     int attack; //攻撃している
 
-    Location arm[2]; //腕の当たり判定
     ENEMY_TYPE attack_type; //攻撃の属性
     UNDEAD_STATE state; //状態
-    LineCollider* collider; //当たり判定
-private:
-    //攻撃
-    void Attack();
 
+    Player* player; //プレイヤー
+private:
+    //プレイヤーとの距離
+    void DistancePlayer();
 public:
     //コンストラクタ
-    Undead();
+    Undead(Player* player);
 
     //デストラクタ
     ~Undead();
@@ -38,16 +37,13 @@ public:
     //描画以外の更新
     void Update() override;
 
-    //プレイヤーとの距離
-    void DistancePlayer(Player* player);
-
     //プレイヤーの弾との当たり判定
     void HitBullet(Bullet* bullet) override;
 
     //描画
     void Draw() const override;
 
-    //LineColliderの取得
-    LineCollider GetLineCollider() const;
+    //状態の取得
+    UNDEAD_STATE GetState() const;
 };
 

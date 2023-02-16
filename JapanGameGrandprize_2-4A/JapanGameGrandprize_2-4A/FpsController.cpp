@@ -1,7 +1,6 @@
 #include"DxLib.h"
 #include "FpsController.h"
 
-
 void FpsController::Init(float RefreshRate, int UpdateTime)
 {
     frame_time = (int)(1000.0f / RefreshRate); //1ƒtƒŒ[ƒ€‚ÌŠÔ‚ÌŒvZ
