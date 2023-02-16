@@ -9,7 +9,7 @@
 #define DETECTION_DISTANCE 500
 
 //物理攻撃範囲
-#define ATTACK_RANGE 100
+#define ATTACK_RANGE 15
 
 //魔法攻撃範囲	
 #define ATTACK_MAGIC 400
@@ -20,6 +20,8 @@
 //攻撃スピード
 #define ATTACK_SPEED 4.5
 
+//今日やること
+//当たり判定、アイテム生成、接近攻撃あれでいいのか
 
 //-----------------------------------
 // コンストラクタ
@@ -32,9 +34,14 @@ EnemyGhost::EnemyGhost()
 	area.height = 40;
 	area.width = 40;
 	standby_time = 0;
+	bullet_x = 0;
+	bullet_y = 0;
+	bullet_speed_x = 0;
+	bullet_speed_y = 0;
 	physical_attack = false;
 	magic_attack = false;
 	ghost_vanish = false;
+	setting = false;
 	action_type = GHOST_STATE::NORMAL;
 	kind = ENEMY_KIND::GHOST;
 }
@@ -68,13 +75,18 @@ void EnemyGhost::Update()
 		location.y -= GHOST_SPEED;
 		break;
 	case GHOST_STATE::MAGIC_ATTACK: //魔法攻撃
-		if (standby_time++ % 600 == 0)
+		if (++standby_time % 300 == 0)
 		{
 			magic_attack = true;
+			standby_time = 0;
 		}
 		break;
 	case GHOST_STATE::PHYSICAL_ATTACK:
-		physical_attack = true;
+		if (++standby_time % 60 == 0)
+		{
+			physical_attack = true;
+			standby_time = 0;
+		}
 		break;
 	}
 
@@ -87,11 +99,11 @@ void EnemyGhost::Update()
 //-----------------------------------
 void EnemyGhost::Draw()const
 {
-
+	DrawFormatString(100, 400, 0x000000, "%d", bullet_x);
 	if (action_type == GHOST_STATE::MAGIC_ATTACK) //魔法攻撃のモーション
 	{
 		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
-			location.y + GHOST_SIZE_Y, GetColor(0, 255, 0), TRUE);
+			location.y + GHOST_SIZE_Y, GetColor(128, 0, 0), TRUE);
 	}
 	else if (action_type == GHOST_STATE::PHYSICAL_ATTACK) //接近攻撃のモーション
 	{
@@ -101,10 +113,13 @@ void EnemyGhost::Draw()const
 	else
 	{
 		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
-			location.y + GHOST_SIZE_Y, GetColor(255, 0, 255), TRUE);
+			location.y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
 	}
 
-
+	if (magic_attack == true)
+	{
+		DrawCircle(bullet_x, bullet_y, 5, GetColor(128, 0, 0));
+	}
 }
 
 
@@ -124,10 +139,12 @@ void EnemyGhost::GhostMove(Player* player)
 			if (player->GetLocationY() > location.y)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
+				
 			}
 			else
 			{
 				action_type = GHOST_STATE::LEFT_UPPER;
+				
 			}
 		}
 		else //右に移動
@@ -135,10 +152,12 @@ void EnemyGhost::GhostMove(Player* player)
 			if (player->GetLocationY() > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
+				
 			}
 			else
 			{
 				action_type = GHOST_STATE::RIGHT_UPPER;
+				
 			}
 		}
 	}
@@ -154,6 +173,8 @@ void EnemyGhost::GhostMove(Player* player)
 	}
 	else if (range <= ATTACK_MAGIC && range >= -ATTACK_MAGIC && magic_attack == false)
 	{
+		player_x = player->GetLocationX();
+		player_y = player->GetLocationY();
 		action_type = GHOST_STATE::MAGIC_ATTACK;
 	}
 }
@@ -164,14 +185,45 @@ void EnemyGhost::GhostMove(Player* player)
 //-----------------------------------
 void EnemyGhost::GhostAttack()
 {
+	
 	if (magic_attack == true) //魔法攻撃
 	{
+		if (setting == false)
+		{
+			bullet_x = location.x;
+			bullet_y = location.y;
+			setting = true;
+			// 弾の移動速度を設定する
+			{
+				float sb, sbx, sby, bx, by, sx, sy;
+
+				sx = bullet_x;
+				sy = bullet_y;
+
+				bx = player_x;
+				by = player_y;
+
+				sbx = bx - sx;
+				sby = by - sy;
+
+				sb = sqrt(sbx * sbx + sby * sby);
+
+				// １フレーム当たり2ドット移動するようにする
+				bullet_speed_x = sbx / sb * 2;
+				bullet_speed_y = sby / sb * 2;
+			}
+		}
+		else
+		{
+			bullet_x += bullet_speed_x;
+			bullet_y += bullet_speed_y;
+		}
 
 	}
 
 	if (physical_attack == true) //物理攻撃
 	{
-
+		//どのように表現するのか未定
 	}
 }
 

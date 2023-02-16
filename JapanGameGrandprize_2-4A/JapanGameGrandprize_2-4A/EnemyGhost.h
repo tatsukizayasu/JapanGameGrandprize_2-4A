@@ -21,9 +21,16 @@ class EnemyGhost : public EnemyBase, public BoxCollider
 private:
 
 	int standby_time; //硬直時間
+	float bullet_x; //弾丸
+	float bullet_y; //弾丸
+	float bullet_speed_x;
+	float bullet_speed_y;
+	float player_x; //
+	float player_y; //
 	bool magic_attack; //魔法攻撃
 	bool ghost_vanish; //ゴーストが透明化したらtrue
 	bool physical_attack; //物理攻撃に入る（true)なら
+	bool setting; //初期処理
 	GHOST_STATE action_type; //行動パターン
 
 public:
