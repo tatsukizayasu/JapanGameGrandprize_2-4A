@@ -2,11 +2,11 @@
 #include "../BoxCollider.h"
 
 #define MAP_CHIP_SIZE 40.f
+class Player;
 
 class MapChip :
     public BoxCollider
 {
-private:
 public:
     //コンストラクタ
     MapChip();
@@ -15,7 +15,7 @@ public:
     //デストラクタ
     ~MapChip();
     //更新
-    virtual void Update();
+    void Update(Player* player);
     //描画
     virtual void Draw() const;
 
