@@ -134,14 +134,13 @@ void EnemyGhost::Draw()const
 void EnemyGhost::GhostMove(Player* player)
 {
 	int range; //プレイヤーとの距離
-	range = location.x - player->GetLocationX();
-
+	range = location.x - player->GetLocation().x;
 	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE)
 	{
-		if (location.x > player->GetLocationX()) //左に移動
+		if (location.x > player->GetLocation().x) //左に移動
 		{
-			if (player->GetLocationY() > location.y)
+			if (player->GetLocation().y > location.y)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
 
@@ -154,7 +153,7 @@ void EnemyGhost::GhostMove(Player* player)
 		}
 		else //右に移動
 		{
-			if (player->GetLocationY() > location.y)
+			if (player->GetLocation().y > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
 
@@ -178,8 +177,8 @@ void EnemyGhost::GhostMove(Player* player)
 	}
 	else if (range <= ATTACK_MAGIC && range >= -ATTACK_MAGIC && magic_attack == false)
 	{
-		player_x = player->GetLocationX();
-		player_y = player->GetLocationY();
+		player_x = player->GetLocation().x;
+		player_y = player->GetLocation().y;
 		action_type = GHOST_STATE::MAGIC_ATTACK;
 	}
 
