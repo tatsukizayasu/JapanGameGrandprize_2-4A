@@ -89,11 +89,13 @@ void CameraWork::Update()
 	if (state == STATE::MOVE) {
 
 		//ˆÚ“®ŠJnƒ‰ƒCƒ“‚Ì•Ï“®
+
+		float player_speed_w = player_p.x - old_player.x;
 		if (player_dir == true) {
-			if (moveing_line > 400 ) { moveing_line -= 2.0f; }
+			if (moveing_line > 400 ) { moveing_line -= player_speed_w; }
 		}
 		else {
-			if (moveing_line < 800) { moveing_line += 2.0f; }
+			if (moveing_line < 800) { moveing_line -= player_speed_w; }
 		}
 		
 
