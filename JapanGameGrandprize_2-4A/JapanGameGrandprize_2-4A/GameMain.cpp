@@ -5,8 +5,6 @@
 #include "PadInput.h"
 #include "Undead.h"
 
-#define _DEBUG
-
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -115,11 +113,6 @@ void GameMain::EnemyUpdate()
 			break;
 	default:
 		break;
-	}
-	if (enemy->CheckHp())
-	{
-		delete enemy;
-		enemy = nullptr;
 	}
 }
 

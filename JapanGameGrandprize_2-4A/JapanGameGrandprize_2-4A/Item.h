@@ -1,6 +1,6 @@
 #pragma once
-#include"SphereCollider.h"
-
+#include "SphereCollider.h"
+#include "EnumElementItem.h"
 class Item :
 	public SphereCollider
 {
@@ -9,6 +9,7 @@ private:
 public:
 	//コンストラクタ
 	Item();
+	Item(ELEMENT_ITEM type, Location location);
 
 	//更新
 	void Update();

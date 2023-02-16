@@ -155,6 +155,7 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="ElementItem.h" />
+    <ClInclude Include="EnumElementItem.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Stage\StageBuilder\Directory.h" />
     <ClInclude Include="EfectBeam.h" />

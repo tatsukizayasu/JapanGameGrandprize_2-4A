@@ -1,17 +1,5 @@
 #pragma once
-
-//Œ³‘f\‘¢‘Ì
-enum class  ELEMENT_ITEM
-{
-	OXYGEN,      //_‘f
-	HYDROGEN,	 //…‘f
-	NITROGEN,	 //’‚‘f
-	CARBON,		 //’Y‘f
-	SULFUR,		 //—°‰©
-	CHLORINE,	 //‰–‘f
-	URANIUM,	 //ƒEƒ‰ƒ“
-	NONE
-};
+#include "EnumElementItem.h"
 
 class ElementItem
 {
@@ -28,5 +16,8 @@ public:
 
 	//Œ³‘fƒ^ƒCƒv‚Ìæ“¾
 	ELEMENT_ITEM GetType() const;
+
+	//Œ³‘f‚Ì—Ê‚ğİ’è
+	void SetVolume(unsigned int num);
 };
 

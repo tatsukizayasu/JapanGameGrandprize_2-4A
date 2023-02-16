@@ -1,7 +1,5 @@
 #include "ElementItem.h"
 
-
-
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -36,4 +34,12 @@ unsigned int ElementItem::GetVolume()const
 ELEMENT_ITEM ElementItem::GetType() const
 {
 	return type; 
+}
+
+//-----------------------------------
+//元素の量を設定
+//-----------------------------------
+void ElementItem::SetVolume(unsigned int num)
+{
+	volume = num;
 }
