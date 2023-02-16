@@ -42,7 +42,6 @@ EnemyGhost::EnemyGhost()
 	bullet_speed_y = 0;
 	physical_attack = false;
 	magic_attack = false;
-	ghost_vanish = false;
 	setting = false;
 	action_type = GHOST_STATE::NORMAL;
 	kind = ENEMY_KIND::GHOST;
@@ -243,4 +242,6 @@ void EnemyGhost::HitBullet(Bullet* bullet)
 {
 
 }
+
+
 
