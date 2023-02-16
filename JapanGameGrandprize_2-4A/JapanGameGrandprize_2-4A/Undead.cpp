@@ -3,6 +3,7 @@
 #include<math.h>
 #include "Undead.h"
 #include "Define.h"
+#include "CameraWork.h"
 
 //攻撃をする範囲
 #define ATTACK_DISTANCE 50
@@ -17,17 +18,23 @@
 #define UNDEAD_SPEED -2
 
 //ドロップ量(最小)
-#define UNDEAD_MIN_DROP 0
+#define UNDEAD_MIN_DROP 0u
 //ドロップ量(最大)
-#define UNDEAD_MAX_DROP 5
+#define UNDEAD_MAX_DROP 5u
 
+//ドロップする種類数
+#define UNDEAD_DROP 4
+
+//体力
+#define UNDEAD_HP 100
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Undead::Undead()
+Undead::Undead(Player* player)
 {
 	/*初期化*/
+	hp = 0;
 	damage = 0;
 	attack_interval = 0;
 	attack = 0;
@@ -37,24 +44,34 @@ Undead::Undead()
 	*type = ENEMY_TYPE::SOIL;
 	attack_type = ENEMY_TYPE::NORMAL;
 	state = UNDEAD_STATE::IDOL;
-	collider = new LineCollider();
+	drop_volume = 0;
 
 	/*当たり判定の設定*/
-	location.x = 1270.0f;
+	location.x = 640.0f;
 	location.y = 430.0f;
 	area.width = 40;
 	area.height = 80;
 
 	//ドロップアイテムの設定
-	drop_item = DropItem(*type, UNDEAD_MIN_DROP, UNDEAD_MAX_DROP);
+	drop_element = new ElementItem * [UNDEAD_DROP];
 
-	//腕の当たり判定の設定
-	for (int i = 0; i < 2; i++)
+	int volume = 0;
+	for (int i = 0; i < UNDEAD_DROP; i++)
 	{
-		arm[i].x = 1270.0f - (50 * i);
-		arm[i].y = 460.0f;
-		collider->SetLocation(arm[i], i);
-	}	
+		volume = UNDEAD_MIN_DROP + GetRand(UNDEAD_MAX_DROP);
+		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+		drop_element[i]->SetVolume(volume);
+		drop_volume += volume;
+	}
+
+	//ドロップアイテムの初期化
+	drop_item = new Item * [drop_volume];
+	for (int i = 0; i < static_cast<int>(drop_volume); i++)
+	{
+		drop_item[i] = nullptr;
+	}
+
+	this->player = player;
 }
 
 //-----------------------------------
@@ -62,8 +79,19 @@ Undead::Undead()
 //-----------------------------------
 Undead::~Undead()
 {
+	for (int i = 0; i < UNDEAD_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+	delete[] drop_element;
+
+	for (int i = 0; i < drop_volume; i++)
+	{
+		delete drop_item[i];
+	}
+	delete[] drop_item;
+
 	delete type;
-	delete collider;
 }
 
 //-----------------------------------
@@ -74,24 +102,33 @@ void Undead::Update()
 	switch (state)
 	{
 	case UNDEAD_STATE::IDOL:
-		if (location.x < SCREEN_WIDTH)
+		if ((-area.width < location.x) && (location.x < SCREEN_WIDTH))
 		{
 			state = UNDEAD_STATE::MOVE;
 		}
 		break;
 	case UNDEAD_STATE::MOVE:
-		for (int i = 0; i < 2; i++)
-		{
-			arm[i].x += speed;
-			collider->SetLocation(arm[i], i);
-		}
+		DistancePlayer();
+
 		location.x += speed;
 
+		if ((location.x < -area.width) || (SCREEN_WIDTH < location.x))
+		{
+			state = UNDEAD_STATE::IDOL;
+		}
 		break;
 	case UNDEAD_STATE::ATTACK:
-		Attack();
 		break;
 	case UNDEAD_STATE::DEATH:
+		for (int i = 0; i < drop_volume; i++)
+		{
+			if (drop_item[i] == nullptr)
+			{
+				break;
+			}
+
+			drop_item[i]->Update(player);
+		}
 		break;
 	default:
 		break;
@@ -101,30 +138,19 @@ void Undead::Update()
 	{
 		attack_interval--;
 	}
-}
 
-//-----------------------------------
-// 攻撃
-//-----------------------------------
-void Undead::Attack()
-{
-	
-	arm[1].x += 5 * cosf(attack * (180 / 30));
-	arm[1].y += 5 * sinf(attack * (180 / 30));
-
-	collider->SetLocation(arm[1], 1);
-	if (++attack % 30 == 0)
+	if (CheckHp() && (state != UNDEAD_STATE::DEATH))
 	{
-		state = UNDEAD_STATE::IDOL;
-		attack_interval = ATTACK_INTERVAL;
+		state = UNDEAD_STATE::DEATH;
+		CreateDropItem(UNDEAD_DROP,location);
 	}
-
 }
+
 
 //-----------------------------------
 // プレイヤーとの距離
 //-----------------------------------
-void Undead::DistancePlayer(Player* player)
+void Undead::DistancePlayer()
 {
 	float distance; //離れている距離
 
@@ -158,7 +184,7 @@ void Undead::DistancePlayer(Player* player)
 //-----------------------------------
 void Undead::HitBullet(Bullet* bullet)
 {
-
+	
 }
 
 //-----------------------------------
@@ -166,12 +192,32 @@ void Undead::HitBullet(Bullet* bullet)
 //-----------------------------------
 void Undead::Draw() const
 {
-	DrawBox(location.x, location.y, location.x + area.width, location.y + area.height, 0xffffff, TRUE);
-	DrawLine(arm[0].x, arm[0].y, arm[1].x, arm[1].y, 0xffffff, 5);
-	DrawFormatString(100, 100, 0x000000, "%d", static_cast<int>(state));
+	Location draw_location; //描画用の座標
+
+	draw_location.x = location.x - CameraWork::GetCamera().x;
+	draw_location.y = location.y - CameraWork::GetCamera().y;
+
+	if (state != UNDEAD_STATE::DEATH)
+	{
+		DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, 0xffffff, TRUE);
+	}
+	else
+	{
+		for (int i = 0; i < drop_volume; i++)
+		{
+			if (drop_item[i] == nullptr)
+			{
+				break;
+			}
+			drop_item[i]->Draw();
+		}
+	}
 }
 
-LineCollider Undead::GetLineCollider() const
+//-----------------------------------
+//状態の取得
+//-----------------------------------
+UNDEAD_STATE Undead::GetState() const
 {
-	return *collider;
+	return state;
 }

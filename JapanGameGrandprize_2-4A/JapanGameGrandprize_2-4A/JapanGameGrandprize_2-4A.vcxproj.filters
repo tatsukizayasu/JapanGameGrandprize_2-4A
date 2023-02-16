@@ -43,9 +43,6 @@
     <ClCompile Include="LineCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Undead.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="CameraWork.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -68,7 +65,16 @@
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="EnemyBase.cpp">
-      <Filter>ソースファイル</Filter>
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Undead.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="ElementItem.cpp">
+      <Filter>ソースファイル\ElementItem</Filter>
     </ClCompile>
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="EnemySlime.cpp">
@@ -109,9 +115,6 @@
     <ClInclude Include="Title.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBase.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Stage\Stage.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
@@ -122,9 +125,6 @@
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
     <ClInclude Include="LineCollider.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Undead.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\MapChip.h">
@@ -151,6 +151,21 @@
     <ClInclude Include="Stage\StageBuilder\Directory.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Undead.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="ElementItem.h">
+      <Filter>ヘッダーファイル\ElementItem</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumElementItem.h">
+      <Filter>ヘッダーファイル\ElementItem</Filter>
+    </ClInclude>
     <ClInclude Include="EnemySlime.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
@@ -173,6 +188,18 @@
     </Filter>
     <Filter Include="ヘッダーファイル\Stage\StageBuilder">
       <UniqueIdentifier>{d1293583-3d3b-49bc-8e71-328d73336604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Enemy">
+      <UniqueIdentifier>{a771c49b-1f8a-4d43-b3ae-91fb70c01a10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Enemy">
+      <UniqueIdentifier>{1df94681-910c-41c5-8e40-61af91250e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\ElementItem">
+      <UniqueIdentifier>{7903dcd5-28ce-4e13-93c4-e9cd69bd1f7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\ElementItem">
+      <UniqueIdentifier>{57cb677f-baa9-4594-a284-5de08e0a7cdd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

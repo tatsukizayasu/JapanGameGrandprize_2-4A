@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "PadInput.h"
+#include "CameraWork.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -48,7 +49,11 @@ Player::~Player()
 //-----------------------------------
 void Player::Draw() const
 {
-	DrawBox(location.x, location.y, location.x + image_size_x, location.y + image_size_y, 0x00ff00, TRUE);
+
+	float x = location.x - CameraWork::GetCamera().x;
+	float y = location.y - CameraWork::GetCamera().y;
+
+	DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
 
 	for (int i = 0; i < bullet_count; i++)
 	{
