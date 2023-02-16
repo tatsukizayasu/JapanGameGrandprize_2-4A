@@ -2,9 +2,11 @@
 #include "EfectExplosion.h"
 class Bullet
 {
-private:
-	float bullet_x, bullet_y;
-	bool delete_flg;
+protected:
+	int damage;          //弾のダメージ
+	int efect_count;	 //エフェクトの時間
+	bool delete_flg;     //弾の削除フラグ
+	bool efect_end;		 //エフェクトの終わりフラグ
 
 	EfectExplosion* efect_explosion;
 public:
@@ -12,8 +14,9 @@ public:
 	Bullet(float,float);
 	~Bullet() {};
 
-	void Draw()const;
-	void Update();
+	virtual void Draw() const = 0;
+	virtual void Update() = 0;
 
-	bool GetDeleteFlg() { return delete_flg; }
+
+	bool GetEfectFlg() { return delete_flg; }
 };

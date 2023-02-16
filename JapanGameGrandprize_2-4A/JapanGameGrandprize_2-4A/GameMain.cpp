@@ -11,8 +11,8 @@
 //-----------------------------------
 GameMain::GameMain()
 {
-	player = new Player();
 	stage = new Stage();
+	player = new Player(stage);
 	enemy = new Undead(player);
 	camera_work = new CameraWork(0, 0, player, stage);
 
