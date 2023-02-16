@@ -76,6 +76,9 @@
     <ClCompile Include="ElementItem.cpp">
       <Filter>ソースファイル\ElementItem</Filter>
     </ClCompile>
+    <ClCompile Include="NormalBullet.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -161,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="EnumElementItem.h">
       <Filter>ヘッダーファイル\ElementItem</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalBullet.h">
+      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

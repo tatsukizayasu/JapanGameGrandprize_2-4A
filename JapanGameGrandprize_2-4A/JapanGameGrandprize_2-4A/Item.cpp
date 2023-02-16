@@ -93,6 +93,6 @@ void Item::Update()
 void Item::Draw()const
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	DrawCircleAA(location.x, location.y, radius, 32, color, TRUE);
+	//DrawCircleAA(location.x, location.y, radius, 32, color, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }

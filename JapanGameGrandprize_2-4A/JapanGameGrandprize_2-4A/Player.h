@@ -7,6 +7,7 @@
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
+#define HP_MAX 100
 
 enum class PlayerState
 {
@@ -25,6 +26,7 @@ class Player : public BoxCollider
 private:
 	int image;						//画像用変数
 	int image_size_x, image_size_y; //画像のサイズ
+	int hp;							//体力
 	int bullet_count;				//撃った弾の数
 	int count;                      //処理をカウントする
 	int not_jet_count;              //跳んでない時を数える
@@ -57,8 +59,15 @@ public:
 	void Update();
 	void Element_Update();
 
+	void RightMove();
+	void LeftMove();
+	void NotInputStick();
+	void Jump();
+	void NotJump();
 	void Shoot_Gun();
 	void SortBullet(int);
+	void Hp_Damage(int);
+	void Hp_Heal(int);
 
 	Bullet* GetBullet(int i) { return bullet[i]; }
 	PlayerState GetState() { return player_state; }

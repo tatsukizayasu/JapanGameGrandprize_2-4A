@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "DxLib.h"
+#include "NormalBullet.h"
 #include "PadInput.h"
 
 //-----------------------------------
@@ -43,6 +44,8 @@ Player::Player()
 	player_state = PlayerState::stop;
 
 	display_attribute = 0;
+
+	hp = 0;
 
 	beam = nullptr;
 
@@ -97,6 +100,8 @@ Player::Player(Stage* stage)
 
 	display_attribute = 0;
 
+	hp = 100;
+
 	beam = nullptr;
 
 	stage = new Stage();
@@ -140,6 +145,8 @@ void Player::Draw() const
 	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
 
+
+
 	SetFontSize(30);
 
 	//上の選択肢
@@ -162,6 +169,8 @@ void Player::Draw() const
 	}
 	//現在の選択肢
 	DrawFormatString(1000, 50, 0x778877, "%d", attribute_c[display_attribute]);
+
+	DrawFormatString(0, 400, 0x999999, "%d", hp);
 }
 
 //-----------------------------------
@@ -171,106 +180,24 @@ void Player::Update()
 {
 	count++;
 
+
+	//スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
-		if (player_state == PlayerState::jump || player_state == PlayerState::down)
-		{
-			if (speed_x < 5.0)
-			{
-				speed_x = speed_x + JUMP_INERTIA;
-			}
-			else
-			{
-				speed_x = 5.0;
-			}
-		}
-		else
-		{
-			player_state = PlayerState::move_right;
-			if (speed_x < 5.0)
-			{
-				speed_x = speed_x + WARK_INERTIA;
-			}
-			else
-			{
-				speed_x = 5.0;
-			}
-		}
-
-		location.x += speed_x;
-		
+		RightMove();
 	}
+	//スティック左入力
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
-		if (player_state == PlayerState::jump || player_state == PlayerState::down)
-		{
-			if (speed_x > -5.0)
-			{
-				speed_x = speed_x - JUMP_INERTIA;
-			}
-			else
-			{
-				speed_x = -5.0;
-			}
-		}
-		else
-		{
-			player_state = PlayerState::move_left;
-			if (speed_x > -5.0)
-			{
-				speed_x = speed_x - WARK_INERTIA;
-			}
-			else
-			{
-				speed_x = -5.0;
-			}
-		}
-		location.x += speed_x;
+		LeftMove();
 	}
+	//スティック未入力
 	else
 	{
-		if (speed_x > 0)
-		{
-			if (player_state == PlayerState::jump || player_state == PlayerState::down)
-			{
-				speed_x -= JUMP_INERTIA;
-			}
-			else
-			{
-				speed_x -= WARK_INERTIA;
-			}
-
-			if (speed_x < 0)
-			{
-				speed_x = 0;
-			}
-		}
-
-		if (speed_x < 0)
-		{
-			if (player_state == PlayerState::jump || player_state == PlayerState::down)
-			{
-				speed_x += JUMP_INERTIA;
-			}
-			else
-			{
-				speed_x += WARK_INERTIA;
-			}
-
-			if (speed_x > 0)
-			{
-				speed_x = 0;
-			}
-		}
-
-		if (speed_x > -JUMP_INERTIA && speed_x < JUMP_INERTIA)
-		{
-			speed_x = 0;
-		}
-
-		location.x += speed_x;
+		NotInputStick();
 	}
 
+	//RBボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
 		if (count % 30 == 0)
@@ -280,85 +207,18 @@ void Player::Update()
 		}
 	}
 
-
+	//Bボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B) && fuel > 0)
 	{
-		player_state = PlayerState::jump;
-		not_jet_count = 0;
-		jump_power = jump - GRAVITY;
-
-		gravity_down = 0.0;
-
-		jump += 0.25;
-		fuel -= 0.25;
-
-
-		if (jump_power > 10)
-		{
-			jump_power = 10.0;
-		}
-
-		if (fuel < 0)
-		{
-			fuel = 0;
-			player_state = PlayerState::down;
-		}
-
-		if (location.y > 0)
-		{
-			location.y -= jump_power;
-		}
+		Jump();
 	}
+	//Bボタン未入力
 	else
 	{
-		if (jump_power > 0)
-		{
-			jump_power -= 0.5;
-			if (location.y > 0)
-			{
-				location.y -= jump_power;
-			}
-			else
-			{
-				jump_power = 0;
-			}
-		}
-		else
-		{
-			jump_power = 0;
-			jump = 10;
-
-			if (location.y < 400)
-			{
-				location.y += gravity_down;
-			}
-			else
-			{
-				player_state = PlayerState::stop;
-			}
-			gravity_down += 0.25;
-
-
-
-			if (not_jet_count++ >= 120)
-			{
-				if (fuel < 100)
-				{
-					fuel += 2.5;
-				}
-				else
-				{
-					fuel = 100;
-				}
-			}
-
-			if (not_jet_count >= 120)
-			{
-				not_jet_count = 120;
-			}
-		}
+		NotJump();
 	}
 
+	//Bボタン解放時
 	if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
 	{
 		player_state = PlayerState::down;
@@ -366,12 +226,12 @@ void Player::Update()
 
 
 
-
+	//弾のアップデート呼び出し
 	for (int i = 0; i < bullet_count; i++)
 	{
 		if (bullet[i] != nullptr)
 		{
-			if (bullet[i]->GetDeleteFlg())
+			if (bullet[i]->GetEfectFlg())
 			{
 				bullet[i] = nullptr;
 				SortBullet(i);
@@ -383,12 +243,194 @@ void Player::Update()
 		}
 	}
 
-	/*if (beam != nullptr)
-	{
-		beam->Update(location.x, location.y);
-	}*/
-
+	//弾の属性の切り替え処理
 	Element_Update();
+	
+}
+
+//スティックを入力していないとき
+void Player::NotInputStick()
+{
+	if (speed_x > 0)
+	{
+		if (player_state == PlayerState::jump || player_state == PlayerState::down)
+		{
+			speed_x -= JUMP_INERTIA;
+		}
+		else
+		{
+			speed_x -= WARK_INERTIA;
+		}
+
+		if (speed_x < 0)
+		{
+			speed_x = 0;
+		}
+	}
+
+	if (speed_x < 0)
+	{
+		if (player_state == PlayerState::jump || player_state == PlayerState::down)
+		{
+			speed_x += JUMP_INERTIA;
+		}
+		else
+		{
+			speed_x += WARK_INERTIA;
+		}
+
+		if (speed_x > 0)
+		{
+			speed_x = 0;
+		}
+	}
+
+	if (speed_x > -JUMP_INERTIA && speed_x < JUMP_INERTIA)
+	{
+		speed_x = 0;
+	}
+
+	location.x += speed_x;
+}
+
+//左移動
+void Player::LeftMove()
+{
+	if (player_state == PlayerState::jump || player_state == PlayerState::down)
+	{
+		if (speed_x > -5.0)
+		{
+			speed_x = speed_x - JUMP_INERTIA;
+		}
+		else
+		{
+			speed_x = -5.0;
+		}
+	}
+	else
+	{
+		player_state = PlayerState::move_left;
+		if (speed_x > -5.0)
+		{
+			speed_x = speed_x - WARK_INERTIA;
+		}
+		else
+		{
+			speed_x = -5.0;
+		}
+	}
+	location.x += speed_x;
+}
+
+//右移動
+void Player::RightMove()
+{
+	if (player_state == PlayerState::jump || player_state == PlayerState::down)
+	{
+		if (speed_x < 5.0)
+		{
+			speed_x = speed_x + JUMP_INERTIA;
+		}
+		else
+		{
+			speed_x = 5.0;
+		}
+	}
+	else
+	{
+		player_state = PlayerState::move_right;
+		if (speed_x < 5.0)
+		{
+			speed_x = speed_x + WARK_INERTIA;
+		}
+		else
+		{
+			speed_x = 5.0;
+		}
+	}
+
+	location.x += speed_x;
+}
+
+//ジャンプ
+void Player::Jump()
+{
+	player_state = PlayerState::jump;
+	not_jet_count = 0;
+	jump_power = jump - GRAVITY;
+
+	gravity_down = 0.0;
+
+	jump += 0.25;
+	fuel -= 0.25;
+
+
+	if (jump_power > 10)
+	{
+		jump_power = 10.0;
+	}
+
+	if (fuel < 0)
+	{
+		fuel = 0;
+		player_state = PlayerState::down;
+	}
+
+	if (location.y > 0)
+	{
+		location.y -= jump_power;
+	}
+}
+
+//ジャンプしてない
+void Player::NotJump()
+{
+	if (jump_power > 0)
+	{
+		jump_power -= 0.5;
+		if (location.y > 0)
+		{
+			location.y -= jump_power;
+		}
+		else
+		{
+			jump_power = 0;
+		}
+	}
+	else
+	{
+		jump_power = 0;
+		jump = 10;
+
+		if (location.y < 400)
+		{
+			location.y += gravity_down;
+		}
+		else
+		{
+			player_state = PlayerState::stop;
+		}
+		gravity_down += 0.25;
+
+
+
+		if (not_jet_count++ >= 120)
+		{
+			if (fuel < 100)
+			{
+				fuel += 2.5;
+			}
+			else
+			{
+				fuel = 100;
+			}
+		}
+
+		if (not_jet_count >= 120)
+		{
+			not_jet_count = 120;
+		}
+	}
 }
 
 //-----------------------------------
@@ -403,7 +445,7 @@ void Player::Shoot_Gun()
 		{
 			if (bullet[i] == NULL)
 			{
-				bullet[i] = new Bullet(location.x, location.y);
+				bullet[i] = new NormalBullet(location.x, location.y);
 			}
 		}
 		break;
@@ -438,11 +480,12 @@ void Player::SortBullet(int delete_bullet)
 	}
 }
 
+//属性を変更
 void Player::Element_Update()
 {
-	if (PAD_INPUT::GetRStick().y > 10000)
+	if (PAD_INPUT::GetRStick().y > 5000)
 	{
-		if (select_count % 30 == 0)
+		if (select_count % 20 == 0)
 		{
 			display_attribute--;
 			if (display_attribute < 0)
@@ -452,9 +495,9 @@ void Player::Element_Update()
 		}
 	}
 
-	if (PAD_INPUT::GetRStick().y < -10000)
+	if (PAD_INPUT::GetRStick().y < -5000)
 	{
-		if (select_count % 30 == 0)
+		if (select_count % 20 == 0)
 		{
 			display_attribute++;
 			if (display_attribute > 5)
@@ -465,5 +508,25 @@ void Player::Element_Update()
 	}
 
 	select_count++;
+}
 
+//ダメージを受けた時
+void Player::Hp_Damage(int damage_value)
+{
+	hp -= damage_value;
+	if (hp <= 0)
+	{
+		hp = 0;
+		player_state = PlayerState::death;
+	}
+}
+
+//回復
+void Player::Hp_Heal(int heal_value)
+{
+	hp += heal_value;
+	if (hp >= HP_MAX)
+	{
+		hp = HP_MAX;
+	}
 }
