@@ -4,9 +4,10 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "../Player.h"
 
 #define STAGE_NAME	"debugStage";
-#define STAGE_NAME	"sample_stage";
+#define STAGE_NAME	"sample_stage2";
 
 
 //-----------------------------------
@@ -14,7 +15,8 @@
 //-----------------------------------
 Stage::Stage()
 {
-	if (LoadDivGraph("Images/Stage/map_chips.png", 100, 10, 10, 40, 40, block_images + 1) == -1)
+
+	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
 	{
 		throw "Images/Stage/map_chips.png";
 	}
@@ -35,7 +37,7 @@ Stage::Stage()
 					{
 						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-					}, { 40,40 }));
+					}, { CHIP_SIZE,CHIP_SIZE }));
 			}
 		}
 	}
@@ -74,12 +76,12 @@ Stage::~Stage()
 //-----------------------------------
 // çXêV
 //-----------------------------------
-void Stage::Update()
+void Stage::Update(Player* player)
 {
 
 	for (int i = 0; i < mapchip.size(); i++)
 	{		
-		mapchip.at(i)->Update();
+		mapchip.at(i)->Update(player);
 
 	}
 
@@ -87,6 +89,7 @@ void Stage::Update()
 	stage_builder->Update();
 #endif
 }
+
 
 //-----------------------------------
 // ï`âÊ
@@ -103,7 +106,6 @@ void Stage::Draw()
 #ifdef _STAGE_BUILDER
 	stage_builder->Draw();
 #endif
-
 	
 }
 

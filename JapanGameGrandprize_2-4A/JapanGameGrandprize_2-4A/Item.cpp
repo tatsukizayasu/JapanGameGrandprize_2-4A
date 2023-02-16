@@ -1,5 +1,8 @@
 #include "DxLib.h"
+#define _USE_MATH_DEFINES
+#include<math.h>
 #include "Item.h"
+#include "CameraWork.h"
 
 //色
 #define WHITE_COLOR 0xffffff
@@ -11,6 +14,7 @@
 
 
 #define RAND_LCOATION 25
+#define ITEM_BASE_SPEED 10
 
 //-----------------------------------
 // コンストラクタ
@@ -18,6 +22,7 @@
 Item::Item()
 {
 	color = 0;
+	speed = 0;
 	location.x = 0;
 	location.y = 0;
 	radius = 0;
@@ -43,6 +48,7 @@ Item::Item(ELEMENT_ITEM type, Location location)
 
 	color = 0;
 	radius = 0;
+	speed = ITEM_BASE_SPEED;
 
 	switch (type)
 	{
@@ -82,9 +88,14 @@ Item::Item(ELEMENT_ITEM type, Location location)
 //-----------------------------------
 // 更新
 //-----------------------------------
-void Item::Update()
+void Item::Update(Player* player)
 {
+	float radian; //角度
+	//プレイヤーとアイテムの角度の計算
+	radian = atan2f(player->GetLocation().y - location.y, player->GetLocation().x - location.x);
 
+	location.x += static_cast<int>(speed * cosf(radian));
+	location.y += static_cast<int>(speed * sinf(radian));
 }
 
 //-----------------------------------
@@ -92,7 +103,12 @@ void Item::Update()
 //-----------------------------------
 void Item::Draw()const
 {
+	Location draw_location; //描画用の座標
+
+	draw_location.x = location.x - CameraWork::GetCamera().x;
+	draw_location.y = location.y - CameraWork::GetCamera().y;
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	//DrawCircleAA(location.x, location.y, radius, 32, color, TRUE);
+	DrawCircle(static_cast<int>(draw_location.x), static_cast<int>(draw_location.y), radius, color, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
