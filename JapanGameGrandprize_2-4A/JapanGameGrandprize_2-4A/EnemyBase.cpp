@@ -1,7 +1,21 @@
 #include "DxLib.h"
 #include "EnemyBase.h"
 
+//-----------------------------------
+//コンストラクタ
+//-----------------------------------
+EnemyBase::EnemyBase() 
+{
+	hp = 0;
+	speed = 0;
+	drop_volume = 0;
+	drop_type_volume = 0; 
 
+	drop_element = nullptr;
+
+	kind = ENEMY_KIND::NONE; 
+	type = nullptr;
+}
 //-----------------------------------
 // HPが0かどうか判断(0になったらtrue)
 //-----------------------------------
@@ -16,39 +30,21 @@ bool EnemyBase::CheckHp()
 }
 
 //-----------------------------------
-//アイテムの生成
+//ドロップする種類の量の取得
 //-----------------------------------
-void EnemyBase::CreateDropItem(int drop_num,Location location)
+int EnemyBase::GetDropTypeVolume() const
 {
-	int volume = 0; //生成数
-	int j = 0;
-	for (int i = 0; i < drop_num; i++)
-	{
-		volume = drop_element[i]->GetVolume();
-		while (0 < volume)
-		{
-			drop_item[j++] = new Item(drop_element[i]->GetType(), location);
-			volume--;
-		}
-	}
+	return drop_type_volume;
 }
 
 //-----------------------------------
-//アイテムの並び替え
+//ドロップするアイテムの量の取得
 //-----------------------------------
-void EnemyBase::SortDropitem(int item_num)
+int EnemyBase::GetDropVolume()const
 {
-	//弾の中身をソートする
-	for (int i = item_num + 1; i < drop_volume; i++)
-	{
-		if ((drop_item[i] == nullptr))
-		{
-			break;
-		}
-		drop_item[i - 1] = drop_item[i];
-		drop_item[i] = nullptr;
-	}
+	return drop_volume;
 }
+
 //-----------------------------------
 // ドロップアイテムの取得
 //-----------------------------------
@@ -63,4 +59,12 @@ ElementItem EnemyBase::GetDropItem(int i) const
 ENEMY_KIND EnemyBase::GetEnemyKind() const
 {
 	return kind;
+}
+
+//-----------------------------------
+//削除可能状態の取得
+//-----------------------------------
+bool EnemyBase::GetCanDelete() const
+{
+	return can_delete;
 }
