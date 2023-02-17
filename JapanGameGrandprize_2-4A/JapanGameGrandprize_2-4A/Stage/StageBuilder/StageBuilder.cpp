@@ -79,6 +79,9 @@ void StageBuilder::Update()
 
 		
 	}
+
+	line->MoveLocation();
+	line->SetLocation(mouse_pos, LINE_START);
 }
 
 //------------------------------------
@@ -119,6 +122,8 @@ void StageBuilder::Draw()const
 		DrawFileInfo();
 	}
 
+
+	line->DrawCollision();
 }
 
 //------------------------------------

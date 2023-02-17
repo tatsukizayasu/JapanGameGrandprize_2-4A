@@ -107,9 +107,10 @@ public:
 #ifdef _SHOW_COLLISION
 	void DrawCollision()const
 	{
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 64);
-		DrawLineAA(vector[LINE_START].x, vector[LINE_START].y,
-			vector[LINE_END].x, vector[LINE_END].y, 0xE9FF00);
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+		DrawLineAA(GetLocation(LINE_START).x, GetLocation(LINE_START).y,
+			GetLocation(LINE_END).x, GetLocation(LINE_END).y,0xE9FF00,3);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		//DrawCircle
 	}
