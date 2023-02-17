@@ -182,6 +182,7 @@
     <ClInclude Include="Stage\MapChip.h" />
     <ClInclude Include="Stage\Stage.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Torrent.h" />
     <ClInclude Include="Undead.h" />
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +214,7 @@
     <ClCompile Include="Stage\MapChip.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Torrent.cpp" />
     <ClCompile Include="Undead.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

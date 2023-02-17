@@ -89,6 +89,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Torrent.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -166,9 +169,6 @@
     <ClInclude Include="EnumElementItem.h">
       <Filter>ヘッダーファイル\ElementItem</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySlime.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="NormalBullet.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
@@ -184,6 +184,12 @@
     <ClInclude Include="Stage\StageBuillder\Debug.h" />
     <ClInclude Include="Stage\StageBuillder\KeyManager.h" />
     <ClInclude Include="Stage\StageBuillder\StageBuilder.h" />
+    <ClInclude Include="Torrent.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySlime.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

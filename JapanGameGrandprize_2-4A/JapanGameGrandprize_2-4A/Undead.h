@@ -18,9 +18,9 @@ class Undead :
 private:
     int damage; //ダメージ
     int attack_interval; //次の攻撃までの時間
-    int attack; //攻撃している
     int image; //画像
     int attack_time; //攻撃している時間(デバッグ用)
+
     ENEMY_TYPE attack_type; //攻撃の属性
     UNDEAD_STATE state; //状態
 

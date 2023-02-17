@@ -38,7 +38,6 @@ Undead::Undead(Player* player)
 	hp = 0;
 	damage = 0;
 	attack_interval = 0;
-	attack = 0;
 	speed = UNDEAD_SPEED;
 	kind = ENEMY_KIND::UNDEAD;
 	type = new ENEMY_TYPE;
