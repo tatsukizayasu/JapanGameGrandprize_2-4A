@@ -1,10 +1,18 @@
 #pragma once
 #include "Define.h"
 #include "Stage/StageBuilder/StageBuilder.h"
+
+#include <math.h>
+
+#define _USE_MATH_DEFINES
+
+#define LINE_START 0
+#define LINE_END 1
+
 class LineCollider2
 {
 private:
-	Location GetMiddlePoint(Location point1, Location point2)
+	Location GetMiddlePoint(Location point1, Location point2)const
 	{
 		Location middle_point;
 		middle_point.x = (point1.x + point2.x) / 2;
@@ -20,7 +28,14 @@ private:
 		vector[1].x = vector[1].x - location.x;
 		vector[1].y = vector[1].y - location.y;
 	}
-	Location MakeTip();
+	Location MakeTip(int index)const
+	{//線分の端の絶対座標を計算する
+		Location tip;
+		tip.x = location.x + vector[index].x;
+		tip.y = location.y + vector[index].y;
+
+		return tip;
+	}
 protected:
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)
 	Location location;	//中心座標
@@ -93,7 +108,8 @@ public:
 	void DrawCollision()const
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 64);
-		DrawLineAA(vector[0].x, vector[0].y, vector[1].x, vector[1].y, 0xE9FF00);
+		DrawLineAA(vector[LINE_START].x, vector[LINE_START].y,
+			vector[LINE_END].x, vector[LINE_END].y, 0xE9FF00);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		//DrawCircle
 	}

@@ -1,9 +1,6 @@
 #include "LineCollider.h"
 #include "BoxCollider.h"
 #include "SphereCollider.h"
-#include <math.h>
-
-#define _USE_MATH_DEFINES
 
 //------------------------------------
 // コンストラクタ
@@ -11,10 +8,10 @@
 LineCollider2::LineCollider2()
 {
 	//絶対座標
-	vector[0] = { 0,0 };
-	vector[1] = { SCREEN_WIDTH, SCREEN_HEIGHT };
+	vector[LINE_START] = { 0,0 };
+	vector[LINE_END] = { SCREEN_WIDTH, SCREEN_HEIGHT };
 	
-	location = GetMiddlePoint(vector[0], vector[1]);
+	location = GetMiddlePoint(vector[LINE_START], vector[LINE_END]);
 	Relativize();
 }
 
@@ -24,12 +21,11 @@ LineCollider2::LineCollider2()
 LineCollider2::LineCollider2(Location point1, Location point2)
 {
 	//絶対座標
-	vector[0] = point1;
+	vector[LINE_START] = point1;
 	vector[1] = point2;
 
-	location = GetMiddlePoint(vector[0], vector[1]);
+	location = GetMiddlePoint(vector[LINE_START], vector[LINE_END]);
 	Relativize();
-
 }
 
 //--------------------------------------
@@ -72,26 +68,30 @@ bool LineCollider2::HitLine(LineCollider2* line)const
 //-----------------------------------------------------
 // 線の端の座標の取得 始点か終点返す デフォルトは始点
 //-----------------------------------------------------
-Location LineCollider2::GetLocation(int i)const
+Location LineCollider2::GetLocation(int index)const
 {
-	if (i < 2)
+	if (index < 2)
 	{
-		return vector[i];
+		return MakeTip(index);
 	}
 	else
 	{
-		return vector[0];
+		return MakeTip(LINE_START);
 	}
 }
 
 //--------------------------------------------------
 // 始点、終点座標の設定 引数：座標、始点：0 終点：1
 //--------------------------------------------------
-void LineCollider2::SetLocation(Location location, int i)
+void LineCollider2::SetLocation(Location location, int index)
 {
-	if (i < 2)
+	if (index < 2)
 	{
-		vector[i] = location;
+		vector[LINE_START] = MakeTip(LINE_START);
+		vector[LINE_END] = MakeTip(LINE_END);
+		vector[index] = location;
+		this->location = GetMiddlePoint(vector[LINE_START], vector[LINE_END]);
+		Relativize();
 	}
 }
 
