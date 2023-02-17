@@ -40,9 +40,6 @@
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="LineCollider.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Undead.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -70,7 +67,10 @@
     <ClCompile Include="EnemyBase.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ColliderBase.cpp" />
+    <ClCompile Include="LineCollider.cpp" />
+    <ClCompile Include="ColliderBase.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -118,9 +118,6 @@
     <ClInclude Include="Stage\Element\Element_DamageWall.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="LineCollider.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Undead.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
@@ -148,7 +145,10 @@
     <ClInclude Include="Stage\StageBuilder\Directory.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="ColliderBase.h" />
+    <ClInclude Include="LineCollider.h" />
+    <ClInclude Include="ColliderBase.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

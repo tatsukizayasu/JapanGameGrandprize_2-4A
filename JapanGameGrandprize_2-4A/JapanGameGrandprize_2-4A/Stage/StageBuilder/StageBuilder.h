@@ -33,7 +33,7 @@ private:
 	char arrow[ARROW_NUM];
 
 	//todo:テストなので消す ヘッダーも
-	LineCollider* line;
+	class LineCollider2* line;
 	
 
 public:

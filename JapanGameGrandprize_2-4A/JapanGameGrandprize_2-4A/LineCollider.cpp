@@ -5,6 +5,97 @@
 
 #define _USE_MATH_DEFINES
 
+//------------------------------------
+// コンストラクタ
+//------------------------------------
+LineCollider2::LineCollider2()
+{
+	//絶対座標
+	vector[0] = { 0,0 };
+	vector[1] = { SCREEN_WIDTH, SCREEN_HEIGHT };
+	
+	location = GetMiddlePoint(vector[0], vector[1]);
+	Relativize();
+}
+
+//------------------------------------
+// コンストラクタ
+//------------------------------------
+LineCollider2::LineCollider2(Location point1, Location point2)
+{
+	//絶対座標
+	vector[0] = point1;
+	vector[1] = point2;
+
+	location = GetMiddlePoint(vector[0], vector[1]);
+	Relativize();
+
+}
+
+//--------------------------------------
+// デストラクタ
+//--------------------------------------
+LineCollider2::~LineCollider2()
+{
+
+}
+
+//-----------------------------------
+// SphereColliderとの当たり判定
+//-----------------------------------
+bool LineCollider2::HitSphere(SphereCollider* sphere)const
+{
+	bool is_hit = false;
+	return is_hit;
+}
+
+//-----------------------------------
+// BoxColliderとの当たり判定
+//-----------------------------------
+bool LineCollider2::HitBox(BoxCollider* box)const
+{
+	bool is_hit = false;
+	return is_hit;
+
+}
+
+//-----------------------------------
+// LineColliderとの当たり判定
+//-----------------------------------
+bool LineCollider2::HitLine(LineCollider2* line)const
+{
+	bool is_hit = false;
+	return is_hit;
+
+}
+
+//-----------------------------------------------------
+// 線の端の座標の取得 始点か終点返す デフォルトは始点
+//-----------------------------------------------------
+Location LineCollider2::GetLocation(int i)const
+{
+	if (i < 2)
+	{
+		return vector[i];
+	}
+	else
+	{
+		return vector[0];
+	}
+}
+
+//--------------------------------------------------
+// 始点、終点座標の設定 引数：座標、始点：0 終点：1
+//--------------------------------------------------
+void LineCollider2::SetLocation(Location location, int i)
+{
+	if (i < 2)
+	{
+		vector[i] = location;
+	}
+}
+
+
 //-----------------------------------
 // SphereColliderとの当たり判定
 //-----------------------------------

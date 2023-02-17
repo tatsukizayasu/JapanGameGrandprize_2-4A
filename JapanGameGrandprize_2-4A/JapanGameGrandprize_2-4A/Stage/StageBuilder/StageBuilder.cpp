@@ -26,7 +26,7 @@ StageBuilder::StageBuilder()
 		arrow[i] = ' ';
 	}
 
-	
+	line = new LineCollider2({0,360}, {1280,360});
 	
 }
 
@@ -41,6 +41,7 @@ StageBuilder::~StageBuilder()
 		delete map_chips[i];
 	}
 	map_chips.clear();
+	delete line;
 }
 
 //------------------------------------
