@@ -159,6 +159,8 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemController.h" />
     <ClInclude Include="NormalBullet.h" />
+    <ClInclude Include="ColliderBase.h" />
+    <ClInclude Include="LineCollider.h" />
     <ClInclude Include="Stage\StageBuilder\Directory.h" />
     <ClInclude Include="EfectBeam.h" />
     <ClInclude Include="EnemySlime.h" />
@@ -171,7 +173,6 @@
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyGhost.h" />
     <ClInclude Include="FpsController.h" />
-    <ClInclude Include="LineCollider.h" />
     <ClInclude Include="GameMain.h" />
     <ClInclude Include="PadInput.h" />
     <ClInclude Include="Player.h" />
@@ -189,18 +190,19 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />
+    <ClCompile Include="ColliderBase.cpp" />
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="ElementItem.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemController.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
+    <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemySlime.cpp" />
     <ClCompile Include="FpsController.cpp" />
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PadInput.cpp" />
     <ClCompile Include="Player.cpp" />
