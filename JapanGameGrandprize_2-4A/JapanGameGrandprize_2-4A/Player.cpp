@@ -18,6 +18,8 @@ Player::Player()
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
+	area.width = image_size_x;
+	area.height = image_size_y;
 	bullet_count = 0;
 	count = 0;
 	jump = 10.0;
@@ -79,6 +81,8 @@ Player::Player(Stage* stage)
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
+	area.width = image_size_x;
+	area.height = image_size_y;
 	bullet_count = 0;
 	count = 0;
 	jump = 10.0;
@@ -165,6 +169,13 @@ void Player::Draw() const
 	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
 
+#ifdef _DEBUG
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		DrawFormatString(20 * i, 100, 0x000000, "%d", element[i]->GetVolume());
+	}
+
+#endif
 
 
 	SetFontSize(30);
@@ -563,11 +574,7 @@ void Player::Hp_Heal(int heal_value)
 void Player::SetElementItem(class Item* item)
 {
 
-	for (int i = 0; i < PLAYER_ELEMENT; i++)
-	{
-		if (item->GetElementType() == element[i]->GetType()) //“¯‚¶Œ³‘f‚ÌŽí—Þ
-		{
-			element[i]->SetVolume(element[i]->GetVolume() + 1);
-		}
-	}
+	int num = static_cast<int>(item->GetElementType());
+
+	element[num]->SetVolume(element[num]->GetVolume() + 1);
 }

@@ -4,7 +4,6 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 #include "Undead.h"
-#include "Item.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -15,6 +14,7 @@ GameMain::GameMain()
 	player = new Player(stage);
 	enemy = new Undead(player);
 	camera_work = new CameraWork(0, 0, player, stage);
+	item_controller = new ItemController();
 
 	input_margin = 0;
 }
@@ -52,8 +52,9 @@ AbstractScene* GameMain::Update()
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
-	
+
 	EnemyUpdate();
+	item_controller->Update(player);
 
 	return this;
 }
@@ -63,11 +64,12 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	//Item** drop_item; //ドロップアイテム
-	enemy->Update();
-
-	switch (enemy->GetEnemyKind())
+	if (enemy != nullptr)
 	{
+		enemy->Update();
+
+		switch (enemy->GetEnemyKind())
+		{
 		case ENEMY_KIND::SLIME:		//スライム
 			break;
 		case ENEMY_KIND::UNDEAD:	//アンデット
@@ -80,6 +82,13 @@ void GameMain::EnemyUpdate()
 				{
 
 				}
+			}
+
+			if (undead->GetCanDelete())
+			{
+				item_controller->SpawnItem(undead, undead->GetLocation());
+				delete undead;
+				enemy = nullptr;
 			}
 			break;
 		}
@@ -119,9 +128,13 @@ void GameMain::EnemyUpdate()
 		}
 		case ENEMY_KIND::NONE:
 			break;
-	default:
-		break;
+		default:
+			break;
+		}
+
 	}
+
+	
 }
 
 //-----------------------------------
@@ -132,7 +145,11 @@ void GameMain::Draw()const
 	//背景
 	SetBackgroundColor(149, 249, 253);
 
+	item_controller->Draw();
 	player->Draw();
 	stage->Draw();
-	enemy->Draw();
+	if (enemy != nullptr)
+	{
+		enemy->Draw();
+	}
 }

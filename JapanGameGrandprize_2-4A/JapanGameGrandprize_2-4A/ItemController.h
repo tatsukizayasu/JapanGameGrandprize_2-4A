@@ -14,9 +14,19 @@ public:
 
 	//デストラクタ
 	~ItemController();
+
+	//更新
+	void Update(class Player* player);
+
+	//描画
+	void Draw() const;
+
 	//アイテムの生成
-	void SpawnItem();
+	void SpawnItem(class EnemyBase* enemy, Location spawn_location);
 
 	//アイテムの並び替え
-	void SortItem();
+	void SortItem(int item_num);
+
+	//アイテムの整理
+	void ArrangementItem(int old_item_volume);
 };
