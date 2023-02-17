@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "DxLib.h"
+#include "NormalBullet.h"
 #include "PadInput.h"
 #include "CameraWork.h"
 
@@ -20,15 +21,96 @@ Player::Player()
 	not_jet_count = 0;
 	speed_x = 0.0;
 	fuel = 100.0;
+	gravity_down = 0.0;
 	for (int i = 0; i < 30; i++)
 	{
 		bullet = new Bullet * [30];
 		bullet[i] = nullptr;
 	}
 
+	i = 0;
+
+	attribute[0] = Attribute::normal;
+	attribute[1] = Attribute::explosion;
+	attribute[2] = Attribute::melt;
+	attribute[3] = Attribute::poison;
+	attribute[4] = Attribute::paralysis;
+	attribute[5] = Attribute::heal;
+
+	for (int i = 0; i < 6; i++)
+	{
+		attribute_c[i] = i;
+	}
+
+	player_state = PlayerState::stop;
+
+	display_attribute = 0;
+
+	hp = 0;
+
+	beam = nullptr;
+
+	stage = nullptr;
+
+	player = this;
+
+
+	//GetGraphSize(image, &image_size_x, &image_size_y);
+}
+
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
+Player::Player(Stage* stage)
+{
+	this->stage = stage;
+	location.x = 0;
+	location.y = 510;
+	image = 0;
+	image_size_x = 40;
+	image_size_y = 80;
+	bullet_count = 0;
+	count = 0;
+	jump = 10.0;
+	jump_power = 0.0;
+	not_jet_count = 0;
+	speed_x = 0.0;
+	fuel = 100.0;
+	gravity_down = 0.0;
+	bullet = new Bullet * [30];
+	for (int i = 0; i < 30; i++)
+	{
+		bullet[i] = nullptr;
+	}
+
+	i = 0;
+
+	attribute[0] = Attribute::normal;
+	attribute[1] = Attribute::explosion;
+	attribute[2] = Attribute::melt;
+	attribute[3] = Attribute::poison;
+	attribute[4] = Attribute::paralysis;
+	attribute[5] = Attribute::heal;
+
+	for (int i = 0; i < 6; i++)
+	{
+		attribute_c[i] = i;
+	}
+
+	player_state = PlayerState::stop;
+
+	display_attribute = 0;
+
+	hp = 100;
+
+	beam = nullptr;
+
 	stage = new Stage();
 
+	player = this;
 	area = { 80,40 };
+
+
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
@@ -65,12 +147,38 @@ void Player::Draw() const
 		}
 	}
 
+	//if (beam != nullptr)
+	//{
+	//	beam->Draw();
+	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
 
-	//printfDx("X%f\tY%f\n", location.x, location.y);
-	//printfDx("\t\tX%f\tY%f\n", x, y);
 
-	//DrawBoxAA(x - (area.width / 2) - 1, y - (area.height / 2) - 1, x - (area.width / 2) + area.width + 1, y - (area.height / 2) + area.height + 1, 0x000000, TRUE, 0.5F);
+
+	SetFontSize(30);
+
+	//上の選択肢
+	if (display_attribute - 1 < 0)
+	{
+		DrawFormatString(1000, 10, 0x778877, "%d", attribute_c[display_attribute + 5]);
+	}
+	else
+	{
+		DrawFormatString(1000, 10, 0x778877, "%d", attribute_c[display_attribute - 1]);
+	}
+	//下の選択肢
+	if (display_attribute + 1 > 5)
+	{
+		DrawFormatString(1000, 90, 0x778877, "%d", attribute_c[display_attribute - 5]);
+	}
+	else
+	{
+		DrawFormatString(1000, 90, 0x778877, "%d", attribute_c[display_attribute + 1]);
+	}
+	//現在の選択肢
+	DrawFormatString(1000, 50, 0x778877, "%d", attribute_c[display_attribute]);
+
+	DrawFormatString(0, 400, 0x999999, "%d", hp);
 }
 
 //-----------------------------------
@@ -79,88 +187,258 @@ void Player::Draw() const
 void Player::Update()
 {
 	//当たっている方向
-	//時計回りで[1:上, 2:右, 3:下, 4:左]
+//時計回りで[1:上, 2:右, 3:下, 4:左]
 	short collision_dir = 0;
 
 	for (int i = 0; i < stage->GetMapChip().size(); i++)
 	{
 
 		collision_dir = stage->GetMapChip().at(i)->GetMapChip_Collision();
-		if (collision_dir != 0) { 
-			printfDx("抜けた:%d\n",collision_dir);
-			break; 
+		if (collision_dir != 0) {
+			clsDx();
+			printfDx("当たった:%d\n", collision_dir);
+			speed_x = 0.0f;
+			break;
 		}
 	}
-
 
 	count++;
+
+
+	//スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000 && collision_dir != 2)
 	{
-		location.x += speed_x;
-		if (speed_x < 5.0)
-		{
-			speed_x = speed_x + 0.25;
-		}
+		RightMove();
 	}
-	else if (PAD_INPUT::GetLStick().x <= -1000 && collision_dir != 4)
+	//スティック左入力
+	else if (PAD_INPUT::GetLStick().x <= -10000 && collision_dir != 4)
 	{
-		location.x += speed_x;
-		if (speed_x > -5.0)
-		{
-			speed_x = speed_x - 0.25;
-		}
+		LeftMove();
 	}
+	//スティック未入力
 	else
 	{
-		if (speed_x > 0)
-		{
-			speed_x--;
-		}
+		NotInputStick();
 	}
 
 	collision_dir = 0;
 
+	//RBボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		Shoot_Gun();
+		if (count % 30 == 0)
+		{
+			bullet_count++;
+			Shoot_Gun();
+		}
+	}
+
+	//Bボタン入力
+	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B) && fuel > 0)
+	{
+		Jump();
+	}
+	//Bボタン未入力
+	else
+	{
+		NotJump();
+	}
+
+	//Bボタン解放時
+	if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
+	{
+		player_state = PlayerState::down;
 	}
 
 
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B) && fuel > 0)
+
+	//弾のアップデート呼び出し
+	for (int i = 0; i < bullet_count; i++)
 	{
-		not_jet_count = 0;
-		jump_power = jump - GRAVITY;
-
-		jump += 0.25;
-		fuel -= 0.25;
-
-
-		if (jump_power > 10)
+		if (bullet[i] != nullptr)
 		{
-			jump_power = 10.0;
+			if (bullet[i]->GetEfectFlg())
+			{
+				bullet[i] = nullptr;
+				SortBullet(i);
+			}
+			else
+			{
+				bullet[i]->Update();
+			}
+		}
+	}
+
+	//弾の属性の切り替え処理
+	Element_Update();
+
+}
+
+//スティックを入力していないとき
+void Player::NotInputStick()
+{
+	if (speed_x > 0)
+	{
+		if (player_state == PlayerState::jump || player_state == PlayerState::down)
+		{
+			speed_x -= JUMP_INERTIA;
+		}
+		else
+		{
+			speed_x -= WARK_INERTIA;
 		}
 
-		if (fuel < 0)
+		if (speed_x < 0)
 		{
-			fuel = 0;
+			speed_x = 0;
+		}
+	}
+
+	if (speed_x < 0)
+	{
+		if (player_state == PlayerState::jump || player_state == PlayerState::down)
+		{
+			speed_x += JUMP_INERTIA;
+		}
+		else
+		{
+			speed_x += WARK_INERTIA;
 		}
 
+		if (speed_x > 0)
+		{
+			speed_x = 0;
+		}
+	}
+
+	if (speed_x > -JUMP_INERTIA && speed_x < JUMP_INERTIA)
+	{
+		speed_x = 0;
+	}
+
+	location.x += speed_x;
+}
+
+//左移動
+void Player::LeftMove()
+{
+	if (player_state == PlayerState::jump || player_state == PlayerState::down)
+	{
+		if (speed_x > -5.0)
+		{
+			speed_x = speed_x - JUMP_INERTIA;
+		}
+		else
+		{
+			speed_x = -5.0;
+		}
+	}
+	else
+	{
+		player_state = PlayerState::move_left;
+		if (speed_x > -5.0)
+		{
+			speed_x = speed_x - WARK_INERTIA;
+		}
+		else
+		{
+			speed_x = -5.0;
+		}
+	}
+	location.x += speed_x;
+}
+
+//右移動
+void Player::RightMove()
+{
+	if (player_state == PlayerState::jump || player_state == PlayerState::down)
+	{
+		if (speed_x < 5.0)
+		{
+			speed_x = speed_x + JUMP_INERTIA;
+		}
+		else
+		{
+			speed_x = 5.0;
+		}
+	}
+	else
+	{
+		player_state = PlayerState::move_right;
+		if (speed_x < 5.0)
+		{
+			speed_x = speed_x + WARK_INERTIA;
+		}
+		else
+		{
+			speed_x = 5.0;
+		}
+	}
+
+	location.x += speed_x;
+}
+
+//ジャンプ
+void Player::Jump()
+{
+	player_state = PlayerState::jump;
+	not_jet_count = 0;
+	jump_power = jump - GRAVITY;
+
+	gravity_down = 0.0;
+
+	jump += 0.25;
+	fuel -= 0.25;
+
+
+	if (jump_power > 10)
+	{
+		jump_power = 10.0;
+	}
+
+	if (fuel < 0)
+	{
+		fuel = 0;
+		player_state = PlayerState::down;
+	}
+
+	if (location.y > 0)
+	{
+		location.y -= jump_power;
+	}
+}
+
+//ジャンプしてない
+void Player::NotJump()
+{
+	if (jump_power > 0)
+	{
+		jump_power -= 0.5;
 		if (location.y > 0)
 		{
 			location.y -= jump_power;
+		}
+		else
+		{
+			jump_power = 0;
 		}
 	}
 	else
 	{
 		jump_power = 0;
 		jump = 10;
-		location.y += 10;
 
-
-		if (location.y > 400)
+		if (location.y < 510)
 		{
-			location.y = 400;
+			location.y += gravity_down;
 		}
+		else
+		{
+			player_state = PlayerState::stop;
+		}
+		gravity_down += 0.25;
+
+
 
 		if (not_jet_count++ >= 120)
 		{
@@ -179,21 +457,6 @@ void Player::Update()
 			not_jet_count = 120;
 		}
 	}
-
-
-
-	for (int i = 0; i < bullet_count; i++)
-	{
-		if (bullet[i]->GetDeleteFlg())
-		{
-			bullet[i] = nullptr;
-			SortBullet(i);
-		}
-		else
-		{
-			bullet[i]->Update();
-		}
-	}
 }
 
 //-----------------------------------
@@ -201,14 +464,26 @@ void Player::Update()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
-	if (count % 30 == 0)
+	switch (display_attribute)
 	{
-		bullet[bullet_count++] = new Bullet(location.x, location.y);
-		if (bullet_count >= 30)
+	case 0:
+		for (i = 0; i < bullet_count; i++)
 		{
-			bullet_count = 30;
+			if (bullet[i] == NULL)
+			{
+				bullet[i] = new NormalBullet(location.x, location.y);
+			}
 		}
+		break;
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	default:
+		break;
 	}
+
 }
 
 //-----------------------------------
@@ -228,5 +503,56 @@ void Player::SortBullet(int delete_bullet)
 			bullet[i - 1] = bullet[i];
 			bullet[i] = nullptr;
 		}
+	}
+}
+
+//属性を変更
+void Player::Element_Update()
+{
+	if (PAD_INPUT::GetRStick().y > 5000)
+	{
+		if (select_count % 20 == 0)
+		{
+			display_attribute--;
+			if (display_attribute < 0)
+			{
+				display_attribute = 5;
+			}
+		}
+	}
+
+	if (PAD_INPUT::GetRStick().y < -5000)
+	{
+		if (select_count % 20 == 0)
+		{
+			display_attribute++;
+			if (display_attribute > 5)
+			{
+				display_attribute = 0;
+			}
+		}
+	}
+
+	select_count++;
+}
+
+//ダメージを受けた時
+void Player::Hp_Damage(int damage_value)
+{
+	hp -= damage_value;
+	if (hp <= 0)
+	{
+		hp = 0;
+		player_state = PlayerState::death;
+	}
+}
+
+//回復
+void Player::Hp_Heal(int heal_value)
+{
+	hp += heal_value;
+	if (hp >= HP_MAX)
+	{
+		hp = HP_MAX;
 	}
 }

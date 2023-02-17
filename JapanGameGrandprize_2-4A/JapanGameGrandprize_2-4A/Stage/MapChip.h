@@ -27,7 +27,7 @@ public:
 
     const char* GetName() { return class_name; }
 
-    const short GetMapChip_Collision() { return collision_dir; }
+    const short GetMapChip_Collision() { short w = collision_dir; collision_dir = 0; return w; }
 
 protected:
     const char* class_name = "default";
