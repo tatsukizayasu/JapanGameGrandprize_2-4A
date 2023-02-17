@@ -69,7 +69,7 @@ public:
 	void Shoot_Gun();
 	void SortBullet(int);
 	void Hp_Damage(int);
-	void Being_Attacked(EnemyBase*);
+	//void Being_Attacked(EnemyBase*);
 	void Hp_Heal(int);
 
 	Bullet* GetBullet(int i) { return bullet[i]; }

@@ -526,9 +526,9 @@ void Player::Hp_Damage(int damage_value)
 	}
 }
 
-//敵からダメージを受けた時
-void Player::Being_Attacked(EnemyBase* enemy_base)
-{}
+////敵からダメージを受けた時
+//void Player::Being_Attacked(EnemyBase* enemy_base)
+//{}
 
 //回復
 void Player::Hp_Heal(int heal_value)
