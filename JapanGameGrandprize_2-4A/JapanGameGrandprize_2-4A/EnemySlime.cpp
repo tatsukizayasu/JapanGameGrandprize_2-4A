@@ -87,17 +87,13 @@ void EnemySlime::Draw()const
 	DrawCircle(location.x - 7 + (1 * direction), location.y - 6, 2, 0x000000, 1, 1);
 	DrawCircle(location.x + 7 + (1 * direction), location.y - 6, 2, 0x000000, 1, 1);
 
-	DrawFormatString(0, 100, 0xffffff, "%f = player.y", location.y);
-
-	DrawBox(location.x - (area.width / 2), location.y - (area.height / 2), location.x - (area.width / 2) + area.width, location.y - (area.height / 2) + area.height, 0xffffff, 0);
+	//DrawBox(location.x - (area.width / 2), location.y - (area.height / 2), location.x - (area.width / 2) + area.width, location.y - (area.height / 2) + area.height, 0xffffff, 0);
 }
 
 void EnemySlime::HitPlayer(BoxCollider* boxcollider)
 {
 	if (HitBox(boxcollider))
 	{
-		//hp--;
-
 		if (state == SLIME_STATE::ATTACK)
 		{
 			jump_distance.y = 0;
