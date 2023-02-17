@@ -5,6 +5,7 @@
 #include "Stage/Stage.h"
 #include "CameraWork.h"
 
+
 class GameMain :
     public AbstractScene
 {

@@ -13,12 +13,13 @@ EfectBeam::EfectBeam()
 
 void EfectBeam::Draw() const
 {
-
+	DrawOval(location.x, location.y, filling_radius_x, filling_radius_y,0x00ff00,FALSE);
 }
 
 void EfectBeam::Update(float p_x, float p_y)
 {
-	location.x = p_x + 20;
+	location.x = p_x + 50;
 	location.y = p_y + 20;
 	filling_radius_x--;
+	filling_radius_y -= 2;
 }
