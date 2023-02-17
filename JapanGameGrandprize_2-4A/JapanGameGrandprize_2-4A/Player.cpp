@@ -28,6 +28,7 @@ Player::Player()
 
 	stage = new Stage();
 
+	area = { 80,40 };
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
@@ -53,7 +54,9 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+	//DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+
+	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -71,6 +74,12 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
+
+	//マップチップのオブジェクト取得
+	for (int i = 0; i < stage->GetMapChip().size(); i++)
+	{
+	}
+
 	count++;
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{

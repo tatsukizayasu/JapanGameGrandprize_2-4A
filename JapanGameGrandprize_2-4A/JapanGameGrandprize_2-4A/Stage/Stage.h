@@ -55,4 +55,10 @@ public:
 	/// </summary>
 	/// <returns>構造体型：マップサイズ</returns>	
 	POINT GetMapSize(void) { POINT mapsize{ map_data.at(0).size(),map_data.size() };  return mapsize; }
+
+	/// <summary>
+	/// マップチップオブジェクトのGetter
+	/// </summary>
+	/// <returns>ベクター型(MapChipオブジェクト型)：MapChip</returns>	
+	std::vector<MapChip*> GetMapChip() { return mapchip; };
 };
