@@ -15,9 +15,14 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
-	enemy = new Undead(player);
+	//enemy = new Undead(player);
 	camera_work = new CameraWork(0, 0, player, stage);
 	input_margin = 0;
+	enemy = new EnemyBase * [3];
+	enemy[0] = new EnemyGhost();
+	enemy[1] = new Undead(player);
+	enemy[2] = new EnemySlime();
+
 }
 
 //-----------------------------------
@@ -44,7 +49,7 @@ AbstractScene* GameMain::Update()
 		return new Title();
 	}
 
-	if (input_margin < 30) 
+	if (input_margin < 30)
 	{
 		input_margin++;
 	}
@@ -53,7 +58,7 @@ AbstractScene* GameMain::Update()
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
-	
+
 	EnemyUpdate();
 
 	return this;
@@ -65,14 +70,16 @@ AbstractScene* GameMain::Update()
 void GameMain::EnemyUpdate()
 {
 	//Item** drop_item; //ドロップアイテム
-	enemy->Update();
+	for (int i = 0; i < 3; i++)
+	{
+		enemy[i]->Update();
 
-		switch (enemy->GetEnemyKind())
+		switch (enemy[i]->GetEnemyKind())
 		{
 		case ENEMY_KIND::SLIME:		//スライム
-		{			
+		{
 			EnemySlime* slime;
-			slime = dynamic_cast<EnemySlime*>(enemy);
+			slime = dynamic_cast<EnemySlime*>(enemy[i]);
 			slime->HitPlayer(player);
 			slime->AttackJudgement(player);
 			break;
@@ -80,7 +87,7 @@ void GameMain::EnemyUpdate()
 		case ENEMY_KIND::UNDEAD:	//アンデット
 		{
 			Undead* undead;
-			undead = dynamic_cast<Undead*>(enemy);
+			undead = dynamic_cast<Undead*>(enemy[i]);
 			if (undead->GetState() == UNDEAD_STATE::ATTACK)
 			{
 				if (undead->HitBox(player))
@@ -101,7 +108,7 @@ void GameMain::EnemyUpdate()
 		case ENEMY_KIND::GHOST:		//ゴースト
 		{
 			EnemyGhost* ghost;
-			ghost = dynamic_cast<EnemyGhost*>(enemy);
+			ghost = dynamic_cast<EnemyGhost*>(enemy[i]);
 			ghost->GhostMove(player);
 			break;
 		}
@@ -131,8 +138,9 @@ void GameMain::EnemyUpdate()
 		}
 		case ENEMY_KIND::NONE:
 			break;
-	default:
-		break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -146,5 +154,8 @@ void GameMain::Draw()const
 
 	player->Draw();
 	stage->Draw();
-	enemy->Draw();
+	for (int i = 0; i < 3; i++)
+	{
+		enemy[i]->Draw();
+	}
 }

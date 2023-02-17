@@ -63,6 +63,10 @@ Player::Player()
 //-----------------------------------
 Player::Player(Stage* stage)
 {
+
+	area.height = 80;
+	area.width = 40;
+
 	this->stage = stage;
 	location.x = 0;
 	location.y = 420;
