@@ -1,5 +1,7 @@
 #pragma once
 #include"EnemyBase.h"
+#include"CameraWork.h"
+
 #include"BoxCollider.h"
 
 enum DIRECTION

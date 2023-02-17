@@ -80,24 +80,20 @@ void EnemySlime::Update()
 
 void EnemySlime::Draw()const
 {
-	DrawCircle(location.x, location.y, 20, color, 1, 1);
-	DrawCircle(location.x, location.y + 8, 7, 0x000000, 1, 1);
-	DrawCircle(location.x - 7, location.y - 6, 4, 0xffffff, 1, 1);
-	DrawCircle(location.x + 7, location.y - 6, 4, 0xffffff, 1, 1);
-	DrawCircle(location.x - 7 + (1 * direction), location.y - 6, 2, 0x000000, 1, 1);
-	DrawCircle(location.x + 7 + (1 * direction), location.y - 6, 2, 0x000000, 1, 1);
+	DrawCircle(location.x - CameraWork::GetCamera().x , location.y, 20, color, 1, 1);
+	DrawCircle(location.x - CameraWork::GetCamera().x, location.y + 8, 7, 0x000000, 1, 1);
+	DrawCircle(location.x - 7 - CameraWork::GetCamera().x, location.y - 6, 4, 0xffffff, 1, 1);
+	DrawCircle(location.x + 7 - CameraWork::GetCamera().x, location.y - 6, 4, 0xffffff, 1, 1);
+	DrawCircle(location.x - 7 + (1 * direction) - CameraWork::GetCamera().x, location.y - 6, 2, 0x000000, 1, 1);
+	DrawCircle(location.x + 7 + (1 * direction) - CameraWork::GetCamera().x, location.y - 6, 2, 0x000000, 1, 1);
 
-	DrawFormatString(0, 100, 0xffffff, "%f = player.y", location.y);
-
-	DrawBox(location.x - (area.width / 2), location.y - (area.height / 2), location.x - (area.width / 2) + area.width, location.y - (area.height / 2) + area.height, 0xffffff, 0);
+	DrawBox(location.x - (area.width / 2)-CameraWork::GetCamera().x, location.y - (area.height / 2), location.x - (area.width / 2) + area.width- CameraWork::GetCamera().x, location.y - (area.height / 2) + area.height, 0xffffff, 0);
 }
 
 void EnemySlime::HitPlayer(BoxCollider* boxcollider)
 {
-	if (HitBox(boxcollider))
+	if (boxcollider->HitBox(new EnemySlime(location.x - CameraWork::GetCamera().x,location.y,area.height, area.width)))
 	{
-		//hp--;
-
 		if (state == SLIME_STATE::ATTACK)
 		{
 			jump_distance.y = 0;
@@ -113,7 +109,7 @@ void EnemySlime::HitStage()
 
 void EnemySlime::AttackJudgement(BoxCollider* boxcollider)
 {
-	if (boxcollider->HitBox(new EnemySlime(location.x + (60 * direction), location.y - 20, 80, 80)))
+	if (boxcollider->HitBox(new EnemySlime(location.x + (60 * direction) - CameraWork::GetCamera().x, location.y - 20, 80, 80)))
 	{
 		color = GetColor(255, 0, 0);
 

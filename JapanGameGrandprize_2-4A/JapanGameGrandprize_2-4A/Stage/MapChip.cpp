@@ -1,7 +1,8 @@
 #include "DxLib.h"
 #include "MapChip.h"
 #include "../CameraWork.h"
-
+		
+#define		COLLLISION_DEBUG		//当たり判定デバック
 
 //-----------------------------------
 // コンストラクタ
@@ -44,6 +45,8 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 		image_size.height = (float)y;
 	}
 
+	collision_dir = 0;
+
 }
 
 //-----------------------------------
@@ -60,20 +63,40 @@ MapChip::~MapChip()
 void MapChip::Update(Player* player)
 {
 
+	if (HitBox(player)) {
+		//上
+		//if (location.y < player->GetLocation().y) {
+		//	collision_dir = 1;
+		//}
 
-	
+		//右
+		if (location.x > player->GetLocation().x) {
+				collision_dir = 2;
+			}
 
-		// カメラ位置に合わせてMapChipオブジェクトの位置を更新
-	//location.x = location.x + CameraWork::GetCamera().x;
-	//location.y = location.y + CameraWork::GetCamera().y;
+		////下
+		//else if (location.y > player->GetLocation().y) {
+		//	collision_dir = 3;
+		//}
+
+		//左
+		else if (location.x < player->GetLocation().x) {
+			collision_dir = 4;
+		}
+	}
 
 
-	// カメラ位置の変化分を計算
-	//float dx = cameraPos.x - oldCameraPos.x;
-	//float dy = cameraPos.y - oldCameraPos.y;
+	// カメラ位置に合わせてMapChipオブジェクトの位置を更新
+//location.x = location.x + CameraWork::GetCamera().x;
+//location.y = location.y + CameraWork::GetCamera().y;
 
 
-	//printfDx("location_x:%f\tlocation_y:%f\n", location.x, location.y);
+// カメラ位置の変化分を計算
+//float dx = cameraPos.x - oldCameraPos.x;
+//float dy = cameraPos.y - oldCameraPos.y;
+
+
+//printfDx("location_x:%f\tlocation_y:%f\n", location.x, location.y);
 }
 
 //-----------------------------------
@@ -89,6 +112,18 @@ void MapChip::Draw()const
 #ifdef _SHOW_COLLISION
 	DrawCollision();
 #endif
+
+
+#ifdef COLLLISION_DEBUG
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);
+	DrawBoxAA(x - (area.width / 2) - 1, y - (area.height / 2) - 1, x - (area.width / 2) + area.width + 1, y - (area.height / 2) + area.height + 1, 0x000000, FALSE, 0.5F);
+	DrawBoxAA(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0xff0000, TRUE, 0.5F);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+#endif // COLLLISION_DEBUG
+
+	
 }
 
 //-----------------------------------
