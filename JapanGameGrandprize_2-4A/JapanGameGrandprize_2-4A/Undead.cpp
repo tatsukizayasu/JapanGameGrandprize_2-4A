@@ -34,7 +34,8 @@
 Undead::Undead(Player* player)
 {
 	/*初期化*/
-	hp = UNDEAD_HP;
+	can_delete = false;
+	hp = 0;
 	damage = 0;
 	attack_interval = 0;
 	attack = 0;
@@ -47,6 +48,7 @@ Undead::Undead(Player* player)
 	drop_volume = 0;
 	image = 0xffffff;
 	attack_time = 0;
+
 	/*当たり判定の設定*/
 	location.x = 640.0f;
 	location.y = 430.0f;
@@ -55,6 +57,7 @@ Undead::Undead(Player* player)
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [UNDEAD_DROP];
+	drop_type_volume = UNDEAD_DROP;
 
 	int volume = 0;
 	for (int i = 0; i < UNDEAD_DROP; i++)
@@ -63,13 +66,6 @@ Undead::Undead(Player* player)
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
-	}
-
-	//ドロップアイテムの初期化
-	drop_item = new Item * [drop_volume];
-	for (int i = 0; i < static_cast<int>(drop_volume); i++)
-	{
-		drop_item[i] = nullptr;
 	}
 
 	this->player = player;
@@ -85,12 +81,6 @@ Undead::~Undead()
 		delete drop_element[i];
 	}
 	delete[] drop_element;
-
-	for (int i = 0; i < drop_volume; i++)
-	{
-		delete drop_item[i];
-	}
-	delete[] drop_item;
 
 	delete type;
 }
@@ -132,15 +122,7 @@ void Undead::Update()
 		}
 		break;
 	case UNDEAD_STATE::DEATH:
-		for (int i = 0; i < drop_volume; i++)
-		{
-			if (drop_item[i] == nullptr)
-			{
-				break;
-			}
-
-			drop_item[i]->Update(player);
-		}
+		can_delete = true;
 		break;
 	default:
 		break;
@@ -151,10 +133,9 @@ void Undead::Update()
 		attack_interval--;
 	}
 
-	if (CheckHp() && (state != UNDEAD_STATE::DEATH))
+	if (CheckHp() && state != UNDEAD_STATE::DEATH)
 	{
 		state = UNDEAD_STATE::DEATH;
-		CreateDropItem(UNDEAD_DROP,location);
 	}
 }
 
@@ -211,21 +192,7 @@ void Undead::Draw() const
 	draw_location.x = location.x - CameraWork::GetCamera().x;
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
-	if (state != UNDEAD_STATE::DEATH)
-	{
-		DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
-	}
-	else
-	{
-		for (int i = 0; i < drop_volume; i++)
-		{
-			if (drop_item[i] == nullptr)
-			{
-				break;
-			}
-			drop_item[i]->Draw();
-		}
-	}
+	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
 }
 
 //-----------------------------------

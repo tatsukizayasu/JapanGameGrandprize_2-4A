@@ -5,7 +5,6 @@
 #include "PadInput.h"
 #include "Undead.h"
 #include"EnemySlime.h"
-#include "Item.h"
 #include"EnemyGhost.h"
 
 //-----------------------------------
@@ -15,14 +14,11 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
-	//enemy = new Undead(player);
+	enemy = new Undead(player);
 	camera_work = new CameraWork(0, 0, player, stage);
-	input_margin = 0;
-	enemy = new EnemyBase * [3];
-	enemy[0] = new EnemyGhost();
-	enemy[1] = new Undead(player);
-	enemy[2] = new EnemySlime();
+	item_controller = new ItemController();
 
+	input_margin = 0;
 }
 
 //-----------------------------------
@@ -49,7 +45,7 @@ AbstractScene* GameMain::Update()
 		return new Title();
 	}
 
-	if (input_margin < 30)
+	if (input_margin < 30) 
 	{
 		input_margin++;
 	}
@@ -60,6 +56,7 @@ AbstractScene* GameMain::Update()
 	stage->Update(player);
 
 	EnemyUpdate();
+	item_controller->Update(player);
 
 	return this;
 }
@@ -69,17 +66,16 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	//Item** drop_item; //ドロップアイテム
-	for (int i = 0; i < 3; i++)
+	if (enemy != nullptr)
 	{
-		enemy[i]->Update();
+		enemy->Update();
 
-		switch (enemy[i]->GetEnemyKind())
+		switch (enemy->GetEnemyKind())
 		{
 		case ENEMY_KIND::SLIME:		//スライム
-		{
+		{			
 			EnemySlime* slime;
-			slime = dynamic_cast<EnemySlime*>(enemy[i]);
+			slime = dynamic_cast<EnemySlime*>(enemy);
 			slime->HitPlayer(player);
 			slime->AttackJudgement(player);
 			break;
@@ -87,13 +83,20 @@ void GameMain::EnemyUpdate()
 		case ENEMY_KIND::UNDEAD:	//アンデット
 		{
 			Undead* undead;
-			undead = dynamic_cast<Undead*>(enemy[i]);
+			undead = dynamic_cast<Undead*>(enemy);
 			if (undead->GetState() == UNDEAD_STATE::ATTACK)
 			{
 				if (undead->HitBox(player))
 				{
 
 				}
+			}
+
+			if (undead->GetCanDelete())
+			{
+				item_controller->SpawnItem(undead, undead->GetLocation());
+				delete undead;
+				enemy = nullptr;
 			}
 			break;
 		}
@@ -108,7 +111,7 @@ void GameMain::EnemyUpdate()
 		case ENEMY_KIND::GHOST:		//ゴースト
 		{
 			EnemyGhost* ghost;
-			ghost = dynamic_cast<EnemyGhost*>(enemy[i]);
+			ghost = dynamic_cast<EnemyGhost*>(enemy);
 			ghost->GhostMove(player);
 			break;
 		}
@@ -141,7 +144,10 @@ void GameMain::EnemyUpdate()
 		default:
 			break;
 		}
+
 	}
+
+	
 }
 
 //-----------------------------------
@@ -152,10 +158,11 @@ void GameMain::Draw()const
 	//背景
 	SetBackgroundColor(149, 249, 253);
 
+	item_controller->Draw();
 	player->Draw();
 	stage->Draw();
-	for (int i = 0; i < 3; i++)
+	if (enemy != nullptr)
 	{
-		enemy[i]->Draw();
+		enemy->Draw();
 	}
 }

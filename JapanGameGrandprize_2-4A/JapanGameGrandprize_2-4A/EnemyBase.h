@@ -2,7 +2,6 @@
 #include "Define.h"
 #include "Bullet.h"
 #include "ElementItem.h"
-#include "Item.h"
 
 //エネミーの種類
 enum class ENEMY_KIND
@@ -39,10 +38,10 @@ class EnemyBase
 {
 public:
 	//コンストラクタ
-	EnemyBase() {};
+	EnemyBase();
 
 	//デストラクタ
-	~EnemyBase() {};
+	~EnemyBase() {}
 
 	//描画以外の更新を実行
 	virtual void Update() = 0;
@@ -53,30 +52,34 @@ public:
 	//プレイヤーの弾との当たり判定
 	virtual void HitBullet(Bullet* bullet) = 0;
 
+	//ドロップする種類の量の取得
+	int GetDropTypeVolume() const;
+
+	//ドロップするアイテムの量の取得
+	int GetDropVolume()const;
+
 	//ドロップアイテムの取得
 	ElementItem GetDropItem(int i) const;
 
 	//エネミーの種類の取得
 	ENEMY_KIND GetEnemyKind() const;
 
-protected: 
+	//削除可能状態の取得
+	bool GetCanDelete() const;
+
+protected:
+	bool can_delete; //削除フラグ
 	int hp;	//体力
 	int speed; //移動速度
 
 	int drop_volume; //ドロップ量
+	int drop_type_volume; //ドロップする種類の量
 
 	ElementItem** drop_element; //ドロップ元素
-	Item** drop_item; //ドロップアイテム
 
 	ENEMY_KIND kind; //エネミーの種類
 	ENEMY_TYPE* type; //エネミーのタイプ
 protected:
 	//HPが0かどうか判断(0になったらtrue)
 	bool CheckHp();
-
-	//アイテムの生成
-	void CreateDropItem(int drop_num, Location location);
-
-	//アイテムの並び替え
-	void SortDropitem(int item_num);
 };
