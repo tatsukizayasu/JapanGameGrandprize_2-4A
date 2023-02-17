@@ -22,6 +22,7 @@ Player::Player()
 	area.height = image_size_y;
 	bullet_count = 0;
 	count = 0;
+	damage_count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
@@ -34,6 +35,7 @@ Player::Player()
 		bullet[i] = nullptr;
 	}
 
+	damage_flg = false;
 	i = 0;
 
 	attribute[0] = Attribute::normal;
@@ -84,6 +86,7 @@ Player::Player(Stage* stage)
 	area.width = image_size_x;
 	area.height = image_size_y;
 	bullet_count = 0;
+	damage_count = 0;
 	count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
@@ -97,6 +100,7 @@ Player::Player(Stage* stage)
 		bullet[i] = nullptr;
 	}
 
+	damage_flg = false;
 	i = 0;
 
 	attribute[0] = Attribute::normal;
@@ -153,7 +157,7 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -168,6 +172,26 @@ void Player::Draw() const
 	//	beam->Draw();
 	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
+
+
+	//ダメージを受けた時点滅する
+	if (damage_flg)
+	{
+		if (damage_count < 5)
+		{
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
+			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,255);
+		}
+		else if (10 < damage_count < 10)
+		{
+			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+		}
+	}
+	else
+	{
+		DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+	}
 
 #ifdef _DEBUG
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
@@ -210,6 +234,13 @@ void Player::Draw() const
 void Player::Update()
 {
 	count++;
+
+	damage_count++;
+	if (damage_count >= 10)
+	{
+		damage_count = 0;
+	}
+		
 
 
 	//スティック右入力
@@ -548,6 +579,7 @@ void Player::Element_Update()
 //-----------------------------------
 void Player::Hp_Damage(int damage_value)
 {
+	damage_flg = true;
 	hp -= damage_value;
 	if (hp <= 0)
 	{

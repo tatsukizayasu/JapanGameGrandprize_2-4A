@@ -38,7 +38,10 @@ private:
 	float jump_power;               //ジャンプの力
 	float speed_x;
 	int select_count;
+	int damage_count;				//無敵時間
 	int i;                          //スイッチ内でのループ用
+
+	bool damage_flg;				//ダメージを受けたかどうかのフラグ
 
 	Player* player;
 

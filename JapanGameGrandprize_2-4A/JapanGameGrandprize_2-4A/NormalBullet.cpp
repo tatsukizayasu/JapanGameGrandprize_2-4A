@@ -29,9 +29,10 @@ NormalBullet::NormalBullet()
 NormalBullet::NormalBullet(float player_x, float player_y)
 {
 	delete_flg = false;
-	location.x = player_x;
-	location.y = player_y;
 	scrool_x = CameraWork::GetCamera().x;
+	location.x = player_x - scrool_x;
+	location.y = player_y;
+
 
 	efect_count = 0;
 	delete_flg = false;
@@ -74,7 +75,7 @@ void NormalBullet::Draw() const
 //-----------------------------------
 void NormalBullet::Update()
 {
-	if (GetDrawX() < 1260 && !delete_flg)
+	if (location.x < 1260 && !delete_flg)
 	{
 		location.x += 10;
 	}
@@ -84,7 +85,7 @@ void NormalBullet::Update()
 		{
 			for (int i = 0; i < PIXEL_MAX; i++)
 			{
-				dot_location_x[i] = GetDrawX();
+				dot_location_x[i] = location.x;
 				dot_location_y[i] = location.y;
 			}
 		}
@@ -119,11 +120,4 @@ bool NormalBullet::NormalBulletEfect()
 		}
 	}
 	return false;
-}
-
-
-float NormalBullet::GetDrawX()
-{
-	float ret = (location.x - CameraWork::GetCamera().x) + (scrool_x + CameraWork::GetCamera().x);
-	return ret;
 }

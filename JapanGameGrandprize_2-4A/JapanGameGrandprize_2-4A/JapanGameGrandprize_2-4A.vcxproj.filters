@@ -184,6 +184,9 @@
     <ClInclude Include="Stage\StageBuillder\Debug.h" />
     <ClInclude Include="Stage\StageBuillder\KeyManager.h" />
     <ClInclude Include="Stage\StageBuillder\StageBuilder.h" />
+    <ClInclude Include="Stage\StageBuilder\StageBuilder.h" />
+    <ClInclude Include="Stage\StageBuilder\Debug.h" />
+    <ClInclude Include="Stage\StageBuilder\KeyManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

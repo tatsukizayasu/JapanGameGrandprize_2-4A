@@ -19,5 +19,4 @@ public:
 	void Update() override;
 
 	bool NormalBulletEfect();
-	float GetDrawX();
 };
