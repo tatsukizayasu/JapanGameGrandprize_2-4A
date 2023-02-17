@@ -72,4 +72,6 @@ public:
 	Bullet* GetBullet(int i) { return bullet[i]; }
 	PlayerState GetState() { return player_state; }
 
+	POINT collision_dir;
+
 };

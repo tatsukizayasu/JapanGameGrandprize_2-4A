@@ -1,5 +1,6 @@
 #pragma once
 #include "../BoxCollider.h"
+#include <Windows.h>
 
 #define MAP_CHIP_SIZE 40.f
 class Player;
@@ -10,7 +11,7 @@ class MapChip :
 private:
     //“–‚½‚Á‚Ä‚¢‚é•ûŒü
     //Œv‰ñ‚è‚Å[1:ã, 2:‰E, 3:‰º, 4:¶]
-    short collision_dir;
+    POINT collision_dir;
 
 
 public:
@@ -27,7 +28,16 @@ public:
 
     const char* GetName() { return class_name; }
 
-    const short GetMapChip_Collision() { short w = collision_dir; collision_dir = 0; return w; }
+    const POINT GetMapChip_Collision() { 
+        
+        POINT w = collision_dir;
+   
+        collision_dir = { 0,0 };
+
+        return w;
+        //short w = collision_dir; collision_dir = 0; return w; 
+
+    }
 
 protected:
     const char* class_name = "default";

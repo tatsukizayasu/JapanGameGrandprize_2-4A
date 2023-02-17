@@ -45,6 +45,8 @@ Stage::Stage()
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
 #endif
+
+	collision_chip = { 0, 0 };
 }
 
 //-----------------------------------
@@ -88,6 +90,19 @@ void Stage::Update(Player* player)
 #ifdef _STAGE_BUILDER
 	stage_builder->Update();
 #endif
+
+
+
+	for (int i = 0; i < GetMapChip().size(); i++)
+	{
+
+		POINT collision_dir = GetMapChip().at(i)->GetMapChip_Collision();
+		if (collision_dir.x != 0 || collision_dir.y != 0) {
+			collision_chip.x = GetMapChip().at(i)->GetLocation().x;
+			collision_chip.y = GetMapChip().at(i)->GetLocation().y;
+			break;
+		}
+	}
 }
 
 

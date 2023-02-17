@@ -110,7 +110,7 @@ Player::Player(Stage* stage)
 	player = this;
 	area = { 80,40 };
 
-
+	collision_dir = { 0,0 };
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
@@ -188,15 +188,15 @@ void Player::Update()
 {
 	//当たっている方向
 //時計回りで[1:上, 2:右, 3:下, 4:左]
-	short collision_dir = 0;
+	/*POINT collision_dir = { 0,0 };*/
 
 	for (int i = 0; i < stage->GetMapChip().size(); i++)
 	{
 
 		collision_dir = stage->GetMapChip().at(i)->GetMapChip_Collision();
-		if (collision_dir != 0) {
+		if (collision_dir.x != 0 || collision_dir.y != 0) {
 			clsDx();
-			printfDx("当たった:%d\n", collision_dir);
+			printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
 			speed_x = 0.0f;
 			break;
 		}
@@ -206,12 +206,12 @@ void Player::Update()
 
 
 	//スティック右入力
-	if (PAD_INPUT::GetLStick().x >= 10000 && collision_dir != 2)
+	if (PAD_INPUT::GetLStick().x >= 10000 && collision_dir.x != 1)
 	{
 		RightMove();
 	}
 	//スティック左入力
-	else if (PAD_INPUT::GetLStick().x <= -10000 && collision_dir != 4)
+	else if (PAD_INPUT::GetLStick().x <= -10000 && collision_dir.x != -1)
 	{
 		LeftMove();
 	}
@@ -221,7 +221,7 @@ void Player::Update()
 		NotInputStick();
 	}
 
-	collision_dir = 0;
+
 
 	//RBボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
@@ -271,6 +271,10 @@ void Player::Update()
 
 	//弾の属性の切り替え処理
 	Element_Update();
+
+
+	//当たり判定のリセット
+	collision_dir = { 0,0 };
 
 }
 
@@ -428,7 +432,7 @@ void Player::NotJump()
 		jump_power = 0;
 		jump = 10;
 
-		if (location.y < 510)
+		if (location.y < 700)
 		{
 			location.y += gravity_down;
 		}
@@ -437,6 +441,13 @@ void Player::NotJump()
 			player_state = PlayerState::stop;
 		}
 		gravity_down += 0.25;
+
+
+		if (collision_dir.y == -1)
+		{
+			gravity_down = 0.0f;
+			location.y = stage->GetCollision_Chip().y - CHIP_SIZE / 2 - area.height + CHIP_SIZE;
+		}
 
 
 

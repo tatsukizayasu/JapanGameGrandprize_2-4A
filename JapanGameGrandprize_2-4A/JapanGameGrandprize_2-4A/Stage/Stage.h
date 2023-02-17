@@ -27,6 +27,8 @@ private:
 	//ブロック画像
 	int block_images[110];
 
+	POINT collision_chip;
+
 public:
 	/// <summary>
 	/// コンストラクタ
@@ -61,4 +63,6 @@ public:
 	/// </summary>
 	/// <returns>ベクター型(MapChipオブジェクト型)：MapChip</returns>	
 	std::vector<MapChip*> GetMapChip() { return mapchip; };
+
+	POINT GetCollision_Chip() { POINT w = collision_chip;  collision_chip = { 0, 0 };  return w; }
 };
