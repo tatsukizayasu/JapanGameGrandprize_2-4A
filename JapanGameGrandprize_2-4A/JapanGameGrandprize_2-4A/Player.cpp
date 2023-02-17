@@ -526,6 +526,10 @@ void Player::Hp_Damage(int damage_value)
 	}
 }
 
+//“G‚©‚çƒ_ƒ[ƒW‚ğó‚¯‚½
+void Player::Being_Attacked(EnemyBase* enemy_base)
+{}
+
 //‰ñ•œ
 void Player::Hp_Heal(int heal_value)
 {

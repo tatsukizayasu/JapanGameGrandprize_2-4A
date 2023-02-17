@@ -4,6 +4,7 @@
 #include "EfectBeam.h"
 #include "Bullet.h"
 #include "Stage/Stage.h"
+#include "EnemyBase.h"
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
@@ -50,6 +51,7 @@ private:
 	Bullet** bullet;             //弾の配列
 	Stage* stage;                //ステージへのポインタ
 	EfectBeam* beam;
+	
 
 public:
 	Player();
@@ -67,6 +69,7 @@ public:
 	void Shoot_Gun();
 	void SortBullet(int);
 	void Hp_Damage(int);
+	void Being_Attacked(EnemyBase*);
 	void Hp_Heal(int);
 
 	Bullet* GetBullet(int i) { return bullet[i]; }
