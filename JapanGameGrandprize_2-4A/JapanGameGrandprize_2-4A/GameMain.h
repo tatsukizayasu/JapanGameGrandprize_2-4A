@@ -4,6 +4,7 @@
 #include "EnemyBase.h"
 #include "Stage/Stage.h"
 #include "CameraWork.h"
+#include "ItemController.h"
 
 
 class GameMain :
@@ -20,6 +21,7 @@ private:
     //操作間隔時間
     int input_margin;
 
+    ItemController* item_controller; //アイテム管理
 public:
     //コンストラクタ
     GameMain();

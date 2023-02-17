@@ -4,9 +4,6 @@
     <ClCompile Include="BoxCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="FpsController.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -70,9 +67,6 @@
     <ClCompile Include="Undead.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>ソースファイル\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="ElementItem.cpp">
       <Filter>ソースファイル\ElementItem</Filter>
     </ClCompile>
@@ -83,9 +77,17 @@
     <ClCompile Include="NormalBullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Item.cpp">
+      <Filter>ソースファイル\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemController.cpp">
+      <Filter>ソースファイル\Item</Filter>
+    </ClCompile>
     <ClCompile Include="EnemyGhost.cpp">
       <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソースファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,16 +148,7 @@
     <ClInclude Include="EfectExplosion.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuilder\Debug.h">
-      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
-    </ClInclude>
     <ClInclude Include="EfectBeam.h">
-      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\StageBuilder\KeyManager.h">
-      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\StageBuilder\StageBuilder.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
     <ClInclude Include="Stage\StageBuilder\Directory.h">
@@ -165,9 +158,6 @@
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Undead.h">
-      <Filter>ヘッダーファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="ElementItem.h">
@@ -182,9 +172,18 @@
     <ClInclude Include="NormalBullet.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>ヘッダーファイル\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemController.h">
+      <Filter>ヘッダーファイル\Item</Filter>
+    </ClInclude>
     <ClInclude Include="EnemyGhost.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\StageBuillder\Debug.h" />
+    <ClInclude Include="Stage\StageBuillder\KeyManager.h" />
+    <ClInclude Include="Stage\StageBuillder\StageBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -216,6 +215,12 @@
     </Filter>
     <Filter Include="ヘッダーファイル\ElementItem">
       <UniqueIdentifier>{57cb677f-baa9-4594-a284-5de08e0a7cdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Item">
+      <UniqueIdentifier>{945fe1fc-bac4-441a-9119-5de3fe12c36e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Item">
+      <UniqueIdentifier>{11f43874-be68-48cd-8a1b-1e881e5c319b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

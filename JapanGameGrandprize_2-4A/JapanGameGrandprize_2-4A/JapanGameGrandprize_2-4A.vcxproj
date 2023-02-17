@@ -157,6 +157,7 @@
     <ClInclude Include="ElementItem.h" />
     <ClInclude Include="EnumElementItem.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemController.h" />
     <ClInclude Include="NormalBullet.h" />
     <ClInclude Include="Stage\StageBuilder\Directory.h" />
     <ClInclude Include="EfectBeam.h" />
@@ -185,13 +186,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
-    <ClCompile Include="BULLET.cpp" />
-    <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="ElementItem.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemController.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />

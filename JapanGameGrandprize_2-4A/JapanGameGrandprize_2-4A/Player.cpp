@@ -3,6 +3,10 @@
 #include "NormalBullet.h"
 #include "PadInput.h"
 #include "CameraWork.h"
+#include "Item.h"
+
+//プレイヤーが持っている元素の種類
+#define PLAYER_ELEMENT 7
 
 //-----------------------------------
 // コンストラクタ
@@ -14,6 +18,8 @@ Player::Player()
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
+	area.width = image_size_x;
+	area.height = image_size_y;
 	bullet_count = 0;
 	count = 0;
 	jump = 10.0;
@@ -42,7 +48,7 @@ Player::Player()
 		attribute_c[i] = i;
 	}
 
-	player_state = PlayerState::stop;
+	player_state = PLAYER_STATE::STOP;
 
 	display_attribute = 0;
 
@@ -54,6 +60,12 @@ Player::Player()
 
 	player = this;
 
+	//元素の初期化
+	element = new ElementItem * [PLAYER_ELEMENT];
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+	}
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
@@ -69,6 +81,8 @@ Player::Player(Stage* stage)
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
+	area.width = image_size_x;
+	area.height = image_size_y;
 	bullet_count = 0;
 	count = 0;
 	jump = 10.0;
@@ -97,7 +111,7 @@ Player::Player(Stage* stage)
 		attribute_c[i] = i;
 	}
 
-	player_state = PlayerState::stop;
+	player_state = PLAYER_STATE::STOP;
 
 	display_attribute = 0;
 
@@ -109,7 +123,12 @@ Player::Player(Stage* stage)
 
 	player = this;
 
-
+	//元素の初期化
+	element = new ElementItem * [PLAYER_ELEMENT];
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+	}
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
@@ -150,6 +169,13 @@ void Player::Draw() const
 	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
 
+#ifdef _DEBUG
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		DrawFormatString(20 * i, 100, 0x000000, "%d", element[i]->GetVolume());
+	}
+
+#endif
 
 
 	SetFontSize(30);
@@ -226,7 +252,7 @@ void Player::Update()
 	//Bボタン解放時
 	if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
 	{
-		player_state = PlayerState::down;
+		player_state = PLAYER_STATE::DOWN;
 	}
 
 
@@ -258,7 +284,7 @@ void Player::NotInputStick()
 {
 	if (speed_x > 0)
 	{
-		if (player_state == PlayerState::jump || player_state == PlayerState::down)
+		if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 		{
 			speed_x -= JUMP_INERTIA;
 		}
@@ -275,7 +301,7 @@ void Player::NotInputStick()
 
 	if (speed_x < 0)
 	{
-		if (player_state == PlayerState::jump || player_state == PlayerState::down)
+		if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 		{
 			speed_x += JUMP_INERTIA;
 		}
@@ -301,7 +327,7 @@ void Player::NotInputStick()
 //左移動
 void Player::LeftMove()
 {
-	if (player_state == PlayerState::jump || player_state == PlayerState::down)
+	if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 	{
 		if (speed_x > -5.0)
 		{
@@ -314,7 +340,7 @@ void Player::LeftMove()
 	}
 	else
 	{
-		player_state = PlayerState::move_left;
+		player_state = PLAYER_STATE::MOVE_LEFT;
 		if (speed_x > -5.0)
 		{
 			speed_x = speed_x - WARK_INERTIA;
@@ -330,7 +356,7 @@ void Player::LeftMove()
 //右移動
 void Player::RightMove()
 {
-	if (player_state == PlayerState::jump || player_state == PlayerState::down)
+	if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 	{
 		if (speed_x < 5.0)
 		{
@@ -343,7 +369,7 @@ void Player::RightMove()
 	}
 	else
 	{
-		player_state = PlayerState::move_right;
+		player_state = PLAYER_STATE::MOVE_RIGHT;
 		if (speed_x < 5.0)
 		{
 			speed_x = speed_x + WARK_INERTIA;
@@ -360,7 +386,7 @@ void Player::RightMove()
 //ジャンプ
 void Player::Jump()
 {
-	player_state = PlayerState::jump;
+	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;
 	jump_power = jump - GRAVITY;
 
@@ -378,7 +404,7 @@ void Player::Jump()
 	if (fuel < 0)
 	{
 		fuel = 0;
-		player_state = PlayerState::down;
+		player_state = PLAYER_STATE::DOWN;
 	}
 
 	if (location.y > 0)
@@ -413,7 +439,7 @@ void Player::NotJump()
 		}
 		else
 		{
-			player_state = PlayerState::stop;
+			player_state = PLAYER_STATE::STOP;
 		}
 		gravity_down += 0.25;
 
@@ -485,7 +511,9 @@ void Player::SortBullet(int delete_bullet)
 	}
 }
 
+//-----------------------------------
 //属性を変更
+//-----------------------------------
 void Player::Element_Update()
 {
 	if (PAD_INPUT::GetRStick().y > 5000)
@@ -515,18 +543,22 @@ void Player::Element_Update()
 	select_count++;
 }
 
+//-----------------------------------
 //ダメージを受けた時
+//-----------------------------------
 void Player::Hp_Damage(int damage_value)
 {
 	hp -= damage_value;
 	if (hp <= 0)
 	{
 		hp = 0;
-		player_state = PlayerState::death;
+		player_state = PLAYER_STATE::DEATH;
 	}
 }
 
+//-----------------------------------
 //回復
+//-----------------------------------
 void Player::Hp_Heal(int heal_value)
 {
 	hp += heal_value;
@@ -534,4 +566,15 @@ void Player::Hp_Heal(int heal_value)
 	{
 		hp = HP_MAX;
 	}
+}
+
+//-----------------------------------
+//元素の量の設定
+//-----------------------------------
+void Player::SetElementItem(class Item* item)
+{
+
+	int num = static_cast<int>(item->GetElementType());
+
+	element[num]->SetVolume(element[num]->GetVolume() + 1);
 }

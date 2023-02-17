@@ -8,6 +8,7 @@ class Item :
 private:
 	int color; //色
 	int speed; //速度
+	ELEMENT_ITEM element_type; //元素
 public:
 	//コンストラクタ
 	Item();
@@ -18,5 +19,8 @@ public:
 
 	//描画
 	void Draw()const;
+
+	//元素のタイプの取得
+	ELEMENT_ITEM GetElementType() const;
 };
 
