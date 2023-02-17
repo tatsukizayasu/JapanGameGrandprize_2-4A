@@ -21,6 +21,7 @@
 //-----------------------------------
 Item::Item()
 {
+	element_type = ELEMENT_ITEM::NONE;
 	color = 0;
 	speed = 0;
 	location.x = 0;
@@ -33,6 +34,7 @@ Item::Item()
 //-----------------------------------
 Item::Item(ELEMENT_ITEM type, Location location)
 {
+	element_type = type;
 	this->location = location;
 	if (GetRand(1))
 	{
@@ -50,7 +52,7 @@ Item::Item(ELEMENT_ITEM type, Location location)
 	radius = 0;
 	speed = ITEM_BASE_SPEED;
 
-	switch (type)
+	switch (element_type)
 	{
 	case ELEMENT_ITEM::OXYGEN:
 		color = WHITE_COLOR;
@@ -111,4 +113,12 @@ void Item::Draw()const
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawCircle(static_cast<int>(draw_location.x), static_cast<int>(draw_location.y), radius, color, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+}
+
+//-----------------------------------
+//Œ³‘f‚Ìƒ^ƒCƒv‚ÌŽæ“¾
+//-----------------------------------
+ELEMENT_ITEM Item::GetElementType() const
+{
+	return element_type;
 }

@@ -5,19 +5,20 @@
 #include "Bullet.h"
 #include "Stage/Stage.h"
 #include "EnemyBase.h"
+#include "ElementItem.h"
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100
 
-enum class PlayerState
+enum class PLAYER_STATE
 {
-	stop = 0,
-	move_left,
-	move_right,
-	jump,
-	down,
-	death
+	STOP = 0,
+	MOVE_LEFT,
+	MOVE_RIGHT,
+	JUMP,
+	DOWN,
+	DEATH
 };
 
 
@@ -45,13 +46,15 @@ private:
 	int attribute_c[6];
 	int display_attribute; //画面に表示させる属性
 
-	PlayerState player_state;
+	PLAYER_STATE player_state;
 	
 	
 	Bullet** bullet;             //弾の配列
 	Stage* stage;                //ステージへのポインタ
 	EfectBeam* beam;
-	
+
+	ElementItem** element;	//元素
+
 
 public:
 	Player();
@@ -73,6 +76,8 @@ public:
 	void Hp_Heal(int);
 
 	Bullet* GetBullet(int i) { return bullet[i]; }
-	PlayerState GetState() { return player_state; }
+	PLAYER_STATE GetState() { return player_state; }
 
+	//元素の量の設定
+	void SetElementItem(class Item* item);
 };
