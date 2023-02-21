@@ -22,7 +22,7 @@ struct Compound
 	int uranium;			//ƒEƒ‰ƒ“
 };
 
-enum class Attribute
+enum class ATTRIBUTE
 {
 	normal = 0,
 	explosion,

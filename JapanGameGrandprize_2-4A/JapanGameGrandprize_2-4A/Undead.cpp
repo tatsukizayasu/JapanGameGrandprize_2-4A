@@ -177,7 +177,7 @@ void Undead::DistancePlayer()
 //-----------------------------------
 // ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-void Undead::HitBullet(Bullet* bullet)
+void Undead::HitBullet(BulletBase* bullet)
 {
 	
 }
