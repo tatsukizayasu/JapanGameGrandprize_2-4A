@@ -37,9 +37,6 @@
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Undead.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="LineCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -74,9 +71,6 @@
       <Filter>ソースファイル\ElementItem</Filter>
     </ClCompile>
     <ClCompile Include="EfectBeam.cpp" />
-    <ClCompile Include="EnemySlime.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="NormalBullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -96,7 +90,13 @@
     <ClCompile Include="ColliderBase.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-     <ClCompile Include="Torrent.cpp">
+    <ClCompile Include="Torrent.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Undead.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySlime.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
@@ -145,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="Stage\Element\Element_DamageWall.h">
       <Filter>ヘッダーファイル\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Undead.h">
-      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\MapChip.h">
       <Filter>ヘッダーファイル\Stage</Filter>
@@ -203,7 +200,13 @@
     <ClInclude Include="Stage\StageBuilder\StageBuilder.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
-     <ClInclude Include="Torrent.h">
+    <ClInclude Include="Torrent.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySlime.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Undead.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
