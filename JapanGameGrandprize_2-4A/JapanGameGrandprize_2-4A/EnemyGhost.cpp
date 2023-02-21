@@ -39,7 +39,6 @@ EnemyGhost::EnemyGhost()
 	bullet_y = 0;
 	player_x = 0;
 	player_y = 0;
-	ghost_x = 0;
 	bullet_speed_x = 0;
 	bullet_speed_y = 0;
 	physical_attack = false;
@@ -107,22 +106,21 @@ void EnemyGhost::Update()
 //-----------------------------------
 void EnemyGhost::Draw()const
 {
-	DrawFormatString(200, 200, GetColor(255, 0, 0), "%d", CameraWork::GetCamera().x);
+	//スクロールに合わせて描画
+	float x = location.x - CameraWork::GetCamera().x;
+	float y = location.y - CameraWork::GetCamera().y;
 
 	if (action_type == GHOST_STATE::MAGIC_ATTACK) //魔法攻撃のモーション
 	{
-		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
-			location.y + GHOST_SIZE_Y, GetColor(128, 0, 0), TRUE);
+		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(128, 0, 0), TRUE);
 	}
 	else if (action_type == GHOST_STATE::PHYSICAL_ATTACK) //接近攻撃のモーション
 	{
-		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
-			location.y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
+		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
 	}
 	else
 	{
-		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
-			location.y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
 	}
 
 	if (magic_attack == true)
@@ -138,14 +136,13 @@ void EnemyGhost::Draw()const
 void EnemyGhost::GhostMove(Player* player)
 {
 	int range; //プレイヤーとの距離	
-	ghost_x = location.x - CameraWork::GetCamera().x;
-
-	range = ghost_x - player->GetLocation().x;
+	
+	range = location.x - player->GetLocation().x;
 
 	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE)
 	{
-		if (location.x > player->GetLocation().x) //左に移動
+		if (range > player->GetLocation().x) //左に移動
 		{
 			if (player->GetLocation().y > location.y)
 			{
