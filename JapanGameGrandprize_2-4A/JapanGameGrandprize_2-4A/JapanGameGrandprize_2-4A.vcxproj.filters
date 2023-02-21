@@ -87,6 +87,11 @@
     <ClCompile Include="EnemyGhost.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Stage\Element\Element_MoveFloor.cpp">
+      <Filter>ソースファイル\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -146,16 +151,7 @@
     <ClInclude Include="EfectExplosion.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuilder\Debug.h">
-      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
-    </ClInclude>
     <ClInclude Include="EfectBeam.h">
-      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\StageBuilder\KeyManager.h">
-      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\StageBuilder\StageBuilder.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
     <ClInclude Include="Stage\StageBuilder\Directory.h">
@@ -184,6 +180,12 @@
     </ClInclude>
     <ClInclude Include="EnemyGhost.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuillder\Debug.h" />
+    <ClInclude Include="Stage\StageBuillder\KeyManager.h" />
+    <ClInclude Include="Stage\StageBuillder\StageBuilder.h" />
+    <ClInclude Include="Stage\Element\Element_MoveFloor.h">
+      <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

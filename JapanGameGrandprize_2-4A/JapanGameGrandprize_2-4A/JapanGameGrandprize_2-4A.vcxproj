@@ -158,6 +158,7 @@
     <ClInclude Include="EnumElementItem.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="NormalBullet.h" />
+    <ClInclude Include="Stage\Element\Element_MoveFloor.h" />
     <ClInclude Include="Stage\StageBuilder\Directory.h" />
     <ClInclude Include="EfectBeam.h" />
     <ClInclude Include="EnemySlime.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="ElementItem.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
+    <ClCompile Include="Stage\Element\Element_MoveFloor.cpp" />
     <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
