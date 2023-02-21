@@ -127,7 +127,7 @@ void StageBuilder::Draw()const
 	}
 
 
-	line->DrawCollision();
+	//line->DrawCollision();
 }
 
 //------------------------------------
