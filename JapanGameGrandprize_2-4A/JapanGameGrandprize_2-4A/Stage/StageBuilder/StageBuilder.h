@@ -4,6 +4,7 @@
 #include "KeyManager.h"
 #include "../MapChip.h"
 #include "../SphereCollider.h"
+#include "../../LineCollider.h"
 #include <vector>
 
 #define MENU_NUM 4
@@ -30,6 +31,10 @@ private:
 
 	int menu_cursor;
 	char arrow[ARROW_NUM];
+
+	//todo:テストなので消す ヘッダーも
+	class LineCollider2* line;
+	
 
 public:
 	//コンストラクタ

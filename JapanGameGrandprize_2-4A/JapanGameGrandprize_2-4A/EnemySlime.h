@@ -1,5 +1,7 @@
 #pragma once
 #include"EnemyBase.h"
+#include"CameraWork.h"
+
 #include"BoxCollider.h"
 
 enum DIRECTION
@@ -13,7 +15,7 @@ enum class SLIME_STATE
 	IDOL,   //アイドル状態
 	MOVE,   //移動
 	ATTACK, //攻撃
-	BOUNCE, //壁、敵に跳ね返る
+	KNOCKBACK, //壁、敵に跳ね返る
 	DEATH,  //死亡
 };
 
@@ -45,6 +47,7 @@ public:
 	void HitStage();
 	void AttackJudgement(BoxCollider* boxcollider);
 	void Attack();
+	void KnockBack();
 
 	virtual void HitBullet(Bullet* bullet)override {};
 };

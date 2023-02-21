@@ -37,6 +37,9 @@
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Undead.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
     <ClCompile Include="LineCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -89,7 +92,11 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Torrent.cpp">
+    <ClCompile Include="LineCollider.cpp" />
+    <ClCompile Include="ColliderBase.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+     <ClCompile Include="Torrent.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
@@ -127,6 +134,9 @@
     <ClInclude Include="Title.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Stage\Stage.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
@@ -135,9 +145,6 @@
     </ClInclude>
     <ClInclude Include="Stage\Element\Element_DamageWall.h">
       <Filter>ヘッダーファイル\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="LineCollider.h">
-      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Undead.h">
       <Filter>ヘッダーファイル</Filter>
@@ -181,13 +188,22 @@
     <ClInclude Include="EnemyGhost.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Stage\StageBuillder\Debug.h" />
-    <ClInclude Include="Stage\StageBuillder\KeyManager.h" />
-    <ClInclude Include="Stage\StageBuillder\StageBuilder.h" />
-    <ClInclude Include="Torrent.h">
-      <Filter>ヘッダーファイル\Enemy</Filter>
+    <ClInclude Include="ColliderBase.h">
+      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="EnemySlime.h">
+    <ClInclude Include="LineCollider.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuilder\Debug.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuilder\KeyManager.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuilder\StageBuilder.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+     <ClInclude Include="Torrent.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
