@@ -13,7 +13,6 @@ enum class GHOST_STATE
 	RIGHT_UPPER,  //‰Eã‚ÉˆÚ“®
 	PHYSICAL_ATTACK,       //•¨—UŒ‚
 	MAGIC_ATTACK, //–‚–@UŒ‚
-	DEATH,   //€–S
 };
 
 
@@ -22,6 +21,7 @@ class EnemyGhost : public EnemyBase, public BoxCollider
 private:
 
 	int standby_time; //d’¼ŠÔ
+	float ghost_x;
 	float bullet_x; //’eŠÛ
 	float bullet_y; //’eŠÛ
 	float bullet_speed_x; //’eŠÛƒXƒs[ƒh
