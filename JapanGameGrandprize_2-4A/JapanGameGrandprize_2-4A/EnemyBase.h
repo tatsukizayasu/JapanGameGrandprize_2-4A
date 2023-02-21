@@ -50,7 +50,7 @@ public:
 	virtual void Draw() const = 0;
 
 	//プレイヤーの弾との当たり判定
-	virtual void HitBullet(Bullet* bullet) = 0;
+	virtual void HitBullet(BulletBase* bullet) = 0;
 
 	//ドロップする種類の量の取得
 	int GetDropTypeVolume() const;

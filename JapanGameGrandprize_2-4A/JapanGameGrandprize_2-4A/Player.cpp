@@ -31,19 +31,19 @@ Player::Player()
 	gravity_down = 0.0;
 	for (int i = 0; i < 30; i++)
 	{
-		bullet = new Bullet * [30];
+		bullet = new BulletBase * [30];
 		bullet[i] = nullptr;
 	}
 
 	damage_flg = false;
 	i = 0;
 
-	attribute[0] = Attribute::normal;
-	attribute[1] = Attribute::explosion;
-	attribute[2] = Attribute::melt;
-	attribute[3] = Attribute::poison;
-	attribute[4] = Attribute::paralysis;
-	attribute[5] = Attribute::heal;
+	attribute[0] = ATTRIBUTE::normal;
+	attribute[1] = ATTRIBUTE::explosion;
+	attribute[2] = ATTRIBUTE::melt;
+	attribute[3] = ATTRIBUTE::poison;
+	attribute[4] = ATTRIBUTE::paralysis;
+	attribute[5] = ATTRIBUTE::heal;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -94,21 +94,22 @@ Player::Player(Stage* stage)
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
-	bullet = new Bullet * [30];
+	bullet = new BulletBase * [30];
 	for (int i = 0; i < 30; i++)
 	{
 		bullet[i] = nullptr;
 	}
 
 	damage_flg = false;
+	pouch_open = false;
 	i = 0;
 
-	attribute[0] = Attribute::normal;
-	attribute[1] = Attribute::explosion;
-	attribute[2] = Attribute::melt;
-	attribute[3] = Attribute::poison;
-	attribute[4] = Attribute::paralysis;
-	attribute[5] = Attribute::heal;
+	attribute[0] = ATTRIBUTE::normal;
+	attribute[1] = ATTRIBUTE::explosion;
+	attribute[2] = ATTRIBUTE::melt;
+	attribute[3] = ATTRIBUTE::poison;
+	attribute[4] = ATTRIBUTE::paralysis;
+	attribute[5] = ATTRIBUTE::heal;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -252,7 +253,10 @@ void Player::Update()
 		damage_count = 0;
 	}
 		
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
+	{
 
+	}
 
 	//スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000)
@@ -317,7 +321,7 @@ void Player::Update()
 	}
 
 	//弾の属性の切り替え処理
-	Element_Update();
+	ElementUpdate();
 	
 }
 
@@ -518,7 +522,7 @@ void Player::Shoot_Gun()
 		{
 			if (bullet[i] == NULL)
 			{
-				bullet[i] = new NormalBullet(location.x, location.y);
+				bullet[i] = new NormalBullet(location.x, location.y,attribute[display_attribute]);
 			}
 		}
 		break;
@@ -556,7 +560,7 @@ void Player::SortBullet(int delete_bullet)
 //-----------------------------------
 //属性を変更
 //-----------------------------------
-void Player::Element_Update()
+void Player::ElementUpdate()
 {
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{

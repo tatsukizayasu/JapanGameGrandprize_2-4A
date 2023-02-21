@@ -26,12 +26,15 @@ NormalBullet::NormalBullet()
 //-----------------------------------//
 // コンストラクタ					 //
 //-----------------------------------//
-NormalBullet::NormalBullet(float player_x, float player_y)
+NormalBullet::NormalBullet(float player_x, float player_y,ATTRIBUTE attribute)
 {
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
 	location.x = player_x - scrool_x;
 	location.y = player_y;
+	this->attribute = attribute;
+	damage = 10;
+	debuff_time = 0;
 
 
 	efect_count = 0;

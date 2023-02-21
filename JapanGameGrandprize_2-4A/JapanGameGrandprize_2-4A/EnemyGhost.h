@@ -50,5 +50,5 @@ public:
 	void GhostMove(Player* player);
 
 	//ƒvƒŒƒCƒ„[‚Ì’eŠÛ‚Æ‚Ì“–‚½‚è”»’è
-	void HitBullet(Bullet* bullet);
+	void HitBullet(BulletBase* bullet);
 };

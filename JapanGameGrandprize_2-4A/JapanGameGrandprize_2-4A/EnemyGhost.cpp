@@ -240,7 +240,7 @@ void EnemyGhost::GhostAttack()
 //-----------------------------------
 // ƒvƒŒƒCƒ„[‚Ì’eŠÛ‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-void EnemyGhost::HitBullet(Bullet* bullet)
+void EnemyGhost::HitBullet(BulletBase* bullet)
 {
 
 }

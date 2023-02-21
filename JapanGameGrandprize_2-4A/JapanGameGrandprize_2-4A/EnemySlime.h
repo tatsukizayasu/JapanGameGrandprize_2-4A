@@ -48,5 +48,5 @@ public:
 	void AttackJudgement(BoxCollider* boxcollider);
 	void Attack();
 
-	virtual void HitBullet(Bullet* bullet)override {};
+	virtual void HitBullet(BulletBase* bullet)override {};
 };

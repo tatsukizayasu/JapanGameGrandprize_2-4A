@@ -41,20 +41,24 @@ private:
 	int damage_count;				//無敵時間
 	int i;                          //スイッチ内でのループ用
 
+
+
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
+	bool pouch_open;				//ポーチを開けている
 
 	Player* player;
 
-	Attribute attribute[6];         //弾の属性
+	ATTRIBUTE attribute[6];         //弾の属性
 	int attribute_c[6];
 	int display_attribute; //画面に表示させる属性
 
 	PLAYER_STATE player_state;
 	
 	
-	Bullet** bullet;             //弾の配列
+	BulletBase** bullet;             //弾の配列
 	Stage* stage;                //ステージへのポインタ
 	EfectBeam* beam;
+
 
 	ElementItem** element;	//元素
 
@@ -65,7 +69,7 @@ public:
 	~Player();
 	void Draw()const;
 	void Update();
-	void Element_Update();
+	void ElementUpdate();
 
 	void RightMove();
 	void LeftMove();
@@ -77,8 +81,9 @@ public:
 	void Hp_Damage(int);
 	//void Being_Attacked(EnemyBase*);
 	void Hp_Heal(int);
+	void OpenPouch();
 
-	Bullet* GetBullet(int i) { return bullet[i]; }
+	BulletBase* GetBullet(int i) { return bullet[i]; }
 	PLAYER_STATE GetState() { return player_state; }
 
 	//元素の量の設定
