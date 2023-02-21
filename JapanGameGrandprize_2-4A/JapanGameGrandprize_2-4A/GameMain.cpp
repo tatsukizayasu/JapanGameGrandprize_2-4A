@@ -14,7 +14,7 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
-	enemy = new Undead(player);
+	enemy = new EnemyGhost();
 	camera_work = new CameraWork(0, 0, player, stage);
 	item_controller = new ItemController();
 
@@ -113,6 +113,12 @@ void GameMain::EnemyUpdate()
 			EnemyGhost* ghost;
 			ghost = dynamic_cast<EnemyGhost*>(enemy);
 			ghost->GhostMove(player);
+			/*if (ghost->GetCanDelete())
+			{
+				item_controller->SpawnItem(ghost, ghost->GetLocation());
+				delete ghost;
+				enemy = nullptr;
+			}*/
 			break;
 		}
 		case ENEMY_KIND::WYVERN:	//ÉèÉCÉoÅ[Éì

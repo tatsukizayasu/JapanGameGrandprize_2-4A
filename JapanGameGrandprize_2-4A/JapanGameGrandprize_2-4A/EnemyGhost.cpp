@@ -29,11 +29,12 @@
 //-----------------------------------
 EnemyGhost::EnemyGhost()
 {
+	can_delete = false;
 	hp = 10;
 	location.x = 600;
 	location.y = 300;
-	area.height = 40;
-	area.width = 40;
+	area.width = GHOST_SIZE_X;
+	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
 	bullet_x = 0;
 	bullet_y = 0;
@@ -43,7 +44,7 @@ EnemyGhost::EnemyGhost()
 	bullet_speed_y = 0;
 	physical_attack = false;
 	magic_attack = false;
-	setting = false;
+	setting_bullet = false;
 	action_type = GHOST_STATE::NORMAL;
 	kind = ENEMY_KIND::GHOST;
 }
@@ -96,8 +97,10 @@ void EnemyGhost::Update()
 
 	if (CheckHp() == true)
 	{
-		
+		can_delete = true;
 	}
+
+	can_delete = true;
 
 }
 
@@ -110,17 +113,19 @@ void EnemyGhost::Draw()const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
+	DrawFormatString(100, 100, GetColor(255, 0, 0), "%d", action_type);
+
 	if (action_type == GHOST_STATE::MAGIC_ATTACK) //魔法攻撃のモーション
 	{
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(128, 0, 0), TRUE);
+		DrawBox(x, y, x + area.width, y + area.height, GetColor(128, 0, 0), TRUE);
 	}
 	else if (action_type == GHOST_STATE::PHYSICAL_ATTACK) //接近攻撃のモーション
 	{
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
+		DrawBox(x, y, x + area.width, y + area.height, GetColor(255, 0, 0), TRUE);
 	}
 	else
 	{
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		DrawBox(x, y, x + area.width, y + area.height, GetColor(255, 255, 0), TRUE);
 	}
 
 	if (magic_attack == true)
@@ -142,13 +147,13 @@ void EnemyGhost::GhostMove(Player* player)
 	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE)
 	{
-		if (range > player->GetLocation().x) //左に移動
+		if (location.x > player->GetLocation().x) //左に移動
 		{
 			if (player->GetLocation().y > location.y)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
 			}
-			else
+			else 
 			{
 				action_type = GHOST_STATE::LEFT_UPPER;
 			}
@@ -201,11 +206,11 @@ void EnemyGhost::GhostAttack()
 
 	if (magic_attack == true) //魔法攻撃
 	{
-		if (setting == false)
+		if (setting_bullet == false) //弾丸初期設定
 		{
 			bullet_x = location.x;
 			bullet_y = location.y;
-			setting = true;
+			setting_bullet = true;
 			// 弾の移動速度を設定する
 			{
 				float sb, sbx, sby, bx, by, sx, sy;
