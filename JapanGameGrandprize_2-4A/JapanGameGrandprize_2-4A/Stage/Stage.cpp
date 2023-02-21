@@ -33,7 +33,7 @@ Stage::Stage()
 			if (i != 0)
 			{
 				mapchip.push_back(new MapChip
-				(&block_images[i],
+				(i, &block_images[i],
 					{
 						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2

@@ -366,7 +366,7 @@ void StageBuilder::MakeMapChip()
 {
 	float pos_x = (int)(mouse_pos.x / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
 	float pos_y = (int)(mouse_pos.y / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
-	map_chips.push_back(new MapChip(&block_images[0],
+	map_chips.push_back(new MapChip(0, &block_images[0],
 		{ pos_x + MAP_CHIP_SIZE / 2,pos_y + MAP_CHIP_SIZE / 2 },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
@@ -376,7 +376,7 @@ void StageBuilder::MakeMapChip()
 //------------------------------------
 void StageBuilder::MakeMapChip(float x, float y, float width, float height)
 {
-	map_chips.push_back(new MapChip(&block_images[0],
+	map_chips.push_back(new MapChip(0, &block_images[0],
 		{ x ,y },{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
 

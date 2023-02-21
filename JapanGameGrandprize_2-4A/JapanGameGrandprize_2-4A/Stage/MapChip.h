@@ -18,7 +18,7 @@ public:
     //コンストラクタ
     MapChip();
     //コンストラクタ
-    MapChip(const int* p_image, Location location, Area area);
+    MapChip(short id, const int* p_image, Location location, Area area);
     //デストラクタ
     ~MapChip();
     //更新

@@ -20,13 +20,18 @@ MapChip::MapChip()
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-MapChip::MapChip(const int* p_image, Location location, Area area)
+MapChip::MapChip(short id, const int* p_image, Location location, Area area)
 {
 	this->location.x = location.x;
 	this->location.y = location.y;
 
 	this->area.width = area.width;
 	this->area.height = area.height;
+
+
+	//デバッグ	一部ブロックを変更
+	if (id == 4) { 
+	}
 
 	image = *p_image;
 	{
