@@ -1,10 +1,10 @@
 #pragma once
 #include "define.h"
+#include "ColliderBase.h"
 
-class SphereCollider
+class SphereCollider :public ColliderBase
 {
 protected:
-	Location location;	//’†SÀ•W
 	int radius;			//”¼Œa
 public:
 
