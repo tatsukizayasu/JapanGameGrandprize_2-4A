@@ -268,7 +268,7 @@ void EnemyGhost::GhostAttack()
 
 	if (physical_attack == true) //•¨—UŒ‚
 	{
-		//‚Ç‚Ì‚æ‚¤‚É•\Œ»‚·‚é‚Ì‚©–¢’è
+		
 	}
 }
 

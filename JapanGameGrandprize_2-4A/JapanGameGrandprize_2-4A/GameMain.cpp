@@ -92,7 +92,7 @@ void GameMain::EnemyUpdate()
 				}
 			}
 
-			if (undead->GetCanDelete())
+			if (undead->GetCanDelete()) //Ž€–S
 			{
 				item_controller->SpawnItem(undead, undead->GetLocation());
 				delete undead;
