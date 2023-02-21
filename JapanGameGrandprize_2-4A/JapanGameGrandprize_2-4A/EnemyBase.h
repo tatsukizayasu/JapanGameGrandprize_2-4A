@@ -2,6 +2,14 @@
 #include "Define.h"
 #include "Bullet.h"
 #include "ElementItem.h"
+#include "EnumEnemyType.h"
+
+//各属性のドロップ数
+#define FIRE_DROP 3
+#define WATER_DROP 4
+#define WIND_DROP 3
+#define SOIL_DROP 4
+#define THUNDER_DROP 7
 
 //エネミーの種類
 enum class ENEMY_KIND
@@ -23,16 +31,7 @@ enum class ENEMY_KIND
 	NONE
 };
 
-//属性
-enum class ENEMY_TYPE
-{
-	NORMAL = 0,	//無属性
-	FIRE,		//火属性
-	WATER,		//水属性
-	WIND,		//風属性
-	SOIL,		//土属性
-	THUNDER,	//雷属性
-};
+
 
 class EnemyBase
 {

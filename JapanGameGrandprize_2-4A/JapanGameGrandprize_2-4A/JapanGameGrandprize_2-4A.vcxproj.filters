@@ -99,6 +99,15 @@
     <ClCompile Include="EnemySlime.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Mage.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBulletBase.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="MageBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -209,6 +218,18 @@
     <ClInclude Include="Undead.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Mage.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumEnemyType.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBulletBase.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="MageBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -246,6 +267,12 @@
     </Filter>
     <Filter Include="ソースファイル\Item">
       <UniqueIdentifier>{11f43874-be68-48cd-8a1b-1e881e5c319b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Enemy\EnemyBullet">
+      <UniqueIdentifier>{f8127659-92a5-4773-ba75-0449f2ff499c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Enemy\EnmeyBullet">
+      <UniqueIdentifier>{78421598-9ef7-41ab-b475-fcc2aa5c11e9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

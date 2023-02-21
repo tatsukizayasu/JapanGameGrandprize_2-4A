@@ -47,5 +47,5 @@ void Torrent::Draw() const
 //-----------------------------------
 TORRENT_STATE Torrent::GetState() const
 {
-
+	return state;
 }
