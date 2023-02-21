@@ -64,5 +64,10 @@ public:
 	/// <returns>ベクター型(MapChipオブジェクト型)：MapChip</returns>	
 	std::vector<MapChip*> GetMapChip() { return mapchip; };
 
+	/// <summary>
+	/// マップチップ座標のGetter
+	/// </summary>
+	/// <returns>POINT型(構造体型)</returns>	
 	POINT GetCollision_Chip() { POINT w = collision_chip;  collision_chip = { 0, 0 };  return w; }
+
 };
