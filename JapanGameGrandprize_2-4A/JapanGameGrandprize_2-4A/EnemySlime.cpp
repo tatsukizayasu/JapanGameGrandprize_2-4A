@@ -13,6 +13,8 @@ EnemySlime::EnemySlime()
 
 	location.x = 1100;
 	location.y = 494;
+
+
 	area.height = 40;
 	area.width = 40;
 
@@ -40,18 +42,15 @@ EnemySlime::EnemySlime(float x, float y, float height, float width)
 
 void EnemySlime::Update()
 {
-	if (CheckHp())state = SLIME_STATE::DEATH;
-
 	switch (state)
 	{
 	case SLIME_STATE::IDOL:
 		static int idol_time;
-		if (idol_time++ >= 20)
+		if (idol_time++ >= 50)
 		{
 			idol_time = 0;
 			state = SLIME_STATE::ATTACK;
 		}
-
 		break;
 
 	case SLIME_STATE::MOVE:
@@ -65,12 +64,12 @@ void EnemySlime::Update()
 		Attack();
 		break;
 
-	case SLIME_STATE::BOUNCE:
-		Attack();
+	case SLIME_STATE::KNOCKBACK:
+		KnockBack();
 		break;
 
 	case SLIME_STATE::DEATH:
-		//DropItem(*type, 0, 2).
+
 
 		break;
 	default:
@@ -92,13 +91,25 @@ void EnemySlime::Draw()const
 
 void EnemySlime::HitPlayer(BoxCollider* boxcollider)
 {
-	if (boxcollider->HitBox(new EnemySlime(location.x - CameraWork::GetCamera().x,location.y,area.height, area.width)))
+	if (boxcollider->HitBox(new EnemySlime(location.x - CameraWork::GetCamera().x,location.y,area.height, area.width)) && hp > 0)
 	{
-		if (state == SLIME_STATE::ATTACK)
+		if (hp <= 0)
+		{
+			if(state == SLIME_STATE::IDOL || state == SLIME_STATE::MOVE)jump_distance.y = 5;  //ƒAƒCƒhƒ‹ó‘Ô
+			//else if()
+
+
+			state = SLIME_STATE::KNOCKBACK;
+			
+		}
+
+		else if (state == SLIME_STATE::ATTACK)
 		{
 			jump_distance.y = 0;
-			state = SLIME_STATE::BOUNCE;
+			state = SLIME_STATE::KNOCKBACK;
 		}
+
+
 	}
 }
 
@@ -124,15 +135,24 @@ void EnemySlime::AttackJudgement(BoxCollider* boxcollider)
 
 void EnemySlime::Attack()
 {
-	int bounce_direction = 1;
-	if (state == SLIME_STATE::BOUNCE)bounce_direction = -1;
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
-	location.x += (ATTACK_SPEED * (direction * bounce_direction));
+	location.x += (ATTACK_SPEED * (direction));
 	if (location.y >= 490)
 	{
-		jump_distance.y = ATTACK_DISTANCE_Y;
 		state = SLIME_STATE::MOVE;
+	}
+}
+
+void EnemySlime::KnockBack()
+{
+	location.y -= (jump_distance.y / 3);
+	jump_distance.y -= 1;
+	location.x += (ATTACK_SPEED * (direction * -1));
+	if (location.y >= 490)
+	{
+		state = SLIME_STATE::MOVE;
+		if (CheckHp())state = SLIME_STATE::DEATH;
 	}
 }
 

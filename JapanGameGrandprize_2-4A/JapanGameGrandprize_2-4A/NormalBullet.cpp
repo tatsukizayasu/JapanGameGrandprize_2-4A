@@ -1,4 +1,5 @@
 #include "NormalBullet.h"
+#include "CameraWork.h"
 #include "Define.h"
 
 //-----------------------------------
@@ -9,6 +10,7 @@ NormalBullet::NormalBullet()
 	location.x = 0.0;
 	location.y = 0.0;
 	efect_count = 0;
+	scrool_x = 0.0;
 	delete_flg = false;
 	efect_end = false;
 
@@ -24,11 +26,16 @@ NormalBullet::NormalBullet()
 //-----------------------------------//
 // コンストラクタ					 //
 //-----------------------------------//
-NormalBullet::NormalBullet(float player_x, float player_y)
+NormalBullet::NormalBullet(float player_x, float player_y,ATTRIBUTE attribute)
 {
 	delete_flg = false;
-	location.x = player_x;
+	scrool_x = CameraWork::GetCamera().x;
+	location.x = player_x - scrool_x;
 	location.y = player_y;
+	this->attribute = attribute;
+	damage = 10;
+	debuff_time = 0;
+
 
 	efect_count = 0;
 	delete_flg = false;
@@ -40,11 +47,11 @@ NormalBullet::NormalBullet(float player_x, float player_y)
 		dot_location_y[i] = 0;
 	}
 
-	speed_x = 0;
-	speed_y[0] = 1.0;
-	speed_y[1] = 0.8;
-	speed_y[2] = 0.6;
-	speed_y[3] = 0.4;
+	speed_x = 1;
+	speed_y[0] = 10;
+	speed_y[1] = 8;
+	speed_y[2] = 6;
+	speed_y[3] = 4;
 	
 }
 
@@ -61,11 +68,9 @@ void NormalBullet::Draw() const
 	{
 		for (int i = 0; i < PIXEL_MAX; i++)
 		{
-			//DrawPixel(dot_location_x[i], dot_location_y[i], 0xeeeeee);
-			DrawCircle(dot_location_x[i], dot_location_y[i], 2, 0xeeeeee, TRUE);
+			DrawCircle(dot_location_x[i], dot_location_y[i], 2, 0x000000, TRUE);
 		}
 	}
-
 }
 
 //-----------------------------------
@@ -79,11 +84,19 @@ void NormalBullet::Update()
 	}
 	else
 	{
+		if (!delete_flg)
+		{
+			for (int i = 0; i < PIXEL_MAX; i++)
+			{
+				dot_location_x[i] = location.x;
+				dot_location_y[i] = location.y;
+			}
+		}
 		delete_flg = true;
 	}
 
 	if (delete_flg)
-	{
+	{		
 		NormalBulletEfect();
 	}
 }
@@ -91,19 +104,22 @@ void NormalBullet::Update()
 bool NormalBullet::NormalBulletEfect()
 {
 
-	if (delete_flg && !efect_end)
+	if (!efect_end)
 	{
-		if (++efect_count % 60 != 0)
+		if (++efect_count % 30 != 0)
 		{
 			for (int i = 0; i < PIXEL_MAX; i++)
 			{
 				dot_location_x[i] -= speed_x;
-				dot_location_y[i] -= speed_y[i];
+				dot_location_y[i] += speed_y[i];
 			}
 		}
 		else
 		{
+			location.x++;
+			location.y++;
 			efect_end = true;
+			return true;
 		}
 	}
 	return false;

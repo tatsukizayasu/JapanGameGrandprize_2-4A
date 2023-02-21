@@ -13,7 +13,6 @@ enum class GHOST_STATE
 	RIGHT_UPPER,  //右上に移動
 	PHYSICAL_ATTACK,       //物理攻撃
 	MAGIC_ATTACK, //魔法攻撃
-	DEATH,   //死亡
 };
 
 
@@ -50,5 +49,5 @@ public:
 	void GhostMove(Player* player);
 
 	//プレイヤーの弾丸との当たり判定
-	void HitBullet(Bullet* bullet);
+	void HitBullet(BulletBase* bullet);
 };
