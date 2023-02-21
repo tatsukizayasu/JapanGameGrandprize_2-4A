@@ -13,6 +13,8 @@ EnemySlime::EnemySlime()
 
 	location.x = 1100;
 	location.y = 494;
+
+
 	area.height = 40;
 	area.width = 40;
 
@@ -40,18 +42,15 @@ EnemySlime::EnemySlime(float x, float y, float height, float width)
 
 void EnemySlime::Update()
 {
-	if (CheckHp())state = SLIME_STATE::DEATH;
-
 	switch (state)
 	{
 	case SLIME_STATE::IDOL:
 		static int idol_time;
-		if (idol_time++ >= 20)
+		if (idol_time++ >= 50)
 		{
 			idol_time = 0;
 			state = SLIME_STATE::ATTACK;
 		}
-
 		break;
 
 	case SLIME_STATE::MOVE:
@@ -65,12 +64,12 @@ void EnemySlime::Update()
 		Attack();
 		break;
 
-	case SLIME_STATE::BOUNCE:
-		Attack();
+	case SLIME_STATE::KNOCKBACK:
+		KnockBack();
 		break;
 
 	case SLIME_STATE::DEATH:
-		//DropItem(*type, 0, 2).
+
 
 		break;
 	default:
@@ -80,29 +79,37 @@ void EnemySlime::Update()
 
 void EnemySlime::Draw()const
 {
-	DrawCircle(location.x, location.y, 20, color, 1, 1);
-	DrawCircle(location.x, location.y + 8, 7, 0x000000, 1, 1);
-	DrawCircle(location.x - 7, location.y - 6, 4, 0xffffff, 1, 1);
-	DrawCircle(location.x + 7, location.y - 6, 4, 0xffffff, 1, 1);
-	DrawCircle(location.x - 7 + (1 * direction), location.y - 6, 2, 0x000000, 1, 1);
-	DrawCircle(location.x + 7 + (1 * direction), location.y - 6, 2, 0x000000, 1, 1);
+	DrawCircle(location.x - CameraWork::GetCamera().x , location.y, 20, color, 1, 1);
+	DrawCircle(location.x - CameraWork::GetCamera().x, location.y + 8, 7, 0x000000, 1, 1);
+	DrawCircle(location.x - 7 - CameraWork::GetCamera().x, location.y - 6, 4, 0xffffff, 1, 1);
+	DrawCircle(location.x + 7 - CameraWork::GetCamera().x, location.y - 6, 4, 0xffffff, 1, 1);
+	DrawCircle(location.x - 7 + (1 * direction) - CameraWork::GetCamera().x, location.y - 6, 2, 0x000000, 1, 1);
+	DrawCircle(location.x + 7 + (1 * direction) - CameraWork::GetCamera().x, location.y - 6, 2, 0x000000, 1, 1);
 
-	DrawFormatString(0, 100, 0xffffff, "%f = player.y", location.y);
-
-	DrawBox(location.x - (area.width / 2), location.y - (area.height / 2), location.x - (area.width / 2) + area.width, location.y - (area.height / 2) + area.height, 0xffffff, 0);
+	DrawBox(location.x - (area.width / 2)-CameraWork::GetCamera().x, location.y - (area.height / 2), location.x - (area.width / 2) + area.width- CameraWork::GetCamera().x, location.y - (area.height / 2) + area.height, 0xffffff, 0);
 }
 
 void EnemySlime::HitPlayer(BoxCollider* boxcollider)
 {
-	if (HitBox(boxcollider))
+	if (boxcollider->HitBox(new EnemySlime(location.x - CameraWork::GetCamera().x,location.y,area.height, area.width)) && hp > 0)
 	{
-		//hp--;
+		if (hp <= 0)
+		{
+			if(state == SLIME_STATE::IDOL || state == SLIME_STATE::MOVE)jump_distance.y = 5;  //ƒAƒCƒhƒ‹ó‘Ô
+			//else if()
 
-		if (state == SLIME_STATE::ATTACK)
+
+			state = SLIME_STATE::KNOCKBACK;
+			
+		}
+
+		else if (state == SLIME_STATE::ATTACK)
 		{
 			jump_distance.y = 0;
-			state = SLIME_STATE::BOUNCE;
+			state = SLIME_STATE::KNOCKBACK;
 		}
+
+
 	}
 }
 
@@ -113,7 +120,7 @@ void EnemySlime::HitStage()
 
 void EnemySlime::AttackJudgement(BoxCollider* boxcollider)
 {
-	if (boxcollider->HitBox(new EnemySlime(location.x + (60 * direction), location.y - 20, 80, 80)))
+	if (boxcollider->HitBox(new EnemySlime(location.x + (60 * direction) - CameraWork::GetCamera().x, location.y - 20, 80, 80)))
 	{
 		color = GetColor(255, 0, 0);
 
@@ -128,15 +135,24 @@ void EnemySlime::AttackJudgement(BoxCollider* boxcollider)
 
 void EnemySlime::Attack()
 {
-	int bounce_direction = 1;
-	if (state == SLIME_STATE::BOUNCE)bounce_direction = -1;
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
-	location.x += (ATTACK_SPEED * (direction * bounce_direction));
+	location.x += (ATTACK_SPEED * (direction));
 	if (location.y >= 490)
 	{
-		jump_distance.y = ATTACK_DISTANCE_Y;
 		state = SLIME_STATE::MOVE;
+	}
+}
+
+void EnemySlime::KnockBack()
+{
+	location.y -= (jump_distance.y / 3);
+	jump_distance.y -= 1;
+	location.x += (ATTACK_SPEED * (direction * -1));
+	if (location.y >= 490)
+	{
+		state = SLIME_STATE::MOVE;
+		if (CheckHp())state = SLIME_STATE::DEATH;
 	}
 }
 
