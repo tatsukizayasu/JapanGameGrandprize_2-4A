@@ -7,12 +7,12 @@ string Directory::current_dir;
 
 bool Directory::Open(const char* path)
 {
-	bool isSuccess = false;
+	bool is_success = false;
 
 	current_dir += path;
 
-	if (_chdir(current_dir.c_str()) != -1)isSuccess = true;
+	if (_chdir(current_dir.c_str()) != -1)is_success = true;
 
 	Update();
-	return isSuccess;
+	return is_success;
 }
