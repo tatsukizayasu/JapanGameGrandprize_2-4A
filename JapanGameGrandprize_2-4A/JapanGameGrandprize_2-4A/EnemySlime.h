@@ -50,5 +50,5 @@ public:
 	void Attack();
 	void KnockBack();
 
-	virtual void HitBullet(Bullet* bullet)override {};
+	virtual void HitBullet(BulletBase* bullet)override {};
 };

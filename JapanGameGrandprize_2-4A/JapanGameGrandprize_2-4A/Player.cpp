@@ -22,6 +22,7 @@ Player::Player()
 	area.height = image_size_y;
 	bullet_count = 0;
 	count = 0;
+	damage_count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
@@ -30,18 +31,19 @@ Player::Player()
 	gravity_down = 0.0;
 	for (int i = 0; i < 30; i++)
 	{
-		bullet = new Bullet * [30];
+		bullet = new BulletBase * [30];
 		bullet[i] = nullptr;
 	}
 
+	damage_flg = false;
 	i = 0;
 
-	attribute[0] = Attribute::normal;
-	attribute[1] = Attribute::explosion;
-	attribute[2] = Attribute::melt;
-	attribute[3] = Attribute::poison;
-	attribute[4] = Attribute::paralysis;
-	attribute[5] = Attribute::heal;
+	attribute[0] = ATTRIBUTE::normal;
+	attribute[1] = ATTRIBUTE::explosion;
+	attribute[2] = ATTRIBUTE::melt;
+	attribute[3] = ATTRIBUTE::poison;
+	attribute[4] = ATTRIBUTE::paralysis;
+	attribute[5] = ATTRIBUTE::heal;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -75,6 +77,10 @@ Player::Player()
 //-----------------------------------
 Player::Player(Stage* stage)
 {
+
+	area.height = 80;
+	area.width = 40;
+
 	this->stage = stage;
 	location.x = 0;
 	location.y = 420;
@@ -84,6 +90,7 @@ Player::Player(Stage* stage)
 	area.width = image_size_x;
 	area.height = image_size_y;
 	bullet_count = 0;
+	damage_count = 0;
 	count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
@@ -91,20 +98,22 @@ Player::Player(Stage* stage)
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
-	bullet = new Bullet * [30];
+	bullet = new BulletBase * [30];
 	for (int i = 0; i < 30; i++)
 	{
 		bullet[i] = nullptr;
 	}
 
+	damage_flg = false;
+	pouch_open = false;
 	i = 0;
 
-	attribute[0] = Attribute::normal;
-	attribute[1] = Attribute::explosion;
-	attribute[2] = Attribute::melt;
-	attribute[3] = Attribute::poison;
-	attribute[4] = Attribute::paralysis;
-	attribute[5] = Attribute::heal;
+	attribute[0] = ATTRIBUTE::normal;
+	attribute[1] = ATTRIBUTE::explosion;
+	attribute[2] = ATTRIBUTE::melt;
+	attribute[3] = ATTRIBUTE::poison;
+	attribute[4] = ATTRIBUTE::paralysis;
+	attribute[5] = ATTRIBUTE::heal;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -154,9 +163,11 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
+
 	//DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
 
 	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
+
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -171,6 +182,26 @@ void Player::Draw() const
 	//	beam->Draw();
 	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
+
+
+	//ダメージを受けた時点滅する
+	if (damage_flg)
+	{
+		if (damage_count < 5)
+		{
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
+			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,255);
+		}
+		else if (10 < damage_count < 10)
+		{
+			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+		}
+	}
+	else
+	{
+		DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+	}
 
 #ifdef _DEBUG
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
@@ -220,6 +251,16 @@ void Player::Update()
 
 	count++;
 
+	damage_count++;
+	if (damage_count >= 10)
+	{
+		damage_count = 0;
+	}
+		
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
+	{
+
+	}
 
 	//スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000)
@@ -284,7 +325,7 @@ void Player::Update()
 	}
 
 	//弾の属性の切り替え処理
-	Element_Update();
+	ElementUpdate();
 	
 }
 
@@ -485,7 +526,7 @@ void Player::Shoot_Gun()
 		{
 			if (bullet[i] == NULL)
 			{
-				bullet[i] = new NormalBullet(location.x, location.y);
+				bullet[i] = new NormalBullet(location.x, location.y,attribute[display_attribute]);
 			}
 		}
 		break;
@@ -523,7 +564,7 @@ void Player::SortBullet(int delete_bullet)
 //-----------------------------------
 //属性を変更
 //-----------------------------------
-void Player::Element_Update()
+void Player::ElementUpdate()
 {
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
@@ -557,6 +598,7 @@ void Player::Element_Update()
 //-----------------------------------
 void Player::Hp_Damage(int damage_value)
 {
+	damage_flg = true;
 	hp -= damage_value;
 	if (hp <= 0)
 	{
@@ -565,7 +607,10 @@ void Player::Hp_Damage(int damage_value)
 	}
 }
 
-//-----------------------------------
+////敵からダメージを受けた時
+//void Player::Being_Attacked(EnemyBase* enemy_base)
+//{}
+
 //回復
 //-----------------------------------
 void Player::Hp_Heal(int heal_value)
