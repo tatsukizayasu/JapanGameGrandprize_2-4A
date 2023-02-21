@@ -21,6 +21,17 @@
 //攻撃スピード
 #define ATTACK_SPEED 4.5
 
+//ドロップ量(最小)
+#define GHOST_MIN_DROP 0u
+
+//ドロップ量(最大)
+#define GHOST_MAX_DROP 4u
+
+//ドロップする種類数
+#define GHOST_DROP 3
+
+
+
 //今日やること
 //当たり判定、アイテム生成、接近攻撃あれでいいのか
 
@@ -47,6 +58,21 @@ EnemyGhost::EnemyGhost()
 	setting_bullet = false;
 	action_type = GHOST_STATE::NORMAL;
 	kind = ENEMY_KIND::GHOST;
+
+	//ドロップアイテムの設定
+	drop_element = new ElementItem * [GHOST_DROP];
+	drop_type_volume = GHOST_DROP;
+
+	int volume = 0;
+	for (int i = 0; i < GHOST_DROP; i++)
+	{
+		volume = GHOST_MIN_DROP + GetRand(GHOST_MAX_DROP);
+		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+		drop_element[i]->SetVolume(volume);
+		drop_volume += volume;
+	}
+
+
 }
 
 
@@ -112,6 +138,7 @@ void EnemyGhost::Draw()const
 	//スクロールに合わせて描画
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
+
 
 	DrawFormatString(100, 100, GetColor(255, 0, 0), "%d", action_type);
 

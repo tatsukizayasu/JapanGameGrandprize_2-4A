@@ -113,12 +113,12 @@ void GameMain::EnemyUpdate()
 			EnemyGhost* ghost;
 			ghost = dynamic_cast<EnemyGhost*>(enemy);
 			ghost->GhostMove(player);
-			/*if (ghost->GetCanDelete())
+			if (ghost->GetCanDelete())
 			{
 				item_controller->SpawnItem(ghost, ghost->GetLocation());
 				delete ghost;
 				enemy = nullptr;
-			}*/
+			}
 			break;
 		}
 		case ENEMY_KIND::WYVERN:	//ƒƒCƒo[ƒ“
