@@ -6,7 +6,7 @@
 
 #define PIXEL_MAX 4
 
-class NormalBullet : public BulletBase, public SphereCollider
+class NormalBullet : public BulletBase
 {
 private:
 	float speed_x, speed_y[PIXEL_MAX];

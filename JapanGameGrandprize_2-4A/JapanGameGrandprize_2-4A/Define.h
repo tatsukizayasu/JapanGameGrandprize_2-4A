@@ -24,12 +24,12 @@ struct Compound
 
 enum class ATTRIBUTE
 {
-	normal = 0,
-	explosion,
-	melt,
-	poison,
-	paralysis,
-	heal
+	NORMAL = 0,
+	EXPLOSION,
+	MELT,
+	POISON,
+	PARALYSIS,
+	HEAL
 };
 
 //íÜêSç¿ïW

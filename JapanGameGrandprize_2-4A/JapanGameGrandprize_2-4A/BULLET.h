@@ -2,7 +2,7 @@
 #include "EfectExplosion.h"
 #include "SphereCollider.h"
 #include "define.h"
-class BulletBase
+class BulletBase : public SphereCollider
 {
 protected:
 	float damage;          //’e‚Ìƒ_ƒ[ƒW
