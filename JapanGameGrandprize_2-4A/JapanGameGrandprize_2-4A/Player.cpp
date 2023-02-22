@@ -4,6 +4,7 @@
 #include "PadInput.h"
 #include "CameraWork.h"
 #include "Item.h"
+#include <iostream>
 
 //プレイヤーが持っている元素の種類
 #define PLAYER_ELEMENT 7
@@ -45,10 +46,13 @@ Player::Player()
 	attribute[4] = ATTRIBUTE::paralysis;
 	attribute[5] = ATTRIBUTE::heal;
 
-	for (int i = 0; i < 6; i++)
-	{
-		attribute_c[i] = i;
-	}
+	attribute_c[0] = "NORMAL";
+	attribute_c[1] = "EXPLOSION";
+	attribute_c[2] = "MELT";
+	attribute_c[3] = "POISON";
+	attribute_c[4] = "PARALYSIS";
+	attribute_c[5] = "HEAL";
+
 
 	player_state = PLAYER_STATE::STOP;
 
@@ -68,6 +72,8 @@ Player::Player()
 	{
 		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
 	}
+
+	pouch = nullptr;
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
@@ -111,6 +117,14 @@ Player::Player(Stage* stage)
 	attribute[4] = ATTRIBUTE::paralysis;
 	attribute[5] = ATTRIBUTE::heal;
 
+	attribute_c[0] = ("NORMAL");
+	attribute_c[1] = ("EXPLOSION");
+	attribute_c[2] = ("MELT");
+	attribute_c[3] = ("POISON");
+	attribute_c[4] = ("PARALYSIS");
+	attribute_c[5] = ("HEAL");
+
+
 	for (int i = 0; i < 6; i++)
 	{
 		attribute_c[i] = i;
@@ -123,6 +137,8 @@ Player::Player(Stage* stage)
 	hp = 100;
 
 	beam = nullptr;
+
+	pouch = new Pouch();
 
 	stage = new Stage();
 
@@ -213,25 +229,31 @@ void Player::Draw() const
 	//上の選択肢
 	if (display_attribute - 1 < 0)
 	{
-		DrawFormatString(1000, 10, 0x778877, "%d", attribute_c[display_attribute + 5]);
+		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute + 5]);
+		cout << attribute_c[display_attribute + 5] << endl;
 	}
 	else
 	{
-		DrawFormatString(1000, 10, 0x778877, "%d", attribute_c[display_attribute - 1]);
+		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute - 1]);
 	}
 	//下の選択肢
 	if (display_attribute + 1 > 5)
 	{
-		DrawFormatString(1000, 90, 0x778877, "%d", attribute_c[display_attribute - 5]);
+		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute - 5]);
 	}
 	else
 	{
-		DrawFormatString(1000, 90, 0x778877, "%d", attribute_c[display_attribute + 1]);
+		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute + 1]);
 	}
 	//現在の選択肢
-	DrawFormatString(1000, 50, 0x778877, "%d", attribute_c[display_attribute]);
+	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
+
+	if (pouch_open)
+	{
+		pouch->Draw();
+	}
 }
 
 //-----------------------------------
@@ -253,9 +275,18 @@ void Player::Update()
 		damage_count = 0;
 	}
 		
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
+		pouch_open = true;
+	}
+	else if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
+	{
+		pouch_open = false;
+	}
 
+	if (pouch_open)
+	{
+		pouch->Update();
 	}
 
 	//スティック右入力
