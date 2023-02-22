@@ -30,21 +30,21 @@ Player::Player()
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		bullet = new BulletBase * [30];
+		bullet = new BulletBase * [BULLET_MAX];
 		bullet[i] = nullptr;
 	}
 
 	damage_flg = false;
 	i = 0;
 
-	attribute[0] = ATTRIBUTE::normal;
-	attribute[1] = ATTRIBUTE::explosion;
-	attribute[2] = ATTRIBUTE::melt;
-	attribute[3] = ATTRIBUTE::poison;
-	attribute[4] = ATTRIBUTE::paralysis;
-	attribute[5] = ATTRIBUTE::heal;
+	attribute[0] = ATTRIBUTE::NORMAL;
+	attribute[1] = ATTRIBUTE::EXPLOSION;
+	attribute[2] = ATTRIBUTE::MELT;
+	attribute[3] = ATTRIBUTE::POISON;
+	attribute[4] = ATTRIBUTE::PARALYSIS;
+	attribute[5] = ATTRIBUTE::HEAL;
 
 	attribute_c[0] = "NORMAL";
 	attribute_c[1] = "EXPLOSION";
@@ -104,8 +104,8 @@ Player::Player(Stage* stage)
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
-	bullet = new BulletBase * [30];
-	for (int i = 0; i < 30; i++)
+	bullet = new BulletBase * [BULLET_MAX];
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet[i] = nullptr;
 	}
@@ -114,12 +114,12 @@ Player::Player(Stage* stage)
 	pouch_open = false;
 	i = 0;
 
-	attribute[0] = ATTRIBUTE::normal;
-	attribute[1] = ATTRIBUTE::explosion;
-	attribute[2] = ATTRIBUTE::melt;
-	attribute[3] = ATTRIBUTE::poison;
-	attribute[4] = ATTRIBUTE::paralysis;
-	attribute[5] = ATTRIBUTE::heal;
+	attribute[0] = ATTRIBUTE::NORMAL;
+	attribute[1] = ATTRIBUTE::EXPLOSION;
+	attribute[2] = ATTRIBUTE::MELT;
+	attribute[3] = ATTRIBUTE::POISON;
+	attribute[4] = ATTRIBUTE::PARALYSIS;
+	attribute[5] = ATTRIBUTE::HEAL;
 
 	attribute_c[0] = ("NORMAL");
 	attribute_c[1] = ("EXPLOSION");
@@ -163,7 +163,7 @@ Player::Player(Stage* stage)
 //-----------------------------------
 Player::~Player()
 {
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		//delete bullet[i];
 	}
@@ -546,24 +546,24 @@ void Player::NotJump()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
-	switch (display_attribute)
+	for (i = 0; i < bullet_count; i++)
 	{
-	case 0:
-		for (i = 0; i < bullet_count; i++)
+		if (bullet[i] == nullptr)
 		{
-			if (bullet[i] == NULL)
+			switch (display_attribute)
 			{
-				bullet[i] = new NormalBullet(location.x, location.y,attribute[display_attribute]);
+			case 0:
+				bullet[i] = new NormalBullet(location.x, location.y, attribute[display_attribute]);
+				break;
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			default:
+				break;
 			}
 		}
-		break;
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	default:
-		break;
 	}
 
 }

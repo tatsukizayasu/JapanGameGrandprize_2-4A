@@ -12,6 +12,7 @@
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100
+#define BULLET_MAX 30
 
 enum class PLAYER_STATE
 {
