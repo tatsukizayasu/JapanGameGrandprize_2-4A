@@ -464,7 +464,7 @@ void Player::Jump()
 {
 	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;
-	jump_power = jump - GRAVITY;
+
 
 	gravity_down = 0.0;
 
@@ -472,9 +472,9 @@ void Player::Jump()
 	fuel -= 0.25;
 
 
-	if (jump_power > 10)
+	if (jump > 10)
 	{
-		jump_power = 10.0;
+		jump = 10.0;
 	}
 
 	if (fuel < 0)
@@ -485,27 +485,63 @@ void Player::Jump()
 
 	if (location.y > 40)
 	{
-		location.y -= jump_power;
+		location.y -= jump;
 	}
 	else
 	{
 		location.y = 40;
+	}
+
+	if (location.y > 400)
+	{
+		location.y = 400;
+		jump = 0.0;
 	}
 }
 
 //ƒWƒƒƒ“ƒv‚µ‚Ä‚È‚¢
 void Player::NotJump()
 {
-	if (location.y > 0)
+	player_state = PLAYER_STATE::DOWN;
+	if (location.y < 400)
 	{
-		location.y -= jump_power;
+		location.y -= jump;
 	}
 	else
 	{
+		player_state = PLAYER_STATE::STOP;
+	}
+
+	if(location.y < 40)
+	{
+		jump = 0;
 		location.y = 40;
 	}
 
+	jump -= 0.25;
 
+	if (jump < -10)
+	{
+		jump = -10;
+	}
+	
+	if (not_jet_count++ >= 120)
+	{
+		jump = 0;
+		if (fuel < 100)
+		{
+			fuel += 2.5;
+		}
+		else
+		{
+			fuel = 100;
+		}
+	}
+
+	if (not_jet_count >= 120)
+	{
+		not_jet_count = 120;
+	}
 
 	/*jump_power -= 0.5;
 	if (location.y > 0)
