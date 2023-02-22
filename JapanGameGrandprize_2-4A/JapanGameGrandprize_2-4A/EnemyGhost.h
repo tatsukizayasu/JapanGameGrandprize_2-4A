@@ -11,7 +11,7 @@ enum class GHOST_STATE
 	LEFT_UPPER,   //左上に移動
 	RIGHT_LOWER,  //右下に移動
 	RIGHT_UPPER,  //右上に移動
-	PHYSICAL_ATTACK,       //物理攻撃
+	PHYSICAL_ATTACK, //物理攻撃
 	MAGIC_ATTACK, //魔法攻撃
 };
 
@@ -47,7 +47,7 @@ public:
 
 	//ゴーストの動きを決める
 	void GhostMove(Player* player);
-
 	//プレイヤーの弾丸との当たり判定
-	void HitBullet(BulletBase* bullet);
+	void HitBullet(BulletBase* bulletbase);
+
 };
