@@ -7,13 +7,19 @@
 #define GHOST_SIZE_Y 60
 
 //プレイヤー発見距離
-#define DETECTION_DISTANCE 500
+#define GHOST_DETECTION_DISTANCE 500
 
 //物理攻撃範囲
-#define ATTACK_RANGE 15
+#define GHOST_ATTACK_RANGE 15
 
 //魔法攻撃範囲	
-#define ATTACK_MAGIC 400
+#define GHOST_ATTACK_MAGIC 400
+
+//魔法攻撃した時の硬直時間
+#define GHOST_MAGIC_STANDBY 60
+
+//近接攻撃した時の硬直時間
+#define GHOST_MAGIC_PHYSICAL 300
 
 //移動スピード
 #define GHOST_SPEED 1.5
@@ -38,35 +44,80 @@ EnemyGhost::EnemyGhost()
 	area.height = 40;
 	area.width = 40;
 	standby_time = 0;
-	player_x = 0;
-	player_y = 0;
+	standby_count = 0;
 	physical_attack = false;
 	magic_attack = false;
-	setting = false;
 	kind = ENEMY_KIND::GHOST;
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WIND;
 	attack_state = GHOST_ATTACK::NONE;
+	state = ENEMY_STATE::IDOL;
+	action_type = GHOST_STATE::NORMAL;
+	bullet = nullptr;
 }
 
+//-----------------------------------
+//デストラクタ
+//-----------------------------------
+EnemyGhost::~EnemyGhost()
+{
+	delete bullet;
+}
 
 //-----------------------------------
 // 描画以外の処理
 //-----------------------------------
 void EnemyGhost::Update()
 {
+	float screen_x; //画面スクロールを考慮したX座標
+
+	screen_x = location.x - CameraWork::GetCamera().x;
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
+		if ((-area.width < screen_x) && (screen_x < SCREEN_WIDTH + area.width))
+		{
+			state = ENEMY_STATE::MOVE;
+		}
 		break;
 	case ENEMY_STATE::MOVE:
 		break;
 	case ENEMY_STATE::ATTACK:
+		switch (attack_state)
+		{
+		case GHOST_ATTACK::PHYSICAL_ATTACK:
+			standby_count++;
+			if (standby_count < GHOST_MAGIC_PHYSICAL) //硬直時間
+			{
+				physical_attack = true;
+				standby_time = 0;
+				attack_state = GHOST_ATTACK::NONE;
+			}
+			break;
+		case GHOST_ATTACK::MAGIC_ATTACK:
+			standby_count++;
+			if (standby_time < GHOST_MAGIC_STANDBY) //硬直時間
+			{
+				magic_attack = true;
+				standby_time = 0;
+				attack_state = GHOST_ATTACK::NONE;
+			}
+			break;
+		case GHOST_ATTACK::NONE:
+			break;
+		default:
+			break;
+		}
 		break;
 	case ENEMY_STATE::DEATH:
 		break;
 	default:
 		break;
+	}
+
+	if (bullet != nullptr)
+	{
+		bullet->Update();
 	}
 }
 
@@ -79,6 +130,8 @@ void EnemyGhost::Idol()
 //移動
 void EnemyGhost::Move(const Location player_location)
 {
+	GhostMove(player_location);
+
 	switch (action_type)
 	{
 	case GHOST_STATE::NORMAL:  //通常移動
@@ -123,27 +176,19 @@ AttackResource EnemyGhost::Attack(const BoxCollider* collider)
 			ret.type_count = 1;
 		}
 
-		if (++standby_time % 300 == 0) //硬直時間
-		{
-			magic_attack = true;
-			standby_time = 0;
-		}
+	
 		break;
 	case GHOST_ATTACK::MAGIC_ATTACK:
-		if (bullet->HitBox(collider))
+		if (bullet != nullptr)
 		{
-			ENEMY_TYPE attack_type[1] = { bullet->GetType() };
-			ret.damage = bullet->GetDamage();
-			ret.type = attack_type;
-			ret.type_count = 1;
+			if (bullet->HitBox(collider))
+			{
+				ENEMY_TYPE attack_type[1] = { bullet->GetType() };
+				ret.damage = bullet->GetDamage();
+				ret.type = attack_type;
+				ret.type_count = 1;
+			}
 		}
-
-		if (++standby_time % 60 == 0) //硬直時間
-		{
-			physical_attack = true;
-			standby_time = 0;
-		}
-
 		break;
 	case GHOST_ATTACK::NONE:
 		break;
@@ -155,6 +200,14 @@ AttackResource EnemyGhost::Attack(const BoxCollider* collider)
 }
 
 //-----------------------------------
+//死亡
+//-----------------------------------
+void EnemyGhost::Death()
+{
+
+}
+
+//-----------------------------------
 // 描画
 //-----------------------------------
 void EnemyGhost::Draw()const
@@ -163,17 +216,23 @@ void EnemyGhost::Draw()const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	if (attack_state == GHOST_ATTACK::MAGIC_ATTACK) //魔法攻撃のモーション
+	switch (attack_state)
 	{
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(128, 0, 0), TRUE);
-	}
-	else if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK) //接近攻撃のモーション
-	{
+	case GHOST_ATTACK::PHYSICAL_ATTACK:
 		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
-	}
-	else
-	{
+		break;
+	case GHOST_ATTACK::MAGIC_ATTACK:
 		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		if (bullet != nullptr)
+		{
+			bullet->Draw();
+		}
+		break;
+	case GHOST_ATTACK::NONE:
+		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -181,18 +240,18 @@ void EnemyGhost::Draw()const
 //-----------------------------------
 // ゴーストの動き
 //-----------------------------------
-void EnemyGhost::GhostMove(Player* player)
+void EnemyGhost::GhostMove(const Location player_location)
 {
 	int range; //プレイヤーとの距離	
 	
-	range = location.x - player->GetLocation().x;
+	range = location.x - player_location.x;
 
 	//プレイヤーが発見距離内にいたら
-	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE)
+	if (range <= GHOST_DETECTION_DISTANCE && range >= -GHOST_DETECTION_DISTANCE)
 	{
-		if (range > player->GetLocation().x) //左に移動
+		if (range > player_location.x) //左に移動
 		{
-			if (player->GetLocation().y > location.y)
+			if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
 			}
@@ -203,7 +262,7 @@ void EnemyGhost::GhostMove(Player* player)
 		}
 		else //右に移動
 		{
-			if (player->GetLocation().y > location.y)
+			if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
 			}
@@ -219,30 +278,24 @@ void EnemyGhost::GhostMove(Player* player)
 	}
 
 	//攻撃範囲内にいる場合
-	if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE && physical_attack == false)
+	if ((range <= GHOST_ATTACK_RANGE) && (range >= -GHOST_ATTACK_RANGE) && (!physical_attack))
 	{
-		action_type = GHOST_STATE::PHYSICAL_ATTACK;
+		attack_state = GHOST_ATTACK::PHYSICAL_ATTACK;
 	}
-	else if (range <= ATTACK_MAGIC && range >= -ATTACK_MAGIC && magic_attack == false)
+	else if ((range <= GHOST_ATTACK_MAGIC) && (range >= -GHOST_ATTACK_MAGIC) && (!magic_attack))
 	{
-		player_x = player->GetLocation().x;
-		player_y = player->GetLocation().y;
-		action_type = GHOST_STATE::MAGIC_ATTACK;
+		attack_state = GHOST_ATTACK::MAGIC_ATTACK;
+		if (bullet == nullptr)
+		{
+			bullet = new GhostBullet(location, player_location);
+		}
 	}
-
-	if (HitBox(player) != false)
-	{
-		action_type = GHOST_STATE::PHYSICAL_ATTACK;
-	}
-
-
-
 }
 
 //-----------------------------------
 // プレイヤーの弾丸との当たり判定
 //-----------------------------------
-void EnemyGhost::HitBullet(BulletBase* bullet)
+void EnemyGhost::HitBullet(const BulletBase* bullet)
 {
 
 }

@@ -44,7 +44,5 @@ public:
     //•`‰æ
     void Draw() const override;
 
-    //ó‘Ô‚Ìæ“¾
-    ENEMY_STATE GetState() const;
 };
 

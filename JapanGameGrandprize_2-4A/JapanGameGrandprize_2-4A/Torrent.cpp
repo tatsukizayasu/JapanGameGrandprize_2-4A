@@ -27,6 +27,22 @@ void Torrent::Update()
 }
 
 //-----------------------------------
+//アイドル状態
+//-----------------------------------
+void Torrent::Idol()
+{
+
+}
+
+//-----------------------------------
+//移動
+//-----------------------------------
+void Torrent::Move(const Location player_location)
+{
+
+}
+
+//-----------------------------------
 //攻撃
 //-----------------------------------
 AttackResource Torrent::Attack(const BoxCollider* collider)
@@ -34,6 +50,14 @@ AttackResource Torrent::Attack(const BoxCollider* collider)
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	return ret;
+}
+
+//-----------------------------------
+//死亡
+//-----------------------------------
+void Torrent::Death()
+{
+
 }
 
 //-----------------------------------

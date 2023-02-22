@@ -1,6 +1,6 @@
 #include "GhostBullet.h"
 
-#define GHOST_BULLET_SPEED 2
+#define GHOST_BULLET_SPEED 10
 #define GHOST_BULLET_DAMAGE 10
 
 //-----------------------------------
@@ -11,6 +11,7 @@ GhostBullet::GhostBullet( Location spawn_location, Location player_location)
 	type = ENEMY_TYPE::WIND;
 	location = spawn_location;
 
+	speed = GHOST_BULLET_SPEED;
 	image = 0;
 	damage = GHOST_BULLET_DAMAGE;
 	float radian; //Šp“x
@@ -41,5 +42,5 @@ void GhostBullet::Update()
 //-----------------------------------
 void GhostBullet::Draw() const
 {
-	DrawCircle(location.x, location.y, 0xffffff, TRUE);
+	DrawCircle(location.x, location.y,3, 0xffffff, TRUE);
 }

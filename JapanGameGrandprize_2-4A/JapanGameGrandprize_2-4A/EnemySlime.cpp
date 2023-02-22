@@ -54,7 +54,6 @@ void EnemySlime::Update()
 		break;
 
 	case ENEMY_STATE::ATTACK:
-		Attack();
 		break;
 	case ENEMY_STATE::DEATH:
 		break;
@@ -94,7 +93,6 @@ void EnemySlime::Idol()
 //-----------------------------------
 void EnemySlime::Move(const Location player_location)
 {
-
 	if (location.x >= 1260)
 	{
 		direction = DIRECTION::LEFT;
@@ -106,6 +104,18 @@ void EnemySlime::Move(const Location player_location)
 		speed = SLIME_SPEED;
 	}
 	location.x += speed;
+
+	float distance; //離れている距離
+
+	//プレイヤーとの距離の計算
+	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
+
+	if (distance < 60)
+	{
+		state = ENEMY_STATE::ATTACK;
+		jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
+		color = GetColor(255, 0, 0);
+	}
 }
 
 
@@ -135,8 +145,7 @@ AttackResource EnemySlime::Attack(const BoxCollider* collider)
 		ret.damage = SLIME_ATTACK_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;
-		jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
-		color = GetColor(255, 0, 0);
+		
 		KnockBack();
 	}
 	else

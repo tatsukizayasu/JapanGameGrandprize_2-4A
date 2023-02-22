@@ -33,7 +33,7 @@ Undead::Undead()
 {
 	/*‰Šú‰»*/
 	can_delete = false;
-	hp = 0;
+	hp = 100;
 	damage = 0;
 	attack_interval = 0;
 	speed = UNDEAD_SPEED;
@@ -101,8 +101,6 @@ void Undead::Update()
 		}
 		break;
 	case ENEMY_STATE::MOVE:
-		
-
 		if ((screen_x < -area.width) || (SCREEN_WIDTH + area.width < screen_x))
 		{
 			state = ENEMY_STATE::IDOL;
@@ -210,7 +208,7 @@ AttackResource Undead::Attack(const BoxCollider* collider)
 //-----------------------------------
 //€–S
 //-----------------------------------
-void Death()
+void Undead::Death()
 {
 
 }
@@ -256,12 +254,4 @@ void Undead::Draw() const
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
 	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
-}
-
-//-----------------------------------
-//ó‘Ô‚Ìæ“¾
-//-----------------------------------
-ENEMY_STATE Undead::GetState() const
-{
-	return state;
 }
