@@ -33,7 +33,7 @@
 
 
 //今日やること
-//当たり判定、アイテム生成、接近攻撃あれでいいのか
+//当たり判定、接近攻撃あれでいいのか
 
 //-----------------------------------
 // コンストラクタ
@@ -126,7 +126,6 @@ void EnemyGhost::Update()
 		can_delete = true;
 	}
 
-	can_delete = true;
 
 }
 
@@ -157,7 +156,7 @@ void EnemyGhost::Draw()const
 
 	if (magic_attack == true)
 	{
-		DrawCircle(bullet_x, bullet_y, 5, GetColor(128, 0, 0));
+		DrawCircle(bullet_x - CameraWork::GetCamera().x, bullet_y - CameraWork::GetCamera().y, 5, GetColor(128, 0, 0));
 	}
 }
 
@@ -200,6 +199,9 @@ void EnemyGhost::GhostMove(Player* player)
 	else //通常移動
 	{
 		action_type = GHOST_STATE::NORMAL;
+		magic_attack = false;
+		physical_attack = false;
+		setting_bullet = false;
 	}
 
 	//攻撃範囲内にいる場合
