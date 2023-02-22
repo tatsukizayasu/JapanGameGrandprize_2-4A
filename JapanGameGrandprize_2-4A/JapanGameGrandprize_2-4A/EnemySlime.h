@@ -26,6 +26,7 @@ private:
 	int direction;
 
 	int slime_image;
+	int slime_angle;
 
 	Location jump_distance;
 

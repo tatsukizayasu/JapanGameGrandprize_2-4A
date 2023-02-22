@@ -79,6 +79,13 @@ void StageBuilder::Update()
 
 		
 	}
+
+	if (map_chips.size() != 0)
+	{
+		map_chips[0]->MoveLocation();
+	}
+	line->MoveLocation();
+	line->SetLocation(mouse_pos, LINE_START);
 }
 
 //------------------------------------
@@ -119,6 +126,8 @@ void StageBuilder::Draw()const
 		DrawFileInfo();
 	}
 
+
+	//line->DrawCollision();
 }
 
 //------------------------------------

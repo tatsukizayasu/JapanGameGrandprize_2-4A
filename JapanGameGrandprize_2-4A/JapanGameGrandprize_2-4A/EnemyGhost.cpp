@@ -1,5 +1,6 @@
 #include "EnemyGhost.h"
 #include"DxLib.h"
+#include "CameraWork.h"
 
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 40
@@ -76,14 +77,14 @@ void EnemyGhost::Update()
 		location.y -= GHOST_SPEED;
 		break;
 	case GHOST_STATE::MAGIC_ATTACK: //魔法攻撃
-		if (++standby_time % 300 == 0)
+		if (++standby_time % 300 == 0) //硬直時間
 		{
 			magic_attack = true;
 			standby_time = 0;
 		}
 		break;
 	case GHOST_STATE::PHYSICAL_ATTACK: //接近攻撃
-		if (++standby_time % 60 == 0)
+		if (++standby_time % 60 == 0) //硬直時間
 		{
 			physical_attack = true;
 			standby_time = 0;
@@ -95,7 +96,7 @@ void EnemyGhost::Update()
 
 	if (CheckHp() == true)
 	{
-
+		
 	}
 
 }
@@ -105,20 +106,21 @@ void EnemyGhost::Update()
 //-----------------------------------
 void EnemyGhost::Draw()const
 {
+	//スクロールに合わせて描画
+	float x = location.x - CameraWork::GetCamera().x;
+	float y = location.y - CameraWork::GetCamera().y;
+
 	if (action_type == GHOST_STATE::MAGIC_ATTACK) //魔法攻撃のモーション
 	{
-		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
-			location.y + GHOST_SIZE_Y, GetColor(128, 0, 0), TRUE);
+		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(128, 0, 0), TRUE);
 	}
 	else if (action_type == GHOST_STATE::PHYSICAL_ATTACK) //接近攻撃のモーション
 	{
-		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
-			location.y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
+		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
 	}
 	else
 	{
-		DrawBox(location.x, location.y, location.x + GHOST_SIZE_X,
-			location.y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
 	}
 
 	if (magic_attack == true)
@@ -133,22 +135,22 @@ void EnemyGhost::Draw()const
 //-----------------------------------
 void EnemyGhost::GhostMove(Player* player)
 {
-	int range; //プレイヤーとの距離
+	int range; //プレイヤーとの距離	
+	
 	range = location.x - player->GetLocation().x;
+
 	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE)
 	{
-		if (location.x > player->GetLocation().x) //左に移動
+		if (range > player->GetLocation().x) //左に移動
 		{
 			if (player->GetLocation().y > location.y)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
-
 			}
 			else
 			{
 				action_type = GHOST_STATE::LEFT_UPPER;
-
 			}
 		}
 		else //右に移動
@@ -156,12 +158,10 @@ void EnemyGhost::GhostMove(Player* player)
 			if (player->GetLocation().y > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
-
 			}
 			else
 			{
 				action_type = GHOST_STATE::RIGHT_UPPER;
-
 			}
 		}
 	}
@@ -186,6 +186,9 @@ void EnemyGhost::GhostMove(Player* player)
 	{
 		action_type = GHOST_STATE::PHYSICAL_ATTACK;
 	}
+
+
+
 }
 
 

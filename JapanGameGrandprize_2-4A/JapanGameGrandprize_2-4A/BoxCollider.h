@@ -3,11 +3,12 @@
 
 #include"Stage/StageBuilder/Debug.h"
 #include"DxLib.h"
+#include "ColliderBase.h"
 
-class BoxCollider
+class BoxCollider : public ColliderBase
 {
 protected:
-	Location location;	//’†SÀ•W
+	
 	Area area; //”ÍˆÍ
 public:
 

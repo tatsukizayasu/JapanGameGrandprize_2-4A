@@ -13,7 +13,6 @@ enum class GHOST_STATE
 	RIGHT_UPPER,  //‰Eã‚ÉˆÚ“®
 	PHYSICAL_ATTACK,       //•¨—UŒ‚
 	MAGIC_ATTACK, //–‚–@UŒ‚
-	DEATH,   //Ž€–S
 };
 
 
