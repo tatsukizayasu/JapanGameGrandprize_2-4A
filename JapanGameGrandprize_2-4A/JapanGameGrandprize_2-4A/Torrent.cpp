@@ -29,7 +29,7 @@ void Torrent::Update()
 //-----------------------------------
 //ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-void Torrent::HitBullet(Bullet* bullet)
+void Torrent::HitBullet(BulletBase* bullet)
 {
 
 }

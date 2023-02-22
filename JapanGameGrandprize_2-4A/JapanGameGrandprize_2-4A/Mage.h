@@ -43,7 +43,7 @@ public:
     void Update() override;
 
     //ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
-    void HitBullet(Bullet* bullet) override;
+    void HitBullet(BulletBase* bullet) override;
 
     //•`‰æ
     void Draw() const override;

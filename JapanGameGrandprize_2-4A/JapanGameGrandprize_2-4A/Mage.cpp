@@ -191,7 +191,7 @@ void Mage::SortBullet(int bullet_num)
 //-----------------------------------
 //ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-void Mage::HitBullet(Bullet* bullet)
+void Mage::HitBullet(BulletBase* bullet)
 {
 	
 }
