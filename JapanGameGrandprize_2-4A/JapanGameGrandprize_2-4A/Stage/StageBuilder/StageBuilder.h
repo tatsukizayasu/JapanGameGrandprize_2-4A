@@ -27,6 +27,7 @@ private:
 	//ƒuƒƒbƒN‰æ‘œ
 	int block_images[100];
 	vector<MapChip*> map_chips;
+	SphereCollider* select_sphere;
 	int mode;
 
 	int menu_cursor;

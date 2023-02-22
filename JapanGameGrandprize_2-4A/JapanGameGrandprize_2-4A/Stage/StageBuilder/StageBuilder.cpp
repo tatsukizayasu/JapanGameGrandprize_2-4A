@@ -18,6 +18,7 @@ StageBuilder::StageBuilder()
 	if (LoadDivGraph("Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) {
 		throw "Images/Stage/map_chips_test.png";
 	}
+	select_sphere = nullptr;
 	mode = BRUSH_MODE;
 
 	menu_cursor = 0;	
@@ -92,6 +93,8 @@ void StageBuilder::Update()
 
 
 #ifdef _DEV
+
+	//select_sphereに選択中のくらすを入れる、クリックしてリリースするまではそいつをマウスと一緒に動かす。リリースだと処理負荷大きそう
 
 	vector<SphereCollider*> points = line->GetPoint();
 	for (int i = 0; i < points.size(); i++)
