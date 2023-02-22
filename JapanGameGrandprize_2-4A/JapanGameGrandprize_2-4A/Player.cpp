@@ -64,7 +64,7 @@ Player::Player()
 
 	stage = nullptr;
 
-	player = this;
+
 
 	//元素の初期化
 	element = new ElementItem * [PLAYER_ELEMENT];
@@ -146,7 +146,6 @@ Player::Player(Stage* stage)
 
 	stage = new Stage();
 
-	player = this;
 	area = { 80,40 };
 
 	//元素の初期化
@@ -165,7 +164,7 @@ Player::~Player()
 {
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		//delete bullet[i];
+		delete bullet[i];
 	}
 	delete[] bullet;
 }
@@ -204,7 +203,7 @@ void Player::Draw() const
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
 			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,255);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
 		else if (10 < damage_count < 10)
 		{
@@ -274,7 +273,7 @@ void Player::Update()
 	{
 		damage_count = 0;
 	}
-		
+
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
 		pouch_open = true;
@@ -353,7 +352,7 @@ void Player::Update()
 
 	//弾の属性の切り替え処理
 	ElementUpdate();
-	
+
 }
 
 //スティックを入力していないとき
@@ -484,61 +483,70 @@ void Player::Jump()
 		player_state = PLAYER_STATE::DOWN;
 	}
 
-	if (location.y > 0)
+	if (location.y > 40)
 	{
 		location.y -= jump_power;
+	}
+	else
+	{
+		location.y = 40;
 	}
 }
 
 //ジャンプしてない
 void Player::NotJump()
 {
-	if (jump_power > 0)
+	if (location.y > 0)
 	{
-		jump_power -= 0.5;
-		if (location.y > 0)
-		{
-			location.y -= jump_power;
-		}
-		else
-		{
-			jump_power = 0;
-		}
+		location.y -= jump_power;
+	}
+	else
+	{
+		location.y = 40;
+	}
+
+
+
+	/*jump_power -= 0.5;
+	if (location.y > 0)
+	{
+		location.y -= jump_power;
 	}
 	else
 	{
 		jump_power = 0;
-		jump = 10;
+	}
 
-		if (location.y < 400)
+	jump = 10;
+
+	if (location.y < 400)
+	{
+		location.y += gravity_down;
+	}
+	else
+	{
+		player_state = PLAYER_STATE::STOP;
+	}
+	gravity_down += 0.25;
+
+
+
+	if (not_jet_count++ >= 120)
+	{
+		if (fuel < 100)
 		{
-			location.y += gravity_down;
+			fuel += 2.5;
 		}
 		else
 		{
-			player_state = PLAYER_STATE::STOP;
-		}
-		gravity_down += 0.25;
-
-
-
-		if (not_jet_count++ >= 120)
-		{
-			if (fuel < 100)
-			{
-				fuel += 2.5;
-			}
-			else
-			{
-				fuel = 100;
-			}
-		}
-
-		if (not_jet_count >= 120)
-		{
-			not_jet_count = 120;
+			fuel = 100;
 		}
 	}
+
+	if (not_jet_count >= 120)
+	{
+		not_jet_count = 120;
+	}*/
 }
 
 //-----------------------------------
@@ -577,7 +585,7 @@ void Player::SortBullet(int delete_bullet)
 	{
 		if (bullet[i] == nullptr)
 		{
-			bullet_count--;                                     
+			bullet_count--;
 			break;
 		}
 		if (bullet[i - 1] == nullptr)
