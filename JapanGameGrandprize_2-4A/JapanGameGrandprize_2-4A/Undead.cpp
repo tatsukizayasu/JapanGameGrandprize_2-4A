@@ -45,6 +45,9 @@ Undead::Undead(Player* player)
 	drop_volume = 0;
 	image = 0xffffff;
 	attack_time = 0;
+	poison_time = 0;
+	poison_damage = 0;
+	paralysis_time = 0;
 
 	/*“–‚½‚è”»’è‚ÌÝ’è*/
 	location.x = 640.0f;
@@ -130,6 +133,8 @@ void Undead::Update()
 		attack_interval--;
 	}
 
+	Poison();
+
 	if (CheckHp() && state != UNDEAD_STATE::DEATH)
 	{
 		state = UNDEAD_STATE::DEATH;
@@ -176,7 +181,29 @@ void Undead::DistancePlayer()
 //-----------------------------------
 void Undead::HitBullet(BulletBase* bullet)
 {
-	
+		switch (bullet->GetAttribute())
+		{
+		case ATTRIBUTE::NORMAL:
+			hp -= bullet->GetDamage();
+			break;
+		case ATTRIBUTE::EXPLOSION:
+			hp -= bullet->GetDamage();
+			break;
+		case ATTRIBUTE::MELT:
+			hp -= bullet->GetDamage();
+			break;
+		case ATTRIBUTE::POISON:
+			poison_damage = bullet->GetDamage();
+			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			paralysis_time = bullet->GetDebuffTime() * 0;
+			break;
+		case ATTRIBUTE::HEAL:
+			break;
+		default:
+			break;
+		}
 }
 
 //-----------------------------------

@@ -88,7 +88,6 @@ void GameMain::EnemyUpdate()
 			{
 				if (undead->HitBox(player))
 				{
-
 				}
 			}
 
@@ -144,7 +143,7 @@ void GameMain::EnemyUpdate()
 		default:
 			break;
 		}
-
+		for(int i=0;i<)
 	}
 
 	

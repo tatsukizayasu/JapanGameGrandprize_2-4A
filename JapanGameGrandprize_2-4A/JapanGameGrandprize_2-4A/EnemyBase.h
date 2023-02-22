@@ -11,6 +11,20 @@
 #define SOIL_DROP 4
 #define THUNDER_DROP 7
 
+//ダメージ倍率
+#define WEAKNESS_DAMAGE 2.0f
+#define RESISTANCE_DAMAGE 0.5f
+
+//デバフの効果時間の倍率
+#define WEAKNESS_DEBUFF 1.5f
+#define	RESISTANCE_DEBUFF 0.5f
+
+//毒ダメージを受けるまでのフレーム数
+#define POISON_DAMAGE_FLAME 10
+
+//麻痺状態の移動スピードの倍率
+#define PARALYSIS_SPEED 0.7f
+
 //エネミーの種類
 enum class ENEMY_KIND
 {
@@ -70,10 +84,12 @@ protected:
 	bool can_delete; //削除フラグ
 	int hp;	//体力
 	int speed; //移動速度
+	int poison_time; //毒の効果時間
+	float poison_damage; //毒のダメージ
+	int paralysis_time; //麻痺の効果時間
 
 	int drop_volume; //ドロップ量
 	int drop_type_volume; //ドロップする種類の量
-
 	ElementItem** drop_element; //ドロップ元素
 
 	ENEMY_KIND kind; //エネミーの種類
@@ -81,4 +97,10 @@ protected:
 protected:
 	//HPが0かどうか判断(0になったらtrue)
 	bool CheckHp();
+
+	//毒状態の処理
+	void Poison();
+
+	//麻痺状態の処理
+	void Paralysis();
 };

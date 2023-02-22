@@ -16,6 +16,7 @@ EnemyBase::EnemyBase()
 	kind = ENEMY_KIND::NONE; 
 	type = nullptr;
 }
+
 //-----------------------------------
 // HP‚ª0‚©‚Ç‚¤‚©”»’f(0‚É‚È‚Á‚½‚çtrue)
 //-----------------------------------
@@ -29,6 +30,32 @@ bool EnemyBase::CheckHp()
 	return ret;
 }
 
+//-----------------------------------
+//“Åó‘Ô‚Ìˆ—
+//-----------------------------------
+void EnemyBase::Poison()
+{
+	if (0 < poison_time)
+	{
+		poison_time--;
+		if (poison_time % POISON_DAMAGE_FLAME == 0)
+		{
+			hp -= poison_damage;
+		}
+	}
+}
+
+//-----------------------------------
+//–ƒáƒó‘Ô‚Ìˆ—
+//-----------------------------------
+void EnemyBase::Paralysis()
+{
+	if (0 < paralysis_time)
+	{
+		paralysis_time--;
+		speed *= 0.7;
+	}
+}
 //-----------------------------------
 //ƒhƒƒbƒv‚·‚éí—Ş‚Ì—Ê‚Ìæ“¾
 //-----------------------------------

@@ -146,9 +146,6 @@
     <ClInclude Include="Title.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBase.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Stage\Stage.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
@@ -215,7 +212,7 @@
     <ClInclude Include="Pouch.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-        <ClInclude Include="Torrent.h">
+    <ClInclude Include="Torrent.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="EnemySlime.h">
@@ -235,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="MageBullet.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
