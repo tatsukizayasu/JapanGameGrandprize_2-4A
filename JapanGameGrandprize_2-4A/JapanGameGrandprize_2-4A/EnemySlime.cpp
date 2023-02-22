@@ -3,9 +3,11 @@
 #include<math.h>
 #include"EnemySlime.h"
 
-#define ATTACK_DISTANCE_Y 15
-#define ATTACK_SPEED 5
+#define SLIME_ATTACK_DISTANCE_Y 15
+#define SLIME_ATTACK_SPEED 5
 
+//ˆÚ“®‘¬“x
+#define SLIME_SPEED 2
 #define SLIME_ATTACK_DAMAGE 10
 
 EnemySlime::EnemySlime()
@@ -20,15 +22,15 @@ EnemySlime::EnemySlime()
 	area.width = 40;
 
 	hp = 5;
-	speed = 2;
+	speed = SLIME_SPEED;
 
 	color = GetColor(0, 0, 255);
 
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WATER;
 
-	state = SLIME_STATE::MOVE;
-
+	state = ENEMY_STATE::MOVE;
+	direction = DIRECTION::LEFT;
 	slime_image = LoadGraph("Images/Enemy/Slime_.png");
 	slime_angle = 0;
 }
@@ -95,13 +97,15 @@ void EnemySlime::Move(const Location player_location)
 
 	if (location.x >= 1260)
 	{
-		location.x += -speed ;
+		direction = DIRECTION::LEFT;
+		speed  = -SLIME_SPEED;
 	}
 	if (location.x <= 20)
 	{
-		location.x += speed;
+		direction = DIRECTION::RIGHT;
+		speed = SLIME_SPEED;
 	}
-	
+	location.x += speed;
 }
 
 
@@ -112,15 +116,38 @@ AttackResource EnemySlime::Attack(const BoxCollider* collider)
 {
 	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
 
+	location.y -= (jump_distance.y / 3);
+	jump_distance.y -= 1;
+	if (location.x >= 1260)
+	{
+		speed = -SLIME_ATTACK_SPEED;
+	}
+	if (location.x <= 20)
+	{
+		speed = SLIME_ATTACK_SPEED;
+	}
+
+	location.x += speed;
+	
 	if (HitBox(collider))
 	{
 		ENEMY_TYPE attack_type[1] = { *type };
 		ret.damage = SLIME_ATTACK_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;
+		jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
+		color = GetColor(255, 0, 0);
 		KnockBack();
 	}
+	else
+	{
+		color = GetColor(0, 0, 255);
+	}
 
+	if (location.y >= 490)
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 	return ret;
 }
 
@@ -129,8 +156,17 @@ AttackResource EnemySlime::Attack(const BoxCollider* collider)
 //-----------------------------------
 void EnemySlime::Death()
 {
-	location.x -= speed * direction;
-	slime_angle -= 15 * direction;
+	if (direction == DIRECTION::LEFT)
+	{
+		slime_angle += -15;
+	}
+	else
+	{
+		slime_angle += 15;
+	}
+	
+	location.x += speed;
+
 	if (slime_angle >= 880 || slime_angle <= -880)
 	{
 		slime_angle = 180;
@@ -143,44 +179,12 @@ void EnemySlime::HitStage()
 
 }
 
-void EnemySlime::AttackJudgement(const BoxCollider* boxcollider)
-{
-	if (!CheckHp())
-	{
-		if (boxcollider->HitBox(new EnemySlime(location.x + (60 * direction) - CameraWork::GetCamera().x, location.y - 20, 80, 80)))
-		{
-			color = GetColor(255, 0, 0);
-
-			if (state == ENEMY_STATE::MOVE)
-			{
-				jump_distance.y = ATTACK_DISTANCE_Y;
-				state = ENEMY_STATE::IDOL;
-			}
-		}
-		else color = GetColor(0, 0, 255);
-	}
-}
-
-void EnemySlime::Attack()
-{
-	location.y -= (jump_distance.y / 3);
-	jump_distance.y -= 1;
-	location.x += (ATTACK_SPEED * (direction));
-	if (location.y >= 490)
-	{
-		state = ENEMY_STATE::MOVE;
-	}
-}
-
 void EnemySlime::KnockBack()
 {
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
-	location.x += (ATTACK_SPEED * (direction * -1));
-	if (CheckHp())
-	{
-		slime_angle -= 15 * direction;
-	}
+	location.x += -speed;
+	
 	if (location.y >= 490)
 	{
 		state = ENEMY_STATE::MOVE;

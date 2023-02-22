@@ -46,10 +46,6 @@ public:
 
 	void HitStage();
 
-	void AttackJudgement(const BoxCollider* boxcollider);
-
-	void Attack();
-
 	void KnockBack();
 
 	virtual void HitBullet(const BulletBase* bullet)override {};
