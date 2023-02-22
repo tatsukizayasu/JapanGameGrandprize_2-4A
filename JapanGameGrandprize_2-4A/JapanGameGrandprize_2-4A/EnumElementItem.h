@@ -3,10 +3,10 @@
 //Œ³‘f\‘¢‘Ì
 enum class  ELEMENT_ITEM
 {
-	OXYGEN,      //Ž_‘f
 	HYDROGEN,	 //…‘f
-	NITROGEN,	 //’‚‘f
+	OXYGEN,      //Ž_‘f
 	CARBON,		 //’Y‘f
+	NITROGEN,	 //’‚‘f
 	SULFUR,		 //—°‰©
 	CHLORINE,	 //‰–‘f
 	URANIUM,	 //ƒEƒ‰ƒ“

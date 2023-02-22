@@ -17,13 +17,11 @@
 //歩くスピード
 #define UNDEAD_SPEED -2
 
-//ドロップ量(最小)
+//ドロップ量
 #define UNDEAD_MIN_DROP 0u
-//ドロップ量(最大)
 #define UNDEAD_MAX_DROP 5u
 
-//ドロップする種類数
-#define UNDEAD_DROP 4
+
 
 //体力
 #define UNDEAD_HP 100
@@ -38,7 +36,6 @@ Undead::Undead(Player* player)
 	hp = 0;
 	damage = 0;
 	attack_interval = 0;
-	attack = 0;
 	speed = UNDEAD_SPEED;
 	kind = ENEMY_KIND::UNDEAD;
 	type = new ENEMY_TYPE;
@@ -56,11 +53,11 @@ Undead::Undead(Player* player)
 	area.height = 80;
 
 	//ドロップアイテムの設定
-	drop_element = new ElementItem * [UNDEAD_DROP];
-	drop_type_volume = UNDEAD_DROP;
+	drop_element = new ElementItem * [SOIL_DROP];
+	drop_type_volume = SOIL_DROP;
 
 	int volume = 0;
-	for (int i = 0; i < UNDEAD_DROP; i++)
+	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		volume = UNDEAD_MIN_DROP + GetRand(UNDEAD_MAX_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
@@ -76,7 +73,7 @@ Undead::Undead(Player* player)
 //-----------------------------------
 Undead::~Undead()
 {
-	for (int i = 0; i < UNDEAD_DROP; i++)
+	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		delete drop_element[i];
 	}
