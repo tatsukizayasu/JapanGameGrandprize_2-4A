@@ -99,6 +99,9 @@
     <ClCompile Include="Pouch.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\StageBuilder\PolyLine.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -207,6 +210,9 @@
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
     <ClInclude Include="Pouch.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\StageBuilder\PolyLine.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>

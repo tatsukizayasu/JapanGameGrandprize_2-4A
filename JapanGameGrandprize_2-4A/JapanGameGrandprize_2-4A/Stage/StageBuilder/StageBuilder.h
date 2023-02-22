@@ -5,6 +5,7 @@
 #include "../MapChip.h"
 #include "../SphereCollider.h"
 #include "../../LineCollider.h"
+#include "PolyLine.h"
 #include <vector>
 
 #define MENU_NUM 4
@@ -26,14 +27,13 @@ private:
 	//ブロック画像
 	int block_images[100];
 	vector<MapChip*> map_chips;
-
 	int mode;
 
 	int menu_cursor;
 	char arrow[ARROW_NUM];
 
 	//todo:テストなので消す ヘッダーも
-	class LineCollider2* line;
+	class PolyLine* line;
 	
 
 public:

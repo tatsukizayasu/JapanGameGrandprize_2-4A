@@ -161,6 +161,7 @@
     <ClInclude Include="NormalBullet.h" />
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
+    <ClInclude Include="Stage\StageBuilder\PolyLine.h" />
     <ClInclude Include="Pouch.h" />
     <ClInclude Include="Stage\StageBuilder\Debug.h" />
     <ClInclude Include="Stage\StageBuilder\Directory.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="ItemController.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
+    <ClCompile Include="Stage\StageBuilder\PolyLine.cpp" />
     <ClCompile Include="Pouch.cpp" />
     <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />

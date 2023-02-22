@@ -1,6 +1,6 @@
 #pragma once
 #include "Define.h"
-#include "Stage/StageBuilder/StageBuilder.h"
+#include "Stage/StageBuilder/Debug.h"
 #include "ColliderBase.h"
 
 #include <math.h>
@@ -10,7 +10,7 @@
 #define LINE_START 0
 #define LINE_END 1
 
-class LineCollider2 :public ColliderBase
+class LineCollider_t :public ColliderBase
 {
 private:
 	Location GetMiddlePoint(Location point1, Location point2)const
@@ -41,9 +41,9 @@ protected:
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)
 
 public:
-	LineCollider2();
-	LineCollider2(Location point1, Location point2);
-	~LineCollider2();
+	LineCollider_t();
+	LineCollider_t(Location point1, Location point2);
+	~LineCollider_t();
 
 	//SphereColliderとの当たり判定
 	bool HitSphere(class SphereCollider* sphere_collider)const;
@@ -52,7 +52,7 @@ public:
 	bool HitBox(class BoxCollider* box_collider)const;
 
 	//LineColliderとの当たり判定
-	bool HitLine(LineCollider2* line_collider)const;
+	bool HitLine(LineCollider_t* line_collider)const;
 
 	//線の端の座標の取得
 	Location GetLocation(int i)const;

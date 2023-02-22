@@ -8,7 +8,15 @@
 class ColliderBase
 {
 public:
-	//抽象化する予定の関数たち↓
+	ColliderBase()
+	{
+		location = { 0,0 };
+	}
+	ColliderBase(Location location)
+	{
+		this->location = location;
+	}
+
 	//中心座標の取得
 	Location GetLocation()const
 	{
@@ -51,6 +59,8 @@ public:
 			this->location = location;
 		}
 	}
+
+
 
 protected:
 	Location location;	//中心座標

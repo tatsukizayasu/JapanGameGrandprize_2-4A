@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 
+#define _DEV
 
 //------------------------------------
 // コンストラクタ
@@ -26,8 +27,18 @@ StageBuilder::StageBuilder()
 		arrow[i] = ' ';
 	}
 
-	line = new LineCollider2({0,360}, {1280,360});
+#ifdef _DEV
+
+	Location loc[3] =
+	{
+		{200.f,200.f},
+		{600.f,300.f},
+		{1000.f,100.f}
+	};
+	line = new PolyLine(loc,3);
 	
+#endif // _DEV
+
 }
 
 //------------------------------------
@@ -41,7 +52,6 @@ StageBuilder::~StageBuilder()
 		delete map_chips[i];
 	}
 	map_chips.clear();
-	delete line;
 }
 
 //------------------------------------
@@ -80,12 +90,23 @@ void StageBuilder::Update()
 		
 	}
 
-	if (map_chips.size() != 0)
+
+#ifdef _DEV
+
+	vector<SphereCollider*> points = line->GetPoint();
+	for (int i = 0; i < points.size(); i++)
 	{
-		map_chips[0]->MoveLocation();
+		if (KeyManager::OnMousePressed(MOUSE_INPUT_RIGHT))
+		{
+			if (mouse->HitSphere(points[i]))
+			{
+				points[i]->ColliderBase::SetLocation(mouse_pos);
+			}
+		}
 	}
-	line->MoveLocation();
-	line->SetLocation(mouse_pos, LINE_START);
+
+
+#endif // _DEV
 }
 
 //------------------------------------
@@ -127,7 +148,11 @@ void StageBuilder::Draw()const
 	}
 
 
+#ifdef _DEV
+
 	line->DrawCollision();
+
+#endif // _DEV
 }
 
 //------------------------------------

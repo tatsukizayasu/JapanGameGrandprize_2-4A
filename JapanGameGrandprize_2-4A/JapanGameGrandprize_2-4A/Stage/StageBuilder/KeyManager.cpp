@@ -62,7 +62,7 @@ bool KeyManager::OnKeyPressed(int Key)
 //----------------
 bool KeyManager::OnMouseClicked(int Key)
 {
-	bool ret = ~oldMouse & nowMouse;
+	bool ret = ~(oldMouse & Key) & (nowMouse & Key);
 	return ret;
 }
 
@@ -71,7 +71,7 @@ bool KeyManager::OnMouseClicked(int Key)
 //----------------
 bool KeyManager::OnMouseReleased(int Key)
 {
-	bool ret = oldMouse & ~nowMouse;
+	bool ret = (oldMouse & Key) & ~(nowMouse & Key);
 	return ret;
 }
 
@@ -80,6 +80,6 @@ bool KeyManager::OnMouseReleased(int Key)
 //----------------
 bool KeyManager::OnMousePressed(int Key)
 {
-	bool ret = oldMouse & nowMouse;
+	bool ret = (oldMouse & Key) & (nowMouse & Key);
 	return ret;
 }
