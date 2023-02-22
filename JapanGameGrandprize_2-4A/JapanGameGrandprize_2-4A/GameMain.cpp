@@ -114,7 +114,7 @@ void GameMain::EnemyUpdate()
 			ghost = dynamic_cast<EnemyGhost*>(enemy);
 			ghost->GhostMove(player);
 
-			if (ghost->GetCanDelete())
+			if (ghost->GetCanDelete()) //Ž€–S
 			{
 				item_controller->SpawnItem(ghost, ghost->GetLocation());
 				delete ghost;

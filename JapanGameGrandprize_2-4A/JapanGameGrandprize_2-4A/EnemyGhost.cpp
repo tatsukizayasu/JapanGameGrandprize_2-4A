@@ -121,7 +121,8 @@ void EnemyGhost::Update()
 
 	GhostAttack(); //攻撃
 
-	if (CheckHp() == true)
+
+	if (CheckHp() == true) //HPがゼロになったら
 	{
 		can_delete = true;
 	}
@@ -279,7 +280,10 @@ void EnemyGhost::GhostAttack()
 //-----------------------------------
 void EnemyGhost::HitBullet(BulletBase* bullet)
 {
-
+	if (HitSphere(bullet) != false)
+	{
+		can_delete = true; //デバック  当たったら死亡
+	}
 }
 
 

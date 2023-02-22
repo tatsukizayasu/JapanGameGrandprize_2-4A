@@ -39,12 +39,12 @@ Player::Player()
 	damage_flg = false;
 	i = 0;
 
-	attribute[0] = ATTRIBUTE::normal;
-	attribute[1] = ATTRIBUTE::explosion;
-	attribute[2] = ATTRIBUTE::melt;
-	attribute[3] = ATTRIBUTE::poison;
-	attribute[4] = ATTRIBUTE::paralysis;
-	attribute[5] = ATTRIBUTE::heal;
+	attribute[0] = ATTRIBUTE::NORMAL;
+	attribute[1] = ATTRIBUTE::EXPLOSION;
+	attribute[2] = ATTRIBUTE::MELT;
+	attribute[3] = ATTRIBUTE::POISON;
+	attribute[4] = ATTRIBUTE::PARALYSIS;
+	attribute[5] = ATTRIBUTE::HEAL;
 
 	attribute_c[0] = "NORMAL";
 	attribute_c[1] = "EXPLOSION";
@@ -114,12 +114,12 @@ Player::Player(Stage* stage)
 	pouch_open = false;
 	i = 0;
 
-	attribute[0] = ATTRIBUTE::normal;
-	attribute[1] = ATTRIBUTE::explosion;
-	attribute[2] = ATTRIBUTE::melt;
-	attribute[3] = ATTRIBUTE::poison;
-	attribute[4] = ATTRIBUTE::paralysis;
-	attribute[5] = ATTRIBUTE::heal;
+	attribute[0] = ATTRIBUTE::NORMAL;
+	attribute[1] = ATTRIBUTE::EXPLOSION;
+	attribute[2] = ATTRIBUTE::MELT;
+	attribute[3] = ATTRIBUTE::POISON;
+	attribute[4] = ATTRIBUTE::PARALYSIS;
+	attribute[5] = ATTRIBUTE::HEAL;
 
 	attribute_c[0] = ("NORMAL");
 	attribute_c[1] = ("EXPLOSION");
