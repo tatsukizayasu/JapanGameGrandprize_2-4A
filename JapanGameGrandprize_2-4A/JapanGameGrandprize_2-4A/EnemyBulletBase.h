@@ -1,7 +1,10 @@
 #pragma once
 #include "EnumEnemyType.h"
+#include "SphereCollider.h"
 
-class EnemyBulletBase
+class EnemyBulletBase :
+	public SphereCollider
+
 {
 public:
 	//XV

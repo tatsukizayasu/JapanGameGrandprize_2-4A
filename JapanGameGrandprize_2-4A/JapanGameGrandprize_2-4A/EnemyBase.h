@@ -45,7 +45,20 @@ enum class ENEMY_KIND
 	NONE
 };
 
+struct AttackResource
+{
+	int damage; //ダメージ
+	ENEMY_TYPE* type; //攻撃タイプ
+	int type_count; //攻撃タイプの数
+};
 
+enum class ENEMY_STATE
+{
+	IDOL,   //アイドル状態
+	MOVE,   //移動
+	ATTACK, //攻撃
+	DEATH,  //死亡
+};
 
 class EnemyBase
 {
@@ -62,8 +75,21 @@ public:
 	//描画
 	virtual void Draw() const = 0;
 
+	//アイドル状態
+	virtual void Idol() = 0;
+
+	//移動
+	virtual void Move(const Location player_location) = 0;
+
+	//攻撃
+	virtual AttackResource Attack(const BoxCollider* collider) = 0;
+
+	//死亡
+	virtual void Death() = 0;
+
+	
 	//プレイヤーの弾との当たり判定
-	virtual void HitBullet(BulletBase* bullet) = 0;
+	virtual void HitBullet(const BulletBase* bullet) = 0;
 
 	//ドロップする種類の量の取得
 	int GetDropTypeVolume() const;
@@ -76,6 +102,9 @@ public:
 
 	//エネミーの種類の取得
 	ENEMY_KIND GetEnemyKind() const;
+
+	//エネミーの状態の取得
+	ENEMY_STATE GetState()const;
 
 	//削除可能状態の取得
 	bool GetCanDelete() const;
@@ -94,6 +123,7 @@ protected:
 
 	ENEMY_KIND kind; //エネミーの種類
 	ENEMY_TYPE* type; //エネミーのタイプ
+	ENEMY_STATE state; //エネミーの状態
 protected:
 	//HPが0かどうか判断(0になったらtrue)
 	bool CheckHp();

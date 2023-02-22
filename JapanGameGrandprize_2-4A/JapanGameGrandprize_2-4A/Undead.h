@@ -4,14 +4,6 @@
 #include "LineCollider.h"
 #include "Player.h"
 
-enum class UNDEAD_STATE
-{
-    IDOL,   //アイドル状態
-    MOVE,   //移動
-    ATTACK, //攻撃
-    DEATH,  //死亡
-};
-
 class Undead :
     public EnemyBase, public BoxCollider
 {
@@ -21,16 +13,12 @@ private:
     int image; //画像
     int attack_time; //攻撃している時間(デバッグ用)
 
-    ENEMY_TYPE attack_type; //攻撃の属性
-    UNDEAD_STATE state; //状態
-
-    Player* player; //プレイヤー
 private:
     //プレイヤーとの距離
-    void DistancePlayer();
+    void DistancePlayer(const Location player_location);
 public:
     //コンストラクタ
-    Undead(Player* player);
+    Undead();
 
     //デストラクタ
     ~Undead();
@@ -38,13 +26,25 @@ public:
     //描画以外の更新
     void Update() override;
 
+    //アイドル状態
+    void Idol() override;
+
+    //移動
+   void Move(const Location player_location) override;
+
+    //攻撃
+    AttackResource Attack(const BoxCollider* collider) override;
+
+    //死亡
+    void Death() override;
+
     //プレイヤーの弾との当たり判定
-    void HitBullet(BulletBase* bullet) override;
+    void HitBullet(const BulletBase* bullet) override;
 
     //描画
     void Draw() const override;
 
     //状態の取得
-    UNDEAD_STATE GetState() const;
+    ENEMY_STATE GetState() const;
 };
 

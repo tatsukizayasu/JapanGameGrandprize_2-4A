@@ -20,22 +20,22 @@ BulletBase::BulletBase(float player_x, float player_y)
 	efect_explosion = nullptr;
 }
 
-bool BulletBase::GetEfectFlg()
+bool BulletBase::GetEfectFlg() const
 {
 	return efect_end;
 }
 
-float BulletBase::GetDamage()
+float BulletBase::GetDamage() const
 {
 	return damage;
 }
 
-float BulletBase::GetDebuffTime()
+float BulletBase::GetDebuffTime() const
 {
 	return debuff_time;
 }
 
-ATTRIBUTE BulletBase::GetAttribute()
+ATTRIBUTE BulletBase::GetAttribute() const
 {
 	return attribute;
 }

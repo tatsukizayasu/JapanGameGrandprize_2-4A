@@ -139,8 +139,6 @@ Mage::~Mage()
 //-----------------------------------
 void Mage::Update()
 {
-
-
 	for (int i = 0; i < MAGE_BULLET_MAX; i++)
 	{
 		if (bullet[i] == nullptr)
@@ -151,6 +149,15 @@ void Mage::Update()
 	}
 }
 
+//-----------------------------------
+//UŒ‚
+//-----------------------------------
+AttackResource Mage::Attack(const BoxCollider* collider)
+{
+	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
+
+	return ret;
+}
 
 //-----------------------------------
 //’e‚Ì¶¬
@@ -191,7 +198,7 @@ void Mage::SortBullet(int bullet_num)
 //-----------------------------------
 //ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-void Mage::HitBullet(BulletBase* bullet)
+void Mage::HitBullet(const BulletBase* bullet)
 {
 	
 }

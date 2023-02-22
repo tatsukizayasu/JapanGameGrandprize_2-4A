@@ -28,8 +28,20 @@ public:
     //更新
     void Update() override;
 
+    //アイドル状態
+    void Idol() override;
+
+    //移動
+    void Move(const Location player_location) override;
+
+    //攻撃
+    AttackResource Attack(const BoxCollider* collider) override;
+
+    //死亡
+    void Death() override;
+
     //プレイヤーの弾との当たり判定
-    void HitBullet(BulletBase* bullet) override;
+    void HitBullet(const BulletBase* bullet) override;
 
     //描画
     void Draw() const override;

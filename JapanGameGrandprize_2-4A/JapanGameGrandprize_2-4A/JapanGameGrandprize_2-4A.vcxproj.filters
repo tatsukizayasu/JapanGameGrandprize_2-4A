@@ -111,6 +111,9 @@
     <ClCompile Include="MageBullet.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
+    <ClCompile Include="GhostBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="EnemyBase.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

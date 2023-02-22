@@ -1,29 +1,19 @@
 #pragma once
 #include"EnemyBase.h"
 #include"CameraWork.h"
-
 #include"BoxCollider.h"
 
-enum DIRECTION
+enum class DIRECTION
 {
-	left = -1,
-	right = 1
-};
-
-enum class SLIME_STATE
-{
-	IDOL,   //ƒAƒCƒhƒ‹ó‘Ô
-	MOVE,   //ˆÚ“®
-	ATTACK, //UŒ‚
-	KNOCKBACK, //•ÇA“G‚É’µ‚Ë•Ô‚é
-	DEATH,  //€–S
+	LEFT = 0,
+	RIGHT
 };
 
 class EnemySlime : public EnemyBase, public BoxCollider
 {
 private:
 	int color;
-	int direction;
+	DIRECTION direction;
 
 	int slime_image;
 	int slime_angle;
@@ -31,8 +21,6 @@ private:
 	Location jump_distance;
 
 	ElementItem drop_item;
-
-	SLIME_STATE state;
 
 public:
 	EnemySlime();
@@ -44,11 +32,25 @@ public:
 	//•`‰æ
 	virtual void Draw()const override;
 
-	void HitPlayer(BoxCollider* boxcollider);
+	//ƒAƒCƒhƒ‹ó‘Ô
+	void Idol() override;
+
+	//ˆÚ“®
+	void Move(const Location player_location) override;
+
+	//UŒ‚
+	AttackResource Attack(const BoxCollider* collider) override;
+
+	//€–S
+	void Death() override;
+
 	void HitStage();
-	void AttackJudgement(BoxCollider* boxcollider);
+
+	void AttackJudgement(const BoxCollider* boxcollider);
+
 	void Attack();
+
 	void KnockBack();
 
-	virtual void HitBullet(BulletBase* bullet)override {};
+	virtual void HitBullet(const BulletBase* bullet)override {};
 };

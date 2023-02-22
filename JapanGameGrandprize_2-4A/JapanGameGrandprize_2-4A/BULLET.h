@@ -23,9 +23,9 @@ public:
 	virtual void Draw() const = 0;
 	virtual void Update() = 0;
 
-	bool GetEfectFlg();
-	float GetDebuffTime();
-	float GetDamage();
-	ATTRIBUTE GetAttribute();
+	bool GetEfectFlg() const;
+	float GetDebuffTime() const;
+	float GetDamage() const;
+	ATTRIBUTE GetAttribute() const;
 
 };

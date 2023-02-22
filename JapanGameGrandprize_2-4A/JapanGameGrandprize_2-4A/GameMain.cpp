@@ -69,81 +69,22 @@ void GameMain::EnemyUpdate()
 	if (enemy != nullptr)
 	{
 		enemy->Update();
-
-		switch (enemy->GetEnemyKind())
+		
+		
+		switch (enemy->GetState())
 		{
-		case ENEMY_KIND::SLIME:		//スライム
-		{			
-			EnemySlime* slime;
-			slime = dynamic_cast<EnemySlime*>(enemy);
-			slime->HitPlayer(player);
-			slime->AttackJudgement(player);
+		case ENEMY_STATE::IDOL:
 			break;
-		}
-		case ENEMY_KIND::UNDEAD:	//アンデット
-		{
-			Undead* undead;
-			undead = dynamic_cast<Undead*>(enemy);
-			if (undead->GetState() == UNDEAD_STATE::ATTACK)
-			{
-				if (undead->HitBox(player))
-				{
-				}
-			}
-
-			if (undead->GetCanDelete())
-			{
-				item_controller->SpawnItem(undead, undead->GetLocation());
-				delete undead;
-				enemy = nullptr;
-			}
+		case ENEMY_STATE::MOVE:
 			break;
-		}
-		case ENEMY_KIND::HARPY:		//ハーピィ
-		{
+		case ENEMY_STATE::ATTACK:
+			//player-> enemy->Attack(player);
 			break;
-		}
-		case ENEMY_KIND::MAGE:		//メイジ
-		{
-			break;
-		}
-		case ENEMY_KIND::GHOST:		//ゴースト
-		{
-			EnemyGhost* ghost;
-			ghost = dynamic_cast<EnemyGhost*>(enemy);
-			ghost->GhostMove(player);
-			break;
-		}
-		case ENEMY_KIND::WYVERN:	//ワイバーン
-		{
-			break;
-		}
-		case ENEMY_KIND::KING_SLIME://スライムキング
-		{
-			break;
-		}
-		case ENEMY_KIND::TORRENT:	//トレント
-		{
-			break;
-		}
-		case ENEMY_KIND::GARGOYLE:	//ガーゴイル
-		{
-			break;
-		}
-		case ENEMY_KIND::DRAGON:	//ドラゴン
-		{
-			break;
-		}
-		case ENEMY_KIND::END_BOSS:	//ラスボス
-		{
-			break;
-		}
-		case ENEMY_KIND::NONE:
+		case ENEMY_STATE::DEATH:
 			break;
 		default:
 			break;
 		}
-		for(int i=0;i<)
 	}
 
 	

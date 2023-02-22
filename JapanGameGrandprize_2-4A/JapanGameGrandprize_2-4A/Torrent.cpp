@@ -27,9 +27,19 @@ void Torrent::Update()
 }
 
 //-----------------------------------
+//攻撃
+//-----------------------------------
+AttackResource Torrent::Attack(const BoxCollider* collider)
+{
+	AttackResource ret = { 0,nullptr,0 }; //戻り値
+
+	return ret;
+}
+
+//-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-void Torrent::HitBullet(BulletBase* bullet)
+void Torrent::HitBullet(const BulletBase* bullet)
 {
 
 }

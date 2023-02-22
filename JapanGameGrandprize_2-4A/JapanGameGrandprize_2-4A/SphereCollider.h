@@ -9,17 +9,17 @@ protected:
 public:
 
 	//SphereCollider当たり判定
-	bool HitSphere(SphereCollider* sphere_collider);
+	bool HitSphere(const SphereCollider* sphere_collider) const;
 
 	//BoxCollider当たり判定
-	bool HitBox(class BoxCollider* box_collider);
+	bool HitBox(const class BoxCollider* box_collider) const;
 
-	bool HitLine(class LineCollider* line_collider);
+	bool HitLine(const class LineCollider* line_collider) const;
 
 	//中心座標の取得
-	Location GetLocation() const 
+	Location GetLocation() const
 	{
-		return location; 
+		return location;
 	}
 
 	//半径の取得
@@ -29,7 +29,7 @@ public:
 	}
 
 	//中心座標の設定
-	void SetLocation(Location location) 
+	void SetLocation(Location location)
 	{
 		this->location = location;
 	}

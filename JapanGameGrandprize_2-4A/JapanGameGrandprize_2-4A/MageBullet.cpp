@@ -15,6 +15,8 @@ MageBullet::MageBullet(ENEMY_TYPE type, Location spawn_location, Location player
 	speed = MAGE_BULLET_SPEED;
 	this->type = type;
 
+	image = 0;
+
 	float radian; //Šp“x
 	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
 	x_speed = speed * cosf(radian);

@@ -89,6 +89,14 @@ ENEMY_KIND EnemyBase::GetEnemyKind() const
 }
 
 //-----------------------------------
+//エネミーの状態の取得
+//-----------------------------------
+ENEMY_STATE EnemyBase::GetState()const
+{
+	return state;
+}
+
+//-----------------------------------
 //削除可能状態の取得
 //-----------------------------------
 bool EnemyBase::GetCanDelete() const

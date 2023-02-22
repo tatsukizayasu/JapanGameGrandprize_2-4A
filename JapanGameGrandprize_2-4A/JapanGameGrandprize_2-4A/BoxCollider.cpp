@@ -8,7 +8,7 @@
 //-----------------------------------
 // SphereColliderとの当たり判定
 //-----------------------------------
-bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
+bool BoxCollider::HitSphere(const SphereCollider* sphere_collider) const
 {
 	bool ret = false;//返り値
 	float rad; //2点の角度
@@ -44,7 +44,7 @@ bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
 //-----------------------------------
 // BoxColliderとの当たり判定
 //-----------------------------------
-bool BoxCollider::HitBox(BoxCollider* box_collider)
+bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 {
 	bool ret = false; //返り値
 
@@ -78,7 +78,7 @@ bool BoxCollider::HitBox(BoxCollider* box_collider)
 //-----------------------------------
 // LineColliderとの当たり判定
 //-----------------------------------
-bool BoxCollider::HitLine(LineCollider* line_collider)
+bool BoxCollider::HitLine(const LineCollider* line_collider) const
 {
 	bool ret = false; //返り値
 
