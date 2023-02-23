@@ -163,8 +163,14 @@ void CameraWork::Update()
 		camera.x = stage->GetMapSize().x * CHIP_SIZE - moveing_line;
 	}
 
-
-	if (old_player.y != player_p.y) {  }
+	// カメラの範囲がマップ外に出ないように調整
+	//マップ外
+	if (camera.y < 0) {
+		camera.y = 0;
+	}
+	else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT) {
+		camera.y = stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT;
+	}
 
  
 
