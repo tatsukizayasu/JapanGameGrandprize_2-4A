@@ -14,7 +14,7 @@ CameraWork::CameraWork()
 	camera.y = 0.0f;
 
 	input_margin = 0;
-	
+
 	speed = 0;
 
 	count = 0;
@@ -30,6 +30,7 @@ CameraWork::CameraWork()
 	moveing_line = 400.0f;
 
 	player_dir = true;
+	player_dir_y = false;
 }
 
 //-----------------------------------
@@ -41,7 +42,7 @@ CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* st
 	this->camera.y = camera_y;
 
 	input_margin = 0;
-	
+
 	speed = 1.0f;
 
 	count = 0;
@@ -57,6 +58,7 @@ CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* st
 	moveing_line = 400.0f;
 
 	player_dir = true;
+	player_dir_y = false;
 
 
 }
@@ -85,19 +87,19 @@ void CameraWork::Update()
 	if (player_p.x > moveing_line) { state = STATE::MOVE; }
 
 
-	//カメラの状態が移動の場合
+	//カメラの状態が移動の場合のみ、X方向にカメラ移動する。
 	if (state == STATE::MOVE) {
 
 		//移動開始ラインの変動
 
 		float player_speed_w = player_p.x - old_player.x;
 		if (player_dir == true) {
-			if (moveing_line > 400 ) { moveing_line -= player_speed_w; }
+			if (moveing_line > 400) { moveing_line -= player_speed_w; }
 		}
 		else {
 			if (moveing_line < 800) { moveing_line -= player_speed_w; }
 		}
-		
+
 
 		//マップの右端に着いたら止める
 		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) < ceilf(player->GetLocation().x)) {
@@ -112,7 +114,7 @@ void CameraWork::Update()
 		if ((old_player.x != player_p.x) || (old_player.y != player_p.y)) {
 			// カメラの座標を更新
 			camera.x = (player->GetLocation().x - moveing_line + player_speed) * speed;
-			camera.y = player->GetLocation().y - 700;
+			//camera.y = player->GetLocation().y - 700;
 
 
 
@@ -125,10 +127,10 @@ void CameraWork::Update()
 				camera.x = stage->GetMapSize().x * CHIP_SIZE - moveing_line;
 			}*/
 			if (camera.y < 0) {
-				camera.y = 0;
+				//camera.y = 0;
 			}
 			else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - 700) {
-				camera.y = stage->GetMapSize().y * CHIP_SIZE - 700;
+				//camera.y = stage->GetMapSize().y * CHIP_SIZE - 700;
 			}
 		}
 
@@ -143,11 +145,40 @@ void CameraWork::Update()
 			}
 
 		}
-
-
-		old_player.x = player_p.x;
-		old_player.y = player_p.y;
 	}
+
+	// カメラのy座標を更新
+	if (player->GetLocation().y - camera.y < 200) {
+		camera.y = player->GetLocation().y - 200;
+	}
+	else if (player->GetLocation().y - camera.y > 420) {
+		camera.y = player->GetLocation().y - 420;
+		//camera.y + 0.25;
+	}
+	if (camera.x < 0) {
+		state = STATE::FIXED;
+		camera.x = 0;
+	}
+	else if (camera.x > stage->GetMapSize().x * CHIP_SIZE - moveing_line) {
+		camera.x = stage->GetMapSize().x * CHIP_SIZE - moveing_line;
+	}
+
+
+	if (old_player.y != player_p.y) {  }
+
+ 
+
+	float player_speed_y = player_p.y - old_player.y;
+	if (player_speed_y < 0) {
+		player_dir_y = false;
+	}
+	else if (player_speed_y > 0) {
+		player_dir_y = true;
+	}
+
+
+	old_player.x = player_p.x;
+	old_player.y = player_p.y;
 
 #ifdef DEBUG
 
@@ -191,7 +222,4 @@ void CameraWork::Update()
 	input_margin = 0;
 
 #endif // DEBUG
-
-
-
 }

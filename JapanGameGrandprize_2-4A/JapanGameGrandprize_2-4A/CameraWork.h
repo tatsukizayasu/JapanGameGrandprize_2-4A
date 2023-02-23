@@ -22,6 +22,7 @@ protected:
 	//プレイヤーの向き
 	//FALSE: 左		TRUE:右
 	bool player_dir;
+	bool player_dir_y;
 
 	//カメラスピード
 	float speed;
