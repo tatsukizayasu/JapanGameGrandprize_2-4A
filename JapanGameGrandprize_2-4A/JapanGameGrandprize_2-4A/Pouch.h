@@ -1,5 +1,8 @@
 #pragma once
 
+#define POUCH_SIZE 200
+
+
 enum class Tab
 {
 	Explosion_Tab = 0,
@@ -12,7 +15,8 @@ enum class Tab
 class Pouch
 {
 private:
-	float pouch_x, pouch_y;
+	float x, y;
+	Tab tab;
 
 public:
 	Pouch();
@@ -21,9 +25,9 @@ public:
 	void Update();
 	void Draw() const;
 
-	void ExplosionTab();
-	void PoisonTab();
-	void MeltTab();
-	void ParalysisTab();
-	void HealTab();
+	void ExplosionTab() const;
+	void PoisonTab() const;
+	void MeltTab() const;
+	void ParalysisTab() const;
+	void HealTab() const;
 };

@@ -6,12 +6,12 @@
 
 enum class GHOST_STATE
 {
-	NORMAL,   //通常移動
+	NORMAL,   //通常移動 左に移動
 	LEFT_lOWER,   //左下に移動
 	LEFT_UPPER,   //左上に移動
 	RIGHT_LOWER,  //右下に移動
 	RIGHT_UPPER,  //右上に移動
-	PHYSICAL_ATTACK,       //物理攻撃
+	PHYSICAL_ATTACK, //物理攻撃
 	MAGIC_ATTACK, //魔法攻撃
 };
 
@@ -29,7 +29,7 @@ private:
 	float player_y; //プレイヤーの座標を保存
 	bool magic_attack; //魔法攻撃
 	bool physical_attack; //物理攻撃に入る（true)なら
-	bool setting; //弾丸初期処理
+	bool setting_bullet; //弾丸初期処理
 	GHOST_STATE action_type; //行動パターン
 
 public:
@@ -47,7 +47,7 @@ public:
 
 	//ゴーストの動きを決める
 	void GhostMove(Player* player);
-
 	//プレイヤーの弾丸との当たり判定
-	void HitBullet(BulletBase* bullet);
+	void HitBullet(BulletBase* bulletbase);
+
 };

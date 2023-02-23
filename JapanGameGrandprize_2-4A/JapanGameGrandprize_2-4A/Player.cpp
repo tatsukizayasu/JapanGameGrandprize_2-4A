@@ -4,6 +4,7 @@
 #include "PadInput.h"
 #include "CameraWork.h"
 #include "Item.h"
+#include <iostream>
 
 //プレイヤーが持っている元素の種類
 #define PLAYER_ELEMENT 7
@@ -29,26 +30,29 @@ Player::Player()
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		bullet = new BulletBase * [30];
+		bullet = new BulletBase * [BULLET_MAX];
 		bullet[i] = nullptr;
 	}
 
 	damage_flg = false;
 	i = 0;
 
-	attribute[0] = ATTRIBUTE::normal;
-	attribute[1] = ATTRIBUTE::explosion;
-	attribute[2] = ATTRIBUTE::melt;
-	attribute[3] = ATTRIBUTE::poison;
-	attribute[4] = ATTRIBUTE::paralysis;
-	attribute[5] = ATTRIBUTE::heal;
+	attribute[0] = ATTRIBUTE::NORMAL;
+	attribute[1] = ATTRIBUTE::EXPLOSION;
+	attribute[2] = ATTRIBUTE::MELT;
+	attribute[3] = ATTRIBUTE::POISON;
+	attribute[4] = ATTRIBUTE::PARALYSIS;
+	attribute[5] = ATTRIBUTE::HEAL;
 
-	for (int i = 0; i < 6; i++)
-	{
-		attribute_c[i] = i;
-	}
+	attribute_c[0] = "NORMAL";
+	attribute_c[1] = "EXPLOSION";
+	attribute_c[2] = "MELT";
+	attribute_c[3] = "POISON";
+	attribute_c[4] = "PARALYSIS";
+	attribute_c[5] = "HEAL";
+
 
 	player_state = PLAYER_STATE::STOP;
 
@@ -60,7 +64,7 @@ Player::Player()
 
 	stage = nullptr;
 
-	player = this;
+
 
 	//元素の初期化
 	element = new ElementItem * [PLAYER_ELEMENT];
@@ -68,6 +72,8 @@ Player::Player()
 	{
 		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
 	}
+
+	pouch = nullptr;
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
@@ -98,8 +104,8 @@ Player::Player(Stage* stage)
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
-	bullet = new BulletBase * [30];
-	for (int i = 0; i < 30; i++)
+	bullet = new BulletBase * [BULLET_MAX];
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet[i] = nullptr;
 	}
@@ -108,12 +114,20 @@ Player::Player(Stage* stage)
 	pouch_open = false;
 	i = 0;
 
-	attribute[0] = ATTRIBUTE::normal;
-	attribute[1] = ATTRIBUTE::explosion;
-	attribute[2] = ATTRIBUTE::melt;
-	attribute[3] = ATTRIBUTE::poison;
-	attribute[4] = ATTRIBUTE::paralysis;
-	attribute[5] = ATTRIBUTE::heal;
+	attribute[0] = ATTRIBUTE::NORMAL;
+	attribute[1] = ATTRIBUTE::EXPLOSION;
+	attribute[2] = ATTRIBUTE::MELT;
+	attribute[3] = ATTRIBUTE::POISON;
+	attribute[4] = ATTRIBUTE::PARALYSIS;
+	attribute[5] = ATTRIBUTE::HEAL;
+
+	attribute_c[0] = ("NORMAL");
+	attribute_c[1] = ("EXPLOSION");
+	attribute_c[2] = ("MELT");
+	attribute_c[3] = ("POISON");
+	attribute_c[4] = ("PARALYSIS");
+	attribute_c[5] = ("HEAL");
+
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -128,9 +142,10 @@ Player::Player(Stage* stage)
 
 	beam = nullptr;
 
+	pouch = new Pouch();
+
 	stage = new Stage();
 
-	player = this;
 	area = { 80,40 };
 
 	//元素の初期化
@@ -147,9 +162,9 @@ Player::Player(Stage* stage)
 //-----------------------------------
 Player::~Player()
 {
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		//delete bullet[i];
+		delete bullet[i];
 	}
 	delete[] bullet;
 }
@@ -162,9 +177,6 @@ void Player::Draw() const
 
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
-
-
-	//DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
 
 	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 
@@ -191,7 +203,7 @@ void Player::Draw() const
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
 			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,255);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
 		else if (10 < damage_count < 10)
 		{
@@ -200,7 +212,6 @@ void Player::Draw() const
 	}
 	else
 	{
-		DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
 	}
 
 #ifdef _DEBUG
@@ -217,25 +228,31 @@ void Player::Draw() const
 	//上の選択肢
 	if (display_attribute - 1 < 0)
 	{
-		DrawFormatString(1000, 10, 0x778877, "%d", attribute_c[display_attribute + 5]);
+		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute + 5]);
+		cout << attribute_c[display_attribute + 5] << endl;
 	}
 	else
 	{
-		DrawFormatString(1000, 10, 0x778877, "%d", attribute_c[display_attribute - 1]);
+		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute - 1]);
 	}
 	//下の選択肢
 	if (display_attribute + 1 > 5)
 	{
-		DrawFormatString(1000, 90, 0x778877, "%d", attribute_c[display_attribute - 5]);
+		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute - 5]);
 	}
 	else
 	{
-		DrawFormatString(1000, 90, 0x778877, "%d", attribute_c[display_attribute + 1]);
+		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute + 1]);
 	}
 	//現在の選択肢
-	DrawFormatString(1000, 50, 0x778877, "%d", attribute_c[display_attribute]);
+	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
+
+	if (pouch_open)
+	{
+		pouch->Draw();
+	}
 }
 
 //-----------------------------------
@@ -256,10 +273,19 @@ void Player::Update()
 	{
 		damage_count = 0;
 	}
-		
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
-	{
 
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
+	{
+		pouch_open = true;
+	}
+	else if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
+	{
+		pouch_open = false;
+	}
+
+	if (pouch_open)
+	{
+		pouch->Update();
 	}
 
 	//スティック右入力
@@ -326,7 +352,7 @@ void Player::Update()
 
 	//弾の属性の切り替え処理
 	ElementUpdate();
-	
+
 }
 
 //スティックを入力していないとき
@@ -438,7 +464,7 @@ void Player::Jump()
 {
 	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;
-	jump_power = jump - GRAVITY;
+
 
 	gravity_down = 0.0;
 
@@ -446,9 +472,9 @@ void Player::Jump()
 	fuel -= 0.25;
 
 
-	if (jump_power > 10)
+	if (jump > 10)
 	{
-		jump_power = 10.0;
+		jump = 10.0;
 	}
 
 	if (fuel < 0)
@@ -457,61 +483,106 @@ void Player::Jump()
 		player_state = PLAYER_STATE::DOWN;
 	}
 
-	if (location.y > 0)
+	if (location.y > 40)
 	{
-		location.y -= jump_power;
+		location.y -= jump;
+	}
+	else
+	{
+		location.y = 40;
+	}
+
+	if (location.y > 400)
+	{
+		location.y = 400;
+		jump = 0.0;
 	}
 }
 
 //ジャンプしてない
 void Player::NotJump()
 {
-	if (jump_power > 0)
+	player_state = PLAYER_STATE::DOWN;
+	if (location.y < 400)
 	{
-		jump_power -= 0.5;
-		if (location.y > 0)
+		location.y -= jump;
+	}
+	else
+	{
+		player_state = PLAYER_STATE::STOP;
+	}
+
+	if(location.y < 40)
+	{
+		jump = 0;
+		location.y = 40;
+	}
+
+	jump -= 0.25;
+
+	if (jump < -10)
+	{
+		jump = -10;
+	}
+	
+	if (not_jet_count++ >= 120)
+	{
+		jump = 0;
+		if (fuel < 100)
 		{
-			location.y -= jump_power;
+			fuel += 2.5;
 		}
 		else
 		{
-			jump_power = 0;
+			fuel = 100;
 		}
+	}
+
+	if (not_jet_count >= 120)
+	{
+		not_jet_count = 120;
+	}
+
+	/*jump_power -= 0.5;
+	if (location.y > 0)
+	{
+		location.y -= jump_power;
 	}
 	else
 	{
 		jump_power = 0;
-		jump = 10;
+	}
 
-		if (location.y < 400)
+	jump = 10;
+
+	if (location.y < 400)
+	{
+		location.y += gravity_down;
+	}
+	else
+	{
+		player_state = PLAYER_STATE::STOP;
+	}
+	gravity_down += 0.25;
+
+
+
+	if (not_jet_count++ >= 120)
+	{
+		if (fuel < 100)
 		{
-			location.y += gravity_down;
+			fuel += 2.5;
 		}
 		else
 		{
-			player_state = PLAYER_STATE::STOP;
-		}
-		gravity_down += 0.25;
-
-
-
-		if (not_jet_count++ >= 120)
-		{
-			if (fuel < 100)
-			{
-				fuel += 2.5;
-			}
-			else
-			{
-				fuel = 100;
-			}
-		}
-
-		if (not_jet_count >= 120)
-		{
-			not_jet_count = 120;
+			fuel = 100;
 		}
 	}
+
+	if (not_jet_count >= 120)
+	{
+		not_jet_count = 120;
+	}*/
 }
 
 //-----------------------------------
@@ -519,24 +590,24 @@ void Player::NotJump()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
-	switch (display_attribute)
+	for (i = 0; i < bullet_count; i++)
 	{
-	case 0:
-		for (i = 0; i < bullet_count; i++)
+		if (bullet[i] == nullptr)
 		{
-			if (bullet[i] == NULL)
+			switch (display_attribute)
 			{
-				bullet[i] = new NormalBullet(location.x, location.y,attribute[display_attribute]);
+			case 0:
+				bullet[i] = new NormalBullet(location.x, location.y, attribute[display_attribute]);
+				break;
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			default:
+				break;
 			}
 		}
-		break;
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	default:
-		break;
 	}
 
 }
@@ -550,7 +621,7 @@ void Player::SortBullet(int delete_bullet)
 	{
 		if (bullet[i] == nullptr)
 		{
-			bullet_count--;                                     
+			bullet_count--;
 			break;
 		}
 		if (bullet[i - 1] == nullptr)
