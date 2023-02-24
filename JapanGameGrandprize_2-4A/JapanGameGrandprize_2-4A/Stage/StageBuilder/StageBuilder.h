@@ -98,6 +98,8 @@ public:
 	void MakeSphere();
 	//線
 	void MakeLine();
+	//線を作り切れなかったときにリセットする
+	void LineReset() {}
 
 	//ファイルカウント
 	int FileCount(const char* path)const;
