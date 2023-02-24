@@ -85,7 +85,7 @@ public:
 	void Hp_Heal(int);
 	void OpenPouch();
 
-	BulletBase* GetBullet(int i) { return bullet[i]; }
+	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
 
 	//Œ³‘f‚Ì—Ê‚Ìİ’è

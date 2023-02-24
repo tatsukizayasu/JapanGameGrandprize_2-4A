@@ -330,13 +330,24 @@ void EnemyGhost::GhostMove(const Location player_location)
 //-----------------------------------
 // プレイヤーの弾丸との当たり判定
 //-----------------------------------
-void EnemyGhost::HitBullet(const BulletBase* bullet)
+bool EnemyGhost::HitBullet(const BulletBase* bullet)
 {
+	bool ret = false; //戻り値
+
 	if (HitSphere(bullet) != false)
 	{
 		can_delete = true; //デバック  当たったら死亡
 	}
+
+	return ret;
 }
 
+//-----------------------------------
+//座標の取得
+//-----------------------------------
+Location EnemyGhost::GetLocation() const
+{
+	return location;
+}
 
 

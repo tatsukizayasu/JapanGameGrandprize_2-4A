@@ -54,5 +54,12 @@ public:
 
 	void KnockBack();
 
-	virtual void HitBullet(const BulletBase* bullet)override {};
+	virtual bool HitBullet(const BulletBase* bullet)override {
+		bool ret = false; //–ß‚è’l
+
+		return ret;
+	};
+
+	//À•W‚Ìæ“¾
+	Location GetLocation() const override;
 };

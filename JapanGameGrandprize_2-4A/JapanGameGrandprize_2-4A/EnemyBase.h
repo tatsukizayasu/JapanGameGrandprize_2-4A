@@ -88,7 +88,7 @@ public:
 	virtual void Death() = 0;
 
 	//プレイヤーの弾との当たり判定
-	virtual void HitBullet(const BulletBase* bullet) = 0;
+	virtual bool HitBullet(const BulletBase* bullet) = 0;
 
 	//ドロップする種類の量の取得
 	int GetDropTypeVolume() const;
@@ -108,6 +108,8 @@ public:
 	//削除可能状態の取得
 	bool GetCanDelete() const;
 
+	//座標の取得
+	virtual Location GetLocation() const = 0;
 protected:
 	bool can_delete; //削除フラグ
 	int hp;	//体力

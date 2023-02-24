@@ -50,7 +50,7 @@ Undead::Undead()
 
 	/*当たり判定の設定*/
 	location.x = 640.0f;
-	location.y = 430.0f;
+	location.y = 400.0f;
 	area.width = 40;
 	area.height = 80;
 
@@ -216,8 +216,11 @@ void Undead::Death()
 //-----------------------------------
 // プレイヤーの弾との当たり判定
 //-----------------------------------
-void Undead::HitBullet(const BulletBase* bullet)
+bool Undead::HitBullet(const BulletBase* bullet)
 {
+	bool ret = false; //戻り値
+	if (HitSphere(bullet))
+	{
 		switch (bullet->GetAttribute())
 		{
 		case ATTRIBUTE::NORMAL:
@@ -241,6 +244,9 @@ void Undead::HitBullet(const BulletBase* bullet)
 		default:
 			break;
 		}
+		ret = true;
+	}
+	return ret;
 }
 
 //-----------------------------------
@@ -254,4 +260,12 @@ void Undead::Draw() const
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
 	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
+}
+
+//-----------------------------------
+//座標の取得
+//-----------------------------------
+Location Undead::GetLocation() const
+{
+	return location;
 }

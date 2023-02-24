@@ -266,7 +266,6 @@ void Player::Update()
 	{
 	}
 
-	count++;
 
 	damage_count++;
 	if (damage_count >= 10)
@@ -307,6 +306,8 @@ void Player::Update()
 	//RBボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
+		count++;
+
 		if (count % 30 == 0)
 		{
 			bullet_count++;
@@ -314,6 +315,12 @@ void Player::Update()
 		}
 	}
 
+	//RBボタン入力
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
+	{
+		bullet_count++;
+		Shoot_Gun();
+	}
 	//Bボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B) && fuel > 0)
 	{

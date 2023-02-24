@@ -5,7 +5,7 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-Torrent::Torrent(Player* player)
+Torrent::Torrent()
 {
 
 }
@@ -63,9 +63,11 @@ void Torrent::Death()
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-void Torrent::HitBullet(const BulletBase* bullet)
+bool Torrent::HitBullet(const BulletBase* bullet)
 {
+	bool ret = false; //戻り値
 
+	return ret;
 }
 
 //-----------------------------------
@@ -77,9 +79,9 @@ void Torrent::Draw() const
 }
 
 //-----------------------------------
-//状態の取得
+//座標の取得
 //-----------------------------------
-TORRENT_STATE Torrent::GetState() const
+Location Torrent::GetLocation() const
 {
-	return state;
+	return location;
 }

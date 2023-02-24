@@ -223,9 +223,11 @@ void Mage::SortBullet(int bullet_num)
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-void Mage::HitBullet(const BulletBase* bullet)
+bool Mage::HitBullet(const BulletBase* bullet)
 {
-	
+	bool ret = false; //戻り値
+
+	return ret;
 }
 
 //-----------------------------------
@@ -234,4 +236,12 @@ void Mage::HitBullet(const BulletBase* bullet)
 void Mage::Draw() const
 {
 
+}
+
+//-----------------------------------
+//座標の取得
+//-----------------------------------
+Location Mage::GetLocation() const
+{
+	return location;
 }

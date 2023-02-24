@@ -33,7 +33,7 @@ bool BoxCollider::HitSphere(const SphereCollider* sphere_collider) const
 	my_y[1] = my_y[0] + area.height;
 
 
-	if ((sphere_x < my_x[0]) && (my_x[1] < sphere_x) && (sphere_y < my_y[0]) && (my_y[1] < sphere_y)) //“–‚½‚è”»’è
+	if ((my_x[0] < sphere_x) && (sphere_x < my_x[1]) && (my_y[0] < sphere_y) && (sphere_y < my_y[1])) //“–‚½‚è”»’è
 	{
 		ret = true;
 	}
