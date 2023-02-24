@@ -14,7 +14,10 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
-	enemy = new Undead(player);
+	enemy = new EnemyBase * [3];
+	enemy[0] = new Undead(player);
+	enemy[1] = new EnemySlime();
+	enemy[2] = new EnemyGhost();
 	camera_work = new CameraWork(0, 0, player, stage);
 	item_controller = new ItemController();
 
@@ -45,7 +48,7 @@ AbstractScene* GameMain::Update()
 		return new Title();
 	}
 
-	if (input_margin < 30) 
+	if (input_margin < 30)
 	{
 		input_margin++;
 	}
@@ -66,88 +69,99 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	if (enemy != nullptr)
+	for (int i = 0; i < 3; i++)
 	{
-		enemy->Update();
 
-		switch (enemy->GetEnemyKind())
+		if (enemy != nullptr)
 		{
-		case ENEMY_KIND::SLIME:		//スライム
-		{			
-			EnemySlime* slime;
-			slime = dynamic_cast<EnemySlime*>(enemy);
-			slime->HitPlayer(player);
-			slime->AttackJudgement(player);
-			break;
-		}
-		case ENEMY_KIND::UNDEAD:	//アンデット
-		{
-			Undead* undead;
-			undead = dynamic_cast<Undead*>(enemy);
-			if (undead->GetState() == UNDEAD_STATE::ATTACK)
+			enemy[i]->Update();
+
+			switch (enemy[i]->GetEnemyKind())
 			{
-				if (undead->HitBox(player))
+			case ENEMY_KIND::SLIME:		//スライム
+			{
+				EnemySlime* slime;
+				slime = dynamic_cast<EnemySlime*>(enemy[i]);
+				slime->HitPlayer(player);
+				slime->AttackJudgement(player);
+				break;
+			}
+			case ENEMY_KIND::UNDEAD:	//アンデット
+			{
+				Undead* undead;
+				undead = dynamic_cast<Undead*>(enemy[i]);
+				if (undead->GetState() == UNDEAD_STATE::ATTACK)
 				{
+					if (undead->HitBox(player))
+					{
 
+					}
 				}
+
+				if (undead->GetCanDelete()) //死亡
+				{
+					item_controller->SpawnItem(undead, undead->GetLocation());
+					delete undead;
+					enemy = nullptr;
+				}
+				break;
+			}
+			case ENEMY_KIND::HARPY:		//ハーピィ
+			{
+				break;
+			}
+			case ENEMY_KIND::MAGE:		//メイジ
+			{
+				break;
+			}
+			case ENEMY_KIND::GHOST:		//ゴースト
+			{
+				EnemyGhost* ghost;
+				ghost = dynamic_cast<EnemyGhost*>(enemy[i]);
+				ghost->GhostMove(player);
+
+				if (ghost->GetCanDelete()) //死亡
+				{
+					item_controller->SpawnItem(ghost, ghost->GetLocation());
+					delete ghost;
+					enemy = nullptr;
+				}
+				break;
+			}
+			case ENEMY_KIND::WYVERN:	//ワイバーン
+			{
+				break;
+			}
+			case ENEMY_KIND::KING_SLIME://スライムキング
+			{
+				break;
+			}
+			case ENEMY_KIND::TORRENT:	//トレント
+			{
+				break;
+			}
+			case ENEMY_KIND::GARGOYLE:	//ガーゴイル
+			{
+				break;
+			}
+			case ENEMY_KIND::DRAGON:	//ドラゴン
+			{
+				break;
+			}
+			case ENEMY_KIND::END_BOSS:	//ラスボス
+			{
+				break;
+			}
+			case ENEMY_KIND::NONE:
+				break;
+			default:
+				break;
 			}
 
-			if (undead->GetCanDelete())
-			{
-				item_controller->SpawnItem(undead, undead->GetLocation());
-				delete undead;
-				enemy = nullptr;
-			}
-			break;
-		}
-		case ENEMY_KIND::HARPY:		//ハーピィ
-		{
-			break;
-		}
-		case ENEMY_KIND::MAGE:		//メイジ
-		{
-			break;
-		}
-		case ENEMY_KIND::GHOST:		//ゴースト
-		{
-			EnemyGhost* ghost;
-			ghost = dynamic_cast<EnemyGhost*>(enemy);
-			ghost->GhostMove(player);
-			break;
-		}
-		case ENEMY_KIND::WYVERN:	//ワイバーン
-		{
-			break;
-		}
-		case ENEMY_KIND::KING_SLIME://スライムキング
-		{
-			break;
-		}
-		case ENEMY_KIND::TORRENT:	//トレント
-		{
-			break;
-		}
-		case ENEMY_KIND::GARGOYLE:	//ガーゴイル
-		{
-			break;
-		}
-		case ENEMY_KIND::DRAGON:	//ドラゴン
-		{
-			break;
-		}
-		case ENEMY_KIND::END_BOSS:	//ラスボス
-		{
-			break;
-		}
-		case ENEMY_KIND::NONE:
-			break;
-		default:
-			break;
 		}
 
 	}
 
-	
 }
 
 //-----------------------------------
@@ -161,8 +175,11 @@ void GameMain::Draw()const
 	item_controller->Draw();
 	player->Draw();
 	stage->Draw();
-	if (enemy != nullptr)
+	for (int i = 0; i < 3; i++)
 	{
-		enemy->Draw();
+		if (enemy != nullptr)
+		{
+			enemy[i]->Draw();
+		}
 	}
 }

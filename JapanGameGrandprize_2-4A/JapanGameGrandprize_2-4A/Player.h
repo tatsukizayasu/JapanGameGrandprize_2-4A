@@ -6,10 +6,13 @@
 #include "Stage/Stage.h"
 #include "EnemyBase.h"
 #include "ElementItem.h"
+#include "Pouch.h"
+#include <string>
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100
+#define BULLET_MAX 30
 
 enum class PLAYER_STATE
 {
@@ -46,10 +49,8 @@ private:
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
 	bool pouch_open;				//ポーチを開けている
 
-	Player* player;
-
 	ATTRIBUTE attribute[6];         //弾の属性
-	int attribute_c[6];
+	std::string attribute_c[6];     //弾の属性の文字列
 	int display_attribute; //画面に表示させる属性
 
 	PLAYER_STATE player_state;
@@ -58,6 +59,7 @@ private:
 	BulletBase** bullet;             //弾の配列
 	Stage* stage;                //ステージへのポインタ
 	EfectBeam* beam;
+	Pouch* pouch;				//ポーチへのポインタ
 
 
 	ElementItem** element;	//元素
