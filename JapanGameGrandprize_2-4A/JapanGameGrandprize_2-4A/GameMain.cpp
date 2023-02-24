@@ -15,7 +15,7 @@ GameMain::GameMain()
 	stage = new Stage();
 	player = new Player(stage);
 	enemy = new EnemyBase * [3];
-	enemy[0] = new Undead(player);
+	enemy[0] = new Undead();
 	enemy[1] = new EnemySlime();
 	enemy[2] = new EnemyGhost();
 	camera_work = new CameraWork(0, 0, player, stage);
@@ -72,41 +72,41 @@ void GameMain::EnemyUpdate()
 	for (int i = 0; i < 3; i++)
 	{
 
-		if (enemy != nullptr)
+		if (enemy[i] != nullptr)
 		{
 			enemy[i]->Update();
 
-		switch (enemy->GetState())
-		{
-		case ENEMY_STATE::IDOL:
-			enemy->Idol();
-			break;
-		case ENEMY_STATE::MOVE:
-			enemy->Move(player->GetLocation());
-			break;
-		case ENEMY_STATE::ATTACK:
-			enemy->Attack(player);
-			break;
-		case ENEMY_STATE::DEATH:
-			enemy->Death();
-			break;
-		default:
-			break;
-		}
-
-		if (enemy->GetCanDelete())
-		{
-
-		}
-
-		for (int i = 0; i < BULLET_MAX; i++)
-		{
-			if (player->GetBullet(i) != nullptr)
+			switch (enemy[i]->GetState())
 			{
-				enemy->HitBullet(player->GetBullet(i));
+			case ENEMY_STATE::IDOL:
+				enemy[i]->Idol();
+				break;
+			case ENEMY_STATE::MOVE:
+				enemy[i]->Move(player->GetLocation());
+				break;
+			case ENEMY_STATE::ATTACK:
+				enemy[i]->Attack(player);
+				break;
+			case ENEMY_STATE::DEATH:
+				enemy[i]->Death();
+				break;
+			default:
+				break;
+			}
+
+			if (enemy[i]->GetCanDelete())
+			{
+
+			}
+
+			for (int i = 0; i < BULLET_MAX; i++)
+			{
+				if (player->GetBullet(i) != nullptr)
+				{
+					enemy[i]->HitBullet(player->GetBullet(i));
+				}
 			}
 		}
-	}
 
 	}
 
