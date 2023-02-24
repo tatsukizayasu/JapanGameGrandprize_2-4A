@@ -23,7 +23,6 @@ enum class GHOST_ATTACK
 class EnemyGhost : public EnemyBase, public BoxCollider
 {
 private:
-
 	int standby_time; //d’¼ŠÔ
 	int standby_count; //d’¼ƒJƒEƒ“ƒg
 	bool magic_attack; //–‚–@UŒ‚

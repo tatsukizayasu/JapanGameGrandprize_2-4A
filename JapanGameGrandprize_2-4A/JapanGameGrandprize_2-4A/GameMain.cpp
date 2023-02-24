@@ -14,7 +14,7 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
-	enemy = new EnemySlime();
+	enemy = new EnemyGhost();
 	camera_work = new CameraWork(0, 0, player, stage);
 	item_controller = new ItemController();
 
@@ -79,7 +79,7 @@ void GameMain::EnemyUpdate()
 			enemy->Move(player->GetLocation());
 			break;
 		case ENEMY_STATE::ATTACK:
-			//player-> enemy->Attack(player);
+			enemy->Attack(player);
 			break;
 		case ENEMY_STATE::DEATH:
 			enemy->Death();

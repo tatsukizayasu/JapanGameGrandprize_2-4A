@@ -13,6 +13,9 @@ public:
 	//描画
 	virtual void Draw() const = 0;
 
+	//画面外に出たかどうか
+	bool ScreenOut();
+
 	//ダメージの取得
 	int GetDamage() const;
 
@@ -22,6 +25,6 @@ protected:
 	int damage; //ダメージ
 	int speed; //速度
 
-	ENEMY_TYPE type; //属性
+	ENEMY_TYPE type; //属性	
 };
 

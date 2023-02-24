@@ -10,7 +10,7 @@
 #define GHOST_DETECTION_DISTANCE 500
 
 //物理攻撃範囲
-#define GHOST_ATTACK_RANGE 15
+#define GHOST_ATTACK_RANGE 20
 
 //魔法攻撃範囲	
 #define GHOST_ATTACK_MAGIC 400
@@ -19,7 +19,7 @@
 #define GHOST_MAGIC_STANDBY 60
 
 //近接攻撃した時の硬直時間
-#define GHOST_MAGIC_PHYSICAL 300
+#define GHOST_PHYSICAL_STANDBY 300
 
 //移動スピード
 #define GHOST_SPEED 1.5
@@ -83,30 +83,26 @@ void EnemyGhost::Update()
 	case ENEMY_STATE::MOVE:
 		break;
 	case ENEMY_STATE::ATTACK:
-		switch (attack_state)
+		standby_count++;
+		if (standby_time < standby_count)
 		{
-		case GHOST_ATTACK::PHYSICAL_ATTACK:
-			standby_count++;
-			if (standby_count < GHOST_MAGIC_PHYSICAL) //硬直時間
+			switch (attack_state)
 			{
-				physical_attack = true;
-				standby_time = 0;
-				attack_state = GHOST_ATTACK::NONE;
+			case GHOST_ATTACK::PHYSICAL_ATTACK:
+				physical_attack = false;
+				break;
+			case GHOST_ATTACK::MAGIC_ATTACK:
+				magic_attack = false;
+				break;
+			case GHOST_ATTACK::NONE:
+				break;
+			default:
+				break;
 			}
-			break;
-		case GHOST_ATTACK::MAGIC_ATTACK:
-			standby_count++;
-			if (standby_time < GHOST_MAGIC_STANDBY) //硬直時間
-			{
-				magic_attack = true;
-				standby_time = 0;
-				attack_state = GHOST_ATTACK::NONE;
-			}
-			break;
-		case GHOST_ATTACK::NONE:
-			break;
-		default:
-			break;
+			standby_time = 0;
+			standby_count = 0;
+			attack_state = GHOST_ATTACK::NONE;
+			state = ENEMY_STATE::MOVE;
 		}
 		break;
 	case ENEMY_STATE::DEATH:
@@ -118,6 +114,12 @@ void EnemyGhost::Update()
 	if (bullet != nullptr)
 	{
 		bullet->Update();
+
+		if (bullet->ScreenOut())
+		{
+			delete bullet;
+			bullet = nullptr;
+		}
 	}
 }
 
@@ -175,8 +177,6 @@ AttackResource EnemyGhost::Attack(const BoxCollider* collider)
 			ret.type = attack_type;
 			ret.type_count = 1;
 		}
-
-	
 		break;
 	case GHOST_ATTACK::MAGIC_ATTACK:
 		if (bullet != nullptr)
@@ -187,6 +187,8 @@ AttackResource EnemyGhost::Attack(const BoxCollider* collider)
 				ret.damage = bullet->GetDamage();
 				ret.type = attack_type;
 				ret.type_count = 1;
+				delete bullet;
+				bullet = nullptr;
 			}
 		}
 		break;
@@ -242,9 +244,9 @@ void EnemyGhost::Draw()const
 //-----------------------------------
 void EnemyGhost::GhostMove(const Location player_location)
 {
-	int range; //プレイヤーとの距離	
+	float range; //プレイヤーとの距離	
 	
-	range = location.x - player_location.x;
+	range = fabsf(location.x - player_location.x);
 
 	//プレイヤーが発見距離内にいたら
 	if (range <= GHOST_DETECTION_DISTANCE && range >= -GHOST_DETECTION_DISTANCE)
@@ -278,13 +280,19 @@ void EnemyGhost::GhostMove(const Location player_location)
 	}
 
 	//攻撃範囲内にいる場合
-	if ((range <= GHOST_ATTACK_RANGE) && (range >= -GHOST_ATTACK_RANGE) && (!physical_attack))
+	if ((range <= GHOST_ATTACK_RANGE) && (!physical_attack))
 	{
+		state = ENEMY_STATE::ATTACK;
 		attack_state = GHOST_ATTACK::PHYSICAL_ATTACK;
+		standby_time = GHOST_PHYSICAL_STANDBY;
+		physical_attack = true;
 	}
-	else if ((range <= GHOST_ATTACK_MAGIC) && (range >= -GHOST_ATTACK_MAGIC) && (!magic_attack))
+	else if ((range <= GHOST_ATTACK_MAGIC) && (!magic_attack))
 	{
+		state = ENEMY_STATE::ATTACK;
 		attack_state = GHOST_ATTACK::MAGIC_ATTACK;
+		standby_time = GHOST_MAGIC_STANDBY;
+		magic_attack = true;
 		if (bullet == nullptr)
 		{
 			bullet = new GhostBullet(location, player_location);

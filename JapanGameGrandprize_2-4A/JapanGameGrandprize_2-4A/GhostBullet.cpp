@@ -1,4 +1,5 @@
 #include "GhostBullet.h"
+#include "CameraWork.h"
 
 #define GHOST_BULLET_SPEED 10
 #define GHOST_BULLET_DAMAGE 10
@@ -42,5 +43,9 @@ void GhostBullet::Update()
 //-----------------------------------
 void GhostBullet::Draw() const
 {
-	DrawCircle(location.x, location.y,3, 0xffffff, TRUE);
+	float x, y;
+	x = location.x - CameraWork::GetCamera().x;
+	y = location.y - CameraWork::GetCamera().y;
+
+	DrawCircle(x, y, 5, 0xffffff, TRUE);
 }
