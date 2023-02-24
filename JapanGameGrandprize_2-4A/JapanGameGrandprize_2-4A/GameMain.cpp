@@ -99,11 +99,11 @@ void GameMain::EnemyUpdate()
 
 			}
 
-			for (int i = 0; i < BULLET_MAX; i++)
+			for (int j = 0; j < BULLET_MAX; j++)
 			{
-				if (player->GetBullet(i) != nullptr)
+				if (player->GetBullet(j) != nullptr)
 				{
-					enemy[i]->HitBullet(player->GetBullet(i));
+					enemy[i]->HitBullet(player->GetBullet(j));
 				}
 			}
 		}

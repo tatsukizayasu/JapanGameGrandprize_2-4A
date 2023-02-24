@@ -304,7 +304,6 @@ void EnemyGhost::GhostMove(const Location player_location)
 		action_type = GHOST_STATE::NORMAL;
 		magic_attack = false;
 		physical_attack = false;
-		setting_bullet = false;
 	}
 
 	//UŒ‚”ÍˆÍ“à‚É‚¢‚éê‡
