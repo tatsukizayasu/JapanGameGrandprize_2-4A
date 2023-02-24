@@ -57,7 +57,7 @@ public:
 	//線の端の座標の取得
 	Location GetLocation(int i)const;
 
-	//始点、終点座標の設定座標の設定
+	//始点、終点座標の設定
 	void SetLocation(Location location, int i);
 
 #ifdef _SHOW_COLLISION

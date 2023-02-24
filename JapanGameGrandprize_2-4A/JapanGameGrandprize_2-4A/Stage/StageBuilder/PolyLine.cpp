@@ -1,9 +1,9 @@
 #include "PolyLine.h"
 #include "DxLib.h"
 
-//---------------------------------
-// コンストラクタ
-//---------------------------------
+//-------------------------------------
+// コンストラクタ 引数：点の座標と数
+//-------------------------------------
 PolyLine::PolyLine(Location bend_points[], unsigned int size)
 {
 	for (int i = 0; i < size; i++)
@@ -28,7 +28,14 @@ PolyLine::~PolyLine()
 //---------------------------------
 // 更新
 //---------------------------------
-
+void PolyLine::Update()
+{
+	for (int i = 0; i < lines.size(); i++)
+	{
+		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
+		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
+	}
+}
 
 //---------------------------------
 // 描画

@@ -14,6 +14,9 @@ public:
     PolyLine(Location bend_points[], unsigned int size);
     ~PolyLine();
 
+    void Update();
+    virtual void Draw()const {}
+
     vector<SphereCollider*> GetPoint()const{return bend_points;}
 
 #ifdef _SHOW_COLLISION
