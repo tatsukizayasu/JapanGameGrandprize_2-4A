@@ -6,7 +6,7 @@
 #include <string>
 #include "../Player.h"
 
-#define STAGE_NAME	"debugStage";
+//#define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage2";
 
 

@@ -67,7 +67,7 @@ MapChip::~MapChip()
 //-----------------------------------
 void MapChip::Update(Player* player)
 {
-
+	if (CheckHitKey(KEY_INPUT_SPACE)) {
 	if (HitBox(player)) {
 		//上
 		if (location.y < player->GetLocation().y) {
@@ -82,15 +82,15 @@ void MapChip::Update(Player* player)
 
 		//右
 		if (location.x > player->GetLocation().x) {
-				collision_dir.x = 1;
-			}
+			collision_dir.x = 1;
+		}
 
 		//左
 		else if (location.x < player->GetLocation().x) {
 			collision_dir.x = -1;
 		}
 	}
-
+}
 
 	// カメラ位置に合わせてMapChipオブジェクトの位置を更新
 //location.x = location.x + CameraWork::GetCamera().x;
