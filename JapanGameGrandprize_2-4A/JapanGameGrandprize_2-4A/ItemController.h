@@ -22,7 +22,7 @@ public:
 	void Draw() const;
 
 	//アイテムの生成
-	void SpawnItem(class EnemyBase* enemy, Location spawn_location);
+	void SpawnItem(class EnemyBase* enemy);
 
 	//アイテムの並び替え
 	void SortItem(int item_num);

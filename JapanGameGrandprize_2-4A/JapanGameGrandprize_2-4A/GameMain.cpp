@@ -6,6 +6,7 @@
 #include "Undead.h"
 #include"EnemySlime.h"
 #include"EnemyGhost.h"
+#include "BULLET.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -31,7 +32,11 @@ GameMain::~GameMain()
 {
 	delete player;
 	delete stage;
-	delete enemy;
+	for (int i = 0; i < 3; i++)
+	{
+		delete enemy[i];
+	}
+	delete[] enemy;
 	delete camera_work;
 }
 
@@ -69,6 +74,9 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
+	BulletBase** bullet;
+	bullet = player->GetBullet();
+
 	for (int i = 0; i < 3; i++)
 	{
 
@@ -89,25 +97,35 @@ void GameMain::EnemyUpdate()
 				break;
 			case ENEMY_STATE::DEATH:
 				enemy[i]->Death();
+
 				break;
 			default:
 				break;
 			}
 
-			if (enemy[i]->GetCanDelete())
-			{
-
-			}
-
+			//プレイヤーの弾との当たり判定
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
-				if (player->GetBullet(j) != nullptr)
+				if (bullet[j] == nullptr)
 				{
-					enemy[i]->HitBullet(player->GetBullet(j));
+					break;
+				}
+
+				if (enemy[i]->HitBullet(bullet[j]))
+				{
+					delete bullet[i];
+					bullet[i] = nullptr;
+					player->SortBullet(j);
 				}
 			}
-		}
 
+			if (enemy[i]->GetCanDelete())
+			{
+				item_controller->SpawnItem(enemy[i]);
+				delete enemy[i];
+				enemy[i] = nullptr;
+			}
+		}
 	}
 
 }
@@ -125,7 +143,7 @@ void GameMain::Draw()const
 	stage->Draw();
 	for (int i = 0; i < 3; i++)
 	{
-		if (enemy != nullptr)
+		if (enemy[i] != nullptr)
 		{
 			enemy[i]->Draw();
 		}

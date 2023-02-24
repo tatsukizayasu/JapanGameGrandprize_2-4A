@@ -50,9 +50,8 @@ void ItemController::Update(class Player* player)
 //-----------------------------------
 //アイテムの生成
 //-----------------------------------
-void ItemController::SpawnItem(class EnemyBase* enemy_base,Location spawn_location)
+void ItemController::SpawnItem(class EnemyBase* enemy_base)
 {
-	EnemyBase* enemy = enemy_base;
 
 	int old_item_volume = item_volume;//生成可能なエネミー数
 
@@ -63,12 +62,12 @@ void ItemController::SpawnItem(class EnemyBase* enemy_base,Location spawn_locati
 	int j = old_item_volume;
 
 	//アイテムの生成
-	for (int i = 0; i < enemy->GetDropTypeVolume(); i++)
+	for (int i = 0; i < enemy_base->GetDropTypeVolume(); i++)
 	{
-		volume =enemy->GetDropItem(i).GetVolume();
+		volume = enemy_base->GetDropItem(i).GetVolume();
 		while (0 < volume)
 		{
-			item[j++] = new Item(enemy->GetDropItem(i).GetType(), spawn_location);
+			item[j++] = new Item(enemy_base->GetDropItem(i).GetType(), enemy_base->GetLocation());
 			volume--;
 		}
 	}
