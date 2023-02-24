@@ -9,6 +9,12 @@ enum class DIRECTION
 	RIGHT
 };
 
+enum class SLIME_STATE
+{
+	JUMP, //スライムがジャンプしてる
+	FALL, //スライムが落下している
+};
+
 class EnemySlime : public EnemyBase, public BoxCollider
 {
 private:
