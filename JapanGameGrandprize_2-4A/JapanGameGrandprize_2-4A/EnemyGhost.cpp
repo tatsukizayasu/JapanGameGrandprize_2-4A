@@ -27,27 +27,51 @@
 //攻撃スピード
 #define ATTACK_SPEED 4.5
 
+//ドロップ量(最小)
+#define GHOST_MIN_DROP 0u
+
+//ドロップ量(最大)
+#define GHOST_MAX_DROP 4u
+
+//ドロップする種類数
+#define GHOST_DROP 3
+
 //ゴーストの攻撃力
 #define GHOST_ATTACK_DAMAGE 10
 
 //今日やること
-//当たり判定、アイテム生成、接近攻撃あれでいいのか
+//当たり判定、接近攻撃あれでいいのか
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
 EnemyGhost::EnemyGhost()
 {
+	can_delete = false;
 	hp = 10;
 	location.x = 600;
 	location.y = 300;
-	area.height = 40;
-	area.width = 40;
+	area.width = GHOST_SIZE_X;
+	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
 	standby_count = 0;
 	physical_attack = false;
 	magic_attack = false;
 	kind = ENEMY_KIND::GHOST;
+
+	//ドロップアイテムの設定
+	drop_element = new ElementItem * [GHOST_DROP];
+	drop_type_volume = GHOST_DROP;
+
+	int volume = 0;
+	for (int i = 0; i < GHOST_DROP; i++)
+	{
+		volume = GHOST_MIN_DROP + GetRand(GHOST_MAX_DROP);
+		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+		drop_element[i]->SetVolume(volume);
+		drop_volume += volume;
+	}
+
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WIND;
 	attack_state = GHOST_ATTACK::NONE;
@@ -258,7 +282,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
 			}
-			else
+			else 
 			{
 				action_type = GHOST_STATE::LEFT_UPPER;
 			}
@@ -278,6 +302,9 @@ void EnemyGhost::GhostMove(const Location player_location)
 	else //通常移動
 	{
 		action_type = GHOST_STATE::NORMAL;
+		magic_attack = false;
+		physical_attack = false;
+		setting_bullet = false;
 	}
 
 	//攻撃範囲内にいる場合
@@ -306,7 +333,10 @@ void EnemyGhost::GhostMove(const Location player_location)
 //-----------------------------------
 void EnemyGhost::HitBullet(const BulletBase* bullet)
 {
-
+	if (HitSphere(bullet) != false)
+	{
+		can_delete = true; //デバック  当たったら死亡
+	}
 }
 
 

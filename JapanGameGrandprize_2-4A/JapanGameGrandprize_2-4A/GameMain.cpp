@@ -14,7 +14,10 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
-	enemy = new EnemyGhost();
+	enemy = new EnemyBase * [3];
+	enemy[0] = new Undead(player);
+	enemy[1] = new EnemySlime();
+	enemy[2] = new EnemyGhost();
 	camera_work = new CameraWork(0, 0, player, stage);
 	item_controller = new ItemController();
 
@@ -45,7 +48,7 @@ AbstractScene* GameMain::Update()
 		return new Title();
 	}
 
-	if (input_margin < 30) 
+	if (input_margin < 30)
 	{
 		input_margin++;
 	}
@@ -66,9 +69,12 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	if (enemy != nullptr)
+	for (int i = 0; i < 3; i++)
 	{
-		enemy->Update();
+
+		if (enemy != nullptr)
+		{
+			enemy[i]->Update();
 
 		switch (enemy->GetState())
 		{
@@ -102,7 +108,8 @@ void GameMain::EnemyUpdate()
 		}
 	}
 
-	
+	}
+
 }
 
 //-----------------------------------
@@ -116,8 +123,11 @@ void GameMain::Draw()const
 	item_controller->Draw();
 	player->Draw();
 	stage->Draw();
-	if (enemy != nullptr)
+	for (int i = 0; i < 3; i++)
 	{
-		enemy->Draw();
+		if (enemy != nullptr)
+		{
+			enemy[i]->Draw();
+		}
 	}
 }

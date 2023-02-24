@@ -49,8 +49,6 @@ private:
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
 	bool pouch_open;				//ポーチを開けている
 
-	Player* player;
-
 	ATTRIBUTE attribute[6];         //弾の属性
 	std::string attribute_c[6];     //弾の属性の文字列
 	int display_attribute; //画面に表示させる属性
