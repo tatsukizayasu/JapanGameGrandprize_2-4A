@@ -9,6 +9,7 @@ NormalBullet::NormalBullet()
 {
 	location.x = 0.0;
 	location.y = 0.0;
+	radius = 4;
 	efect_count = 0;
 	scrool_x = 0.0;
 	delete_flg = false;

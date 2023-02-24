@@ -194,3 +194,11 @@ void EnemySlime::KnockBack()
 	}
 }
 
+//-----------------------------------
+//À•W‚Ìæ“¾
+//-----------------------------------
+Location EnemySlime::GetLocation() const
+{
+	return location;
+}
+

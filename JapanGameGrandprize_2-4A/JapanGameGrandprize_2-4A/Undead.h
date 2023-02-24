@@ -39,10 +39,12 @@ public:
     void Death() override;
 
     //プレイヤーの弾との当たり判定
-    void HitBullet(const BulletBase* bullet) override;
+    bool HitBullet(const BulletBase* bullet) override;
 
     //描画
     void Draw() const override;
 
+    //座標の取得
+    Location GetLocation() const override;
 };
 
