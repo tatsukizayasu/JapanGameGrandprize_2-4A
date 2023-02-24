@@ -72,6 +72,7 @@ void EnemyGhost::Update()
 	float screen_x; //画面スクロールを考慮したX座標
 
 	screen_x = location.x - CameraWork::GetCamera().x;
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:

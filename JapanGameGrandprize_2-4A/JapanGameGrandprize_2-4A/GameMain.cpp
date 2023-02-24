@@ -92,6 +92,14 @@ void GameMain::EnemyUpdate()
 		{
 
 		}
+
+		for (int i = 0; i < BULLET_MAX; i++)
+		{
+			if (player->GetBullet(i) != nullptr)
+			{
+				enemy->HitBullet(player->GetBullet(i));
+			}
+		}
 	}
 
 	

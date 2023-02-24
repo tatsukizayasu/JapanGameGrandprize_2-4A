@@ -87,7 +87,6 @@ public:
 	//€–S
 	virtual void Death() = 0;
 
-	
 	//ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 	virtual void HitBullet(const BulletBase* bullet) = 0;
 
