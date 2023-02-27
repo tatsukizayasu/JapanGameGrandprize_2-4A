@@ -59,6 +59,7 @@ Undead::Undead()
 	drop_type_volume = SOIL_DROP;
 
 	int volume = 0;
+
 	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		volume = UNDEAD_MIN_DROP + GetRand(UNDEAD_MAX_DROP);
@@ -78,6 +79,7 @@ Undead::~Undead()
 	{
 		delete drop_element[i];
 	}
+
 	delete[] drop_element;
 
 	delete type;
@@ -202,6 +204,7 @@ AttackResource Undead::Attack(const BoxCollider* collider)
 		ret.type = attack_type;
 		ret.type_count = 1;
 	}
+
 	return ret;
 }
 
@@ -219,8 +222,10 @@ void Undead::Death()
 bool Undead::HitBullet(const BulletBase* bullet)
 {
 	bool ret = false; //–ß‚è’l
+
 	if (HitSphere(bullet))
 	{
+
 		switch (bullet->GetAttribute())
 		{
 		case ATTRIBUTE::NORMAL:
@@ -244,8 +249,10 @@ bool Undead::HitBullet(const BulletBase* bullet)
 		default:
 			break;
 		}
+
 		ret = true;
 	}
+
 	return ret;
 }
 

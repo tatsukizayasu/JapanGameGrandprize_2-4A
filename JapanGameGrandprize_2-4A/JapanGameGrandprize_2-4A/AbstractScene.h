@@ -3,6 +3,7 @@
 class AbstractScene
 {
 public:
+
 	//デストラクタ
 	virtual ~AbstractScene() {};
 

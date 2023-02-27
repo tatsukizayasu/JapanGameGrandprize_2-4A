@@ -9,6 +9,7 @@ class Torrent :
 private:
 
 public:
+
     //コンストラクタ
     Torrent();
 
@@ -39,4 +40,3 @@ public:
     //座標の取得
     Location GetLocation() const override;
 };
-

@@ -4,7 +4,6 @@
 #define SCREEN_WIDTH 1280	//画面サイズ (横)
 #define GRAVITY 10
 
-
 //化合物構造体
 struct Compound
 {

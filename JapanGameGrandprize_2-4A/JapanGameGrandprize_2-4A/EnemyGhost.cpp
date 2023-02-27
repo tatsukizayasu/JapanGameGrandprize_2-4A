@@ -320,6 +320,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 		attack_state = GHOST_ATTACK::MAGIC_ATTACK;
 		standby_time = GHOST_MAGIC_STANDBY;
 		magic_attack = true;
+
 		if (bullet == nullptr)
 		{
 			bullet = new GhostBullet(location, player_location);
@@ -349,5 +350,3 @@ Location EnemyGhost::GetLocation() const
 {
 	return location;
 }
-
-

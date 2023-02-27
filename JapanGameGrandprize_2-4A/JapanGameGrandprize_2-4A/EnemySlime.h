@@ -12,6 +12,7 @@ enum class DIRECTION
 class EnemySlime : public EnemyBase, public BoxCollider
 {
 private:
+
 	int color;
 	DIRECTION direction;
 
@@ -21,8 +22,8 @@ private:
 	Location jump_distance;
 
 	ElementItem drop_item;
-
 public:
+
 	EnemySlime();
 	EnemySlime(float x, float y, float height, float width);
 	~EnemySlime() {};
@@ -48,7 +49,9 @@ public:
 
 	void KnockBack();
 
-	virtual bool HitBullet(const BulletBase* bullet)override {
+	virtual bool HitBullet(const BulletBase* bullet)override
+	{
+
 		bool ret = false; //–ß‚è’l
 
 		return ret;

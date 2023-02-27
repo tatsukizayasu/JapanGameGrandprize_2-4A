@@ -63,6 +63,7 @@ enum class ENEMY_STATE
 class EnemyBase
 {
 public:
+
 	//コンストラクタ
 	EnemyBase();
 
@@ -111,6 +112,7 @@ public:
 	//座標の取得
 	virtual Location GetLocation() const = 0;
 protected:
+
 	bool can_delete; //削除フラグ
 	int hp;	//体力
 	int speed; //移動速度
@@ -126,6 +128,7 @@ protected:
 	ENEMY_TYPE* type; //エネミーのタイプ
 	ENEMY_STATE state; //エネミーの状態
 protected:
+
 	//HPが0かどうか判断(0になったらtrue)
 	bool CheckHp();
 

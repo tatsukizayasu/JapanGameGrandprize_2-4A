@@ -21,6 +21,7 @@ NormalBullet::NormalBullet()
 		dot_location_y[i] = 0;
 		speed_y[i] = 0;
 	}
+
 	speed_x = 0;
 }
 
@@ -37,7 +38,6 @@ NormalBullet::NormalBullet(float player_x, float player_y,ATTRIBUTE attribute)
 	damage = 10;
 	debuff_time = 0;
 
-
 	efect_count = 0;
 	delete_flg = false;
 	efect_end = false;
@@ -53,7 +53,6 @@ NormalBullet::NormalBullet(float player_x, float player_y,ATTRIBUTE attribute)
 	speed_y[1] = 8;
 	speed_y[2] = 6;
 	speed_y[3] = 4;
-	
 }
 
 //-----------------------------------
@@ -65,6 +64,7 @@ void NormalBullet::Draw() const
 	{
 		DrawBox(location.x, location.y, location.x + 20, location.y + 10, 0xff00ff, TRUE);
 	}
+
 	if (!efect_end && delete_flg)
 	{
 		for (int i = 0; i < PIXEL_MAX; i++)
@@ -93,6 +93,7 @@ void NormalBullet::Update()
 				dot_location_y[i] = location.y;
 			}
 		}
+
 		delete_flg = true;
 	}
 

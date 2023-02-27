@@ -17,6 +17,7 @@ class Mage :
     public EnemyBase,public BoxCollider
 {
 private:
+
     int shot_rate; //魔法弾の発射レート
     int image; //画像
     int drop; //ドロップするアイテムの種類の数
@@ -24,8 +25,8 @@ private:
     Player* player; //プレイヤー
 
     MageBullet* bullet[20]; //弾
-
 private:
+
     //弾の生成
     void CreateBullet();
 

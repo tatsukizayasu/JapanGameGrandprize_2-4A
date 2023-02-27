@@ -12,7 +12,6 @@
 
 #define MAGE_SHOT_RATE 20
 
-
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -39,6 +38,7 @@ Mage::Mage()
 
 	//ドロップアイテムの設定
 	drop = 0;
+
 	switch (*type)
 	{
 	case ENEMY_TYPE::NORMAL:
@@ -65,9 +65,12 @@ Mage::Mage()
 	drop_type_volume = drop;
 
 	int volume = 0;
+
 	for (int i = 0; i < drop; i++)
 	{
+
 		volume = MAGE_MIN_DROP + GetRand(MAGE_MAX_DROP);
+
 		switch (*type)
 		{
 		case ENEMY_TYPE::NORMAL:
@@ -103,6 +106,7 @@ Mage::Mage()
 		default:
 			break;
 		}
+
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
@@ -112,6 +116,7 @@ Mage::Mage()
 	{
 		bullet[i] = nullptr;
 	}
+
 	this->player = player;
 }
 
@@ -126,6 +131,7 @@ Mage::~Mage()
 	{
 		delete drop_element[i];
 	}
+
 	delete[] drop_element;
 
 	for (int i = 0; i < MAGE_BULLET_MAX; i++)
@@ -145,6 +151,7 @@ void Mage::Update()
 		{
 			break;
 		}
+
 		bullet[i]->Update();
 	}
 }
@@ -190,6 +197,7 @@ void Mage::Death()
 void Mage::CreateBullet()
 {
 	shot_rate++;
+
 	if (shot_rate % MAGE_SHOT_RATE == 0)
 	{
 		for (int i = 0; i < MAGE_BULLET_MAX; i++)

@@ -14,5 +14,6 @@ bool Directory::Open(const char* path)
 	if (_chdir(current_dir.c_str()) != -1)is_success = true;
 
 	Update();
+
 	return is_success;
 }
