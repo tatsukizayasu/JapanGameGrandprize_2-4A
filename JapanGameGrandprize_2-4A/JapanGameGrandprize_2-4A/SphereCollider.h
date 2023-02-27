@@ -5,6 +5,7 @@
 class SphereCollider :public ColliderBase
 {
 protected:
+
 	int radius;			//”¼Œa
 public:
 

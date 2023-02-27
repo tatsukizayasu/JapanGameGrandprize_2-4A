@@ -9,11 +9,13 @@
 class NormalBullet : public BulletBase
 {
 private:
+
 	float speed_x, speed_y[PIXEL_MAX];
 	float dot_location_x[PIXEL_MAX], dot_location_y[PIXEL_MAX];
 public:
+
 	NormalBullet();
-	NormalBullet(float, float,ATTRIBUTE);
+	NormalBullet(float, float,bool,ATTRIBUTE);
 	~NormalBullet() {}
 
 	void Draw() const override;

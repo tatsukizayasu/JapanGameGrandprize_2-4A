@@ -10,7 +10,6 @@
 #define STAGE_NAME	"sample_stage2";
 #define STAGE_NAME	"Stage01";
 
-
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -115,7 +114,6 @@ void Stage::Update(Player* player)
 #endif
 }
 
-
 //-----------------------------------
 // 描画
 //-----------------------------------
@@ -134,7 +132,6 @@ void Stage::Draw()
 #ifdef _STAGE_BUILDER
 	stage_builder->Draw();
 #endif
-	
 }
 
 //-----------------------------------
@@ -144,11 +141,11 @@ void Stage::LoadMap()
 {
 	const char* stage_name = STAGE_NAME;
 
-
 	char buf[37];
 	sprintf_s(buf, sizeof(buf), "Data/Map_Data/%s.csv", stage_name);
 
 	int FileHandle;
+
 	if ((FileHandle = FileRead_open(buf)) == 0) 
 	{
 		exit(1);
@@ -164,6 +161,7 @@ void Stage::LoadMap()
 		char* tmp = strtok_s(str, ",", &context);
 
 		map_data.push_back(std::vector<int>());
+
 		while (tmp != NULL) 
 		{
 
@@ -172,6 +170,7 @@ void Stage::LoadMap()
 			tmp = strtok_s(NULL, ",", &context);
 			j++;
 		}
+
 		j = 0;
 		i++;
 	}

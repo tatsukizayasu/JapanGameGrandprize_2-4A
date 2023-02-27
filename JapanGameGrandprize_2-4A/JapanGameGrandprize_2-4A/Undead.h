@@ -8,15 +8,17 @@ class Undead :
     public EnemyBase, public BoxCollider
 {
 private:
+
     int damage; //ダメージ
     int attack_interval; //次の攻撃までの時間
     int image; //画像
     int attack_time; //攻撃している時間(デバッグ用)
-
 private:
+
     //プレイヤーとの距離
     void DistancePlayer(const Location player_location);
 public:
+
     //コンストラクタ
     Undead();
 
@@ -33,7 +35,10 @@ public:
    void Move(const Location player_location) override;
 
     //攻撃
-    AttackResource Attack(const BoxCollider* collider) override;
+   void  Attack() override;
+
+    //攻撃が当たっているか
+   AttackResource HitCheck(const BoxCollider* collider) override;
 
     //死亡
     void Death() override;
@@ -47,4 +52,3 @@ public:
     //座標の取得
     Location GetLocation() const override;
 };
-

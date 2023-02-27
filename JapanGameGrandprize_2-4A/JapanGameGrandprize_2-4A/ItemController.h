@@ -4,6 +4,7 @@
 class ItemController
 {
 private:
+
 	int item_volume; //生成しているアイテムの量
 
 	Item** item; //アイテム

@@ -101,6 +101,7 @@ void EnemySlime::Move(const Location player_location)
 		direction = DIRECTION::RIGHT;
 		speed = SLIME_SPEED;
 	}
+
 	location.x += speed;
 
 	float distance; //—£‚ê‚Ä‚¢‚é‹——£
@@ -115,16 +116,15 @@ void EnemySlime::Move(const Location player_location)
 	}
 }
 
-
 //-----------------------------------
 //UŒ‚
 //-----------------------------------
-AttackResource EnemySlime::Attack(const BoxCollider* collider)
+void  EnemySlime::Attack()
 {
-	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
 
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
+
 	if (location.x >= 1260)
 	{
 		speed = -SLIME_ATTACK_SPEED;
@@ -136,21 +136,34 @@ AttackResource EnemySlime::Attack(const BoxCollider* collider)
 
 	location.x += speed;
 	
-	if (HitBox(collider))
-	{
-		ENEMY_TYPE attack_type[1] = { *type };
-		ret.damage = SLIME_ATTACK_DAMAGE;
-		ret.type = attack_type;
-		ret.type_count = 1;
-		
-		KnockBack();
-	}
 
 	if (location.y >= 490)
 	{
 		state = ENEMY_STATE::MOVE;
 		speed = SLIME_SPEED;
 	}
+}
+
+//-----------------------------------
+//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+//-----------------------------------
+AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
+{
+	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
+
+	if (state == ENEMY_STATE::ATTACK)
+	{
+		if (HitBox(collider))
+		{
+			ENEMY_TYPE attack_type[1] = { *type };
+			ret.damage = SLIME_ATTACK_DAMAGE;
+			ret.type = attack_type;
+			ret.type_count = 1;
+
+			KnockBack();
+		}
+	}
+
 	return ret;
 }
 
@@ -173,7 +186,6 @@ void EnemySlime::Death()
 	if (slime_angle >= 880 || slime_angle <= -880)
 	{
 		slime_angle = 180;
-		
 	}
 }
 
@@ -201,4 +213,3 @@ Location EnemySlime::GetLocation() const
 {
 	return location;
 }
-

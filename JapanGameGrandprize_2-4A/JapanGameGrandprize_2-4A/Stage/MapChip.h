@@ -8,12 +8,12 @@ class MapChip :
     public BoxCollider
 {
 private:
+
     //当たっている方向
     //時計回りで[1:上, 2:右, 3:下, 4:左]
     short collision_dir;
-
-
 public:
+
     //コンストラクタ
     MapChip();
     //コンストラクタ
@@ -28,11 +28,10 @@ public:
     const char* GetName() { return class_name; }
 
     const short GetMapChip_Collision() { return collision_dir; }
-
 protected:
+
     const char* class_name = "default";
     int image;
     Area image_size;
     float ex_rate;
-    
 };
