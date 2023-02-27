@@ -4,9 +4,9 @@
 
 class EnemyBulletBase :
 	public SphereCollider
-
 {
 public:
+
 	//更新
 	virtual void Update() = 0;
 
@@ -22,6 +22,7 @@ public:
 	//タイプの取得
 	ENEMY_TYPE GetType() const;
 protected:
+
 	int damage; //ダメージ
 	int speed; //速度
 

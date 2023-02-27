@@ -21,6 +21,7 @@ using namespace std;
 class StageBuilder
 {
 private:
+
 	SphereCollider* mouse;//判定のみ
 	Location mouse_pos;
 	//ブロック画像
@@ -34,9 +35,8 @@ private:
 
 	//todo:テストなので消す ヘッダーも
 	class LineCollider2* line;
-	
-
 public:
+
 	//コンストラクタ
 	StageBuilder();
 	//デストラクタ
@@ -87,4 +87,3 @@ public:
 	//CSVファイルからの読み込み
 	void LoadStage(char* stage_name);
 };
-

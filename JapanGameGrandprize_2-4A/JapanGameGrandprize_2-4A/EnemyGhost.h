@@ -23,6 +23,7 @@ enum class GHOST_ATTACK
 class EnemyGhost : public EnemyBase, public BoxCollider
 {
 private:
+
 	int standby_time; //硬直時間
 	int standby_count; //硬直カウント
 	bool magic_attack; //魔法攻撃
@@ -30,11 +31,12 @@ private:
 	GHOST_STATE action_type; //行動パターン
 	GHOST_ATTACK attack_state; //攻撃状態
 	GhostBullet* bullet; //弾
-
 private:
+
 	//ゴーストの動きを決める
 	void GhostMove(const Location player_location);
 public:
+
 	//コンスタラクタ
 	EnemyGhost(); 
 
@@ -54,7 +56,10 @@ public:
 	void Move(const Location player_location) override;
 
 	//攻撃
-	AttackResource Attack(const BoxCollider* collider) override;
+	void  Attack() override;
+
+	//攻撃が当たっているか
+	AttackResource HitCheck(const BoxCollider* collider) override;
 
 	//死亡
 	void Death() override;
