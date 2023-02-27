@@ -159,6 +159,7 @@
     <ClInclude Include="EnumElementItem.h" />
     <ClInclude Include="EnumEnemyType.h" />
     <ClInclude Include="GhostBullet.h" />
+    <ClInclude Include="harpy.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemController.h" />
     <ClInclude Include="Mage.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="ElementItem.cpp" />
     <ClCompile Include="GhostBullet.cpp" />
+    <ClCompile Include="harpy.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemController.cpp" />
     <ClCompile Include="Mage.cpp" />
