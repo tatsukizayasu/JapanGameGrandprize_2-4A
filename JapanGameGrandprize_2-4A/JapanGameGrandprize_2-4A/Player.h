@@ -12,7 +12,7 @@
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100
-#define BULLET_MAX 30
+#define BULLET_MAX 50
 
 enum class PLAYER_STATE
 {
@@ -47,6 +47,7 @@ private:
 
 
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
+	bool move_direction;			//プレイヤーの向き
 	bool pouch_open;				//ポーチを開けている
 
 	ATTRIBUTE attribute[6];         //弾の属性
