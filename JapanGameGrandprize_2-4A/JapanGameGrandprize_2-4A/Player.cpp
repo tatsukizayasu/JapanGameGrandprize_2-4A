@@ -89,7 +89,7 @@ Player::Player(Stage* stage)
 
 	this->stage = stage;
 	location.x = 0;
-	location.y = 420;
+	location.y = 1220;
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
@@ -261,10 +261,33 @@ void Player::Draw() const
 void Player::Update()
 {
 
-	//マップチップのオブジェクト取得
-	for (int i = 0; i < stage->GetMapChip().size(); i++)
+
+	if (CheckHitKey(KEY_INPUT_DOWN))
 	{
+		location.y -= 10;
 	}
+	else if (CheckHitKey(KEY_INPUT_UP))
+	{
+		location.y += 10;
+	}
+	else if (CheckHitKey(KEY_INPUT_LEFT))
+	{
+		location.x += 10;
+	}
+	else if (CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		location.x -= 10;
+	}
+
+	else if (CheckHitKey(KEY_INPUT_S))
+	{
+		location.x += 400;
+	}
+
+	//マップチップのオブジェクト取得
+	//for (int i = 0; i < stage->GetMapChip().size(); i++)
+	//{
+	//}
 
 
 	damage_count++;
@@ -501,7 +524,7 @@ void Player::Jump()
 
 	if (location.y > 400)
 	{
-		location.y = 400;
+		//location.y = 1200;
 		jump = 0.0;
 	}
 }
@@ -522,7 +545,7 @@ void Player::NotJump()
 	if(location.y < 40)
 	{
 		jump = 0;
-		location.y = 40;
+		//location.y = 40;
 	}
 
 	jump -= 0.25;
