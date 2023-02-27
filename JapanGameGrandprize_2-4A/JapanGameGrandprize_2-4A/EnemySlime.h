@@ -9,10 +9,10 @@ enum class DIRECTION
 	RIGHT
 };
 
-enum class SLIME_STATE
+enum class SLIME_ATTACK
 {
-	JUMP, //スライムがジャンプしてる
-	FALL, //スライムが落下している
+	BEFORE_ATTACK,//攻撃する前
+	AFTER_ATTACK,//攻撃した後
 };
 
 class EnemySlime : public EnemyBase, public BoxCollider
@@ -20,12 +20,12 @@ class EnemySlime : public EnemyBase, public BoxCollider
 private:
 	int color;
 	DIRECTION direction;
+	SLIME_ATTACK slime_attack;
 
 	int slime_image;
 	int slime_angle;
 
 	Location jump_distance;
-
 	ElementItem drop_item;
 
 public:
@@ -54,11 +54,7 @@ public:
 
 	void KnockBack();
 
-	virtual bool HitBullet(const BulletBase* bullet)override {
-		bool ret = false; //戻り値
-
-		return ret;
-	};
+	virtual bool HitBullet(const BulletBase* bullet)override;
 
 	//座標の取得
 	Location GetLocation() const override;
