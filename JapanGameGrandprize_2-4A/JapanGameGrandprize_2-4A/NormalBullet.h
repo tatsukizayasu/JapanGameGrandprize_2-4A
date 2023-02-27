@@ -15,7 +15,7 @@ private:
 public:
 
 	NormalBullet();
-	NormalBullet(float, float,ATTRIBUTE);
+	NormalBullet(float, float,bool,ATTRIBUTE);
 	~NormalBullet() {}
 
 	void Draw() const override;

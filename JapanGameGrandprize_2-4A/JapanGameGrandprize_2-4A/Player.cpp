@@ -36,6 +36,8 @@ Player::Player()
 		bullet[i] = nullptr;
 	}
 
+	move_direction = false;
+
 	damage_flg = false;
 	i = 0;
 
@@ -112,6 +114,7 @@ Player::Player(Stage* stage)
 
 	damage_flg = false;
 	pouch_open = false;
+	move_direction = false;
 	i = 0;
 
 	attribute[0] = ATTRIBUTE::NORMAL;
@@ -291,11 +294,13 @@ void Player::Update()
 	//スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
+		move_direction = false;
 		RightMove();
 	}
 	//スティック左入力
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
+		move_direction = true;
 		LeftMove();
 	}
 	//スティック未入力
@@ -314,13 +319,6 @@ void Player::Update()
 			bullet_count++;
 			Shoot_Gun();
 		}
-	}
-
-	//RBボタン入力
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
-	{
-		bullet_count++;
-		Shoot_Gun();
 	}
 
 	//Bボタン入力
@@ -348,6 +346,7 @@ void Player::Update()
 		{
 			if (bullet[i]->GetEfectFlg())
 			{
+				delete bullet[i];
 				bullet[i] = nullptr;
 				SortBullet(i);
 			}
@@ -517,7 +516,7 @@ void Player::NotJump()
 		player_state = PLAYER_STATE::STOP;
 	}
 
-	if(location.y < 40)
+	if (location.y < 40)
 	{
 		jump = 0;
 		location.y = 40;
@@ -529,7 +528,7 @@ void Player::NotJump()
 	{
 		jump = -10;
 	}
-	
+
 	if (not_jet_count++ >= 120)
 	{
 		jump = 0;
@@ -600,7 +599,7 @@ void Player::Shoot_Gun()
 			switch (display_attribute)
 			{
 			case 0:
-				bullet[i] = new NormalBullet(location.x, location.y, attribute[display_attribute]);
+				bullet[i] = new NormalBullet(location.x, location.y, move_direction, attribute[display_attribute]);
 				break;
 			case 1:
 			case 2:
@@ -619,19 +618,18 @@ void Player::Shoot_Gun()
 //-----------------------------------
 void Player::SortBullet(int delete_bullet)
 {
-	for (int i = delete_bullet + 1; i < 30; i++)
+	for (int i = delete_bullet + 1; i < BULLET_MAX; i++)
 	{
-		if (bullet[i] == nullptr)
-		{
-			bullet_count--;
-			break;
-		}
 		if (bullet[i - 1] == nullptr)
 		{
 			bullet[i - 1] = bullet[i];
 			bullet[i] = nullptr;
 		}
+		if (bullet[i] == nullptr)
+		{
+		}
 	}
+	bullet_count--;
 }
 
 //-----------------------------------
