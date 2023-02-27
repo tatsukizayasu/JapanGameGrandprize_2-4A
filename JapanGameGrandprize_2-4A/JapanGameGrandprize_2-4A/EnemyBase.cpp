@@ -6,8 +6,12 @@
 //-----------------------------------
 EnemyBase::EnemyBase() 
 {
+	can_delete = false;
 	hp = 0;
 	speed = 0;
+	paralysis_time = 0;
+	poison_damage = 0;
+	poison_time = 0;
 	drop_volume = 0;
 	drop_type_volume = 0; 
 

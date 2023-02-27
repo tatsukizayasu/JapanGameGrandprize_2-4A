@@ -45,7 +45,16 @@ void Torrent::Move(const Location player_location)
 //-----------------------------------
 //UŒ‚
 //-----------------------------------
-AttackResource Torrent::Attack(const BoxCollider* collider)
+void  Torrent::Attack()
+{
+	
+}
+
+
+//-----------------------------------
+//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+//-----------------------------------
+AttackResource Torrent::HitCheck(const BoxCollider* collider)
 {
 	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
 

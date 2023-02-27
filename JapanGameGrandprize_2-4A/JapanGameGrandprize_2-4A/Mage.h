@@ -6,21 +6,14 @@
 
 #define MAGE_BULLET_MAX 20
 
-enum class MAGE_STATE
-{
-    IDOL = 0, //アイドル状態
-    MOVE,
-    DEATH,  //死亡
-};
-
 class Mage :
     public EnemyBase,public BoxCollider
 {
 private:
     int shot_rate; //魔法弾の発射レート
+    int shot_count; //発射した弾の数
     int image; //画像
     int drop; //ドロップするアイテムの種類の数
-    MAGE_STATE state; //状態
     Player* player; //プレイヤー
 
     MageBullet* bullet[20]; //弾
@@ -49,7 +42,10 @@ public:
     void Move(const Location player_location) override;
 
     //攻撃
-    AttackResource Attack(const BoxCollider* collider) override;
+    void  Attack() override;
+
+    //攻撃が当たっているか
+    AttackResource HitCheck(const BoxCollider* collider) override;
 
     //死亡
     void Death() override;

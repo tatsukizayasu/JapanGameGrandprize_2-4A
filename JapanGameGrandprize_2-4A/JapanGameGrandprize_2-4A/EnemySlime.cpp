@@ -119,9 +119,8 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-AttackResource EnemySlime::Attack(const BoxCollider* collider)
+void  EnemySlime::Attack()
 {
-	AttackResource ret = { 0,nullptr,0 }; //ñﬂÇËíl
 
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
@@ -136,20 +135,32 @@ AttackResource EnemySlime::Attack(const BoxCollider* collider)
 
 	location.x += speed;
 	
-	if (HitBox(collider))
-	{
-		ENEMY_TYPE attack_type[1] = { *type };
-		ret.damage = SLIME_ATTACK_DAMAGE;
-		ret.type = attack_type;
-		ret.type_count = 1;
-		
-		KnockBack();
-	}
 
 	if (location.y >= 490)
 	{
 		state = ENEMY_STATE::MOVE;
 		speed = SLIME_SPEED;
+	}
+}
+
+//-----------------------------------
+//çUåÇÇ™ìñÇΩÇ¡ÇƒÇ¢ÇÈÇ©
+//-----------------------------------
+AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
+{
+	AttackResource ret = { 0,nullptr,0 }; //ñﬂÇËíl
+
+	if (state == ENEMY_STATE::ATTACK)
+	{
+		if (HitBox(collider))
+		{
+			ENEMY_TYPE attack_type[1] = { *type };
+			ret.damage = SLIME_ATTACK_DAMAGE;
+			ret.type = attack_type;
+			ret.type_count = 1;
+
+			KnockBack();
+		}
 	}
 	return ret;
 }

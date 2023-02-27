@@ -93,7 +93,7 @@ void GameMain::EnemyUpdate()
 				enemy[i]->Move(player->GetLocation());
 				break;
 			case ENEMY_STATE::ATTACK:
-				enemy[i]->Attack(player);
+				enemy[i]->Attack();
 				break;
 			case ENEMY_STATE::DEATH:
 				enemy[i]->Death();
@@ -102,6 +102,9 @@ void GameMain::EnemyUpdate()
 			default:
 				break;
 			}
+
+
+			enemy[i]->HitCheck(player);
 
 			//ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 			for (int j = 0; j < BULLET_MAX; j++)

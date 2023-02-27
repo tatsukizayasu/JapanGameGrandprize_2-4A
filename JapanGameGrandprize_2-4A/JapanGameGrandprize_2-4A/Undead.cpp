@@ -88,40 +88,6 @@ Undead::~Undead()
 //-----------------------------------
 void Undead::Update()
 {
-	float screen_x; //画面スクロールを考慮したX座標
-
-	screen_x = location.x - CameraWork::GetCamera().x;
-
-	switch (state)
-	{
-	case ENEMY_STATE::IDOL:
-		if ((-area.width < screen_x) && (screen_x < SCREEN_WIDTH + area.width))
-		{
-			state = ENEMY_STATE::MOVE;
-		}
-		break;
-	case ENEMY_STATE::MOVE:
-		if ((screen_x < -area.width) || (SCREEN_WIDTH + area.width < screen_x))
-		{
-			state = ENEMY_STATE::IDOL;
-		}
-		break;
-	case ENEMY_STATE::ATTACK:
-		attack_time--;
-		if (attack_time < 0)
-		{
-			state = ENEMY_STATE::MOVE;
-			image = 0xffffff;
-			attack_interval = ATTACK_INTERVAL;
-		}
-		break;
-	case ENEMY_STATE::DEATH:
-		can_delete = true;
-		break;
-	default:
-		break;
-	}
-
 	if (attack_interval > 0)
 	{
 		attack_interval--;
@@ -175,7 +141,13 @@ void Undead::DistancePlayer(const Location player_location)
 //-----------------------------------
 void Undead::Idol()
 {
+	float screen_x; //画面スクロールを考慮したX座標
 
+	screen_x = location.x - CameraWork::GetCamera().x;
+	if ((-area.width < screen_x) && (screen_x < SCREEN_WIDTH + area.width))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 }
 
 //-----------------------------------
@@ -183,24 +155,51 @@ void Undead::Idol()
 //-----------------------------------
 void Undead::Move(const Location player_location)
 {
+
+	float screen_x; //画面スクロールを考慮したX座標
+
 	DistancePlayer(player_location);
 
 	location.x += speed;
+
+	screen_x = location.x - CameraWork::GetCamera().x;
+
+	if ((screen_x < -area.width) || (SCREEN_WIDTH + area.width < screen_x))
+	{
+		state = ENEMY_STATE::IDOL;
+	}
 }
 
 //-----------------------------------
 //攻撃
 //-----------------------------------
-AttackResource Undead::Attack(const BoxCollider* collider)
+void  Undead::Attack()
+{
+	attack_time--;
+	if (attack_time < 0)
+	{
+		state = ENEMY_STATE::MOVE;
+		image = 0xffffff;
+		attack_interval = ATTACK_INTERVAL;
+	}
+}
+
+//-----------------------------------
+//攻撃が当たっているか
+//-----------------------------------
+AttackResource Undead::HitCheck(const BoxCollider* collider)
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (HitBox(collider))
+	if (state == ENEMY_STATE::ATTACK)
 	{
-		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
-		ret.damage = UNDEAD_ATTACK_DAMAGE;
-		ret.type = attack_type;
-		ret.type_count = 1;
+		if (HitBox(collider))
+		{
+			ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
+			ret.damage = UNDEAD_ATTACK_DAMAGE;
+			ret.type = attack_type;
+			ret.type_count = 1;
+		}
 	}
 	return ret;
 }
@@ -210,7 +209,7 @@ AttackResource Undead::Attack(const BoxCollider* collider)
 //-----------------------------------
 void Undead::Death()
 {
-
+	can_delete = true;
 }
 
 //-----------------------------------

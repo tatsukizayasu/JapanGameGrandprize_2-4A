@@ -108,27 +108,7 @@ void EnemyGhost::Update()
 	case ENEMY_STATE::MOVE:
 		break;
 	case ENEMY_STATE::ATTACK:
-		standby_count++;
-		if (standby_time < standby_count)
-		{
-			switch (attack_state)
-			{
-			case GHOST_ATTACK::PHYSICAL_ATTACK:
-				physical_attack = false;
-				break;
-			case GHOST_ATTACK::MAGIC_ATTACK:
-				magic_attack = false;
-				break;
-			case GHOST_ATTACK::NONE:
-				break;
-			default:
-				break;
-			}
-			standby_time = 0;
-			standby_count = 0;
-			attack_state = GHOST_ATTACK::NONE;
-			state = ENEMY_STATE::MOVE;
-		}
+		
 		break;
 	case ENEMY_STATE::DEATH:
 		break;
@@ -144,6 +124,7 @@ void EnemyGhost::Update()
 		{
 			delete bullet;
 			bullet = nullptr;
+			attack_state = GHOST_ATTACK::NONE;
 		}
 	}
 }
@@ -188,7 +169,35 @@ void EnemyGhost::Move(const Location player_location)
 //-----------------------------------
 //UŒ‚
 //-----------------------------------
-AttackResource EnemyGhost::Attack(const BoxCollider* collider)
+void  EnemyGhost::Attack()
+{
+	standby_count++;
+	if (standby_time < standby_count)
+	{
+		switch (attack_state)
+		{
+		case GHOST_ATTACK::PHYSICAL_ATTACK:
+			physical_attack = false;
+			attack_state = GHOST_ATTACK::NONE;
+			break;
+		case GHOST_ATTACK::MAGIC_ATTACK:
+			magic_attack = false;
+			break;
+		case GHOST_ATTACK::NONE:
+			break;
+		default:
+			break;
+		}
+		standby_time = 0;
+		standby_count = 0;
+		state = ENEMY_STATE::MOVE;
+	}
+}
+
+//-----------------------------------
+//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+//-----------------------------------
+AttackResource EnemyGhost::HitCheck(const BoxCollider* collider)
 {
 	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
 
@@ -212,6 +221,7 @@ AttackResource EnemyGhost::Attack(const BoxCollider* collider)
 				ret.damage = bullet->GetDamage();
 				ret.type = attack_type;
 				ret.type_count = 1;
+
 				delete bullet;
 				bullet = nullptr;
 			}

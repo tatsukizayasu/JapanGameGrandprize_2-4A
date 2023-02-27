@@ -54,7 +54,10 @@ public:
 	void Move(const Location player_location) override;
 
 	//UŒ‚
-	AttackResource Attack(const BoxCollider* collider) override;
+	void  Attack() override;
+
+	//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+	AttackResource HitCheck(const BoxCollider* collider) override;
 
 	//€–S
 	void Death() override;
