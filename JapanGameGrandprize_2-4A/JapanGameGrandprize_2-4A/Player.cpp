@@ -198,7 +198,6 @@ void Player::Draw() const
 	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
 
-
 	//ダメージを受けた時点滅する
 	if (damage_flg)
 	{
@@ -215,6 +214,7 @@ void Player::Draw() const
 	}
 	else
 	{
+
 	}
 
 #ifdef _DEBUG
@@ -224,7 +224,6 @@ void Player::Draw() const
 	}
 
 #endif
-
 
 	SetFontSize(30);
 
@@ -238,6 +237,7 @@ void Player::Draw() const
 	{
 		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute - 1]);
 	}
+
 	//下の選択肢
 	if (display_attribute + 1 > 5)
 	{
@@ -247,6 +247,7 @@ void Player::Draw() const
 	{
 		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute + 1]);
 	}
+
 	//現在の選択肢
 	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
 
@@ -267,8 +268,8 @@ void Player::Update()
 	//マップチップのオブジェクト取得
 	for (int i = 0; i < stage->GetMapChip().size(); i++)
 	{
-	}
 
+	}
 
 	damage_count++;
 	if (damage_count >= 10)
@@ -325,6 +326,7 @@ void Player::Update()
 	{
 		Jump();
 	}
+
 	//Bボタン未入力
 	else
 	{
@@ -336,8 +338,6 @@ void Player::Update()
 	{
 		player_state = PLAYER_STATE::DOWN;
 	}
-
-
 
 	//弾のアップデート呼び出し
 	for (int i = 0; i < bullet_count; i++)
@@ -359,7 +359,6 @@ void Player::Update()
 
 	//弾の属性の切り替え処理
 	ElementUpdate();
-
 }
 
 //スティックを入力していないとき
@@ -472,12 +471,10 @@ void Player::Jump()
 	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;
 
-
 	gravity_down = 0.0;
 
 	jump += 0.25;
 	fuel -= 0.25;
-
 
 	if (jump > 10)
 	{
@@ -572,8 +569,6 @@ void Player::NotJump()
 	}
 	gravity_down += 0.25;
 
-
-
 	if (not_jet_count++ >= 120)
 	{
 		if (fuel < 100)
@@ -616,7 +611,6 @@ void Player::Shoot_Gun()
 			}
 		}
 	}
-
 }
 
 //-----------------------------------
@@ -677,6 +671,7 @@ void Player::Hp_Damage(int damage_value)
 {
 	damage_flg = true;
 	hp -= damage_value;
+
 	if (hp <= 0)
 	{
 		hp = 0;

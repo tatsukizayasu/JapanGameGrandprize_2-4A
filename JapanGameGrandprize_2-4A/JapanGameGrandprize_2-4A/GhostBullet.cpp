@@ -11,7 +11,7 @@ GhostBullet::GhostBullet( Location spawn_location, Location player_location)
 {
 	type = ENEMY_TYPE::WIND;
 	location = spawn_location;
-
+	radius = 5;
 	speed = GHOST_BULLET_SPEED;
 	image = 0;
 	damage = GHOST_BULLET_DAMAGE;
@@ -47,5 +47,5 @@ void GhostBullet::Draw() const
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
 
-	DrawCircle(x, y, 5, 0xffffff, TRUE);
+	DrawCircle(x, y, radius, 0xffffff, TRUE);
 }

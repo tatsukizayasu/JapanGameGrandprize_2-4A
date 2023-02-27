@@ -22,6 +22,7 @@ NormalBullet::NormalBullet()
 		dot_location_y[i] = 0;
 		speed_y[i] = 0;
 	}
+
 	speed_x = 0;
 }
 
@@ -40,7 +41,6 @@ NormalBullet::NormalBullet(float player_x, float player_y, bool player_direc,ATT
 	this->player_state = player_state;
 	player_direction = player_direc;
 
-
 	efect_count = 0;
 	delete_flg = false;
 	efect_end = false;
@@ -56,7 +56,6 @@ NormalBullet::NormalBullet(float player_x, float player_y, bool player_direc,ATT
 	speed_y[1] = 8;
 	speed_y[2] = 6;
 	speed_y[3] = 4;
-
 }
 
 //-----------------------------------
@@ -70,6 +69,7 @@ void NormalBullet::Draw() const
 	{
 		DrawBox(location.x - scrool_x, location.y, (location.x - scrool_x) + 20, location.y + 10, 0xff00ff, TRUE);
 	}
+
 	if (!efect_end && delete_flg)
 	{
 		for (int i = 0; i < PIXEL_MAX; i++)

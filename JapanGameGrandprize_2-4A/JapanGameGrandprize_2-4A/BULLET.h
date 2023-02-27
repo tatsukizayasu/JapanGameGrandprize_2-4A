@@ -3,10 +3,12 @@
 #include "SphereCollider.h"
 #include "define.h"
 
+
 enum class PLAYER_STATE;
 class BulletBase : public SphereCollider
 {
 protected:
+
 	float damage;          //弾のダメージ
 	int debuff_time;	 //弾の効果時間
 	int efect_count;	 //エフェクトの時間
@@ -19,6 +21,7 @@ protected:
 	ATTRIBUTE attribute;
 	EfectExplosion* efect_explosion;
 public:
+
 	BulletBase();
 	BulletBase(float,float);
 	~BulletBase() {};
@@ -30,5 +33,4 @@ public:
 	float GetDebuffTime() const;
 	float GetDamage() const;
 	ATTRIBUTE GetAttribute() const;
-
 };

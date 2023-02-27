@@ -12,7 +12,6 @@
 #define YELLOW_COLOR 0xfcf16e
 #define DARK_YELLOW_COLOR 0xffcc4e
 
-
 #define RAND_LCOATION 25
 #define ITEM_BASE_SPEED 10
 

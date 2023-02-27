@@ -24,11 +24,10 @@ enum class PLAYER_STATE
 	DEATH
 };
 
-
-
 class Player : public BoxCollider
 {
 private:
+
 	int image;						//画像用変数
 	int image_size_x, image_size_y; //画像のサイズ
 	int hp;							//体力
@@ -44,8 +43,6 @@ private:
 	int damage_count;				//無敵時間
 	int i;                          //スイッチ内でのループ用
 
-
-
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
 	bool move_direction;			//プレイヤーの向き
 	bool pouch_open;				//ポーチを開けている
@@ -56,7 +53,6 @@ private:
 
 	PLAYER_STATE player_state;
 	
-	
 	BulletBase** bullet;             //弾の配列
 	Stage* stage;                //ステージへのポインタ
 	EfectBeam* beam;
@@ -64,9 +60,8 @@ private:
 
 
 	ElementItem** element;	//元素
-
-
 public:
+
 	Player();
 	Player(Stage*);
 	~Player();

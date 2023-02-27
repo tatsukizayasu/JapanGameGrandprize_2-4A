@@ -63,6 +63,7 @@ enum class ENEMY_STATE
 class EnemyBase
 {
 public:
+
 	//コンストラクタ
 	EnemyBase();
 
@@ -82,7 +83,10 @@ public:
 	virtual void Move(const Location player_location) = 0;
 
 	//攻撃
-	virtual AttackResource Attack(const BoxCollider* collider) = 0;
+	virtual void  Attack() = 0;
+
+	//攻撃が当たっているか
+	virtual AttackResource HitCheck(const BoxCollider* collider) = 0;
 
 	//死亡
 	virtual void Death() = 0;
@@ -111,6 +115,7 @@ public:
 	//座標の取得
 	virtual Location GetLocation() const = 0;
 protected:
+
 	bool can_delete; //削除フラグ
 	int hp;	//体力
 	int speed; //移動速度
@@ -126,6 +131,7 @@ protected:
 	ENEMY_TYPE* type; //エネミーのタイプ
 	ENEMY_STATE state; //エネミーの状態
 protected:
+
 	//HPが0かどうか判断(0になったらtrue)
 	bool CheckHp();
 

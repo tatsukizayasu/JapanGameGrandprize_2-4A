@@ -6,7 +6,6 @@
 #include "CameraWork.h"
 #include "ItemController.h"
 
-
 class GameMain :
     public AbstractScene
 {
@@ -23,6 +22,7 @@ private:
 
     ItemController* item_controller; //アイテム管理
 public:
+
     //コンストラクタ
     GameMain();
 

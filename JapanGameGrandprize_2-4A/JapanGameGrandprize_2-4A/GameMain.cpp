@@ -32,10 +32,12 @@ GameMain::~GameMain()
 {
 	delete player;
 	delete stage;
+
 	for (int i = 0; i < 3; i++)
 	{
 		delete enemy[i];
 	}
+
 	delete[] enemy;
 	delete camera_work;
 }
@@ -93,7 +95,7 @@ void GameMain::EnemyUpdate()
 				enemy[i]->Move(player->GetLocation());
 				break;
 			case ENEMY_STATE::ATTACK:
-				enemy[i]->Attack(player);
+				enemy[i]->Attack();
 				break;
 			case ENEMY_STATE::DEATH:
 				enemy[i]->Death();
@@ -102,6 +104,9 @@ void GameMain::EnemyUpdate()
 			default:
 				break;
 			}
+
+
+			enemy[i]->HitCheck(player);
 
 			//ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 			for (int j = 0; j < BULLET_MAX; j++)
@@ -127,7 +132,6 @@ void GameMain::EnemyUpdate()
 			}
 		}
 	}
-
 }
 
 //-----------------------------------
@@ -141,6 +145,7 @@ void GameMain::Draw()const
 	item_controller->Draw();
 	player->Draw();
 	stage->Draw();
+
 	for (int i = 0; i < 3; i++)
 	{
 		if (enemy[i] != nullptr)
