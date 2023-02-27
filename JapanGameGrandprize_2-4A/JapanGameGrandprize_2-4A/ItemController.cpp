@@ -27,7 +27,7 @@ ItemController::~ItemController()
 //-----------------------------------
 //更新
 //-----------------------------------
-void ItemController::Update(class Player* player)
+void ItemController::Update(Player* player)
 {
 	for (int i = 0; i < item_volume; i++)
 	{
@@ -36,7 +36,7 @@ void ItemController::Update(class Player* player)
 			break;
 		}
 
-		item[i]->Update(player);
+		item[i]->Update(player->GetLocation());
 
 		if (item[i]->HitBox(player))
 		{
@@ -51,7 +51,7 @@ void ItemController::Update(class Player* player)
 //-----------------------------------
 //アイテムの生成
 //-----------------------------------
-void ItemController::SpawnItem(class EnemyBase* enemy_base)
+void ItemController::SpawnItem(const EnemyBase* enemy_base)
 {
 
 	int old_item_volume = item_volume;//生成可能なエネミー数
@@ -60,7 +60,7 @@ void ItemController::SpawnItem(class EnemyBase* enemy_base)
 	ArrangementItem(old_item_volume);
 
 	int volume = 0; //生成数
-	int j = old_item_volume;
+	int j = 0;
 
 	//アイテムの生成
 	for (int i = 0; i < enemy_base->GetDropTypeVolume(); i++)
@@ -69,7 +69,10 @@ void ItemController::SpawnItem(class EnemyBase* enemy_base)
 
 		while (0 < volume)
 		{
-			item[j++] = new Item(enemy_base->GetDropItem(i).GetType(), enemy_base->GetLocation());
+			if (item[j] == nullptr)
+			{
+				item[j++] = new Item(enemy_base->GetDropItem(i).GetType(), enemy_base->GetLocation());
+			}
 			volume--;
 		}
 	}
@@ -78,7 +81,7 @@ void ItemController::SpawnItem(class EnemyBase* enemy_base)
 //-----------------------------------
 //アイテムの並び替え
 //-----------------------------------
-void ItemController::SortItem(int item_num)
+void ItemController::SortItem(const int item_num)
 {
 	int old_item_volume = item_volume;//生成可能なアイテム数
 
@@ -101,7 +104,7 @@ void ItemController::SortItem(int item_num)
 //-----------------------------------
 //アイテムの整理
 //-----------------------------------
-void ItemController::ArrangementItem(int old_item_volume)
+void ItemController::ArrangementItem(const int old_item_volume)
 {
 	Item** temporary_item; //避難用
 
@@ -130,6 +133,11 @@ void ItemController::ArrangementItem(int old_item_volume)
 		}
 	}
 	
+
+	for (int i = old_item_volume; i < item_volume; i++)
+	{
+		item[i] = nullptr;
+	}
 	delete[] temporary_item;
 }
 

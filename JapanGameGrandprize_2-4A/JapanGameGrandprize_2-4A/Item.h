@@ -1,7 +1,6 @@
 #pragma once
 #include "SphereCollider.h"
 #include "EnumElementItem.h"
-#include "Player.h"
 
 class Item :
 	public SphereCollider
@@ -18,7 +17,7 @@ public:
 	Item(ELEMENT_ITEM type, Location location);
 
 	//çXêV
-	void Update(Player* player);
+	void Update(const Location);
 
 	//ï`âÊ
 	void Draw()const;

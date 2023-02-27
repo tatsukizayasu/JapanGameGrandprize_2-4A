@@ -7,6 +7,7 @@
 #include"EnemySlime.h"
 #include"EnemyGhost.h"
 #include "BULLET.h"
+#include "Mage.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -16,7 +17,7 @@ GameMain::GameMain()
 	stage = new Stage();
 	player = new Player(stage);
 	enemy = new EnemyBase * [3];
-	enemy[0] = new Undead();
+	enemy[0] = new Mage();
 	enemy[1] = new EnemySlime();
 	enemy[2] = new EnemyGhost();
 	camera_work = new CameraWork(0, 0, player, stage);
@@ -95,7 +96,7 @@ void GameMain::EnemyUpdate()
 				enemy[i]->Move(player->GetLocation());
 				break;
 			case ENEMY_STATE::ATTACK:
-				enemy[i]->Attack();
+				enemy[i]->Attack(player->GetLocation());
 				break;
 			case ENEMY_STATE::DEATH:
 				enemy[i]->Death();
@@ -104,7 +105,6 @@ void GameMain::EnemyUpdate()
 			default:
 				break;
 			}
-
 
 			enemy[i]->HitCheck(player);
 

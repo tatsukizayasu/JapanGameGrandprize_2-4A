@@ -89,11 +89,11 @@ Item::Item(ELEMENT_ITEM type, Location location)
 //-----------------------------------
 // 更新
 //-----------------------------------
-void Item::Update(Player* player)
+void Item::Update(const Location player_location)
 {
 	float radian; //角度
 	//プレイヤーとアイテムの角度の計算
-	radian = atan2f(player->GetLocation().y - location.y, player->GetLocation().x - location.x);
+	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
 
 	location.x += static_cast<int>(speed * cosf(radian));
 	location.y += static_cast<int>(speed * sinf(radian));

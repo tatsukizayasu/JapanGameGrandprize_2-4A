@@ -175,7 +175,7 @@ void Undead::Move(const Location player_location)
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  Undead::Attack()
+void  Undead::Attack(Location player_location)
 {
 	attack_time--;
 	if (attack_time < 0)
@@ -265,7 +265,8 @@ void Undead::Draw() const
 	draw_location.x = location.x - CameraWork::GetCamera().x;
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
-	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
+	DrawBox(draw_location.x, draw_location.y,
+		draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
 }
 
 //-----------------------------------

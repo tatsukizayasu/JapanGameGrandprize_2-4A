@@ -169,7 +169,7 @@ void EnemyGhost::Move(const Location player_location)
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  EnemyGhost::Attack()
+void  EnemyGhost::Attack(Location player_location)
 {
 	standby_count++;
 	if (standby_time < standby_count)

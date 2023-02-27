@@ -1,10 +1,9 @@
 #pragma once
 #include "EnemyBase.h"
 #include "BoxCollider.h"
-#include "Player.h"
-#include "MageBullet.h"
+#include "EnemyBulletBase.h"
 
-#define MAGE_BULLET_MAX 20
+#define MAGE_BULLET_MAX 5
 
 class Mage :
     public EnemyBase,public BoxCollider
@@ -15,13 +14,12 @@ private:
     int shot_count; //”­Ë‚µ‚½’e‚Ì”
     int image; //‰æ‘œ
     int drop; //ƒhƒƒbƒv‚·‚éƒAƒCƒeƒ€‚Ìí—Ş‚Ì”
-    Player* player; //ƒvƒŒƒCƒ„[
 
-    MageBullet* bullet[20]; //’e
+    EnemyBulletBase** bullet; //’e
 private:
 
     //’e‚Ì¶¬
-    void CreateBullet();
+    void CreateBullet(Location);
 
     //’e‚Ì•À‚Ñ‘Ö‚¦
     void SortBullet(int);
@@ -43,7 +41,7 @@ public:
     void Move(const Location player_location) override;
 
     //UŒ‚
-    void  Attack() override;
+    void  Attack(Location) override;
 
     //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
     AttackResource HitCheck(const BoxCollider* collider) override;
@@ -58,7 +56,7 @@ public:
     void Draw() const override;
 
     //’e‚Ìæ“¾
-    MageBullet GetBullet(int) const;
+    EnemyBulletBase** GetBullet() const;
 
     //À•W‚Ìæ“¾
     Location GetLocation() const override;
