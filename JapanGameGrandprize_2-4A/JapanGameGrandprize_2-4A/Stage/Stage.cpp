@@ -39,6 +39,10 @@ Stage::Stage()
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 					}, { CHIP_SIZE,CHIP_SIZE }));
 			}
+			/*else
+			{
+				mapchip.push_back(nullptr);
+			}*/
 		}
 	}
 
@@ -78,6 +82,26 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
+	/*int player_top = (player->GetLocation().y - CHIP_SIZE) / CHIP_SIZE;
+	int player_bottom = (player->GetLocation().y + CHIP_SIZE) / CHIP_SIZE;
+	int player_left = (player->GetLocation().x - CHIP_SIZE) / CHIP_SIZE;
+	int player_right = (player->GetLocation().x + CHIP_SIZE) / CHIP_SIZE;
+	if (0<player_top&& mapchip.at(player_top) != nullptr)
+	{
+		mapchip.at(player_top)->Update(player);
+	}
+	if (player_bottom < map_data.size() && mapchip.at(player_bottom) != nullptr)
+	{
+		mapchip.at(player_bottom)->Update(player);
+	}
+	if (0 < player_left && mapchip.at(player_left) != nullptr)
+	{
+		mapchip.at(player_left)->Update(player);
+	}
+	if (player_right < map_data.at(0).size() && mapchip.at(player_right) != nullptr)
+	{
+		mapchip.at(player_right)->Update(player);
+	}*/
 
 	for (int i = 0; i < mapchip.size(); i++)
 	{		
@@ -99,7 +123,10 @@ void Stage::Draw()
 	//マップチップ		描画
 	for (int i = 0; i < mapchip.size(); i++)
 	{
-		mapchip.at(i)->Draw();
+		if (mapchip.at(i) != nullptr)
+		{
+			mapchip.at(i)->Draw();
+		}
 	}
 
 #ifdef _STAGE_BUILDER
