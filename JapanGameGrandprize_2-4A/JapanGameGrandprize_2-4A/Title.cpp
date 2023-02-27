@@ -74,7 +74,8 @@ int Title::GetDrawCenterX(const char* string, int font_handle, int margin)const
 		font_handle = DX_DEFAULT_FONT_HANDLE;
 	}
 
+	const int w = screenX / 2 + margin 
+		- (GetDrawFormatStringWidthToHandle(font_handle, string) / 2);
 
-	const int w = screenX / 2 + margin - (GetDrawFormatStringWidthToHandle(font_handle, string) / 2);
 	return w;
 }

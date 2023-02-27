@@ -5,6 +5,7 @@ class SceneManager :
     public AbstractScene
 {
 private:
+
     AbstractScene* mScene;
 public:
 

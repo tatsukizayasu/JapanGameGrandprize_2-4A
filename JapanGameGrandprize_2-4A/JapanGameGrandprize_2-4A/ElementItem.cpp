@@ -18,7 +18,6 @@ ElementItem::ElementItem(ELEMENT_ITEM type)
 	this->type = type;
 }
 
-
 //-----------------------------------
 //Œ³‘f‚Ì—Ê‚ðŽæ“¾
 //-----------------------------------
@@ -26,7 +25,6 @@ unsigned int ElementItem::GetVolume()const
 {
 	return volume;
 }
-
 
 //-----------------------------------
 //Œ³‘fƒ^ƒCƒv‚ÌŽæ“¾

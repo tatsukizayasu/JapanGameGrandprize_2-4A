@@ -2,7 +2,6 @@
 
 #define POUCH_SIZE 200
 
-
 enum class Tab
 {
 	Explosion_Tab = 0,
@@ -15,10 +14,11 @@ enum class Tab
 class Pouch
 {
 private:
+
 	float x, y;
 	Tab tab;
-
 public:
+
 	Pouch();
 	~Pouch() {};
 

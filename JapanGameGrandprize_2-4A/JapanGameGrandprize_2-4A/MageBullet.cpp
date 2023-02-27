@@ -3,7 +3,6 @@
 #include<math.h>
 #include "MageBullet.h"
 
-
 #define MAGE_BULLET_SPEED 5
 
 //-----------------------------------

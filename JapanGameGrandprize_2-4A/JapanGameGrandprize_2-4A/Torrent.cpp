@@ -1,7 +1,6 @@
 #include "DxLib.h"
 #include "Torrent.h"
 
-
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -45,7 +44,16 @@ void Torrent::Move(const Location player_location)
 //-----------------------------------
 //攻撃
 //-----------------------------------
-AttackResource Torrent::Attack(const BoxCollider* collider)
+void  Torrent::Attack()
+{
+	
+}
+
+
+//-----------------------------------
+//攻撃が当たっているか
+//-----------------------------------
+AttackResource Torrent::HitCheck(const BoxCollider* collider)
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 

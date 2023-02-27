@@ -4,7 +4,6 @@
 
 class CameraWork
 {
-
 protected:
 
 	//カメラ座標
@@ -30,7 +29,6 @@ protected:
 	//カウント
 	float count;
 
-
 	//移動開始X座標
 	float moveing_line;
 
@@ -41,13 +39,13 @@ protected:
 
 	//入力間隔時間		デバック
 	int input_margin;
-
 public:
-	enum class STATE {
+
+	enum class STATE 
+	{
 		MOVE,	//移動
 		FIXED	//固定
 	};
-
 
 	CameraWork();
 	CameraWork(float camera_x, float camera_y, Player* player, Stage* stage);
@@ -55,9 +53,6 @@ public:
 	~CameraWork();
 	void Update();
 	static Camera GetCamera() { return camera; }
-
-
-
 private:
 
 	//カメラの状態

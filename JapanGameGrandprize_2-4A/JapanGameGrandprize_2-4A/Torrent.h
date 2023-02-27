@@ -9,6 +9,7 @@ class Torrent :
 private:
 
 public:
+
     //コンストラクタ
     Torrent();
 
@@ -25,7 +26,10 @@ public:
     void Move(const Location player_location) override;
 
     //攻撃
-    AttackResource Attack(const BoxCollider* collider) override;
+    void  Attack() override;
+
+    //攻撃が当たっているか
+    AttackResource HitCheck(const BoxCollider* collider) override;
 
     //死亡
     void Death() override;
@@ -39,4 +43,3 @@ public:
     //座標の取得
     Location GetLocation() const override;
 };
-
