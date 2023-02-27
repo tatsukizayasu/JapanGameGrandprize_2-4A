@@ -332,24 +332,24 @@ bool EnemyGhost::HitBullet(const BulletBase* bullet)
 	bool ret = false; //–ß‚è’l
 	if (HitSphere(bullet))
 	{
-		switch (bullet->GetAttribute())
+		switch (bullet->GetAttribute()) //Žó‚¯‚½‰»‡•¨‚Ì‘®«
 		{
-		case ATTRIBUTE::NORMAL:
-			hp -= bullet->GetDamage() * 0;
+		case ATTRIBUTE::NORMAL: 
+			hp -= bullet->GetDamage() * 0; //–³Œø
 			break;
 		case ATTRIBUTE::EXPLOSION:
 			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //Žã“_‘®«
 			break;
 		case ATTRIBUTE::MELT:
-			hp -= bullet->GetDamage() * 0;
+			hp -= bullet->GetDamage() * 0; //–³Œø
 			break;
 		case ATTRIBUTE::POISON:
-			poison_damage = bullet->GetDamage() * 0;
-			poison_time = bullet->GetDebuffTime() * 0;
+			poison_damage = bullet->GetDamage() * 0; //–³Œø
+			poison_time = bullet->GetDebuffTime() * 0; //–³Œø
 			break;
 		case ATTRIBUTE::PARALYSIS:
-			paralysis_time = bullet->GetDebuffTime() * 0;
-			paralysis_time = bullet->GetDamage() * 0;
+			paralysis_time = bullet->GetDebuffTime() * 0; //–³Œø
+			paralysis_time = bullet->GetDamage() * 0; //–³Œø
 			break;
 		case ATTRIBUTE::HEAL:
 			break;
