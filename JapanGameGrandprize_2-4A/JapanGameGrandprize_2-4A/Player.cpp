@@ -522,9 +522,9 @@ void Player::Jump()
 		location.y = 40;
 	}
 
-	if (location.y > 400)
+	if (location.y > 1200)
 	{
-		//location.y = 1200;
+		location.y = 1200;
 		jump = 0.0;
 	}
 }
@@ -533,7 +533,7 @@ void Player::Jump()
 void Player::NotJump()
 {
 	player_state = PLAYER_STATE::DOWN;
-	if (location.y < 400)
+	if (location.y < 1200)
 	{
 		location.y -= jump;
 	}
@@ -545,7 +545,7 @@ void Player::NotJump()
 	if(location.y < 40)
 	{
 		jump = 0;
-		//location.y = 40;
+		location.y = 40;
 	}
 
 	jump -= 0.25;
