@@ -19,7 +19,7 @@ GameMain::GameMain()
 	enemy[0] = new Undead();
 	enemy[1] = new EnemySlime();
 	enemy[2] = new EnemyGhost();
-	camera_work = new CameraWork(0, 0, player, stage);
+	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
 
 	input_margin = 0;
