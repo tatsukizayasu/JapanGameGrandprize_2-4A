@@ -20,6 +20,7 @@ ItemController::~ItemController()
 	{
 		delete item[i];
 	}
+
 	delete[] item;
 }
 
@@ -65,6 +66,7 @@ void ItemController::SpawnItem(class EnemyBase* enemy_base)
 	for (int i = 0; i < enemy_base->GetDropTypeVolume(); i++)
 	{
 		volume = enemy_base->GetDropItem(i).GetVolume();
+
 		while (0 < volume)
 		{
 			item[j++] = new Item(enemy_base->GetDropItem(i).GetType(), enemy_base->GetLocation());
@@ -87,6 +89,7 @@ void ItemController::SortItem(int item_num)
 		{
 			break;
 		}
+
 		item[i - 1] = item[i];
 		item[i] = nullptr;
 		item_volume--;
@@ -145,4 +148,3 @@ void ItemController::Draw() const
 		item[i]->Draw();
 	}
 }
-

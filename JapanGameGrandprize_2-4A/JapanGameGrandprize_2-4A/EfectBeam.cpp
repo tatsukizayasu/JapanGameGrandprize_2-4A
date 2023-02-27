@@ -1,8 +1,6 @@
 #include "EfectBeam.h"
 #include "DxLib.h"
 
-
-
 EfectBeam::EfectBeam()
 {
 	location.x = 0;

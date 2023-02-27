@@ -13,15 +13,18 @@ struct Stick
 class PAD_INPUT
 {
 private:
+
 	static char now_key[BUTTONS]; //今回の入力キー
 	static char old_key[BUTTONS]; //前回の入力キー
 	static XINPUT_STATE input; //パッド
 	static Stick r_stick; //右スティック
 	static Stick l_stick; //左スティック
 private:
+
 	//コンストラクタ
 	PAD_INPUT() = default;
 public:
+
 	//パッド情報の更新
 	static void UpdateKey()
 	{

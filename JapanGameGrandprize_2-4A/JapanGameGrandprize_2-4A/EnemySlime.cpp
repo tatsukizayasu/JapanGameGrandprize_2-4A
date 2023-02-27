@@ -101,6 +101,7 @@ void EnemySlime::Move(const Location player_location)
 		direction = DIRECTION::RIGHT;
 		speed = SLIME_SPEED;
 	}
+
 	location.x += speed;
 
 	float distance; //—£‚ê‚Ä‚¢‚é‹——£
@@ -115,7 +116,6 @@ void EnemySlime::Move(const Location player_location)
 	}
 }
 
-
 //-----------------------------------
 //UŒ‚
 //-----------------------------------
@@ -124,6 +124,7 @@ void  EnemySlime::Attack()
 
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
+
 	if (location.x >= 1260)
 	{
 		speed = -SLIME_ATTACK_SPEED;
@@ -162,6 +163,7 @@ AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
 			KnockBack();
 		}
 	}
+
 	return ret;
 }
 
@@ -184,7 +186,6 @@ void EnemySlime::Death()
 	if (slime_angle >= 880 || slime_angle <= -880)
 	{
 		slime_angle = 180;
-		
 	}
 }
 
@@ -212,4 +213,3 @@ Location EnemySlime::GetLocation() const
 {
 	return location;
 }
-

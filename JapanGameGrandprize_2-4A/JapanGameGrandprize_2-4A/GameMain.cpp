@@ -32,10 +32,12 @@ GameMain::~GameMain()
 {
 	delete player;
 	delete stage;
+
 	for (int i = 0; i < 3; i++)
 	{
 		delete enemy[i];
 	}
+
 	delete[] enemy;
 	delete camera_work;
 }
@@ -130,7 +132,6 @@ void GameMain::EnemyUpdate()
 			}
 		}
 	}
-
 }
 
 //-----------------------------------
@@ -144,6 +145,7 @@ void GameMain::Draw()const
 	item_controller->Draw();
 	player->Draw();
 	stage->Draw();
+
 	for (int i = 0; i < 3; i++)
 	{
 		if (enemy[i] != nullptr)
