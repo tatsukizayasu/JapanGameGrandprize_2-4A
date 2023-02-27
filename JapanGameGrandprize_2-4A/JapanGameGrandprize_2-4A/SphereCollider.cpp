@@ -92,6 +92,7 @@ bool SphereCollider::HitLine(const LineCollider* line_collider) const
 		{
 			inner_product[i] = (vector_x[i + 1] * vector_x[0]) - (vector_y[i + 1] * vector_y[0]);
 		}
+
 		//‰~‚Ì’†S‚Æ‚Ì‹——£‚ÌŒvZ
 		for (int i = 0; i < 2; i++)
 		{

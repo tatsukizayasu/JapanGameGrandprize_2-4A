@@ -36,6 +36,8 @@ Player::Player()
 		bullet[i] = nullptr;
 	}
 
+	move_direction = false;
+
 	damage_flg = false;
 	i = 0;
 
@@ -112,6 +114,7 @@ Player::Player(Stage* stage)
 
 	damage_flg = false;
 	pouch_open = false;
+	move_direction = false;
 	i = 0;
 
 	attribute[0] = ATTRIBUTE::NORMAL;
@@ -195,7 +198,6 @@ void Player::Draw() const
 	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
 
-
 	//ダメージを受けた時点滅する
 	if (damage_flg)
 	{
@@ -212,6 +214,7 @@ void Player::Draw() const
 	}
 	else
 	{
+
 	}
 
 #ifdef _DEBUG
@@ -221,7 +224,6 @@ void Player::Draw() const
 	}
 
 #endif
-
 
 	SetFontSize(30);
 
@@ -235,6 +237,7 @@ void Player::Draw() const
 	{
 		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute - 1]);
 	}
+
 	//下の選択肢
 	if (display_attribute + 1 > 5)
 	{
@@ -244,6 +247,7 @@ void Player::Draw() const
 	{
 		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute + 1]);
 	}
+
 	//現在の選択肢
 	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
 
@@ -262,32 +266,6 @@ void Player::Update()
 {
 
 
-	if (CheckHitKey(KEY_INPUT_DOWN))
-	{
-		location.y -= 10;
-	}
-	else if (CheckHitKey(KEY_INPUT_UP))
-	{
-		location.y += 10;
-	}
-	else if (CheckHitKey(KEY_INPUT_LEFT))
-	{
-		location.x += 10;
-	}
-	else if (CheckHitKey(KEY_INPUT_RIGHT))
-	{
-		location.x -= 10;
-	}
-
-	else if (CheckHitKey(KEY_INPUT_S))
-	{
-		location.x += 400;
-	}
-
-	//マップチップのオブジェクト取得
-	//for (int i = 0; i < stage->GetMapChip().size(); i++)
-	//{
-	//}
 
 
 	damage_count++;
@@ -313,11 +291,13 @@ void Player::Update()
 	//スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
+		move_direction = false;
 		RightMove();
 	}
 	//スティック左入力
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
+		move_direction = true;
 		LeftMove();
 	}
 	//スティック未入力
@@ -338,17 +318,12 @@ void Player::Update()
 		}
 	}
 
-	//RBボタン入力
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
-	{
-		bullet_count++;
-		Shoot_Gun();
-	}
 	//Bボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B) && fuel > 0)
 	{
 		Jump();
 	}
+
 	//Bボタン未入力
 	else
 	{
@@ -361,8 +336,6 @@ void Player::Update()
 		player_state = PLAYER_STATE::DOWN;
 	}
 
-
-
 	//弾のアップデート呼び出し
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -370,6 +343,7 @@ void Player::Update()
 		{
 			if (bullet[i]->GetEfectFlg())
 			{
+				delete bullet[i];
 				bullet[i] = nullptr;
 				SortBullet(i);
 			}
@@ -382,7 +356,6 @@ void Player::Update()
 
 	//弾の属性の切り替え処理
 	ElementUpdate();
-
 }
 
 //スティックを入力していないとき
@@ -495,12 +468,10 @@ void Player::Jump()
 	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;
 
-
 	gravity_down = 0.0;
 
 	jump += 0.25;
 	fuel -= 0.25;
-
 
 	if (jump > 10)
 	{
@@ -542,7 +513,7 @@ void Player::NotJump()
 		player_state = PLAYER_STATE::STOP;
 	}
 
-	if(location.y < 40)
+	if (location.y < 40)
 	{
 		jump = 0;
 		location.y = 40;
@@ -554,7 +525,7 @@ void Player::NotJump()
 	{
 		jump = -10;
 	}
-	
+
 	if (not_jet_count++ >= 120)
 	{
 		jump = 0;
@@ -595,8 +566,6 @@ void Player::NotJump()
 	}
 	gravity_down += 0.25;
 
-
-
 	if (not_jet_count++ >= 120)
 	{
 		if (fuel < 100)
@@ -627,7 +596,7 @@ void Player::Shoot_Gun()
 			switch (display_attribute)
 			{
 			case 0:
-				bullet[i] = new NormalBullet(location.x, location.y, attribute[display_attribute]);
+				bullet[i] = new NormalBullet(location.x, location.y, move_direction, attribute[display_attribute]);
 				break;
 			case 1:
 			case 2:
@@ -639,7 +608,6 @@ void Player::Shoot_Gun()
 			}
 		}
 	}
-
 }
 
 //-----------------------------------
@@ -647,19 +615,18 @@ void Player::Shoot_Gun()
 //-----------------------------------
 void Player::SortBullet(int delete_bullet)
 {
-	for (int i = delete_bullet + 1; i < 30; i++)
+	for (int i = delete_bullet + 1; i < BULLET_MAX; i++)
 	{
-		if (bullet[i] == nullptr)
-		{
-			bullet_count--;
-			break;
-		}
 		if (bullet[i - 1] == nullptr)
 		{
 			bullet[i - 1] = bullet[i];
 			bullet[i] = nullptr;
 		}
+		if (bullet[i] == nullptr)
+		{
+		}
 	}
+	bullet_count--;
 }
 
 //-----------------------------------
@@ -701,6 +668,7 @@ void Player::Hp_Damage(int damage_value)
 {
 	damage_flg = true;
 	hp -= damage_value;
+
 	if (hp <= 0)
 	{
 		hp = 0;

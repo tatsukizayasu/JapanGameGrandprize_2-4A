@@ -5,13 +5,14 @@
 
 #include "StageBuilder/StageBuilder.h"
 
-#define CHIP_SIZE		40
+#define CHIP_SIZE	40
 
 class Player;
 
 class Stage
 {
 private:
+
 	//MapChipオブジェクト
 	std::vector<MapChip*> mapchip;
 
@@ -26,8 +27,8 @@ private:
 	int background_images;
 	//ブロック画像
 	int block_images[110];
-
 public:
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>

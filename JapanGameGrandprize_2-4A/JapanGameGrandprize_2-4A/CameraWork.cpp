@@ -59,8 +59,6 @@ CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* st
 
 	player_dir = true;
 	player_dir_y = false;
-
-
 }
 
 //-----------------------------------
@@ -86,23 +84,26 @@ void CameraWork::Update()
 	//プレイヤーが移動開始ラインを超えたらカメラの状態を移動にする
 	if (player_p.x > moveing_line) { state = STATE::MOVE; }
 
-
 	//カメラの状態が移動の場合のみ、X方向にカメラ移動する。
-	if (state == STATE::MOVE) {
+	if (state == STATE::MOVE) 
+	{
 
 		//移動開始ラインの変動
 
 		float player_speed_w = player_p.x - old_player.x;
-		if (player_dir == true) {
+		if (player_dir == true)
+		{
 			if (moveing_line > 400) { moveing_line -= player_speed_w; }
 		}
-		else {
+		else 
+		{
 			if (moveing_line < 800) { moveing_line -= player_speed_w; }
 		}
 
-
 		//マップの右端に着いたら止める
-		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) < ceilf(player->GetLocation().x)) {
+		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) 
+			                                                        < ceilf(player->GetLocation().x))
+		{
 			state = STATE::FIXED;
 			return;
 		}
@@ -111,77 +112,86 @@ void CameraWork::Update()
 		float player_speed = 1.0f;
 		//printfDx("player_speed:%f\n", player_speed);
 
-		if ((old_player.x != player_p.x) || (old_player.y != player_p.y)) {
+		if ((old_player.x != player_p.x) || (old_player.y != player_p.y)) 
+		{
 			// カメラの座標を更新
 			camera.x = (player->GetLocation().x - moveing_line + player_speed) * speed;
 			//camera.y = player->GetLocation().y - 700;
 
-
-
 			// カメラの範囲がマップ外に出ないように調整
-			if (camera.x < 0) {
+			if (camera.x < 0)
+			{
 				state = STATE::FIXED;
 				camera.x = 0;
 			}
 			/*else if (camera.x > stage->GetMapSize().x * CHIP_SIZE - moveing_line) {
 				camera.x = stage->GetMapSize().x * CHIP_SIZE - moveing_line;
 			}*/
-			if (camera.y < 0) {
+			if (camera.y < 0) 
+			{
 				//camera.y = 0;
 			}
-			else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - 700) {
+			else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - 700) 
+			{
 				//camera.y = stage->GetMapSize().y * CHIP_SIZE - 700;
 			}
 		}
 
-
 		{	//プレイヤーの向き
 			float player_speed = player_p.x - old_player.x;
-			if (player_speed < 0) {
+			if (player_speed < 0) 
+			{
 				player_dir = false;
 			}
-			else if (player_speed > 0) {
+			else if (player_speed > 0) 
+			{
 				player_dir = true;
 			}
-
 		}
 	}
 
 	// カメラのy座標を更新
-	if (player->GetLocation().y - camera.y < 200) {
+	if (player->GetLocation().y - camera.y < 200) 
+	{
 		camera.y = player->GetLocation().y - 200;
 	}
-	else if (player->GetLocation().y - camera.y > 420) {
+	else if (player->GetLocation().y - camera.y > 420) 
+	{
 		camera.y = player->GetLocation().y - 420;
 		//camera.y + 0.25;
 	}
-	if (camera.x < 0) {
+
+	if (camera.x < 0)
+	{
 		state = STATE::FIXED;
 		camera.x = 0;
 	}
-	else if (camera.x > stage->GetMapSize().x * CHIP_SIZE - moveing_line) {
+	else if (camera.x > stage->GetMapSize().x * CHIP_SIZE - moveing_line) 
+	{
 		camera.x = stage->GetMapSize().x * CHIP_SIZE - moveing_line;
 	}
 
 	// カメラの範囲がマップ外に出ないように調整
 	//マップ外
-	if (camera.y < 0) {
+	if (camera.y < 0) 
+	{
 		camera.y = 0;
 	}
-	else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT) {
+	else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT)
+	{
 		camera.y = stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT;
 	}
 
- 
-
 	float player_speed_y = player_p.y - old_player.y;
-	if (player_speed_y < 0) {
+
+	if (player_speed_y < 0) 
+	{
 		player_dir_y = false;
 	}
-	else if (player_speed_y > 0) {
+	else if (player_speed_y > 0) 
+	{
 		player_dir_y = true;
 	}
-
 
 	old_player.x = player_p.x;
 	old_player.y = player_p.y;

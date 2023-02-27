@@ -12,7 +12,6 @@
 
 #define MAGE_SHOT_RATE 20
 
-
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -22,12 +21,13 @@ Mage::Mage()
 	can_delete = false;
 	hp = 0;
 	shot_rate = 0;
+	shot_count = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
 	type = new ENEMY_TYPE;
 	
 	*type = static_cast<ENEMY_TYPE>(1 + GetRand(3));
-	state = MAGE_STATE::IDOL;
+	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	image = 0xffffff;
 
@@ -39,6 +39,7 @@ Mage::Mage()
 
 	//ドロップアイテムの設定
 	drop = 0;
+
 	switch (*type)
 	{
 	case ENEMY_TYPE::NORMAL:
@@ -65,9 +66,12 @@ Mage::Mage()
 	drop_type_volume = drop;
 
 	int volume = 0;
+
 	for (int i = 0; i < drop; i++)
 	{
+
 		volume = MAGE_MIN_DROP + GetRand(MAGE_MAX_DROP);
+
 		switch (*type)
 		{
 		case ENEMY_TYPE::NORMAL:
@@ -103,6 +107,7 @@ Mage::Mage()
 		default:
 			break;
 		}
+
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
@@ -112,6 +117,7 @@ Mage::Mage()
 	{
 		bullet[i] = nullptr;
 	}
+
 	this->player = player;
 }
 
@@ -126,6 +132,7 @@ Mage::~Mage()
 	{
 		delete drop_element[i];
 	}
+
 	delete[] drop_element;
 
 	for (int i = 0; i < MAGE_BULLET_MAX; i++)
@@ -139,13 +146,32 @@ Mage::~Mage()
 //-----------------------------------
 void Mage::Update()
 {
+
+	
 	for (int i = 0; i < MAGE_BULLET_MAX; i++)
 	{
 		if (bullet[i] == nullptr)
 		{
 			break;
 		}
+
 		bullet[i]->Update();
+
+		if (bullet[i]->ScreenOut()) //画面外に出たら削除
+		{
+			delete bullet[i];
+			bullet[i] = nullptr;
+			SortBullet(i);
+			i--;
+		}
+	}
+
+	Poison();
+	Paralysis();
+
+	if (CheckHp() && (state != ENEMY_STATE::DEATH))
+	{
+		state = ENEMY_STATE::DEATH;
 	}
 }
 
@@ -169,10 +195,43 @@ void Mage::Move(const Location player_location)
 //-----------------------------------
 //攻撃
 //-----------------------------------
-AttackResource Mage::Attack(const BoxCollider* collider)
+void  Mage::Attack()
+{
+	CreateBullet();
+	
+	if (shot_count % MAGE_BULLET_MAX == 0)
+	{
+		state = ENEMY_STATE::MOVE;
+	}
+}
+
+//-----------------------------------
+//攻撃が当たっているか
+//-----------------------------------
+AttackResource Mage::HitCheck(const BoxCollider* collider)
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
+	for (int i = 0; i < MAGE_BULLET_MAX; i++)
+	{
+		if (bullet[i] == nullptr)
+		{
+			break;
+		}
+
+		if (bullet[i]->HitBox(collider))
+		{
+			ENEMY_TYPE attack_type[1] = { bullet[i]->GetType() };
+			ret.damage += bullet[i]->GetDamage();
+			ret.type = attack_type;
+			ret.type_count = 1;
+
+			delete bullet[i];
+			bullet[i] = nullptr;
+			SortBullet(i);
+			i--;
+		}
+	}
 	return ret;
 }
 
@@ -181,7 +240,7 @@ AttackResource Mage::Attack(const BoxCollider* collider)
 //-----------------------------------
 void Mage::Death()
 {
-
+	can_delete = true;
 }
 
 //-----------------------------------
@@ -190,6 +249,7 @@ void Mage::Death()
 void Mage::CreateBullet()
 {
 	shot_rate++;
+
 	if (shot_rate % MAGE_SHOT_RATE == 0)
 	{
 		for (int i = 0; i < MAGE_BULLET_MAX; i++)
@@ -197,6 +257,7 @@ void Mage::CreateBullet()
 			if (bullet[i] == nullptr)
 			{
 				bullet[i] = new MageBullet(*type, location, player->GetLocation());
+				shot_count++;
 				break;
 			}
 		}
@@ -226,6 +287,34 @@ void Mage::SortBullet(int bullet_num)
 bool Mage::HitBullet(const BulletBase* bullet)
 {
 	bool ret = false; //戻り値
+
+	if (HitSphere(bullet))
+	{
+		switch (bullet->GetAttribute())
+		{
+		case ATTRIBUTE::NORMAL:
+			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+			break;
+		case ATTRIBUTE::EXPLOSION:
+			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+			break;
+		case ATTRIBUTE::MELT:
+			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+			break;
+		case ATTRIBUTE::POISON:
+			poison_damage = bullet->GetDamage();
+			poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			break;
+		case ATTRIBUTE::HEAL:
+			break;
+		default:
+			break;
+		}
+		ret = true;
+	}
 
 	return ret;
 }

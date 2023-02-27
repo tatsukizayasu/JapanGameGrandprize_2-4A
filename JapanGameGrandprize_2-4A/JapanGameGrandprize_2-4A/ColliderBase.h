@@ -8,12 +8,14 @@
 class ColliderBase
 {
 public:
+
 	//抽象化する予定の関数たち↓
 	//中心座標の取得
 	Location GetLocation()const
 	{
 		return location;
 	}
+
 	//中心座標の移動
 	void MoveLocation()
 	{
@@ -39,6 +41,7 @@ public:
 		}
 
 	}
+
 	//中心座標の設定
 	void SetLocation(Location location)
 	{
@@ -46,13 +49,13 @@ public:
 		Location distance;
 		distance.x = this->location.x - location.x;
 		distance.y = this->location.y - location.y;
+
 		if (powf(distance.x, 2) + powf(distance.y, 2) < powf(distance_limit, 2))
 		{
 			this->location = location;
 		}
 	}
-
 protected:
+
 	Location location;	//中心座標
 };
-
