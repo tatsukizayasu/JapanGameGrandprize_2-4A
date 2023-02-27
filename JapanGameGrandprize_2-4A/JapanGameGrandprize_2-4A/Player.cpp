@@ -5,6 +5,7 @@
 #include "CameraWork.h"
 #include "Item.h"
 #include <iostream>
+#include <stdio.h>
 
 //プレイヤーが持っている元素の種類
 #define PLAYER_ELEMENT 7
@@ -36,7 +37,7 @@ Player::Player()
 		bullet[i] = nullptr;
 	}
 
-	move_direction = false;
+	move_left = false;
 
 	damage_flg = false;
 	i = 0;
@@ -114,7 +115,7 @@ Player::Player(Stage* stage)
 
 	damage_flg = false;
 	pouch_open = false;
-	move_direction = false;
+	move_left = false;
 	i = 0;
 
 	attribute[0] = ATTRIBUTE::NORMAL;
@@ -124,18 +125,12 @@ Player::Player(Stage* stage)
 	attribute[4] = ATTRIBUTE::PARALYSIS;
 	attribute[5] = ATTRIBUTE::HEAL;
 
-	attribute_c[0] = ("NORMAL");
-	attribute_c[1] = ("EXPLOSION");
-	attribute_c[2] = ("MELT");
-	attribute_c[3] = ("POISON");
-	attribute_c[4] = ("PARALYSIS");
-	attribute_c[5] = ("HEAL");
-
-
-	for (int i = 0; i < 6; i++)
-	{
-		attribute_c[i] = i;
-	}
+	attribute_c[0] = "NORMAL";
+	attribute_c[1] = "EXPLOSION";
+	attribute_c[2] = "MELT";
+	attribute_c[3] = "POISON";
+	attribute_c[4] = "PARALYSIS";
+	attribute_c[5] = "HEAL";
 
 	player_state = PLAYER_STATE::STOP;
 
@@ -294,13 +289,13 @@ void Player::Update()
 	//スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
-		move_direction = false;
+		move_left = false;
 		RightMove();
 	}
 	//スティック左入力
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
-		move_direction = true;
+		move_left = true;
 		LeftMove();
 	}
 	//スティック未入力
@@ -599,7 +594,7 @@ void Player::Shoot_Gun()
 			switch (display_attribute)
 			{
 			case 0:
-				bullet[i] = new NormalBullet(location.x, location.y, move_direction, attribute[display_attribute]);
+				bullet[i] = new NormalBullet(location.x, location.y, move_left, attribute[display_attribute]);
 				break;
 			case 1:
 			case 2:
@@ -703,4 +698,9 @@ void Player::SetElementItem(class Item* item)
 	int num = static_cast<int>(item->GetElementType());
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);
+}
+
+bool Player::GetMoveDirection()
+{
+	return move_left;
 }
