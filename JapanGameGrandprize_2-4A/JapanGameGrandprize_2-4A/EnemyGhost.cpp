@@ -124,6 +124,12 @@ void EnemyGhost::Update()
 			attack_state = GHOST_ATTACK::NONE;
 		}
 	}
+
+	if (CheckHp() && state != ENEMY_STATE::DEATH)
+	{
+		state = ENEMY_STATE::DEATH;
+	}
+
 }
 
 //アイドル状態
@@ -346,29 +352,28 @@ bool EnemyGhost::HitBullet(const BulletBase* bullet)
 		switch (bullet->GetAttribute()) //受けた化合物の属性
 		{
 		case ATTRIBUTE::NORMAL: 
-			hp -= bullet->GetDamage() * 0; //無効
+			hp -= bullet->GetDamage() * 10; //無効
 			break;
-		case ATTRIBUTE::EXPLOSION:
-			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
-			break;
-		case ATTRIBUTE::MELT:
-			hp -= bullet->GetDamage() * 0; //無効
-			break;
-		case ATTRIBUTE::POISON:
-			poison_damage = bullet->GetDamage() * 0; //無効
-			poison_time = bullet->GetDebuffTime() * 0; //無効
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			paralysis_time = bullet->GetDebuffTime() * 0; //無効
-			paralysis_time = bullet->GetDamage() * 0; //無効
-			break;
-		case ATTRIBUTE::HEAL:
-			break;
-		default:
-			break;
+	//	case ATTRIBUTE::EXPLOSION:
+	//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+	//		break;
+	//	case ATTRIBUTE::MELT:
+	//		hp -= bullet->GetDamage() * 0; //無効
+	//		break;
+	//	case ATTRIBUTE::POISON:
+	//		poison_damage = bullet->GetDamage() * 0; //無効
+	//		poison_time = bullet->GetDebuffTime() * 0; //無効
+	//		break;
+	//	case ATTRIBUTE::PARALYSIS:
+	//		paralysis_time = bullet->GetDebuffTime() * 0; //無効
+	//		paralysis_time = bullet->GetDamage() * 0; //無効
+	//		break;
+	//	case ATTRIBUTE::HEAL:
+	//		break;
+	//	default:
+	//		break;
 		}
 		ret = true;
-		return ret;
 	}
 	return ret;
 }
