@@ -176,7 +176,13 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
+	float now_hp = (hp / HP_MAX) * HP_BOX_WIDTH;
+
 	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
+
+	//HPÉoÅ[ÇÃï\é¶
+	DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, 0x00ff00, TRUE);
+	DrawBox(10, 50, HP_BOX_WIDTH - 1, 50 + HP_BAR_HEIGHT, 0x000000, FALSE);
 
 
 	for (int i = 0; i < bullet_count; i++)
@@ -259,9 +265,6 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
-
-
-
 
 	damage_count++;
 	if (damage_count >= 10)
@@ -695,6 +698,7 @@ void Player::SetElementItem(class Item* item)
 	int num = static_cast<int>(item->GetElementType());
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);
+
 }
 
 bool Player::GetMoveDirection()

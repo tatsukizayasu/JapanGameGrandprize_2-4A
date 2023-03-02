@@ -9,10 +9,12 @@ class BulletBase : public SphereCollider
 {
 protected:
 
-	float damage;          //弾のダメージ
+	Area area;           //範囲
+	float damage;        //弾のダメージ
 	int debuff_time;	 //弾の効果時間
 	int efect_count;	 //エフェクトの時間
-	float scrool_x;      //弾のスクロールの値
+	float scrool_x;      //弾のスクロールの値(X)
+	float scrool_y;		 //弾のスクロールの値(Y)
 	bool delete_flg;     //弾の削除フラグ
 	bool efect_end;		 //エフェクトの終わりフラグ
 	bool player_direction;//プレイヤーの向き

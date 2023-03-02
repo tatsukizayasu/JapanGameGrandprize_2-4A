@@ -13,6 +13,7 @@ NormalBullet::NormalBullet()
 	radius = 4;
 	efect_count = 0;
 	scrool_x = 0.0;
+	scrool_y = 0.0;
 	delete_flg = false;
 	efect_end = false;
 
@@ -33,6 +34,8 @@ NormalBullet::NormalBullet(float player_x, float player_y, bool player_direc,ATT
 {
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
+	scrool_y = CameraWork::GetCamera().y;
+
 	location.x = player_x;
 	location.y = player_y;
 	this->attribute = attribute;
@@ -64,10 +67,11 @@ NormalBullet::NormalBullet(float player_x, float player_y, bool player_direc,ATT
 void NormalBullet::Draw() const
 {
 	float scrool_x = CameraWork::GetCamera().x;
+	float scrool_y = CameraWork::GetCamera().y;
 
 	if (!delete_flg)
 	{
-		DrawBox(location.x - scrool_x, location.y, (location.x - scrool_x) + 20, location.y + 10, 0xff00ff, TRUE);
+		DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, 0xff00ff, TRUE);
 	}
 
 	if (!efect_end && delete_flg)
