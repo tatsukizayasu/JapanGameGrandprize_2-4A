@@ -78,7 +78,7 @@ void NormalBullet::Draw() const
 	{
 		for (int i = 0; i < PIXEL_MAX; i++)
 		{
-			DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i], 2, 0x000000, TRUE);
+			DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
 		}
 	}
 }

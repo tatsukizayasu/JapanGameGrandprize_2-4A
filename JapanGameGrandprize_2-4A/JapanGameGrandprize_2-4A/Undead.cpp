@@ -50,7 +50,7 @@ Undead::Undead()
 
 	/*当たり判定の設定*/
 	location.x = 640.0f;
-	location.y = 400.0f;
+	location.y = 1220.0f;
 	area.width = 40;
 	area.height = 80;
 
@@ -143,10 +143,12 @@ void Undead::DistancePlayer(const Location player_location)
 //-----------------------------------
 void Undead::Idol()
 {
-	float screen_x; //画面スクロールを考慮したX座標
+	Location scroll; //画面スクロールを考慮したX座標
 
-	screen_x = location.x - CameraWork::GetCamera().x;
-	if ((-area.width < screen_x) && (screen_x < SCREEN_WIDTH + area.width))
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
 	{
 		state = ENEMY_STATE::MOVE;
 	}
@@ -158,15 +160,18 @@ void Undead::Idol()
 void Undead::Move(const Location player_location)
 {
 
-	float screen_x; //画面スクロールを考慮したX座標
+	Location scroll; //画面スクロールを考慮したX座標
 
+	
 	DistancePlayer(player_location);
 
 	location.x += speed;
 
-	screen_x = location.x - CameraWork::GetCamera().x;
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
 
-	if ((screen_x < -area.width) || (SCREEN_WIDTH + area.width < screen_x))
+	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) || 
+		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
 	{
 		state = ENEMY_STATE::IDOL;
 	}
@@ -175,7 +180,7 @@ void Undead::Move(const Location player_location)
 //-----------------------------------
 //攻撃
 //-----------------------------------
-void  Undead::Attack()
+void  Undead::Attack(Location player_location)
 {
 	attack_time--;
 	if (attack_time < 0)
@@ -265,7 +270,8 @@ void Undead::Draw() const
 	draw_location.x = location.x - CameraWork::GetCamera().x;
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
-	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
+	DrawBox(draw_location.x, draw_location.y,
+		draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
 }
 
 //-----------------------------------

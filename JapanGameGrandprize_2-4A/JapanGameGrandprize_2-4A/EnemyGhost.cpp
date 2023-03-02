@@ -33,9 +33,6 @@
 //ドロップ量(最大)
 #define GHOST_MAX_DROP 4u
 
-//ドロップする種類数
-#define GHOST_DROP 3
-
 //ゴーストの攻撃力
 #define GHOST_ATTACK_DAMAGE 10
 
@@ -50,7 +47,7 @@ EnemyGhost::EnemyGhost()
 	can_delete = false;
 	hp = 10;
 	location.x = 600;
-	location.y = 300;
+	location.y = 1200;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
@@ -60,11 +57,11 @@ EnemyGhost::EnemyGhost()
 	kind = ENEMY_KIND::GHOST;
 
 	//ドロップアイテムの設定
-	drop_element = new ElementItem * [GHOST_DROP];
-	drop_type_volume = GHOST_DROP;
+	drop_element = new ElementItem * [WIND_DROP];
+	drop_type_volume = WIND_DROP;
 
 	int volume = 0;
-	for (int i = 0; i < GHOST_DROP; i++)
+	for (int i = 0; i < WIND_DROP; i++)
 	{
 		volume = GHOST_MIN_DROP + GetRand(GHOST_MAX_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
@@ -127,6 +124,12 @@ void EnemyGhost::Update()
 			attack_state = GHOST_ATTACK::NONE;
 		}
 	}
+
+	if (CheckHp() && state != ENEMY_STATE::DEATH)
+	{
+		state = ENEMY_STATE::DEATH;
+	}
+
 }
 
 //アイドル状態
@@ -169,7 +172,7 @@ void EnemyGhost::Move(const Location player_location)
 //-----------------------------------
 //攻撃
 //-----------------------------------
-void  EnemyGhost::Attack()
+void  EnemyGhost::Attack(Location player_location)
 {
 	standby_count++;
 	if (standby_time < standby_count)
@@ -344,12 +347,34 @@ void EnemyGhost::GhostMove(const Location player_location)
 bool EnemyGhost::HitBullet(const BulletBase* bullet)
 {
 	bool ret = false; //戻り値
-
-	if (HitSphere(bullet) != false)
+	if (HitSphere(bullet))
 	{
-		can_delete = true; //デバック  当たったら死亡
+		switch (bullet->GetAttribute()) //受けた化合物の属性
+		{
+		case ATTRIBUTE::NORMAL: 
+			hp -= bullet->GetDamage() * 10; //無効
+			break;
+	//	case ATTRIBUTE::EXPLOSION:
+	//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+	//		break;
+	//	case ATTRIBUTE::MELT:
+	//		hp -= bullet->GetDamage() * 0; //無効
+	//		break;
+	//	case ATTRIBUTE::POISON:
+	//		poison_damage = bullet->GetDamage() * 0; //無効
+	//		poison_time = bullet->GetDebuffTime() * 0; //無効
+	//		break;
+	//	case ATTRIBUTE::PARALYSIS:
+	//		paralysis_time = bullet->GetDebuffTime() * 0; //無効
+	//		paralysis_time = bullet->GetDamage() * 0; //無効
+	//		break;
+	//	case ATTRIBUTE::HEAL:
+	//		break;
+	//	default:
+	//		break;
+		}
+		ret = true;
 	}
-
 	return ret;
 }
 
