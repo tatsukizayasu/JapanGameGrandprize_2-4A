@@ -38,7 +38,7 @@ Mage::Mage()
 
 	/*当たり判定の設定*/
 	location.x = 640.0f;
-	location.y = 430.0f;
+	location.y = 1220.0f;
 	area.width = 40;
 	area.height = 80;
 
@@ -191,10 +191,12 @@ void Mage::Update()
 //-----------------------------------
 void Mage::Idol()
 {
-	float screen_x; //画面スクロールを考慮したX座標
+	Location scroll; //画面スクロールを考慮したX座標
 
-	screen_x = location.x - CameraWork::GetCamera().x;
-	if ((-area.width < screen_x) && (screen_x < SCREEN_WIDTH + area.width))
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
 	{
 		state = ENEMY_STATE::MOVE;
 	}
@@ -205,13 +207,17 @@ void Mage::Idol()
 //-----------------------------------
 void Mage::Move(const Location player_location)
 {
-	float screen_x; //画面スクロールを考慮したX座標
+	Location scroll; //画面スクロールを考慮したX座標
 
-	screen_x = location.x - CameraWork::GetCamera().x;
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
 
 	state = ENEMY_STATE::ATTACK;
-
-	if ((screen_x < -area.width) || (SCREEN_WIDTH + area.width < screen_x))
+	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) ||
+		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
 	{
 		state = ENEMY_STATE::IDOL;
 	}
@@ -225,9 +231,10 @@ void  Mage::Attack(Location player_location)
 {
 	CreateBullet(player_location);
 	
-	if (shot_count % MAGE_BULLET_MAX == 0)
+	if (shot_count >= MAGE_BULLET_MAX)
 	{
 		state = ENEMY_STATE::MOVE;
+		shot_count = 0;
 	}
 }
 
@@ -255,7 +262,6 @@ AttackResource Mage::HitCheck(const BoxCollider* collider)
 			delete bullet[i];
 			bullet[i] = nullptr;
 			SortBullet(i);
-			i--;
 		}
 	}
 	return ret;
@@ -357,6 +363,16 @@ void Mage::Draw() const
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
 	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
+
+	for (int i = 0; i < MAGE_BULLET_MAX; i++)
+	{
+		if (bullet[i] == nullptr)
+		{
+			break;
+		}
+
+		bullet[i]->Draw();
+	}
 }
 
 //-----------------------------------

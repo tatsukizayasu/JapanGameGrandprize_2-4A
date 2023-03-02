@@ -64,17 +64,18 @@ NormalBullet::NormalBullet(float player_x, float player_y, bool player_direc,ATT
 void NormalBullet::Draw() const
 {
 	float scrool_x = CameraWork::GetCamera().x;
+	float scrool_y = CameraWork::GetCamera().y;
 
 	if (!delete_flg)
 	{
-		DrawBox(location.x - scrool_x, location.y, (location.x - scrool_x) + 20, location.y + 10, 0xff00ff, TRUE);
+		DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, location.y - scrool_y + 10, 0xff00ff, TRUE);
 	}
 
 	if (!efect_end && delete_flg)
 	{
 		for (int i = 0; i < PIXEL_MAX; i++)
 		{
-			DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i], 2, 0x000000, TRUE);
+			DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
 		}
 	}
 }

@@ -345,7 +345,7 @@ bool EnemyGhost::HitBullet(const BulletBase* bullet)
 {
 	bool ret = false; //戻り値
 
-	if (HitSphere(bullet) != false)
+	if (HitSphere(bullet))
 	{
 		can_delete = true; //デバック  当たったら死亡
 	}
