@@ -83,7 +83,7 @@ public:
 	virtual void Move(const Location player_location) = 0;
 
 	//UŒ‚
-	virtual void  Attack() = 0;
+	virtual void  Attack(Location) = 0;
 
 	//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
 	virtual AttackResource HitCheck(const BoxCollider* collider) = 0;

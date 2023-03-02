@@ -7,11 +7,17 @@
 #include "EnemyBase.h"
 #include "ElementItem.h"
 #include "Pouch.h"
+#include "DxLib.h"
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
-#define HP_MAX 100
+#define HP_MAX 100.f
+#define HP_BOX_WIDTH 500
 #define BULLET_MAX 50
+#define HP_BAR_HEIGHT 50
+#define GREEN GetColor(0,255,0)
+#define RED GetColor(255,0,0)
+#define YELLOW GetColor(255,239,0)
 
 enum class PLAYER_STATE
 {
@@ -22,6 +28,9 @@ enum class PLAYER_STATE
 	DOWN,
 	DEATH
 };
+
+
+
 
 class Player : public BoxCollider
 {
