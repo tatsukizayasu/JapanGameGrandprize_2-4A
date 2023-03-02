@@ -180,10 +180,21 @@ void Player::Draw() const
 
 	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 
-	//HPバーの表示
-	DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, 0x00ff00, TRUE);
+	//HPバーの表示ここから
+	if (hp >= 50)
+	{
+		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, GREEN, TRUE);
+	}
+	else if (hp >= 20)
+	{
+		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, YELLOW, TRUE);
+	}
+	else
+	{
+		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, RED, TRUE);
+	}
 	DrawBox(10, 50, HP_BOX_WIDTH - 1, 50 + HP_BAR_HEIGHT, 0x000000, FALSE);
-
+	//ここまで
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -193,10 +204,6 @@ void Player::Draw() const
 		}
 	}
 
-	//if (beam != nullptr)
-	//{
-	//	beam->Draw();
-	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
 
 	//ダメージを受けた時点滅する
@@ -428,6 +435,12 @@ void Player::LeftMove()
 		}
 	}
 	location.x += speed_x;
+
+	if (location.x < 0)
+	{
+		speed_x = 0.0;
+		location.x = 0;
+	}
 }
 
 //右移動
@@ -458,6 +471,12 @@ void Player::RightMove()
 	}
 
 	location.x += speed_x;
+
+	if (location.x < 0)
+	{
+		speed_x = 0.0;
+		location.x = 0;
+	}
 }
 
 //ジャンプ
@@ -542,44 +561,6 @@ void Player::NotJump()
 		not_jet_count = 120;
 	}
 
-	/*jump_power -= 0.5;
-	if (location.y > 0)
-	{
-		location.y -= jump_power;
-	}
-	else
-	{
-		jump_power = 0;
-	}
-
-	jump = 10;
-
-	if (location.y < 400)
-	{
-		location.y += gravity_down;
-	}
-	else
-	{
-		player_state = PLAYER_STATE::STOP;
-	}
-	gravity_down += 0.25;
-
-	if (not_jet_count++ >= 120)
-	{
-		if (fuel < 100)
-		{
-			fuel += 2.5;
-		}
-		else
-		{
-			fuel = 100;
-		}
-	}
-
-	if (not_jet_count >= 120)
-	{
-		not_jet_count = 120;
-	}*/
 }
 
 //-----------------------------------

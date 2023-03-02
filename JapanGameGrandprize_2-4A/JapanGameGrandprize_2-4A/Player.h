@@ -11,10 +11,13 @@
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
-#define HP_MAX 100
+#define HP_MAX 100.f
 #define HP_BOX_WIDTH 500
 #define BULLET_MAX 50
 #define HP_BAR_HEIGHT 50
+#define GREEN GetColor(0,255,0)
+#define RED GetColor(255,0,0)
+#define YELLOW GetColor(255,239,0)
 
 enum class PLAYER_STATE
 {
@@ -26,12 +29,7 @@ enum class PLAYER_STATE
 	DEATH
 };
 
-enum class PLAYER_HP_STATE
-{
-	GREEN = 0,
-	YEROW,
-	RED
-};
+
 
 
 class Player : public BoxCollider
@@ -62,7 +60,6 @@ private:
 	int display_attribute;          //画面に表示させる属性
 
 	PLAYER_STATE player_state;
-	PLAYER_HP_STATE hp_state;
 	
 	BulletBase** bullet;             //弾の配列
 	Stage* stage;                //ステージへのポインタ
