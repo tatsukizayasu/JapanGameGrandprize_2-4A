@@ -12,9 +12,13 @@
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100.f
-#define HP_BOX_WIDTH 500
-#define BULLET_MAX 50
+#define HP_BAR_WIDTH 500
 #define HP_BAR_HEIGHT 50
+#define FUEL_MAX 100.f
+#define FUEL_BAR_HEIGHT 100
+
+
+#define BULLET_MAX 50
 #define GREEN GetColor(0,255,0)
 #define RED GetColor(255,0,0)
 #define YELLOW GetColor(255,239,0)

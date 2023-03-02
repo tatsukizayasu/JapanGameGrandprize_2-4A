@@ -176,9 +176,24 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	float now_hp = (hp / HP_MAX) * HP_BOX_WIDTH;
+	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
+	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
 
 	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
+	//FUELバーの表示ここから
+	if (fuel >= 50)
+	{
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
+	}
+	else if (fuel >= 20)
+	{
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
+	}
+	else
+	{
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
+	}
+	//ここまで
 
 	//HPバーの表示ここから
 	if (hp >= 50)
@@ -193,7 +208,7 @@ void Player::Draw() const
 	{
 		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, RED, TRUE);
 	}
-	DrawBox(10, 50, HP_BOX_WIDTH - 1, 50 + HP_BAR_HEIGHT, 0x000000, FALSE);
+	DrawBox(10, 50, HP_BAR_WIDTH - 1, 50 + HP_BAR_HEIGHT, 0x000000, FALSE);
 	//ここまで
 
 	for (int i = 0; i < bullet_count; i++)
@@ -257,6 +272,7 @@ void Player::Draw() const
 	}
 
 	//現在の選択肢
+	DrawCircle(990, 60, 5, 0x000000, TRUE);
 	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
