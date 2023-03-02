@@ -109,6 +109,7 @@ void Item::Draw()const
 	draw_location.x = location.x - CameraWork::GetCamera().x;
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
+	DrawCircle(static_cast<int>(draw_location.x), static_cast<int>(draw_location.y), radius, 0x000000, FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawCircle(static_cast<int>(draw_location.x), static_cast<int>(draw_location.y), radius, color, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);

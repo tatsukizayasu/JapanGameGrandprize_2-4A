@@ -8,6 +8,7 @@
 ItemController::ItemController()
 {
 	item_volume = 0;
+	item_max = 0;
 	item = nullptr;
 }
 
@@ -44,6 +45,7 @@ void ItemController::Update(Player* player)
 			delete item[i];
 			item[i] = nullptr;
 			SortItem(i);
+			item_volume--;
 		}
 	}
 }
@@ -54,10 +56,14 @@ void ItemController::Update(Player* player)
 void ItemController::SpawnItem(const EnemyBase* enemy_base)
 {
 
-	int old_item_volume = item_volume;//生成可能なエネミー数
+	int old_item_max = item_max;//生成可能なエネミー数
 
 	item_volume += enemy_base->GetDropVolume();
-	ArrangementItem(old_item_volume);
+	if (item_max < item_volume)
+	{
+		item_max = item_volume;
+		ArrangementItem(old_item_max);
+	}
 
 	int volume = 0; //生成数
 	int j = 0;
@@ -67,13 +73,16 @@ void ItemController::SpawnItem(const EnemyBase* enemy_base)
 	{
 		volume = enemy_base->GetDropItem(i).GetVolume();
 
-		while (0 < volume)
+		for (int j = 0; j < volume; j++)
 		{
-			if (item[j] == nullptr)
+			for (int n = 0; n < item_max; n++)
 			{
-				item[j++] = new Item(enemy_base->GetDropItem(i).GetType(), enemy_base->GetLocation());
+				if (item[n] == nullptr)
+				{
+					item[n] = new Item(enemy_base->GetDropItem(i).GetType(), enemy_base->GetLocation());
+					break;
+				}
 			}
-			volume--;
 		}
 	}
 }
@@ -83,10 +92,8 @@ void ItemController::SpawnItem(const EnemyBase* enemy_base)
 //-----------------------------------
 void ItemController::SortItem(const int item_num)
 {
-	int old_item_volume = item_volume;//生成可能なアイテム数
-
 	//弾の中身をソートする
-	for (int i = item_num + 1; i < item_volume; i++)
+	for (int i = item_num + 1; i < item_max; i++)
 	{
 		if ((item[i] == nullptr))
 		{
@@ -95,50 +102,46 @@ void ItemController::SortItem(const int item_num)
 
 		item[i - 1] = item[i];
 		item[i] = nullptr;
-		item_volume--;
 	}
-
-	ArrangementItem(old_item_volume);
 }
 
 //-----------------------------------
 //アイテムの整理
 //-----------------------------------
-void ItemController::ArrangementItem(const int old_item_volume)
+void ItemController::ArrangementItem(const int old_item_max)
 {
-	Item** temporary_item; //避難用
-
-	//もともとのアイテム一時的に避難する
-	temporary_item = item;
-
-	item = new Item * [item_volume];
-
-	//避難させたアイテムを元に戻す
-	if (old_item_volume < item_volume)
+	if (item == nullptr)
 	{
-		for (int i = 0; i < old_item_volume; i++)
+		//アイテムの初期化
+		item = new Item * [item_max];
+
+		for (int i = 0; i < item_max; i++)
 		{
-			if (temporary_item == nullptr)
-			{
-				break;
-			}
-			item[i] = temporary_item[i];
+			item[i] = nullptr;
 		}
 	}
 	else
 	{
-		for (int i = 0; i < item_volume; i++)
+		Item** temporary_item; //避難用
+
+		//もともとのアイテム一時的に避難する
+		temporary_item = item;
+
+		item = new Item * [item_max];
+
+		//避難させたアイテムを元に戻す
+		for (int i = 0; i < old_item_max; i++)
 		{
 			item[i] = temporary_item[i];
 		}
-	}
-	
 
-	for (int i = old_item_volume; i < item_volume; i++)
-	{
-		item[i] = nullptr;
+		for (int i = old_item_max; i < item_max; i++)
+		{
+			item[i] = nullptr;
+		}
+		delete[] temporary_item;
 	}
-	delete[] temporary_item;
+
 }
 
 //-----------------------------------
