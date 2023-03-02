@@ -1,4 +1,5 @@
 #include "Stage.h"
+#include "../CameraWork.h"
 #include "DxLib.h"
 #include <iostream>
 #include <fstream>
@@ -25,9 +26,9 @@ Stage::Stage()
 	LoadMap();
 
 	//マップチップの描画情報をセット
-	for (float y = 0; y < map_data.size(); y++) 
+	for (float y = 0; y < map_data.size(); y++)
 	{
-		for (float x = 0; x < map_data.at(0).size(); x++) 
+		for (float x = 0; x < map_data.at(0).size(); x++)
 		{
 			int i = map_data.at(y).at(x);
 			if (i != 0 && i != -1)
@@ -67,7 +68,7 @@ Stage::~Stage()
 	mapchip.shrink_to_fit();
 
 	//マップチップ画像を削除
-	for (int i = 0; i < 100; i++) 
+	for (int i = 0; i < 100; i++)
 	{
 		DeleteGraph(block_images[i]);
 	}
@@ -104,7 +105,7 @@ void Stage::Update(Player* player)
 	}*/
 
 	for (int i = 0; i < mapchip.size(); i++)
-	{		
+	{
 		mapchip.at(i)->Update(player);
 
 	}
@@ -121,16 +122,36 @@ void Stage::Draw()
 {
 
 	//マップチップ		描画
-	for (int i = 0; i < mapchip.size(); i++)
+
+	//描画範囲
+	struct DrawArea
 	{
-		if (mapchip.at(i) != nullptr)
-		{
-			mapchip.at(i)->Draw();
-		}
+		float width;
+		float height;
+	} draw;
+
+	draw = { SCREEN_WIDTH + CHIP_SIZE,SCREEN_HEIGHT + CHIP_SIZE };
+
+	CameraWork::Camera camera = CameraWork::GetCamera();
+
+	for (auto& m : mapchip)
+	{
+		if (m == nullptr) continue;
+
+		float x = m->GetLocation().x;
+		float y = m->GetLocation().y;
+		float w = m->GetArea().width;
+		float h = m->GetArea().height;
+
+		// 画面内にあるMapChipオブジェクトだけ描画する
+		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
+
+		m->Draw();
 	}
 
+
 #ifdef _STAGE_BUILDER
-	stage_builder->Draw();
+	//stage_builder->Draw();
 #endif
 }
 
@@ -146,7 +167,7 @@ void Stage::LoadMap()
 
 	int FileHandle;
 
-	if ((FileHandle = FileRead_open(buf)) == 0) 
+	if ((FileHandle = FileRead_open(buf)) == 0)
 	{
 		exit(1);
 	}
@@ -162,7 +183,7 @@ void Stage::LoadMap()
 
 		map_data.push_back(std::vector<int>());
 
-		while (tmp != NULL) 
+		while (tmp != NULL)
 		{
 
 			map_data[i].push_back(std::stoi(tmp));

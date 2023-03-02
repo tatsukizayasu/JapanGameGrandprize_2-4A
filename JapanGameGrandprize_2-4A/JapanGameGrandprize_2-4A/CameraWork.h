@@ -4,17 +4,18 @@
 
 class CameraWork
 {
-protected:
-
-	//カメラ座標
-	//static POINT camera;
-
+public:
 	//カメラ座標構造体
 	struct Camera
 	{
 		float x;
 		float y;
 	};
+
+protected:
+
+	//カメラ座標
+	//static POINT camera;
 
 	//プレイヤーの旧座標
 	Camera old_player;
