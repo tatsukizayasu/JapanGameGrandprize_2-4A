@@ -180,7 +180,7 @@ void Player::Draw() const
 	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
 
 	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
-	//FUELバーの表示
+	//FUELバーの表示ここから
 	if (fuel >= 50)
 	{
 		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
@@ -193,6 +193,7 @@ void Player::Draw() const
 	{
 		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
 	}
+	//ここまで
 
 	//HPバーの表示ここから
 	if (hp >= 50)
@@ -271,6 +272,7 @@ void Player::Draw() const
 	}
 
 	//現在の選択肢
+	DrawCircle(990, 60, 5, 0x000000, TRUE);
 	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
