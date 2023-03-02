@@ -7,7 +7,6 @@
 #include "EnemyBase.h"
 #include "ElementItem.h"
 #include "Pouch.h"
-#include <string>
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
@@ -44,12 +43,12 @@ private:
 	int i;                          //スイッチ内でのループ用
 
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
-	bool move_direction;			//プレイヤーの向き
+	bool move_left;			//プレイヤーの向き true:左　false:右
 	bool pouch_open;				//ポーチを開けている
 
 	ATTRIBUTE attribute[6];         //弾の属性
-	std::string attribute_c[6];     //弾の属性の文字列
-	int display_attribute; //画面に表示させる属性
+	const char* attribute_c[6];        //弾の属性の文字列
+	int display_attribute;          //画面に表示させる属性
 
 	PLAYER_STATE player_state;
 	
@@ -86,4 +85,6 @@ public:
 
 	//元素の量の設定
 	void SetElementItem(class Item* item);
+	//プレイヤーの向き
+	bool GetMoveDirection();
 };
