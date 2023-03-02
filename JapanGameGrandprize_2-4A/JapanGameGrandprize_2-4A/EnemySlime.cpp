@@ -75,7 +75,7 @@ void EnemySlime::Draw()const
 	DrawCircle(location.x + 7 + (1 * direction) - CameraWork::GetCamera().x, location.y - 6, 2, 0x000000, 1, 1);
 	DrawBox(location.x - (area.width / 2)-CameraWork::GetCamera().x, location.y - (area.height / 2), location.x - (area.width / 2) + area.width- CameraWork::GetCamera().x, location.y - (area.height / 2) + area.height, 0xffffff, 0);*/
 
-	DrawRotaGraph(location.x - CameraWork::GetCamera().x, location.y, 0.17, M_PI / 180 * slime_angle, slime_image, TRUE);
+	DrawRotaGraph(location.x - CameraWork::GetCamera().x, location.y - CameraWork::GetCamera().y, 0.17, M_PI / 180 * slime_angle, slime_image, TRUE);
 }
 
 //-----------------------------------
@@ -119,7 +119,7 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  EnemySlime::Attack()
+void  EnemySlime::Attack(Location player_location)
 {
 
 	location.y -= (jump_distance.y / 3);

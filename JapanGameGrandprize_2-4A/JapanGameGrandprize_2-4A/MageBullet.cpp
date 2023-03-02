@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include<math.h>
 #include "MageBullet.h"
+#include "CameraWork.h"
 
 #define MAGE_BULLET_SPEED 5
 
@@ -11,6 +12,7 @@
 MageBullet::MageBullet(ENEMY_TYPE type, Location spawn_location, Location player_location)
 {
 	location = spawn_location;
+	radius = 6;
 	speed = MAGE_BULLET_SPEED;
 	this->type = type;
 
@@ -44,21 +46,24 @@ void MageBullet::Update()
 //-----------------------------------
 void MageBullet::Draw() const
 {
+	float x, y;
+	x = location.x - CameraWork::GetCamera().x;
+	y = location.y - CameraWork::GetCamera().y;
 	switch (type)
 	{
 	case ENEMY_TYPE::NORMAL:
 		break;
 	case ENEMY_TYPE::FIRE:
-		DrawCircle(location.x, location.y, 6, 0xff0000, TRUE);
+		DrawCircle(x, y, radius, 0xff0000, TRUE);
 		break;
 	case ENEMY_TYPE::WATER:
-		DrawCircle(location.x, location.y, 6, 0x00ff00, TRUE);
+		DrawCircle(x, y, radius, 0x0000ff, TRUE);
 		break;
 	case ENEMY_TYPE::WIND:
-		DrawCircle(location.x, location.y, 6, 0x00ffff, TRUE);
+		DrawCircle(x,y, radius, 0xffffff, TRUE);
 		break;
 	case ENEMY_TYPE::SOIL:
-		DrawCircle(location.x, location.y, 6, 0x770077, TRUE);
+		DrawCircle(x, y, radius, 0xffff00, TRUE);
 		break;
 	case ENEMY_TYPE::THUNDER:
 		break;

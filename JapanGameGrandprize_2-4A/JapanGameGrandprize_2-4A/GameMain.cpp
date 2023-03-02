@@ -7,6 +7,7 @@
 #include"EnemySlime.h"
 #include"EnemyGhost.h"
 #include "BULLET.h"
+#include "Mage.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -15,11 +16,12 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
-	enemy = new EnemyBase * [3];
+	enemy = new EnemyBase * [4];
 	enemy[0] = new Undead();
 	enemy[1] = new EnemySlime();
 	enemy[2] = new EnemyGhost();
-	camera_work = new CameraWork(0, 0, player, stage);
+	enemy[3] = new Mage();
+	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
 
 	input_margin = 0;
@@ -79,7 +81,7 @@ void GameMain::EnemyUpdate()
 	BulletBase** bullet;
 	bullet = player->GetBullet();
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 
 		if (enemy[i] != nullptr)
@@ -95,7 +97,7 @@ void GameMain::EnemyUpdate()
 				enemy[i]->Move(player->GetLocation());
 				break;
 			case ENEMY_STATE::ATTACK:
-				enemy[i]->Attack();
+				enemy[i]->Attack(player->GetLocation());
 				break;
 			case ENEMY_STATE::DEATH:
 				enemy[i]->Death();
@@ -104,7 +106,6 @@ void GameMain::EnemyUpdate()
 			default:
 				break;
 			}
-
 
 			enemy[i]->HitCheck(player);
 
@@ -142,11 +143,12 @@ void GameMain::Draw()const
 	//背景
 	SetBackgroundColor(149, 249, 253);
 
-	item_controller->Draw();
-	player->Draw();
 	stage->Draw();
+	item_controller->Draw();
 
-	for (int i = 0; i < 3; i++)
+	player->Draw();
+
+	for (int i = 0; i < 4; i++)
 	{
 		if (enemy[i] != nullptr)
 		{

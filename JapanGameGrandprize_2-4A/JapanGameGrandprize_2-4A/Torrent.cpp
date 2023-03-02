@@ -44,7 +44,7 @@ void Torrent::Move(const Location player_location)
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  Torrent::Attack()
+void  Torrent::Attack(Location player_location)
 {
 	
 }

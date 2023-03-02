@@ -8,6 +8,7 @@
 
 #define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage2";
+#define STAGE_NAME	"Stage01";
 
 //-----------------------------------
 // コンストラクタ
@@ -29,8 +30,7 @@ Stage::Stage()
 		for (float x = 0; x < map_data.at(0).size(); x++) 
 		{
 			int i = map_data.at(y).at(x);
-
-			if (i != 0)
+			if (i != 0 && i != -1)
 			{
 				mapchip.push_back(new MapChip
 				(&block_images[i],
@@ -124,7 +124,7 @@ void Stage::LoadMap()
 		exit(1);
 	}
 
-	char str[900];		//一行の長さ
+	char str[2506];		//一行の長さ
 	char* context;
 	int i = 0, j = 0;
 

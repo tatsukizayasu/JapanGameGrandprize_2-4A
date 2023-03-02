@@ -47,7 +47,7 @@ EnemyGhost::EnemyGhost()
 	can_delete = false;
 	hp = 10;
 	location.x = 600;
-	location.y = 300;
+	location.y = 1200;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
@@ -172,7 +172,7 @@ void EnemyGhost::Move(const Location player_location)
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  EnemyGhost::Attack()
+void  EnemyGhost::Attack(Location player_location)
 {
 	standby_count++;
 	if (standby_time < standby_count)
