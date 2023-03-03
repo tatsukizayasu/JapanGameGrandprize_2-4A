@@ -5,14 +5,23 @@
 #include "../MapChip.h"
 #include "../SphereCollider.h"
 #include "../../LineCollider.h"
+#include "PolyLine.h"
 #include <vector>
 
+//モードの数とその種類------
 #define MENU_NUM 4
 #define MENU_MODE -1
 #define BRUSH_MODE 0
 #define MODULATION_MODE 1
 #define SAVE_MODE 2
 #define LOAD_MODE 3
+//--------------------------
+
+//ブラシの数とその種類---------
+#define CLASS_NUM 2	
+#define MAP_CHIP 0
+#define POLY_LINE 1
+//-----------------------------
 
 #define ARROW_NUM 16
 
@@ -21,22 +30,27 @@ using namespace std;
 class StageBuilder
 {
 private:
+	const char* class_name[CLASS_NUM] =
+	{
+		"default_map_chip",
+		"poly_line"
+	};
 
-	SphereCollider* mouse;//判定のみ
+	SphereCollider* mouse;
 	Location mouse_pos;
-	//ブロック画像
-	int block_images[100];
+	int block_images[110];		//ブロック画像
 	vector<MapChip*> map_chips;
-
+	ColliderBase* select_collider;
 	int mode;
 
 	int menu_cursor;
 	char arrow[ARROW_NUM];
+	int current_brush;
 
-	//todo:テストなので消す ヘッダーも
-	class LineCollider2* line;
+	//todo:テスト 後々vector配列にして運用する
+	class PolyLine* line;
+
 public:
-
 	//コンストラクタ
 	StageBuilder();
 	//デストラクタ
@@ -59,6 +73,8 @@ public:
 	//マウスの更新
 	void UpdateMouse();
 
+	//モードごとに分かれた描画
+	void DrawWhichMode()const;
 	//メニューモードの描画
 	void DrawMenu()const;
 	//セーブモードの描画
@@ -66,11 +82,23 @@ public:
 	//格子の描画
 	void DrawFrame()const;
 	//ファイルの描画
-	void DrawFile(float x,float y,const char* path ,int font_size)const;
+	void DrawFile(float x, float y, const char* path, int font_size)const;
+	//現在のブラシになっているクラスを描画
+	void DrawClassName()const;
 
 	//マップチップを作成する
-	void MakeMapChip();
-	void MakeMapChip(float x,float y,float width,float height);
+	void MakeMapChip(); //クリックしたとき用
+	void MakeMapChip(float x, float y, float width, float height); //CSVファイルからの読み込み用
+
+	//コリジョンクラスを作成する
+	//折れ線
+	void MakePolyLine();
+	//円
+	void MakeSphere();
+	//線
+	void MakeLine();
+	//線を作り切れなかったときにリセットする
+	void LineReset() {}
 
 	//ファイルカウント
 	int FileCount(const char* path)const;
