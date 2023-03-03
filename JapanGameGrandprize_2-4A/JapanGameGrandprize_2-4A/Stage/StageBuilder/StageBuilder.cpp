@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "StageBuilder.h"
+#include "../../CameraWork.h"
 #include "Directory.h"
 #include <string>
 #include <fstream>
@@ -14,17 +15,16 @@ StageBuilder::StageBuilder()
 {
 	Directory::Init();
 	mouse = new SphereCollider();
-	mouse_pos = {};
+	select_collider = nullptr;
+	menu_cursor = 0;	
+	arrow[0] = '>';
 
 	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, 40, 40, block_images) == -1)
 	{
 		throw "Images/Stage/map_chips_.png";
 	}
-	select_collider = nullptr;
 	mode = BRUSH_MODE;
 
-	menu_cursor = 0;	
-	arrow[0] = '>';
 
 	for (int i = 1; i < ARROW_NUM; i++)
 	{
@@ -137,8 +137,10 @@ void StageBuilder::Update()
 //------------------------------------
 void StageBuilder::Draw()const
 {
-	DrawCircleAA(mouse_pos.x, mouse_pos.y, 2, 10, 0xFFFFFF);
-	DrawCircleAA(mouse_pos.x, mouse_pos.y, 1, 10, 0x000000);
+	DrawCircleAA(mouse->GetLocation().x, 
+		mouse->GetLocation().y, 2, 10, 0xFFFFFF);
+	DrawCircleAA(mouse->GetLocation().x, 
+		mouse->GetLocation().y, 1, 10, 0x000000);
 
 	for (int i = 0; i < map_chips.size(); i++)
 	{
@@ -163,11 +165,13 @@ void StageBuilder::Draw()const
 
 #ifdef _DEV
 
-	//line->DrawCollision();
+	line->DrawCollision();
 
 #endif // _DEV
 
 	DrawWhichMode();
+
+	DrawFormatString(500, 330, 0, "%lf,%lf", CameraWork::GetCamera().x, CameraWork::GetCamera().y);
 }
 
 //--------------------------------------
@@ -341,10 +345,8 @@ void StageBuilder::UpdateMouse()
 {
 	int x, y;
 	GetMousePoint(&x, &y);
-	mouse_pos.x = (float)x;
-	mouse_pos.y = (float)y;
 
-	mouse->SetLocation(mouse_pos);
+	mouse->SetLocation({(float)x,(float)y});
 }
 
 //------------------------------------
@@ -480,8 +482,10 @@ void StageBuilder::DrawClassName()const
 //------------------------------------
 void StageBuilder::MakeMapChip()
 {
-	float pos_x = (int)(mouse_pos.x / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
-	float pos_y = (int)(mouse_pos.y / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
+	float pos_x = (int)((mouse->GetLocation().x + CameraWork::GetCamera().x)
+		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
+	float pos_y = (int)((mouse->GetLocation().y + CameraWork::GetCamera().y)
+		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
 	map_chips.push_back(new MapChip(&block_images[0],
 		{ pos_x + MAP_CHIP_SIZE / 2,pos_y + MAP_CHIP_SIZE / 2 },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
@@ -509,8 +513,6 @@ void StageBuilder::MakePolyLine()
 //------------------------------------
 void StageBuilder::MakeSphere()
 {
-	int x = (int)mouse->GetLocation().x / 10 * 10;
-	int y = (int)mouse->GetLocation().y / 10 * 10;
 
 
 }
@@ -519,6 +521,14 @@ void StageBuilder::MakeSphere()
 // Line class‚Ì¶¬
 //------------------------------------
 void StageBuilder::MakeLine()
+{
+
+}
+
+//--------------------------------------
+// ü‚ğì‚èØ‚ê‚È‚©‚Á‚½‚Æ‚«ƒŠƒZƒbƒg
+//--------------------------------------
+void StageBuilder::LineReset()
 {
 
 }

@@ -36,15 +36,21 @@ private:
 		"poly_line"
 	};
 
+	//インタフェース
 	SphereCollider* mouse;
-	Location mouse_pos;
-	int block_images[110];		//ブロック画像
-	vector<MapChip*> map_chips;
 	ColliderBase* select_collider;
-	int mode;
-
 	int menu_cursor;
 	char arrow[ARROW_NUM];
+
+	//デフォルトマップチップ
+	int block_images[110];		//ブロック画像
+	vector<MapChip*> map_chips;
+
+	//スフィア
+	//vector<SphereCollider*> 
+
+	//ツール用
+	int mode;
 	int current_brush;
 
 	//todo:テスト 後々vector配列にして運用する
@@ -98,7 +104,7 @@ public:
 	//線
 	void MakeLine();
 	//線を作り切れなかったときにリセットする
-	void LineReset() {}
+	void LineReset();
 
 	//ファイルカウント
 	int FileCount(const char* path)const;
