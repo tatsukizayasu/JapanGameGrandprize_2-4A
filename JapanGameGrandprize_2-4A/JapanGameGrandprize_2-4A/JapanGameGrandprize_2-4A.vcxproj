@@ -168,6 +168,7 @@
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
     <ClInclude Include="Pouch.h" />
+    <ClInclude Include="Stage\Element\Element_Wooden_Floor.h" />
     <ClInclude Include="Stage\StageBuilder\Debug.h" />
     <ClInclude Include="Stage\StageBuilder\Directory.h" />
     <ClInclude Include="EfectBeam.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="Pouch.cpp" />
+    <ClCompile Include="Stage\Element\Element_Wooden_Floor.cpp" />
     <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
