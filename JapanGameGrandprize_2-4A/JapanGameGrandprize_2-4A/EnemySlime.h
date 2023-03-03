@@ -9,15 +9,23 @@ enum class DIRECTION
 	RIGHT
 };
 
+enum class SLIME_ATTACK
+{
+	BEFORE_ATTACK,//UŒ‚‚·‚é‘O
+	AFTER_ATTACK,//UŒ‚‚µ‚½Œã
+};
+
 class EnemySlime : public EnemyBase, public BoxCollider
 {
 private:
 
 	int color;
 	DIRECTION direction;
+	SLIME_ATTACK slime_attack;
 
 	int slime_image;
 	int slime_angle;
+	int wait_time;
 
 	Location jump_distance;
 
@@ -48,17 +56,7 @@ public:
 	//€–S
 	void Death() override;
 
-	void HitStage();
-
-	void KnockBack();
-
-	virtual bool HitBullet(const BulletBase* bullet)override
-	{
-
-		bool ret = false; //–ß‚è’l
-
-		return ret;
-	};
+	virtual bool HitBullet(const BulletBase* bullet)override;
 
 	//À•W‚Ìæ“¾
 	Location GetLocation() const override;

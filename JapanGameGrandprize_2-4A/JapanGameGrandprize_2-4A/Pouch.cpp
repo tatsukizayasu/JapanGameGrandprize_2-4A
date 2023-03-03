@@ -1,6 +1,7 @@
 #include "Pouch.h"
 #include "DxLib.h"
 #include "PadInput.h"
+#include "Define.h"
 
 //コンストラクタ
 Pouch::Pouch()
@@ -8,6 +9,13 @@ Pouch::Pouch()
 	x = 700;
 	y = 50;
 	tab = Tab::Explosion_Tab;
+
+	//元素の初期化
+	element = new ElementItem * [PLAYER_ELEMENT];
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+	}
 }
 
 //アップデート
@@ -60,36 +68,39 @@ void Pouch::Update()
 			break;
 		}
 	}
+
+
+
 }
 
 //爆発
 void Pouch::ExplosionTab () const 
 {
-	DrawBox(x, y, x + POUCH_SIZE, y + POUCH_SIZE, 0xff99ff, TRUE);
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 }
 
 //溶解
 void Pouch::MeltTab() const
 {
-	DrawBox(x, y, x + POUCH_SIZE, y + POUCH_SIZE, 0xff55ff, TRUE);
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff55ff, TRUE);
 }
 
 //麻痺
 void Pouch::ParalysisTab()const
 {
-	DrawBox(x, y, x + POUCH_SIZE, y + POUCH_SIZE, 0xff0099, TRUE);
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff0099, TRUE);
 }
 
 //毒
 void Pouch::PoisonTab()const
 {
-	DrawBox(x, y, x + POUCH_SIZE, y + POUCH_SIZE, 0x5500ff, TRUE);
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x5500ff, TRUE);
 }
 
 //回復
 void Pouch::HealTab()const
 {
-	DrawBox(x, y, x + POUCH_SIZE, y + POUCH_SIZE, 0xff1111, TRUE);
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff1111, TRUE);
 }
 
 //描画
@@ -115,4 +126,11 @@ void Pouch::Draw() const
 	default:
 		break;
 	}
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		DrawBox(x + (50 * i), y + 400, (x + (50 * i)) + 50, y + 450, 0xffffff, FALSE);
+	}
+
 }

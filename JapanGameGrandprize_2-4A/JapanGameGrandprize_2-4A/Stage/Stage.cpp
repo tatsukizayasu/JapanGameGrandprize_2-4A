@@ -176,7 +176,7 @@ void Stage::Draw()
 
 
 #ifdef _STAGE_BUILDER
-	//stage_builder->Draw();
+	stage_builder->Draw();
 #endif
 }
 

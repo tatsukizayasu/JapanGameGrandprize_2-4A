@@ -1,6 +1,9 @@
 #pragma once
+#include "ElementItem.h"
 
-#define POUCH_SIZE 200
+
+#define POUCH_WIDTH 200
+#define POUCH_HEIGHT 500
 
 enum class Tab
 {
@@ -17,6 +20,7 @@ private:
 
 	float x, y;
 	Tab tab;
+	ElementItem** element;
 public:
 
 	Pouch();

@@ -118,6 +118,9 @@
     <ClCompile Include="Stage\Element\Element_Wooden_Floor.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\StageBuilder\PolyLine.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -247,6 +250,9 @@
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
     <ClInclude Include="harpy.h" />
+    <ClInclude Include="Stage\StageBuilder\PolyLine.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Stage\Element\Element_Wooden_Floor.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
