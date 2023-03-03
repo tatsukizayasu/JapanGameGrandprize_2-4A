@@ -1,6 +1,6 @@
 #pragma once
 
-//Œ³‘f\‘¢‘Ì
+//Œ³‘f—ñ‹“‘Ì
 enum class  ELEMENT_ITEM
 {
 	HYDROGEN,	 //…‘f

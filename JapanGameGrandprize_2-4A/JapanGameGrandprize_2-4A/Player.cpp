@@ -7,8 +7,7 @@
 #include <iostream>
 #include <stdio.h>
 
-//プレイヤーが持っている元素の種類
-#define PLAYER_ELEMENT 7
+
 
 //-----------------------------------
 // コンストラクタ
@@ -247,6 +246,7 @@ void Player::Draw() const
 	}
 
 #endif
+
 
 	SetFontSize(30);
 
