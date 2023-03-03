@@ -23,7 +23,8 @@ public:
     // ƒVƒ“ƒOƒ‹ƒgƒ“@‚±‚±‚Ü‚Å
 
 private:
-    class EnemyBulletsBase** enemy_bullets;
+
+    EnemyBulletBase** enemy_bullets;
     int enemy_bullet_count;
     int enemy_bullet_max;
 
@@ -35,19 +36,19 @@ public:
     void Update();
 
     //’e‚Ì¶¬
-    void CreateEnemyBullet(class EnemyBulletsBase* bullet);
+    void CreateEnemyBullet(class EnemyBulletBase* bullet);
 
     //’e‚Ì•À‚×‘Ö‚¦
-    void SortEnemyBullet(int bullet_num);
+    void SortEnemyBullet(const int bullet_num);
 
     //’e‚Ìíœ
-    EnemyBulletsBase** DeletePlayerBullet(EnemyBulletsBase* bullet);
+    void DeletePlayerBullet(const EnemyBulletBase* bullet);
 
     //•`‰æ
-    void Draw();
+    void Draw() const;
 
     //’e‚Ìæ“¾
-    EnemyBulletsBase** GetPlayerBullets();
+    EnemyBulletBase** GetEnemyBullets() const;
 
 };
 

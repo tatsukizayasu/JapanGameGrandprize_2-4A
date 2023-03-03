@@ -24,6 +24,8 @@ GameMain::GameMain()
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
 
+	bullet_manager = BulletManager::GetInstance();
+
 	input_margin = 0;
 }
 
@@ -68,6 +70,7 @@ AbstractScene* GameMain::Update()
 	stage->Update(player);
 
 	EnemyUpdate();
+	bullet_manager->Update();
 	item_controller->Update(player);
 
 	return this;
@@ -78,8 +81,11 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	BulletBase** bullet;
-	bullet = player->GetBullet();
+	BulletBase** player_bullet;
+	player_bullet = player->GetBullet();
+
+	EnemyBulletBase** enemy_bullet;
+	enemy_bullet = bullet_manager->GetEnemyBullets();
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -112,15 +118,15 @@ void GameMain::EnemyUpdate()
 			//ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
-				if (bullet[j] == nullptr)
+				if (player_bullet[j] == nullptr)
 				{
 					break;
 				}
 
-				if (enemy[i]->HitBullet(bullet[j]))
+				if (enemy[i]->HitBullet(player_bullet[j]))
 				{
-					delete bullet[j];
-					bullet[j] = nullptr;
+					delete player_bullet[j];
+					player_bullet[j] = nullptr;
 					player->SortBullet(j);
 				}
 			}
@@ -155,4 +161,6 @@ void GameMain::Draw()const
 			enemy[i]->Draw();
 		}
 	}
+	bullet_manager->Draw();
+
 }
