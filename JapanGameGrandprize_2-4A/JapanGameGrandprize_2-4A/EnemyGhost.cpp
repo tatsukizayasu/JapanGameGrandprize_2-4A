@@ -352,26 +352,26 @@ bool EnemyGhost::HitBullet(const BulletBase* bullet)
 		switch (bullet->GetAttribute()) //Žó‚¯‚½‰»‡•¨‚Ì‘®«
 		{
 		case ATTRIBUTE::NORMAL: 
-			hp -= bullet->GetDamage() * 10; //–³Œø
+			hp -= bullet->GetDamage() * 0; //–³Œø
 			break;
-	//	case ATTRIBUTE::EXPLOSION:
-	//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //Žã“_‘®«
-	//		break;
-	//	case ATTRIBUTE::MELT:
-	//		hp -= bullet->GetDamage() * 0; //–³Œø
-	//		break;
-	//	case ATTRIBUTE::POISON:
-	//		poison_damage = bullet->GetDamage() * 0; //–³Œø
-	//		poison_time = bullet->GetDebuffTime() * 0; //–³Œø
-	//		break;
-	//	case ATTRIBUTE::PARALYSIS:
-	//		paralysis_time = bullet->GetDebuffTime() * 0; //–³Œø
-	//		paralysis_time = bullet->GetDamage() * 0; //–³Œø
-	//		break;
-	//	case ATTRIBUTE::HEAL:
-	//		break;
-	//	default:
-	//		break;
+		case ATTRIBUTE::EXPLOSION:
+			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //Žã“_‘®«
+			break;
+		case ATTRIBUTE::MELT:
+			hp -= bullet->GetDamage() * 0; //–³Œø
+			break;
+		case ATTRIBUTE::POISON:
+			poison_damage = bullet->GetDamage() * 0; //–³Œø
+			poison_time = bullet->GetDebuffTime() * 0; //–³Œø
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			paralysis_time = bullet->GetDebuffTime() * 0; //–³Œø
+			paralysis_time = bullet->GetDamage() * 0; //–³Œø
+			break;
+		case ATTRIBUTE::HEAL:
+			break;
+		default:
+			break;
 		}
 		ret = true;
 	}
