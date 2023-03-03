@@ -10,6 +10,9 @@
 #define SLIME_SPEED 2
 #define SLIME_ATTACK_DAMAGE 10
 
+#define SLIME_MIN_DROP 0u
+#define SLIME_MAX_DROP 3u
+
 EnemySlime::EnemySlime()
 {
 	kind = ENEMY_KIND::SLIME;
@@ -21,7 +24,7 @@ EnemySlime::EnemySlime()
 	area.height = 40;
 	area.width = 40;
 
-	hp = 5;
+	hp = 100;
 	speed = SLIME_SPEED;
 
 	color = GetColor(0, 0, 255);
@@ -33,14 +36,21 @@ EnemySlime::EnemySlime()
 	direction = DIRECTION::LEFT;
 	slime_image = LoadGraph("Images/Enemy/Slime_.png");
 	slime_angle = 0;
-}
 
-EnemySlime::EnemySlime(float x, float y, float height, float width)
-{
-	location.x = x;
-	location.y = y;
-	area.height = height;
-	area.width = width;
+	//ドロップアイテムの設定
+	drop_element = new ElementItem * [SOIL_DROP];
+	drop_type_volume = SOIL_DROP;
+
+	int volume = 0;
+
+	for (int i = 0; i < WATER_DROP; i++)
+	{
+		volume = SLIME_MIN_DROP + GetRand(SLIME_MAX_DROP);
+		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+		drop_element[i]->SetVolume(volume);
+		drop_volume += volume;
+	}
+
 }
 
 void EnemySlime::Update()
@@ -62,6 +72,7 @@ void EnemySlime::Update()
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;
+		jump_distance.y = 15;
 	}
 }
 
@@ -101,7 +112,6 @@ void EnemySlime::Move(const Location player_location)
 		direction = DIRECTION::RIGHT;
 		speed = SLIME_SPEED;
 	}
-
 	location.x += speed;
 
 	float distance; //離れている距離
@@ -121,26 +131,32 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 void  EnemySlime::Attack()
 {
-
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
 
-	if (location.x >= 1260)
+	switch (slime_attack)
 	{
-		speed = -SLIME_ATTACK_SPEED;
-	}
-	if (location.x <= 20)
-	{
-		speed = SLIME_ATTACK_SPEED;
-	}
+	case SLIME_ATTACK::BEFORE_ATTACK:
 
+		if (direction == DIRECTION::RIGHT)speed = SLIME_ATTACK_SPEED;
+		else speed = -SLIME_ATTACK_SPEED;
+		break;
+
+	case SLIME_ATTACK::AFTER_ATTACK:
+
+		if (direction == DIRECTION::RIGHT)speed = -SLIME_ATTACK_SPEED;
+		else speed = SLIME_ATTACK_SPEED;
+
+		break;
+	}
 	location.x += speed;
-	
 
-	if (location.y >= 490)
+	if (location.y >= 450)
 	{
+		slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 		state = ENEMY_STATE::MOVE;
-		speed = SLIME_SPEED;
+		if (direction == DIRECTION::RIGHT)speed = SLIME_SPEED;
+		else speed = -SLIME_SPEED;
 	}
 }
 
@@ -155,12 +171,11 @@ AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
 	{
 		if (HitBox(collider))
 		{
+			slime_attack = SLIME_ATTACK::AFTER_ATTACK;
 			ENEMY_TYPE attack_type[1] = { *type };
 			ret.damage = SLIME_ATTACK_DAMAGE;
 			ret.type = attack_type;
 			ret.type_count = 1;
-
-			KnockBack();
 		}
 	}
 
@@ -172,38 +187,65 @@ AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
 //-----------------------------------
 void EnemySlime::Death()
 {
-	if (direction == DIRECTION::LEFT)
+	if (slime_angle >= 880 || slime_angle <= -880)
 	{
-		slime_angle += -15;
+		slime_angle = 880;
 	}
 	else
 	{
-		slime_angle += 15;
-	}
-	
-	location.x += speed;
-
-	if (slime_angle >= 880 || slime_angle <= -880)
-	{
-		slime_angle = 180;
+		if (location.y <= 450)
+		{
+			location.y -= (jump_distance.y / 3);
+			jump_distance.y -= 1;
+		}
+		if (direction == DIRECTION::RIGHT)
+		{
+			speed = -SLIME_ATTACK_SPEED;
+			slime_angle -= 15;
+		}
+		else
+		{
+			speed = SLIME_ATTACK_SPEED;
+			slime_angle += 15;
+		}
+		location.x += speed;
 	}
 }
 
-void EnemySlime::HitStage()
+//-----------------------------------
+// プレイヤーの弾との当たり判定
+//-----------------------------------
+bool EnemySlime::HitBullet(const BulletBase* bullet)
 {
-
-}
-
-void EnemySlime::KnockBack()
-{
-	location.y -= (jump_distance.y / 3);
-	jump_distance.y -= 1;
-	location.x += -speed;
-	
-	if (location.y >= 490)
+	bool ret = false; //戻り値
+	if (HitSphere(bullet))
 	{
-		state = ENEMY_STATE::MOVE;
+		switch (bullet->GetAttribute())
+		{
+		case ATTRIBUTE::NORMAL:
+			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+			break;
+		case ATTRIBUTE::EXPLOSION:
+			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+			break;
+		case ATTRIBUTE::MELT:
+			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+			break;
+		case ATTRIBUTE::POISON:
+			//poison_damage = bullet->GetDamage();
+			//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			paralysis_time = bullet->GetDebuffTime() * 0;
+			break;
+		case ATTRIBUTE::HEAL:
+			break;
+		default:
+			break;
+		}
+		ret = true;
 	}
+	return ret;
 }
 
 //-----------------------------------

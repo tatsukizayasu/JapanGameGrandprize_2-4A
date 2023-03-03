@@ -55,17 +55,7 @@ public:
 	//€–S
 	void Death() override;
 
-	void HitStage();
-
-	void KnockBack();
-
-	virtual bool HitBullet(const BulletBase* bullet)override
-	{
-
-		bool ret = false; //–ß‚è’l
-
-		return ret;
-	};
+	virtual bool HitBullet(const BulletBase* bullet)override;
 
 	//À•W‚Ìæ“¾
 	Location GetLocation() const override;
