@@ -7,7 +7,7 @@
 Pouch::Pouch()
 {
 	x = 700;
-	y = 50;
+	y = 200;
 	tab = Tab::Explosion_Tab;
 
 	//å≥ëfÇÃèâä˙âª
@@ -77,30 +77,35 @@ void Pouch::Update()
 void Pouch::ExplosionTab () const 
 {
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
+	DrawString(x, y + 50, "EXPLOSION", 0x000000);
 }
 
 //ónâ
 void Pouch::MeltTab() const
 {
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff55ff, TRUE);
+	DrawString(x, y + 50, "MELT", 0x000000);
 }
 
 //ñÉ·É
 void Pouch::ParalysisTab()const
 {
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff0099, TRUE);
+	DrawString(x, y + 50, "PARALYSIS", 0x000000);
 }
 
 //ì≈
 void Pouch::PoisonTab()const
 {
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x5500ff, TRUE);
+	DrawString(x, y + 50, "POISON", 0x000000);
 }
 
 //âÒïú
 void Pouch::HealTab()const
 {
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff1111, TRUE);
+	DrawString(x, y + 50, "HEAL", 0x000000);
 }
 
 //ï`âÊ
@@ -133,4 +138,8 @@ void Pouch::Draw() const
 		DrawBox(x + (50 * i), y + 400, (x + (50 * i)) + 50, y + 450, 0xffffff, FALSE);
 	}
 
+	for (int i = 4; i < PLAYER_ELEMENT; i++)
+	{
+		DrawBox(x + (50 * i) + 25, y + 450, (x + (50 * i) + 25) + 50, y + POUCH_HEIGHT, 0xffffff, FALSE);
+	}
 }
