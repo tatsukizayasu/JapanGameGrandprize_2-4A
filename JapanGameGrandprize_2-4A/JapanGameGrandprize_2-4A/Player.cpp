@@ -203,7 +203,7 @@ void Player::Update()
 
 	for (auto& m : stage->GetMapChip())
 	{
-		collision_dir = stage->GetMapChip().at(i)->GetMapChip_Collision();
+		collision_dir = m->GetMapChip_Collision();
 		if (m == nullptr) continue;
 
 		float x = m->GetLocation().x;
@@ -211,17 +211,32 @@ void Player::Update()
 		float w = m->GetArea().width;
 		float h = m->GetArea().height;
 
-		// 画面内にあるMapChipオブジェクトだけ描画する
-		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
-
 		if (collision_dir.x != 0 || collision_dir.y != 0) {
 			clsDx();
 			printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
 			speed_x = 0.0f;
 			break;
 
-			m->Draw();
+			
 		}
+	}
+
+
+	if (CheckHitKey(KEY_INPUT_DOWN))
+	{
+		location.y -= 10;
+	}
+	else if (CheckHitKey(KEY_INPUT_UP))
+	{
+		location.y += 10;
+	}
+	else if (CheckHitKey(KEY_INPUT_LEFT))
+	{
+		location.x += 10;
+	}
+	else if (CheckHitKey(KEY_INPUT_RIGHT))
+	{
+		location.x -= 10;
 	}
 
 	count++;
@@ -468,7 +483,7 @@ void Player::NotJump()
 		if (collision_dir.y == -1)
 		{
 			gravity_down = 0.0f;
-			location.y = stage->GetCollision_Chip().y - CHIP_SIZE / 2 - area.height + CHIP_SIZE;
+			//location.y = stage->GetCollision_Chip().y - CHIP_SIZE / 2 - area.height + CHIP_SIZE;
 		}
 
 
