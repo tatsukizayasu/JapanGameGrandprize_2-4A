@@ -190,15 +190,37 @@ void Player::Update()
 //時計回りで[1:上, 2:右, 3:下, 4:左]
 	/*POINT collision_dir = { 0,0 };*/
 
-	for (int i = 0; i < stage->GetMapChip().size(); i++)
+	//描画範囲
+	struct DrawArea
 	{
+		float width;
+		float height;
+	} draw;
 
+	draw = { SCREEN_WIDTH + CHIP_SIZE,SCREEN_HEIGHT + CHIP_SIZE };
+
+	CameraWork::Camera camera = CameraWork::GetCamera();
+
+	for (auto& m : stage->GetMapChip())
+	{
 		collision_dir = stage->GetMapChip().at(i)->GetMapChip_Collision();
+		if (m == nullptr) continue;
+
+		float x = m->GetLocation().x;
+		float y = m->GetLocation().y;
+		float w = m->GetArea().width;
+		float h = m->GetArea().height;
+
+		// 画面内にあるMapChipオブジェクトだけ描画する
+		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
+
 		if (collision_dir.x != 0 || collision_dir.y != 0) {
 			clsDx();
 			printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
 			speed_x = 0.0f;
 			break;
+
+			m->Draw();
 		}
 	}
 
