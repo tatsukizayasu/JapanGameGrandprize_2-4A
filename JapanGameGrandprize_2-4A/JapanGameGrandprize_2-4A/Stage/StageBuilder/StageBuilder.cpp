@@ -163,7 +163,7 @@ void StageBuilder::Draw()const
 
 #ifdef _DEV
 
-	line->DrawCollision();
+	//line->DrawCollision();
 
 #endif // _DEV
 
