@@ -244,7 +244,7 @@ AttackResource EnemyGhost::HitCheck(const BoxCollider* collider)
 //-----------------------------------
 void EnemyGhost::Death()
 {
-
+	can_delete = true;
 }
 
 //-----------------------------------
