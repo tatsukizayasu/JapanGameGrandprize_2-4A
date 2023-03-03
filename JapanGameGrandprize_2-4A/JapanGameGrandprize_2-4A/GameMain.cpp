@@ -119,8 +119,8 @@ void GameMain::EnemyUpdate()
 
 				if (enemy[i]->HitBullet(bullet[j]))
 				{
-					delete bullet[i];
-					bullet[i] = nullptr;
+					delete bullet[j];
+					bullet[j] = nullptr;
 					player->SortBullet(j);
 				}
 			}

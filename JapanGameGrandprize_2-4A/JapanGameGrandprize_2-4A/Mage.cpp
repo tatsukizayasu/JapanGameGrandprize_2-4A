@@ -38,7 +38,7 @@ Mage::Mage()
 
 	/*“–‚½‚è”»’è‚Ìİ’è*/
 	location.x = 640.0f;
-	location.y = 1220.0f;
+	location.y = 1120.0f;
 	area.width = 40;
 	area.height = 80;
 
