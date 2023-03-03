@@ -1,4 +1,6 @@
 #include "Mage.h"
+#include "CameraWork.h"
+#include "MageBullet.h"
 
 //魔法弾の発射レート
 #define MAGE_SHOT_RATE 20
@@ -12,6 +14,9 @@
 
 #define MAGE_SHOT_RATE 20
 
+//体力
+#define MAGE_HP 100
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -19,7 +24,7 @@ Mage::Mage()
 {
 	/*初期化*/
 	can_delete = false;
-	hp = 0;
+	hp = MAGE_HP;
 	shot_rate = 0;
 	shot_count = 0;
 	speed = MAGE_SPEED;
@@ -33,7 +38,7 @@ Mage::Mage()
 
 	/*当たり判定の設定*/
 	location.x = 640.0f;
-	location.y = 430.0f;
+	location.y = 1220.0f;
 	area.width = 40;
 	area.height = 80;
 
@@ -46,15 +51,19 @@ Mage::Mage()
 		break;
 	case ENEMY_TYPE::FIRE:
 		drop = FIRE_DROP;
+		image = 0xff0000;
 		break;
 	case ENEMY_TYPE::WATER:
 		drop = WATER_DROP;
+		image = 0x0000ff;
 		break;
 	case ENEMY_TYPE::WIND:
 		drop = WIND_DROP;
+		image = 0xffffff;
 		break;
 	case ENEMY_TYPE::SOIL:
 		drop = SOIL_DROP;
+		image = 0xffff00;
 		break;
 	case ENEMY_TYPE::THUNDER:
 		break;
@@ -112,13 +121,14 @@ Mage::Mage()
 		drop_volume += volume;
 	}
 
+	bullet = new EnemyBulletBase * [MAGE_BULLET_MAX];
+
 	//弾の初期化
 	for (int i = 0; i < MAGE_BULLET_MAX; i++)
 	{
 		bullet[i] = nullptr;
 	}
 
-	this->player = player;
 }
 
 //-----------------------------------
@@ -139,6 +149,8 @@ Mage::~Mage()
 	{
 		delete bullet[i];
 	}
+
+	delete[] bullet;
 }
 
 //-----------------------------------
@@ -146,8 +158,6 @@ Mage::~Mage()
 //-----------------------------------
 void Mage::Update()
 {
-
-	
 	for (int i = 0; i < MAGE_BULLET_MAX; i++)
 	{
 		if (bullet[i] == nullptr)
@@ -181,7 +191,15 @@ void Mage::Update()
 //-----------------------------------
 void Mage::Idol()
 {
+	Location scroll; //画面スクロールを考慮したX座標
 
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 }
 
 //-----------------------------------
@@ -189,19 +207,34 @@ void Mage::Idol()
 //-----------------------------------
 void Mage::Move(const Location player_location)
 {
+	Location scroll; //画面スクロールを考慮したX座標
+
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+
+	state = ENEMY_STATE::ATTACK;
+	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) ||
+		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
+	{
+		state = ENEMY_STATE::IDOL;
+	}
 
 }
 
 //-----------------------------------
 //攻撃
 //-----------------------------------
-void  Mage::Attack()
+void  Mage::Attack(Location player_location)
 {
-	CreateBullet();
+	CreateBullet(player_location);
 	
-	if (shot_count % MAGE_BULLET_MAX == 0)
+	if (shot_count >= MAGE_BULLET_MAX)
 	{
 		state = ENEMY_STATE::MOVE;
+		shot_count = 0;
 	}
 }
 
@@ -229,7 +262,6 @@ AttackResource Mage::HitCheck(const BoxCollider* collider)
 			delete bullet[i];
 			bullet[i] = nullptr;
 			SortBullet(i);
-			i--;
 		}
 	}
 	return ret;
@@ -246,7 +278,7 @@ void Mage::Death()
 //-----------------------------------
 //弾の生成
 //-----------------------------------
-void Mage::CreateBullet()
+void Mage::CreateBullet(Location player_location)
 {
 	shot_rate++;
 
@@ -256,7 +288,7 @@ void Mage::CreateBullet()
 		{
 			if (bullet[i] == nullptr)
 			{
-				bullet[i] = new MageBullet(*type, location, player->GetLocation());
+				bullet[i] = new MageBullet(*type, location, player_location);
 				shot_count++;
 				break;
 			}
@@ -325,6 +357,30 @@ bool Mage::HitBullet(const BulletBase* bullet)
 void Mage::Draw() const
 {
 
+	Location draw_location; //描画用の座標
+
+	draw_location.x = location.x - CameraWork::GetCamera().x;
+	draw_location.y = location.y - CameraWork::GetCamera().y;
+
+	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
+
+	for (int i = 0; i < MAGE_BULLET_MAX; i++)
+	{
+		if (bullet[i] == nullptr)
+		{
+			break;
+		}
+
+		bullet[i]->Draw();
+	}
+}
+
+//-----------------------------------
+//弾の取得
+//-----------------------------------
+EnemyBulletBase** Mage::GetBullet() const
+{
+	return bullet;
 }
 
 //-----------------------------------

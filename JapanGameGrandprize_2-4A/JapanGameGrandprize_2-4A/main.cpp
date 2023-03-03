@@ -1,7 +1,6 @@
 #include "DxLib.h"
 #include "Define.h"
 #include "SceneManager.h"
-#include "FpsController.h"
 #include "Title.h"
 #include "GameMain.h"
 #include "PadInput.h"
@@ -15,6 +14,9 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow)
 {
+
+	double dNextTime = GetNowCount();
+
 	SetMainWindowText("Stick To Wall");
 
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
@@ -45,7 +47,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		return 0;
 	}
-	FpsController FPSC(FRAMERATE, 800);
 
 	// ゲームループ
 	while ((ProcessMessage() == 0) && (sceneMng->Update() != nullptr))
@@ -54,7 +55,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		ClearDrawScreen();		// 画面の初期化
 		PAD_INPUT::UpdateKey();
 		sceneMng->Draw();
-		FPSC.All();
 
 		//強制終了
 		if (PAD_INPUT::OnButton(XINPUT_BUTTON_BACK))
@@ -79,6 +79,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 		ScreenFlip();			// 裏画面の内容を表画面に反映
+
+
+				//フレームレートの設定
+		dNextTime += static_cast<double>(1.0 / 60.0 * 1000.0);
+		if (dNextTime > GetNowCount()) {
+			WaitTimer(static_cast<int>(dNextTime) - GetNowCount());
+		}
+		else { dNextTime = GetNowCount(); }		//補正
 	}
 	return 0;
 }

@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "DxLib.h"
+#include "player.h"
 
 //-----------------------------------
 // コンストラクタ
