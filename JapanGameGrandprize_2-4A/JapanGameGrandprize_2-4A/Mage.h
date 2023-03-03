@@ -17,7 +17,6 @@ private:
     int drop; //ドロップするアイテムの種類の数
     int attack_interval; //攻撃の間隔
 
-    EnemyBulletBase** bullet; //弾
 private:
     //テレポート
     void Teleport();
@@ -25,8 +24,6 @@ private:
     //弾の生成
     void CreateBullet(Location);
 
-    //弾の並び替え
-    void SortBullet(int);
 public:
 
     //コンストラクタ
@@ -58,9 +55,6 @@ public:
 
     //描画
     void Draw() const override;
-
-    //弾の取得
-    EnemyBulletBase** GetBullet() const;
 
     //座標の取得
     Location GetLocation() const override;

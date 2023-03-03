@@ -1,5 +1,4 @@
 #include "BulletManager.h"
-
 BulletManager* BulletManager::instance = nullptr;
 
 #define ENEMY_BULLET_EXPANSION 10
@@ -45,6 +44,7 @@ void BulletManager::Update()
             enemy_bullets[i] = nullptr;
 
             SortEnemyBullet(i);
+            enemy_bullet_count--;
         }
     }
 }
@@ -56,21 +56,39 @@ void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
 {
     if (enemy_bullet_count == enemy_bullet_max)
     {
-        EnemyBulletBase** temporary_bullets; //避難用
+        if (enemy_bullets == nullptr)
+        {
+            //最大値の更新
+            enemy_bullet_max += ENEMY_BULLET_EXPANSION;
 
-        //避難
-        temporary_bullets = enemy_bullets;
+            enemy_bullets = new EnemyBulletBase * [enemy_bullet_max];
+            for (int i = 0; i < enemy_bullet_max; i++)
+            {
+                enemy_bullets[i] = nullptr;
+            }
+        }
+        else
+        {
+            EnemyBulletBase** temporary_bullets; //避難用
 
-        //最大値の更新
-        enemy_bullet_max += ENEMY_BULLET_EXPANSION;
+            //避難
+            temporary_bullets = enemy_bullets;
 
-        //弾の再生成
-        enemy_bullets = new EnemyBulletBase * [enemy_bullet_max];
+            //最大値の更新
+            enemy_bullet_max += ENEMY_BULLET_EXPANSION;
 
-        //避難していた弾を戻す
-        enemy_bullets = temporary_bullets;
+            //弾の再生成
+            enemy_bullets = new EnemyBulletBase * [enemy_bullet_max];
 
-        delete[] temporary_bullets;
+            //避難していた弾を戻す
+            enemy_bullets = temporary_bullets;
+
+            delete[] temporary_bullets;
+            for (int i = enemy_bullet_count; i < enemy_bullet_max; i++)
+            {
+                enemy_bullets[i] = nullptr;
+            }
+        }
     }
     //弾の生成
     enemy_bullets[enemy_bullet_count] = dynamic_cast<EnemyBulletBase*>(bullet);
@@ -94,14 +112,13 @@ void BulletManager::SortEnemyBullet(const int bullet_num)
 
         enemy_bullets[i - 1] = enemy_bullets[i];
         enemy_bullets[i] = nullptr;
-        enemy_bullet_count--;
     }
 }
 
 //-----------------------------------
 //弾の削除
 //-----------------------------------
-void BulletManager::DeletePlayerBullet(const EnemyBulletBase* bullet)
+void BulletManager::DeleteEnemyBullet(const EnemyBulletBase* bullet)
 {
     for (int i = 0; i < enemy_bullet_max; i++)
     {
@@ -111,8 +128,24 @@ void BulletManager::DeletePlayerBullet(const EnemyBulletBase* bullet)
             enemy_bullets[i] = nullptr;
 
             SortEnemyBullet(i);
+            enemy_bullet_count--;
         }
     }
+}
+
+//-----------------------------------
+//攻撃が当たっているか
+//-----------------------------------
+AttackResource BulletManager::Hit(const int i)
+{
+    AttackResource ret = { 0,nullptr,0 }; //戻り値
+
+    ENEMY_TYPE attack_type[1] = { enemy_bullets[i]->GetType() };
+    ret.damage = enemy_bullets[i]->GetDamage();
+    ret.type = attack_type;
+    ret.type_count = 1;
+
+    return ret;
 }
 
 //-----------------------------------
@@ -137,4 +170,13 @@ void BulletManager::Draw() const
 EnemyBulletBase** BulletManager::GetEnemyBullets() const
 {
     return enemy_bullets;
+}
+
+
+//-----------------------------------
+//弾の最大値の取得
+//-----------------------------------
+int BulletManager::EnemyGetBulletMax() const
+{
+    return enemy_bullet_max;
 }

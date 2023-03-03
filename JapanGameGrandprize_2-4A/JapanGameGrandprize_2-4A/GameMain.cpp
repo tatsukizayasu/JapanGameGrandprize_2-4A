@@ -44,6 +44,7 @@ GameMain::~GameMain()
 
 	delete[] enemy;
 	delete camera_work;
+	delete bullet_manager;
 }
 
 //-----------------------------------
@@ -70,7 +71,6 @@ AbstractScene* GameMain::Update()
 	stage->Update(player);
 
 	EnemyUpdate();
-	bullet_manager->Update();
 	item_controller->Update(player);
 
 	return this;
@@ -83,6 +83,8 @@ void GameMain::EnemyUpdate()
 {
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
+
+	bullet_manager->Update();
 
 	EnemyBulletBase** enemy_bullet;
 	enemy_bullet = bullet_manager->GetEnemyBullets();
@@ -136,6 +138,22 @@ void GameMain::EnemyUpdate()
 				item_controller->SpawnItem(enemy[i]);
 				delete enemy[i];
 				enemy[i] = nullptr;
+			}
+		}
+	}
+
+	if (enemy_bullet != nullptr)
+	{
+		for (int i = 0; i < bullet_manager->EnemyGetBulletMax(); i++)
+		{
+			if (enemy_bullet[i] == nullptr)
+			{
+				break;
+			}
+			if (enemy_bullet[i]->HitBox(player))
+			{
+				bullet_manager->Hit(i);
+				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
 			}
 		}
 	}

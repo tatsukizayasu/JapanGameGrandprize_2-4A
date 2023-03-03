@@ -42,7 +42,10 @@ public:
     void SortEnemyBullet(const int bullet_num);
 
     //’e‚Ìíœ
-    void DeletePlayerBullet(const EnemyBulletBase* bullet);
+    void DeleteEnemyBullet(const EnemyBulletBase* bullet);
+
+    //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+    AttackResource Hit(const int i);
 
     //•`‰æ
     void Draw() const;
@@ -50,5 +53,7 @@ public:
     //’e‚Ìæ“¾
     EnemyBulletBase** GetEnemyBullets() const;
 
+    //’e‚ÌÅ‘å’l‚Ìæ“¾
+    int EnemyGetBulletMax() const;
 };
 
