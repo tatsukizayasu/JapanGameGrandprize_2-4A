@@ -5,7 +5,6 @@
 #include "CameraWork.h"
 #include "Item.h"
 #include <iostream>
-#include <stdio.h>
 
 
 
@@ -22,7 +21,8 @@ Player::Player()
 	area.width = image_size_x;
 	area.height = image_size_y;
 	bullet_count = 0;
-	count = 0;
+	shoot_count = 0;
+	flashing_count = 0;
 	damage_count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
@@ -99,7 +99,8 @@ Player::Player(Stage* stage)
 	area.height = image_size_y;
 	bullet_count = 0;
 	damage_count = 0;
-	count = 0;
+	shoot_count = 0;
+	flashing_count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
@@ -178,7 +179,6 @@ void Player::Draw() const
 	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
 	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
 
-	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 	//FUELバーの表示ここから
 	if (fuel >= 50)
 	{
@@ -223,20 +223,21 @@ void Player::Draw() const
 	//ダメージを受けた時点滅する
 	if (damage_flg)
 	{
-		if (damage_count < 5)
+		if (flashing_count < 5)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
-			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
-		else if (10 < damage_count < 10)
+		else if (flashing_count < 10)
 		{
-			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 		}
+		else{}
 	}
 	else
 	{
-
+		DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 	}
 
 #ifdef _DEBUG
@@ -288,11 +289,18 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
-
-	damage_count++;
-	if (damage_count >= 10)
+	if (damage_flg == true)
 	{
-		damage_count = 0;
+		if (flashing_count++ >= 10)
+		{
+			flashing_count = 0;
+		}
+
+		if (++damage_count % 120 == 0)
+		{
+			damage_flg = false;
+			damage_count = 0;
+		}
 	}
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
@@ -330,9 +338,7 @@ void Player::Update()
 	//RBボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		count++;
-
-		if (count % 30 == 0)
+		if (shoot_count++ % 30 == 0)
 		{
 			bullet_count++;
 			Shoot_Gun();
