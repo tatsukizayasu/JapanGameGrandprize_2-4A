@@ -8,6 +8,7 @@
 #include "ElementItem.h"
 #include "Pouch.h"
 #include "DxLib.h"
+#include "EnumEnemyType.h"
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
@@ -88,8 +89,7 @@ public:
 	void NotJump();
 	void Shoot_Gun();
 	void SortBullet(int);
-	void Hp_Damage(int);
-	//void Being_Attacked(EnemyBase*);
+	void HpDamage(AttackResource);
 	void Hp_Heal(int);
 	void OpenPouch();
 

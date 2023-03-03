@@ -115,7 +115,7 @@ void GameMain::EnemyUpdate()
 				break;
 			}
 
-			enemy[i]->HitCheck(player);
+			player->HpDamage(enemy[i]->HitCheck(player));
 
 			//ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 			for (int j = 0; j < BULLET_MAX; j++)
@@ -127,8 +127,8 @@ void GameMain::EnemyUpdate()
 
 				if (enemy[i]->HitBullet(player_bullet[j]))
 				{
-					delete bullet[j];
-					bullet[j] = nullptr;
+					delete player_bullet[j];
+					player_bullet[j] = nullptr;
 					player->SortBullet(j);
 				}
 			}
@@ -152,7 +152,7 @@ void GameMain::EnemyUpdate()
 			}
 			if (enemy_bullet[i]->HitBox(player))
 			{
-				bullet_manager->Hit(i);
+				player->HpDamage(bullet_manager->Hit(i));
 				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
 			}
 		}
