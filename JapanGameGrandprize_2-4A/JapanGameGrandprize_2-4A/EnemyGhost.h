@@ -30,7 +30,6 @@ private:
 	bool physical_attack; //物理攻撃に入る（true)なら
 	GHOST_STATE action_type; //行動パターン
 	GHOST_ATTACK attack_state; //攻撃状態
-	GhostBullet* bullet; //弾
 private:
 
 	//ゴーストの動きを決める

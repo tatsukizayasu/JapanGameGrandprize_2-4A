@@ -1,7 +1,7 @@
 #include "EnemyGhost.h"
 #include"DxLib.h"
 #include "CameraWork.h"
-
+#include "BulletManager.h"
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 40
 #define GHOST_SIZE_Y 60
@@ -74,7 +74,6 @@ EnemyGhost::EnemyGhost()
 	attack_state = GHOST_ATTACK::NONE;
 	state = ENEMY_STATE::IDOL;
 	action_type = GHOST_STATE::NORMAL;
-	bullet = nullptr;
 }
 
 //-----------------------------------
@@ -82,7 +81,6 @@ EnemyGhost::EnemyGhost()
 //-----------------------------------
 EnemyGhost::~EnemyGhost()
 {
-	delete bullet;
 }
 
 //-----------------------------------
@@ -90,51 +88,25 @@ EnemyGhost::~EnemyGhost()
 //-----------------------------------
 void EnemyGhost::Update()
 {
-	float screen_x; //画面スクロールを考慮したX座標
-
-	screen_x = location.x - CameraWork::GetCamera().x;
-
-	switch (state)
-	{
-	case ENEMY_STATE::IDOL:
-		if ((-area.width < screen_x) && (screen_x < SCREEN_WIDTH + area.width))
-		{
-			state = ENEMY_STATE::MOVE;
-		}
-		break;
-	case ENEMY_STATE::MOVE:
-		break;
-	case ENEMY_STATE::ATTACK:
-		
-		break;
-	case ENEMY_STATE::DEATH:
-		break;
-	default:
-		break;
-	}
-
-	if (bullet != nullptr)
-	{
-		bullet->Update();
-
-		if (bullet->ScreenOut())
-		{
-			delete bullet;
-			bullet = nullptr;
-			attack_state = GHOST_ATTACK::NONE;
-		}
-	}
-
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
-
 }
 
 //アイドル状態
 void EnemyGhost::Idol()
 {
+	Location scroll; //画面スクロールを考慮したX座標
+
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 
 }
 
@@ -204,9 +176,8 @@ AttackResource EnemyGhost::HitCheck(const BoxCollider* collider)
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	switch (attack_state)
+	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK)
 	{
-	case GHOST_ATTACK::PHYSICAL_ATTACK:
 		if (HitBox(collider))
 		{
 			ENEMY_TYPE attack_type[1] = { *type };
@@ -214,26 +185,6 @@ AttackResource EnemyGhost::HitCheck(const BoxCollider* collider)
 			ret.type = attack_type;
 			ret.type_count = 1;
 		}
-		break;
-	case GHOST_ATTACK::MAGIC_ATTACK:
-		if (bullet != nullptr)
-		{
-			if (bullet->HitBox(collider))
-			{
-				ENEMY_TYPE attack_type[1] = { bullet->GetType() };
-				ret.damage = bullet->GetDamage();
-				ret.type = attack_type;
-				ret.type_count = 1;
-
-				delete bullet;
-				bullet = nullptr;
-			}
-		}
-		break;
-	case GHOST_ATTACK::NONE:
-		break;
-	default:
-		break;
 	}
 
 	return ret;
@@ -256,23 +207,13 @@ void EnemyGhost::Draw()const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	switch (attack_state)
+	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK)
 	{
-	case GHOST_ATTACK::PHYSICAL_ATTACK:
 		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
-		break;
-	case GHOST_ATTACK::MAGIC_ATTACK:
+	}
+	else
+	{
 		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
-		if (bullet != nullptr)
-		{
-			bullet->Draw();
-		}
-		break;
-	case GHOST_ATTACK::NONE:
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
-		break;
-	default:
-		break;
 	}
 }
 
@@ -334,10 +275,8 @@ void EnemyGhost::GhostMove(const Location player_location)
 		standby_time = GHOST_MAGIC_STANDBY;
 		magic_attack = true;
 
-		if (bullet == nullptr)
-		{
-			bullet = new GhostBullet(location, player_location);
-		}
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new GhostBullet(location, player_location));
 	}
 }
 
