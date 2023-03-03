@@ -154,6 +154,7 @@
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BulletManager.h" />
     <ClInclude Include="ElementItem.h" />
     <ClInclude Include="EnemyBulletBase.h" />
     <ClInclude Include="EnumElementItem.h" />
@@ -197,6 +198,7 @@
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="EnemyBulletBase.cpp" />
     <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />

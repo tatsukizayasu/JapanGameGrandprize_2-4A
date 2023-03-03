@@ -5,6 +5,7 @@
 #include "Stage/Stage.h"
 #include "CameraWork.h"
 #include "ItemController.h"
+#include "BulletManager.h"
 
 class GameMain :
     public AbstractScene
@@ -21,6 +22,7 @@ private:
     int input_margin;
 
     ItemController* item_controller; //アイテム管理
+    BulletManager* bullet_manager; //弾の管理
 public:
 
     //コンストラクタ

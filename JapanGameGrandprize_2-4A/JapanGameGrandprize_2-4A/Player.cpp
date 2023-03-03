@@ -659,10 +659,31 @@ void Player::ElementUpdate()
 //-----------------------------------
 //ƒ_ƒ[ƒW‚ğó‚¯‚½
 //-----------------------------------
-void Player::Hp_Damage(int damage_value)
+void Player::HpDamage(AttackResource attack)
 {
 	damage_flg = true;
-	hp -= damage_value;
+	hp -= attack.damage;
+
+	for (int i = 0; i < attack.type_count; i++)
+	{
+		switch (attack.type[i])
+		{
+		case ENEMY_TYPE::NORMAL:
+			break;
+		case ENEMY_TYPE::FIRE:
+			break;
+		case ENEMY_TYPE::WATER:
+			break;
+		case ENEMY_TYPE::WIND:
+			break;
+		case ENEMY_TYPE::SOIL:
+			break;
+		case ENEMY_TYPE::THUNDER:
+			break;
+		default:
+			break;
+		}
+	}
 
 	if (hp <= 0)
 	{

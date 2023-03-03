@@ -6,13 +6,13 @@
 #include "CameraWork.h"
 
 //攻撃をする範囲
-#define ATTACK_DISTANCE 50
+#define UNDEAD_ATTACK_DISTANCE 50
 
 //次の攻撃までの時間
-#define ATTACK_INTERVAL 30
+#define UNDEAD_ATTACK_INTERVAL 30
 
 //追いかける範囲
-#define TRACKING_DISTANCE 340
+#define UNDEAD_TRACKING_DISTANCE 340
 
 //歩くスピード
 #define UNDEAD_SPEED -2
@@ -115,13 +115,13 @@ void Undead::DistancePlayer(const Location player_location)
 	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
 
 	//攻撃範囲に入っているかつ攻撃までの時間が0以下だったら攻撃する
-	if ((distance < ATTACK_DISTANCE) && (attack_interval <= 0))
+	if ((distance < UNDEAD_ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
 		state = ENEMY_STATE::ATTACK;
 		attack_time = 20;
 		image = 0xff0000;
 	}
-	else if(distance < TRACKING_DISTANCE) //一定範囲内だとプレイヤーを追いかける
+	else if(distance < UNDEAD_TRACKING_DISTANCE) //一定範囲内だとプレイヤーを追いかける
 	{
 		if (player_location.x < location.x)
 		{
@@ -187,7 +187,7 @@ void  Undead::Attack(Location player_location)
 	{
 		state = ENEMY_STATE::MOVE;
 		image = 0xffffff;
-		attack_interval = ATTACK_INTERVAL;
+		attack_interval = UNDEAD_ATTACK_INTERVAL;
 	}
 }
 

@@ -45,13 +45,6 @@ enum class ENEMY_KIND
 	NONE
 };
 
-struct AttackResource
-{
-	int damage; //ダメージ
-	ENEMY_TYPE* type; //攻撃タイプ
-	int type_count; //攻撃タイプの数
-};
-
 enum class ENEMY_STATE
 {
 	IDOL,   //アイドル状態
