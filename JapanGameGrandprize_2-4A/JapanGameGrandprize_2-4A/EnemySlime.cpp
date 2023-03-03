@@ -13,16 +13,19 @@
 #define SLIME_MIN_DROP 0u
 #define SLIME_MAX_DROP 3u
 
+#define GROUND 1200
+#define WAIT_TIME 30 //プレイヤーを見つけて攻撃するまでの時間
+
 EnemySlime::EnemySlime()
 {
 	kind = ENEMY_KIND::SLIME;
 
 	location.x = 1100;
-	location.y = 450;
-
+	location.y = GROUND;
 
 	area.height = 40;
 	area.width = 40;
+	wait_time = 0;
 
 	hp = 100;
 	speed = SLIME_SPEED;
@@ -102,27 +105,36 @@ void EnemySlime::Idol()
 //-----------------------------------
 void EnemySlime::Move(const Location player_location)
 {
-	if (location.x >= 1260)
+	if (wait_time == 0)
 	{
-		direction = DIRECTION::LEFT;
-		speed  = -SLIME_SPEED;
+		if (location.x >= 1260)
+		{
+			direction = DIRECTION::LEFT;
+			speed = -SLIME_SPEED;
+		}
+		if (location.x <= 20)
+		{
+			direction = DIRECTION::RIGHT;
+			speed = SLIME_SPEED;
+		}
+		location.x += speed;
 	}
-	if (location.x <= 20)
+
+		float distance; //離れている距離
+
+		//プレイヤーとの距離の計算
+		distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
+
+
+	if (distance < 120 || wait_time != 0)
 	{
-		direction = DIRECTION::RIGHT;
-		speed = SLIME_SPEED;
+		wait_time++;
 	}
-	location.x += speed;
-
-	float distance; //離れている距離
-
-	//プレイヤーとの距離の計算
-	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
-
-	if (distance < 120)
+	if (wait_time >= WAIT_TIME)
 	{
 		state = ENEMY_STATE::ATTACK;
 		jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
+		wait_time = 0;
 	}
 }
 
@@ -151,7 +163,7 @@ void  EnemySlime::Attack(Location player_location)
 	}
 	location.x += speed;
 
-	if (location.y >= 450)
+	if (location.y >= GROUND)
 	{
 		slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 		state = ENEMY_STATE::MOVE;
@@ -171,6 +183,8 @@ AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
 	{
 		if (HitBox(collider))
 		{
+			hp -= 10;
+
 			slime_attack = SLIME_ATTACK::AFTER_ATTACK;
 			ENEMY_TYPE attack_type[1] = { *type };
 			ret.damage = SLIME_ATTACK_DAMAGE;
@@ -190,10 +204,11 @@ void EnemySlime::Death()
 	if (slime_angle >= 880 || slime_angle <= -880)
 	{
 		slime_angle = 880;
+		can_delete = true;
 	}
 	else
 	{
-		if (location.y <= 450)
+		if (location.y <= GROUND)
 		{
 			location.y -= (jump_distance.y / 3);
 			jump_distance.y -= 1;
