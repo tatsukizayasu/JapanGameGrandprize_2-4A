@@ -16,9 +16,9 @@ StageBuilder::StageBuilder()
 	mouse = new SphereCollider();
 	mouse_pos = {};
 
-	if (LoadDivGraph("Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) 
+	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, 40, 40, block_images) == -1)
 	{
-		throw "Images/Stage/map_chips_test.png";
+		throw "Images/Stage/map_chips_.png";
 	}
 	select_collider = nullptr;
 	mode = BRUSH_MODE;

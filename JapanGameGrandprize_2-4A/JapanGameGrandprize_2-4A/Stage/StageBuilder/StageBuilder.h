@@ -38,7 +38,7 @@ private:
 
 	SphereCollider* mouse;
 	Location mouse_pos;
-	int block_images[100];		//ブロック画像
+	int block_images[110];		//ブロック画像
 	vector<MapChip*> map_chips;
 	ColliderBase* select_collider;
 	int mode;
@@ -50,7 +50,7 @@ private:
 	//todo:テスト 後々vector配列にして運用する
 	class PolyLine* line;
 
-
+public:
 	//コンストラクタ
 	StageBuilder();
 	//デストラクタ
