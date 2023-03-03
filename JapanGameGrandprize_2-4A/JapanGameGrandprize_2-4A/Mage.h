@@ -9,14 +9,18 @@ class Mage :
     public EnemyBase,public BoxCollider
 {
 private:
+    bool can_teleport; //テレポート可能か
 
     int shot_rate; //魔法弾の発射レート
     int shot_count; //発射した弾の数
     int image; //画像
     int drop; //ドロップするアイテムの種類の数
+    int attack_interval; //攻撃の間隔
 
     EnemyBulletBase** bullet; //弾
 private:
+    //テレポート
+    void Teleport();
 
     //弾の生成
     void CreateBullet(Location);

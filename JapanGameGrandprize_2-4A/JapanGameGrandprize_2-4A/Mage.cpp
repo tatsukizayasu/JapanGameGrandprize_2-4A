@@ -17,6 +17,12 @@
 //体力
 #define MAGE_HP 100
 
+//移動範囲
+#define MAGE_TELEPORT_AREA 200
+
+//攻撃間隔
+#define MAGE_ATTACK_INTERVAL 120
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -27,6 +33,7 @@ Mage::Mage()
 	hp = MAGE_HP;
 	shot_rate = 0;
 	shot_count = 0;
+	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
 	type = new ENEMY_TYPE;
@@ -158,6 +165,11 @@ Mage::~Mage()
 //-----------------------------------
 void Mage::Update()
 {
+
+	if (attack_interval < 0)
+	{
+		attack_interval--;
+	}
 	for (int i = 0; i < MAGE_BULLET_MAX; i++)
 	{
 		if (bullet[i] == nullptr)
@@ -209,18 +221,28 @@ void Mage::Move(const Location player_location)
 {
 	Location scroll; //画面スクロールを考慮したX座標
 
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
+	
+
+	if (attack_interval < 0)
+	{
+		state = ENEMY_STATE::ATTACK;
+	}
 
 	scroll.x = location.x - CameraWork::GetCamera().x;
 	scroll.y = location.y - CameraWork::GetCamera().y;
 
-	state = ENEMY_STATE::ATTACK;
 	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) ||
 		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
 	{
 		state = ENEMY_STATE::IDOL;
 	}
+}
+
+//-----------------------------------
+//テレポート
+//-----------------------------------
+void Mage::Teleport()
+{
 
 }
 
@@ -235,6 +257,7 @@ void  Mage::Attack(Location player_location)
 	{
 		state = ENEMY_STATE::MOVE;
 		shot_count = 0;
+		attack_interval = MAGE_ATTACK_INTERVAL;
 	}
 }
 
