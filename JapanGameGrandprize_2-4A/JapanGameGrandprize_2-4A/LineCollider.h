@@ -13,6 +13,7 @@
 class LineCollider_t :public ColliderBase
 {
 private:
+
 	Location GetMiddlePoint(Location point1, Location point2)const
 	{
 		Location middle_point;
@@ -30,7 +31,8 @@ private:
 		vector[1].y = vector[1].y - location.y;
 	}
 	Location MakeTip(int index)const
-	{//線分の端の絶対座標を計算する
+	{
+		//線分の端の絶対座標を計算する
 		Location tip;
 		tip.x = location.x + vector[index].x;
 		tip.y = location.y + vector[index].y;
@@ -38,7 +40,9 @@ private:
 		return tip;
 	}
 protected:
+
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)
+public:
 
 public:
 	LineCollider_t();
@@ -76,8 +80,8 @@ public:
 class LineCollider
 {
 protected:
-	Location location[2];	//線の端の座標(0:始点,1:終点)
 
+	Location location[2];	//線の端の座標(0:始点,1:終点)
 public:
 
 	//SphereColliderとの当たり判定

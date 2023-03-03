@@ -6,8 +6,12 @@
 //-----------------------------------
 EnemyBase::EnemyBase() 
 {
+	can_delete = false;
 	hp = 0;
 	speed = 0;
+	paralysis_time = 0;
+	poison_damage = 0;
+	poison_time = 0;
 	drop_volume = 0;
 	drop_type_volume = 0; 
 
@@ -16,6 +20,7 @@ EnemyBase::EnemyBase()
 	kind = ENEMY_KIND::NONE; 
 	type = nullptr;
 }
+
 //-----------------------------------
 // HPが0かどうか判断(0になったらtrue)
 //-----------------------------------
@@ -29,6 +34,32 @@ bool EnemyBase::CheckHp()
 	return ret;
 }
 
+//-----------------------------------
+//毒状態の処理
+//-----------------------------------
+void EnemyBase::Poison()
+{
+	if (0 < poison_time)
+	{
+		poison_time--;
+		if (poison_time % POISON_DAMAGE_FLAME == 0)
+		{
+			hp -= poison_damage;
+		}
+	}
+}
+
+//-----------------------------------
+//麻痺状態の処理
+//-----------------------------------
+void EnemyBase::Paralysis()
+{
+	if (0 < paralysis_time)
+	{
+		paralysis_time--;
+		speed *= 0.7;
+	}
+}
 //-----------------------------------
 //ドロップする種類の量の取得
 //-----------------------------------
@@ -59,6 +90,14 @@ ElementItem EnemyBase::GetDropItem(int i) const
 ENEMY_KIND EnemyBase::GetEnemyKind() const
 {
 	return kind;
+}
+
+//-----------------------------------
+//エネミーの状態の取得
+//-----------------------------------
+ENEMY_STATE EnemyBase::GetState()const
+{
+	return state;
 }
 
 //-----------------------------------

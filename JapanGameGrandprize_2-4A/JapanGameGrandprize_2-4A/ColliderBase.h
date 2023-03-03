@@ -22,6 +22,7 @@ public:
 	{
 		return location;
 	}
+
 	//中心座標の移動
 	void MoveLocation()
 	{
@@ -47,6 +48,7 @@ public:
 		}
 
 	}
+
 	//中心座標の設定
 	void SetLocation(Location location)
 	{
@@ -54,6 +56,7 @@ public:
 		Location distance;
 		distance.x = this->location.x - location.x;
 		distance.y = this->location.y - location.y;
+
 		if (powf(distance.x, 2) + powf(distance.y, 2) < powf(distance_limit, 2))
 		{
 			this->location = location;
@@ -65,4 +68,3 @@ public:
 protected:
 	Location location;	//中心座標
 };
-

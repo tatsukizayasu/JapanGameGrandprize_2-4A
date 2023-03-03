@@ -5,6 +5,7 @@
 class SphereCollider :public ColliderBase
 {
 protected:
+
 	int radius;			//”¼Œa
 public:
 	SphereCollider():ColliderBase()
@@ -17,17 +18,17 @@ public:
 	}
 
 	//SphereCollider“–‚½‚è”»’è
-	bool HitSphere(SphereCollider* sphere_collider);
+	bool HitSphere(const SphereCollider* sphere_collider) const;
 
 	//BoxCollider“–‚½‚è”»’è
-	bool HitBox(class BoxCollider* box_collider);
+	bool HitBox(const class BoxCollider* box_collider) const;
 
-	bool HitLine(class LineCollider* line_collider);
+	bool HitLine(const class LineCollider* line_collider) const;
 
 	//’†SÀ•W‚ÌŽæ“¾
-	Location GetLocation() const 
+	Location GetLocation() const
 	{
-		return location; 
+		return location;
 	}
 
 	//”¼Œa‚ÌŽæ“¾
@@ -37,7 +38,7 @@ public:
 	}
 
 	//’†SÀ•W‚ÌÝ’è
-	void SetLocation(Location location) 
+	void SetLocation(Location location)
 	{
 		this->location = location;
 	}

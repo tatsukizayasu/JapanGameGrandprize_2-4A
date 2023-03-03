@@ -36,6 +36,7 @@ void Pouch::Update()
 			break;
 		}
 	}
+
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
 		switch (tab)

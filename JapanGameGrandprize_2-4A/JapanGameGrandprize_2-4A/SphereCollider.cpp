@@ -5,7 +5,7 @@
 #include <math.h>
 
 
-bool SphereCollider::HitSphere(SphereCollider* sphere_collider)
+bool SphereCollider::HitSphere(const SphereCollider* sphere_collider) const
 {
 	bool ret = false;//返り値
 	float distance;	//中心座標の距離
@@ -21,7 +21,7 @@ bool SphereCollider::HitSphere(SphereCollider* sphere_collider)
 	return ret;
 }
 
-bool SphereCollider::HitBox(class BoxCollider* box_collider)
+bool SphereCollider::HitBox(const BoxCollider* box_collider) const
 {
 	bool ret = false; //返り値
 	float rad; //2点の角度
@@ -54,7 +54,7 @@ bool SphereCollider::HitBox(class BoxCollider* box_collider)
 	return ret;
 }
 
-bool SphereCollider::HitLine(class LineCollider* line_collider)
+bool SphereCollider::HitLine(const LineCollider* line_collider) const
 {
 	bool ret = false; //返り値
 
@@ -92,6 +92,7 @@ bool SphereCollider::HitLine(class LineCollider* line_collider)
 		{
 			inner_product[i] = (vector_x[i + 1] * vector_x[0]) - (vector_y[i + 1] * vector_y[0]);
 		}
+
 		//円の中心との距離の計算
 		for (int i = 0; i < 2; i++)
 		{

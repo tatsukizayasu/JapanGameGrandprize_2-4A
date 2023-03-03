@@ -52,7 +52,6 @@ bool LineCollider_t::HitBox(BoxCollider* box)const
 {
 	bool is_hit = false;
 	return is_hit;
-
 }
 
 //-----------------------------------
@@ -62,7 +61,6 @@ bool LineCollider_t::HitLine(LineCollider_t* line)const
 {
 	bool is_hit = false;
 	return is_hit;
-
 }
 
 //-----------------------------------------------------
@@ -94,7 +92,6 @@ void LineCollider_t::SetLocation(Location location, int index)
 		Relativize();
 	}
 }
-
 
 //-----------------------------------
 // SphereColliderとの当たり判定
@@ -129,14 +126,16 @@ bool LineCollider::HitSphere(class SphereCollider* sphere_collider)
 	unit_vector = sqrtf(powf(vector_x[0], 2) + powf(vector_y[0], 2));
 
 	//最短距離の計算
-	shortest_distance = (vector_x[1] * (vector_x[0] / unit_vector)) - (vector_y[1] * (vector_y[0] / unit_vector));
+	shortest_distance = (vector_x[1] * (vector_x[0] / unit_vector)) 
+						- (vector_y[1] * (vector_y[0] / unit_vector));
 
 	if (fabsf(shortest_distance) <= sphere_collider->GetRadius())
 	{
 		//内積の計算
 		for (int i = 0; i < 2; i++)
 		{
-			inner_product[i] = (vector_x[i + 1] * vector_x[0]) - (vector_y[i + 1] * vector_y[0]);
+			inner_product[i] = (vector_x[i + 1] * vector_x[0]) 
+								- (vector_y[i + 1] * vector_y[0]);
 		}
 		//円の中心との距離の計算
 		for (int i = 0; i < 2; i++)
@@ -144,8 +143,9 @@ bool LineCollider::HitSphere(class SphereCollider* sphere_collider)
 			center_distance[i] = sqrtf(powf(vector_x[i + 1], 2) + powf(vector_y[i + 1], 2));
 		}
 
-		if ((inner_product[0] * inner_product[1] <= 0.0f) || (center_distance[0] < sphere_collider->GetRadius()) || 
-			(center_distance[1] < sphere_collider->GetRadius()))
+		if ((inner_product[0] * inner_product[1] <= 0.0f) 
+				|| (center_distance[0] < sphere_collider->GetRadius()) 
+					||(center_distance[1] < sphere_collider->GetRadius()))
 		{
 			ret = true;
 		}
@@ -207,7 +207,8 @@ bool LineCollider::HitBox(class BoxCollider* box_collider)
 	sub_y[1] = sub_y[0] + box_collider->GetArea().height;
 
 
-	if ((my_x[0] < sub_x[1]) && (my_x[1] < sub_x[1]) && (my_y[0] < sub_y[1]) && (sub_y[0] < my_y[1]))
+	if ((my_x[0] < sub_x[1]) && (my_x[1] < sub_x[1]) 
+			&& (my_y[0] < sub_y[1]) && (sub_y[0] < my_y[1]))
 	{
 		//自分のLineColliderの始点と終点とのベクトルの計算
 		vector_x[0] = location[1].x - location[0].x;
@@ -218,15 +219,18 @@ bool LineCollider::HitBox(class BoxCollider* box_collider)
 		vector_y[1] = box_collider->GetLocation().y - location[0].y;
 
 		//自分のLineColliderの始点と右下の角とのベクトル
-		vector_x[2] = (box_collider->GetLocation().x + box_collider->GetArea().width) - location[0].x;
-		vector_y[2] = (box_collider->GetLocation().y + box_collider->GetArea().height) - location[0].y;
+		vector_x[2] = (box_collider->GetLocation().x 
+						+ box_collider->GetArea().width) - location[0].x;
+		vector_y[2] = (box_collider->GetLocation().y 
+						+ box_collider->GetArea().height) - location[0].y;
 
 		//各頂点と外積の計算
 		for (int i = 0, n = 0; i < 2; i++)
 		{
 			for (int j = 0; j < 2; j++)
 			{
-				outer_product[n++] = (vector_x[0] * vector_y[i]) - (vector_y[0] * vector_x[j]);
+				outer_product[n++] = (vector_x[0] * vector_y[i]) 
+					                    - (vector_y[0] * vector_x[j]);
 			}
 		}
 
@@ -287,7 +291,8 @@ bool LineCollider::HitLine(LineCollider* line_collider)
 	//外積の計算
 	for (int i = 0; i < 2; i++)
 	{
-		outer_product[i] = (vector_x[0] * vector_y[i + 1]) - (vector_x[i + 1] * vector_y[0]);
+		outer_product[i] = (vector_x[0] * vector_y[i + 1]) 
+			                - (vector_x[i + 1] * vector_y[0]);
 	}
 
 	//当たり判定の判断

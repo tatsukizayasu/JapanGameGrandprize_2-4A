@@ -1,8 +1,6 @@
 #pragma once
 #include "AbstractScene.h"
 
-
-
 class Title :
     public AbstractScene
 {
@@ -33,9 +31,8 @@ private:
     
     //操作間隔時間
     int input_margin;
-    
-
 public:
+
     //コンストラクタ
     Title();
 

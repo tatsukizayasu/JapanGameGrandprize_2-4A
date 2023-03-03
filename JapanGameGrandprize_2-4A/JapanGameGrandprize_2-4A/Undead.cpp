@@ -17,50 +17,50 @@
 //歩くスピード
 #define UNDEAD_SPEED -2
 
-//ドロップ量(最小)
+//ドロップ量
 #define UNDEAD_MIN_DROP 0u
-//ドロップ量(最大)
 #define UNDEAD_MAX_DROP 5u
 
-//ドロップする種類数
-#define UNDEAD_DROP 4
 
+#define UNDEAD_ATTACK_DAMAGE 10
 //体力
 #define UNDEAD_HP 100
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Undead::Undead(Player* player)
+Undead::Undead()
 {
 	/*初期化*/
 	can_delete = false;
-	hp = 0;
+	hp = 100;
 	damage = 0;
 	attack_interval = 0;
-	attack = 0;
 	speed = UNDEAD_SPEED;
 	kind = ENEMY_KIND::UNDEAD;
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::SOIL;
-	attack_type = ENEMY_TYPE::NORMAL;
-	state = UNDEAD_STATE::IDOL;
+	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	image = 0xffffff;
 	attack_time = 0;
+	poison_time = 0;
+	poison_damage = 0;
+	paralysis_time = 0;
 
 	/*当たり判定の設定*/
 	location.x = 640.0f;
-	location.y = 430.0f;
+	location.y = 1220.0f;
 	area.width = 40;
 	area.height = 80;
 
 	//ドロップアイテムの設定
-	drop_element = new ElementItem * [UNDEAD_DROP];
-	drop_type_volume = UNDEAD_DROP;
+	drop_element = new ElementItem * [SOIL_DROP];
+	drop_type_volume = SOIL_DROP;
 
 	int volume = 0;
-	for (int i = 0; i < UNDEAD_DROP; i++)
+
+	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		volume = UNDEAD_MIN_DROP + GetRand(UNDEAD_MAX_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
@@ -68,7 +68,6 @@ Undead::Undead(Player* player)
 		drop_volume += volume;
 	}
 
-	this->player = player;
 }
 
 //-----------------------------------
@@ -76,10 +75,11 @@ Undead::Undead(Player* player)
 //-----------------------------------
 Undead::~Undead()
 {
-	for (int i = 0; i < UNDEAD_DROP; i++)
+	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		delete drop_element[i];
 	}
+
 	delete[] drop_element;
 
 	delete type;
@@ -90,52 +90,16 @@ Undead::~Undead()
 //-----------------------------------
 void Undead::Update()
 {
-	float screen_x; //画面スクロールを考慮したX座標
-
-	screen_x = location.x - CameraWork::GetCamera().x;
-
-	switch (state)
-	{
-	case UNDEAD_STATE::IDOL:
-		if ((-area.width < screen_x) && (screen_x < SCREEN_WIDTH + area.width))
-		{
-			state = UNDEAD_STATE::MOVE;
-		}
-		break;
-	case UNDEAD_STATE::MOVE:
-		DistancePlayer();
-
-		location.x += speed;
-
-		if ((screen_x < -area.width) || (SCREEN_WIDTH + area.width < screen_x))
-		{
-			state = UNDEAD_STATE::IDOL;
-		}
-		break;
-	case UNDEAD_STATE::ATTACK:
-		attack_time--;
-		if (attack_time < 0)
-		{
-			state = UNDEAD_STATE::MOVE;
-			image = 0xffffff;
-			attack_interval = ATTACK_INTERVAL;
-		}
-		break;
-	case UNDEAD_STATE::DEATH:
-		can_delete = true;
-		break;
-	default:
-		break;
-	}
-
 	if (attack_interval > 0)
 	{
 		attack_interval--;
 	}
 
-	if (CheckHp() && state != UNDEAD_STATE::DEATH)
+	Poison();
+
+	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
-		state = UNDEAD_STATE::DEATH;
+		state = ENEMY_STATE::DEATH;
 	}
 }
 
@@ -143,23 +107,23 @@ void Undead::Update()
 //-----------------------------------
 // プレイヤーとの距離
 //-----------------------------------
-void Undead::DistancePlayer()
+void Undead::DistancePlayer(const Location player_location)
 {
 	float distance; //離れている距離
 
 	//プレイヤーとの距離の計算
-	distance = sqrtf(powf(player->GetLocation().x - location.x, 2) + powf(player->GetLocation().y - location.y, 2));
+	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
 
 	//攻撃範囲に入っているかつ攻撃までの時間が0以下だったら攻撃する
 	if ((distance < ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
-		state = UNDEAD_STATE::ATTACK;
+		state = ENEMY_STATE::ATTACK;
 		attack_time = 20;
 		image = 0xff0000;
 	}
 	else if(distance < TRACKING_DISTANCE) //一定範囲内だとプレイヤーを追いかける
 	{
-		if (player->GetLocation().x < location.x)
+		if (player_location.x < location.x)
 		{
 			speed = UNDEAD_SPEED;
 		}
@@ -175,11 +139,125 @@ void Undead::DistancePlayer()
 }
 
 //-----------------------------------
+//アイドル状態
+//-----------------------------------
+void Undead::Idol()
+{
+	Location scroll; //画面スクロールを考慮したX座標
+
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
+}
+
+//-----------------------------------
+//移動
+//-----------------------------------
+void Undead::Move(const Location player_location)
+{
+
+	Location scroll; //画面スクロールを考慮したX座標
+
+	
+	DistancePlayer(player_location);
+
+	location.x += speed;
+
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+
+	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) || 
+		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
+	{
+		state = ENEMY_STATE::IDOL;
+	}
+}
+
+//-----------------------------------
+//攻撃
+//-----------------------------------
+void  Undead::Attack(Location player_location)
+{
+	attack_time--;
+	if (attack_time < 0)
+	{
+		state = ENEMY_STATE::MOVE;
+		image = 0xffffff;
+		attack_interval = ATTACK_INTERVAL;
+	}
+}
+
+//-----------------------------------
+//攻撃が当たっているか
+//-----------------------------------
+AttackResource Undead::HitCheck(const BoxCollider* collider)
+{
+	AttackResource ret = { 0,nullptr,0 }; //戻り値
+
+	if (state == ENEMY_STATE::ATTACK)
+	{
+		if (HitBox(collider))
+		{
+			ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
+			ret.damage = UNDEAD_ATTACK_DAMAGE;
+			ret.type = attack_type;
+			ret.type_count = 1;
+		}
+	}
+
+	return ret;
+}
+
+//-----------------------------------
+//死亡
+//-----------------------------------
+void Undead::Death()
+{
+	can_delete = true;
+}
+
+//-----------------------------------
 // プレイヤーの弾との当たり判定
 //-----------------------------------
-void Undead::HitBullet(BulletBase* bullet)
+bool Undead::HitBullet(const BulletBase* bullet)
 {
-	
+	bool ret = false; //戻り値
+
+	if (HitSphere(bullet))
+	{
+
+		switch (bullet->GetAttribute())
+		{
+		case ATTRIBUTE::NORMAL:
+			hp -= bullet->GetDamage();
+			break;
+		case ATTRIBUTE::EXPLOSION:
+			hp -= bullet->GetDamage();
+			break;
+		case ATTRIBUTE::MELT:
+			hp -= bullet->GetDamage();
+			break;
+		case ATTRIBUTE::POISON:
+			poison_damage = bullet->GetDamage();
+			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			paralysis_time = bullet->GetDebuffTime() * 0;
+			break;
+		case ATTRIBUTE::HEAL:
+			break;
+		default:
+			break;
+		}
+
+		ret = true;
+	}
+
+	return ret;
 }
 
 //-----------------------------------
@@ -192,13 +270,14 @@ void Undead::Draw() const
 	draw_location.x = location.x - CameraWork::GetCamera().x;
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
-	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
+	DrawBox(draw_location.x, draw_location.y,
+		draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
 }
 
 //-----------------------------------
-//状態の取得
+//座標の取得
 //-----------------------------------
-UNDEAD_STATE Undead::GetState() const
+Location Undead::GetLocation() const
 {
-	return state;
+	return location;
 }

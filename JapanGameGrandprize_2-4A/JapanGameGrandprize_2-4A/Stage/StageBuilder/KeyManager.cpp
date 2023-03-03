@@ -15,6 +15,7 @@ void KeyManager::Update()
 	{
 		oldKey[i] = nowKey[i];
 	}
+
 	if (GetHitKeyStateAll(nowKey) == -1)
 	{
 		throw - 1;
@@ -22,9 +23,7 @@ void KeyManager::Update()
 
 	oldMouse = nowMouse;
 	nowMouse = GetMouseInput();
-
 }
-
 
 //キーボード入力　引数：KEY_INPUT_anyKey
 
@@ -34,6 +33,7 @@ void KeyManager::Update()
 bool KeyManager::OnKeyClicked(int Key)
 {
 	bool ret = (oldKey[Key] != TRUE) && (nowKey[Key] == TRUE);
+
 	return ret;
 }
 
@@ -43,6 +43,7 @@ bool KeyManager::OnKeyClicked(int Key)
 bool KeyManager::OnKeyReleased(int Key)
 {
 	bool ret = (oldKey[Key] == TRUE) && (nowKey[Key] != TRUE);
+
 	return ret;
 }
 
@@ -52,6 +53,7 @@ bool KeyManager::OnKeyReleased(int Key)
 bool KeyManager::OnKeyPressed(int Key)
 {
 	bool ret = (oldKey[Key] == TRUE) && (nowKey[Key] == TRUE);
+
 	return ret;
 }
 

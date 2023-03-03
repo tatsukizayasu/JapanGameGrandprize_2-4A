@@ -1,29 +1,27 @@
 #pragma once
 #include"EnemyBase.h"
 #include"CameraWork.h"
-
 #include"BoxCollider.h"
 
-enum DIRECTION
+enum class DIRECTION
 {
-	left = -1,
-	right = 1
+	LEFT = 0,
+	RIGHT
 };
 
-enum class SLIME_STATE
+enum class SLIME_ATTACK
 {
-	IDOL,   //ƒAƒCƒhƒ‹ó‘Ô
-	MOVE,   //ˆÚ“®
-	ATTACK, //UŒ‚
-	KNOCKBACK, //•ÇA“G‚É’µ‚Ë•Ô‚é
-	DEATH,  //€–S
+	BEFORE_ATTACK,//UŒ‚‚·‚é‘O
+	AFTER_ATTACK,//UŒ‚‚µ‚½Œã
 };
 
 class EnemySlime : public EnemyBase, public BoxCollider
 {
 private:
+
 	int color;
-	int direction;
+	DIRECTION direction;
+	SLIME_ATTACK slime_attack;
 
 	int slime_image;
 	int slime_angle;
@@ -31,10 +29,8 @@ private:
 	Location jump_distance;
 
 	ElementItem drop_item;
-
-	SLIME_STATE state;
-
 public:
+
 	EnemySlime();
 	EnemySlime(float x, float y, float height, float width);
 	~EnemySlime() {};
@@ -44,11 +40,23 @@ public:
 	//•`‰æ
 	virtual void Draw()const override;
 
-	void HitPlayer(BoxCollider* boxcollider);
-	void HitStage();
-	void AttackJudgement(BoxCollider* boxcollider);
-	void Attack();
-	void KnockBack();
+	//ƒAƒCƒhƒ‹ó‘Ô
+	void Idol() override;
 
-	virtual void HitBullet(BulletBase* bullet)override {};
+	//ˆÚ“®
+	void Move(const Location player_location) override;
+
+	//UŒ‚
+	void  Attack(Location) override;
+
+	//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+	AttackResource HitCheck(const BoxCollider* collider) override;
+
+	//€–S
+	void Death() override;
+
+	virtual bool HitBullet(const BulletBase* bullet)override;
+
+	//À•W‚Ìæ“¾
+	Location GetLocation() const override;
 };

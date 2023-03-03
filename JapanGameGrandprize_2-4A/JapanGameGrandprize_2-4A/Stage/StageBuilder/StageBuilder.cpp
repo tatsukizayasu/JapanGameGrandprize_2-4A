@@ -15,7 +15,9 @@ StageBuilder::StageBuilder()
 	Directory::Init();
 	mouse = new SphereCollider();
 	mouse_pos = {};
-	if (LoadDivGraph("Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) {
+
+	if (LoadDivGraph("Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) 
+	{
 		throw "Images/Stage/map_chips_test.png";
 	}
 	select_collider = nullptr;
@@ -23,6 +25,7 @@ StageBuilder::StageBuilder()
 
 	menu_cursor = 0;	
 	arrow[0] = '>';
+
 	for (int i = 1; i < ARROW_NUM; i++)
 	{
 		arrow[i] = ' ';
@@ -50,11 +53,15 @@ StageBuilder::StageBuilder()
 StageBuilder::~StageBuilder()
 {
 	delete mouse;
+
 	for (int i = 0; i < map_chips.size(); i++)
 	{
 		delete map_chips[i];
 	}
+
 	map_chips.clear();
+
+	delete line;
 }
 
 //------------------------------------
@@ -66,6 +73,7 @@ void StageBuilder::Update()
 	UpdateMouse();
 
 	if (KeyManager::OnKeyClicked(KEY_INPUT_ESCAPE))mode = MENU_MODE;
+
 	switch (mode)
 	{
 	case MENU_MODE:
@@ -89,8 +97,6 @@ void StageBuilder::Update()
 		Directory::Open("\\Stage\\StageBuilder\\dat");
 		UpdateLoad();
 		break;
-
-		
 	}
 
 
@@ -287,7 +293,6 @@ void StageBuilder::UpdateSave()
 			stage_max++;
 		}
 		
-
 		Directory::OpenMain();
 		mode = BRUSH_MODE;
 		menu_cursor = 0;
@@ -386,6 +391,7 @@ void StageBuilder::DrawFileInfo()const
 	DrawBoxAA(draw_pos_x, draw_pos_y,
 		draw_pos_x + MAP_CHIP_SIZE * 4, draw_pos_y + l_font_size * scale, 
 		0x000000, TRUE);
+
 	DrawBoxAA(draw_pos_x, draw_pos_y,
 		560.f + MAP_CHIP_SIZE * 4, draw_pos_y + l_font_size * scale,
 		0xFFFFFF, FALSE, 3);
@@ -408,6 +414,7 @@ void StageBuilder::DrawFileInfo()const
 void StageBuilder::DrawFrame()const
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 127);
+
 	for (int i = 0; i * MAP_CHIP_SIZE < SCREEN_HEIGHT; i++)
 	{
 		DrawLineAA(0, i * MAP_CHIP_SIZE, SCREEN_WIDTH, i * MAP_CHIP_SIZE, 0xFFFFFF);
@@ -417,6 +424,7 @@ void StageBuilder::DrawFrame()const
 	{
 		DrawLineAA(i * MAP_CHIP_SIZE, 0, i * MAP_CHIP_SIZE, SCREEN_HEIGHT, 0xFFFFFF);
 	}
+
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
@@ -446,7 +454,6 @@ void StageBuilder::DrawFile(float x, float y, const char* path, int font_size)co
 		// ŒŸõƒnƒ“ƒhƒ‹‚ÌŒãŽn––
 		FileRead_findClose(find_handle);
 	}
-
 }
 
 //-------------------------------------
@@ -566,13 +573,14 @@ void StageBuilder::Select(int menu_max)
 		char tmp = arrow[menu_cursor];
 		arrow[menu_cursor] = ' ';
 		menu_cursor--;
+
 		if (menu_cursor < 0)
 		{
 			menu_cursor = menu_max - 1;
 		}
+
 		arrow[menu_cursor] = tmp;
 	}
-
 }
 
 //------------------------------------

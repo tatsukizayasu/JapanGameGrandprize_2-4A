@@ -4,8 +4,9 @@
 class ItemController
 {
 private:
-	int item_volume; //生成しているアイテムの量
 
+	int item_volume; //生成しているアイテムの量
+	int item_max; //アイテムの生成できる最大数
 	Item** item; //アイテム
 public:
 
@@ -16,17 +17,18 @@ public:
 	~ItemController();
 
 	//更新
-	void Update(class Player* player);
+	void Update( class Player* player);
 
 	//描画
 	void Draw() const;
 
 	//アイテムの生成
-	void SpawnItem(class EnemyBase* enemy, Location spawn_location);
+	void SpawnItem(const class EnemyBase* enemy);
 
 	//アイテムの並び替え
-	void SortItem(int item_num);
+	void SortItem(const int item_num);
 
 	//アイテムの整理
-	void ArrangementItem(int old_item_volume);
+	void ArrangementItem(const int old_item_volume);
+
 };

@@ -5,6 +5,7 @@
 #include "CameraWork.h"
 #include "Item.h"
 #include <iostream>
+#include <stdio.h>
 
 //プレイヤーが持っている元素の種類
 #define PLAYER_ELEMENT 7
@@ -35,6 +36,8 @@ Player::Player()
 		bullet = new BulletBase * [BULLET_MAX];
 		bullet[i] = nullptr;
 	}
+
+	move_left = false;
 
 	damage_flg = false;
 	i = 0;
@@ -89,7 +92,7 @@ Player::Player(Stage* stage)
 
 	this->stage = stage;
 	location.x = 0;
-	location.y = 420;
+	location.y = 1220;
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
@@ -112,6 +115,7 @@ Player::Player(Stage* stage)
 
 	damage_flg = false;
 	pouch_open = false;
+	move_left = false;
 	i = 0;
 
 	attribute[0] = ATTRIBUTE::NORMAL;
@@ -121,18 +125,12 @@ Player::Player(Stage* stage)
 	attribute[4] = ATTRIBUTE::PARALYSIS;
 	attribute[5] = ATTRIBUTE::HEAL;
 
-	attribute_c[0] = ("NORMAL");
-	attribute_c[1] = ("EXPLOSION");
-	attribute_c[2] = ("MELT");
-	attribute_c[3] = ("POISON");
-	attribute_c[4] = ("PARALYSIS");
-	attribute_c[5] = ("HEAL");
-
-
-	for (int i = 0; i < 6; i++)
-	{
-		attribute_c[i] = i;
-	}
+	attribute_c[0] = "NORMAL";
+	attribute_c[1] = "EXPLOSION";
+	attribute_c[2] = "MELT";
+	attribute_c[3] = "POISON";
+	attribute_c[4] = "PARALYSIS";
+	attribute_c[5] = "HEAL";
 
 	player_state = PLAYER_STATE::STOP;
 
@@ -178,8 +176,40 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
+	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
+	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
 
+	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
+	//FUELバーの表示ここから
+	if (fuel >= 50)
+	{
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
+	}
+	else if (fuel >= 20)
+	{
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
+	}
+	else
+	{
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
+	}
+	//ここまで
+
+	//HPバーの表示ここから
+	if (hp >= 50)
+	{
+		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, GREEN, TRUE);
+	}
+	else if (hp >= 20)
+	{
+		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, YELLOW, TRUE);
+	}
+	else
+	{
+		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, RED, TRUE);
+	}
+	DrawBox(10, 50, HP_BAR_WIDTH - 1, 50 + HP_BAR_HEIGHT, 0x000000, FALSE);
+	//ここまで
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -189,12 +219,7 @@ void Player::Draw() const
 		}
 	}
 
-	//if (beam != nullptr)
-	//{
-	//	beam->Draw();
-	//}
 	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
-
 
 	//ダメージを受けた時点滅する
 	if (damage_flg)
@@ -212,6 +237,7 @@ void Player::Draw() const
 	}
 	else
 	{
+
 	}
 
 #ifdef _DEBUG
@@ -221,7 +247,6 @@ void Player::Draw() const
 	}
 
 #endif
-
 
 	SetFontSize(30);
 
@@ -235,6 +260,7 @@ void Player::Draw() const
 	{
 		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute - 1]);
 	}
+
 	//下の選択肢
 	if (display_attribute + 1 > 5)
 	{
@@ -244,7 +270,9 @@ void Player::Draw() const
 	{
 		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute + 1]);
 	}
+
 	//現在の選択肢
+	DrawCircle(990, 60, 5, 0x000000, TRUE);
 	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
@@ -260,13 +288,6 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
-
-	//マップチップのオブジェクト取得
-	for (int i = 0; i < stage->GetMapChip().size(); i++)
-	{
-	}
-
-	count++;
 
 	damage_count++;
 	if (damage_count >= 10)
@@ -291,11 +312,13 @@ void Player::Update()
 	//スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
+		move_left = false;
 		RightMove();
 	}
 	//スティック左入力
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
+		move_left = true;
 		LeftMove();
 	}
 	//スティック未入力
@@ -307,6 +330,8 @@ void Player::Update()
 	//RBボタン入力
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
+		count++;
+
 		if (count % 30 == 0)
 		{
 			bullet_count++;
@@ -319,6 +344,7 @@ void Player::Update()
 	{
 		Jump();
 	}
+
 	//Bボタン未入力
 	else
 	{
@@ -331,8 +357,6 @@ void Player::Update()
 		player_state = PLAYER_STATE::DOWN;
 	}
 
-
-
 	//弾のアップデート呼び出し
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -340,6 +364,7 @@ void Player::Update()
 		{
 			if (bullet[i]->GetEfectFlg())
 			{
+				delete bullet[i];
 				bullet[i] = nullptr;
 				SortBullet(i);
 			}
@@ -352,7 +377,6 @@ void Player::Update()
 
 	//弾の属性の切り替え処理
 	ElementUpdate();
-
 }
 
 //スティックを入力していないとき
@@ -427,6 +451,12 @@ void Player::LeftMove()
 		}
 	}
 	location.x += speed_x;
+
+	if (location.x < 0)
+	{
+		speed_x = 0.0;
+		location.x = 0;
+	}
 }
 
 //右移動
@@ -457,6 +487,12 @@ void Player::RightMove()
 	}
 
 	location.x += speed_x;
+
+	if (location.x < 0)
+	{
+		speed_x = 0.0;
+		location.x = 0;
+	}
 }
 
 //ジャンプ
@@ -465,12 +501,10 @@ void Player::Jump()
 	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;
 
-
 	gravity_down = 0.0;
 
 	jump += 0.25;
 	fuel -= 0.25;
-
 
 	if (jump > 10)
 	{
@@ -492,9 +526,9 @@ void Player::Jump()
 		location.y = 40;
 	}
 
-	if (location.y > 400)
+	if (location.y > 1200)
 	{
-		location.y = 400;
+		location.y = 1200;
 		jump = 0.0;
 	}
 }
@@ -503,7 +537,7 @@ void Player::Jump()
 void Player::NotJump()
 {
 	player_state = PLAYER_STATE::DOWN;
-	if (location.y < 400)
+	if (location.y < 1200)
 	{
 		location.y -= jump;
 	}
@@ -512,7 +546,7 @@ void Player::NotJump()
 		player_state = PLAYER_STATE::STOP;
 	}
 
-	if(location.y < 40)
+	if (location.y < 40)
 	{
 		jump = 0;
 		location.y = 40;
@@ -524,7 +558,7 @@ void Player::NotJump()
 	{
 		jump = -10;
 	}
-	
+
 	if (not_jet_count++ >= 120)
 	{
 		jump = 0;
@@ -543,46 +577,6 @@ void Player::NotJump()
 		not_jet_count = 120;
 	}
 
-	/*jump_power -= 0.5;
-	if (location.y > 0)
-	{
-		location.y -= jump_power;
-	}
-	else
-	{
-		jump_power = 0;
-	}
-
-	jump = 10;
-
-	if (location.y < 400)
-	{
-		location.y += gravity_down;
-	}
-	else
-	{
-		player_state = PLAYER_STATE::STOP;
-	}
-	gravity_down += 0.25;
-
-
-
-	if (not_jet_count++ >= 120)
-	{
-		if (fuel < 100)
-		{
-			fuel += 2.5;
-		}
-		else
-		{
-			fuel = 100;
-		}
-	}
-
-	if (not_jet_count >= 120)
-	{
-		not_jet_count = 120;
-	}*/
 }
 
 //-----------------------------------
@@ -597,7 +591,7 @@ void Player::Shoot_Gun()
 			switch (display_attribute)
 			{
 			case 0:
-				bullet[i] = new NormalBullet(location.x, location.y, attribute[display_attribute]);
+				bullet[i] = new NormalBullet(location.x, location.y, move_left, attribute[display_attribute]);
 				break;
 			case 1:
 			case 2:
@@ -609,7 +603,6 @@ void Player::Shoot_Gun()
 			}
 		}
 	}
-
 }
 
 //-----------------------------------
@@ -617,19 +610,18 @@ void Player::Shoot_Gun()
 //-----------------------------------
 void Player::SortBullet(int delete_bullet)
 {
-	for (int i = delete_bullet + 1; i < 30; i++)
+	for (int i = delete_bullet + 1; i < BULLET_MAX; i++)
 	{
-		if (bullet[i] == nullptr)
-		{
-			bullet_count--;
-			break;
-		}
 		if (bullet[i - 1] == nullptr)
 		{
 			bullet[i - 1] = bullet[i];
 			bullet[i] = nullptr;
 		}
+		if (bullet[i] == nullptr)
+		{
+		}
 	}
+	bullet_count--;
 }
 
 //-----------------------------------
@@ -671,6 +663,7 @@ void Player::Hp_Damage(int damage_value)
 {
 	damage_flg = true;
 	hp -= damage_value;
+
 	if (hp <= 0)
 	{
 		hp = 0;
@@ -702,4 +695,10 @@ void Player::SetElementItem(class Item* item)
 	int num = static_cast<int>(item->GetElementType());
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);
+
+}
+
+bool Player::GetMoveDirection()
+{
+	return move_left;
 }

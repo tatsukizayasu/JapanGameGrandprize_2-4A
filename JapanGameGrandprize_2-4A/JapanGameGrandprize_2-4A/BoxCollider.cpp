@@ -8,7 +8,7 @@
 //-----------------------------------
 // SphereColliderとの当たり判定
 //-----------------------------------
-bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
+bool BoxCollider::HitSphere(const SphereCollider* sphere_collider) const
 {
 	bool ret = false;//返り値
 	float rad; //2点の角度
@@ -20,11 +20,14 @@ bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
 	float my_y[2];
 
 	//角度の計算
-	rad = atan2f(sphere_collider->GetLocation().y - location.y, sphere_collider->GetLocation().x - location.x);
+	rad = atan2f(sphere_collider->GetLocation().y - location.y,
+			      sphere_collider->GetLocation().x - location.x);
 
 	//座標の計算
-	sphere_x = sphere_collider->GetLocation().x + (sphere_collider->GetRadius() * cosf(rad));
-	sphere_y = sphere_collider->GetLocation().y + (sphere_collider->GetRadius() * sinf(rad));
+	sphere_x = sphere_collider->GetLocation().x 
+		        + (sphere_collider->GetRadius() * cosf(rad));
+	sphere_y = sphere_collider->GetLocation().y 
+		        + (sphere_collider->GetRadius() * sinf(rad));
 
 	//自分の当たり判定の範囲の計算
 	my_x[0] = location.x - (area.width / 2);
@@ -33,7 +36,8 @@ bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
 	my_y[1] = my_y[0] + area.height;
 
 
-	if ((sphere_x < my_x[0]) && (my_x[1] < sphere_x) && (sphere_y < my_y[0]) && (my_y[1] < sphere_y)) //当たり判定
+	if ((my_x[0] < sphere_x) && (sphere_x < my_x[1]) 
+		    && (my_y[0] < sphere_y) && (sphere_y < my_y[1])) //当たり判定
 	{
 		ret = true;
 	}
@@ -44,7 +48,7 @@ bool BoxCollider::HitSphere(class SphereCollider* sphere_collider)
 //-----------------------------------
 // BoxColliderとの当たり判定
 //-----------------------------------
-bool BoxCollider::HitBox(BoxCollider* box_collider)
+bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 {
 	bool ret = false; //返り値
 
@@ -68,17 +72,19 @@ bool BoxCollider::HitBox(BoxCollider* box_collider)
 	sub_x[1] = sub_x[0] + box_collider->GetArea().width;
 	sub_y[1] = sub_y[0] + box_collider->GetArea().height;
 
-	if ((my_x[0] < sub_x[1]) && (sub_x[0] < my_x[1]) && (my_y[0] < sub_y[1]) && (sub_y[0] < my_y[1])) //当たり判定
+	if ((my_x[0] < sub_x[1]) && (sub_x[0] < my_x[1]) 
+		    && (my_y[0] < sub_y[1]) && (sub_y[0] < my_y[1])) //当たり判定
 	{
 		ret = true;
 	}
+
 	return ret;
 }
 
 //-----------------------------------
 // LineColliderとの当たり判定
 //-----------------------------------
-bool BoxCollider::HitLine(LineCollider* line_collider)
+bool BoxCollider::HitLine(const LineCollider* line_collider) const
 {
 	bool ret = false; //返り値
 
@@ -127,8 +133,8 @@ bool BoxCollider::HitLine(LineCollider* line_collider)
 		sub_y[1] = line_collider->GetLocation(0).y;
 	}
 
-
-	if ((my_x[0] < sub_x[1]) && (my_x[1] < sub_x[1]) && (my_y[0] < sub_y[1]) && (sub_y[0] < my_y[1]))
+	if ((my_x[0] < sub_x[1]) && (my_x[1] < sub_x[1]) 
+		    && (my_y[0] < sub_y[1]) && (sub_y[0] < my_y[1]))
 	{
 		//LineColliderの始点と終点とのベクトルの計算
 		vector_x[0] = line_collider->GetLocation(1).x - line_collider->GetLocation(0).x;
@@ -147,7 +153,8 @@ bool BoxCollider::HitLine(LineCollider* line_collider)
 		{
 			for (int j = 0; j < 2; j++)
 			{
-				outer_product[n++] = (vector_x[0] * vector_y[i]) - (vector_y[0] * vector_x[j]);
+				outer_product[n++] = (vector_x[0] * vector_y[i]) 
+					                    - (vector_y[0] * vector_x[j]);
 			}
 		}
 
@@ -178,6 +185,7 @@ bool BoxCollider::HitLine(LineCollider* line_collider)
 
 	return ret;
 }
+
 //-----------------------------------
 // 中心座標の取得
 //-----------------------------------

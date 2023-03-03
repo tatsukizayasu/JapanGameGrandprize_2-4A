@@ -51,7 +51,6 @@ private:
 	class PolyLine* line;
 
 
-public:
 	//コンストラクタ
 	StageBuilder();
 	//デストラクタ
@@ -116,4 +115,3 @@ public:
 	//CSVファイルからの読み込み
 	void LoadStage(char* stage_name);
 };
-
