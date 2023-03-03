@@ -42,7 +42,7 @@ protected:
 	int input_margin;
 public:
 
-	enum class STATE 
+	enum class STATE
 	{
 		MOVE,	//ˆÚ“®
 		FIXED	//ŒÅ’è
