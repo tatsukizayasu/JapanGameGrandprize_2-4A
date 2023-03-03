@@ -7,9 +7,10 @@
 #include <string>
 #include "../Player.h"
 
-#define STAGE_NAME	"debugStage";
+//#define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage2";
 #define STAGE_NAME	"Stage01";
+
 
 //-----------------------------------
 // コンストラクタ
@@ -31,25 +32,23 @@ Stage::Stage()
 		for (float x = 0; x < map_data.at(0).size(); x++)
 		{
 			int i = map_data.at(y).at(x);
-			if (i != 0 && i != -1)
+			if (i != 0)
 			{
 				mapchip.push_back(new MapChip
-				(0,&block_images[i],
+				(i, &block_images[i],
 					{
 						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 					}, { CHIP_SIZE,CHIP_SIZE }));
 			}
-			/*else
-			{
-				mapchip.push_back(nullptr);
-			}*/
 		}
 	}
 
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
 #endif
+
+	collision_chip = { 0, 0 };
 }
 
 //-----------------------------------
@@ -83,26 +82,6 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
-	/*int player_top = (player->GetLocation().y - CHIP_SIZE) / CHIP_SIZE;
-	int player_bottom = (player->GetLocation().y + CHIP_SIZE) / CHIP_SIZE;
-	int player_left = (player->GetLocation().x - CHIP_SIZE) / CHIP_SIZE;
-	int player_right = (player->GetLocation().x + CHIP_SIZE) / CHIP_SIZE;
-	if (0<player_top&& mapchip.at(player_top) != nullptr)
-	{
-		mapchip.at(player_top)->Update(player);
-	}
-	if (player_bottom < map_data.size() && mapchip.at(player_bottom) != nullptr)
-	{
-		mapchip.at(player_bottom)->Update(player);
-	}
-	if (0 < player_left && mapchip.at(player_left) != nullptr)
-	{
-		mapchip.at(player_left)->Update(player);
-	}
-	if (player_right < map_data.at(0).size() && mapchip.at(player_right) != nullptr)
-	{
-		mapchip.at(player_right)->Update(player);
-	}*/
 
 	for (int i = 0; i < mapchip.size(); i++)
 	{
@@ -113,7 +92,40 @@ void Stage::Update(Player* player)
 #ifdef _STAGE_BUILDER
 	stage_builder->Update();
 #endif
+
+
+	//描画範囲
+	struct DrawArea
+	{
+		float width;
+		float height;
+	} draw;
+
+	draw = { SCREEN_WIDTH + CHIP_SIZE,SCREEN_HEIGHT + CHIP_SIZE };
+
+	CameraWork::Camera camera = CameraWork::GetCamera();
+
+	for (auto& m : mapchip)
+	{
+		if (m == nullptr) continue;
+
+		float x = m->GetLocation().x;
+		float y = m->GetLocation().y;
+		float w = m->GetArea().width;
+		float h = m->GetArea().height;
+
+		// 画面内にあるMapChipオブジェクトだけ描画する
+		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
+
+		POINT collision_dir = m->GetMapChip_Collision();
+		if (collision_dir.x != 0 || collision_dir.y != 0) {
+			collision_chip.x = m->GetLocation().x;
+			collision_chip.y = m->GetLocation().y;
+			break;
+		}
+	}
 }
+
 
 //-----------------------------------
 // 描画
@@ -153,7 +165,8 @@ void Stage::Draw()
 #ifdef _STAGE_BUILDER
 	//stage_builder->Draw();
 #endif
-}
+	}
+
 
 //-----------------------------------
 // マップ読込み
@@ -162,11 +175,11 @@ void Stage::LoadMap()
 {
 	const char* stage_name = STAGE_NAME;
 
+
 	char buf[37];
 	sprintf_s(buf, sizeof(buf), "Data/Map_Data/%s.csv", stage_name);
 
 	int FileHandle;
-
 	if ((FileHandle = FileRead_open(buf)) == 0)
 	{
 		exit(1);
@@ -182,7 +195,6 @@ void Stage::LoadMap()
 		char* tmp = strtok_s(str, ",", &context);
 
 		map_data.push_back(std::vector<int>());
-
 		while (tmp != NULL)
 		{
 
@@ -191,7 +203,6 @@ void Stage::LoadMap()
 			tmp = strtok_s(NULL, ",", &context);
 			j++;
 		}
-
 		j = 0;
 		i++;
 	}

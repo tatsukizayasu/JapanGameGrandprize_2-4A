@@ -211,13 +211,16 @@ void Player::Update()
 		float w = m->GetArea().width;
 		float h = m->GetArea().height;
 
-		if (collision_dir.x != 0 || collision_dir.y != 0) {
+		if (collision_dir.y != 0) {
 			clsDx();
 			printfDx("“–‚½‚Á‚½:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
-			speed_x = 0.0f;
+
 			break;
 
-			
+			if (collision_dir.x != 0) {
+				speed_x = 0.0f;
+			}
+
 		}
 	}
 
@@ -469,7 +472,7 @@ void Player::NotJump()
 		jump_power = 0;
 		jump = 10;
 
-		if (location.y < 700)
+		if (location.y < 2000)
 		{
 			location.y += gravity_down;
 		}
@@ -483,7 +486,7 @@ void Player::NotJump()
 		if (collision_dir.y == -1)
 		{
 			gravity_down = 0.0f;
-			//location.y = stage->GetCollision_Chip().y - CHIP_SIZE / 2 - area.height + CHIP_SIZE;
+			location.y = stage->GetCollision_Chip().y - CHIP_SIZE / 2 - area.height + CHIP_SIZE;
 		}
 
 
