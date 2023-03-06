@@ -16,6 +16,10 @@
 #define GROUND 1200
 #define WAIT_TIME 30 //プレイヤーを見つけて攻撃するまでの時間
 
+#define ONE_ROUND 360 //一周の角度
+#define ROTATION_SPEED 15 //スライムが回転するスピード
+
+
 EnemySlime::EnemySlime()
 {
 	kind = ENEMY_KIND::SLIME;
@@ -201,9 +205,8 @@ AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
 //-----------------------------------
 void EnemySlime::Death()
 {
-	if (slime_angle >= 880 || slime_angle <= -880)
+	if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
 	{
-		slime_angle = 880;
 		can_delete = true;
 	}
 	else
@@ -211,17 +214,17 @@ void EnemySlime::Death()
 		if (location.y <= GROUND)
 		{
 			location.y -= (jump_distance.y / 3);
-			jump_distance.y -= 1;
+			jump_distance.y--;
 		}
 		if (direction == DIRECTION::RIGHT)
 		{
 			speed = -SLIME_ATTACK_SPEED;
-			slime_angle -= 15;
+			slime_angle -= ROTATION_SPEED;
 		}
 		else
 		{
 			speed = SLIME_ATTACK_SPEED;
-			slime_angle += 15;
+			slime_angle += ROTATION_SPEED;
 		}
 		location.x += speed;
 	}
