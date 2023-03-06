@@ -27,6 +27,7 @@ private:
 
 	int standby_time; //硬直時間
 	int standby_count; //硬直カウント
+	int ghost_image; //ゴーストの画像。
 	bool magic_attack; //魔法攻撃
 	bool physical_attack; //物理攻撃に入る（true)なら
 	GHOST_STATE action_type; //行動パターン

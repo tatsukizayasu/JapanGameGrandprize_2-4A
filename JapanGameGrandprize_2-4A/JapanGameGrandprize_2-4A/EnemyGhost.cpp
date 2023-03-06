@@ -56,6 +56,8 @@ EnemyGhost::EnemyGhost()
 	magic_attack = false;
 	kind = ENEMY_KIND::GHOST;
 
+	ghost_image = LoadGraph("Images/Enemy/Ghostimage.png"); //画像読込み
+
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
 	drop_type_volume = WIND_DROP;
@@ -264,17 +266,18 @@ void EnemyGhost::Draw()const
 	switch (attack_state)
 	{
 	case GHOST_ATTACK::PHYSICAL_ATTACK:
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
+		/*DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);*/
+		DrawRotaGraph(x, y, 1.5f, M_PI / 180, ghost_image, TRUE); //画像、左に傾け
 		break;
 	case GHOST_ATTACK::MAGIC_ATTACK:
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		DrawRotaGraph(x, y, 1.5f, M_PI / 180, ghost_image, TRUE);
 		if (bullet != nullptr)
 		{
 			bullet->Draw();
 		}
 		break;
 	case GHOST_ATTACK::NONE:
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		DrawRotaGraph(x, y, 1.5f, M_PI / 180, ghost_image, TRUE);
 		break;
 	default:
 		break;
