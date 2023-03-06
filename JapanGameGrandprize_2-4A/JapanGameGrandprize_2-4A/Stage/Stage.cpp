@@ -1,5 +1,6 @@
 #include "Stage.h"
 #include "../CameraWork.h"
+#include "Element/Element.h"
 #include "DxLib.h"
 #include <iostream>
 #include <fstream>
@@ -53,6 +54,8 @@ Stage::Stage()
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
 #endif
+
+	//element = new Stage_Element();
 }
 
 //-----------------------------------

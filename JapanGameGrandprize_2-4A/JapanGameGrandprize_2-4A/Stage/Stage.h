@@ -2,19 +2,19 @@
 #include "MapChip.h"
 #include <vector>
 #include <Windows.h>
-
 #include "StageBuilder/StageBuilder.h"
 
 #define CHIP_SIZE	40
 
 class Player;
+class Stage_Element;
 
 class Stage
 {
 private:
 
-	//MapChipオブジェクト
-	std::vector<MapChip*> mapchip;
+	//オブジェクト
+	Stage *element;
 
 #ifdef _STAGE_BUILDER
 	StageBuilder* stage_builder;
@@ -37,6 +37,10 @@ private:
 
 	//当たっている方向	(値渡し用)	構造体
 	POINT collision_dir_w;
+
+protected:
+	//MapChipオブジェクト
+	std::vector<MapChip*> mapchip;
 
 public:
 
