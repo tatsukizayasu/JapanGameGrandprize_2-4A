@@ -673,7 +673,6 @@ void Player::HpDamage(AttackResource attack)
 		if (attack.damage > 0)
 		{
 			damage_flg = true;
-			hp -= attack.damage;
 
 			if (attack.type != nullptr)
 			{
@@ -728,7 +727,6 @@ void Player::Hp_Heal(int heal_value)
 //-----------------------------------
 void Player::SetElementItem(class Item* item)
 {
-
 	int num = static_cast<int>(item->GetElementType());
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);
