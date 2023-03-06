@@ -5,7 +5,7 @@
 //------------------------------------
 // コンストラクタ
 //------------------------------------
-LineCollider2::LineCollider2()
+LineCollider_t::LineCollider_t()
 {
 	//絶対座標
 	vector[LINE_START] = { 0,0 };
@@ -18,7 +18,7 @@ LineCollider2::LineCollider2()
 //------------------------------------
 // コンストラクタ
 //------------------------------------
-LineCollider2::LineCollider2(Location point1, Location point2)
+LineCollider_t::LineCollider_t(Location point1, Location point2)
 {
 	//絶対座標
 	vector[LINE_START] = point1;
@@ -31,7 +31,7 @@ LineCollider2::LineCollider2(Location point1, Location point2)
 //--------------------------------------
 // デストラクタ
 //--------------------------------------
-LineCollider2::~LineCollider2()
+LineCollider_t::~LineCollider_t()
 {
 
 }
@@ -39,7 +39,7 @@ LineCollider2::~LineCollider2()
 //-----------------------------------
 // SphereColliderとの当たり判定
 //-----------------------------------
-bool LineCollider2::HitSphere(SphereCollider* sphere)const
+bool LineCollider_t::HitSphere(SphereCollider* sphere)const
 {
 	bool is_hit = false;
 	return is_hit;
@@ -48,7 +48,7 @@ bool LineCollider2::HitSphere(SphereCollider* sphere)const
 //-----------------------------------
 // BoxColliderとの当たり判定
 //-----------------------------------
-bool LineCollider2::HitBox(BoxCollider* box)const
+bool LineCollider_t::HitBox(BoxCollider* box)const
 {
 	bool is_hit = false;
 	return is_hit;
@@ -57,7 +57,7 @@ bool LineCollider2::HitBox(BoxCollider* box)const
 //-----------------------------------
 // LineColliderとの当たり判定
 //-----------------------------------
-bool LineCollider2::HitLine(LineCollider2* line)const
+bool LineCollider_t::HitLine(LineCollider_t* line)const
 {
 	bool is_hit = false;
 	return is_hit;
@@ -66,7 +66,7 @@ bool LineCollider2::HitLine(LineCollider2* line)const
 //-----------------------------------------------------
 // 線の端の座標の取得 始点か終点返す デフォルトは始点
 //-----------------------------------------------------
-Location LineCollider2::GetLocation(int index)const
+Location LineCollider_t::GetLocation(int index)const
 {
 	if (index < 2)
 	{
@@ -81,7 +81,7 @@ Location LineCollider2::GetLocation(int index)const
 //--------------------------------------------------
 // 始点、終点座標の設定 引数：座標、始点：0 終点：1
 //--------------------------------------------------
-void LineCollider2::SetLocation(Location location, int index)
+void LineCollider_t::SetLocation(Location location, int index)
 {
 	if (index < 2)
 	{

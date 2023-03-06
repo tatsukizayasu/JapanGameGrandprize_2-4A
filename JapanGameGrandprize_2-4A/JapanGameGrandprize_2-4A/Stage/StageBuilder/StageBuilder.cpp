@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 
+#define _DEV
+
 //------------------------------------
 // コンストラクタ
 //------------------------------------
@@ -14,11 +16,11 @@ StageBuilder::StageBuilder()
 	mouse = new SphereCollider();
 	mouse_pos = {};
 
-	if (LoadDivGraph("Images/Stage/map_chips.png", 10, 10, 1, 40, 40, block_images) == -1) 
+	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, 40, 40, block_images) == -1)
 	{
-		throw "Images/Stage/map_chips_test.png";
+		throw "Images/Stage/map_chips_.png";
 	}
-
+	select_collider = nullptr;
 	mode = BRUSH_MODE;
 
 	menu_cursor = 0;	
@@ -29,7 +31,20 @@ StageBuilder::StageBuilder()
 		arrow[i] = ' ';
 	}
 
-	line = new LineCollider2({0,360}, {1280,360});
+	current_brush = MAP_CHIP;
+
+#ifdef _DEV
+
+	Location loc[3] =
+	{
+		{200.f,200.f},
+		{600.f,300.f},
+		{1000.f,100.f}
+	};
+	line = new PolyLine(loc,3);
+	
+#endif // _DEV
+
 }
 
 //------------------------------------
@@ -84,13 +99,37 @@ void StageBuilder::Update()
 		break;
 	}
 
-	if (map_chips.size() != 0)
+
+#ifdef _DEV
+
+	vector<SphereCollider*> points = line->GetPoint();
+	for (int i = 0; i < points.size(); i++)
 	{
-		map_chips[0]->MoveLocation();
+		if (KeyManager::OnMouseClicked(MOUSE_INPUT_RIGHT))
+		{
+			if (mouse->HitSphere(points[i]))
+			{
+				select_collider = points[i];
+			}
+		}
+
+		if (KeyManager::OnMouseReleased(MOUSE_INPUT_RIGHT))
+		{
+			select_collider = nullptr;
+		}
+
 	}
 
-	line->MoveLocation();
-	line->SetLocation(mouse_pos, LINE_START);
+	if (select_collider != nullptr)
+	{
+		float set_x = (int)(mouse->GetLocation().x) / 10 * 10;
+		float set_y = (int)(mouse->GetLocation().y) / 10 * 10;
+		select_collider->SetLocation({ set_x,set_y });
+		line->Update();
+	}
+
+
+#endif // _DEV
 }
 
 //------------------------------------
@@ -119,18 +158,38 @@ void StageBuilder::Draw()const
 			frame_x, frame_y,
 			(double)frame_x * MAP_CHIP_SIZE + 20, (double)frame_y * MAP_CHIP_SIZE) + 20;
 	}
-
 #endif
+
+
+#ifdef _DEV
+
+	//line->DrawCollision();
+
+#endif // _DEV
+
+	DrawWhichMode();
+}
+
+//--------------------------------------
+// モードごとに分かれた描画
+//--------------------------------------
+void StageBuilder::DrawWhichMode()const
+{
+	if (mode == BRUSH_MODE)
+	{
+		DrawClassName();
+	}
+
 	if (mode == MENU_MODE)
 	{
 		DrawMenu();
 	}
+
 	if (mode == SAVE_MODE || mode == LOAD_MODE)
 	{
 		DrawFileInfo();
 	}
 
-	//line->DrawCollision();
 }
 
 //------------------------------------
@@ -155,10 +214,28 @@ void StageBuilder::UpdateMenu()
 //------------------------------------
 void StageBuilder::UpdateBrush()
 {
-	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_TAB))
 	{
-		MakeMapChip();
+		current_brush++;
+		if (CLASS_NUM <= current_brush)
+		{
+			current_brush -= CLASS_NUM;
+		}
 	}
+	switch (current_brush)
+	{
+	case MAP_CHIP:
+		if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+		{
+			MakeMapChip();
+		}
+		break;
+	case POLY_LINE:
+		MakePolyLine();
+		break;
+	}
+
 }
 
 //------------------------------------
@@ -379,6 +456,25 @@ void StageBuilder::DrawFile(float x, float y, const char* path, int font_size)co
 	}
 }
 
+//-------------------------------------
+// 現在のブラシになっているクラスを描画
+//-------------------------------------
+void StageBuilder::DrawClassName()const
+{
+	int draw_width;
+
+	int font_size = 20;
+	SetFontSize(font_size);
+	draw_width = GetDrawStringWidth(class_name[current_brush], -1);
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+	DrawBox(0, 0, draw_width+8, font_size+4, 0x000000, TRUE);
+	DrawBoxAA(0, 0, (float)draw_width+8, (float)font_size+4, 0xFFFFFF, FALSE, 3);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	DrawFormatString(4, 4, 0xffffff,"%s", class_name[current_brush]);
+
+}
+
 //------------------------------------
 // マップチップの作成
 //------------------------------------
@@ -398,6 +494,33 @@ void StageBuilder::MakeMapChip(float x, float y, float width, float height)
 {
 	map_chips.push_back(new MapChip(&block_images[0],
 		{ x ,y },{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
+}
+
+//------------------------------------
+// PolyLine classの生成
+//------------------------------------
+void StageBuilder::MakePolyLine()
+{
+
+}
+
+//------------------------------------
+// Sphere classの生成
+//------------------------------------
+void StageBuilder::MakeSphere()
+{
+	int x = (int)mouse->GetLocation().x / 10 * 10;
+	int y = (int)mouse->GetLocation().y / 10 * 10;
+
+
+}
+
+//------------------------------------
+// Line classの生成
+//------------------------------------
+void StageBuilder::MakeLine()
+{
+
 }
 
 //------------------------------------
