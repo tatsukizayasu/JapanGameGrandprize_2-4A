@@ -668,40 +668,43 @@ void Player::ElementUpdate()
 void Player::HpDamage(AttackResource attack)
 {
 
-	if (attack.damage > 0)
+	if (!damage_flg)
 	{
-		damage_flg = true;
-		hp -= attack.damage;
-
-		if (attack.type != nullptr)
+		if (attack.damage > 0)
 		{
-			for (int i = 0; i < attack.type_count; i++)
+			damage_flg = true;
+			hp -= attack.damage;
+
+			if (attack.type != nullptr)
 			{
-				switch (attack.type[i])
+				for (int i = 0; i < attack.type_count; i++)
 				{
-				case ENEMY_TYPE::NORMAL:
-					break;
-				case ENEMY_TYPE::FIRE:
-					break;
-				case ENEMY_TYPE::WATER:
-					break;
-				case ENEMY_TYPE::WIND:
-					break;
-				case ENEMY_TYPE::SOIL:
-					break;
-				case ENEMY_TYPE::THUNDER:
-					break;
-				default:
-					break;
+					switch (attack.type[i])
+					{
+					case ENEMY_TYPE::NORMAL:
+						break;
+					case ENEMY_TYPE::FIRE:
+						break;
+					case ENEMY_TYPE::WATER:
+						break;
+					case ENEMY_TYPE::WIND:
+						break;
+					case ENEMY_TYPE::SOIL:
+						break;
+					case ENEMY_TYPE::THUNDER:
+						break;
+					default:
+						break;
+					}
 				}
 			}
 		}
+	}
 
-		if (hp <= 0)
-		{
-			hp = 0;
-			player_state = PLAYER_STATE::DEATH;
-		}
+	if (hp <= 0)
+	{
+		hp = 0;
+		player_state = PLAYER_STATE::DEATH;
 	}
 }
 
