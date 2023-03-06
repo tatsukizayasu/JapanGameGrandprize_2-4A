@@ -36,6 +36,26 @@ struct Location
 {
 	float x;	//中心座標(x)
 	float y;	//中心座標(y)
+
+	Location operator +(Location location)
+	{
+		Location ret;
+
+		ret.x = this->x + location.x;
+		ret.y = this->y + location.y;
+
+		return ret;
+	}
+
+	Location operator -(Location location)
+	{
+		Location ret;
+
+		ret.x = this->x - location.x;
+		ret.y = this->y - location.y;
+
+		return ret;
+	}
 };
 
 //サイズ

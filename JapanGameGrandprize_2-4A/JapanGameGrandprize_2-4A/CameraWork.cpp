@@ -1,7 +1,7 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 
-CameraWork::Camera CameraWork::camera;
+Location CameraWork::camera;
 
 //#define DEBUG
 

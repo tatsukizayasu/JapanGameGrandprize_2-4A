@@ -46,8 +46,8 @@ private:
 	int block_images[110];		//ブロック画像
 	vector<MapChip*> map_chips;
 
-	//スフィア
-	//vector<SphereCollider*> 
+	//保留中のスフィア
+	vector<SphereCollider*> pending_sphere;
 
 	//ツール用
 	int mode;
@@ -87,10 +87,16 @@ public:
 	void DrawFileInfo()const;
 	//格子の描画
 	void DrawFrame()const;
+	//マウスの描画
+	void DrawMouse()const;
 	//ファイルの描画
 	void DrawFile(float x, float y, const char* path, int font_size)const;
 	//現在のブラシになっているクラスを描画
 	void DrawClassName()const;
+	//保留中のスフィアの描画
+	void DrawSphere()const;
+	//保留中のラインの描画
+	void DrawLine(Location start, Location end)const;
 
 	//マップチップを作成する
 	void MakeMapChip(); //クリックしたとき用
@@ -101,10 +107,8 @@ public:
 	void MakePolyLine();
 	//円
 	void MakeSphere();
-	//線
-	void MakeLine();
-	//線を作り切れなかったときにリセットする
-	void LineReset();
+	//保留中のオブジェクトをリセットする
+	void Trash();
 
 	//ファイルカウント
 	int FileCount(const char* path)const;
@@ -120,4 +124,5 @@ public:
 	void SaveStage(char* stage_name);
 	//CSVファイルからの読み込み
 	void LoadStage(char* stage_name);
+
 };

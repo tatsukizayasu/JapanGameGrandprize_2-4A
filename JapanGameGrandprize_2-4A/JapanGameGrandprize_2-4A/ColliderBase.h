@@ -2,9 +2,9 @@
 #include "DxLib.h"
 #include "Stage/StageBuilder/KeyManager.h"
 #include "define.h"
+#define _USE_MATH_DEFINES
 #include <math.h>
 
-#define _USE_MATH_DEFINES
 class ColliderBase
 {
 public:

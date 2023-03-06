@@ -17,6 +17,9 @@ public:
 		radius = 5;
 	}
 
+	//•`‰æ
+	virtual void Draw()const;
+
 	//SphereCollider“–‚½‚è”»’è
 	bool HitSphere(const SphereCollider* sphere_collider) const;
 
