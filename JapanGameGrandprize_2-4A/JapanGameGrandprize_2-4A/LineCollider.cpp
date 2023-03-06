@@ -39,7 +39,7 @@ LineCollider_t::~LineCollider_t()
 //-----------------------------------
 // SphereCollider‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-bool LineCollider_t::HitSphere(SphereCollider* sphere)const
+bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 {
 	bool is_hit = false;
 	return is_hit;
@@ -48,7 +48,7 @@ bool LineCollider_t::HitSphere(SphereCollider* sphere)const
 //-----------------------------------
 // BoxCollider‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-bool LineCollider_t::HitBox(BoxCollider* box)const
+bool LineCollider_t::HitBox(const BoxCollider* box)const
 {
 	bool is_hit = false;
 	return is_hit;
@@ -57,7 +57,7 @@ bool LineCollider_t::HitBox(BoxCollider* box)const
 //-----------------------------------
 // LineCollider‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-bool LineCollider_t::HitLine(LineCollider_t* line)const
+bool LineCollider_t::HitLine(const LineCollider_t* line)const
 {
 	bool is_hit = false;
 	return is_hit;

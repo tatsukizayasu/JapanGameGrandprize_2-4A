@@ -15,9 +15,11 @@ enum class SLIME_ATTACK
 	AFTER_ATTACK,//UŒ‚‚µ‚½Œã
 };
 
-class EnemySlime : public EnemyBase, public BoxCollider
+class EnemySlime :
+	public EnemyBase
 {
 private:
+	bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
 
 	int color;
 	DIRECTION direction;
@@ -51,12 +53,12 @@ public:
 	void  Attack(Location) override;
 
 	//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
-	AttackResource HitCheck(const BoxCollider* collider) override;
+	AttackResource Hit() override;
 
 	//€–S
 	void Death() override;
 
-	virtual bool HitBullet(const BulletBase* bullet)override;
+	virtual void HitBullet(const BulletBase* bullet)override;
 
 	//À•W‚Ìæ“¾
 	Location GetLocation() const override;

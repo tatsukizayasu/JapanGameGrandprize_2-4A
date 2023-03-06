@@ -13,13 +13,13 @@ protected:
 public:
 
 	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è
-	bool HitSphere(const class SphereCollider* sphere_collider) const;
+	bool HitSphere(const class SphereCollider* sphere_collider) const override;
 
 	//BoxCollider‚Æ‚Ì“–‚½‚è”»’è
-	bool HitBox(const BoxCollider* box_collider) const;
+	bool HitBox(const class BoxCollider* box_collider) const override;
 
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
-	bool HitLine(const class LineCollider* line_collider) const;
+	bool HitLine(const class LineCollider_t* line_collider) const override;
 	
 	//’†SÀ•W‚Ìæ“¾
 	Location GetLocation()const;

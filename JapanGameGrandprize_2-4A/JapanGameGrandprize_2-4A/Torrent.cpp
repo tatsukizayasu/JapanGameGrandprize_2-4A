@@ -53,7 +53,7 @@ void  Torrent::Attack(Location player_location)
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource Torrent::HitCheck(const BoxCollider* collider)
+AttackResource Torrent::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
@@ -71,11 +71,8 @@ void Torrent::Death()
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-bool Torrent::HitBullet(const BulletBase* bullet)
+void Torrent::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-
-	return ret;
 }
 
 //-----------------------------------

@@ -1,6 +1,7 @@
 #include "Mage.h"
 #include "CameraWork.h"
 #include "MageBullet.h"
+#include "BulletManager.h"
 
 //魔法弾の発射レート
 #define MAGE_SHOT_RATE 20
@@ -17,6 +18,12 @@
 //体力
 #define MAGE_HP 100
 
+//移動範囲
+#define MAGE_TELEPORT_AREA 200
+
+//攻撃間隔
+#define MAGE_ATTACK_INTERVAL 120
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -27,6 +34,7 @@ Mage::Mage()
 	hp = MAGE_HP;
 	shot_rate = 0;
 	shot_count = 0;
+	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
 	type = new ENEMY_TYPE;
@@ -38,7 +46,7 @@ Mage::Mage()
 
 	/*当たり判定の設定*/
 	location.x = 640.0f;
-	location.y = 1220.0f;
+	location.y = 1120.0f;
 	area.width = 40;
 	area.height = 80;
 
@@ -121,14 +129,6 @@ Mage::Mage()
 		drop_volume += volume;
 	}
 
-	bullet = new EnemyBulletBase * [MAGE_BULLET_MAX];
-
-	//弾の初期化
-	for (int i = 0; i < MAGE_BULLET_MAX; i++)
-	{
-		bullet[i] = nullptr;
-	}
-
 }
 
 //-----------------------------------
@@ -144,13 +144,6 @@ Mage::~Mage()
 	}
 
 	delete[] drop_element;
-
-	for (int i = 0; i < MAGE_BULLET_MAX; i++)
-	{
-		delete bullet[i];
-	}
-
-	delete[] bullet;
 }
 
 //-----------------------------------
@@ -158,22 +151,10 @@ Mage::~Mage()
 //-----------------------------------
 void Mage::Update()
 {
-	for (int i = 0; i < MAGE_BULLET_MAX; i++)
+
+	if (0 <= attack_interval)
 	{
-		if (bullet[i] == nullptr)
-		{
-			break;
-		}
-
-		bullet[i]->Update();
-
-		if (bullet[i]->ScreenOut()) //画面外に出たら削除
-		{
-			delete bullet[i];
-			bullet[i] = nullptr;
-			SortBullet(i);
-			i--;
-		}
+		attack_interval--;
 	}
 
 	Poison();
@@ -195,6 +176,7 @@ void Mage::Idol()
 
 	scroll.x = location.x - CameraWork::GetCamera().x;
 	scroll.y = location.y - CameraWork::GetCamera().y;
+
 	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
 		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
 	{
@@ -209,18 +191,26 @@ void Mage::Move(const Location player_location)
 {
 	Location scroll; //画面スクロールを考慮したX座標
 
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
+	if (attack_interval < 0)
+	{
+		state = ENEMY_STATE::ATTACK;
+	}
 
 	scroll.x = location.x - CameraWork::GetCamera().x;
 	scroll.y = location.y - CameraWork::GetCamera().y;
 
-	state = ENEMY_STATE::ATTACK;
 	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) ||
 		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
 	{
 		state = ENEMY_STATE::IDOL;
 	}
+}
+
+//-----------------------------------
+//テレポート
+//-----------------------------------
+void Mage::Teleport()
+{
 
 }
 
@@ -235,35 +225,17 @@ void  Mage::Attack(Location player_location)
 	{
 		state = ENEMY_STATE::MOVE;
 		shot_count = 0;
+		attack_interval = MAGE_ATTACK_INTERVAL;
 	}
 }
 
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource Mage::HitCheck(const BoxCollider* collider)
+AttackResource Mage::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	for (int i = 0; i < MAGE_BULLET_MAX; i++)
-	{
-		if (bullet[i] == nullptr)
-		{
-			break;
-		}
-
-		if (bullet[i]->HitBox(collider))
-		{
-			ENEMY_TYPE attack_type[1] = { bullet[i]->GetType() };
-			ret.damage += bullet[i]->GetDamage();
-			ret.type = attack_type;
-			ret.type_count = 1;
-
-			delete bullet[i];
-			bullet[i] = nullptr;
-			SortBullet(i);
-		}
-	}
 	return ret;
 }
 
@@ -284,71 +256,41 @@ void Mage::CreateBullet(Location player_location)
 
 	if (shot_rate % MAGE_SHOT_RATE == 0)
 	{
-		for (int i = 0; i < MAGE_BULLET_MAX; i++)
-		{
-			if (bullet[i] == nullptr)
-			{
-				bullet[i] = new MageBullet(*type, location, player_location);
-				shot_count++;
-				break;
-			}
-		}
-	}
-}
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new MageBullet(*type, location, player_location));
 
-//-----------------------------------
-//弾の並び替え
-//-----------------------------------
-void Mage::SortBullet(int bullet_num)
-{
-	//弾の中身をソートする
-	for (int i = bullet_num + 1; i < MAGE_BULLET_MAX; i++)
-	{
-		if ((bullet[i] == nullptr))
-		{
-			break;
-		}
-		bullet[i - 1] = bullet[i];
-		bullet[i] = nullptr;
+		shot_count++;
 	}
 }
 
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-bool Mage::HitBullet(const BulletBase* bullet)
+void Mage::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-
-	if (HitSphere(bullet))
+	switch (bullet->GetAttribute())
 	{
-		switch (bullet->GetAttribute())
-		{
-		case ATTRIBUTE::NORMAL:
-			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
-			break;
-		case ATTRIBUTE::EXPLOSION:
-			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
-			break;
-		case ATTRIBUTE::MELT:
-			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
-			break;
-		case ATTRIBUTE::POISON:
-			poison_damage = bullet->GetDamage();
-			poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
-			break;
-		case ATTRIBUTE::HEAL:
-			break;
-		default:
-			break;
-		}
-		ret = true;
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		break;
+	case ATTRIBUTE::POISON:
+		poison_damage = bullet->GetDamage();
+		poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
-
-	return ret;
 }
 
 //-----------------------------------
@@ -362,25 +304,8 @@ void Mage::Draw() const
 	draw_location.x = location.x - CameraWork::GetCamera().x;
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
-	DrawBox(draw_location.x, draw_location.y, draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
-
-	for (int i = 0; i < MAGE_BULLET_MAX; i++)
-	{
-		if (bullet[i] == nullptr)
-		{
-			break;
-		}
-
-		bullet[i]->Draw();
-	}
-}
-
-//-----------------------------------
-//弾の取得
-//-----------------------------------
-EnemyBulletBase** Mage::GetBullet() const
-{
-	return bullet;
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2, image, TRUE);
 }
 
 //-----------------------------------
