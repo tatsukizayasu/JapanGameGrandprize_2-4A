@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "ElementItem.h"
 #include "EnumEnemyType.h"
+#include "BoxCollider.h"
 
 //各属性のドロップ数
 #define FIRE_DROP 3
@@ -53,7 +54,8 @@ enum class ENEMY_STATE
 	DEATH,  //死亡
 };
 
-class EnemyBase
+class EnemyBase :
+	public BoxCollider
 {
 public:
 
@@ -79,13 +81,13 @@ public:
 	virtual void  Attack(Location) = 0;
 
 	//攻撃が当たっているか
-	virtual AttackResource HitCheck(const BoxCollider* collider) = 0;
+	virtual AttackResource Hit() = 0;
 
 	//死亡
 	virtual void Death() = 0;
 
 	//プレイヤーの弾との当たり判定
-	virtual bool HitBullet(const BulletBase* bullet) = 0;
+	virtual void HitBullet(const BulletBase* bullet) = 0;
 
 	//ドロップする種類の量の取得
 	int GetDropTypeVolume() const;

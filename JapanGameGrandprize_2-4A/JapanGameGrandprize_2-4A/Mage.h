@@ -6,7 +6,7 @@
 #define MAGE_BULLET_MAX 5
 
 class Mage :
-    public EnemyBase,public BoxCollider
+    public EnemyBase
 {
 private:
     bool can_teleport; //テレポート可能か
@@ -45,13 +45,13 @@ public:
     void  Attack(Location) override;
 
     //攻撃が当たっているか
-    AttackResource HitCheck(const BoxCollider* collider) override;
+    AttackResource Hit() override;
 
     //死亡
     void Death() override;
 
     //プレイヤーの弾との当たり判定
-    bool HitBullet(const BulletBase* bullet) override;
+    void HitBullet(const BulletBase* bullet) override;
 
     //描画
     void Draw() const override;

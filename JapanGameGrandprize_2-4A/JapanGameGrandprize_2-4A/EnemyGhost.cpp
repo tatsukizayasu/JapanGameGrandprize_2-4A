@@ -45,13 +45,14 @@
 EnemyGhost::EnemyGhost()
 {
 	can_delete = false;
+	attack = false;
+
 	hp = 10;
 	location.x = 600;
 	location.y = 1200;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
-	standby_count = 0;
 	physical_attack = false;
 	magic_attack = false;
 	kind = ENEMY_KIND::GHOST;
@@ -146,12 +147,13 @@ void EnemyGhost::Move(const Location player_location)
 //-----------------------------------
 void  EnemyGhost::Attack(Location player_location)
 {
-	standby_count++;
-	if (standby_time < standby_count)
+	standby_time--;
+	if (standby_time < 0)
 	{
 		switch (attack_state)
 		{
 		case GHOST_ATTACK::PHYSICAL_ATTACK:
+			attack = false;
 			physical_attack = false;
 			attack_state = GHOST_ATTACK::NONE;
 			break;
@@ -164,7 +166,6 @@ void  EnemyGhost::Attack(Location player_location)
 			break;
 		}
 		standby_time = 0;
-		standby_count = 0;
 		state = ENEMY_STATE::MOVE;
 	}
 }
@@ -172,19 +173,17 @@ void  EnemyGhost::Attack(Location player_location)
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource EnemyGhost::HitCheck(const BoxCollider* collider)
+AttackResource EnemyGhost::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK)
+	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK && (!attack))
 	{
-		if (HitBox(collider))
-		{
-			ENEMY_TYPE attack_type[1] = { *type };
-			ret.damage = GHOST_ATTACK_DAMAGE;
-			ret.type = attack_type;
-			ret.type_count = 1;
-		}
+		attack = true;
+		ENEMY_TYPE attack_type[1] = { *type };
+		ret.damage = GHOST_ATTACK_DAMAGE;
+		ret.type = attack_type;
+		ret.type_count = 1;
 	}
 
 	return ret;
@@ -283,38 +282,32 @@ void EnemyGhost::GhostMove(const Location player_location)
 //-----------------------------------
 // プレイヤーの弾丸との当たり判定
 //-----------------------------------
-bool EnemyGhost::HitBullet(const BulletBase* bullet)
+void EnemyGhost::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-	if (HitSphere(bullet))
+	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
-		switch (bullet->GetAttribute()) //受けた化合物の属性
-		{
-		case ATTRIBUTE::NORMAL: 
-			hp -= bullet->GetDamage() * 10; //無効
-			break;
-	//	case ATTRIBUTE::EXPLOSION:
-	//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
-	//		break;
-	//	case ATTRIBUTE::MELT:
-	//		hp -= bullet->GetDamage() * 0; //無効
-	//		break;
-	//	case ATTRIBUTE::POISON:
-	//		poison_damage = bullet->GetDamage() * 0; //無効
-	//		poison_time = bullet->GetDebuffTime() * 0; //無効
-	//		break;
-	//	case ATTRIBUTE::PARALYSIS:
-	//		paralysis_time = bullet->GetDebuffTime() * 0; //無効
-	//		paralysis_time = bullet->GetDamage() * 0; //無効
-	//		break;
-	//	case ATTRIBUTE::HEAL:
-	//		break;
-	//	default:
-	//		break;
-		}
-		ret = true;
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage() * 10; //無効
+		break;
+		//	case ATTRIBUTE::EXPLOSION:
+		//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+		//		break;
+		//	case ATTRIBUTE::MELT:
+		//		hp -= bullet->GetDamage() * 0; //無効
+		//		break;
+		//	case ATTRIBUTE::POISON:
+		//		poison_damage = bullet->GetDamage() * 0; //無効
+		//		poison_time = bullet->GetDebuffTime() * 0; //無効
+		//		break;
+		//	case ATTRIBUTE::PARALYSIS:
+		//		paralysis_time = bullet->GetDebuffTime() * 0; //無効
+		//		paralysis_time = bullet->GetDamage() * 0; //無効
+		//		break;
+		//	case ATTRIBUTE::HEAL:
+		//		break;
+		//	default:
+		//		break;
 	}
-	return ret;
 }
 
 //-----------------------------------

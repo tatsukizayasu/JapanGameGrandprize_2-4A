@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
-class harpy :public EnemyBase
+class harpy :
+	public EnemyBase
 {
 
 };

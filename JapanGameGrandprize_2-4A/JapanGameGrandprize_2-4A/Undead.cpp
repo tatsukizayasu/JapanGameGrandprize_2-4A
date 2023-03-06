@@ -33,6 +33,7 @@ Undead::Undead()
 {
 	/*初期化*/
 	can_delete = false;
+	attack = false;
 	hp = 100;
 	damage = 0;
 	attack_interval = 0;
@@ -185,6 +186,7 @@ void  Undead::Attack(Location player_location)
 	attack_time--;
 	if (attack_time < 0)
 	{
+		attack = false;
 		state = ENEMY_STATE::MOVE;
 		image = 0xffffff;
 		attack_interval = UNDEAD_ATTACK_INTERVAL;
@@ -194,19 +196,17 @@ void  Undead::Attack(Location player_location)
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource Undead::HitCheck(const BoxCollider* collider)
+AttackResource Undead::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (state == ENEMY_STATE::ATTACK)
+	if (!attack)
 	{
-		if (HitBox(collider))
-		{
-			ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
-			ret.damage = UNDEAD_ATTACK_DAMAGE;
-			ret.type = attack_type;
-			ret.type_count = 1;
-		}
+		attack = true;
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
+		ret.damage = UNDEAD_ATTACK_DAMAGE;
+		ret.type = attack_type;
+		ret.type_count = 1;
 	}
 
 	return ret;
@@ -223,41 +223,31 @@ void Undead::Death()
 //-----------------------------------
 // プレイヤーの弾との当たり判定
 //-----------------------------------
-bool Undead::HitBullet(const BulletBase* bullet)
+void Undead::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-
-	if (HitSphere(bullet))
+	switch (bullet->GetAttribute())
 	{
-
-		switch (bullet->GetAttribute())
-		{
-		case ATTRIBUTE::NORMAL:
-			hp -= bullet->GetDamage();
-			break;
-		case ATTRIBUTE::EXPLOSION:
-			hp -= bullet->GetDamage();
-			break;
-		case ATTRIBUTE::MELT:
-			hp -= bullet->GetDamage();
-			break;
-		case ATTRIBUTE::POISON:
-			poison_damage = bullet->GetDamage();
-			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			paralysis_time = bullet->GetDebuffTime() * 0;
-			break;
-		case ATTRIBUTE::HEAL:
-			break;
-		default:
-			break;
-		}
-
-		ret = true;
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage();
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage();
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage();
+		break;
+	case ATTRIBUTE::POISON:
+		poison_damage = bullet->GetDamage();
+		poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * 0;
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
-
-	return ret;
 }
 
 //-----------------------------------

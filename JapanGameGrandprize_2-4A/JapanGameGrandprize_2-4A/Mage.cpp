@@ -232,7 +232,7 @@ void  Mage::Attack(Location player_location)
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource Mage::HitCheck(const BoxCollider* collider)
+AttackResource Mage::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
@@ -266,39 +266,31 @@ void Mage::CreateBullet(Location player_location)
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-bool Mage::HitBullet(const BulletBase* bullet)
+void Mage::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-
-	if (HitSphere(bullet))
+	switch (bullet->GetAttribute())
 	{
-		switch (bullet->GetAttribute())
-		{
-		case ATTRIBUTE::NORMAL:
-			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
-			break;
-		case ATTRIBUTE::EXPLOSION:
-			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
-			break;
-		case ATTRIBUTE::MELT:
-			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
-			break;
-		case ATTRIBUTE::POISON:
-			poison_damage = bullet->GetDamage();
-			poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
-			break;
-		case ATTRIBUTE::HEAL:
-			break;
-		default:
-			break;
-		}
-		ret = true;
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		break;
+	case ATTRIBUTE::POISON:
+		poison_damage = bullet->GetDamage();
+		poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
-
-	return ret;
 }
 
 //-----------------------------------

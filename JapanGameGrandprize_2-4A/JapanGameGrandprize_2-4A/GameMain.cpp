@@ -106,6 +106,10 @@ void GameMain::EnemyUpdate()
 				break;
 			case ENEMY_STATE::ATTACK:
 				enemy[i]->Attack(player->GetLocation());
+				if (player->HitBox(enemy[i]))
+				{
+					player->HpDamage(enemy[i]->Hit());
+				}
 				break;
 			case ENEMY_STATE::DEATH:
 				enemy[i]->Death();
@@ -115,8 +119,6 @@ void GameMain::EnemyUpdate()
 				break;
 			}
 
-			player->HpDamage(enemy[i]->HitCheck(player));
-
 			//ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
@@ -125,8 +127,9 @@ void GameMain::EnemyUpdate()
 					break;
 				}
 
-				if (enemy[i]->HitBullet(player_bullet[j]))
+				if (player_bullet[j]->HitBox(enemy[i]))
 				{
+					enemy[i]->HitBullet(player_bullet[j]);
 					delete player_bullet[j];
 					player_bullet[j] = nullptr;
 					player->SortBullet(j);
