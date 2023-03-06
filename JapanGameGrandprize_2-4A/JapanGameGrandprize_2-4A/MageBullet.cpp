@@ -5,6 +5,7 @@
 #include "CameraWork.h"
 
 #define MAGE_BULLET_SPEED 5
+#define MAGE_BULLET_DAMAGE 2
 
 //-----------------------------------
 //コンストラクタ
@@ -17,7 +18,7 @@ MageBullet::MageBullet(ENEMY_TYPE type, Location spawn_location, Location player
 	this->type = type;
 
 	image = 0;
-
+	damage = MAGE_BULLET_DAMAGE;
 	float radian; //角度
 	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
 	x_speed = speed * cosf(radian);

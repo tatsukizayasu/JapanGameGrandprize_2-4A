@@ -4,7 +4,7 @@
 #include "Player.h"
 
 class Torrent :
-    public EnemyBase,public BoxCollider
+    public EnemyBase
 {
 private:
 
@@ -29,13 +29,13 @@ public:
     void  Attack(Location) override;
 
     //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
-    AttackResource HitCheck(const BoxCollider* collider) override;
+    AttackResource Hit() override;
 
     //€–S
     void Death() override;
 
     //ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
-    bool HitBullet(const BulletBase* bullet) override;
+    void HitBullet(const BulletBase* bullet) override;
 
     //•`‰æ
     void Draw() const override;

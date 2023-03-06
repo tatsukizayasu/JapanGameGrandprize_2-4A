@@ -5,10 +5,8 @@
 #include "CameraWork.h"
 #include "Item.h"
 #include <iostream>
-#include <stdio.h>
 
-//プレイヤーが持っている元素の種類
-#define PLAYER_ELEMENT 7
+
 
 //-----------------------------------
 // コンストラクタ
@@ -23,7 +21,8 @@ Player::Player()
 	area.width = image_size_x;
 	area.height = image_size_y;
 	bullet_count = 0;
-	count = 0;
+	shoot_count = 0;
+	flashing_count = 0;
 	damage_count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
@@ -31,6 +30,7 @@ Player::Player()
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
+	damage = 0;
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet = new BulletBase * [BULLET_MAX];
@@ -100,7 +100,9 @@ Player::Player(Stage* stage)
 	area.height = image_size_y;
 	bullet_count = 0;
 	damage_count = 0;
-	count = 0;
+	shoot_count = 0;
+	damage = 0;
+	flashing_count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
@@ -140,8 +142,6 @@ Player::Player(Stage* stage)
 
 	beam = nullptr;
 
-	pouch = new Pouch();
-
 	stage = new Stage();
 
 	area = { 80,40 };
@@ -152,6 +152,14 @@ Player::Player(Stage* stage)
 	{
 		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
 	}
+
+	pouch = new Pouch();
+
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		pouch->SetElement(element[i], i);
+	}
+
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
@@ -179,7 +187,6 @@ void Player::Draw() const
 	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
 	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
 
-	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 	//FUELバーの表示ここから
 	if (fuel >= 50)
 	{
@@ -224,20 +231,21 @@ void Player::Draw() const
 	//ダメージを受けた時点滅する
 	if (damage_flg)
 	{
-		if (damage_count < 5)
+		if (flashing_count < 5)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
-			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
-		else if (10 < damage_count < 10)
+		else if (flashing_count < 10)
 		{
-			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 		}
+		else {}
 	}
 	else
 	{
-
+		DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 	}
 
 #ifdef _DEBUG
@@ -247,6 +255,7 @@ void Player::Draw() const
 	}
 
 #endif
+
 
 	SetFontSize(30);
 
@@ -288,16 +297,41 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
-
-	damage_count++;
-	if (damage_count >= 10)
+	if (damage_flg == true)
 	{
-		damage_count = 0;
+		damage_count++;
+		if (damage_count < damage)
+		{
+			if (hp > 0)
+			{
+				hp--;
+			}
+			else
+			{
+				hp = 0;
+				player_state = PLAYER_STATE::DEATH;
+			}
+		}
+
+		if (flashing_count++ >= 10)
+		{
+			flashing_count = 0;
+		}
+
+		if (damage_count % 120 == 0)
+		{
+			damage_flg = false;
+			damage_count = 0;
+		}
 	}
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
 		pouch_open = true;
+		for (int i = 0; i < PLAYER_ELEMENT; i++)
+		{
+			pouch->SetElement(element[i], i);
+		}
 	}
 	else if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
 	{
@@ -327,15 +361,17 @@ void Player::Update()
 		NotInputStick();
 	}
 
-	//RBボタン入力
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
-	{
-		count++;
 
-		if (count % 30 == 0)
+	//RBボタン入力
+	if (!pouch_open)
+	{
+		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 		{
-			bullet_count++;
-			Shoot_Gun();
+			if (shoot_count++ % 30 == 0)
+			{
+				bullet_count++;
+				Shoot_Gun();
+			}
 		}
 	}
 
@@ -376,7 +412,10 @@ void Player::Update()
 	}
 
 	//弾の属性の切り替え処理
-	ElementUpdate();
+	if (!pouch_open)
+	{
+		ElementUpdate();
+	}
 }
 
 //スティックを入力していないとき
@@ -659,15 +698,40 @@ void Player::ElementUpdate()
 //-----------------------------------
 //ダメージを受けた時
 //-----------------------------------
-void Player::Hp_Damage(int damage_value)
+void Player::HpDamage(AttackResource attack)
 {
-	damage_flg = true;
-	hp -= damage_value;
 
-	if (hp <= 0)
+	if (!damage_flg)
 	{
-		hp = 0;
-		player_state = PLAYER_STATE::DEATH;
+		if (attack.damage > 0)
+		{
+			damage_flg = true;
+			damage = attack.damage;
+
+			if (attack.type != nullptr)
+			{
+				for (int i = 0; i < attack.type_count; i++)
+				{
+					switch (attack.type[i])
+					{
+					case ENEMY_TYPE::NORMAL:
+						break;
+					case ENEMY_TYPE::FIRE:
+						break;
+					case ENEMY_TYPE::WATER:
+						break;
+					case ENEMY_TYPE::WIND:
+						break;
+					case ENEMY_TYPE::SOIL:
+						break;
+					case ENEMY_TYPE::THUNDER:
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -691,7 +755,6 @@ void Player::Hp_Heal(int heal_value)
 //-----------------------------------
 void Player::SetElementItem(class Item* item)
 {
-
 	int num = static_cast<int>(item->GetElementType());
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);

@@ -154,6 +154,7 @@
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BulletManager.h" />
     <ClInclude Include="ElementItem.h" />
     <ClInclude Include="EnemyBulletBase.h" />
     <ClInclude Include="EnumElementItem.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="LineCollider.h" />
     <ClInclude Include="Stage\StageBuilder\PolyLine.h" />
     <ClInclude Include="Pouch.h" />
+    <ClInclude Include="Stage\Element\Element_Wooden_Floor.h" />
     <ClInclude Include="Stage\StageBuilder\Debug.h" />
     <ClInclude Include="Stage\StageBuilder\Directory.h" />
     <ClInclude Include="EfectBeam.h" />
@@ -197,6 +199,7 @@
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="EnemyBulletBase.cpp" />
     <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />
@@ -213,6 +216,7 @@
     <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="Stage\StageBuilder\PolyLine.cpp" />
     <ClCompile Include="Pouch.cpp" />
+    <ClCompile Include="Stage\Element\Element_Wooden_Floor.cpp" />
     <ClCompile Include="Stage\StageBuilder\Directory.cpp" />
     <ClCompile Include="EfectExplosion.cpp" />
     <ClCompile Include="EnemyBase.cpp" />

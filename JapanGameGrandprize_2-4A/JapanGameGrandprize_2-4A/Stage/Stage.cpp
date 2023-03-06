@@ -47,6 +47,9 @@ Stage::Stage()
 		}
 	}
 
+	collision_chip = { 0, 0 };
+	collision_dir = { 0, 0 };
+
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
 #endif
@@ -83,30 +86,52 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
-	/*int player_top = (player->GetLocation().y - CHIP_SIZE) / CHIP_SIZE;
-	int player_bottom = (player->GetLocation().y + CHIP_SIZE) / CHIP_SIZE;
-	int player_left = (player->GetLocation().x - CHIP_SIZE) / CHIP_SIZE;
-	int player_right = (player->GetLocation().x + CHIP_SIZE) / CHIP_SIZE;
-	if (0<player_top&& mapchip.at(player_top) != nullptr)
-	{
-		mapchip.at(player_top)->Update(player);
-	}
-	if (player_bottom < map_data.size() && mapchip.at(player_bottom) != nullptr)
-	{
-		mapchip.at(player_bottom)->Update(player);
-	}
-	if (0 < player_left && mapchip.at(player_left) != nullptr)
-	{
-		mapchip.at(player_left)->Update(player);
-	}
-	if (player_right < map_data.at(0).size() && mapchip.at(player_right) != nullptr)
-	{
-		mapchip.at(player_right)->Update(player);
-	}*/
 
-	for (int i = 0; i < mapchip.size(); i++)
+	//当たり判定演算範囲
+	struct DrawArea
 	{
-		mapchip.at(i)->Update(player);
+		float width;
+		float height;
+	} draw;
+
+	draw = { SCREEN_WIDTH + CHIP_SIZE,SCREEN_HEIGHT + CHIP_SIZE };
+
+	CameraWork::Camera camera = CameraWork::GetCamera();
+
+	for (auto& m : mapchip)
+	{
+		if (m == nullptr) continue;
+
+		float x = m->GetLocation().x;
+		float y = m->GetLocation().y;
+		float w = m->GetArea().width;
+		float h = m->GetArea().height;
+
+		// 画面内にあるMapChipオブジェクトだけUpdateする
+		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
+
+		//当たっているオブジェクトの座標を更新
+		collision_dir = m->GetMapChip_Collision();
+		if (collision_dir.x != 0 || collision_dir.y != 0) {
+			collision_chip.x = m->GetLocation().x;
+			collision_chip.y = m->GetLocation().y;
+			break;
+		}
+
+		m->Update(player);
+
+		//当たっている方向を更新
+		collision_dir = m->GetMapChip_Collision();
+		if (collision_dir.y != 0) {
+			//clsDx();
+			//printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
+			collision_dir_w = collision_dir;
+
+			if (collision_dir.x != 0) {
+				//speed_x = 0.0f;
+			}
+			
+		}
 
 	}
 
@@ -120,7 +145,7 @@ void Stage::Update(Player* player)
 //-----------------------------------
 void Stage::Draw()
 {
-
+	
 	//マップチップ		描画
 
 	//描画範囲

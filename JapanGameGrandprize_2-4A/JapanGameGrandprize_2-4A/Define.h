@@ -1,5 +1,8 @@
 #pragma once
 
+//プレイヤーが持っている元素の種類
+#define PLAYER_ELEMENT 7
+
 #define SCREEN_HEIGHT 720	//画面サイズ (縦)
 #define SCREEN_WIDTH 1280	//画面サイズ (横)
 #define GRAVITY 10
@@ -64,3 +67,4 @@ struct Area
 	float height;	//縦
 	float width;	//横
 };
+

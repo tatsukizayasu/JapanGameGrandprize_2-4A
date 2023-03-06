@@ -27,6 +27,17 @@ private:
 	int background_images;
 	//ブロック画像
 	int block_images[110];
+
+	//当たったオブジェクトの座標	構造体
+	POINT collision_chip;
+
+	//当たっている方向		構造体
+	//X[右:1, -左:-1], Y[上:1, 下:-1]
+	POINT collision_dir;
+
+	//当たっている方向	(値渡し用)	構造体
+	POINT collision_dir_w;
+
 public:
 
 	/// <summary>
@@ -61,5 +72,21 @@ public:
 	/// マップチップオブジェクトのGetter
 	/// </summary>
 	/// <returns>ベクター型(MapChipオブジェクト型)：MapChip</returns>	
-	std::vector<MapChip*> GetMapChip() { return mapchip; };
+	/// ※全要素をループして使わないこと
+	//std::vector<MapChip*> GetMapChip() { return mapchip; };
+
+
+	/// <summary>
+	/// **プレイヤーとステージの当たり判定用**
+	/// 当たったマップチップの方向のGetter
+	/// </summary>
+	/// <returns>POINT型(構造体型) X[右:1, -左:-1], Y[上:1, 下:-1]</returns>	
+	POINT GetCollision_Chip() { POINT w = collision_dir_w;  collision_dir_w = { 0, 0 };  return w; }
+
+	/// <summary>
+	/// **プレイヤーとステージの当たり判定用**
+	/// 当たったマップチップ座標のGetter
+	/// </summary>
+	/// <returns>POINT型(構造体型) X, Y</returns>	
+	POINT GetCollision_Chip_Location() { POINT w = collision_chip;  collision_chip = { 0, 0 };  return w; }
 };
