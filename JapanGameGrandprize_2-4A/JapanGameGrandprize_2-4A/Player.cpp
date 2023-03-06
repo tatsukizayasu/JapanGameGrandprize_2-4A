@@ -233,7 +233,7 @@ void Player::Draw() const
 		{
 			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 		}
-		else{}
+		else {}
 	}
 	else
 	{
@@ -667,34 +667,41 @@ void Player::ElementUpdate()
 //-----------------------------------
 void Player::HpDamage(AttackResource attack)
 {
-	damage_flg = true;
-	hp -= attack.damage;
 
-	for (int i = 0; i < attack.type_count; i++)
+	if (attack.damage > 0)
 	{
-		switch (attack.type[i])
+		damage_flg = true;
+		hp -= attack.damage;
+
+		if (attack.type != nullptr)
 		{
-		case ENEMY_TYPE::NORMAL:
-			break;
-		case ENEMY_TYPE::FIRE:
-			break;
-		case ENEMY_TYPE::WATER:
-			break;
-		case ENEMY_TYPE::WIND:
-			break;
-		case ENEMY_TYPE::SOIL:
-			break;
-		case ENEMY_TYPE::THUNDER:
-			break;
-		default:
-			break;
+			for (int i = 0; i < attack.type_count; i++)
+			{
+				switch (attack.type[i])
+				{
+				case ENEMY_TYPE::NORMAL:
+					break;
+				case ENEMY_TYPE::FIRE:
+					break;
+				case ENEMY_TYPE::WATER:
+					break;
+				case ENEMY_TYPE::WIND:
+					break;
+				case ENEMY_TYPE::SOIL:
+					break;
+				case ENEMY_TYPE::THUNDER:
+					break;
+				default:
+					break;
+				}
+			}
 		}
-	}
 
-	if (hp <= 0)
-	{
-		hp = 0;
-		player_state = PLAYER_STATE::DEATH;
+		if (hp <= 0)
+		{
+			hp = 0;
+			player_state = PLAYER_STATE::DEATH;
+		}
 	}
 }
 
