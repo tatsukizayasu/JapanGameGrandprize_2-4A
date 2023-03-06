@@ -43,7 +43,7 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 		image_size.height = (float)y;
 	}
 
-	collision_dir = 0;
+	collision_dir = { 0,0 };
 
 }
 
@@ -63,38 +63,27 @@ void MapChip::Update(Player* player)
 
 	if (HitBox(player)) {
 		//上
-		//if (location.y < player->GetLocation().y) {
-		//	collision_dir = 1;
-		//}
+		if (location.y < player->GetLocation().y) {
+			collision_dir.y = 1;
+		}
+		//下
+		else if (location.y > player->GetLocation().y) {
+			collision_dir.y = -1;
+		}
+
+
 
 		//右
 		if (location.x > player->GetLocation().x) {
-				collision_dir = 2;
-			}
-
-		////下
-		//else if (location.y > player->GetLocation().y) {
-		//	collision_dir = 3;
-		//}
+			collision_dir.x = 1;
+		}
 
 		//左
 		else if (location.x < player->GetLocation().x) {
-			collision_dir = 4;
+			collision_dir.x = -1;
 		}
+	
 	}
-
-
-	// カメラ位置に合わせてMapChipオブジェクトの位置を更新
-//location.x = location.x + CameraWork::GetCamera().x;
-//location.y = location.y + CameraWork::GetCamera().y;
-
-
-// カメラ位置の変化分を計算
-//float dx = cameraPos.x - oldCameraPos.x;
-//float dy = cameraPos.y - oldCameraPos.y;
-
-
-//printfDx("location_x:%f\tlocation_y:%f\n", location.x, location.y);
 }
 
 //-----------------------------------
