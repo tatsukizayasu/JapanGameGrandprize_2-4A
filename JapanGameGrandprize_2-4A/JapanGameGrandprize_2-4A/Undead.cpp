@@ -120,7 +120,6 @@ void Undead::DistancePlayer(const Location player_location)
 	{
 		state = ENEMY_STATE::ATTACK;
 		attack_time = 20;
-		image = 0xff0000;
 	}
 	else if(distance < UNDEAD_TRACKING_DISTANCE) //ˆê’è”ÍˆÍ“à‚¾‚ÆƒvƒŒƒCƒ„[‚ð’Ç‚¢‚©‚¯‚é
 	{
@@ -202,6 +201,7 @@ AttackResource Undead::Hit()
 
 	if (!attack)
 	{
+		image = 0xff0000;
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
 		ret.damage = UNDEAD_ATTACK_DAMAGE;
