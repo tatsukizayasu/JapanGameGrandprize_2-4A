@@ -114,7 +114,6 @@
     <ClCompile Include="GhostBullet.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
-    <ClCompile Include="harpy.cpp" />
     <ClCompile Include="Stage\Element\Element_Wooden_Floor.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
@@ -123,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="BulletManager.cpp">
       <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="harpy.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="harpy.cpp">
       <Filter>ソースファイル\Enemy</Filter>
@@ -263,7 +265,7 @@
     </ClInclude>
     <ClInclude Include="harpy.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Stage\Element\Element_Wooden_Floor.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>

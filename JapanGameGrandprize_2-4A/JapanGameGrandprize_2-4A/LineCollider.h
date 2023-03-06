@@ -50,13 +50,13 @@ public:
 	~LineCollider_t();
 
 	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è
-	bool HitSphere(class SphereCollider* sphere_collider)const;
+	bool HitSphere(const class SphereCollider* sphere_collider)const override;
 
 	//BoxCollider‚Æ‚Ì“–‚½‚è”»’è
-	bool HitBox(class BoxCollider* box_collider)const;
+	bool HitBox(const class BoxCollider* box_collider)const override;
 
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
-	bool HitLine(LineCollider_t* line_collider)const;
+	bool HitLine(const class LineCollider_t* line_collider)const override;
 
 	//ü‚Ì’[‚ÌÀ•W‚Ìæ“¾
 	Location GetLocation(int i)const;
