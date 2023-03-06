@@ -1,5 +1,6 @@
 #pragma once
 #include "ElementItem.h"
+#include "Define.h"
 
 
 #define POUCH_WIDTH 200
@@ -20,7 +21,7 @@ private:
 
 	float x, y;
 	Tab tab;
-	ElementItem** element;
+	ElementItem* element[PLAYER_ELEMENT];
 public:
 
 	Pouch();
@@ -34,4 +35,5 @@ public:
 	void MeltTab() const;
 	void ParalysisTab() const;
 	void HealTab() const;
+	void SetElement(ElementItem*,int i);
 };

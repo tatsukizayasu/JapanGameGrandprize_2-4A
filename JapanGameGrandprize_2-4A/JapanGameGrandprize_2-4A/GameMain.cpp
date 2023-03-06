@@ -24,6 +24,8 @@ GameMain::GameMain()
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
 
+	bullet_manager = BulletManager::GetInstance();
+
 	input_margin = 0;
 }
 
@@ -42,6 +44,7 @@ GameMain::~GameMain()
 
 	delete[] enemy;
 	delete camera_work;
+	delete bullet_manager;
 }
 
 //-----------------------------------
@@ -78,8 +81,13 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	BulletBase** bullet;
-	bullet = player->GetBullet();
+	BulletBase** player_bullet;
+	player_bullet = player->GetBullet();
+
+	bullet_manager->Update();
+
+	EnemyBulletBase** enemy_bullet;
+	enemy_bullet = bullet_manager->GetEnemyBullets();
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -98,6 +106,10 @@ void GameMain::EnemyUpdate()
 				break;
 			case ENEMY_STATE::ATTACK:
 				enemy[i]->Attack(player->GetLocation());
+				if (player->HitBox(enemy[i]))
+				{
+					player->HpDamage(enemy[i]->Hit());
+				}
 				break;
 			case ENEMY_STATE::DEATH:
 				enemy[i]->Death();
@@ -107,20 +119,19 @@ void GameMain::EnemyUpdate()
 				break;
 			}
 
-			enemy[i]->HitCheck(player);
-
 			//ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
-				if (bullet[j] == nullptr)
+				if (player_bullet[j] == nullptr)
 				{
 					break;
 				}
 
-				if (enemy[i]->HitBullet(bullet[j]))
+				if (player_bullet[j]->HitBox(enemy[i]))
 				{
-					delete bullet[j];
-					bullet[j] = nullptr;
+					enemy[i]->HitBullet(player_bullet[j]);
+					delete player_bullet[j];
+					player_bullet[j] = nullptr;
 					player->SortBullet(j);
 				}
 			}
@@ -130,6 +141,23 @@ void GameMain::EnemyUpdate()
 				item_controller->SpawnItem(enemy[i]);
 				delete enemy[i];
 				enemy[i] = nullptr;
+			}
+		}
+	}
+
+	if (enemy_bullet != nullptr)
+	{
+		for (int i = 0; i < bullet_manager->EnemyGetBulletMax(); i++)
+		{
+			if (enemy_bullet[i] == nullptr)
+			{
+				break;
+			}
+			if (enemy_bullet[i]->HitBox(player))
+			{
+				player->HpDamage(bullet_manager->Hit(i));
+				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
+				i--;
 			}
 		}
 	}
@@ -155,4 +183,6 @@ void GameMain::Draw()const
 			enemy[i]->Draw();
 		}
 	}
+	bullet_manager->Draw();
+
 }

@@ -16,8 +16,14 @@
 #define GROUND 1200
 #define WAIT_TIME 30 //プレイヤーを見つけて攻撃するまでの時間
 
+#define ONE_ROUND 360 //一周の角度
+#define ROTATION_SPEED 15 //スライムが回転するスピード
+
+
 EnemySlime::EnemySlime()
 {
+	attack = false;
+
 	kind = ENEMY_KIND::SLIME;
 
 	location.x = 1100;
@@ -165,6 +171,7 @@ void  EnemySlime::Attack(Location player_location)
 
 	if (location.y >= GROUND)
 	{
+		attack = false;
 		slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 		state = ENEMY_STATE::MOVE;
 		if (direction == DIRECTION::RIGHT)speed = SLIME_SPEED;
@@ -175,22 +182,18 @@ void  EnemySlime::Attack(Location player_location)
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
+AttackResource EnemySlime::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (state == ENEMY_STATE::ATTACK)
+	if (!attack)
 	{
-		if (HitBox(collider))
-		{
-			hp -= 10;
-
-			slime_attack = SLIME_ATTACK::AFTER_ATTACK;
-			ENEMY_TYPE attack_type[1] = { *type };
-			ret.damage = SLIME_ATTACK_DAMAGE;
-			ret.type = attack_type;
-			ret.type_count = 1;
-		}
+		attack = true;
+		slime_attack = SLIME_ATTACK::AFTER_ATTACK;
+		ENEMY_TYPE attack_type[1] = { *type };
+		ret.damage = SLIME_ATTACK_DAMAGE;
+		ret.type = attack_type;
+		ret.type_count = 1;
 	}
 
 	return ret;
@@ -201,9 +204,8 @@ AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
 //-----------------------------------
 void EnemySlime::Death()
 {
-	if (slime_angle >= 880 || slime_angle <= -880)
+	if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
 	{
-		slime_angle = 880;
 		can_delete = true;
 	}
 	else
@@ -211,17 +213,17 @@ void EnemySlime::Death()
 		if (location.y <= GROUND)
 		{
 			location.y -= (jump_distance.y / 3);
-			jump_distance.y -= 1;
+			jump_distance.y--;
 		}
 		if (direction == DIRECTION::RIGHT)
 		{
 			speed = -SLIME_ATTACK_SPEED;
-			slime_angle -= 15;
+			slime_angle -= ROTATION_SPEED;
 		}
 		else
 		{
 			speed = SLIME_ATTACK_SPEED;
-			slime_angle += 15;
+			slime_angle += ROTATION_SPEED;
 		}
 		location.x += speed;
 	}
@@ -230,37 +232,32 @@ void EnemySlime::Death()
 //-----------------------------------
 // プレイヤーの弾との当たり判定
 //-----------------------------------
-bool EnemySlime::HitBullet(const BulletBase* bullet)
+void EnemySlime::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-	if (HitSphere(bullet))
+	switch (bullet->GetAttribute())
 	{
-		switch (bullet->GetAttribute())
-		{
-		case ATTRIBUTE::NORMAL:
-			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
-			break;
-		case ATTRIBUTE::EXPLOSION:
-			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
-			break;
-		case ATTRIBUTE::MELT:
-			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
-			break;
-		case ATTRIBUTE::POISON:
-			//poison_damage = bullet->GetDamage();
-			//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			paralysis_time = bullet->GetDebuffTime() * 0;
-			break;
-		case ATTRIBUTE::HEAL:
-			break;
-		default:
-			break;
-		}
-		ret = true;
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::POISON:
+		//poison_damage = bullet->GetDamage();
+		//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * 0;
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
-	return ret;
+
 }
 
 //-----------------------------------

@@ -6,13 +6,13 @@
 #include "CameraWork.h"
 
 //攻撃をする範囲
-#define ATTACK_DISTANCE 50
+#define UNDEAD_ATTACK_DISTANCE 50
 
 //次の攻撃までの時間
-#define ATTACK_INTERVAL 30
+#define UNDEAD_ATTACK_INTERVAL 30
 
 //追いかける範囲
-#define TRACKING_DISTANCE 340
+#define UNDEAD_TRACKING_DISTANCE 340
 
 //歩くスピード
 #define UNDEAD_SPEED -2
@@ -33,6 +33,7 @@ Undead::Undead()
 {
 	/*初期化*/
 	can_delete = false;
+	attack = false;
 	hp = 100;
 	damage = 0;
 	attack_interval = 0;
@@ -115,13 +116,12 @@ void Undead::DistancePlayer(const Location player_location)
 	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
 
 	//攻撃範囲に入っているかつ攻撃までの時間が0以下だったら攻撃する
-	if ((distance < ATTACK_DISTANCE) && (attack_interval <= 0))
+	if ((distance < UNDEAD_ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
 		state = ENEMY_STATE::ATTACK;
 		attack_time = 20;
-		image = 0xff0000;
 	}
-	else if(distance < TRACKING_DISTANCE) //一定範囲内だとプレイヤーを追いかける
+	else if(distance < UNDEAD_TRACKING_DISTANCE) //一定範囲内だとプレイヤーを追いかける
 	{
 		if (player_location.x < location.x)
 		{
@@ -185,28 +185,28 @@ void  Undead::Attack(Location player_location)
 	attack_time--;
 	if (attack_time < 0)
 	{
+		attack = false;
 		state = ENEMY_STATE::MOVE;
 		image = 0xffffff;
-		attack_interval = ATTACK_INTERVAL;
+		attack_interval = UNDEAD_ATTACK_INTERVAL;
 	}
 }
 
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource Undead::HitCheck(const BoxCollider* collider)
+AttackResource Undead::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (state == ENEMY_STATE::ATTACK)
+	if (!attack)
 	{
-		if (HitBox(collider))
-		{
-			ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
-			ret.damage = UNDEAD_ATTACK_DAMAGE;
-			ret.type = attack_type;
-			ret.type_count = 1;
-		}
+		image = 0xff0000;
+		attack = true;
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
+		ret.damage = UNDEAD_ATTACK_DAMAGE;
+		ret.type = attack_type;
+		ret.type_count = 1;
 	}
 
 	return ret;
@@ -223,41 +223,31 @@ void Undead::Death()
 //-----------------------------------
 // プレイヤーの弾との当たり判定
 //-----------------------------------
-bool Undead::HitBullet(const BulletBase* bullet)
+void Undead::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-
-	if (HitSphere(bullet))
+	switch (bullet->GetAttribute())
 	{
-
-		switch (bullet->GetAttribute())
-		{
-		case ATTRIBUTE::NORMAL:
-			hp -= bullet->GetDamage();
-			break;
-		case ATTRIBUTE::EXPLOSION:
-			hp -= bullet->GetDamage();
-			break;
-		case ATTRIBUTE::MELT:
-			hp -= bullet->GetDamage();
-			break;
-		case ATTRIBUTE::POISON:
-			poison_damage = bullet->GetDamage();
-			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			paralysis_time = bullet->GetDebuffTime() * 0;
-			break;
-		case ATTRIBUTE::HEAL:
-			break;
-		default:
-			break;
-		}
-
-		ret = true;
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage();
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage();
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage();
+		break;
+	case ATTRIBUTE::POISON:
+		poison_damage = bullet->GetDamage();
+		poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * 0;
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
-
-	return ret;
 }
 
 //-----------------------------------
@@ -270,8 +260,8 @@ void Undead::Draw() const
 	draw_location.x = location.x - CameraWork::GetCamera().x;
 	draw_location.y = location.y - CameraWork::GetCamera().y;
 
-	DrawBox(draw_location.x, draw_location.y,
-		draw_location.x + area.width, draw_location.y + area.height, image, TRUE);
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2, image, TRUE);
 }
 
 //-----------------------------------
