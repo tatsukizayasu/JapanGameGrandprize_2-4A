@@ -56,6 +56,7 @@ private:
 	int damage_count;				//無敵時間
 	int flashing_count;				//点滅の間隔
 	int i;                          //スイッチ内でのループ用
+	int damage;                     //敵から受けたダメージの値
 
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
 	bool move_left;			//プレイヤーの向き true:左　false:右

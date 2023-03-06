@@ -11,12 +11,12 @@ Pouch::Pouch()
 	tab = Tab::Explosion_Tab;
 
 	//元素の初期化
-	element = new ElementItem * [PLAYER_ELEMENT];
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
-		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+		element[i] = nullptr;
 	}
 }
+
 
 //アップデート
 void Pouch::Update()
@@ -136,10 +136,17 @@ void Pouch::Draw() const
 	for (int i = 0; i < 4; i++)
 	{
 		DrawBox(x + (50 * i), y + 400, (x + (50 * i)) + 50, y + 450, 0xffffff, FALSE);
+		DrawFormatString(x + (50 * i), y + 400, 0x000000, "%d", element[i]->GetVolume());
 	}
 
-	for (int i = 4; i < PLAYER_ELEMENT; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		DrawBox(x + (50 * i) + 25, y + 450, (x + (50 * i) + 25) + 50, y + POUCH_HEIGHT, 0xffffff, FALSE);
+		DrawBox(x + (50 * i) + 25, y + 450, (x + (50 * i) + 50) + 25, y + POUCH_HEIGHT, 0xffffff, FALSE);
+		DrawFormatString(x + (50 * i) + 25, y + 450, 0xffffff, "%d", element[i + 4]->GetVolume());
 	}
+}
+
+void Pouch::SetElement(ElementItem* item, int i)
+{
+	element[i] = item;
 }

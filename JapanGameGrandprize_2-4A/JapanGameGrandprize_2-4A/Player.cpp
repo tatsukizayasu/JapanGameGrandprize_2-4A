@@ -30,6 +30,7 @@ Player::Player()
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
+	damage = 0;
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet = new BulletBase * [BULLET_MAX];
@@ -100,6 +101,7 @@ Player::Player(Stage* stage)
 	bullet_count = 0;
 	damage_count = 0;
 	shoot_count = 0;
+	damage = 0;
 	flashing_count = 0;
 	jump = 10.0;
 	jump_power = 0.0;
@@ -140,8 +142,6 @@ Player::Player(Stage* stage)
 
 	beam = nullptr;
 
-	pouch = new Pouch();
-
 	stage = new Stage();
 
 	area = { 80,40 };
@@ -152,6 +152,14 @@ Player::Player(Stage* stage)
 	{
 		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
 	}
+
+	pouch = new Pouch();
+
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		pouch->SetElement(element[i], i);
+	}
+
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
@@ -291,12 +299,26 @@ void Player::Update()
 {
 	if (damage_flg == true)
 	{
+		damage_count++;
+		if (damage_count < damage)
+		{
+			if (hp > 0)
+			{
+				hp--;
+			}
+			else
+			{
+				hp = 0;
+				player_state = PLAYER_STATE::DEATH;
+			}
+		}
+
 		if (flashing_count++ >= 10)
 		{
 			flashing_count = 0;
 		}
 
-		if (++damage_count % 120 == 0)
+		if (damage_count % 120 == 0)
 		{
 			damage_flg = false;
 			damage_count = 0;
@@ -306,6 +328,10 @@ void Player::Update()
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
 		pouch_open = true;
+		for (int i = 0; i < PLAYER_ELEMENT; i++)
+		{
+			pouch->SetElement(element[i], i);
+		}
 	}
 	else if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
 	{
@@ -335,13 +361,17 @@ void Player::Update()
 		NotInputStick();
 	}
 
+
 	//RBボタン入力
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
+	if (!pouch_open)
 	{
-		if (shoot_count++ % 30 == 0)
+		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 		{
-			bullet_count++;
-			Shoot_Gun();
+			if (shoot_count++ % 30 == 0)
+			{
+				bullet_count++;
+				Shoot_Gun();
+			}
 		}
 	}
 
@@ -382,7 +412,10 @@ void Player::Update()
 	}
 
 	//弾の属性の切り替え処理
-	ElementUpdate();
+	if (!pouch_open)
+	{
+		ElementUpdate();
+	}
 }
 
 //スティックを入力していないとき
@@ -673,6 +706,7 @@ void Player::HpDamage(AttackResource attack)
 		if (attack.damage > 0)
 		{
 			damage_flg = true;
+			damage = attack.damage;
 
 			if (attack.type != nullptr)
 			{
@@ -698,12 +732,6 @@ void Player::HpDamage(AttackResource attack)
 				}
 			}
 		}
-	}
-
-	if (hp <= 0)
-	{
-		hp = 0;
-		player_state = PLAYER_STATE::DEATH;
 	}
 }
 
