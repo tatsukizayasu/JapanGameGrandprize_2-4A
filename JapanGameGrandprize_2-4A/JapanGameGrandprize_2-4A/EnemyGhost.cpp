@@ -46,7 +46,7 @@ EnemyGhost::EnemyGhost()
 {
 	can_delete = false;
 	hp = 10;
-	location.x = 600;
+	location.x = 1400;
 	location.y = 1200;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
@@ -147,6 +147,9 @@ void EnemyGhost::Move(const Location player_location)
 	{
 	case GHOST_STATE::NORMAL:  //通常移動
 		location.x -= GHOST_SPEED;
+		break;
+	case GHOST_STATE::NORMAL_RIGHT://右
+		location.x += GHOST_SPEED;
 		break;
 	case GHOST_STATE::LEFT_lOWER:  //左下を目指す
 		location.x -= GHOST_SPEED;
@@ -256,6 +259,8 @@ void EnemyGhost::Draw()const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
+	DrawFormatString(200, 200, GetColor(255, 255, 0), "%d", action_type);
+
 	switch (attack_state)
 	{
 	case GHOST_ATTACK::PHYSICAL_ATTACK:
@@ -289,7 +294,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 	//プレイヤーが発見距離内にいたら
 	if (range <= GHOST_DETECTION_DISTANCE && range >= -GHOST_DETECTION_DISTANCE)
 	{
-		if (range > player_location.x) //左に移動
+		if (location.x > player_location.x) //左に移動
 		{
 			if (player_location.y > location.y)
 			{
@@ -302,7 +307,11 @@ void EnemyGhost::GhostMove(const Location player_location)
 		}
 		else //右に移動
 		{
-			if (player_location.y > location.y)
+			//if (location.y + 10 >= player_location.y && location.y - 10 <= player_location.y)
+			//{
+			//	//action_type = GHOST_STATE::NORMAL_RIGHT;
+			//}
+			 if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
 			}

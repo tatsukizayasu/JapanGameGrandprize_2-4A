@@ -7,6 +7,7 @@
 enum class GHOST_STATE
 {
 	NORMAL,   //’ÊíˆÚ“® ¶‚ÉˆÚ“®
+	NORMAL_RIGHT, //’ÊíˆÚ“® ‰E‚ÉˆÚ“®
 	LEFT_lOWER,   //¶‰º‚ÉˆÚ“®
 	LEFT_UPPER,   //¶ã‚ÉˆÚ“®
 	RIGHT_LOWER,  //‰E‰º‚ÉˆÚ“®
