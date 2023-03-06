@@ -77,7 +77,11 @@ void StageBuilder::Update()
 	KeyManager::Update(); //StageBuilder上でしか使わないため、ソースコードの散らばりを避けています。
 	UpdateMouse();
 
-	if (KeyManager::OnKeyClicked(KEY_INPUT_ESCAPE))mode = MENU_MODE;
+	if (KeyManager::OnKeyClicked(KEY_INPUT_ESCAPE))
+	{
+		mode = MENU_MODE;
+		Trash();
+	}
 
 	switch (mode)
 	{
@@ -197,19 +201,31 @@ void StageBuilder::Draw()const
 //--------------------------------------
 void StageBuilder::DrawWhichMode()const
 {
-	if (mode == BRUSH_MODE)
+	switch (mode)
 	{
-		DrawClassName();
-	}
 
-	if (mode == MENU_MODE)
-	{
+	case MENU_MODE:
 		DrawMenu();
-	}
-
-	if (mode == SAVE_MODE || mode == LOAD_MODE)
-	{
+		break;
+	
+	case BRUSH_MODE:
+		DrawClassName();
+		break;
+	
+	case MODULATION_MODE:
+		if (select_collider != nullptr)
+		{
+			DrawCircleAA(
+				select_collider->GetLocation().x - CameraWork::GetCamera().x,
+				select_collider->GetLocation().y - CameraWork::GetCamera().y,
+				6, 20, 0xFFFF22, TRUE);
+		}
+		break;
+	
+	case SAVE_MODE:
+	case LOAD_MODE:
 		DrawFileInfo();
+		break;
 	}
 
 }
