@@ -129,6 +129,7 @@ void BulletManager::DeleteEnemyBullet(const EnemyBulletBase* bullet)
 
             SortEnemyBullet(i);
             enemy_bullet_count--;
+            break;
         }
     }
 }

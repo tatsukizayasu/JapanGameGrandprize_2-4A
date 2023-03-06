@@ -154,6 +154,7 @@ void GameMain::EnemyUpdate()
 			{
 				player->HpDamage(bullet_manager->Hit(i));
 				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
+				i--;
 			}
 		}
 	}
