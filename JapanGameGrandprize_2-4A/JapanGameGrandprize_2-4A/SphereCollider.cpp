@@ -54,7 +54,7 @@ bool SphereCollider::HitBox(const BoxCollider* box_collider) const
 	return ret;
 }
 
-bool SphereCollider::HitLine(const LineCollider* line_collider) const
+bool SphereCollider::HitLine(const LineCollider_t* line_collider) const
 {
 	bool ret = false; //•Ô‚è’l
 
