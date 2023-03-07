@@ -98,7 +98,7 @@ void Stage::Update(Player* player)
 
 	draw = { SCREEN_WIDTH + CHIP_SIZE,SCREEN_HEIGHT + CHIP_SIZE };
 
-	CameraWork::Camera camera = CameraWork::GetCamera();
+	Location camera = CameraWork::GetCamera();
 
 	for (auto& m : mapchip)
 	{
@@ -160,7 +160,7 @@ void Stage::Draw()
 
 	draw = { SCREEN_WIDTH + CHIP_SIZE,SCREEN_HEIGHT + CHIP_SIZE };
 
-	CameraWork::Camera camera = CameraWork::GetCamera();
+	Location camera = CameraWork::GetCamera();
 
 	for (auto& m : mapchip)
 	{

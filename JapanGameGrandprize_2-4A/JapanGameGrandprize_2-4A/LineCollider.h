@@ -3,9 +3,9 @@
 #include "Stage/StageBuilder/Debug.h"
 #include "ColliderBase.h"
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 
-#define _USE_MATH_DEFINES
 
 #define LINE_START 0
 #define LINE_END 1
@@ -39,15 +39,13 @@ private:
 
 		return tip;
 	}
-protected:
-
-	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)
-public:
-
 public:
 	LineCollider_t();
 	LineCollider_t(Location point1, Location point2);
 	~LineCollider_t();
+
+	//描画
+	virtual void Draw()const;
 
 	//SphereColliderとの当たり判定
 	bool HitSphere(const class SphereCollider* sphere_collider)const override;
@@ -64,17 +62,10 @@ public:
 	//始点、終点座標の設定
 	void SetLocation(Location location, int i);
 
-#ifdef _SHOW_COLLISION
-	void DrawCollision()const
-	{
 
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
-		DrawLineAA(GetLocation(LINE_START).x, GetLocation(LINE_START).y,
-			GetLocation(LINE_END).x, GetLocation(LINE_END).y,0xE9FF00,3);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		//DrawCircle
-	}
-#endif
+
+protected:
+	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)
 };
 
 class LineCollider

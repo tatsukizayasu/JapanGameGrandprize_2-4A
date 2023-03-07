@@ -1,4 +1,5 @@
 #include "LineCollider.h"
+#include "CameraWork.h"
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 
@@ -34,6 +35,22 @@ LineCollider_t::LineCollider_t(Location point1, Location point2)
 LineCollider_t::~LineCollider_t()
 {
 
+}
+
+//--------------------------------------
+// •`‰æ
+//--------------------------------------
+void LineCollider_t::Draw()const
+{
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+	DrawLineAA(
+		GetLocation(LINE_START).x - CameraWork::GetCamera().x, 
+		GetLocation(LINE_START).y - CameraWork::GetCamera().y,
+		GetLocation(LINE_END).x - CameraWork::GetCamera().x,
+		GetLocation(LINE_END).y - CameraWork::GetCamera().y,
+		0xE9FF00, 3);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	//DrawCircle
 }
 
 //-----------------------------------

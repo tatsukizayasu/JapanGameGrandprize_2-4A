@@ -1,4 +1,5 @@
 #pragma once
+#include "Define.h"
 #include "Player.h"
 #include "Stage/Stage.h"
 
@@ -34,7 +35,7 @@ protected:
 	float moveing_line;
 
 	//オブジェクト
-	static Camera camera;
+	static Location camera;
 	Player* player;
 	Stage* stage;
 
@@ -53,7 +54,7 @@ public:
 
 	~CameraWork();
 	void Update();
-	static Camera GetCamera() { return camera; }
+	static Location GetCamera() { return camera; }
 private:
 
 	//カメラの状態

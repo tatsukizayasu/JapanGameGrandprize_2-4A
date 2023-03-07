@@ -17,6 +17,9 @@ public:
 		radius = 5;
 	}
 
+	//•`‰æ
+	virtual void Draw()const;
+
 	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è
 	bool HitSphere(const class SphereCollider* sphere_collider) const override;
 

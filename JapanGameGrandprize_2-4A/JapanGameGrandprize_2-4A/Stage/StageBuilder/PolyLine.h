@@ -12,16 +12,13 @@ private:
     vector<LineCollider_t*>lines;          //ê¸
 public:
     PolyLine(Location bend_points[], unsigned int size);
+    PolyLine(const vector<SphereCollider*>spheres);
     ~PolyLine();
 
     void Update();
-    virtual void Draw()const {}
+    virtual void Draw()const;
 
     vector<SphereCollider*> GetPoint()const{return bend_points;}
-
-#ifdef _SHOW_COLLISION
-    void DrawCollision()const;
-#endif
 
 };
 

@@ -16,6 +16,24 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 	}
 }
 
+//-------------------------------------
+// コンストラクタ 引数：円のベクター配列
+//-------------------------------------
+PolyLine::PolyLine(const vector<SphereCollider*> spheres)
+{
+	for (int i = 0; i < spheres.size(); i++)
+	{
+		bend_points.push_back(new SphereCollider(*spheres[i]));
+	}
+
+	for (int i = 0; i < spheres.size() - 1; i++)
+	{
+		lines.push_back(new LineCollider_t(
+			spheres[i]->GetLocation(), spheres[i + 1]->GetLocation()
+		));
+	}
+}
+
 //---------------------------------
 // デストラクタ
 //---------------------------------
@@ -37,38 +55,31 @@ void PolyLine::Update()
 	}
 }
 
-//---------------------------------
+//-------------------------------------
 // 描画
-//---------------------------------
-
-
-//---------------------------------
-// 
-//---------------------------------
-
-
-//---------------------------------
-// 
-//---------------------------------
-
-
-//---------------------------------
-// 
-//---------------------------------
-
-
-#ifdef _SHOW_COLLISION
-void PolyLine::DrawCollision()const
+//-------------------------------------
+void PolyLine::Draw()const
 {
 	for (int i = 0; i < lines.size(); i++)
 	{
-		lines[i]->DrawCollision();
+		lines[i]->Draw();
 	}
 	for (int i = 0; i < bend_points.size(); i++)
 	{
-		SphereCollider* it = bend_points[i];
-		DrawCircleAA(it->GetLocation().x, it->GetLocation().y, 5, 10,
-			0x666666);
+		bend_points[i]->Draw();
 	}
 }
-#endif
+
+//---------------------------------
+// 
+//---------------------------------
+
+
+//---------------------------------
+// 
+//---------------------------------
+
+
+//---------------------------------
+// 
+//---------------------------------
