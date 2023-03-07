@@ -3,7 +3,7 @@
 
 Stage_Element::Stage_Element()
 {
-	DxLib_End();
+	//DxLib_End();
 	//for (auto& m : mapchip)
 	//{	
 	//	if (m == nullptr) continue;
@@ -11,10 +11,6 @@ Stage_Element::Stage_Element()
 	//}
 }
 
-//Stage_Element::Stage_Element(const int* p_image, Location location, Area area)
-//{
-//	int f = 0;
-//}
 
 Stage_Element::~Stage_Element()
 {

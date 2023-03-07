@@ -1,6 +1,5 @@
 #include "Stage.h"
 #include "../CameraWork.h"
-#include "Element/Element.h"
 #include "DxLib.h"
 #include <iostream>
 #include <fstream>
@@ -40,6 +39,8 @@ Stage::Stage()
 						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 					}, { CHIP_SIZE,CHIP_SIZE }));
+
+				CreateElement(i);
 			}
 			/*else
 			{
@@ -54,8 +55,6 @@ Stage::Stage()
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
 #endif
-
-	//element = new Stage_Element();
 }
 
 //-----------------------------------
@@ -89,7 +88,7 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
-
+	
 	//当たり判定演算範囲
 	struct DrawArea
 	{
@@ -122,6 +121,7 @@ void Stage::Update(Player* player)
 		}
 
 		m->Update(player);
+		ElementUpdate(player);
 
 		//当たっている方向を更新
 		collision_dir = m->GetMapChip_Collision();
@@ -133,7 +133,7 @@ void Stage::Update(Player* player)
 			if (collision_dir.x != 0) {
 				//speed_x = 0.0f;
 			}
-			
+
 		}
 
 	}
@@ -148,7 +148,7 @@ void Stage::Update(Player* player)
 //-----------------------------------
 void Stage::Draw()
 {
-	
+
 	//マップチップ		描画
 
 	//描画範囲
@@ -175,6 +175,7 @@ void Stage::Draw()
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
 
 		m->Draw();
+		ElementDraw();
 	}
 
 
@@ -225,4 +226,51 @@ void Stage::LoadMap()
 	}
 
 	FileRead_close(FileHandle);
+}
+
+void Stage::CreateElement(short id)
+{
+	switch (id)
+	{
+	case 61:
+		element_damagewall.push_back(new Element_DamageWall());
+		break;
+
+	case 62:
+		element_wooden_floor.push_back(new Element_Wooden_Floor());
+		break;
+
+	case 63:
+		break;
+
+	default:
+		break;
+	}
+}
+
+void Stage::ElementUpdate(Player* player)
+{
+	for (auto& e : element_damagewall)
+	{
+		e->Update(player);
+	}
+
+	for (auto& e : element_wooden_floor)
+	{
+		e->Update(player);
+	}
+
+}
+
+void Stage::ElementDraw()
+{
+	for (auto& e : element_damagewall)
+	{
+		e->Draw();
+	}
+
+	for (auto& e : element_wooden_floor)
+	{
+		e->Draw();
+	}
 }

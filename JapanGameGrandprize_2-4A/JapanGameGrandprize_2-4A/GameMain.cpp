@@ -16,6 +16,7 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
+	stage->SetPlayer(player);
 	enemy = new EnemyBase * [4];
 	enemy[0] = new Undead();
 	enemy[1] = new EnemySlime();

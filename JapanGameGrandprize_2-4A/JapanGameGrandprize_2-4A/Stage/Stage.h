@@ -3,18 +3,22 @@
 #include <vector>
 #include <Windows.h>
 #include "StageBuilder/StageBuilder.h"
+#include "Element/Element_DamageWall.h"
+#include "Element/Element_Wooden_Floor.h"
 
 #define CHIP_SIZE	40
 
 class Player;
-class Stage_Element;
 
 class Stage
 {
 private:
 
-	//オブジェクト
-	Stage *element;
+	//オブジェクト変数
+	Player* player;
+
+	std::vector<Element_Wooden_Floor*> element_wooden_floor;
+	std::vector<Element_DamageWall*> element_damagewall;
 
 #ifdef _STAGE_BUILDER
 	StageBuilder* stage_builder;
@@ -65,6 +69,27 @@ public:
 	/// ステージの読み込み
 	/// </summary>
 	void LoadMap();
+
+	/// <summary>
+	/// ステージ要素の作成
+	/// </summary>
+	void CreateElement(short id);
+
+	/// <summary>
+	/// ステージ要素の更新
+	/// </summary>
+	void ElementUpdate(Player* player);
+	
+	/// <summary>
+	/// ステージ要素の描画
+	/// </summary>
+	void ElementDraw();
+
+	/// <summary>
+	/// StageクラスにPlayerオブジェクトを渡すSetter
+	/// </summary>
+	/// <param name = "*player">Playerオブジェクトポインタ</param>
+	void SetPlayer(Player *player) { this->player = player; }
 
 	/// <summary>
 	/// マップサイズのGeter
