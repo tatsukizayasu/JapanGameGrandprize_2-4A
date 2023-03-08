@@ -10,6 +10,7 @@
 EnemyBase::EnemyBase() 
 {
 	can_delete = false;
+	left_move = true;
 	hp = 0;
 	speed = 0;
 	paralysis_time = 0;
@@ -58,16 +59,38 @@ bool EnemyBase::HitStage(const Stage* stage)
 	{
 		if (chip != nullptr)
 		{
-			Location draw_location = chip->GetLocation();
-			Area draw = chip->GetArea();
+			Location chip_location = chip->GetLocation();
+			Area chip_area = chip->GetArea();
 
 			//•`‰æ”ÍˆÍ“à‚É‚ ‚éƒuƒƒbƒN
-			if ((camera.x < draw_location.x + draw.width) && (draw_location.x < camera.x + draw_area.width) &&
-				(camera.y < draw_location.y + draw.height) && (draw_location.y < camera.y + draw_area.height))
+			if ((camera.x < chip_location.x + chip_area.width) && (chip_location.x < camera.x + draw_area.width) &&
+				(camera.y < chip_location.y + chip_area.height) && (chip_location.y < camera.y + draw_area.height))
 			{
 				if (HitBox(chip))
 				{
+					if (state == ENEMY_STATE::MOVE)
+					{
+						if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+						{
+							if (left_move)
+							{
+								location.x = (chip_location.x + (chip_area.width / 2) + (area.width / 2) + 2);
+							}
+							else
+							{
+								location.x = (chip_location.x - (chip_area.width / 2) - (area.width / 2) - 2);
+							}
+							left_move = !left_move;
+							speed = -speed;
+						}
+					}
+					if (state == ENEMY_STATE::FALL) //—‰ºó‘Ô
+					{
+						location.y = (chip_location.y - (chip_area.height / 2) - (area.height / 2)) + 2;
+					}
+
 					ret = true;
+					break;
 				}
 			}
 		}

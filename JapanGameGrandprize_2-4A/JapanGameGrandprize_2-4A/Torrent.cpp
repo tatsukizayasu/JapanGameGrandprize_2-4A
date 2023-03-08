@@ -34,6 +34,9 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
 		break;
+	case ENEMY_STATE::FALL:
+		Fall();
+		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
 		break;
@@ -62,6 +65,14 @@ void Torrent::Idol()
 //ˆÚ“®
 //-----------------------------------
 void Torrent::Move(const Location player_location)
+{
+
+}
+
+//-----------------------------------
+//—Ž‰º
+//-----------------------------------
+void Torrent::Fall()
 {
 
 }

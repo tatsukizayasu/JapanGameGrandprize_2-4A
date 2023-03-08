@@ -31,6 +31,7 @@ Mage::Mage()
 {
 	/*初期化*/
 	can_delete = false;
+	left_move = true;
 	hp = MAGE_HP;
 	shot_rate = 0;
 	shot_count = 0;
@@ -45,7 +46,7 @@ Mage::Mage()
 	image = 0xffffff;
 
 	/*当たり判定の設定*/
-	location.x = 640.0f;
+	location.x = 660.0f;
 	location.y = 1120.0f;
 	area.width = 40;
 	area.height = 80;
@@ -161,6 +162,9 @@ void Mage::Update(const Player* player, const Stage* stage)
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
 		break;
+	case ENEMY_STATE::FALL:
+		Fall();
+		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
 		break;
@@ -234,6 +238,14 @@ void Mage::Move(const Location player_location)
 //テレポート
 //-----------------------------------
 void Mage::Teleport()
+{
+
+}
+
+//-----------------------------------
+//落下
+//-----------------------------------
+void Mage::Fall()
 {
 
 }
@@ -323,10 +335,9 @@ void Mage::HitBullet(const BulletBase* bullet)
 void Mage::Draw() const
 {
 
-	Location draw_location; //描画用の座標
-
-	draw_location.x = location.x - CameraWork::GetCamera().x;
-	draw_location.y = location.y - CameraWork::GetCamera().y;
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2, image, TRUE);

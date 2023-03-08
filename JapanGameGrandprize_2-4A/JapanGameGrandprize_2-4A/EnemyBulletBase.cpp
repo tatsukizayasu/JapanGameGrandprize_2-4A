@@ -51,6 +51,7 @@ bool EnemyBulletBase::HitStage(const Stage* stage) const
 				if (HitBox(chip))
 				{
 					ret = true;
+					break;
 				}
 			}
 		}

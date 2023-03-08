@@ -55,6 +55,9 @@ public:
 	//ˆÚ“®
 	void Move(const Location player_location) override;
 
+	//—‰º
+	void Fall() override;
+
 	//UŒ‚
 	void  Attack(Location) override;
 

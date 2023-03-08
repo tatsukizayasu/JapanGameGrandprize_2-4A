@@ -32,10 +32,13 @@ public:
     //ƒAƒCƒhƒ‹ó‘Ô
     void Idol() override;
 
-    //ˆÚ“®
+   //ˆÚ“®
    void Move(const Location player_location) override;
 
-    //UŒ‚
+   //—‰º
+   void Fall() override;
+
+   //UŒ‚
    void  Attack(Location) override;
 
     //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©

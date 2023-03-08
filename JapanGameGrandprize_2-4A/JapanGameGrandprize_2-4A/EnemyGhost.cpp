@@ -45,11 +45,12 @@
 EnemyGhost::EnemyGhost()
 {
 	can_delete = false;
+	left_move = true;
 	attack = false;
 
 	hp = 10;
-	location.x = 600;
-	location.y = 1200;
+	location.x = 640.0f;
+	location.y = 1120.0f;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
@@ -99,6 +100,9 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
 		break;
+	case ENEMY_STATE::FALL:
+		Fall();
+		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
 		break;
@@ -109,10 +113,10 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		break;
 	}
 
-	if (HitStage(stage)) //ステージとの当たり判定
-	{
-		location = old_location;
-	}
+	//if (HitStage(stage)) //ステージとの当たり判定
+	//{
+	//	location = old_location;
+	//}
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -228,16 +232,19 @@ void EnemyGhost::Death()
 void EnemyGhost::Draw()const
 {
 	//スクロールに合わせて描画
-	float x = location.x - CameraWork::GetCamera().x;
-	float y = location.y - CameraWork::GetCamera().y;
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
 
 	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK)
 	{
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
+		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xff0000, TRUE);
 	}
 	else
 	{
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffff00, TRUE);
 	}
 }
 
@@ -302,6 +309,14 @@ void EnemyGhost::GhostMove(const Location player_location)
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new GhostBullet(location, player_location));
 	}
+}
+
+//-----------------------------------
+//落下
+//-----------------------------------
+void EnemyGhost::Fall()
+{
+
 }
 
 //-----------------------------------

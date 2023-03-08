@@ -15,7 +15,7 @@
 #define UNDEAD_TRACKING_DISTANCE 340
 
 //歩くスピード
-#define UNDEAD_SPEED -2
+#define UNDEAD_SPEED 2
 
 //ドロップ量
 #define UNDEAD_MIN_DROP 0u
@@ -33,6 +33,8 @@ Undead::Undead()
 {
 	/*初期化*/
 	can_delete = false;
+	left_move = true;
+
 	attack = false;
 	hp = 100;
 	damage = 0;
@@ -50,8 +52,8 @@ Undead::Undead()
 	paralysis_time = 0;
 
 	/*当たり判定の設定*/
-	location.x = 640.0f;
-	location.y = 1220.0f;
+	location.x = 1690.0f;
+	location.y = 980.0f;
 	area.width = 40;
 	area.height = 80;
 
@@ -100,6 +102,27 @@ void Undead::Update(const Player* player, const Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
+
+		if (!HitStage(stage)) //ステージとの当たり判定
+		{
+			state = ENEMY_STATE::FALL;
+			speed = 0;
+		}
+		break;
+	case ENEMY_STATE::FALL:
+		Fall();
+		if (HitStage(stage)) //ステージとの当たり判定
+		{
+			state = ENEMY_STATE::MOVE;
+			if (left_move)
+			{
+				speed = -UNDEAD_SPEED;
+			}
+			else
+			{
+				speed = UNDEAD_SPEED;
+			}
+		}
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
@@ -116,10 +139,7 @@ void Undead::Update(const Player* player, const Stage* stage)
 		attack_interval--;
 	}
 
-	if (HitStage(stage)) //ステージとの当たり判定
-	{
-		location = old_location;
-	}
+	
 
 	Poison();
 
@@ -150,16 +170,14 @@ void Undead::DistancePlayer(const Location player_location)
 	{
 		if (player_location.x < location.x)
 		{
-			speed = UNDEAD_SPEED;
+			left_move = true;
+			speed = -UNDEAD_SPEED;
 		}
 		else
 		{
-			speed = -UNDEAD_SPEED;
+			left_move = false;
+			speed = UNDEAD_SPEED;
 		}
-	}
-	else
-	{
-		speed = UNDEAD_SPEED;
 	}
 }
 
@@ -200,6 +218,18 @@ void Undead::Move(const Location player_location)
 	{
 		state = ENEMY_STATE::IDOL;
 	}
+}
+
+//-----------------------------------
+//落下
+//-----------------------------------
+void Undead::Fall()
+{
+	if (speed < GRAVITY)
+	{
+		speed += ENEMY_FALL_SPEED;
+	}
+	location.y += speed;
 }
 
 //-----------------------------------
@@ -280,10 +310,9 @@ void Undead::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Undead::Draw() const
 {
-	Location draw_location; //描画用の座標
-
-	draw_location.x = location.x - CameraWork::GetCamera().x;
-	draw_location.y = location.y - CameraWork::GetCamera().y;
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2, image, TRUE);
