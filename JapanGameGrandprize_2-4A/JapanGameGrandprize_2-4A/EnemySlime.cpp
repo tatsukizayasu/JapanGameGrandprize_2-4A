@@ -28,7 +28,7 @@ EnemySlime::EnemySlime()
 	left_move = false;
 	kind = ENEMY_KIND::SLIME;
 
-	location.x = 1440.0f;
+	location.x = 1690.0f;
 	location.y = 980.0f;
 
 	area.height = 40;
@@ -43,7 +43,7 @@ EnemySlime::EnemySlime()
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WATER;
 
-	state = ENEMY_STATE::MOVE;
+	state = ENEMY_STATE::IDOL;
 	slime_image = LoadGraph("Images/Enemy/Slime_.png");
 	slime_angle = 0;
 
@@ -140,7 +140,15 @@ void EnemySlime::Draw()const
 //-----------------------------------
 void EnemySlime::Idol()
 {
+	Location scroll; //画面スクロールを考慮したX座標
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
 
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 }
 
 //-----------------------------------
@@ -213,11 +221,11 @@ void  EnemySlime::Attack(Location player_location)
 
 		if (left_move)
 		{
-			speed = SLIME_ATTACK_SPEED;
+			speed = -SLIME_ATTACK_SPEED;
 		}
 		else
 		{
-			speed = -SLIME_ATTACK_SPEED;
+			speed = SLIME_ATTACK_SPEED;
 		}
 
 		break;
