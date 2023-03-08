@@ -128,9 +128,8 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 void EnemyGhost::Idol()
 {
 	Location scroll; //画面スクロールを考慮したX座標
-
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
 
 	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
 		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))

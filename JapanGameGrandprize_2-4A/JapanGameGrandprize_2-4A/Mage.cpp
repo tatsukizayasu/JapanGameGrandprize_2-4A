@@ -201,9 +201,8 @@ void Mage::Update(const Player* player, const Stage* stage)
 void Mage::Idol()
 {
 	Location scroll; //画面スクロールを考慮したX座標
-
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
 
 	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
 		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
