@@ -1,4 +1,7 @@
 #include "BulletManager.h"
+#include "Stage/Stage.h"
+#include "CameraWork.h"
+
 BulletManager* BulletManager::instance = nullptr;
 
 #define ENEMY_BULLET_EXPANSION 10
@@ -27,7 +30,7 @@ BulletManager::~BulletManager()
 //-----------------------------------
 //更新
 //-----------------------------------
-void BulletManager::Update()
+void BulletManager::Update(const Stage* stage)
 {
     for (int i = 0; i < enemy_bullet_count; i++)
     {
@@ -38,7 +41,7 @@ void BulletManager::Update()
 
         enemy_bullets[i]->Update();
 
-        if (enemy_bullets[i]->ScreenOut()) //画面外に出たか
+        if (enemy_bullets[i]->ScreenOut() || enemy_bullets[i]->HitStage(stage)) //画面外に出たか
         {
             delete enemy_bullets[i];
             enemy_bullets[i] = nullptr;
@@ -133,6 +136,8 @@ void BulletManager::DeleteEnemyBullet(const EnemyBulletBase* bullet)
         }
     }
 }
+
+
 
 //-----------------------------------
 //攻撃が当たっているか

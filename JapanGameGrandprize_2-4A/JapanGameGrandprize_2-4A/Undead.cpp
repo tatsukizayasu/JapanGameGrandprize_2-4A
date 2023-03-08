@@ -89,11 +89,36 @@ Undead::~Undead()
 //-----------------------------------
 // 更新
 //-----------------------------------
-void Undead::Update()
+void Undead::Update(const Player* player, const Stage* stage)
 {
+	Location old_location = location;	//前の座標
+
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		Idol();
+		break;
+	case ENEMY_STATE::MOVE:
+		Move(player->GetLocation());
+		break;
+	case ENEMY_STATE::ATTACK:
+		Attack(player->GetLocation());
+		break;
+	case ENEMY_STATE::DEATH:
+		Death();
+		break;
+	default:
+		break;
+	}
+
 	if (attack_interval > 0)
 	{
 		attack_interval--;
+	}
+
+	if (HitStage(stage)) //ステージとの当たり判定
+	{
+		location = old_location;
 	}
 
 	Poison();

@@ -66,7 +66,7 @@ public:
 	~EnemyBase() {}
 
 	//描画以外の更新を実行
-	virtual void Update() = 0;
+	virtual void Update(const class Player* player, const class Stage* stage) = 0;
 
 	//描画
 	virtual void Draw() const = 0;
@@ -82,6 +82,9 @@ public:
 
 	//攻撃が当たっているか
 	virtual AttackResource Hit() = 0;
+
+	//ステージとの当たり判定
+	bool HitStage(const class Stage* stage);
 
 	//死亡
 	virtual void Death() = 0;

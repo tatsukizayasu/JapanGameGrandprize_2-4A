@@ -17,7 +17,7 @@ public:
     ~Torrent();
 
     //更新
-    void Update() override;
+    void Update(const class Player* player, const class Stage* stage) override;
 
     //アイドル状態
     void Idol() override;

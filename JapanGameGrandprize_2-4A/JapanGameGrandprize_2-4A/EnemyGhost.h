@@ -44,7 +44,7 @@ public:
 	~EnemyGhost();
 
 	//描画以外の更新を実行
-	void Update()override;
+	void Update(const class Player* player, const class Stage* stage)override;
 
 	//描画
 	void Draw()const override;

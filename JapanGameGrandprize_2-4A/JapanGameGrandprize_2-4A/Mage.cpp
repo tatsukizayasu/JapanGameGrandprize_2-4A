@@ -149,12 +149,36 @@ Mage::~Mage()
 //-----------------------------------
 //更新
 //-----------------------------------
-void Mage::Update()
+void Mage::Update(const Player* player, const Stage* stage)
 {
+	Location old_location = location;	//前の座標
+
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		Idol();
+		break;
+	case ENEMY_STATE::MOVE:
+		Move(player->GetLocation());
+		break;
+	case ENEMY_STATE::ATTACK:
+		Attack(player->GetLocation());
+		break;
+	case ENEMY_STATE::DEATH:
+		Death();
+		break;
+	default:
+		break;
+	}
 
 	if (0 <= attack_interval)
 	{
 		attack_interval--;
+	}
+
+	if (HitStage(stage)) //ステージとの当たり判定
+	{
+		location = old_location;
 	}
 
 	Poison();

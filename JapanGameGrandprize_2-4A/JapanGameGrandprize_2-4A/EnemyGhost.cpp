@@ -87,8 +87,33 @@ EnemyGhost::~EnemyGhost()
 //-----------------------------------
 // 描画以外の処理
 //-----------------------------------
-void EnemyGhost::Update()
+void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 {
+	Location old_location = location;	//前の座標
+
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		Idol();
+		break;
+	case ENEMY_STATE::MOVE:
+		Move(player->GetLocation());
+		break;
+	case ENEMY_STATE::ATTACK:
+		Attack(player->GetLocation());
+		break;
+	case ENEMY_STATE::DEATH:
+		Death();
+		break;
+	default:
+		break;
+	}
+
+	if (HitStage(stage)) //ステージとの当たり判定
+	{
+		location = old_location;
+	}
+
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;

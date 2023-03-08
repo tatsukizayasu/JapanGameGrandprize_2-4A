@@ -85,39 +85,24 @@ void GameMain::EnemyUpdate()
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
-	bullet_manager->Update();
+	bullet_manager->Update(stage);
 
 	EnemyBulletBase** enemy_bullet;
 	enemy_bullet = bullet_manager->GetEnemyBullets();
 
 	for (int i = 0; i < 4; i++)
 	{
-
 		if (enemy[i] != nullptr)
 		{
-			enemy[i]->Update();
+			enemy[i]->Update(player,stage);
 
-			switch (enemy[i]->GetState())
+			//エネミーの攻撃
+			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
 			{
-			case ENEMY_STATE::IDOL:
-				enemy[i]->Idol();
-				break;
-			case ENEMY_STATE::MOVE:
-				enemy[i]->Move(player->GetLocation());
-				break;
-			case ENEMY_STATE::ATTACK:
-				enemy[i]->Attack(player->GetLocation());
 				if (player->HitBox(enemy[i]))
 				{
 					player->HpDamage(enemy[i]->Hit());
 				}
-				break;
-			case ENEMY_STATE::DEATH:
-				enemy[i]->Death();
-
-				break;
-			default:
-				break;
 			}
 
 			//プレイヤーの弾との当たり判定
@@ -137,7 +122,7 @@ void GameMain::EnemyUpdate()
 				}
 			}
 
-			if (enemy[i]->GetCanDelete())
+			if (enemy[i]->GetCanDelete()) //エネミーの削除
 			{
 				item_controller->SpawnItem(enemy[i]);
 				delete enemy[i];
@@ -146,6 +131,7 @@ void GameMain::EnemyUpdate()
 		}
 	}
 
+	//敵の弾とプレイヤーとの当たり判定
 	if (enemy_bullet != nullptr)
 	{
 		for (int i = 0; i < bullet_manager->EnemyGetBulletMax(); i++)
