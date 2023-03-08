@@ -19,7 +19,7 @@ public:
 	~NormalBullet() {}
 
 	void Draw() const override;
-	void Update() override;
+	void Update(const Stage*) override;
 
 	bool NormalBulletEfect();
 };

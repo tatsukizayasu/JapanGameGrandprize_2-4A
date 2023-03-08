@@ -2,6 +2,8 @@
 #include "EfectExplosion.h"
 #include "SphereCollider.h"
 #include "define.h"
+#include "Stage/Stage.h"
+#include "Stage/MapChip.h"
 
 
 enum class PLAYER_STATE;
@@ -29,8 +31,9 @@ public:
 	~BulletBase() {};
 
 	virtual void Draw() const = 0;
-	virtual void Update() = 0;
+	virtual void Update(const Stage*) = 0;
 
+	bool HitBlock(const Stage*);
 	bool GetEfectFlg() const;
 	float GetDebuffTime() const;
 	float GetDamage() const;

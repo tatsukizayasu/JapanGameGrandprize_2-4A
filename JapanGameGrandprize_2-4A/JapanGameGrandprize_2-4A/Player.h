@@ -9,6 +9,7 @@
 #include "Pouch.h"
 #include "DxLib.h"
 #include "EnumEnemyType.h"
+#include <vector>
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
@@ -35,6 +36,20 @@ enum class PLAYER_STATE
 };
 
 
+struct MaterialParameter
+{
+	int number_of_bullets;
+	int time;
+	float damage;
+	const char* material_name[10];
+	ATTRIBUTE atribute;
+};
+
+struct ChemicalFormula
+{
+	MaterialParameter x;
+};
+
 
 
 class Player : public BoxCollider
@@ -52,6 +67,7 @@ private:
 	float jump;                     //ジャンプの値
 	float jump_power;               //ジャンプの力
 	float speed_x;
+	float old_x, old_y;				//壁とかに当たった時に元の位置に戻すための変数
 	int select_count;
 	int damage_count;				//無敵時間
 	int flashing_count;				//点滅の間隔
@@ -59,19 +75,21 @@ private:
 	int damage;                     //敵から受けたダメージの値
 
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
-	bool move_left;			//プレイヤーの向き true:左　false:右
+	bool move_left;					//プレイヤーの向き true:左　false:右
 	bool pouch_open;				//ポーチを開けている
+	bool hit_stage;					//ステージのブロックに触れている
 
 	ATTRIBUTE attribute[6];         //弾の属性
-	const char* attribute_c[6];        //弾の属性の文字列
+	const char* attribute_c[6];     //弾の属性の文字列
 	int display_attribute;          //画面に表示させる属性
 
 	PLAYER_STATE player_state;
 	
 	BulletBase** bullet;             //弾の配列
-	Stage* stage;                //ステージへのポインタ
+	Stage* stage;					 //ステージへのポインタ
 	EfectBeam* beam;
-	Pouch* pouch;				//ポーチへのポインタ
+	Pouch* pouch;					 //ポーチへのポインタ
+
 
 
 	ElementItem** element;	//元素
@@ -93,6 +111,7 @@ public:
 	void SortBullet(int);
 	void HpDamage(AttackResource);
 	void Hp_Heal(int);
+	bool HitBlock(const Stage*);
 	void OpenPouch();
 
 	BulletBase** GetBullet()const { return bullet; }
