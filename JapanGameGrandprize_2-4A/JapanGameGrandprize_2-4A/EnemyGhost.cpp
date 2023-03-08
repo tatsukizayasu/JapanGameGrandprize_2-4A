@@ -241,25 +241,7 @@ void EnemyGhost::Draw()const
 	draw_location = draw_location - camera;
 
 
-	switch (attack_state)
-	{
-	case GHOST_ATTACK::PHYSICAL_ATTACK:
-		/*DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);*/
-		DrawRotaGraph(x, y, 1.5f, M_PI / 180, ghost_image, TRUE); //‰æ‘œA¶‚ÉŒX‚¯
-		break;
-	case GHOST_ATTACK::MAGIC_ATTACK:
-		DrawRotaGraph(x, y, 1.5f, M_PI / 180, ghost_image, TRUE);
-		if (bullet != nullptr)
-		{
-			bullet->Draw();
-		}
-		break;
-	case GHOST_ATTACK::NONE:
-		DrawRotaGraph(x, y, 1.5f, M_PI / 180, ghost_image, TRUE);
-		break;
-	default:
-		break;
-	}
+	DrawRotaGraph(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
 }
 
 
