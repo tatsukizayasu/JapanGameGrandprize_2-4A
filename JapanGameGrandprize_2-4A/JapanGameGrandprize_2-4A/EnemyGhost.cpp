@@ -4,7 +4,7 @@
 
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 40
-#define GHOST_SIZE_Y 60
+#define GHOST_SIZE_Y 80
 
 //プレイヤー発見距離
 #define GHOST_DETECTION_DISTANCE 500
@@ -261,7 +261,6 @@ void EnemyGhost::Draw()const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	DrawFormatString(200, 200, GetColor(255, 255, 0), "%d", action_type);
 
 	switch (attack_state)
 	{
