@@ -154,6 +154,7 @@
     <ClInclude Include="AbstractScene.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BulletManager.h" />
     <ClInclude Include="ElementItem.h" />
     <ClInclude Include="EnemyBulletBase.h" />
     <ClInclude Include="EnumElementItem.h" />
@@ -167,6 +168,8 @@
     <ClInclude Include="NormalBullet.h" />
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
+    <ClInclude Include="Stage\Element\Stage_Element.h" />
+    <ClInclude Include="Stage\Element\Stage_Element_Base.h" />
     <ClInclude Include="Stage\StageBuilder\PolyLine.h" />
     <ClInclude Include="Pouch.h" />
     <ClInclude Include="Stage\Element\Element_Wooden_Floor.h" />
@@ -187,7 +190,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SphereCollider.h" />
-    <ClInclude Include="Stage\Element\Element.h" />
     <ClInclude Include="Stage\Element\Element_DamageWall.h" />
     <ClInclude Include="Stage\MapChip.h" />
     <ClInclude Include="Stage\Stage.h" />
@@ -198,6 +200,7 @@
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="EnemyBulletBase.cpp" />
     <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />
@@ -212,6 +215,8 @@
     <ClCompile Include="MageBullet.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
+    <ClCompile Include="Stage\Element\Stage_Element.cpp" />
+    <ClCompile Include="Stage\Element\Stage_Element_Base.cpp" />
     <ClCompile Include="Stage\StageBuilder\PolyLine.cpp" />
     <ClCompile Include="Pouch.cpp" />
     <ClCompile Include="Stage\Element\Element_Wooden_Floor.cpp" />
@@ -228,7 +233,6 @@
     <ClCompile Include="SphereCollider.cpp" />
     <ClCompile Include="Stage\StageBuilder\KeyManager.cpp" />
     <ClCompile Include="Stage\StageBuilder\StageBuilder.cpp" />
-    <ClCompile Include="Stage\Element\Element.cpp" />
     <ClCompile Include="Stage\Element\Element_DamageWall.cpp" />
     <ClCompile Include="Stage\MapChip.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />

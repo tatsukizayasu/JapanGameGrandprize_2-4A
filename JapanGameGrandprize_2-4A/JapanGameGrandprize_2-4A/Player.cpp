@@ -5,7 +5,7 @@
 #include "CameraWork.h"
 #include "Item.h"
 #include <iostream>
-#include <stdio.h>
+
 
 
 
@@ -22,14 +22,18 @@ Player::Player()
 	area.width = image_size_x;
 	area.height = image_size_y;
 	bullet_count = 0;
-	count = 0;
+	shoot_count = 0;
+	flashing_count = 0;
 	damage_count = 0;
-	jump = 10.0;
+	jump = 0.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
+	old_x = 0.0;
+	old_y = 0.0;
+	damage = 0;
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet = new BulletBase * [BULLET_MAX];
@@ -91,7 +95,7 @@ Player::Player(Stage* stage)
 
 	this->stage = stage;
 	location.x = 0;
-	location.y = 1220;
+	location.y = 1100;
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
@@ -99,11 +103,16 @@ Player::Player(Stage* stage)
 	area.height = image_size_y;
 	bullet_count = 0;
 	damage_count = 0;
-	count = 0;
-	jump = 10.0;
+	shoot_count = 0;
+	select_count = 0;
+	damage = 0;
+	flashing_count = 0;
+	jump = 0.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
 	speed_x = 0.0;
+	old_x = 0.0;
+	old_y = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
 	bullet = new BulletBase * [BULLET_MAX];
@@ -139,9 +148,7 @@ Player::Player(Stage* stage)
 
 	beam = nullptr;
 
-	pouch = new Pouch();
-
-	stage = new Stage();
+	this->stage = stage;
 
 	area = { 80,40 };
 
@@ -151,6 +158,14 @@ Player::Player(Stage* stage)
 	{
 		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
 	}
+
+	pouch = new Pouch();
+
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		pouch->SetElement(element[i], i);
+	}
+
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
@@ -178,7 +193,6 @@ void Player::Draw() const
 	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
 	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
 
-	DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 	//FUELバーの表示ここから
 	if (fuel >= 50)
 	{
@@ -223,20 +237,21 @@ void Player::Draw() const
 	//ダメージを受けた時点滅する
 	if (damage_flg)
 	{
-		if (damage_count < 5)
+		if (flashing_count < 5)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
-			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
-		else if (10 < damage_count < 10)
+		else if (flashing_count < 10)
 		{
-			DrawBox(x, y, x + image_size_x, y + image_size_y, 0x00ff00, TRUE);
+			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 		}
+		else {}
 	}
 	else
 	{
-
+		DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
 	}
 
 #ifdef _DEBUG
@@ -288,16 +303,43 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
-
-	damage_count++;
-	if (damage_count >= 10)
+	old_x = location.x;
+	old_y = location.y;
+	if (damage_flg == true)
 	{
-		damage_count = 0;
+		damage_count++;
+		if (damage_count < damage)
+		{
+			if (hp > 0)
+			{
+				hp--;
+			}
+			else
+			{
+				hp = 0;
+				player_state = PLAYER_STATE::DEATH;
+			}
+		}
+
+		if (flashing_count++ >= 10)
+		{
+			flashing_count = 0;
+		}
+
+		if (damage_count % 120 == 0)
+		{
+			damage_flg = false;
+			damage_count = 0;
+		}
 	}
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
 		pouch_open = true;
+		for (int i = 0; i < PLAYER_ELEMENT; i++)
+		{
+			pouch->SetElement(element[i], i);
+		}
 	}
 	else if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
 	{
@@ -327,15 +369,17 @@ void Player::Update()
 		NotInputStick();
 	}
 
-	//RBボタン入力
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
-	{
-		count++;
 
-		if (count % 30 == 0)
+	//RBボタン入力
+	if (!pouch_open)
+	{
+		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 		{
-			bullet_count++;
-			Shoot_Gun();
+			if (shoot_count++ % 30 == 0)
+			{
+				bullet_count++;
+				Shoot_Gun();
+			}
 		}
 	}
 
@@ -344,7 +388,6 @@ void Player::Update()
 	{
 		Jump();
 	}
-
 	//Bボタン未入力
 	else
 	{
@@ -370,13 +413,16 @@ void Player::Update()
 			}
 			else
 			{
-				bullet[i]->Update();
+				bullet[i]->Update(stage);
 			}
 		}
 	}
 
 	//弾の属性の切り替え処理
-	ElementUpdate();
+	if (!pouch_open)
+	{
+		ElementUpdate();
+	}
 }
 
 //スティックを入力していないとき
@@ -395,6 +441,7 @@ void Player::NotInputStick()
 
 		if (speed_x < 0)
 		{
+			player_state = PLAYER_STATE::STOP;
 			speed_x = 0;
 		}
 	}
@@ -418,10 +465,19 @@ void Player::NotInputStick()
 
 	if (speed_x > -JUMP_INERTIA && speed_x < JUMP_INERTIA)
 	{
+		player_state = PLAYER_STATE::STOP;
 		speed_x = 0;
 	}
 
-	location.x += speed_x;
+	if (!HitBlock(stage))
+	{
+		location.x += speed_x;
+	}
+	if (HitBlock(stage))
+	{
+		speed_x = 0.0;
+		location.x = old_x;
+	}
 }
 
 //左移動
@@ -450,12 +506,20 @@ void Player::LeftMove()
 			speed_x = -5.0;
 		}
 	}
-	location.x += speed_x;
+
+	if (!HitBlock(stage))
+	{
+		location.x += speed_x;
+	}
 
 	if (location.x < 0)
 	{
 		speed_x = 0.0;
-		location.x = 0;
+	}
+
+	if (HitBlock(stage))
+	{
+		location.x = old_x;
 	}
 }
 
@@ -486,12 +550,20 @@ void Player::RightMove()
 		}
 	}
 
-	location.x += speed_x;
+	if (!HitBlock(stage))
+	{
+		location.x += speed_x;
+	}
+
+	if (HitBlock(stage))
+	{
+		location.x = old_x;
+		speed_x = 0.0;
+	}
 
 	if (location.x < 0)
 	{
 		speed_x = 0.0;
-		location.x = 0;
 	}
 }
 
@@ -517,19 +589,15 @@ void Player::Jump()
 		player_state = PLAYER_STATE::DOWN;
 	}
 
-	if (location.y > 40)
+	if (!HitBlock(stage))
 	{
 		location.y -= jump;
 	}
-	else
+	
+	if(HitBlock(stage))
 	{
-		location.y = 40;
-	}
-
-	if (location.y > 1200)
-	{
-		location.y = 1200;
 		jump = 0.0;
+		location.y = old_y;
 	}
 }
 
@@ -537,20 +605,6 @@ void Player::Jump()
 void Player::NotJump()
 {
 	player_state = PLAYER_STATE::DOWN;
-	if (location.y < 1200)
-	{
-		location.y -= jump;
-	}
-	else
-	{
-		player_state = PLAYER_STATE::STOP;
-	}
-
-	if (location.y < 40)
-	{
-		jump = 0;
-		location.y = 40;
-	}
 
 	jump -= 0.25;
 
@@ -561,7 +615,6 @@ void Player::NotJump()
 
 	if (not_jet_count++ >= 120)
 	{
-		jump = 0;
 		if (fuel < 100)
 		{
 			fuel += 2.5;
@@ -577,6 +630,17 @@ void Player::NotJump()
 		not_jet_count = 120;
 	}
 
+	if (!HitBlock(stage))
+	{
+		location.y -= jump;
+	}
+	
+	if(HitBlock(stage))
+	{
+		jump = 0;
+		location.y = old_y;
+		player_state = PLAYER_STATE::STOP;
+	}
 }
 
 //-----------------------------------
@@ -659,15 +723,40 @@ void Player::ElementUpdate()
 //-----------------------------------
 //ダメージを受けた時
 //-----------------------------------
-void Player::Hp_Damage(int damage_value)
+void Player::HpDamage(AttackResource attack)
 {
-	damage_flg = true;
-	hp -= damage_value;
 
-	if (hp <= 0)
+	if (!damage_flg)
 	{
-		hp = 0;
-		player_state = PLAYER_STATE::DEATH;
+		if (attack.damage > 0)
+		{
+			damage_flg = true;
+			damage = attack.damage;
+
+			if (attack.type != nullptr)
+			{
+				for (int i = 0; i < attack.type_count; i++)
+				{
+					switch (attack.type[i])
+					{
+					case ENEMY_TYPE::NORMAL:
+						break;
+					case ENEMY_TYPE::FIRE:
+						break;
+					case ENEMY_TYPE::WATER:
+						break;
+					case ENEMY_TYPE::WIND:
+						break;
+					case ENEMY_TYPE::SOIL:
+						break;
+					case ENEMY_TYPE::THUNDER:
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -686,16 +775,45 @@ void Player::Hp_Heal(int heal_value)
 	}
 }
 
-//-----------------------------------
+//-----------------------------------wer
 //元素の量の設定
 //-----------------------------------
 void Player::SetElementItem(class Item* item)
 {
-
 	int num = static_cast<int>(item->GetElementType());
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);
 
+}
+
+bool Player::HitBlock(const Stage* stage_pointa)
+{
+	//マップチップ
+	std::vector<MapChip*>map_chip = stage_pointa->GetMapChip();
+
+	//描画範囲
+	Location camera = CameraWork::GetCamera();
+
+	for (MapChip* map_chip : map_chip)
+	{
+		if (map_chip != nullptr)
+		{
+
+			Location draw_location = map_chip->GetLocation();
+			Area draw = { SCREEN_HEIGHT + CHIP_SIZE,SCREEN_WIDTH + CHIP_SIZE };
+
+			// 画面内にあるMapChipオブジェクトだけUpdateする
+			if ((camera.x < draw_location.x + draw.width) && (draw_location.x < camera.x + draw.width)
+				&& (camera.y < draw_location.y + draw.height) && (draw_location.y < camera.y + draw.height))
+			{
+				if (HitBox(map_chip))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 bool Player::GetMoveDirection()

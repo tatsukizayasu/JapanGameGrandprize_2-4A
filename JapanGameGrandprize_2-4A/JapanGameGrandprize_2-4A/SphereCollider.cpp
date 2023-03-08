@@ -1,9 +1,19 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 #include "LineCollider.h"
+#include "CameraWork.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+//---------------------
+// •`‰æ
+//---------------------
+void SphereCollider::Draw()const
+{
+	DrawCircleAA(GetLocation().x - CameraWork::GetCamera().x, 
+		GetLocation().y - CameraWork::GetCamera().y,
+		GetRadius(),10, GetColor(128, 128, 128), TRUE);
+}
 
 bool SphereCollider::HitSphere(const SphereCollider* sphere_collider) const
 {
@@ -37,7 +47,7 @@ bool SphereCollider::HitBox(const BoxCollider* box_collider) const
 
 	//À•W‚ÌŒvŽZ
 	sphere_x = location.x + (radius * cosf(rad));
-	sphere_y = location.y - (radius * sinf(rad));
+	sphere_y = location.y + (radius * sinf(rad));
 
 	//‘ŠŽè‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ‚ÌŒvŽZ
 	sub_x[0] = box_collider->GetLocation().x - (box_collider->GetArea().width / 2);
@@ -54,7 +64,7 @@ bool SphereCollider::HitBox(const BoxCollider* box_collider) const
 	return ret;
 }
 
-bool SphereCollider::HitLine(const LineCollider* line_collider) const
+bool SphereCollider::HitLine(const LineCollider_t* line_collider) const
 {
 	bool ret = false; //•Ô‚è’l
 

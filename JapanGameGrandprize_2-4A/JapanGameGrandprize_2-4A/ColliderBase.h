@@ -2,9 +2,9 @@
 #include "DxLib.h"
 #include "Stage/StageBuilder/KeyManager.h"
 #include "define.h"
+#define _USE_MATH_DEFINES
 #include <math.h>
 
-#define _USE_MATH_DEFINES
 class ColliderBase
 {
 public:
@@ -62,8 +62,14 @@ public:
 			this->location = location;
 		}
 	}
+	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è
+	virtual bool HitSphere(const class SphereCollider* sphere_collider) const = 0;
 
+	//BoxCollider‚Æ‚Ì“–‚½‚è”»’è
+	virtual bool HitBox(const class BoxCollider* box_collider) const = 0;
 
+	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
+	virtual bool HitLine(const class LineCollider_t* line_collider)const = 0;
 
 protected:
 	Location location;	//’†SÀ•W

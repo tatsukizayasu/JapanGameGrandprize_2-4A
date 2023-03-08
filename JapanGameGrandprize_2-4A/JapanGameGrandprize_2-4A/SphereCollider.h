@@ -17,13 +17,17 @@ public:
 		radius = 5;
 	}
 
-	//SphereCollider“–‚½‚è”»’è
-	bool HitSphere(const SphereCollider* sphere_collider) const;
+	//•`‰æ
+	virtual void Draw()const;
 
-	//BoxCollider“–‚½‚è”»’è
-	bool HitBox(const class BoxCollider* box_collider) const;
+	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è
+	bool HitSphere(const class SphereCollider* sphere_collider) const override;
 
-	bool HitLine(const class LineCollider* line_collider) const;
+	//BoxCollider‚Æ‚Ì“–‚½‚è”»’è
+	bool HitBox(const class BoxCollider* box_collider) const override;
+
+	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
+	bool HitLine(const class LineCollider_t* line_collider) const override;
 
 	//’†SÀ•W‚Ìæ“¾
 	Location GetLocation() const

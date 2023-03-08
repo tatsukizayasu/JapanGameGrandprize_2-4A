@@ -130,10 +130,7 @@ void ItemController::ArrangementItem(const int old_item_max)
 		item = new Item * [item_max];
 
 		//”ð“ï‚³‚¹‚½ƒAƒCƒeƒ€‚ðŒ³‚É–ß‚·
-		for (int i = 0; i < old_item_max; i++)
-		{
-			item[i] = temporary_item[i];
-		}
+		item = temporary_item;
 
 		for (int i = old_item_max; i < item_max; i++)
 		{

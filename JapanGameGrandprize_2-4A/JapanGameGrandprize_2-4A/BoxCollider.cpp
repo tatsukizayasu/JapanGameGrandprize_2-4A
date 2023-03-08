@@ -84,7 +84,7 @@ bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 //-----------------------------------
 // LineCollider‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-bool BoxCollider::HitLine(const LineCollider* line_collider) const
+bool BoxCollider::HitLine(const LineCollider_t* line_collider) const
 {
 	bool ret = false; //•Ô‚è’l
 

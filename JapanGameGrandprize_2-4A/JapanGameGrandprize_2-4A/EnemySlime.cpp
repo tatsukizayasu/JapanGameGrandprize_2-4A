@@ -2,6 +2,8 @@
 #define _USE_MATH_DEFINES
 #include<math.h>
 #include"EnemySlime.h"
+#include"Player.h"
+#include"Stage/Stage.h"
 
 #define SLIME_ATTACK_DISTANCE_Y 15
 #define SLIME_ATTACK_SPEED 5
@@ -22,13 +24,15 @@
 
 EnemySlime::EnemySlime()
 {
+	attack = false;
+	left_move = false;
 	kind = ENEMY_KIND::SLIME;
 
-	location.x = 1100;
-	location.y = GROUND;
+	location.x = 1690.0f;
+	location.y = 980.0f;
 
 	area.height = 40;
-	area.width = 40;
+	area.width = 46;
 	wait_time = 0;
 
 	hp = 100;
@@ -39,8 +43,7 @@ EnemySlime::EnemySlime()
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WATER;
 
-	state = ENEMY_STATE::MOVE;
-	direction = DIRECTION::LEFT;
+	state = ENEMY_STATE::IDOL;
 	slime_image = LoadGraph("Images/Enemy/Slime_.png");
 	slime_angle = 0;
 
@@ -60,21 +63,52 @@ EnemySlime::EnemySlime()
 
 }
 
-void EnemySlime::Update()
+void EnemySlime::Update(const Player* player, const Stage* stage)
 {
+	Location old_location = location;	//前の座標
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
+		Idol();
 		break;
 	case ENEMY_STATE::MOVE:
+		Move(player->GetLocation());
+
+		if (!HitStage(stage)) //ステージとの当たり判定
+		{
+			state = ENEMY_STATE::FALL;
+			speed = 0;
+		}
+
+		break;
+	case ENEMY_STATE::FALL:
+		Fall();
+		if (HitStage(stage)) //ステージとの当たり判定
+		{
+			state = ENEMY_STATE::MOVE;
+			if (left_move)
+			{
+				speed = -SLIME_SPEED;
+			}
+			else
+			{
+				speed = SLIME_SPEED;
+			}
+		}
 		break;
 	case ENEMY_STATE::ATTACK:
+		Attack(player->GetLocation());
 		break;
 	case ENEMY_STATE::DEATH:
+		Death();
 		break;
 	default:
 		break;
 	}
+
+
+	
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -85,6 +119,11 @@ void EnemySlime::Update()
 
 void EnemySlime::Draw()const
 {
+
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
+
 	/*DrawCircle(location.x - CameraWork::GetCamera().x , location.y, 20, color, 1, 1);
 	DrawCircle(location.x - CameraWork::GetCamera().x, location.y + 8, 7, 0x000000, 1, 1);
 	DrawCircle(location.x - 7 - CameraWork::GetCamera().x, location.y - 6, 4, 0xffffff, 1, 1);
@@ -93,7 +132,7 @@ void EnemySlime::Draw()const
 	DrawCircle(location.x + 7 + (1 * direction) - CameraWork::GetCamera().x, location.y - 6, 2, 0x000000, 1, 1);
 	DrawBox(location.x - (area.width / 2)-CameraWork::GetCamera().x, location.y - (area.height / 2), location.x - (area.width / 2) + area.width- CameraWork::GetCamera().x, location.y - (area.height / 2) + area.height, 0xffffff, 0);*/
 
-	DrawRotaGraph(location.x - CameraWork::GetCamera().x, location.y - CameraWork::GetCamera().y, 0.17, M_PI / 180 * slime_angle, slime_image, TRUE);
+	DrawRotaGraph(draw_location.x, draw_location.y, 0.17, M_PI / 180 * slime_angle, slime_image, TRUE, !left_move);
 }
 
 //-----------------------------------
@@ -101,7 +140,15 @@ void EnemySlime::Draw()const
 //-----------------------------------
 void EnemySlime::Idol()
 {
+	Location scroll; //画面スクロールを考慮したX座標
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
 
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 }
 
 //-----------------------------------
@@ -109,37 +156,43 @@ void EnemySlime::Idol()
 //-----------------------------------
 void EnemySlime::Move(const Location player_location)
 {
-	if (wait_time == 0)
+
+	float distance; //離れている距離
+
+	//プレイヤーとの距離の計算
+	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
+
+
+	if (distance < 120 )
 	{
-		if (location.x >= 1260)
+		if (wait_time != 0)
 		{
-			direction = DIRECTION::LEFT;
-			speed = -SLIME_SPEED;
+			wait_time++;
 		}
-		if (location.x <= 20)
-		{
-			direction = DIRECTION::RIGHT;
-			speed = SLIME_SPEED;
-		}
+	}
+	else
+	{
 		location.x += speed;
 	}
 
-		float distance; //離れている距離
-
-		//プレイヤーとの距離の計算
-		distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
-
-
-	if (distance < 120 || wait_time != 0)
-	{
-		wait_time++;
-	}
 	if (wait_time >= WAIT_TIME)
 	{
 		state = ENEMY_STATE::ATTACK;
 		jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
 		wait_time = 0;
 	}
+}
+
+//-----------------------------------
+//落下
+//-----------------------------------
+void EnemySlime::Fall()
+{
+	if (speed < GRAVITY)
+	{
+		speed += ENEMY_FALL_SPEED;
+	}
+	location.y += speed;
 }
 
 //-----------------------------------
@@ -154,14 +207,26 @@ void  EnemySlime::Attack(Location player_location)
 	{
 	case SLIME_ATTACK::BEFORE_ATTACK:
 
-		if (direction == DIRECTION::RIGHT)speed = SLIME_ATTACK_SPEED;
-		else speed = -SLIME_ATTACK_SPEED;
+		if (left_move)
+		{
+			speed = -SLIME_ATTACK_SPEED;
+		}
+		else
+		{
+			speed = SLIME_ATTACK_SPEED;
+		}
 		break;
 
 	case SLIME_ATTACK::AFTER_ATTACK:
 
-		if (direction == DIRECTION::RIGHT)speed = -SLIME_ATTACK_SPEED;
-		else speed = SLIME_ATTACK_SPEED;
+		if (left_move)
+		{
+			speed = -SLIME_ATTACK_SPEED;
+		}
+		else
+		{
+			speed = SLIME_ATTACK_SPEED;
+		}
 
 		break;
 	}
@@ -169,32 +234,36 @@ void  EnemySlime::Attack(Location player_location)
 
 	if (location.y >= GROUND)
 	{
+		attack = false;
 		slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 		state = ENEMY_STATE::MOVE;
-		if (direction == DIRECTION::RIGHT)speed = SLIME_SPEED;
-		else speed = -SLIME_SPEED;
+		if (left_move)
+		{
+			speed = -SLIME_SPEED;
+		}
+		else
+		{
+			speed = SLIME_SPEED;
+
+		}
 	}
 }
 
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource EnemySlime::HitCheck(const BoxCollider* collider)
+AttackResource EnemySlime::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (state == ENEMY_STATE::ATTACK)
+	if (!attack)
 	{
-		if (HitBox(collider))
-		{
-			hp -= 10;
-
-			slime_attack = SLIME_ATTACK::AFTER_ATTACK;
-			ENEMY_TYPE attack_type[1] = { *type };
-			ret.damage = SLIME_ATTACK_DAMAGE;
-			ret.type = attack_type;
-			ret.type_count = 1;
-		}
+		attack = true;
+		slime_attack = SLIME_ATTACK::AFTER_ATTACK;
+		ENEMY_TYPE attack_type[1] = { *type };
+		ret.damage = SLIME_ATTACK_DAMAGE;
+		ret.type = attack_type;
+		ret.type_count = 1;
 	}
 
 	return ret;
@@ -216,15 +285,16 @@ void EnemySlime::Death()
 			location.y -= (jump_distance.y / 3);
 			jump_distance.y--;
 		}
-		if (direction == DIRECTION::RIGHT)
-		{
-			speed = -SLIME_ATTACK_SPEED;
-			slime_angle -= ROTATION_SPEED;
-		}
-		else
+		if (left_move)
 		{
 			speed = SLIME_ATTACK_SPEED;
 			slime_angle += ROTATION_SPEED;
+		}
+		else
+		{
+		
+			speed = -SLIME_ATTACK_SPEED;
+			slime_angle -= ROTATION_SPEED;
 		}
 		location.x += speed;
 	}
@@ -233,37 +303,32 @@ void EnemySlime::Death()
 //-----------------------------------
 // プレイヤーの弾との当たり判定
 //-----------------------------------
-bool EnemySlime::HitBullet(const BulletBase* bullet)
+void EnemySlime::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-	if (HitSphere(bullet))
+	switch (bullet->GetAttribute())
 	{
-		switch (bullet->GetAttribute())
-		{
-		case ATTRIBUTE::NORMAL:
-			hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
-			break;
-		case ATTRIBUTE::EXPLOSION:
-			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
-			break;
-		case ATTRIBUTE::MELT:
-			hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
-			break;
-		case ATTRIBUTE::POISON:
-			//poison_damage = bullet->GetDamage();
-			//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			paralysis_time = bullet->GetDebuffTime() * 0;
-			break;
-		case ATTRIBUTE::HEAL:
-			break;
-		default:
-			break;
-		}
-		ret = true;
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::POISON:
+		//poison_damage = bullet->GetDamage();
+		//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * 0;
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
-	return ret;
+
 }
 
 //-----------------------------------

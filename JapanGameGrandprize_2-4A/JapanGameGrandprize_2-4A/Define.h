@@ -5,7 +5,7 @@
 
 #define SCREEN_HEIGHT 720	//画面サイズ (縦)
 #define SCREEN_WIDTH 1280	//画面サイズ (横)
-#define GRAVITY 10
+#define GRAVITY 10 //重力
 
 //化合物構造体
 struct Compound
@@ -39,6 +39,26 @@ struct Location
 {
 	float x;	//中心座標(x)
 	float y;	//中心座標(y)
+
+	Location operator +(Location location)
+	{
+		Location ret;
+
+		ret.x = this->x + location.x;
+		ret.y = this->y + location.y;
+
+		return ret;
+	}
+
+	Location operator -(Location location)
+	{
+		Location ret;
+
+		ret.x = this->x - location.x;
+		ret.y = this->y - location.y;
+
+		return ret;
+	}
 };
 
 //サイズ
@@ -47,3 +67,4 @@ struct Area
 	float height;	//縦
 	float width;	//横
 };
+

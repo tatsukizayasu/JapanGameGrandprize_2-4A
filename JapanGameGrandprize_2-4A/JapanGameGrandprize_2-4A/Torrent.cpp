@@ -1,5 +1,7 @@
 #include "DxLib.h"
 #include "Torrent.h"
+#include "Player.h"
+#include "Stage/Stage.h"
 
 //-----------------------------------
 //コンストラクタ
@@ -20,9 +22,35 @@ Torrent::~Torrent()
 //-----------------------------------
 //更新
 //-----------------------------------
-void Torrent::Update()
+void Torrent::Update(const Player* player, const Stage* stage)
 {
+	Location old_location = location;	//前の座標
 
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		Idol();
+		break;
+	case ENEMY_STATE::MOVE:
+		Move(player->GetLocation());
+		break;
+	case ENEMY_STATE::FALL:
+		Fall();
+		break;
+	case ENEMY_STATE::ATTACK:
+		Attack(player->GetLocation());
+		break;
+	case ENEMY_STATE::DEATH:
+		Death();
+		break;
+	default:
+		break;
+	}
+
+	if (HitStage(stage)) //ステージとの当たり判定
+	{
+		location = old_location;
+	}
 }
 
 //-----------------------------------
@@ -42,6 +70,14 @@ void Torrent::Move(const Location player_location)
 }
 
 //-----------------------------------
+//落下
+//-----------------------------------
+void Torrent::Fall()
+{
+
+}
+
+//-----------------------------------
 //攻撃
 //-----------------------------------
 void  Torrent::Attack(Location player_location)
@@ -53,7 +89,7 @@ void  Torrent::Attack(Location player_location)
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
-AttackResource Torrent::HitCheck(const BoxCollider* collider)
+AttackResource Torrent::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
@@ -71,11 +107,8 @@ void Torrent::Death()
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-bool Torrent::HitBullet(const BulletBase* bullet)
+void Torrent::HitBullet(const BulletBase* bullet)
 {
-	bool ret = false; //戻り値
-
-	return ret;
 }
 
 //-----------------------------------

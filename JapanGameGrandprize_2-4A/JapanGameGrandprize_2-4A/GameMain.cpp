@@ -17,14 +17,16 @@ GameMain::GameMain()
 {
 	stage = new Stage();
 	player = new Player(stage);
-	enemy = new EnemyBase * [5];
+	stage->SetPlayer(player);
+	enemy = new EnemyBase * [4];
 	enemy[0] = new Undead();
 	enemy[1] = new EnemySlime();
 	enemy[2] = new EnemyGhost();
 	enemy[3] = new Mage();
-	enemy[4] = nullptr;//new Harpy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
+
+	bullet_manager = BulletManager::GetInstance();
 
 	input_margin = 0;
 }
@@ -44,6 +46,7 @@ GameMain::~GameMain()
 
 	delete[] enemy;
 	delete camera_work;
+	delete bullet_manager;
 }
 
 //-----------------------------------
@@ -80,58 +83,69 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
-	BulletBase** bullet;
-	bullet = player->GetBullet();
+	BulletBase** player_bullet;
+	player_bullet = player->GetBullet();
+
+	bullet_manager->Update(stage);
+
+	EnemyBulletBase** enemy_bullet;
+	enemy_bullet = bullet_manager->GetEnemyBullets();
 
 	for (int i = 0; i < 4; i++)
 	{
-
 		if (enemy[i] != nullptr)
 		{
-			enemy[i]->Update();
+			enemy[i]->Update(player,stage);
 
-			switch (enemy[i]->GetState())
+			//エネミーの攻撃
+			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
 			{
-			case ENEMY_STATE::IDOL:
-				enemy[i]->Idol();
-				break;
-			case ENEMY_STATE::MOVE:
-				enemy[i]->Move(player->GetLocation());
-				break;
-			case ENEMY_STATE::ATTACK:
-				enemy[i]->Attack(player->GetLocation());
-				break;
-			case ENEMY_STATE::DEATH:
-				enemy[i]->Death();
-
-				break;
-			default:
-				break;
+				if (player->HitBox(enemy[i]))
+				{
+					player->HpDamage(enemy[i]->Hit());
+				}
 			}
-
-			enemy[i]->HitCheck(player);
 
 			//プレイヤーの弾との当たり判定
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
-				if (bullet[j] == nullptr)
+				if (player_bullet[j] == nullptr)
 				{
 					break;
 				}
 
-				if (enemy[i]->HitBullet(bullet[j]))
+				if (player_bullet[j]->HitBox(enemy[i]))
 				{
-					delete bullet[j];
-					bullet[j] = nullptr;
+					enemy[i]->HitBullet(player_bullet[j]);
+					delete player_bullet[j];
+					player_bullet[j] = nullptr;
 					player->SortBullet(j);
 				}
 			}
 
-			if (enemy[i]->GetCanDelete())
+			if (enemy[i]->GetCanDelete()) //エネミーの削除
 			{
 				item_controller->SpawnItem(enemy[i]);
 				delete enemy[i];
 				enemy[i] = nullptr;
+			}
+		}
+	}
+
+	//敵の弾とプレイヤーとの当たり判定
+	if (enemy_bullet != nullptr)
+	{
+		for (int i = 0; i < bullet_manager->EnemyGetBulletMax(); i++)
+		{
+			if (enemy_bullet[i] == nullptr)
+			{
+				break;
+			}
+			if (enemy_bullet[i]->HitBox(player))
+			{
+				player->HpDamage(bullet_manager->Hit(i));
+				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
+				i--;
 			}
 		}
 	}
@@ -157,4 +171,6 @@ void GameMain::Draw()const
 			enemy[i]->Draw();
 		}
 	}
+	bullet_manager->Draw();
+
 }

@@ -8,6 +8,8 @@
 #include "ElementItem.h"
 #include "Pouch.h"
 #include "DxLib.h"
+#include "EnumEnemyType.h"
+#include <vector>
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
@@ -34,6 +36,20 @@ enum class PLAYER_STATE
 };
 
 
+struct MaterialParameter
+{
+	int number_of_bullets;
+	int time;
+	float damage;
+	const char* material_name[10];
+	ATTRIBUTE atribute;
+};
+
+struct ChemicalFormula
+{
+	MaterialParameter x;
+};
+
 
 
 class Player : public BoxCollider
@@ -44,31 +60,36 @@ private:
 	int image_size_x, image_size_y; //画像のサイズ
 	int hp;							//体力
 	int bullet_count;				//撃った弾の数
-	int count;                      //処理をカウントする
+	int shoot_count;                //処理をカウントする
 	int not_jet_count;              //跳んでない時を数える
 	float gravity_down;				//下降時の値
 	float fuel;						//燃料
 	float jump;                     //ジャンプの値
 	float jump_power;               //ジャンプの力
 	float speed_x;
+	float old_x, old_y;				//壁とかに当たった時に元の位置に戻すための変数
 	int select_count;
 	int damage_count;				//無敵時間
+	int flashing_count;				//点滅の間隔
 	int i;                          //スイッチ内でのループ用
+	int damage;                     //敵から受けたダメージの値
 
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
-	bool move_left;			//プレイヤーの向き true:左　false:右
+	bool move_left;					//プレイヤーの向き true:左　false:右
 	bool pouch_open;				//ポーチを開けている
+	bool hit_stage;					//ステージのブロックに触れている
 
 	ATTRIBUTE attribute[6];         //弾の属性
-	const char* attribute_c[6];        //弾の属性の文字列
+	const char* attribute_c[6];     //弾の属性の文字列
 	int display_attribute;          //画面に表示させる属性
 
 	PLAYER_STATE player_state;
 	
 	BulletBase** bullet;             //弾の配列
-	Stage* stage;                //ステージへのポインタ
+	Stage* stage;					 //ステージへのポインタ
 	EfectBeam* beam;
-	Pouch* pouch;				//ポーチへのポインタ
+	Pouch* pouch;					 //ポーチへのポインタ
+
 
 
 	ElementItem** element;	//元素
@@ -88,9 +109,9 @@ public:
 	void NotJump();
 	void Shoot_Gun();
 	void SortBullet(int);
-	void Hp_Damage(int);
-	//void Being_Attacked(EnemyBase*);
+	void HpDamage(AttackResource);
 	void Hp_Heal(int);
+	bool HitBlock(const Stage*);
 	void OpenPouch();
 
 	BulletBase** GetBullet()const { return bullet; }

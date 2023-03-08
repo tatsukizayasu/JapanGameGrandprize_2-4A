@@ -30,19 +30,19 @@ NormalBullet::NormalBullet()
 //-----------------------------------//
 // コンストラクタ					 //
 //-----------------------------------//
-NormalBullet::NormalBullet(float player_x, float player_y, bool player_direc,ATTRIBUTE attribute)
+NormalBullet::NormalBullet(float player_x, float player_y, bool direction,ATTRIBUTE attribute)
 {
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
 	scrool_y = CameraWork::GetCamera().y;
 
 	location.x = player_x;
-	location.y = player_y;
+	location.y = player_y - 10;
 	this->attribute = attribute;
 	damage = 10;
 	debuff_time = 0;
 	this->player_state = player_state;
-	player_direction = player_direc;
+	player_direction = direction;
 
 	efect_count = 0;
 	delete_flg = false;
@@ -86,12 +86,12 @@ void NormalBullet::Draw() const
 //-----------------------------------
 // 更新
 //-----------------------------------
-void NormalBullet::Update()
+void NormalBullet::Update(const Stage* stage_pointa)
 {
 	float scrool_x = CameraWork::GetCamera().x;
-	if (player_direction == false)
+	if (!player_direction)
 	{
-		if ((location.x - scrool_x) < 1260 && !delete_flg)
+		if (!HitBlock(stage_pointa) && location.x - scrool_x < 1280 && !delete_flg)
 		{
 			location.x += 10;
 		}
@@ -108,9 +108,10 @@ void NormalBullet::Update()
 			delete_flg = true;
 		}
 	}
+
 	if (player_direction)
 	{
-		if (location.x - scrool_x > 0 && !delete_flg)
+		if (!HitBlock(stage_pointa) && location.x - scrool_x > 0 && !delete_flg)
 		{
 			location.x -= 10;
 		}

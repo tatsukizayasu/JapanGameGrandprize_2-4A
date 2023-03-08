@@ -2,8 +2,9 @@
 #include "MapChip.h"
 #include <vector>
 #include <Windows.h>
-
 #include "StageBuilder/StageBuilder.h"
+#include "Element/Element_DamageWall.h"
+#include "Element/Element_Wooden_Floor.h"
 
 #define CHIP_SIZE	40
 
@@ -13,8 +14,11 @@ class Stage
 {
 private:
 
-	//MapChipオブジェクト
-	std::vector<MapChip*> mapchip;
+	//オブジェクト変数
+	Player* player;
+
+	std::vector<Element_Wooden_Floor*> element_wooden_floor;
+	std::vector<Element_DamageWall*> element_damagewall;
 
 #ifdef _STAGE_BUILDER
 	StageBuilder* stage_builder;
@@ -37,6 +41,10 @@ private:
 
 	//当たっている方向	(値渡し用)	構造体
 	POINT collision_dir_w;
+
+protected:
+	//MapChipオブジェクト
+	std::vector<MapChip*> mapchip;
 
 public:
 
@@ -63,6 +71,27 @@ public:
 	void LoadMap();
 
 	/// <summary>
+	/// ステージ要素の作成
+	/// </summary>
+	void CreateElement(short id);
+
+	/// <summary>
+	/// ステージ要素の更新
+	/// </summary>
+	void ElementUpdate(Player* player);
+	
+	/// <summary>
+	/// ステージ要素の描画
+	/// </summary>
+	void ElementDraw();
+
+	/// <summary>
+	/// StageクラスにPlayerオブジェクトを渡すSetter
+	/// </summary>
+	/// <param name = "*player">Playerオブジェクトポインタ</param>
+	void SetPlayer(Player *player) { this->player = player; }
+
+	/// <summary>
 	/// マップサイズのGeter
 	/// </summary>
 	/// <returns>構造体型：マップサイズ</returns>	
@@ -73,7 +102,7 @@ public:
 	/// </summary>
 	/// <returns>ベクター型(MapChipオブジェクト型)：MapChip</returns>	
 	/// ※全要素をループして使わないこと
-	//std::vector<MapChip*> GetMapChip() { return mapchip; };
+	std::vector<MapChip*> GetMapChip() const { return mapchip; };
 
 
 	/// <summary>

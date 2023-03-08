@@ -5,10 +5,11 @@
 #include "Player.h"
 
 class Undead :
-    public EnemyBase, public BoxCollider
+    public EnemyBase
 {
 private:
 
+    bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
     int damage; //ƒ_ƒ[ƒW
     int attack_interval; //Ÿ‚ÌUŒ‚‚Ü‚Å‚ÌŠÔ
     int image; //‰æ‘œ
@@ -26,25 +27,28 @@ public:
     ~Undead();
 
     //•`‰æˆÈŠO‚ÌXV
-    void Update() override;
+    void Update(const class Player* player, const class Stage* stage) override;
 
     //ƒAƒCƒhƒ‹ó‘Ô
     void Idol() override;
 
-    //ˆÚ“®
+   //ˆÚ“®
    void Move(const Location player_location) override;
 
-    //UŒ‚
+   //—‰º
+   void Fall() override;
+
+   //UŒ‚
    void  Attack(Location) override;
 
     //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
-   AttackResource HitCheck(const BoxCollider* collider) override;
+   AttackResource Hit() override;
 
     //€–S
     void Death() override;
 
     //ƒvƒŒƒCƒ„[‚Ì’e‚Æ‚Ì“–‚½‚è”»’è
-    bool HitBullet(const BulletBase* bullet) override;
+    void HitBullet(const BulletBase* bullet) override;
 
     //•`‰æ
     void Draw() const override;

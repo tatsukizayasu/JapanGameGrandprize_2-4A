@@ -1,5 +1,7 @@
 #include "DxLib.h"
+#include "../../Define.h"
 #include "StageBuilder.h"
+#include "../../CameraWork.h"
 #include "Directory.h"
 #include <string>
 #include <fstream>
@@ -14,17 +16,16 @@ StageBuilder::StageBuilder()
 {
 	Directory::Init();
 	mouse = new SphereCollider();
-	mouse_pos = {};
+	select_collider = nullptr;
+	menu_cursor = 0;	
+	arrow[0] = '>';
 
 	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, 40, 40, block_images) == -1)
 	{
 		throw "Images/Stage/map_chips_.png";
 	}
-	select_collider = nullptr;
 	mode = BRUSH_MODE;
 
-	menu_cursor = 0;	
-	arrow[0] = '>';
 
 	for (int i = 1; i < ARROW_NUM; i++)
 	{
@@ -34,14 +35,13 @@ StageBuilder::StageBuilder()
 	current_brush = MAP_CHIP;
 
 #ifdef _DEV
-
-	Location loc[3] =
+	Location points[3] =
 	{
-		{200.f,200.f},
-		{600.f,300.f},
-		{1000.f,100.f}
+		{200,200},
+		{640,500},
+		{940,350}
 	};
-	line = new PolyLine(loc,3);
+	line = new PolyLine(points,3);
 	
 #endif // _DEV
 
@@ -58,8 +58,13 @@ StageBuilder::~StageBuilder()
 	{
 		delete map_chips[i];
 	}
-
 	map_chips.clear();
+
+	for (int i = 0; i < pending_sphere.size(); i++)
+	{
+		delete pending_sphere[i];
+	}
+	pending_sphere.clear();
 
 	delete line;
 }
@@ -102,22 +107,25 @@ void StageBuilder::Update()
 
 #ifdef _DEV
 
-	vector<SphereCollider*> points = line->GetPoint();
-	for (int i = 0; i < points.size(); i++)
+	if (line != nullptr)
 	{
-		if (KeyManager::OnMouseClicked(MOUSE_INPUT_RIGHT))
+		vector<SphereCollider*> points = line->GetPoint();
+		for (int i = 0; i < points.size(); i++)
 		{
-			if (mouse->HitSphere(points[i]))
+			if (KeyManager::OnMouseClicked(MOUSE_INPUT_RIGHT))
 			{
-				select_collider = points[i];
+				if (mouse->HitSphere(points[i]))
+				{
+					select_collider = points[i];
+				}
 			}
-		}
 
-		if (KeyManager::OnMouseReleased(MOUSE_INPUT_RIGHT))
-		{
-			select_collider = nullptr;
-		}
+			if (KeyManager::OnMouseReleased(MOUSE_INPUT_RIGHT))
+			{
+				select_collider = nullptr;
+			}
 
+		}
 	}
 
 	if (select_collider != nullptr)
@@ -137,8 +145,6 @@ void StageBuilder::Update()
 //------------------------------------
 void StageBuilder::Draw()const
 {
-	DrawCircleAA(mouse_pos.x, mouse_pos.y, 2, 10, 0xFFFFFF);
-	DrawCircleAA(mouse_pos.x, mouse_pos.y, 1, 10, 0x000000);
 
 	for (int i = 0; i < map_chips.size(); i++)
 	{
@@ -163,11 +169,27 @@ void StageBuilder::Draw()const
 
 #ifdef _DEV
 
-	//line->DrawCollision();
+	if (line != nullptr)
+	{
+		line->Draw();
+	}
+
+	if (2 <= pending_sphere.size())
+	{
+		for (int i = 0; i + 1 < pending_sphere.size(); i++)
+		{
+			DrawLine(pending_sphere[i]->GetLocation() - CameraWork::GetCamera()
+				, pending_sphere[i + 1]->GetLocation() - CameraWork::GetCamera());
+		}
+	}
+	DrawSphere();
 
 #endif // _DEV
 
 	DrawWhichMode();
+
+	DrawMouse();
+
 }
 
 //--------------------------------------
@@ -223,14 +245,17 @@ void StageBuilder::UpdateBrush()
 			current_brush -= CLASS_NUM;
 		}
 	}
+
 	switch (current_brush)
 	{
+
 	case MAP_CHIP:
 		if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 		{
 			MakeMapChip();
 		}
 		break;
+
 	case POLY_LINE:
 		MakePolyLine();
 		break;
@@ -341,10 +366,11 @@ void StageBuilder::UpdateMouse()
 {
 	int x, y;
 	GetMousePoint(&x, &y);
-	mouse_pos.x = (float)x;
-	mouse_pos.y = (float)y;
 
-	mouse->SetLocation(mouse_pos);
+	x = x + (int)CameraWork::GetCamera().x;
+	y = y + (int)CameraWork::GetCamera().y;
+
+	mouse->SetLocation({(float)x,(float)y});
 }
 
 //------------------------------------
@@ -428,6 +454,17 @@ void StageBuilder::DrawFrame()const
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
+//-------------------------------------
+// マウスの描画
+//-------------------------------------
+void StageBuilder::DrawMouse()const
+{
+	DrawCircleAA(mouse->GetLocation().x - CameraWork::GetCamera().x,
+		mouse->GetLocation().y - CameraWork::GetCamera().y, 2, 10, 0xFFFFFF);
+	DrawCircleAA(mouse->GetLocation().x - CameraWork::GetCamera().x,
+		mouse->GetLocation().y - CameraWork::GetCamera().y, 1, 10, 0x000000);
+}
+
 //------------------------------------
 // ファイルの描画
 //------------------------------------
@@ -475,13 +512,37 @@ void StageBuilder::DrawClassName()const
 
 }
 
+//---------------------------------------------
+// 保留中のスフィアの描画
+//---------------------------------------------
+void StageBuilder::DrawSphere()const
+{
+	for (int i = 0; i < pending_sphere.size(); i++)
+	{
+		pending_sphere[i]->Draw();
+	}
+}
+
+//---------------------------------------------
+// 保留中のラインの描画
+//---------------------------------------------
+void StageBuilder::DrawLine(Location start, Location end)const
+{
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
+	DrawLineAA(start.x, start.y, end.x, end.y, 0xE9FF00, 3);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
 //------------------------------------
 // マップチップの作成
 //------------------------------------
 void StageBuilder::MakeMapChip()
 {
-	float pos_x = (int)(mouse_pos.x / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
-	float pos_y = (int)(mouse_pos.y / MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
+	float pos_x = (int)(mouse->GetLocation().x 
+		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
+	float pos_y = (int)(mouse->GetLocation().y
+		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
 	map_chips.push_back(new MapChip(&block_images[0],
 		{ pos_x + MAP_CHIP_SIZE / 2,pos_y + MAP_CHIP_SIZE / 2 },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
@@ -501,7 +562,20 @@ void StageBuilder::MakeMapChip(float x, float y, float width, float height)
 //------------------------------------
 void StageBuilder::MakePolyLine()
 {
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+	{
+		MakeSphere();
+		
+	}
 
+	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
+	{
+		if (2 <= pending_sphere.size())
+		{
+			line = new PolyLine(pending_sphere);
+			Trash();
+		}
+	}
 }
 
 //------------------------------------
@@ -509,18 +583,20 @@ void StageBuilder::MakePolyLine()
 //------------------------------------
 void StageBuilder::MakeSphere()
 {
-	int x = (int)mouse->GetLocation().x / 10 * 10;
-	int y = (int)mouse->GetLocation().y / 10 * 10;
-
+	pending_sphere.push_back(new SphereCollider(mouse->GetLocation()));
 
 }
 
-//------------------------------------
-// Line classの生成
-//------------------------------------
-void StageBuilder::MakeLine()
+//--------------------------------------
+// 線を作り切れなかったときリセット
+//--------------------------------------
+void StageBuilder::Trash()
 {
-
+	for (int i = 0; i < pending_sphere.size(); i++)
+	{
+		delete pending_sphere[i];
+	}
+	pending_sphere.clear();
 }
 
 //------------------------------------

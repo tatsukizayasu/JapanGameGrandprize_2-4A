@@ -4,7 +4,7 @@
 #include "Player.h"
 
 class Torrent :
-    public EnemyBase,public BoxCollider
+    public EnemyBase
 {
 private:
 
@@ -17,7 +17,7 @@ public:
     ~Torrent();
 
     //更新
-    void Update() override;
+    void Update(const class Player* player, const class Stage* stage) override;
 
     //アイドル状態
     void Idol() override;
@@ -25,17 +25,20 @@ public:
     //移動
     void Move(const Location player_location) override;
 
+    //落下
+    void Fall() override;
+
     //攻撃
     void  Attack(Location) override;
 
     //攻撃が当たっているか
-    AttackResource HitCheck(const BoxCollider* collider) override;
+    AttackResource Hit() override;
 
     //死亡
     void Death() override;
 
     //プレイヤーの弾との当たり判定
-    bool HitBullet(const BulletBase* bullet) override;
+    void HitBullet(const BulletBase* bullet) override;
 
     //描画
     void Draw() const override;
