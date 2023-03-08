@@ -102,7 +102,7 @@ public:
 	/// </summary>
 	/// <returns>ベクター型(MapChipオブジェクト型)：MapChip</returns>	
 	/// ※全要素をループして使わないこと
-	//std::vector<MapChip*> GetMapChip() { return mapchip; };
+	std::vector<MapChip*> GetMapChip() const { return mapchip; };
 
 
 	/// <summary>

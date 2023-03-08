@@ -8,6 +8,7 @@
 
 
 
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -24,12 +25,14 @@ Player::Player()
 	shoot_count = 0;
 	flashing_count = 0;
 	damage_count = 0;
-	jump = 10.0;
+	jump = 0.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
 	speed_x = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
+	old_x = 0.0;
+	old_y = 0.0;
 	damage = 0;
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
@@ -92,7 +95,7 @@ Player::Player(Stage* stage)
 
 	this->stage = stage;
 	location.x = 0;
-	location.y = 1220;
+	location.y = 1100;
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
@@ -101,12 +104,15 @@ Player::Player(Stage* stage)
 	bullet_count = 0;
 	damage_count = 0;
 	shoot_count = 0;
+	select_count = 0;
 	damage = 0;
 	flashing_count = 0;
-	jump = 10.0;
+	jump = 0.0;
 	jump_power = 0.0;
 	not_jet_count = 0;
 	speed_x = 0.0;
+	old_x = 0.0;
+	old_y = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
 	bullet = new BulletBase * [BULLET_MAX];
@@ -142,7 +148,7 @@ Player::Player(Stage* stage)
 
 	beam = nullptr;
 
-	stage = new Stage();
+	this->stage = stage;
 
 	area = { 80,40 };
 
@@ -297,6 +303,8 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
+	old_x = location.x;
+	old_y = location.y;
 	if (damage_flg == true)
 	{
 		damage_count++;
@@ -380,7 +388,6 @@ void Player::Update()
 	{
 		Jump();
 	}
-
 	//Bボタン未入力
 	else
 	{
@@ -406,7 +413,7 @@ void Player::Update()
 			}
 			else
 			{
-				bullet[i]->Update();
+				bullet[i]->Update(stage);
 			}
 		}
 	}
@@ -434,6 +441,7 @@ void Player::NotInputStick()
 
 		if (speed_x < 0)
 		{
+			player_state = PLAYER_STATE::STOP;
 			speed_x = 0;
 		}
 	}
@@ -457,10 +465,19 @@ void Player::NotInputStick()
 
 	if (speed_x > -JUMP_INERTIA && speed_x < JUMP_INERTIA)
 	{
+		player_state = PLAYER_STATE::STOP;
 		speed_x = 0;
 	}
 
-	location.x += speed_x;
+	if (!HitBlock(stage))
+	{
+		location.x += speed_x;
+	}
+	if (HitBlock(stage))
+	{
+		speed_x = 0.0;
+		location.x = old_x;
+	}
 }
 
 //左移動
@@ -489,12 +506,20 @@ void Player::LeftMove()
 			speed_x = -5.0;
 		}
 	}
-	location.x += speed_x;
+
+	if (!HitBlock(stage))
+	{
+		location.x += speed_x;
+	}
 
 	if (location.x < 0)
 	{
 		speed_x = 0.0;
-		location.x = 0;
+	}
+
+	if (HitBlock(stage))
+	{
+		location.x = old_x;
 	}
 }
 
@@ -525,12 +550,20 @@ void Player::RightMove()
 		}
 	}
 
-	location.x += speed_x;
+	if (!HitBlock(stage))
+	{
+		location.x += speed_x;
+	}
+
+	if (HitBlock(stage))
+	{
+		location.x = old_x;
+		speed_x = 0.0;
+	}
 
 	if (location.x < 0)
 	{
 		speed_x = 0.0;
-		location.x = 0;
 	}
 }
 
@@ -556,19 +589,15 @@ void Player::Jump()
 		player_state = PLAYER_STATE::DOWN;
 	}
 
-	if (location.y > 40)
+	if (!HitBlock(stage))
 	{
 		location.y -= jump;
 	}
-	else
+	
+	if(HitBlock(stage))
 	{
-		location.y = 40;
-	}
-
-	if (location.y > 1200)
-	{
-		location.y = 1200;
 		jump = 0.0;
+		location.y = old_y;
 	}
 }
 
@@ -576,20 +605,6 @@ void Player::Jump()
 void Player::NotJump()
 {
 	player_state = PLAYER_STATE::DOWN;
-	if (location.y < 1200)
-	{
-		location.y -= jump;
-	}
-	else
-	{
-		player_state = PLAYER_STATE::STOP;
-	}
-
-	if (location.y < 40)
-	{
-		jump = 0;
-		location.y = 40;
-	}
 
 	jump -= 0.25;
 
@@ -600,7 +615,6 @@ void Player::NotJump()
 
 	if (not_jet_count++ >= 120)
 	{
-		jump = 0;
 		if (fuel < 100)
 		{
 			fuel += 2.5;
@@ -616,6 +630,17 @@ void Player::NotJump()
 		not_jet_count = 120;
 	}
 
+	if (!HitBlock(stage))
+	{
+		location.y -= jump;
+	}
+	
+	if(HitBlock(stage))
+	{
+		jump = 0;
+		location.y = old_y;
+		player_state = PLAYER_STATE::STOP;
+	}
 }
 
 //-----------------------------------
@@ -750,7 +775,7 @@ void Player::Hp_Heal(int heal_value)
 	}
 }
 
-//-----------------------------------
+//-----------------------------------wer
 //元素の量の設定
 //-----------------------------------
 void Player::SetElementItem(class Item* item)
@@ -759,6 +784,36 @@ void Player::SetElementItem(class Item* item)
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);
 
+}
+
+bool Player::HitBlock(const Stage* stage_pointa)
+{
+	//マップチップ
+	std::vector<MapChip*>map_chip = stage_pointa->GetMapChip();
+
+	//描画範囲
+	Location camera = CameraWork::GetCamera();
+
+	for (MapChip* map_chip : map_chip)
+	{
+		if (map_chip != nullptr)
+		{
+
+			Location draw_location = map_chip->GetLocation();
+			Area draw = { SCREEN_HEIGHT + CHIP_SIZE,SCREEN_WIDTH + CHIP_SIZE };
+
+			// 画面内にあるMapChipオブジェクトだけUpdateする
+			if ((camera.x < draw_location.x + draw.width) && (draw_location.x < camera.x + draw.width)
+				&& (camera.y < draw_location.y + draw.height) && (draw_location.y < camera.y + draw.height))
+			{
+				if (HitBox(map_chip))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 bool Player::GetMoveDirection()
