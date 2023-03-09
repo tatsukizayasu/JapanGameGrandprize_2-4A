@@ -1,22 +1,18 @@
 #pragma once
+#include "Stage_Element_Base.h"
 
-class Player;
-
-class Element_DamageWall
+class Element_DamageWall : public Stage_Element_Base
 {
 private:
-
-	//オブジェクト
-	Player* player;
 
 public:
 
 	//コンストラクタ
-	Element_DamageWall();
+	Element_DamageWall(MapChip* mapchip, int* image);
 	//デストラクタ
 	~Element_DamageWall();
 	//更新
-	void Update(Player* player);
+	void Update(Player *player);
 	//描画
 	void Draw() const;
 
