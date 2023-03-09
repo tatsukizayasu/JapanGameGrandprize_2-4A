@@ -180,11 +180,6 @@ void Mage::Update(const Player* player, const Stage* stage)
 		attack_interval--;
 	}
 
-	if (HitStage(stage)) //ステージとの当たり判定
-	{
-		location = old_location;
-	}
-
 	Poison();
 	Paralysis();
 
