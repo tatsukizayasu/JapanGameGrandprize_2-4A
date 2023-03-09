@@ -251,7 +251,7 @@ void EnemyGhost::Draw()const
 void EnemyGhost::GhostMove(const Location player_location)
 {
 	float range; //プレイヤーとの距離	
-	
+
 	range = fabsf(location.x - player_location.x);
 
 	//プレイヤーが発見距離内にいたら
@@ -263,7 +263,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
 			}
-			else 
+			else
 			{
 				action_type = GHOST_STATE::LEFT_UPPER;
 			}
@@ -274,7 +274,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 			//{
 			//	//action_type = GHOST_STATE::NORMAL_RIGHT;
 			//}
-			 if (player_location.y > location.y)
+			if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
 			}
@@ -327,26 +327,26 @@ void EnemyGhost::HitBullet(const BulletBase* bullet)
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * 10; //無効
+		hp -= bullet->GetDamage() * 0; //無効
 		break;
-		//	case ATTRIBUTE::EXPLOSION:
-		//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
-		//		break;
-		//	case ATTRIBUTE::MELT:
-		//		hp -= bullet->GetDamage() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::POISON:
-		//		poison_damage = bullet->GetDamage() * 0; //無効
-		//		poison_time = bullet->GetDebuffTime() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::PARALYSIS:
-		//		paralysis_time = bullet->GetDebuffTime() * 0; //無効
-		//		paralysis_time = bullet->GetDamage() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::HEAL:
-		//		break;
-		//	default:
-		//		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * 0; //無効
+		break;
+	case ATTRIBUTE::POISON:
+		poison_damage = bullet->GetDamage() * 0; //無効
+		poison_time = bullet->GetDebuffTime() * 0; //無効
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * 0; //無効
+		paralysis_time = bullet->GetDamage() * 0; //無効
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
 }
 
