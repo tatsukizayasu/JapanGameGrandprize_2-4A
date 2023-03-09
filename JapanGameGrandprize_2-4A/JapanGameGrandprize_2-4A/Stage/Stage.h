@@ -3,12 +3,12 @@
 #include <vector>
 #include <Windows.h>
 #include "StageBuilder/StageBuilder.h"
-#include "Element/Element_DamageWall.h"
-#include "Element/Element_Wooden_Floor.h"
 
 #define CHIP_SIZE	40
 
 class Player;
+
+class Stage_Element;
 
 class Stage
 {
@@ -16,9 +16,8 @@ private:
 
 	//オブジェクト変数
 	Player* player;
+	Stage_Element* element;
 
-	std::vector<Element_Wooden_Floor*> element_wooden_floor;
-	std::vector<Element_DamageWall*> element_damagewall;
 
 #ifdef _STAGE_BUILDER
 	StageBuilder* stage_builder;
@@ -71,21 +70,6 @@ public:
 	void LoadMap();
 
 	/// <summary>
-	/// ステージ要素の作成
-	/// </summary>
-	void CreateElement(short id);
-
-	/// <summary>
-	/// ステージ要素の更新
-	/// </summary>
-	void ElementUpdate(Player* player);
-	
-	/// <summary>
-	/// ステージ要素の描画
-	/// </summary>
-	void ElementDraw();
-
-	/// <summary>
 	/// StageクラスにPlayerオブジェクトを渡すSetter
 	/// </summary>
 	/// <param name = "*player">Playerオブジェクトポインタ</param>
@@ -95,7 +79,7 @@ public:
 	/// マップサイズのGeter
 	/// </summary>
 	/// <returns>構造体型：マップサイズ</returns>	
-	POINT GetMapSize(void) { POINT mapsize{ map_data.at(0).size(),map_data.size() };  return mapsize; }
+	POINT GetMapSize(void) const { POINT mapsize{ map_data.at(0).size(),map_data.size() };  return mapsize; }
 
 	/// <summary>
 	/// マップチップオブジェクトのGetter
@@ -110,12 +94,12 @@ public:
 	/// 当たったマップチップの方向のGetter
 	/// </summary>
 	/// <returns>POINT型(構造体型) X[右:1, -左:-1], Y[上:1, 下:-1]</returns>	
-	POINT GetCollision_Chip() { POINT w = collision_dir_w;  collision_dir_w = { 0, 0 };  return w; }
+	const POINT GetCollision_Chip() { POINT w = collision_dir_w;  collision_dir_w = { 0, 0 };  return w; }
 
 	/// <summary>
 	/// **プレイヤーとステージの当たり判定用**
 	/// 当たったマップチップ座標のGetter
 	/// </summary>
 	/// <returns>POINT型(構造体型) X, Y</returns>	
-	POINT GetCollision_Chip_Location() { POINT w = collision_chip;  collision_chip = { 0, 0 };  return w; }
+	const POINT GetCollision_Chip_Location() { POINT w = collision_chip;  collision_chip = { 0, 0 };  return w; }
 };

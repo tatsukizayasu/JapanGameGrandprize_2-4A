@@ -1,20 +1,21 @@
 #pragma once
+#include "Stage_Element_Base.h"
 
-class Player;
 
-class Element_Wooden_Floor
+class Element_Wooden_Floor : public Stage_Element_Base
 {
 private:
 
-	//オブジェクト
-	Player* player;
+	//元の当たり判定範囲
+	Area original_collision;
 
 public:
 
 	//コンストラクタ
-	Element_Wooden_Floor();
+	Element_Wooden_Floor(MapChip* mapchip, int* image);
 	//デストラクタ
 	~Element_Wooden_Floor();
+
 	//更新
 	void Update(Player* player);
 	//描画
