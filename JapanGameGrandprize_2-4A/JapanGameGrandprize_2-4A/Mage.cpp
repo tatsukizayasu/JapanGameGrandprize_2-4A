@@ -18,8 +18,8 @@
 //体力
 #define MAGE_HP 100
 
-//移動範囲
-#define MAGE_TELEPORT_AREA 200
+//移動範囲(直径)
+#define MAGE_TELEPORT_AREA 400
 
 //攻撃間隔
 #define MAGE_ATTACK_INTERVAL 120
@@ -31,6 +31,7 @@ Mage::Mage()
 {
 	/*初期化*/
 	can_delete = false;
+	can_teleport = true;
 	left_move = true;
 	hp = MAGE_HP;
 	shot_rate = 0;
@@ -160,7 +161,12 @@ void Mage::Update(const Player* player, const Stage* stage)
 		Idol();
 		break;
 	case ENEMY_STATE::MOVE:
+		if (can_teleport)
+		{
+			Teleport(stage);
+		}
 		Move(player->GetLocation());
+		
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -199,6 +205,8 @@ void Mage::Idol()
 	Location camera = CameraWork::GetCamera(); //カメラ
 	scroll = location - camera;
 
+	
+
 	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
 		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
 	{
@@ -213,13 +221,13 @@ void Mage::Move(const Location player_location)
 {
 	Location scroll; //画面スクロールを考慮したX座標
 
+	scroll.x = location.x - CameraWork::GetCamera().x;
+	scroll.y = location.y - CameraWork::GetCamera().y;
+
 	if (attack_interval < 0)
 	{
 		state = ENEMY_STATE::ATTACK;
 	}
-
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
 
 	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) ||
 		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
@@ -231,9 +239,31 @@ void Mage::Move(const Location player_location)
 //-----------------------------------
 //テレポート
 //-----------------------------------
-void Mage::Teleport()
+void Mage::Teleport(const Stage* stage)
 {
+	HitMapChip hit_stage;
 
+	float radian; //角度
+	int teleport; //テレポートの場所距離
+	Location old_location = location; //元の地点
+	while (true)
+	{
+		//テレポートする距離設定
+		teleport = (MAGE_TELEPORT_AREA / 2) - GetRand(MAGE_TELEPORT_AREA);
+		//角度の計算
+		radian = GetRand(360) * (M_PI / 180);
+
+		//テレポートの座標の計算
+		location.x = old_location.x + (teleport * cosf(radian));
+		location.y = old_location.y + (teleport * sinf(radian));
+
+		hit_stage = HitStage(stage);
+		if (!hit_stage.hit)
+		{
+			break;
+		}
+	}
+	can_teleport = false;
 }
 
 //-----------------------------------
@@ -256,6 +286,7 @@ void  Mage::Attack(Location player_location)
 		state = ENEMY_STATE::MOVE;
 		shot_count = 0;
 		attack_interval = MAGE_ATTACK_INTERVAL;
+		can_teleport = true;
 	}
 }
 

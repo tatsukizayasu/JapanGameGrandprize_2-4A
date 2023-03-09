@@ -19,7 +19,7 @@ private:
 
 private:
     //テレポート
-    void Teleport();
+    void Teleport(const class Stage* stage);
 
     //弾の生成
     void CreateBullet(Location);
