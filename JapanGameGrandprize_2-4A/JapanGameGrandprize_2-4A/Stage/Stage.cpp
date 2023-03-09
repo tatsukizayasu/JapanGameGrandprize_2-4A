@@ -44,7 +44,7 @@ Stage::Stage()
 					}, { CHIP_SIZE,CHIP_SIZE }));
 				
 				
-				element->AddElement(mapchip.back(), &block_images[i], i);
+				element->AddElement(mapchip.back(), block_images[i], i);
 			}
 			/*else
 			{
