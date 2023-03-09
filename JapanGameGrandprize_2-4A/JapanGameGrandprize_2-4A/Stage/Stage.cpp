@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include "../Player.h"
+#include "Element/Stage_Element.h"
 
 #define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage2";
@@ -16,6 +17,8 @@
 //-----------------------------------
 Stage::Stage()
 {
+
+	element = new Stage_Element();
 
 	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
 	{
@@ -39,8 +42,9 @@ Stage::Stage()
 						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 					}, { CHIP_SIZE,CHIP_SIZE }));
-
-				CreateElement(i);
+				
+				
+				element->AddElement(mapchip.back(), &block_images[i], i);
 			}
 			/*else
 			{
@@ -88,7 +92,7 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
-	
+
 	//“–‚½‚è”»’è‰‰ŽZ”ÍˆÍ
 	struct DrawArea
 	{
@@ -121,7 +125,7 @@ void Stage::Update(Player* player)
 		}
 
 		m->Update(player);
-		ElementUpdate(player);
+		element->Update(player);
 
 		//“–‚½‚Á‚Ä‚¢‚é•ûŒü‚ðXV
 		collision_dir = m->GetMapChip_Collision();
@@ -175,7 +179,7 @@ void Stage::Draw()
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
 
 		m->Draw();
-		ElementDraw();
+		element->Draw();
 	}
 
 
@@ -226,51 +230,4 @@ void Stage::LoadMap()
 	}
 
 	FileRead_close(FileHandle);
-}
-
-void Stage::CreateElement(short id)
-{
-	switch (id)
-	{
-	case 61:
-		element_damagewall.push_back(new Element_DamageWall());
-		break;
-
-	case 62:
-		element_wooden_floor.push_back(new Element_Wooden_Floor());
-		break;
-
-	case 63:
-		break;
-
-	default:
-		break;
-	}
-}
-
-void Stage::ElementUpdate(Player* player)
-{
-	for (auto& e : element_damagewall)
-	{
-		e->Update(player);
-	}
-
-	for (auto& e : element_wooden_floor)
-	{
-		e->Update(player);
-	}
-
-}
-
-void Stage::ElementDraw()
-{
-	for (auto& e : element_damagewall)
-	{
-		e->Draw();
-	}
-
-	for (auto& e : element_wooden_floor)
-	{
-		e->Draw();
-	}
 }
