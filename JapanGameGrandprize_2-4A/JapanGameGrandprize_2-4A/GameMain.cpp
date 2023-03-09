@@ -6,6 +6,7 @@
 #include "Undead.h"
 #include"EnemySlime.h"
 #include"EnemyGhost.h"
+#include"Harpy.h"
 #include "BULLET.h"
 #include "Mage.h"
 
