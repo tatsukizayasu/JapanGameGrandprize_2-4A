@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include "../Player.h"
+#include "Element/Stage_Element.h"
 
 #define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage2";
@@ -16,6 +17,8 @@
 //-----------------------------------
 Stage::Stage()
 {
+
+	element = new Stage_Element();
 
 	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
 	{
@@ -39,6 +42,9 @@ Stage::Stage()
 						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 					}, { CHIP_SIZE,CHIP_SIZE }));
+				
+				
+				element->AddElement(mapchip.back(), &block_images[i], i);
 			}
 			/*else
 			{
@@ -119,6 +125,7 @@ void Stage::Update(Player* player)
 		}
 
 		m->Update(player);
+		element->Update(player);
 
 		//当たっている方向を更新
 		collision_dir = m->GetMapChip_Collision();
@@ -130,7 +137,7 @@ void Stage::Update(Player* player)
 			if (collision_dir.x != 0) {
 				//speed_x = 0.0f;
 			}
-			
+
 		}
 
 	}
@@ -145,7 +152,7 @@ void Stage::Update(Player* player)
 //-----------------------------------
 void Stage::Draw()
 {
-	
+
 	//マップチップ		描画
 
 	//描画範囲
@@ -172,6 +179,7 @@ void Stage::Draw()
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
 
 		m->Draw();
+		element->Draw();
 	}
 
 

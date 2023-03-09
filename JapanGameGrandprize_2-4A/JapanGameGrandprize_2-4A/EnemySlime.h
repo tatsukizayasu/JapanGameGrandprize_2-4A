@@ -3,11 +3,7 @@
 #include"CameraWork.h"
 #include"BoxCollider.h"
 
-enum class DIRECTION
-{
-	LEFT = 0,
-	RIGHT
-};
+
 
 enum class SLIME_ATTACK
 {
@@ -22,7 +18,6 @@ private:
 	bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
 
 	int color;
-	DIRECTION direction;
 	SLIME_ATTACK slime_attack;
 
 	int slime_image;
@@ -39,7 +34,7 @@ public:
 	~EnemySlime() {};
 
 	//•`‰æˆÈŠO‚ÌXV‚ğÀs
-	virtual void Update()override;
+	virtual void Update(const class Player* player, const class Stage* stage)override;
 	//•`‰æ
 	virtual void Draw()const override;
 
@@ -48,6 +43,9 @@ public:
 
 	//ˆÚ“®
 	void Move(const Location player_location) override;
+
+	//—‰º
+	void Fall() override;
 
 	//UŒ‚
 	void  Attack(Location) override;

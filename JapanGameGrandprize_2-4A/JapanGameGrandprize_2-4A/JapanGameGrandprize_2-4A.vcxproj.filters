@@ -28,12 +28,6 @@
     <ClCompile Include="Stage\Stage.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\Element\Element.cpp">
-      <Filter>ソースファイル\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Stage\Element\Element_DamageWall.cpp">
-      <Filter>ソースファイル\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
@@ -114,9 +108,6 @@
     <ClCompile Include="GhostBullet.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
-    <ClCompile Include="Stage\Element\Element_Wooden_Floor.cpp">
-      <Filter>ソースファイル\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\StageBuilder\PolyLine.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -128,6 +119,18 @@
     </ClCompile>
     <ClCompile Include="harpy.cpp">
       <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_DamageWall.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_Wooden_Floor.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Stage_Element.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Stage_Element_Base.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,12 +168,6 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Stage.h">
-      <Filter>ヘッダーファイル\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\Element\Element.h">
-      <Filter>ヘッダーファイル\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Stage\Element\Element_DamageWall.h">
       <Filter>ヘッダーファイル\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Stage\MapChip.h">
@@ -266,8 +263,17 @@
     <ClInclude Include="harpy.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Stage\Element\Stage_Element_Base.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Stage_Element.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
     <ClInclude Include="Stage\Element\Element_Wooden_Floor.h">
-      <Filter>ヘッダーファイル\Stage</Filter>
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_DamageWall.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -312,6 +318,12 @@
     </Filter>
     <Filter Include="ソースファイル\Enemy\EnmeyBullet">
       <UniqueIdentifier>{78421598-9ef7-41ab-b475-fcc2aa5c11e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Stage\Element">
+      <UniqueIdentifier>{f8db2803-c2b7-453a-9d9c-2ceb5a7eab6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Stage\Element">
+      <UniqueIdentifier>{9246e21e-4ec4-45b4-bf72-12a753eea626}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

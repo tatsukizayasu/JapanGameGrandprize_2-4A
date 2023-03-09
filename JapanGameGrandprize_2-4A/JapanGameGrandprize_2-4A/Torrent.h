@@ -17,13 +17,16 @@ public:
     ~Torrent();
 
     //更新
-    void Update() override;
+    void Update(const class Player* player, const class Stage* stage) override;
 
     //アイドル状態
     void Idol() override;
 
     //移動
     void Move(const Location player_location) override;
+
+    //落下
+    void Fall() override;
 
     //攻撃
     void  Attack(Location) override;

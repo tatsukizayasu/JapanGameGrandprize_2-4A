@@ -44,6 +44,14 @@ public:
 		return w;
 	}
 
+	/// <summary>
+	/// “–‚½‚è”»’è”ÍˆÍ‚ÌSetter
+	/// </summary>
+	void SetArea(Area set_area) {
+		area.height = set_area.height;
+		area.width = set_area.width;
+	}
+
 
 protected:
 

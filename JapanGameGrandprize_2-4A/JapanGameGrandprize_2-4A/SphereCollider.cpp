@@ -47,7 +47,7 @@ bool SphereCollider::HitBox(const BoxCollider* box_collider) const
 
 	//À•W‚ÌŒvŽZ
 	sphere_x = location.x + (radius * cosf(rad));
-	sphere_y = location.y - (radius * sinf(rad));
+	sphere_y = location.y + (radius * sinf(rad));
 
 	//‘ŠŽè‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ‚ÌŒvŽZ
 	sub_x[0] = box_collider->GetLocation().x - (box_collider->GetArea().width / 2);

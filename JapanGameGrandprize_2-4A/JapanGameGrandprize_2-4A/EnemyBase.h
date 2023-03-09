@@ -4,6 +4,8 @@
 #include "ElementItem.h"
 #include "EnumEnemyType.h"
 #include "BoxCollider.h"
+#include "Stage/Stage.h"
+
 
 //各属性のドロップ数
 #define FIRE_DROP 3
@@ -25,6 +27,16 @@
 
 //麻痺状態の移動スピードの倍率
 #define PARALYSIS_SPEED 0.7f
+
+//落下速度
+#define ENEMY_FALL_SPEED 1
+
+//当たり判定
+struct HitMapChip
+{
+	bool hit; //当たったか
+	MapChip* chip; //マップチップ
+};
 
 //エネミーの種類
 enum class ENEMY_KIND
@@ -50,6 +62,7 @@ enum class ENEMY_STATE
 {
 	IDOL,   //アイドル状態
 	MOVE,   //移動
+	FALL,	//落下
 	ATTACK, //攻撃
 	DEATH,  //死亡
 };
@@ -66,7 +79,7 @@ public:
 	~EnemyBase() {}
 
 	//描画以外の更新を実行
-	virtual void Update() = 0;
+	virtual void Update(const class Player* player, const class Stage* stage) = 0;
 
 	//描画
 	virtual void Draw() const = 0;
@@ -77,11 +90,17 @@ public:
 	//移動
 	virtual void Move(const Location player_location) = 0;
 
+	//落下
+	virtual void Fall() = 0;
+
 	//攻撃
 	virtual void  Attack(Location) = 0;
 
 	//攻撃が当たっているか
 	virtual AttackResource Hit() = 0;
+
+	//ステージとの当たり判定
+	HitMapChip HitStage(const class Stage* stage);
 
 	//死亡
 	virtual void Death() = 0;
@@ -112,6 +131,7 @@ public:
 protected:
 
 	bool can_delete; //削除フラグ
+	bool left_move; //左に動いているかどうか
 	int hp;	//体力
 	int speed; //移動速度
 	int poison_time; //毒の効果時間

@@ -5,7 +5,7 @@
 
 #define SCREEN_HEIGHT 720	//画面サイズ (縦)
 #define SCREEN_WIDTH 1280	//画面サイズ (横)
-#define GRAVITY 10
+#define GRAVITY 10 //重力
 
 //化合物構造体
 struct Compound

@@ -44,7 +44,7 @@ public:
 	~EnemyGhost();
 
 	//•`‰æˆÈŠO‚ÌXV‚ğÀs
-	void Update()override;
+	void Update(const class Player* player, const class Stage* stage)override;
 
 	//•`‰æ
 	void Draw()const override;
@@ -54,6 +54,9 @@ public:
 
 	//ˆÚ“®
 	void Move(const Location player_location) override;
+
+	//—‰º
+	void Fall() override;
 
 	//UŒ‚
 	void  Attack(Location) override;

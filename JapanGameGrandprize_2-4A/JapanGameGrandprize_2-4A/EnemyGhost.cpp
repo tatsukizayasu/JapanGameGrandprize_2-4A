@@ -45,11 +45,12 @@
 EnemyGhost::EnemyGhost()
 {
 	can_delete = false;
+	left_move = true;
 	attack = false;
 
 	hp = 10;
-	location.x = 600;
-	location.y = 1200;
+	location.x = 640.0f;
+	location.y = 1120.0f;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
@@ -87,8 +88,36 @@ EnemyGhost::~EnemyGhost()
 //-----------------------------------
 // 描画以外の処理
 //-----------------------------------
-void EnemyGhost::Update()
+void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 {
+	Location old_location = location;	//前の座標
+
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		Idol();
+		break;
+	case ENEMY_STATE::MOVE:
+		Move(player->GetLocation());
+		break;
+	case ENEMY_STATE::FALL:
+		Fall();
+		break;
+	case ENEMY_STATE::ATTACK:
+		Attack(player->GetLocation());
+		break;
+	case ENEMY_STATE::DEATH:
+		Death();
+		break;
+	default:
+		break;
+	}
+
+	//if (HitStage(stage)) //ステージとの当たり判定
+	//{
+	//	location = old_location;
+	//}
+
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;
@@ -99,9 +128,8 @@ void EnemyGhost::Update()
 void EnemyGhost::Idol()
 {
 	Location scroll; //画面スクロールを考慮したX座標
-
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
 
 	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
 		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
@@ -203,16 +231,19 @@ void EnemyGhost::Death()
 void EnemyGhost::Draw()const
 {
 	//スクロールに合わせて描画
-	float x = location.x - CameraWork::GetCamera().x;
-	float y = location.y - CameraWork::GetCamera().y;
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
 
 	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK)
 	{
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 0, 0), TRUE);
+		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xff0000, TRUE);
 	}
 	else
 	{
-		DrawBox(x, y, x + GHOST_SIZE_X, y + GHOST_SIZE_Y, GetColor(255, 255, 0), TRUE);
+		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffff00, TRUE);
 	}
 }
 
@@ -277,6 +308,14 @@ void EnemyGhost::GhostMove(const Location player_location)
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new GhostBullet(location, player_location));
 	}
+}
+
+//-----------------------------------
+//落下
+//-----------------------------------
+void EnemyGhost::Fall()
+{
+
 }
 
 //-----------------------------------

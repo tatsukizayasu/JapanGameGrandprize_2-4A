@@ -16,6 +16,9 @@ public:
 	//画面外に出たかどうか
 	bool ScreenOut();
 
+	//ステージとの当たり判定
+	bool HitStage(const class Stage* stage) const;
+
 	//ダメージの取得
 	int GetDamage() const;
 

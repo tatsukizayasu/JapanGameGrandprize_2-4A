@@ -33,7 +33,7 @@ public:
     ~BulletManager();
 
     //XV
-    void Update();
+    void Update(const class Stage* stage);
 
     //’e‚Ì¶¬
     void CreateEnemyBullet(class EnemyBulletBase* bullet);

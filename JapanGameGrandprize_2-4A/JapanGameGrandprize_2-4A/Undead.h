@@ -27,15 +27,18 @@ public:
     ~Undead();
 
     //描画以外の更新
-    void Update() override;
+    void Update(const class Player* player, const class Stage* stage) override;
 
     //アイドル状態
     void Idol() override;
 
-    //移動
+   //移動
    void Move(const Location player_location) override;
 
-    //攻撃
+   //落下
+   void Fall() override;
+
+   //攻撃
    void  Attack(Location) override;
 
     //攻撃が当たっているか
