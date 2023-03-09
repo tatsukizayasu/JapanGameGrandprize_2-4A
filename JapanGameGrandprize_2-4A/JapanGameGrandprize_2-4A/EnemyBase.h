@@ -4,6 +4,8 @@
 #include "ElementItem.h"
 #include "EnumEnemyType.h"
 #include "BoxCollider.h"
+#include "Stage/Stage.h"
+
 
 //各属性のドロップ数
 #define FIRE_DROP 3
@@ -28,6 +30,13 @@
 
 //落下速度
 #define ENEMY_FALL_SPEED 1
+
+//当たり判定
+struct HitMapChip
+{
+	bool hit; //当たったか
+	MapChip* chip; //マップチップ
+};
 
 //エネミーの種類
 enum class ENEMY_KIND
@@ -91,7 +100,7 @@ public:
 	virtual AttackResource Hit() = 0;
 
 	//ステージとの当たり判定
-	bool HitStage(const class Stage* stage);
+	HitMapChip HitStage(const class Stage* stage);
 
 	//死亡
 	virtual void Death() = 0;

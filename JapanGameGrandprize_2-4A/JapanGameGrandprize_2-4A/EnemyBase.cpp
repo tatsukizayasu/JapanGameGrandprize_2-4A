@@ -1,6 +1,5 @@
 #include "DxLib.h"
 #include "EnemyBase.h"
-#include "Stage/Stage.h"
 #include "vector"
 #include "CameraWork.h"
 
@@ -42,9 +41,9 @@ bool EnemyBase::CheckHp()
 //-----------------------------------
 //ステージとの当たり判定
 //-----------------------------------
-bool EnemyBase::HitStage(const Stage* stage)
+HitMapChip EnemyBase::HitStage(const Stage* stage)
 {
-	bool ret = false; //戻り値
+	HitMapChip ret = { false,nullptr }; //戻り値
 
 	//マップチップ
 	std::vector<MapChip*>map_chip = stage->GetMapChip();
@@ -68,28 +67,8 @@ bool EnemyBase::HitStage(const Stage* stage)
 			{
 				if (HitBox(chip))
 				{
-					if (state == ENEMY_STATE::MOVE)
-					{
-						if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
-						{
-							if (left_move)
-							{
-								location.x = (chip_location.x + (chip_area.width / 2) + (area.width / 2) + 2);
-							}
-							else
-							{
-								location.x = (chip_location.x - (chip_area.width / 2) - (area.width / 2) - 2);
-							}
-							left_move = !left_move;
-							speed = -speed;
-						}
-					}
-					if (state == ENEMY_STATE::FALL) //落下状態
-					{
-						location.y = (chip_location.y - (chip_area.height / 2) - (area.height / 2)) + 2;
-					}
-
-					ret = true;
+					ret.hit = true;
+					ret.chip = chip;
 					break;
 				}
 			}

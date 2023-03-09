@@ -47,10 +47,6 @@ void Torrent::Update(const Player* player, const Stage* stage)
 		break;
 	}
 
-	if (HitStage(stage)) //ステージとの当たり判定
-	{
-		location = old_location;
-	}
 }
 
 //-----------------------------------

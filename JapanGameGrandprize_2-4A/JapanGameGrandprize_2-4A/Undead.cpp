@@ -93,7 +93,7 @@ Undead::~Undead()
 //-----------------------------------
 void Undead::Update(const Player* player, const Stage* stage)
 {
-	Location old_location = location;	//前の座標
+	HitMapChip hit_stage = {false,nullptr}; //ステージとの当たり判定
 
 	switch (state)
 	{
@@ -103,7 +103,26 @@ void Undead::Update(const Player* player, const Stage* stage)
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
 
-		if (!HitStage(stage)) //ステージとの当たり判定
+		hit_stage = HitStage(stage);
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
+			if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+			{
+				if (left_move)
+				{
+					location.x = chip_location.x + (chip_area.width / 2) + (area.width / 2) + 2;
+				}
+				else
+				{
+					location.x = chip_location.x - (chip_area.width / 2) - (area.width / 2) - 2;
+				}
+				left_move = !left_move;
+				speed = -speed;
+			}
+		}
+		else
 		{
 			state = ENEMY_STATE::FALL;
 			speed = 0;
@@ -111,16 +130,25 @@ void Undead::Update(const Player* player, const Stage* stage)
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
-		if (HitStage(stage)) //ステージとの当たり判定
+
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit) //ステージとの当たり判定
 		{
-			state = ENEMY_STATE::MOVE;
-			if (left_move)
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
+			if ((chip_location.y - chip_area.height / 2) < (location.y + area.height / 2))
 			{
-				speed = -UNDEAD_SPEED;
-			}
-			else
-			{
-				speed = UNDEAD_SPEED;
+				location.y = chip_location.y - (chip_area.height / 2) - (area.height / 2) + 2;
+				state = ENEMY_STATE::MOVE;
+				if (left_move)
+				{
+					speed = -UNDEAD_SPEED;
+				}
+				else
+				{
+					speed = UNDEAD_SPEED;
+				}
 			}
 		}
 		break;
