@@ -21,7 +21,7 @@ void Element_Wooden_Floor::Update(Player* player)
 		//左スティックを下方向に倒している
 		if (PAD_INPUT::GetLStick().y <= -10000)
 		{
-			mapchip->SetArea(Area{ 0.0f, 0.0f });
+			mapchip->SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
 		}
 	}
 	//プレイヤーがマップチップよりも下に行ったら元の当たり判定範囲に戻す
