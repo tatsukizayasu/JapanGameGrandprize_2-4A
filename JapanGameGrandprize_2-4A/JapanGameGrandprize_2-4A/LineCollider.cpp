@@ -54,6 +54,29 @@ void LineCollider_t::Draw()const
 }
 
 //-----------------------------------
+// “_‚Æ‚Ì“–‚½‚è”»’è
+//-----------------------------------
+bool LineCollider_t::HitDot(Location point)const
+{
+	bool is_hit = false;
+	float closs_product;
+
+	Location vector1 =
+		GetLocation(LINE_END) - GetLocation(LINE_START);
+	Location vector2 =
+		point - GetLocation(LINE_START);
+
+	closs_product = (vector1.x * vector2.y) - (vector1.y * vector2.x);
+
+	if (closs_product == 0)
+	{
+		is_hit = true;
+	}
+
+	return is_hit;
+}
+
+//-----------------------------------
 // SphereCollider‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
 bool LineCollider_t::HitSphere(const SphereCollider* sphere)const

@@ -24,11 +24,11 @@ private:
 	}
 	void Relativize()
 	{
-		vector[0].x = vector[0].x - location.x;
-		vector[0].y = vector[0].y - location.y;
+		vector[LINE_START].x = vector[LINE_START].x - location.x;
+		vector[LINE_START].y = vector[LINE_START].y - location.y;
 
-		vector[1].x = vector[1].x - location.x;
-		vector[1].y = vector[1].y - location.y;
+		vector[LINE_END].x = vector[LINE_END].x - location.x;
+		vector[LINE_END].y = vector[LINE_END].y - location.y;
 	}
 	Location MakeTip(int index)const
 	{
@@ -46,6 +46,9 @@ public:
 
 	//•`‰æ
 	virtual void Draw()const;
+
+	//“_‚Æ‚Ì“–‚½‚è”»’è
+	bool HitDot(Location point)const;
 
 	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è
 	bool HitSphere(const class SphereCollider* sphere_collider)const override;
