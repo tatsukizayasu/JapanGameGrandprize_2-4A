@@ -81,6 +81,95 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 }
 
 //-----------------------------------
+//ステージのどの面と当たったを判断
+//-----------------------------------
+STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
+{
+	STAGE_DIRECTION ret = STAGE_DIRECTION::TOP; //戻り値
+
+	Location chip_location = map_chip->GetLocation();
+	Area chip_area = map_chip->GetArea();
+	Location vertex = location; //頂点
+	float distance[4]; //距離
+	int min_vertex; //当たった頂点
+	float min_distance; //最低距離
+
+	//左上との距離
+	distance[0] = sqrtf(powf(chip_location.x - (location.x + area.width / 2), 2) +
+		powf(chip_location.y - (location.y - area.height / 2), 2));
+
+	//右上との距離
+	distance[1] = sqrtf(powf(chip_location.x - (location.x - area.width / 2), 2) +
+		powf(chip_location.y - (location.y - area.height / 2), 2));
+
+	//左下との距離
+	distance[2] = sqrtf(powf(chip_location.x - (location.x - area.width / 2), 2) +
+		powf(chip_location.y - (location.y + area.height / 2), 2));
+
+	//右下との距離
+	distance[3] = sqrtf(powf(chip_location.x - (location.x + area.width / 2), 2) +
+		powf(chip_location.y - (location.y + area.height / 2), 2));
+
+	min_distance = distance[0];
+	min_vertex = 0;
+
+	for (int i = 1; i < 4; i++)
+	{
+		if (distance[i] < min_distance)
+		{
+			min_distance = distance[i];
+			min_vertex = i;
+		}
+	}
+	
+	switch (min_vertex)
+	{
+	case 0:
+		vertex = {location.x - area.width / 2,location.y - area.height / 2 };
+		break;
+	case 1:
+		vertex = { location.x + area.width / 2,location.y - area.height / 2 };
+		break;
+	case 2:
+		vertex = { location.x - area.width / 2,location.y + area.height / 2 };
+		break;
+	case 3:
+		vertex = { location.x + area.width / 2,location.y + area.height / 2 };
+		break;
+	default:
+		break;
+	}
+
+	//上面との距離
+	distance[0] = sqrtf(powf(chip_location.x - vertex.x, 2) +
+		powf((chip_location.y - chip_area.height / 2) - vertex.y, 2));
+
+	//下面との距離
+	distance[1] = sqrtf(powf(chip_location.x - vertex.x, 2) +
+		powf((chip_location.y + chip_area.height / 2) - vertex.y, 2));
+
+	//左面との距離
+	distance[2] = sqrtf(powf((chip_location.x - chip_area.width / 2) - vertex.x, 2) +
+		powf(chip_location.y - vertex.y, 2));
+
+	//右面との距離
+	distance[3] = sqrtf(powf((chip_location.x + chip_area.width / 2) - vertex.x, 2) +
+		powf(chip_location.y - vertex.y, 2));
+
+	min_distance = distance[0];
+	for (int i = 1; i < 4; i++)
+	{
+		if (distance[i] < min_distance)
+		{
+			min_distance = distance[i];
+			ret = static_cast<STAGE_DIRECTION>(i);
+		}
+	}
+
+	return ret;
+}
+
+//-----------------------------------
 //毒状態の処理
 //-----------------------------------
 void EnemyBase::Poison()
@@ -106,6 +195,7 @@ void EnemyBase::Paralysis()
 		speed *= 0.7;
 	}
 }
+
 //-----------------------------------
 //ドロップする種類の量の取得
 //-----------------------------------
