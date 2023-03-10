@@ -1,6 +1,5 @@
 #include "GameMain.h"
 #include "DxLib.h"
-#include "Title.h"
 #include "CameraWork.h"
 #include "PadInput.h"
 #include "Undead.h"
@@ -54,20 +53,6 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
-#ifdef _DEBUG
-	//シーン切り替えテスト		デバック
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_RIGHT) && input_margin >= 30)
-	{
-		input_margin = 0;
-		return new Title();
-	}
-
-	if (input_margin < 30)
-	{
-		input_margin++;
-	}
-#endif
-
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
