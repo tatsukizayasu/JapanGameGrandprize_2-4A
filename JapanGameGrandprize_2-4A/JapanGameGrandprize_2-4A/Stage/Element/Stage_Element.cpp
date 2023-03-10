@@ -19,16 +19,16 @@ void Stage_Element::AddElement(short type, int* image, Location location, Area a
 
 	switch (type)
 	{
-	case Element::DEBUG_WOOD:
-		element.push_back(std::make_shared<Element_DamageWall>(type, element, image, location, area));
+	case Element::GreenButton:
+		element.push_back(std::make_shared<Element_DamageWall>(id, element, mapchip, image));
 		break;
 
 	case Element::DEBUG_GRASS:
 		element.push_back(std::make_shared <Element_Wooden_Floor>(type, element, image, location, area));
 		break;
 
-	case Element::DEBUG_SOIL:
-		element.push_back(std::make_shared <Element_Wooden_Floor>(type, element, image, location, area));
+	case Element::YellowButton:
+		element.push_back(std::make_shared <Element_Wooden_Floor>(id, element, mapchip, image));
 		break;
 
 	default:
