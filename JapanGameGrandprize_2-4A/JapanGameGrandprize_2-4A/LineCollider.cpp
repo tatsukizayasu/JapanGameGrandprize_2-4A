@@ -12,7 +12,7 @@ LineCollider_t::LineCollider_t()
 	vector[LINE_START] = { 0,0 };
 	vector[LINE_END] = { SCREEN_WIDTH, SCREEN_HEIGHT };
 	
-	location = GetMiddlePoint(vector[LINE_START], vector[LINE_END]);
+	location = GetMiddlePoint();
 	Relativize();
 }
 
@@ -21,11 +21,17 @@ LineCollider_t::LineCollider_t()
 //------------------------------------
 LineCollider_t::LineCollider_t(Location point1, Location point2)
 {
+	//ì_Ç∂Ç·Ç»Ç¢Ç±Ç∆Çï€èÿÇ∑ÇÈ
+	if (point1 == point2)
+	{
+		point2.x += 1;
+		point2.y += 1;
+	}
 	//ê‚ëŒç¿ïW
 	vector[LINE_START] = point1;
-	vector[1] = point2;
+	vector[LINE_END] = point2;
 
-	location = GetMiddlePoint(vector[LINE_START], vector[LINE_END]);
+	location = GetMiddlePoint();
 	Relativize();
 }
 
@@ -67,6 +73,12 @@ bool LineCollider_t::HitDot(Location point)const
 		point - GetLocation(LINE_START);
 
 	closs_product = (vector1.x * vector2.y) - (vector1.y * vector2.x);
+
+	//ê¸ï™ÇÃîÕàÕì‡Ç©Ç«Ç§Ç©
+	if ((GetMin() <= point) && point <= GetMax())
+	{
+		is_hit = true;
+	}
 
 	if (closs_product == 0)
 	{
@@ -128,7 +140,7 @@ void LineCollider_t::SetLocation(Location location, int index)
 		vector[LINE_START] = MakeTip(LINE_START);
 		vector[LINE_END] = MakeTip(LINE_END);
 		vector[index] = location;
-		this->location = GetMiddlePoint(vector[LINE_START], vector[LINE_END]);
+		this->location = GetMiddlePoint();
 		Relativize();
 	}
 }

@@ -35,7 +35,7 @@ StageBuilder::StageBuilder()
 	current_brush = MAP_CHIP;
 
 #ifdef _DEV
-	line_collider = new LineCollider_t({ 0,1080 }, { 1280,1080 });
+	line_collider = new LineCollider_t({ 500,1080 }, { 700,1280 });
 
 	Location points[3] =
 	{

@@ -13,15 +13,16 @@
 class LineCollider_t :public ColliderBase
 {
 private:
-
-	Location GetMiddlePoint(Location point1, Location point2)const
+	//中点を返す
+	Location GetMiddlePoint()const
 	{
 		Location middle_point;
-		middle_point.x = (point1.x + point2.x) / 2;
-		middle_point.y = (point1.y + point2.y) / 2;
+		middle_point.x = (vector[LINE_START].x + vector[LINE_END].x) / 2;
+		middle_point.y = (vector[LINE_START].y + vector[LINE_END].y) / 2;
 
 		return middle_point;
 	}
+	//座標を中心座標からのベクターに相対化する
 	void Relativize()
 	{
 		vector[LINE_START].x = vector[LINE_START].x - location.x;
@@ -30,6 +31,7 @@ private:
 		vector[LINE_END].x = vector[LINE_END].x - location.x;
 		vector[LINE_END].y = vector[LINE_END].y - location.y;
 	}
+	//線分の端の絶対座標を返す
 	Location MakeTip(int index)const
 	{
 		//線分の端の絶対座標を計算する
@@ -39,6 +41,62 @@ private:
 
 		return tip;
 	}
+	//線分を対角線とした矩形の左上の座標を返す
+	Location GetMin()const
+	{
+		Location vector_min = {};
+		float x;
+		float y;
+
+		if (vector[LINE_START].x < vector[LINE_END].x)
+		{
+			x = vector[LINE_START].x;
+		}
+		else
+		{
+			x = vector[LINE_END].x;
+		}
+
+		if (vector[LINE_START].y < vector[LINE_END].y)
+		{
+			y = vector[LINE_START].y;
+		}
+		else
+		{
+			y = vector[LINE_END].y;
+		}
+
+		return vector_min;
+	}
+	//線分を対角線とした矩形の右下の座標を返す
+	Location GetMax()const
+	{
+		Location vector_max{};
+		float x;
+		float y;
+
+		if (vector[LINE_START].x > vector[LINE_END].x)
+		{
+			x = vector[LINE_START].x;
+		}
+		else
+		{
+			x = vector[LINE_END].x;
+		}
+
+		if (vector[LINE_START].y > vector[LINE_END].y)
+		{
+			y = vector[LINE_START].y;
+		}
+		else
+		{
+			y = vector[LINE_END].y;
+		}
+
+		return vector_max;
+	}
+
+
 public:
 	LineCollider_t();
 	LineCollider_t(Location point1, Location point2);
