@@ -36,18 +36,30 @@ enum class PLAYER_STATE
 };
 
 
-struct MaterialParameter
+struct ChemicalFormulaMaterial
+{
+	int hydrogen;
+	int oxygen;
+	int carbon;
+	int nitrogen;
+	int sulfur;
+	int chlorine;
+	int uranium;
+};
+
+struct ChemicalFormulaParameter
 {
 	int number_of_bullets;
 	int time;
 	float damage;
 	const char* material_name[10];
 	ATTRIBUTE atribute;
+	ChemicalFormulaMaterial material;
 };
 
 struct ChemicalFormula
 {
-	MaterialParameter x;
+	ChemicalFormulaParameter x;
 };
 
 
