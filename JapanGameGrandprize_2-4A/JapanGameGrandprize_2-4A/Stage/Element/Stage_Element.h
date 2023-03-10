@@ -6,14 +6,16 @@
 #include "Element_DamageWall.h"
 #include "Element_Wooden_Floor.h"
 #include <memory>
+#include <set>
 
 namespace Element {
-	const int DEBUG_GRASS = 1;		//デバック用草ブロック
-	const int DEBUG_SOIL = 4;		//デバック用土ブロック
-	const int DEBUG_WOOD = 23;		//デバック用木ブロック
-	const int GreenButton = 61;		//緑のボタン
-	const int YellowButton = 62;	//黄色のボタン
+	const short DEBUG_GRASS = 1;		//デバック用草ブロック
+	const short DEBUG_SOIL = 4;		//デバック用土ブロック
+	const short DEBUG_WOOD = 23;		//デバック用木ブロック
+	const short GreenButton = 61;		//緑のボタン
+	const short YellowButton = 62;	//黄色のボタン
 }
+
 
 class Stage_Element
 {
@@ -23,14 +25,17 @@ private:
 	std::vector<std::shared_ptr<Stage_Element_Base>> element;
 	Player* player;
 
+	//ステージ要素のID
+	std::set<short> elements_id{ Element::DEBUG_GRASS,Element::DEBUG_SOIL, Element::DEBUG_WOOD, Element::GreenButton, Element::YellowButton };
+
 protected:
 
 
 public:
-	
+
 	//コンストラクタ
 	Stage_Element();
-	
+
 	//デストラクタ
 	~Stage_Element();
 
@@ -41,14 +46,19 @@ public:
 	void SetPlayer(Player* player) { this->player = player; }
 
 	/// <summary>
+	/// ステージ要素ID		Getter
+	/// </summary>
+	std::set<short> GetElementID() { return elements_id; }
+
+	/// <summary>
 	/// ステージ要素の作成
 	/// </summary>
-	void AddElement(MapChip* mapchip, int image, short type);
+	void AddElement(short type, int* image, Location location, Area area);
 
 	/// <summary>
 	/// ステージ要素の更新
 	/// </summary>
-	void Update(Player *player);
+	void Update(Player* player);
 
 	/// <summary>
 	/// ステージ要素の描画

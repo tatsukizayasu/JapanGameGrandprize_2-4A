@@ -3,7 +3,7 @@
 #include "Stage_Element.h"
 
 
-Element_DamageWall::Element_DamageWall(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, MapChip* mapchip, int image) : Stage_Element_Base(element, mapchip, image)
+Element_DamageWall::Element_DamageWall(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : Stage_Element_Base(element, image, location, area)
 {
 	this->type = Element::DEBUG_WOOD;
 }
@@ -23,7 +23,7 @@ void Element_DamageWall::Update(Player* player)
 	}
 }
 
-void Element_DamageWall::Draw() const
-{
-	
-}
+//void Element_DamageWall::Draw() const
+//{
+//
+//}

@@ -33,18 +33,25 @@ Stage::Stage()
 	{
 		for (float x = 0; x < map_data.at(0).size(); x++)
 		{
-			int i = map_data.at(y).at(x);
+			short i = map_data.at(y).at(x);
 			if (i != 0 && i != -1)
 			{
-				mapchip.push_back(new MapChip
-				(&block_images[i],
-					{
-						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-					}, { CHIP_SIZE,CHIP_SIZE }));
 				
-				
-				element->AddElement(mapchip.back(), block_images[i], i);
+				if (i == 1) {
+					element->AddElement(i, &block_images[i], {
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						}, { CHIP_SIZE,CHIP_SIZE });
+
+				}
+				else {
+					mapchip.push_back(new MapChip
+					(&block_images[i],
+						{
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						}, { CHIP_SIZE,CHIP_SIZE }));
+				}
 			}
 			/*else
 			{
@@ -85,7 +92,7 @@ Stage::~Stage()
 #ifdef _STAGE_BUILDER
 	delete stage_builder;
 #endif
-}
+	}
 
 //-----------------------------------
 // XV
@@ -149,7 +156,7 @@ void Stage::Update(Player* player)
 #ifdef _STAGE_BUILDER
 	stage_builder->Update();
 #endif
-}
+	}
 
 //-----------------------------------
 // •`‰æ

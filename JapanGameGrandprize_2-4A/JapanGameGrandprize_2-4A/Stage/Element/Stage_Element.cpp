@@ -14,34 +14,34 @@ Stage_Element::~Stage_Element()
 	delete player;
 }
 
-void Stage_Element::AddElement(MapChip* mapchip, int image, short id)
+void Stage_Element::AddElement(short type, int* image, Location location, Area area)
 {
 
-	switch (id)
+	switch (type)
 	{
 	case Element::DEBUG_WOOD:
-		element.push_back(std::make_shared<Element_DamageWall>(id, element, mapchip, image));
+		element.push_back(std::make_shared<Element_DamageWall>(type, element, image, location, area));
 		break;
 
 	case Element::DEBUG_GRASS:
-		element.push_back(std::make_shared <Element_Wooden_Floor>(id, element, mapchip, image));
+		element.push_back(std::make_shared <Element_Wooden_Floor>(type, element, image, location, area));
 		break;
 
 	case Element::DEBUG_SOIL:
-		element.push_back(std::make_shared <Element_Wooden_Floor>(id, element, mapchip, image));
+		element.push_back(std::make_shared <Element_Wooden_Floor>(type, element, image, location, area));
 		break;
 
 	default:
 		break;
 	}
-
+	
 }
 
 void Stage_Element::Update(Player* player)
 {
 	for (auto& e : element)
 	{
-		e->Update(player);
+		e->MapChip::Update(player);
 	}
 
 }
@@ -51,6 +51,6 @@ void Stage_Element::Draw() const
 {
 	for (auto& e : element)
 	{
-		e->Draw();
+		e->MapChip::Draw();
 	}
 }
