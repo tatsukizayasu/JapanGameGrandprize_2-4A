@@ -79,18 +79,12 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		hit_stage = HitStage(stage);
 		if (hit_stage.hit) //ステージとの当たり判定
 		{
-			Location chip_location = hit_stage.chip->GetLocation();
-			Area chip_area = hit_stage.chip->GetArea();
-			if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 			{
-				if (left_move)
-				{
-					location.x = chip_location.x + (chip_area.width / 2) + (area.width / 2) + 2;
-				}
-				else
-				{
-					location.x = chip_location.x - (chip_area.width / 2) - (area.width / 2) - 2;
-				}
+				location = old_location;
 				left_move = !left_move;
 				speed = -speed;
 			}
@@ -112,7 +106,8 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			Area chip_area = hit_stage.chip->GetArea();
 			if ((chip_location.y - chip_area.height / 2) < (location.y + area.height / 2))
 			{
-				location.y = chip_location.y - (chip_area.height / 2) - (area.height / 2) + 2;
+				location.y = chip_location.y - 
+					(chip_area.height / 2)- (area.height / 2);
 				state = ENEMY_STATE::MOVE;
 				if (left_move)
 				{
