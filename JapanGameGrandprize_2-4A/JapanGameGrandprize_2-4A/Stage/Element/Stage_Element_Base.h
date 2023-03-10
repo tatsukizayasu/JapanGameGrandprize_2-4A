@@ -12,7 +12,7 @@ private:
 protected:
 	
 	MapChip* mapchip;
-	const int *image;
+	int image;
 	
 
 public:
@@ -21,7 +21,7 @@ public:
 	Stage_Element_Base();
 
 	//コンストラクタ
-	Stage_Element_Base(MapChip* mapchip, int* image);
+	Stage_Element_Base(MapChip* mapchip, int image);
 	//コンストラクタ
 	//Stage_Element(const int* p_image, Location location, Area area);
 	//デストラクタ

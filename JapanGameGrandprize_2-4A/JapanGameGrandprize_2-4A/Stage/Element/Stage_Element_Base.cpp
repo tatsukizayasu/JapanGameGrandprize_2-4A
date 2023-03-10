@@ -6,10 +6,10 @@
 Stage_Element_Base::Stage_Element_Base()
 {
 	this->mapchip = nullptr;
-	this->image = nullptr;
+	this->image = 0;
 }
 
-Stage_Element_Base::Stage_Element_Base(MapChip* mapchip, int* image)
+Stage_Element_Base::Stage_Element_Base(MapChip* mapchip, int image)
 {
 	this->mapchip = mapchip;
 	this->image = image;

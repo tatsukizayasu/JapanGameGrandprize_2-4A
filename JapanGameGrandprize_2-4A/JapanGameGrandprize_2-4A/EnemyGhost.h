@@ -7,6 +7,7 @@
 enum class GHOST_STATE
 {
 	NORMAL,   //通常移動 左に移動
+	NORMAL_RIGHT, //通常移動 右に移動
 	LEFT_lOWER,   //左下に移動
 	LEFT_UPPER,   //左上に移動
 	RIGHT_LOWER,  //右下に移動
@@ -27,6 +28,7 @@ private:
 	bool attack; //攻撃が当たったか
 
 	int standby_time; //硬直時間
+	int ghost_image; //ゴーストの画像。
 	bool magic_attack; //魔法攻撃
 	bool physical_attack; //物理攻撃に入る（true)なら
 	GHOST_STATE action_type; //行動パターン

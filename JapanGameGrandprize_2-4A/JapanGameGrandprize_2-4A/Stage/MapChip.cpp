@@ -91,6 +91,9 @@ void MapChip::Update(Player* player)
 //-----------------------------------
 void MapChip::Draw()const
 {
+	//‰æ‘œ‚ª‚È‚¢–”‚ÍƒGƒ‰[‚Ìê‡‚Í•`‰æ‚µ‚È‚¢
+	if (image == 0) { return; }
+
 	//printfDx("camera_x:%f\tcamera_y:%f\n", CameraWork::GetCamera().x, CameraWork::GetCamera().y);
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;

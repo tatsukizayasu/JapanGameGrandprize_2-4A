@@ -4,7 +4,7 @@
 #include "BulletManager.h"
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 40
-#define GHOST_SIZE_Y 60
+#define GHOST_SIZE_Y 80
 
 //プレイヤー発見距離
 #define GHOST_DETECTION_DISTANCE 500
@@ -49,14 +49,16 @@ EnemyGhost::EnemyGhost()
 	attack = false;
 
 	hp = 10;
-	location.x = 640.0f;
-	location.y = 1120.0f;
+	location.x = 1400;
+	location.y = 1200;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
 	physical_attack = false;
 	magic_attack = false;
 	kind = ENEMY_KIND::GHOST;
+
+	ghost_image = LoadGraph("Images/Enemy/Ghostimage.png"); //画像読込み
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -149,6 +151,9 @@ void EnemyGhost::Move(const Location player_location)
 	case GHOST_STATE::NORMAL:  //通常移動
 		location.x -= GHOST_SPEED;
 		break;
+	case GHOST_STATE::NORMAL_RIGHT://右
+		location.x += GHOST_SPEED;
+		break;
 	case GHOST_STATE::LEFT_lOWER:  //左下を目指す
 		location.x -= GHOST_SPEED;
 		location.y += GHOST_SPEED;
@@ -222,7 +227,7 @@ AttackResource EnemyGhost::Hit()
 //-----------------------------------
 void EnemyGhost::Death()
 {
-
+	can_delete = true;
 }
 
 //-----------------------------------
@@ -235,16 +240,8 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK)
-	{
-		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xff0000, TRUE);
-	}
-	else
-	{
-		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffff00, TRUE);
-	}
+
+	DrawRotaGraph(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
 }
 
 
@@ -254,25 +251,29 @@ void EnemyGhost::Draw()const
 void EnemyGhost::GhostMove(const Location player_location)
 {
 	float range; //プレイヤーとの距離	
-	
+
 	range = fabsf(location.x - player_location.x);
 
 	//プレイヤーが発見距離内にいたら
 	if (range <= GHOST_DETECTION_DISTANCE && range >= -GHOST_DETECTION_DISTANCE)
 	{
-		if (range > player_location.x) //左に移動
+		if (location.x > player_location.x) //左に移動
 		{
 			if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
 			}
-			else 
+			else
 			{
 				action_type = GHOST_STATE::LEFT_UPPER;
 			}
 		}
 		else //右に移動
 		{
+			//if (location.y + 10 >= player_location.y && location.y - 10 <= player_location.y)
+			//{
+			//	//action_type = GHOST_STATE::NORMAL_RIGHT;
+			//}
 			if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
@@ -326,26 +327,26 @@ void EnemyGhost::HitBullet(const BulletBase* bullet)
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * 10; //無効
+		hp -= bullet->GetDamage() * 0; //無効
 		break;
-		//	case ATTRIBUTE::EXPLOSION:
-		//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
-		//		break;
-		//	case ATTRIBUTE::MELT:
-		//		hp -= bullet->GetDamage() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::POISON:
-		//		poison_damage = bullet->GetDamage() * 0; //無効
-		//		poison_time = bullet->GetDebuffTime() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::PARALYSIS:
-		//		paralysis_time = bullet->GetDebuffTime() * 0; //無効
-		//		paralysis_time = bullet->GetDamage() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::HEAL:
-		//		break;
-		//	default:
-		//		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * 0; //無効
+		break;
+	case ATTRIBUTE::POISON:
+		poison_damage = bullet->GetDamage() * 0; //無効
+		poison_time = bullet->GetDebuffTime() * 0; //無効
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * 0; //無効
+		paralysis_time = bullet->GetDamage() * 0; //無効
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
 }
 

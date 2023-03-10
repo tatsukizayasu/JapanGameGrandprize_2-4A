@@ -12,7 +12,7 @@ private:
 public:
 
 	//コンストラクタ
-	Element_Wooden_Floor(MapChip* mapchip, int* image);
+	Element_Wooden_Floor(MapChip* mapchip, int image);
 	//デストラクタ
 	~Element_Wooden_Floor();
 

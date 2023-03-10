@@ -8,7 +8,7 @@ private:
 public:
 
 	//コンストラクタ
-	Element_DamageWall(MapChip* mapchip, int* image);
+	Element_DamageWall(MapChip* mapchip, int image);
 	//デストラクタ
 	~Element_DamageWall();
 	//更新

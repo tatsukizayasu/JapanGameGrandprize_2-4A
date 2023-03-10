@@ -44,7 +44,7 @@ Stage::Stage()
 					}, { CHIP_SIZE,CHIP_SIZE }));
 				
 				
-				element->AddElement(mapchip.back(), &block_images[i], i);
+				element->AddElement(mapchip.back(), block_images[i], i);
 			}
 			/*else
 			{
@@ -113,6 +113,10 @@ void Stage::Update(Player* player)
 		float w = m->GetArea().width;
 		float h = m->GetArea().height;
 
+		//ブロックの範囲を固定化
+		w = MAP_CHIP_SIZE;
+		h = MAP_CHIP_SIZE;
+
 		// 画面内にあるMapChipオブジェクトだけUpdateする
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
 
@@ -174,6 +178,10 @@ void Stage::Draw()
 		float y = m->GetLocation().y;
 		float w = m->GetArea().width;
 		float h = m->GetArea().height;
+
+		//ブロックの範囲を固定化
+		w = MAP_CHIP_SIZE;
+		h = MAP_CHIP_SIZE;
 
 		// 画面内にあるMapChipオブジェクトだけ描画する
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;

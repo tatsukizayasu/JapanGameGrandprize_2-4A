@@ -42,7 +42,7 @@ public:
 	/// <summary>
 	/// ステージ要素の作成
 	/// </summary>
-	void AddElement(MapChip* mapchip, int *image, short type);
+	void AddElement(MapChip* mapchip, int image, short type);
 
 	/// <summary>
 	/// ステージ要素の更新

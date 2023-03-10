@@ -18,8 +18,9 @@
 //体力
 #define MAGE_HP 100
 
-//移動範囲
-#define MAGE_TELEPORT_AREA 200
+//移動範囲(直径)
+#define MAGE_TELEPORT_AREA 600
+#define MAGE_TELEPORT_RATE 80
 
 //攻撃間隔
 #define MAGE_ATTACK_INTERVAL 120
@@ -31,10 +32,12 @@ Mage::Mage()
 {
 	/*初期化*/
 	can_delete = false;
+	can_teleport = true;
 	left_move = true;
 	hp = MAGE_HP;
 	shot_rate = 0;
 	shot_count = 0;
+	teleport_count = 0;
 	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
@@ -161,6 +164,10 @@ void Mage::Update(const Player* player, const Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
+		if (can_teleport)
+		{
+			Teleport(stage);
+		}
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -175,10 +182,6 @@ void Mage::Update(const Player* player, const Stage* stage)
 		break;
 	}
 
-	if (0 <= attack_interval)
-	{
-		attack_interval--;
-	}
 
 	Poison();
 	Paralysis();
@@ -211,15 +214,22 @@ void Mage::Idol()
 //-----------------------------------
 void Mage::Move(const Location player_location)
 {
-	Location scroll; //画面スクロールを考慮したX座標
+	Location scroll = location;
+	Location camera = CameraWork::GetCamera();
+	scroll = scroll - camera;
 
-	if (attack_interval < 0)
+	teleport_count++;
+	attack_interval--;
+
+	if (teleport_count % MAGE_TELEPORT_RATE  == 0) //テレポートする
+	{
+		can_teleport =true;
+	}
+
+	if (attack_interval < 0) //攻撃に移行
 	{
 		state = ENEMY_STATE::ATTACK;
 	}
-
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
 
 	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) ||
 		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
@@ -231,9 +241,44 @@ void Mage::Move(const Location player_location)
 //-----------------------------------
 //テレポート
 //-----------------------------------
-void Mage::Teleport()
+void Mage::Teleport(const Stage* stage)
 {
+	HitMapChip hit_stage;
 
+	float radian; //角度
+	int teleport; //テレポートの場所距離
+	Location old_location = location; //元の地点
+
+	Location camera = CameraWork::GetCamera();
+	while (true)
+	{
+		//テレポートする距離設定
+		teleport = (MAGE_TELEPORT_AREA / 2) - GetRand(MAGE_TELEPORT_AREA);
+		//角度の計算
+		radian = GetRand(360) * (M_PI / 180);
+
+		//テレポートの座標の計算
+		location.x = old_location.x + (teleport * cosf(radian));
+		location.y = old_location.y + (teleport * sinf(radian));
+
+		Location scroll = location; //画面スクロールを考慮した座標
+		//画面スクロールを考慮した座標の計算
+		scroll = scroll - camera;
+
+		//ステージとの当たり判定の取得
+		hit_stage = HitStage(stage);
+
+		if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+			(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+		{
+			if (!hit_stage.hit)
+			{
+				break;
+			}
+		}
+		
+	}
+	can_teleport = false;
 }
 
 //-----------------------------------
@@ -256,6 +301,7 @@ void  Mage::Attack(Location player_location)
 		state = ENEMY_STATE::MOVE;
 		shot_count = 0;
 		attack_interval = MAGE_ATTACK_INTERVAL;
+		teleport_count = 0;
 	}
 }
 

@@ -52,6 +52,13 @@ public:
 		area.width = set_area.width;
 	}
 
+	/// <summary>
+	/// ‰æ‘œ‚ÌSetter
+	/// </summary>
+	void SetImage(int image) {
+		this->image = image;
+}
+
 
 protected:
 

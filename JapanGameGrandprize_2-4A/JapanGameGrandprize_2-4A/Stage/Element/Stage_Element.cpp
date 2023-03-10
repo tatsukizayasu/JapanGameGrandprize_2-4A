@@ -10,7 +10,7 @@ Stage_Element::~Stage_Element()
 {
 }
 
-void Stage_Element::AddElement(MapChip* mapchip, int *image , short id)
+void Stage_Element::AddElement(MapChip* mapchip, int image , short id)
 {
 
 		switch (id)
