@@ -1,7 +1,6 @@
 #pragma once
 #include "Stage_Element_Base.h"
 
-
 class Element_Wooden_Floor : public Stage_Element_Base
 {
 private:

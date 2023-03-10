@@ -55,7 +55,6 @@ bool SphereCollider::HitBox(const BoxCollider* box_collider) const
 	sub_x[1] = sub_x[0] + box_collider->GetArea().width;
 	sub_y[1] = sub_y[0] + box_collider->GetArea().height;
 
-
 	if ((sub_x[0] < sphere_x) && (sphere_x < sub_x[1]) && (sub_y[0] < sphere_y) && (sphere_y < sub_y[1])) //“–‚½‚è”»’è
 	{
 		ret = true;
@@ -100,7 +99,8 @@ bool SphereCollider::HitLine(const LineCollider_t* line_collider) const
 		//“àÏ‚ÌŒvŽZ
 		for (int i = 0; i < 2; i++)
 		{
-			inner_product[i] = (vector_x[i + 1] * vector_x[0]) - (vector_y[i + 1] * vector_y[0]);
+			inner_product[i] = (vector_x[i + 1] * vector_x[0]) 
+				               - (vector_y[i + 1] * vector_y[0]);
 		}
 
 		//‰~‚Ì’†S‚Æ‚Ì‹——£‚ÌŒvŽZ

@@ -17,7 +17,6 @@
 //-----------------------------------
 Stage::Stage()
 {
-
 	element = new Stage_Element();
 
 	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
@@ -73,7 +72,6 @@ Stage::Stage()
 //-----------------------------------
 Stage::~Stage()
 {
-
 	//マップチップの描画情報オブジェクトを削除
 	for (int i = 0; i < mapchip.size(); i++)
 	{
@@ -99,7 +97,6 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
-
 	//当たり判定演算範囲
 	struct DrawArea
 	{
@@ -125,31 +122,36 @@ void Stage::Update(Player* player)
 		h = MAP_CHIP_SIZE;
 
 		// 画面内にあるMapChipオブジェクトだけUpdateする
-		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
+		if (x + w < camera.x || camera.x + draw.width < x || 
+			  y + h < camera.y || camera.y + draw.height < y) continue;
 
 		//当たっているオブジェクトの座標を更新
-		/*collision_dir = m->GetMapChip_Collision();
-		if (collision_dir.x != 0 || collision_dir.y != 0) {
+		collision_dir = m->GetMapChip_Collision();
+
+		if (collision_dir.x != 0 || collision_dir.y != 0) 
+		{
 			collision_chip.x = m->GetLocation().x;
 			collision_chip.y = m->GetLocation().y;
 			break;
-		}*/
+		}
 
 		m->Update(player);
 		element->Update(player);
 
-		////当たっている方向を更新
-		//collision_dir = m->GetMapChip_Collision();
-		//if (collision_dir.y != 0) {
-		//	//clsDx();
-		//	//printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
-		//	collision_dir_w = collision_dir;
+		//当たっている方向を更新
+		collision_dir = m->GetMapChip_Collision();
+		if (collision_dir.y != 0) 
+		{
+			//clsDx();
+			//printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
+			collision_dir_w = collision_dir;
 
-		//	if (collision_dir.x != 0) {
-		//		//speed_x = 0.0f;
-		//	}
+			if (collision_dir.x != 0) 
+			{
+				//speed_x = 0.0f;
+			}
 
-		//}
+		}
 
 	}
 
@@ -163,7 +165,6 @@ void Stage::Update(Player* player)
 //-----------------------------------
 void Stage::Draw()
 {
-
 	//マップチップ		描画
 
 	//描画範囲

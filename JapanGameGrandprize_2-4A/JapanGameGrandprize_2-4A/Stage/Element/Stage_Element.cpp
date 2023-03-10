@@ -1,17 +1,12 @@
 #include "Stage_Element.h"
 
-
 Stage_Element::Stage_Element()
 {
 	player = nullptr;
 }
 
-
 Stage_Element::~Stage_Element()
 {
-	element.clear();
-	element.shrink_to_fit();
-	delete player;
 }
 
 void Stage_Element::AddElement(short type, int* image, Location location, Area area)
@@ -43,9 +38,7 @@ void Stage_Element::Update(Player* player)
 	{
 		e->MapChip::Update(player);
 	}
-
 }
-
 
 void Stage_Element::Draw() const
 {

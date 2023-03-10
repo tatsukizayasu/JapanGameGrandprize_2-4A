@@ -22,7 +22,7 @@ class Stage_Element
 private:
 
 	//オブジェクト変数
-	std::vector<std::shared_ptr<Stage_Element_Base>> element;
+	std::vector<Stage_Element_Base*> element;
 	Player* player;
 
 	//ステージ要素のID

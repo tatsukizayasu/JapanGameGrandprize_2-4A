@@ -1,6 +1,6 @@
+#include "SceneManager.h"
 #include "DxLib.h"
 #include <time.h>
-#include "SceneManager.h"
 #include "FpsController.h"
 
 //-----------------------------------

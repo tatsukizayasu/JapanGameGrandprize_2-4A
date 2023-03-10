@@ -67,4 +67,3 @@ struct Area
 	float height;	//èc
 	float width;	//â°
 };
-
