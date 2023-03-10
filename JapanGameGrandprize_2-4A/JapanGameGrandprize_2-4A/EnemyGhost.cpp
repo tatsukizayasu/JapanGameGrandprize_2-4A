@@ -56,7 +56,6 @@ EnemyGhost::EnemyGhost()
 	standby_time = 0;
 	physical_attack = false;
 	magic_attack = false;
-	inversion = false;
 	kind = ENEMY_KIND::GHOST;
 
 	ghost_image = LoadGraph("Images/Enemy/Ghostimage.png"); //‰æ‘œ“Çž‚Ý
@@ -300,18 +299,9 @@ void EnemyGhost::GhostMove(const Location player_location)
 
 	else //’ÊíˆÚ“®
 	{
-		if (inversion == false)
-		{
-			action_type = GHOST_STATE::NORMAL;
-			magic_attack = false;
-			physical_attack = false;
-		}
-		else
-		{
-			action_type = GHOST_STATE::NORMAL_RIGHT;
-			magic_attack = false;
-			physical_attack = false;
-		}
+		action_type = GHOST_STATE::NORMAL;
+		magic_attack = false;
+		physical_attack = false;
 	}
 
 	//UŒ‚”ÍˆÍ“à‚É‚¢‚éê‡
@@ -329,6 +319,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 		standby_time = GHOST_MAGIC_STANDBY;
 		magic_attack = true;
 
+		//’e‚Ì¶¬
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new GhostBullet(location, player_location));
 	}

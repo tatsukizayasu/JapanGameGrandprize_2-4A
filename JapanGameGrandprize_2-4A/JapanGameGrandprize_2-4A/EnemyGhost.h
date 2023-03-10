@@ -21,8 +21,7 @@ enum class GHOST_ATTACK
 	NONE
 };
 
-class EnemyGhost :
-	public EnemyBase
+class EnemyGhost :public EnemyBase
 {
 private:
 	int standby_attack; //次の攻撃待機時間
@@ -32,7 +31,6 @@ private:
 	bool magic_attack; //魔法攻撃
 	bool attack; //攻撃が当たったか
 	bool physical_attack; //物理攻撃に入る（true)なら
-	bool inversion; //反転（壁にあったった)
 	GHOST_STATE action_type; //行動パターン
 	GHOST_ATTACK attack_state; //攻撃状態
 private:
