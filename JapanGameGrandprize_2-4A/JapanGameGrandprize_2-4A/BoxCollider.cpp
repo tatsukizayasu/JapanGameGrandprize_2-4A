@@ -1,9 +1,8 @@
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 #include "LineCollider.h"
-#include <math.h>
-
 #define _USE_MATH_DEFINES
+#include <math.h>
 
 //-----------------------------------
 // SphereCollider‚Æ‚Ì“–‚½‚è”»’è
@@ -34,7 +33,6 @@ bool BoxCollider::HitSphere(const SphereCollider* sphere_collider) const
 	my_y[0] = location.y - (area.height / 2);
 	my_x[1] = my_x[0] + area.width;
 	my_y[1] = my_y[0] + area.height;
-
 
 	if ((my_x[0] < sphere_x) && (sphere_x < my_x[1]) 
 		    && (my_y[0] < sphere_y) && (sphere_y < my_y[1])) //“–‚½‚è”»’è
@@ -114,7 +112,6 @@ bool BoxCollider::HitLine(const LineCollider_t* line_collider) const
 	{
 		sub_x[0] = line_collider->GetLocation(0).x;
 		sub_x[1] = line_collider->GetLocation(1).x;
-
 	}
 	else
 	{

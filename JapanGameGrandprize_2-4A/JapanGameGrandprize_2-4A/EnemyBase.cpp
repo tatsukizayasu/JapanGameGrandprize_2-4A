@@ -1,5 +1,5 @@
-#include "DxLib.h"
 #include "EnemyBase.h"
+#include "DxLib.h"
 #include "vector"
 #include "CameraWork.h"
 
@@ -31,10 +31,12 @@ EnemyBase::EnemyBase()
 bool EnemyBase::CheckHp()
 {
 	bool ret = false;
+
 	if (hp <= 0)
 	{
 		ret = true;
 	}
+
 	return ret;
 }
 
@@ -115,7 +117,7 @@ int EnemyBase::GetDropTypeVolume() const
 //-----------------------------------
 //ドロップするアイテムの量の取得
 //-----------------------------------
-int EnemyBase::GetDropVolume()const
+int EnemyBase::GetDropVolume() const
 {
 	return drop_volume;
 }

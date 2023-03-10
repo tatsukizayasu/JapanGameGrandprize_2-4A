@@ -15,6 +15,4 @@ public:
 	void Update(Player *player);
 	//•`‰æ
 	void Draw() const;
-
-
 };

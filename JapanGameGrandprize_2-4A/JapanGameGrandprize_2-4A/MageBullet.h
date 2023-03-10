@@ -23,4 +23,3 @@ public:
     //•`‰æ
     void Draw() const override ;
 };
-

@@ -12,8 +12,6 @@ private:
 	//当たっている方向	構造体
 	//X[右:1, -左:-1], Y[上:1, 下:-1]
 	POINT collision_dir;
-
-
 public:
 
 	//コンストラクタ
@@ -29,14 +27,13 @@ public:
 
 	const char* GetName() { return class_name; }
 
-
 	/// <summary>
 	/// **プレイヤーとステージの当たり判定用**
 	/// 当たったマップチップ座標のGetter
 	/// </summary>
 	/// <returns>POINT型(構造体型) X[右:1, -左:-1], Y[上:1, 下:-1]</returns>	
-	const POINT GetMapChip_Collision() {
-
+	const POINT GetMapChip_Collision()
+	{
 		POINT w = collision_dir;
 
 		collision_dir = { 0,0 };
@@ -47,7 +44,8 @@ public:
 	/// <summary>
 	/// 当たり判定範囲のSetter
 	/// </summary>
-	void SetArea(Area set_area) {
+	void SetArea(Area set_area)
+	{
 		area.height = set_area.height;
 		area.width = set_area.width;
 	}
@@ -55,11 +53,10 @@ public:
 	/// <summary>
 	/// 画像のSetter
 	/// </summary>
-	void SetImage(int image) {
+	void SetImage(int image) 
+	{
 		this->image = image;
-}
-
-
+	}
 protected:
 
 	const char* class_name = "default";

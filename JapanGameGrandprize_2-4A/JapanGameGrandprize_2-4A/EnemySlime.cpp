@@ -1,9 +1,9 @@
-#include<dxlib.h>
+#include "EnemySlime.h"
+#include "dxlib.h"
 #define _USE_MATH_DEFINES
-#include<math.h>
-#include"EnemySlime.h"
-#include"Player.h"
-#include"Stage/Stage.h"
+#include <math.h>
+#include "Player.h"
+#include "Stage/Stage.h"
 
 #define SLIME_ATTACK_DISTANCE_Y 15
 #define SLIME_ATTACK_SPEED 5
@@ -73,6 +73,7 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 	case ENEMY_STATE::IDOL:
 		Idol();
 		break;
+
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
 
@@ -102,6 +103,7 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		}
 
 		break;
+
 	case ENEMY_STATE::FALL:
 		Fall();
 		hit_stage = HitStage(stage);
@@ -125,18 +127,18 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			}
 		}
 		break;
+
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
 		break;
+
 	case ENEMY_STATE::DEATH:
 		Death();
 		break;
+
 	default:
 		break;
 	}
-
-
-	
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -184,12 +186,10 @@ void EnemySlime::Idol()
 //-----------------------------------
 void EnemySlime::Move(const Location player_location)
 {
-
 	float distance; //離れている距離
 
 	//プレイヤーとの距離の計算
 	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
-
 
 	if (distance < 120 )
 	{
@@ -265,6 +265,7 @@ void  EnemySlime::Attack(Location player_location)
 		attack = false;
 		slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 		state = ENEMY_STATE::MOVE;
+
 		if (left_move)
 		{
 			speed = -SLIME_SPEED;
@@ -320,7 +321,6 @@ void EnemySlime::Death()
 		}
 		else
 		{
-		
 			speed = -SLIME_ATTACK_SPEED;
 			slime_angle -= ROTATION_SPEED;
 		}
@@ -356,7 +356,6 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
-
 }
 
 //-----------------------------------

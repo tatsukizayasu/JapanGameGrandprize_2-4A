@@ -1,7 +1,7 @@
+#include "Undead.h"
 #include "DxLib.h"
 #define _USE_MATH_DEFINES
-#include<math.h>
-#include "Undead.h"
+#include <math.h>
 #include "Define.h"
 #include "CameraWork.h"
 
@@ -20,7 +20,6 @@
 //ドロップ量
 #define UNDEAD_MIN_DROP 0u
 #define UNDEAD_MAX_DROP 5u
-
 
 #define UNDEAD_ATTACK_DAMAGE 10
 //体力
@@ -70,7 +69,6 @@ Undead::Undead()
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
-
 }
 
 //-----------------------------------
@@ -167,8 +165,6 @@ void Undead::Update(const Player* player, const Stage* stage)
 		attack_interval--;
 	}
 
-	
-
 	Poison();
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
@@ -176,7 +172,6 @@ void Undead::Update(const Player* player, const Stage* stage)
 		state = ENEMY_STATE::DEATH;
 	}
 }
-
 
 //-----------------------------------
 // プレイヤーとの距離
@@ -230,9 +225,7 @@ void Undead::Idol()
 //-----------------------------------
 void Undead::Move(const Location player_location)
 {
-
 	Location scroll; //画面スクロールを考慮したX座標
-
 	
 	DistancePlayer(player_location);
 
@@ -256,7 +249,7 @@ void Undead::Fall()
 	if (speed < GRAVITY)
 	{
 		speed += ENEMY_FALL_SPEED;
-	}
+	} 
 	location.y += speed;
 }
 

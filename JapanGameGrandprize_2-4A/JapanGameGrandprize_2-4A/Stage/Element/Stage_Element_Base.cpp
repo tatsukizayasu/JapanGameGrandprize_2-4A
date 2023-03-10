@@ -19,7 +19,6 @@ Stage_Element_Base::~Stage_Element_Base()
 {
 }
 
-
 bool Stage_Element_Base::HitPlayer(Player* player) const
 {
 	Location location = mapchip->GetLocation();
@@ -35,9 +34,7 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 
 	//•â³
 
-
 	Rect mapchip_rect = { location.x - (area.width / 2), location.y - (area.height / 2), area.height, area.width };
-
 
 	Location p_location = player->GetLocation();
 	Area p_area = player->GetArea();
@@ -48,12 +45,11 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 
 	Rect player_rect = { p_location.x - (p_area.width / 2), p_location.y - (p_area.height / 2), p_area.height, p_area.width };
 
-
-
 	if ((mapchip_rect.x - x < player_rect.x + player_rect.width) && (player_rect.x < mapchip_rect.x + mapchip_rect.width + x)
 		&& (mapchip_rect.y - y < player_rect.y + player_rect.height) && (player_rect.y < mapchip_rect.y + mapchip_rect.height + y))
 	{
 		return true;
 	}
+
 	return false;
 }

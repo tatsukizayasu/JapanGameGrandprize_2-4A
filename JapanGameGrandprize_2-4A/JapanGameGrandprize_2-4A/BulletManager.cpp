@@ -97,7 +97,6 @@ void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
     enemy_bullets[enemy_bullet_count] = dynamic_cast<EnemyBulletBase*>(bullet);
 
     enemy_bullet_count++;
-
 }
 
 //-----------------------------------
@@ -137,8 +136,6 @@ void BulletManager::DeleteEnemyBullet(const EnemyBulletBase* bullet)
     }
 }
 
-
-
 //-----------------------------------
 //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
 //-----------------------------------
@@ -177,7 +174,6 @@ EnemyBulletBase** BulletManager::GetEnemyBullets() const
 {
     return enemy_bullets;
 }
-
 
 //-----------------------------------
 //’e‚ÌÅ‘å’l‚Ìæ“¾

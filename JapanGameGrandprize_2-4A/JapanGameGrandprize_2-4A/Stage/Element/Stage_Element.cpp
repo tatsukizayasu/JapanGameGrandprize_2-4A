@@ -5,14 +5,12 @@ Stage_Element::Stage_Element()
 	player = nullptr;
 }
 
-
 Stage_Element::~Stage_Element()
 {
 }
 
 void Stage_Element::AddElement(MapChip* mapchip, int image , short id)
 {
-
 		switch (id)
 		{
 		case Element::DEBUG_WOOD:
@@ -30,7 +28,6 @@ void Stage_Element::AddElement(MapChip* mapchip, int image , short id)
 		default:
 			break;
 		}
-	
 }
 
 void Stage_Element::Update(Player* player)
@@ -39,9 +36,7 @@ void Stage_Element::Update(Player* player)
 	{
 		e->Update(player);
 	}
-
 }
-
 
 void Stage_Element::Draw() const
 {

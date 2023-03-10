@@ -6,7 +6,8 @@
 #include "Element_DamageWall.h"
 #include "Element_Wooden_Floor.h"
 
-namespace Element {
+namespace Element 
+{
 	const int DEBUG_GRASS = 1;		//デバック用草ブロック
 	const int DEBUG_SOIL = 4;		//デバック用土ブロック
 	const int DEBUG_WOOD = 23;		//デバック用木ブロック
@@ -21,10 +22,6 @@ private:
 	//オブジェクト変数
 	std::vector<Stage_Element_Base*> element;
 	Player* player;
-
-protected:
-
-
 public:
 	
 	//コンストラクタ

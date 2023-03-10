@@ -6,15 +6,10 @@ class MapChip;
 
 class Stage_Element_Base
 {
-private:
-
-
 protected:
 	
 	MapChip* mapchip;
 	int image;
-	
-
 public:
 	
 	//デフォルトコンストラクタ

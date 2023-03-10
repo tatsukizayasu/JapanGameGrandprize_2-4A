@@ -80,13 +80,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 
-
-				//フレームレートの設定
+		//フレームレートの設定
 		dNextTime += static_cast<double>(1.0 / 60.0 * 1000.0);
-		if (dNextTime > GetNowCount()) {
+
+		if (dNextTime > GetNowCount()) 
+		{
 			WaitTimer(static_cast<int>(dNextTime) - GetNowCount());
 		}
 		else { dNextTime = GetNowCount(); }		//補正
 	}
+
 	return 0;
 }
