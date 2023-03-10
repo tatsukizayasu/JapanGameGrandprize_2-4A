@@ -1,9 +1,12 @@
 #include "Element_Wooden_Floor.h"
 #include "../Player.h"
 #include "../PadInput.h"
+#include "Stage_Element.h"
 
-Element_Wooden_Floor::Element_Wooden_Floor(MapChip* mapchip, int image) : Stage_Element_Base(mapchip, image)
+
+Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, MapChip* mapchip, int image) : Stage_Element_Base(element, mapchip, image)
 {
+	this->type = Element::DEBUG_GRASS;
 	original_collision = mapchip->GetArea();
 }
 
@@ -25,6 +28,7 @@ void Element_Wooden_Floor::Update(Player* player)
 			mapchip->SetImage(0);
 		}
 	}
+
 	//プレイヤーがマップチップよりも下に行ったら元の当たり判定範囲に戻す
 	else if (player->GetLocation().y > mapchip->GetLocation().y) {
 		mapchip->SetArea(original_collision);

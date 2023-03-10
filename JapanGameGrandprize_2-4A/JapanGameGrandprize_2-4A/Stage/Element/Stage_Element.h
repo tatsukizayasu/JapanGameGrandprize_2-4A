@@ -5,6 +5,7 @@
 #include "Stage_Element_Base.h"
 #include "Element_DamageWall.h"
 #include "Element_Wooden_Floor.h"
+#include <memory>
 
 namespace Element {
 	const int DEBUG_GRASS = 1;		//デバック用草ブロック
@@ -19,7 +20,7 @@ class Stage_Element
 private:
 
 	//オブジェクト変数
-	std::vector<Stage_Element_Base*> element;
+	std::vector<std::shared_ptr<Stage_Element_Base>> element;
 	Player* player;
 
 protected:

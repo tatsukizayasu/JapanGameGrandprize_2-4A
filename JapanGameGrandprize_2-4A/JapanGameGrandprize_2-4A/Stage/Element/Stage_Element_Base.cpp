@@ -3,14 +3,17 @@
 #include "../Player.h"
 #include <windef.h>
 
+
 Stage_Element_Base::Stage_Element_Base()
 {
+
 	this->mapchip = nullptr;
 	this->image = 0;
 }
 
-Stage_Element_Base::Stage_Element_Base(MapChip* mapchip, int image)
+Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, MapChip* mapchip, int image)
 {
+	this->element = element;
 	this->mapchip = mapchip;
 	this->image = image;
 }
@@ -56,4 +59,24 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 		return true;
 	}
 	return false;
+}
+
+
+std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
+{
+	for (auto elem : element) {
+		if (elem != nullptr && elem->GetType() == type) {
+			//MapChip* mapchip = elem->GetMapChip();
+
+			if (mapchip->GetLocation().y > elem->GetMapChip()->GetLocation().y
+				&& mapchip->GetLocation().x == elem->GetMapChip()->GetLocation().x) {
+
+				SearchElement(type)->GetMapChip()->SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
+				SearchElement(type)->GetMapChip()->SetImage(0);
+				printfDx("aa");
+				return elem;
+			}
+			
+		}
+	}
 }
