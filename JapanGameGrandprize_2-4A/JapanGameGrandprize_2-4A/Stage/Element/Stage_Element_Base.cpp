@@ -57,21 +57,21 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 }
 
 
-std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
-{
-	for (auto elem : element) {
-		if (elem != nullptr && elem->GetType() == type) {
-			//MapChip* mapchip = elem->GetMapChip();
-
-			if (mapchip->GetLocation().y > elem->GetMapChip()->GetLocation().y
-				&& mapchip->GetLocation().x == elem->GetMapChip()->GetLocation().x) {
-
-				SearchElement(type)->GetMapChip()->SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
-				SearchElement(type)->GetMapChip()->SetImage(0);
-				printfDx("aa");
-				return elem;
-			}
-			
-		}
-	}
-}
+//std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
+//{
+//	for (auto elem : element) {
+//		if (elem != nullptr && elem->GetType() == type) {
+//			//MapChip* mapchip = elem->GetMapChip();
+//
+//			if (mapchip->GetLocation().y > elem->GetMapChip()->GetLocation().y
+//				&& mapchip->GetLocation().x == elem->GetMapChip()->GetLocation().x) {
+//
+//				SearchElement(type)->GetMapChip()->SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
+//				SearchElement(type)->GetMapChip()->SetImage(0);
+//				printfDx("aa");
+//				return elem;
+//			}
+//			
+//		}
+//	}
+//}

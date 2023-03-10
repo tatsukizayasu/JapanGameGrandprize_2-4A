@@ -1,6 +1,7 @@
 #include "Element_Wooden_Floor.h"
 #include "../Player.h"
 #include "../PadInput.h"
+#include "Stage_Element.h"
 
 
 Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : Stage_Element_Base(element, image, location, area)

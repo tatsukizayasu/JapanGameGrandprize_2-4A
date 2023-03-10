@@ -12,7 +12,7 @@ class Stage_Element_Base : public MapChip
 protected:
 	
 	MapChip* mapchip;
-
+	short type;
 
 
 public:
