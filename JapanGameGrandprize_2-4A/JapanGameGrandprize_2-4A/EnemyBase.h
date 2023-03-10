@@ -38,6 +38,16 @@ struct HitMapChip
 	MapChip* chip; //マップチップ
 };
 
+
+//ステージブロックと当たった面
+enum class STAGE_DIRECTION
+{
+	TOP,	//上面
+	BOTTOM,	//下面
+	LEFT,	//左面
+	RIGHT	//右面
+};
+
 //エネミーの種類
 enum class ENEMY_KIND
 {
@@ -101,6 +111,9 @@ public:
 
 	//ステージとの当たり判定
 	HitMapChip HitStage(const class Stage* stage);
+
+	//ステージのどの面と当たったを判断
+	STAGE_DIRECTION HitDirection(const class MapChip* map_chip);
 
 	//死亡
 	virtual void Death() = 0;

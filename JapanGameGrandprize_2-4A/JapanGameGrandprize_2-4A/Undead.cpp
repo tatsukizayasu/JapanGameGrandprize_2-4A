@@ -52,7 +52,7 @@ Undead::Undead()
 	paralysis_time = 0;
 
 	/*当たり判定の設定*/
-	location.x = 1690.0f;
+	location.x = 1680.0f;
 	location.y = 980.0f;
 	area.width = 40;
 	area.height = 80;
@@ -94,7 +94,7 @@ Undead::~Undead()
 void Undead::Update(const Player* player, const Stage* stage)
 {
 	HitMapChip hit_stage = {false,nullptr}; //ステージとの当たり判定
-
+	Location old_location = location; //移動前の座標
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -106,18 +106,12 @@ void Undead::Update(const Player* player, const Stage* stage)
 		hit_stage = HitStage(stage);
 		if (hit_stage.hit) //ステージとの当たり判定
 		{
-			Location chip_location = hit_stage.chip->GetLocation();
-			Area chip_area = hit_stage.chip->GetArea();
-			if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 			{
-				if (left_move)
-				{
-					location.x = chip_location.x + (chip_area.width / 2) + (area.width / 2) + 2;
-				}
-				else
-				{
-					location.x = chip_location.x - (chip_area.width / 2) - (area.width / 2) - 2;
-				}
+				location = old_location;
 				left_move = !left_move;
 				speed = -speed;
 			}
@@ -139,7 +133,9 @@ void Undead::Update(const Player* player, const Stage* stage)
 			Area chip_area = hit_stage.chip->GetArea();
 			if ((chip_location.y - chip_area.height / 2) < (location.y + area.height / 2))
 			{
-				location.y = chip_location.y - (chip_area.height / 2) - (area.height / 2) + 2;
+				location.y = chip_location.y - 
+					(chip_area.height / 2) - (area.height / 2);
+
 				state = ENEMY_STATE::MOVE;
 				if (left_move)
 				{
