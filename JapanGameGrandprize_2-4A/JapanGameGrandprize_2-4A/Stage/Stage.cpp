@@ -121,28 +121,28 @@ void Stage::Update(Player* player)
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
 
 		//当たっているオブジェクトの座標を更新
-		collision_dir = m->GetMapChip_Collision();
+		/*collision_dir = m->GetMapChip_Collision();
 		if (collision_dir.x != 0 || collision_dir.y != 0) {
 			collision_chip.x = m->GetLocation().x;
 			collision_chip.y = m->GetLocation().y;
 			break;
-		}
+		}*/
 
 		m->Update(player);
 		element->Update(player);
 
-		//当たっている方向を更新
-		collision_dir = m->GetMapChip_Collision();
-		if (collision_dir.y != 0) {
-			//clsDx();
-			//printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
-			collision_dir_w = collision_dir;
+		////当たっている方向を更新
+		//collision_dir = m->GetMapChip_Collision();
+		//if (collision_dir.y != 0) {
+		//	//clsDx();
+		//	//printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
+		//	collision_dir_w = collision_dir;
 
-			if (collision_dir.x != 0) {
-				//speed_x = 0.0f;
-			}
+		//	if (collision_dir.x != 0) {
+		//		//speed_x = 0.0f;
+		//	}
 
-		}
+		//}
 
 	}
 

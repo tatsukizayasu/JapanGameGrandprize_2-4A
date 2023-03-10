@@ -19,7 +19,7 @@ void Stage_Element::AddElement(MapChip* mapchip, int image, short id)
 
 	switch (id)
 	{
-	case Element::DEBUG_WOOD:
+	case Element::GreenButton:
 		element.push_back(std::make_shared<Element_DamageWall>(id, element, mapchip, image));
 		break;
 
@@ -27,7 +27,7 @@ void Stage_Element::AddElement(MapChip* mapchip, int image, short id)
 		element.push_back(std::make_shared <Element_Wooden_Floor>(id, element, mapchip, image));
 		break;
 
-	case Element::DEBUG_SOIL:
+	case Element::YellowButton:
 		element.push_back(std::make_shared <Element_Wooden_Floor>(id, element, mapchip, image));
 		break;
 
