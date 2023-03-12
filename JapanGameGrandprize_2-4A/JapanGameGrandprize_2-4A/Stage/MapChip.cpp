@@ -42,8 +42,6 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 		image_size.width = (float)x;
 		image_size.height = (float)y;
 	}
-
-	collision_dir = { 0,0 };
 }
 
 //-----------------------------------
@@ -56,32 +54,8 @@ MapChip::~MapChip()
 //-----------------------------------
 // çXêV
 //-----------------------------------
-void MapChip::Update(Player* player)
+void MapChip::Update()
 {
-	if (HitBox(player)) 
-	{
-		//è„
-		if (location.y < player->GetLocation().y) 
-		{
-			collision_dir.y = 1;
-		}
-		//â∫
-		else if (location.y > player->GetLocation().y)
-		{
-			collision_dir.y = -1;
-		}
-
-		//âE
-		if (location.x > player->GetLocation().x) 
-		{
-			collision_dir.x = 1;
-		}
-		//ç∂
-		else if (location.x < player->GetLocation().x) 
-		{
-			collision_dir.x = -1;
-		}
-	}
 }
 
 //-----------------------------------

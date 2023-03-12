@@ -8,8 +8,9 @@ Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_p
 {
 	this->type = Element::DEBUG_GRASS;
 	original_collision = area;
+	original_image = *image;
 
-	*image = LoadGraph("Images/Stage/Wooden_Floor.png");
+	//*image = LoadGraph("Images/Stage/Wooden_Floor.png");
 	area = { MAP_CHIP_SIZE, MAP_CHIP_SIZE };
 }
 
@@ -32,13 +33,15 @@ void Element_Wooden_Floor::Update(Player* player)
 	//プレイヤーがマップチップよりも下に行ったら元の当たり判定範囲に戻す
 	else if (player->GetLocation().y > location.y) {
 		area = original_collision;
-		//mapchip->SetImage(*image);
+		image = original_image;
 	}
 
 	//当たり判定範囲のデバック表示
 	//printfDx("x:%f, y:%f\n", mapchip->GetArea().height, mapchip->GetArea().width);
 }
 
-//void Element_Wooden_Floor::Draw() const
-//{
-//}
+void Element_Wooden_Floor::Draw() const
+{
+
+	MapChip::Draw();
+}

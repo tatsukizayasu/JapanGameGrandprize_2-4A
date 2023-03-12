@@ -21,7 +21,6 @@ public:
 	Stage_Element_Base();
 
 	Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area);
-	Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, MapChip* mapchip, int image);
 	//コンストラクタ
 	//Stage_Element(const int* p_image, Location location, Area area);
 	//デストラクタ
@@ -29,7 +28,6 @@ public:
 	virtual void Update(Player* player) {};
 	////描画
 	//virtual void Draw() const {};
-	virtual void Draw() const {};
 
 	/// <summary>
 	/// プレイヤーとブロックが当たっているかのGetter

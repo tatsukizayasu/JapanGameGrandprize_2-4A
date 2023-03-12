@@ -5,6 +5,10 @@ class Element_Wooden_Floor : public Stage_Element_Base
 {
 private:
 
+
+	//Œ³‚Ì‰æ‘œ
+	int original_image;
+
 	//Œ³‚Ì“–‚½‚è”»’è”ÍˆÍ
 	Area original_collision;
 
@@ -18,7 +22,7 @@ public:
 	//XV
 	void Update(Player* player) override;
 	////•`‰æ
-	//void Draw() const override;
+	void Draw() const override;
 
 
 };

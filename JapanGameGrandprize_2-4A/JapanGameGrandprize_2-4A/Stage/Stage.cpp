@@ -36,7 +36,7 @@ Stage::Stage()
 			if (i != 0 && i != -1)
 			{
 				
-				if (i == 1) {
+				if (element->GetElementID().find(i) != element->GetElementID().end()) {
 					element->AddElement(i, &block_images[i], {
 							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
@@ -59,8 +59,6 @@ Stage::Stage()
 		}
 	}
 
-	collision_chip = { 0, 0 };
-	collision_dir = { 0, 0 };
 
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
@@ -125,39 +123,19 @@ void Stage::Update(Player* player)
 		if (x + w < camera.x || camera.x + draw.width < x || 
 			  y + h < camera.y || camera.y + draw.height < y) continue;
 
-		//当たっているオブジェクトの座標を更新
-		collision_dir = m->GetMapChip_Collision();
 
-		if (collision_dir.x != 0 || collision_dir.y != 0) 
-		{
-			collision_chip.x = m->GetLocation().x;
-			collision_chip.y = m->GetLocation().y;
-			break;
-		}
 
-		m->Update(player);
-		element->Update(player);
-
-		//当たっている方向を更新
-		collision_dir = m->GetMapChip_Collision();
-		if (collision_dir.y != 0) 
-		{
-			//clsDx();
-			//printfDx("当たった:X%d\tY:%d\n", collision_dir.x, collision_dir.y);
-			collision_dir_w = collision_dir;
-
-			if (collision_dir.x != 0) 
-			{
-				//speed_x = 0.0f;
-			}
-
-		}
+		m->Update();
+		
 
 	}
 
 #ifdef _STAGE_BUILDER
 	stage_builder->Update();
 #endif
+
+	element->Update(player);
+
 	}
 
 //-----------------------------------
@@ -195,13 +173,16 @@ void Stage::Draw()
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
 
 		m->Draw();
-		element->Draw();
+		
 	}
 
 
 #ifdef _STAGE_BUILDER
 	stage_builder->Draw();
 #endif
+
+	element->Draw();
+
 }
 
 //-----------------------------------
@@ -246,4 +227,17 @@ void Stage::LoadMap()
 	}
 
 	FileRead_close(FileHandle);
+}
+
+std::vector<MapChip*> Stage::GetMapChip() const
+{
+	std::vector<MapChip*>map_chip = mapchip;
+	std::vector<Stage_Element_Base*>e_map_chip = GetElement_MapChip();
+	map_chip.insert(map_chip.end(), e_map_chip.begin(), e_map_chip.end());
+	return map_chip;
+}
+
+std::vector<Stage_Element_Base*> Stage::GetElement_MapChip() const
+{
+	return	element->GetMapChip();
 }

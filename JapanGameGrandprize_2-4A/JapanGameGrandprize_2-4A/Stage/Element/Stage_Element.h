@@ -48,7 +48,22 @@ public:
 	/// <summary>
 	/// ステージ要素ID		Getter
 	/// </summary>
-	std::set<short> GetElementID() { return elements_id; }
+	const std::set<short>& GetElementID() { return elements_id; }
+
+	/// <summary>
+	/// ElementオブジェクトのGetter
+	/// </summary>
+	/// <returns>ベクター型(Stage_Element_Baseオブジェクト型)：Stage_Element_Base</returns>	
+	/// ※全要素をループして使わないこと
+	std::vector<Stage_Element_Base*> GetMapChip() const {
+		std::vector<Stage_Element_Base*> result;
+		result.reserve(element.size());
+		for (const auto& e : element) {
+			result.push_back(e.get());
+		}
+		return result;
+
+	};
 
 	/// <summary>
 	/// ステージ要素の作成
