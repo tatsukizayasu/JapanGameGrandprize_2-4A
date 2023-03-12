@@ -1,6 +1,8 @@
 #include "Stage_Element.h"
 #include "../CameraWork.h"
 
+//#define NODEBUG
+
 Stage_Element::Stage_Element()
 {
 	player = nullptr;
@@ -12,6 +14,9 @@ Stage_Element::~Stage_Element()
 
 void Stage_Element::AddElement(short type, int* image, Location location, Area area)
 {
+#ifndef NODEBUG
+
+
 
 	switch (type)
 	{
@@ -30,7 +35,7 @@ void Stage_Element::AddElement(short type, int* image, Location location, Area a
 	default:
 		break;
 	}
-	
+#endif // !NODEBUG	
 }
 
 void Stage_Element::Update(Player* player)
@@ -100,7 +105,7 @@ void Stage_Element::Draw() const
 		if (x + w < camera.x || camera.x + draw.width < x ||
 			y + h < camera.y || camera.y + draw.height < y) continue;
 
-		
+
 		e->Draw();
 
 	}

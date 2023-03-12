@@ -12,6 +12,8 @@
 #define STAGE_NAME	"sample_stage2";
 #define STAGE_NAME	"Stage01";
 
+#define NODEBUG
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -35,6 +37,8 @@ Stage::Stage()
 			short i = map_data.at(y).at(x);
 			if (i != 0 && i != -1)
 			{
+
+#ifndef NODEBUG
 				
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
 					element->AddElement(i, &block_images[i], {
@@ -51,11 +55,22 @@ Stage::Stage()
 							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 						}, { CHIP_SIZE,CHIP_SIZE }));
 				}
+
+
+
+#else NODEBUG	//NODEBUG
+
+				mapchip.push_back(new MapChip
+				(&block_images[i],
+					{
+						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+					}, { CHIP_SIZE,CHIP_SIZE }));
+
+#endif // NODEBUG	
 			}
-			/*else
-			{
-				mapchip.push_back(nullptr);
-			}*/
+
+
 		}
 	}
 
