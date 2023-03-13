@@ -3,6 +3,10 @@
 #include "PadInput.h"
 #include "Define.h"
 
+
+
+
+
 //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 Pouch::Pouch()
 {
@@ -14,6 +18,79 @@ Pouch::Pouch()
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
 		element[i] = nullptr;
+	}
+}
+
+
+//”š”­
+void Pouch::ExplosionTabDraw() const 
+{
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
+	DrawString(x, y + 50, "EXPLOSION", 0x000000);
+}
+
+//—n‰ð
+void Pouch::MeltTabDraw() const
+{
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff55ff, TRUE);
+	DrawString(x, y + 50, "MELT", 0x000000);
+}
+
+//–ƒáƒ
+void Pouch::ParalysisTabDraw()const
+{
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff0099, TRUE);
+	DrawString(x, y + 50, "PARALYSIS", 0x000000);
+}
+
+//“Å
+void Pouch::PoisonTabDraw()const
+{
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x5500ff, TRUE);
+	DrawString(x, y + 50, "POISON", 0x000000);
+}
+
+//‰ñ•œ
+void Pouch::HealTabDraw()const
+{
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff1111, TRUE);
+	DrawString(x, y + 50, "HEAL", 0x000000);
+}
+
+//•`‰æ
+void Pouch::Draw() const
+{
+	switch (tab)
+	{
+	case Tab::Explosion_Tab:
+		ExplosionTabDraw();
+		break;
+	case Tab::Melt_Tab:
+		MeltTabDraw();
+		break;
+	case Tab::Poison_Tab:
+		PoisonTabDraw();
+		break;
+	case Tab::Paralysis_Tab:
+		ParalysisTabDraw();
+		break;
+	case Tab::Heal_Tab:
+		HealTabDraw();
+		break;
+	default:
+		break;
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		DrawBox(x + (50 * i), y + 400, (x + (50 * i)) + 50, y + 450, 0xffffff, FALSE);
+		DrawFormatString(x + (50 * i), y + 400, 0x000000, "%d", element[i]->GetVolume());
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		DrawBox(x + (50 * i) + 25, y + 450, (x + (50 * i) + 50) + 25, y + POUCH_HEIGHT, 0xffffff, FALSE);
+		DrawFormatString(x + (50 * i) + 25, y + 450, 0xffffff, "%d", element[i + 4]->GetVolume());
 	}
 }
 
@@ -67,81 +144,57 @@ void Pouch::Update()
 			break;
 		}
 	}
-}
 
-//”š”­
-void Pouch::ExplosionTab() const 
-{
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
-	DrawString(x, y + 50, "EXPLOSION", 0x000000);
-}
-
-//—n‰ð
-void Pouch::MeltTab() const
-{
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff55ff, TRUE);
-	DrawString(x, y + 50, "MELT", 0x000000);
-}
-
-//–ƒáƒ
-void Pouch::ParalysisTab()const
-{
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff0099, TRUE);
-	DrawString(x, y + 50, "PARALYSIS", 0x000000);
-}
-
-//“Å
-void Pouch::PoisonTab()const
-{
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x5500ff, TRUE);
-	DrawString(x, y + 50, "POISON", 0x000000);
-}
-
-//‰ñ•œ
-void Pouch::HealTab()const
-{
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff1111, TRUE);
-	DrawString(x, y + 50, "HEAL", 0x000000);
-}
-
-//•`‰æ
-void Pouch::Draw() const
-{
 	switch (tab)
 	{
 	case Tab::Explosion_Tab:
-		ExplosionTab();
+		ExplosionTabUpdate();
 		break;
 	case Tab::Melt_Tab:
-		MeltTab();
+		MeltTabUpdate();
 		break;
 	case Tab::Poison_Tab:
-		PoisonTab();
+		PoisonTabUpdate();
 		break;
 	case Tab::Paralysis_Tab:
-		ParalysisTab();
+		ParalysisTabUpdate();
 		break;
 	case Tab::Heal_Tab:
-		HealTab();
+		HealTabUpdate();
 		break;
 	default:
 		break;
 	}
-
-	for (int i = 0; i < 4; i++)
-	{
-		DrawBox(x + (50 * i), y + 400, (x + (50 * i)) + 50, y + 450, 0xffffff, FALSE);
-		DrawFormatString(x + (50 * i), y + 400, 0x000000, "%d", element[i]->GetVolume());
-	}
-
-	for (int i = 0; i < 3; i++)
-	{
-		DrawBox(x + (50 * i) + 25, y + 450, (x + (50 * i) + 50) + 25, y + POUCH_HEIGHT, 0xffffff, FALSE);
-		DrawFormatString(x + (50 * i) + 25, y + 450, 0xffffff, "%d", element[i + 4]->GetVolume());
-	}
 }
+
+void Pouch::ExplosionTabUpdate()
+{
+
+}
+
+void Pouch::PoisonTabUpdate()
+{
+
+}
+
+void Pouch::HealTabUpdate()
+{
+
+}
+
+void Pouch::MeltTabUpdate()
+{
+
+}
+
+void Pouch::ParalysisTabUpdate()
+{
+
+}
+
 
 void Pouch::SetElement(ElementItem* item, int i)
 {
 	element[i] = item;
 }
+

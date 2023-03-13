@@ -19,6 +19,12 @@
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
 
+#define EXPLOSION_MAX_NUM 13	//爆発の化合物の個数
+#define POISON_MAX_NUM 18		//毒　の化合物の個数
+#define MELT_MAX_NUM 13			//溶解の化合物の個数
+#define PARARYSIS_MAX_NUM 11	//麻痺の化合物の個数
+#define HEAL_MAX_NUM 7			//回復の化合物の個数
+
 #define BULLET_MAX 50
 #define GREEN GetColor(0,255,0)
 #define RED GetColor(255,0,0)
@@ -47,98 +53,15 @@ struct ChemicalFormulaMaterial
 };
 
 struct ChemicalFormulaParameter
-
 {
 	int number_of_bullets;
 	int time;
 	int damage_per_second;
 	int damage;
-	const char* chemical_formula_name[10];
+	const char* chemical_formula_name[18];
 	const char* chemical_formula[10];
 	ATTRIBUTE atribute;
 	ChemicalFormulaMaterial material;
-};
-
-struct ChemicalFormulaExplosion
-{
-	ChemicalFormulaParameter nitroglycerin;
-	ChemicalFormulaParameter tnt;
-	ChemicalFormulaParameter diazodinitrophenol;
-	ChemicalFormulaParameter picric_acid;
-	ChemicalFormulaParameter pen_slit;
-	ChemicalFormulaParameter Hexogen;
-	ChemicalFormulaParameter hmx;
-	ChemicalFormulaParameter acetone_peroxide;
-	ChemicalFormulaParameter nitro_glycol;
-	ChemicalFormulaParameter hniw;
-	ChemicalFormulaParameter trimethylene_nitramine;
-	ChemicalFormulaParameter nitroguanidine;
-	ChemicalFormulaParameter fox_7;
-};
-
-struct ChemicalFormulaPoison
-{
-	ChemicalFormulaParameter dinitrogen_tetroxide;
-	ChemicalFormulaParameter mustard_gas;
-	ChemicalFormulaParameter aniline;
-	ChemicalFormulaParameter histamine;
-	ChemicalFormulaParameter cs_gus;
-	ChemicalFormulaParameter naphthol;
-	ChemicalFormulaParameter ciguatoxin;
-	ChemicalFormulaParameter tetrodotoxin;
-	ChemicalFormulaParameter toxiferin;
-	ChemicalFormulaParameter strychnine;
-	ChemicalFormulaParameter chrysanthemum_acid;
-	ChemicalFormulaParameter Rotenone;
-	ChemicalFormulaParameter saxitoxin;
-	ChemicalFormulaParameter lysine;
-	ChemicalFormulaParameter solanine;
-	ChemicalFormulaParameter anisatin;
-	ChemicalFormulaParameter hyoscyamine;
-	ChemicalFormulaParameter palytoxin;
-};
-
-struct ChemicalFormulaPararysis
-{
-	ChemicalFormulaParameter ether;
-	ChemicalFormulaParameter allylamine;
-	ChemicalFormulaParameter indole;
-	ChemicalFormulaParameter skatole;
-	ChemicalFormulaParameter heptanoic_acid;
-	ChemicalFormulaParameter thalidomaide;
-	ChemicalFormulaParameter nicotine;
-	ChemicalFormulaParameter lycorine;
-	ChemicalFormulaParameter lobeline;
-	ChemicalFormulaParameter batrachotoxin;
-	ChemicalFormulaParameter aconitine;
-};
-
-struct ChemicalFormulaHeal
-{
-	ChemicalFormulaParameter aspartic_acid;
-	ChemicalFormulaParameter ibotenic_acid;
-	ChemicalFormulaParameter glutamic_acid;
-	ChemicalFormulaParameter tricolominic_acid;
-	ChemicalFormulaParameter glutamine;
-	ChemicalFormulaParameter glucose;
-	ChemicalFormulaParameter sugar;
-};
-
-struct ChemicalFormulaMelt
-{
-	ChemicalFormulaParameter hydrochloric_acid;
-	ChemicalFormulaParameter aqua_regia;
-	ChemicalFormulaParameter suluric_acid;
-	ChemicalFormulaParameter acetic_acid;
-	ChemicalFormulaParameter nitric_acid;
-	ChemicalFormulaParameter formic_acid;
-	ChemicalFormulaParameter methanesulfonic_acid;
-	ChemicalFormulaParameter benzenesulfonic_acid;
-	ChemicalFormulaParameter p_toluenesulfonic_acid;
-	ChemicalFormulaParameter chloric_acid;
-	ChemicalFormulaParameter perchloric_acid;
-	ChemicalFormulaParameter thiosulfate;
-	ChemicalFormulaParameter hydrogen_sulfide;
 };
 
 class Player : public BoxCollider
@@ -180,6 +103,12 @@ private:
 	Pouch* pouch;					 //ポーチへのポインタ
 
 	ElementItem** element;	//元素
+
+	ChemicalFormulaParameter chemical_formula_explosion[13];
+	ChemicalFormulaParameter chemical_formula_poison[18];
+	ChemicalFormulaParameter chemical_formula_pararysis[11];
+	ChemicalFormulaParameter chemical_formula_heal[7];
+	ChemicalFormulaParameter chemical_formula_melt[13];
 public:
 
 	Player();
@@ -199,10 +128,16 @@ public:
 	void HpDamage(AttackResource);
 	void Hp_Heal(int);
 	bool HitBlock(const Stage*);
+	void InitChemicalParameter();
 	void OpenPouch();
 
 	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
+	ChemicalFormulaParameter GetExplosion(int);
+	ChemicalFormulaParameter GetPoison(int);
+	ChemicalFormulaParameter GetPararysis(int);
+	ChemicalFormulaParameter GetHeal(int);
+	ChemicalFormulaParameter GetMelt(int);
 
 	//元素の量の設定
 	void SetElementItem(class Item* item);

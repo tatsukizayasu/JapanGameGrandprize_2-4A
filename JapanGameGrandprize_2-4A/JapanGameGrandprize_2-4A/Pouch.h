@@ -17,22 +17,26 @@ enum class Tab
 class Pouch
 {
 private:
-
 	float x, y;
 	Tab tab;
 	ElementItem* element[PLAYER_ELEMENT];
 public:
-
 	Pouch();
 	~Pouch() {};
 
 	void Update();
 	void Draw() const;
 
-	void ExplosionTab() const;
-	void PoisonTab() const;
-	void MeltTab() const;
-	void ParalysisTab() const;
-	void HealTab() const;
+	void ExplosionTabUpdate();
+	void PoisonTabUpdate();
+	void MeltTabUpdate();
+	void ParalysisTabUpdate();
+	void HealTabUpdate();
+
+	void ExplosionTabDraw() const;
+	void PoisonTabDraw() const;
+	void MeltTabDraw() const;
+	void ParalysisTabDraw() const;
+	void HealTabDraw() const;
 	void SetElement(ElementItem*,int i);
 };
