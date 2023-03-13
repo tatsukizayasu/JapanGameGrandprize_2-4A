@@ -107,6 +107,9 @@ bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 bool LineCollider_t::HitBox(const BoxCollider* box)const
 {
 	bool is_hit = false;
+	bool box_ishit = false;
+	float sign = 0;
+
 	Location vertex[4] =
 	{
 		//Žl‹÷
@@ -124,7 +127,16 @@ bool LineCollider_t::HitBox(const BoxCollider* box)const
 
 	};
 
-	float sign = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if ((GetMin() <= vertex[i]) && vertex[i] <= GetMax())
+		{
+			box_ishit = true;
+		}
+	}
+	if (box_ishit == false)return false; //ü•ª‚ðˆÍ‚¤ŽlŠpŒ`‚É‚·‚ç“–‚½‚Á‚Ä‚È‚¢
+
+	
 	for (int i = 0; i < 4; i++)
 	{
 		float closs_product = 0;
