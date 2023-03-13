@@ -75,7 +75,7 @@ void Stage_Element_Base::StartAnimation(float time, std::function<void()>* callb
 	if (elapsed.count() >= time * 1000.0f) {
 		start_time = end_time;
 		count++;
-		printfDx("count:%d\n", count);
+		//printfDx("count:%d\n", count);
 		
 		if (callback != nullptr) {
 			(*callback)();

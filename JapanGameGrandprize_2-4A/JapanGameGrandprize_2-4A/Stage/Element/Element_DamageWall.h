@@ -1,11 +1,11 @@
 #pragma once
 #include "Stage_Element_Base.h"
-#include <future>
+
 
 class Element_DamageWall : public Stage_Element_Base
 {
 private:
-	Player* player;
+	
 public:
 
 	//コンストラクタ
