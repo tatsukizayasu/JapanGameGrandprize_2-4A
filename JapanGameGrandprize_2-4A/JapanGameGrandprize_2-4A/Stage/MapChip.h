@@ -2,16 +2,12 @@
 #include "../BoxCollider.h"
 
 #define MAP_CHIP_SIZE 40.f
-class Player;
+
 
 class MapChip :
 	public BoxCollider
 {
 private:
-
-	//当たっている方向	構造体
-	//X[右:1, -左:-1], Y[上:1, 下:-1]
-	POINT collision_dir;
 
 
 public:
@@ -21,33 +17,19 @@ public:
 	//コンストラクタ
 	MapChip(const int* p_image, Location location, Area area);
 	//デストラクタ
-	~MapChip();
+	virtual ~MapChip();
 	//更新
-	void Update(Player* player);
+	virtual void Update();
 	//描画
 	virtual void Draw() const;
 
 	const char* GetName() { return class_name; }
 
-
-	/// <summary>
-	/// **プレイヤーとステージの当たり判定用**
-	/// 当たったマップチップ座標のGetter
-	/// </summary>
-	/// <returns>POINT型(構造体型) X[右:1, -左:-1], Y[上:1, 下:-1]</returns>	
-	const POINT GetMapChip_Collision() {
-
-		POINT w = collision_dir;
-
-		collision_dir = { 0,0 };
-
-		return w;
-	}
-
 	/// <summary>
 	/// 当たり判定範囲のSetter
 	/// </summary>
-	void SetArea(Area set_area) {
+	void SetArea(Area set_area)
+	{
 		area.height = set_area.height;
 		area.width = set_area.width;
 	}
@@ -55,14 +37,14 @@ public:
 	/// <summary>
 	/// 画像のSetter
 	/// </summary>
-	void SetImage(int image) {
+	void SetImage(int image) 
+	{
 		this->image = image;
-}
-
-
+	}
 protected:
 
 	const char* class_name = "default";
+	short type;
 	int image;
 	Area image_size;
 	float ex_rate;

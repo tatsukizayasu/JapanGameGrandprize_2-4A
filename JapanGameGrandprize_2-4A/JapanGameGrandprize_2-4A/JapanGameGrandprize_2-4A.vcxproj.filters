@@ -37,9 +37,6 @@
     <ClCompile Include="CameraWork.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="EfectExplosion.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -162,9 +159,6 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="SphereCollider.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Stage.h">

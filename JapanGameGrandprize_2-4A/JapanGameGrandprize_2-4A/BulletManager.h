@@ -56,4 +56,3 @@ public:
     //’e‚ÌÅ‘å’l‚Ìæ“¾
     int EnemyGetBulletMax() const;
 };
-

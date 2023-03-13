@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyBulletBase.h"
+
 class GhostBullet :
     public EnemyBulletBase
 {
@@ -23,4 +24,3 @@ public:
     //•`‰æ
     void Draw() const override;
 };
-

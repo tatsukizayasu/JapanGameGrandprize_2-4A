@@ -1,7 +1,8 @@
 #include "EnemyGhost.h"
-#include"DxLib.h"
+#include "DxLib.h"
 #include "CameraWork.h"
 #include "BulletManager.h"
+
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 40
 #define GHOST_SIZE_Y 80
@@ -65,6 +66,7 @@ EnemyGhost::EnemyGhost()
 	drop_type_volume = WIND_DROP;
 
 	int volume = 0;
+
 	for (int i = 0; i < WIND_DROP; i++)
 	{
 		volume = GHOST_MIN_DROP + GetRand(GHOST_MAX_DROP);
@@ -210,6 +212,7 @@ void  EnemyGhost::Attack(Location player_location)
 		default:
 			break;
 		}
+
 		standby_time = 0;
 		state = ENEMY_STATE::MOVE;
 	}
@@ -252,10 +255,8 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-
 	DrawRotaGraph(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
 }
-
 
 //-----------------------------------
 // ゴーストの動き
@@ -330,7 +331,6 @@ void EnemyGhost::GhostMove(const Location player_location)
 //-----------------------------------
 void EnemyGhost::Fall()
 {
-
 }
 
 //-----------------------------------

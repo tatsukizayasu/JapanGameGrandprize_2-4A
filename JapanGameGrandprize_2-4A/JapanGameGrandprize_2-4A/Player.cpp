@@ -6,9 +6,6 @@
 #include "Item.h"
 #include <iostream>
 
-
-
-
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -34,6 +31,7 @@ Player::Player()
 	old_x = 0.0;
 	old_y = 0.0;
 	damage = 0;
+
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet = new BulletBase * [BULLET_MAX];
@@ -59,7 +57,6 @@ Player::Player()
 	attribute_c[4] = "PARALYSIS";
 	attribute_c[5] = "HEAL";
 
-
 	player_state = PLAYER_STATE::STOP;
 
 	display_attribute = 0;
@@ -69,8 +66,6 @@ Player::Player()
 	beam = nullptr;
 
 	stage = nullptr;
-
-
 
 	//元素の初期化
 	element = new ElementItem * [PLAYER_ELEMENT];
@@ -89,7 +84,6 @@ Player::Player()
 //-----------------------------------
 Player::Player(Stage* stage)
 {
-
 	area.height = 80;
 	area.width = 40;
 
@@ -115,6 +109,7 @@ Player::Player(Stage* stage)
 	old_y = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
+
 	bullet = new BulletBase * [BULLET_MAX];
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
@@ -196,15 +191,18 @@ void Player::Draw() const
 	//FUELバーの表示ここから
 	if (fuel >= 50)
 	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
+			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
 	}
 	else if (fuel >= 20)
 	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
+			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
 	}
 	else
 	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), 
+			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
 	}
 	//ここまで
 
@@ -261,7 +259,6 @@ void Player::Draw() const
 	}
 
 #endif
-
 
 	SetFontSize(30);
 
@@ -368,7 +365,6 @@ void Player::Update()
 	{
 		NotInputStick();
 	}
-
 
 	//RBボタン入力
 	if (!pouch_open)
@@ -725,7 +721,6 @@ void Player::ElementUpdate()
 //-----------------------------------
 void Player::HpDamage(AttackResource attack)
 {
-
 	if (!damage_flg)
 	{
 		if (attack.damage > 0)
