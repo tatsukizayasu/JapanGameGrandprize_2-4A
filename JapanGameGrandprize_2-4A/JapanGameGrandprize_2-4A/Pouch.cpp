@@ -17,7 +17,6 @@ Pouch::Pouch()
 	}
 }
 
-
 //アップデート
 void Pouch::Update()
 {
@@ -68,13 +67,10 @@ void Pouch::Update()
 			break;
 		}
 	}
-
-
-
 }
 
 //爆発
-void Pouch::ExplosionTab () const 
+void Pouch::ExplosionTab() const 
 {
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 	DrawString(x, y + 50, "EXPLOSION", 0x000000);
@@ -131,7 +127,6 @@ void Pouch::Draw() const
 	default:
 		break;
 	}
-
 
 	for (int i = 0; i < 4; i++)
 	{

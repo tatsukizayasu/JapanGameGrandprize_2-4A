@@ -1,5 +1,5 @@
-#include "DxLib.h"
 #include "Torrent.h"
+#include "DxLib.h"
 #include "Player.h"
 #include "Stage/Stage.h"
 
@@ -8,7 +8,6 @@
 //-----------------------------------
 Torrent::Torrent()
 {
-
 }
 
 //-----------------------------------
@@ -16,7 +15,6 @@ Torrent::Torrent()
 //-----------------------------------
 Torrent::~Torrent()
 {
-
 }
 
 //-----------------------------------
@@ -46,7 +44,6 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-
 }
 
 //-----------------------------------
@@ -54,7 +51,6 @@ void Torrent::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void Torrent::Idol()
 {
-
 }
 
 //-----------------------------------
@@ -62,7 +58,6 @@ void Torrent::Idol()
 //-----------------------------------
 void Torrent::Move(const Location player_location)
 {
-
 }
 
 //-----------------------------------
@@ -70,7 +65,6 @@ void Torrent::Move(const Location player_location)
 //-----------------------------------
 void Torrent::Fall()
 {
-
 }
 
 //-----------------------------------
@@ -78,9 +72,7 @@ void Torrent::Fall()
 //-----------------------------------
 void  Torrent::Attack(Location player_location)
 {
-	
 }
-
 
 //-----------------------------------
 //çUåÇÇ™ìñÇΩÇ¡ÇƒÇ¢ÇÈÇ©
@@ -97,7 +89,6 @@ AttackResource Torrent::Hit()
 //-----------------------------------
 void Torrent::Death()
 {
-
 }
 
 //-----------------------------------
@@ -112,7 +103,6 @@ void Torrent::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Torrent::Draw() const
 {
-
 }
 
 //-----------------------------------

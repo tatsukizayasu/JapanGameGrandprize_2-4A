@@ -1,7 +1,7 @@
+#include "MageBullet.h"
 #include "DxLib.h"
 #define _USE_MATH_DEFINES
-#include<math.h>
-#include "MageBullet.h"
+#include <math.h>
 #include "CameraWork.h"
 
 #define MAGE_BULLET_SPEED 5
@@ -10,7 +10,8 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-MageBullet::MageBullet(ENEMY_TYPE type, Location spawn_location, Location player_location)
+MageBullet::MageBullet(ENEMY_TYPE type,
+	Location spawn_location,Location player_location)
 {
 	location = spawn_location;
 	radius = 6;
@@ -50,6 +51,7 @@ void MageBullet::Draw() const
 	float x, y;
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
+
 	switch (type)
 	{
 	case ENEMY_TYPE::NORMAL:

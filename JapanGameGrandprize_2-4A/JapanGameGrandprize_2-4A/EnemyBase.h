@@ -6,7 +6,6 @@
 #include "BoxCollider.h"
 #include "Stage/Stage.h"
 
-
 //各属性のドロップ数
 #define FIRE_DROP 3
 #define WATER_DROP 4

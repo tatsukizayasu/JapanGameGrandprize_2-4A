@@ -6,7 +6,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-
 #define LINE_START 0
 #define LINE_END 1
 
@@ -22,6 +21,7 @@ private:
 
 		return middle_point;
 	}
+
 	void Relativize()
 	{
 		vector[0].x = vector[0].x - location.x;
@@ -30,6 +30,7 @@ private:
 		vector[1].x = vector[1].x - location.x;
 		vector[1].y = vector[1].y - location.y;
 	}
+
 	Location MakeTip(int index)const
 	{
 		//線分の端の絶対座標を計算する
@@ -61,10 +62,8 @@ public:
 
 	//始点、終点座標の設定
 	void SetLocation(Location location, int i);
-
-
-
 protected:
+
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)
 };
 

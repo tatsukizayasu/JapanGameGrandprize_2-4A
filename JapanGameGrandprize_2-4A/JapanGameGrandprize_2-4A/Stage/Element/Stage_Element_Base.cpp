@@ -7,23 +7,21 @@ Stage_Element_Base::Stage_Element_Base()
 {
 	this->mapchip = nullptr;
 	this->image = 0;
+	type = 0;
 }
 
-Stage_Element_Base::Stage_Element_Base(MapChip* mapchip, int image)
+Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : MapChip(image, location, area)
 {
 	this->mapchip = mapchip;
-	this->image = image;
 }
 
 Stage_Element_Base::~Stage_Element_Base()
 {
 }
 
-
 bool Stage_Element_Base::HitPlayer(Player* player) const
 {
-	Location location = mapchip->GetLocation();
-	Area area = mapchip->GetArea();
+	
 
 	struct Rect
 	{
@@ -57,3 +55,23 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 	}
 	return false;
 }
+
+
+//std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
+//{
+//	for (auto elem : element) {
+//		if (elem != nullptr && elem->GetType() == type) {
+//			//MapChip* mapchip = elem->GetMapChip();
+//
+//			if (mapchip->GetLocation().y > elem->GetMapChip()->GetLocation().y
+//				&& mapchip->GetLocation().x == elem->GetMapChip()->GetLocation().x) {
+//
+//				SearchElement(type)->GetMapChip()->SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
+//				SearchElement(type)->GetMapChip()->SetImage(0);
+//				printfDx("aa");
+//				return elem;
+//			}
+//			
+//		}
+//	}
+//}

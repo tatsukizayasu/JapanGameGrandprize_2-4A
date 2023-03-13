@@ -5,8 +5,8 @@
 #include "Stage/Stage.h"
 #include "Stage/MapChip.h"
 
-
 enum class PLAYER_STATE;
+
 class BulletBase : public SphereCollider
 {
 protected:

@@ -46,7 +46,6 @@ public:
 		{
 			location.x += scalar;
 		}
-
 	}
 
 	//’†SÀ•W‚Ìİ’è

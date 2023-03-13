@@ -30,7 +30,8 @@ NormalBullet::NormalBullet()
 //-----------------------------------//
 // コンストラクタ					 //
 //-----------------------------------//
-NormalBullet::NormalBullet(float player_x, float player_y, bool direction,ATTRIBUTE attribute)
+NormalBullet::NormalBullet(float player_x, float player_y,
+	                         bool direction,ATTRIBUTE attribute)
 {
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
@@ -129,8 +130,6 @@ void NormalBullet::Update(const Stage* stage_pointa)
 		}
 	}
 
-
-
 	if (delete_flg)
 	{
 		NormalBulletEfect();
@@ -139,7 +138,6 @@ void NormalBullet::Update(const Stage* stage_pointa)
 
 bool NormalBullet::NormalBulletEfect()
 {
-
 	if (!efect_end)
 	{
 		if (++efect_count % 30 != 0)
