@@ -22,8 +22,8 @@ GameMain::GameMain()
 	player = new Player(stage);
 	stage->SetPlayer(player);
 	enemy = new EnemyBase * [4];
-	enemy[0] = new Undead();
-	enemy[1] = new EnemySlime();
+	enemy[0] = new EnemySlime();
+	enemy[1] = new Undead();
 	enemy[2] = new EnemyGhost();
 	enemy[3] = new Mage();
 	camera_work = new CameraWork(0, 800, player, stage);
