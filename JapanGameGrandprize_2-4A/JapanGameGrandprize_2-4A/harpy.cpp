@@ -1,12 +1,14 @@
 #include "Harpy.h"
 #include "CameraWork.h"
+#include"DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
 #define HARPY_SIZE_X 40
 #define HARPY_SIZE_Y 80
 
 //プレイヤー発見距離
-#define HARPY_DETECTION_DISTANCE 500
+#define DETECTION_DISTANCE_X 500
+#define DETECTION_DISTANCE_Y 100
 
 //物理攻撃範囲
 #define HARPY_ATTACK_RANGE 20
@@ -157,34 +159,67 @@ void Harpy::Idol()
 //移動
 void Harpy::Move(const Location player_location)
 {
+	//double sb, sbx, sby, bx, by, sx, sy;
 
-	switch (action_type)
-	{
-	case HARPY_STATE::NORMAL:  //通常移動
-		location.x -= speed;
-		break;
-	case HARPY_STATE::NORMAL_RIGHT://右
-		location.x += speed;
-		break;
-	case HARPY_STATE::LEFT_lOWER:  //左下を目指す
-		location.x -= speed;
-		location.y += speed;
-		break;
-	case HARPY_STATE::LEFT_UPPER:  //左上を目指す
-		location.x -= speed;
-		location.y -= speed;
-		break;
-	case HARPY_STATE::RIGHT_LOWER:  //右下を目指す
-		location.x += speed;
-		location.y += speed;
-		break;
-	case HARPY_STATE::RIGHT_UPPER:  //右上を目指す。
-		location.x += speed;
-		location.y -= speed;
-		break;
-	default:
-		break;
-	}
+	//sx = location.x + HARPY_SIZE_X / 2;
+	//sy = location.y+ HARPY_SIZE_Y / 2;
+
+	//bx = BallX + Bw / 2;
+	//by = BallY + Bh / 2;
+
+	//sbx = bx - sx;
+	//sby = by - sy;
+
+	//// 平方根を求めるのに標準関数の sqrt を使う、
+	//// これを使うには math.h をインクルードする必要がある
+	//sb = sqrt(sbx * sbx + sby * sby);
+
+	//// １フレーム当たり８ドット移動するようにする
+	//ETamaSx = sbx / sb * 8;
+	//ETamaSy = sby / sb * 8;
+
+	//float range_x; //プレイヤーとの距離X座標	
+	//float range_y; //プレイヤーとの距離Y座標
+
+	//range_x = fabsf(location.x - player_location.x);
+	//range_y = fabsf(location.y - player_location.y);
+
+	//if (range_x <= DETECTION_DISTANCE_X && range_x >= -DETECTION_DISTANCE_X
+	//	&& range_y <= DETECTION_DISTANCE_Y && -range_y >= -DETECTION_DISTANCE_Y)
+	//{
+	//	if (location.x > player_location.x)//左に移動
+	//	{
+	//		
+	//	}
+	//}
+
+	//switch (action_type)
+	//{
+	//case HARPY_STATE::NORMAL:  //通常移動
+	//	location.x -= speed;
+	//	break;
+	//case HARPY_STATE::NORMAL_RIGHT://右
+	//	location.x += speed;
+	//	break;
+	//case HARPY_STATE::LEFT_lOWER:  //左下を目指す
+	//	location.x -= speed;
+	//	location.y += speed;
+	//	break;
+	//case HARPY_STATE::LEFT_UPPER:  //左上を目指す
+	//	location.x -= speed;
+	//	location.y -= speed;
+	//	break;
+	//case HARPY_STATE::RIGHT_LOWER:  //右下を目指す
+	//	location.x += speed;
+	//	location.y += speed;
+	//	break;
+	//case HARPY_STATE::RIGHT_UPPER:  //右上を目指す。
+	//	location.x += speed;
+	//	location.y -= speed;
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 //-----------------------------------
@@ -252,8 +287,10 @@ void Harpy::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+	draw_location.x + area.width / 2, draw_location.y + area.height / 2, 
+		GetColor(255,255,0),TRUE);
 
-	//DrawRotaGraph(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
 }
 
 
