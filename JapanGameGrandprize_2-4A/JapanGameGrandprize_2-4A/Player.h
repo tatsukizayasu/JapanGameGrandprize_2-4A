@@ -53,7 +53,8 @@ struct ChemicalFormulaParameter
 	int time;
 	int damage_per_second;
 	int damage;
-	const char* material_name[10];
+	const char* chemical_formula_name[10];
+	const char* chemical_formula[10];
 	ATTRIBUTE atribute;
 	ChemicalFormulaMaterial material;
 };
