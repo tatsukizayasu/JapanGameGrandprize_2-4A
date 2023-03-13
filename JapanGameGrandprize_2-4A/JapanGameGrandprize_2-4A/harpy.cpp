@@ -26,7 +26,7 @@
 #define HARPY_ATTACK_DAMAGE 4
 
 //移動スピード
-#define HARPY_SPEED 2.5
+#define SPEED 2.5
 
 //攻撃スピード
 #define ATTACK_SPEED 5
@@ -51,7 +51,7 @@ Harpy::Harpy()
 	location.x = 500;
 	location.y = 500;
 	standby_attack = 0;
-	speed = 1.5;
+	speed = SPEED;
 	area.width = HARPY_SIZE_X;
 	area.height = HARPY_SIZE_Y;
 	standby_time = 0;
@@ -127,13 +127,17 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		Area chip_area = hit_stage.chip->GetArea();
 		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
 		{
-			speed = 0.1; //速度を落とすかもしくは、反転させる処理を作成
-			left_move != left_move;
+			speed = SPEED; //速度を落とすかもしくは、反転させる処理を作成
+			/*if (left_move ==true)
+			{
+				left_move = false;
+			}
+			else
+			{
+				left_move = false;
+			}*/
 		}
-		else
-		{
-			speed = 1.5;
-		}
+
 	}
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
