@@ -125,16 +125,16 @@ STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 	switch (min_vertex)
 	{
 	case 0:
-		vertex = {location.x - area.width / 2,location.y - area.height / 2 };
+		vertex = {location.x - 1,location.y - 1};
 		break;
 	case 1:
-		vertex = { location.x + area.width / 2,location.y - area.height / 2 };
+		vertex = {location.x + 1 ,location.y - 1};
 		break;
 	case 2:
-		vertex = { location.x - area.width / 2,location.y + area.height / 2 };
+		vertex = {location.x - 1,location.y + 1};
 		break;
 	case 3:
-		vertex = { location.x + area.width / 2,location.y + area.height / 2 };
+		vertex = {location.x + 1,location.y + 1};
 		break;
 	default:
 		break;

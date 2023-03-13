@@ -28,11 +28,11 @@ EnemySlime::EnemySlime()
 	left_move = true;
 	kind = ENEMY_KIND::SLIME;
 
-	location.x = 1690.0f;
+	location.x = 3080.0;
 	location.y = 980.0f;
 
 	area.height = 40;
-	area.width = 46;
+	area.width = 40;
 	wait_time = 0;
 
 	hp = 100;
@@ -106,7 +106,11 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		{
 			Location chip_location = hit_stage.chip->GetLocation();
 			Area chip_area = hit_stage.chip->GetArea();
-			if ((chip_location.y - chip_area.height / 2) < (location.y + area.height / 2))
+
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
 				location.y = chip_location.y - 
 					(chip_area.height / 2)- (area.height / 2);
