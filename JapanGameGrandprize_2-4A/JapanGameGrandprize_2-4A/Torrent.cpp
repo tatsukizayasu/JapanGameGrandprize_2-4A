@@ -2,12 +2,64 @@
 #include "DxLib.h"
 #include "Player.h"
 #include "Stage/Stage.h"
+#include "TorrentBullet.h"
+#include "BulletManager.h"
+
+//移動速度
+#define TORRENT_SPEED 4
+
+//タックルのダメージ
+#define TORRENT_TACKLE_DAMAGE 10
+
+//発射速度
+#define TORRENT_SHOT_RATE 30
+
+//ドロップ数
+#define TORRENT_MIN_DROP 20
+#define TORRENT_DROP 20
+
+//葉っぱを飛ばしている時間
+#define LEAF_CUTTER_TIME 1800
+
+//次の葉っぱを飛ばす攻撃に移る時間
+#define LEAF_CUTTER_INTERVAL 1800
+
+//木の実を落としている時間
+#define DROP_NUTS_TIME 1200
+
+//次の木の実を落とす攻撃に移る時間
+#define DROP_NUTS_INTERVAL 1200
+
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
 Torrent::Torrent()
 {
+	left_move = false;
+	attack = false;
+	shot_rate = 0;
+	leaf_cutter_interval = 0;
+	drop_nuts_interval = 0;
+	animation = 0;
+	image_argument = 0;
+	attack_time = 0;
+	attack_state = TORRENT_ATTACK::NONE;
+
+
+	//ドロップアイテムの設定
+	drop_element = new ElementItem * [SOIL_DROP];
+	drop_type_volume = SOIL_DROP;
+
+	int volume = 0;
+
+	for (int i = 0; i < SOIL_DROP; i++)
+	{
+		volume = TORRENT_MIN_DROP + GetRand(TORRENT_DROP);
+		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+		drop_element[i]->SetVolume(volume);
+		drop_volume += volume;
+	}
 }
 
 //-----------------------------------
@@ -15,6 +67,14 @@ Torrent::Torrent()
 //-----------------------------------
 Torrent::~Torrent()
 {
+	for (int i = 0; i < SOIL_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+
+	delete[] drop_element;
+
+	delete type;
 }
 
 //-----------------------------------
@@ -72,6 +132,179 @@ void Torrent::Fall()
 //-----------------------------------
 void  Torrent::Attack(Location player_location)
 {
+
+	if (0 < leaf_cutter_interval) //次の葉っぱを飛ばす攻撃までの時間のカウント
+	{
+		leaf_cutter_interval--;
+	}
+
+	if (0 < drop_nuts_interval) //次の木の実を落とす攻撃までの時間のカウント
+	{
+		drop_nuts_interval--;
+	}
+
+	switch (attack_state)
+	{
+	case TORRENT_ATTACK::TACKLE:
+		Tackle();
+		break;
+	case TORRENT_ATTACK::LEAF_CUTTER:
+		LeafCutter(player_location);
+		break;
+	case TORRENT_ATTACK::DROP_NUTS:
+		DropNuts();
+		break;
+	case TORRENT_ATTACK::NONE:
+		AttackNone();
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//タックル攻撃
+//-----------------------------------
+void Torrent::Tackle()
+{
+
+}
+
+//-----------------------------------
+//葉っぱを飛ばす攻撃
+//-----------------------------------
+void Torrent::LeafCutter(Location player_location)
+{
+	CreateLeaf(player_location);
+	attack_time--;
+	if (attack_time < 0) //攻撃の終了
+	{
+		leaf_cutter_interval = LEAF_CUTTER_INTERVAL; //次の攻撃までの時間の設定
+		if (drop_nuts_interval < 0) //木の実を落とす攻撃が可能かどうか
+		{
+			TORRENT_ATTACK next_attack; //次の攻撃
+			next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) * 2); //次の攻撃の設定
+
+			switch (next_attack) //次の攻撃に移行
+			{
+			case TORRENT_ATTACK::TACKLE:
+				attack_state = TORRENT_ATTACK::TACKLE;
+				break;
+			case TORRENT_ATTACK::DROP_NUTS:
+				attack_state = TORRENT_ATTACK::DROP_NUTS;
+				attack_time = DROP_NUTS_TIME;
+				break;
+			case TORRENT_ATTACK::LEAF_CUTTER:
+			case TORRENT_ATTACK::NONE:
+			default:
+				break;
+			}
+		}
+		else
+		{
+			attack_state = TORRENT_ATTACK::TACKLE; //タックル攻撃に移行
+			if (left_move) //左に向いている
+			{
+				speed = -TORRENT_SPEED;
+			}
+			else
+			{
+				speed = TORRENT_SPEED;
+			}
+		}
+	}
+}
+
+//-----------------------------------
+//葉っぱの生成
+//-----------------------------------
+void Torrent::CreateLeaf(Location player_location)
+{
+	shot_rate++;
+
+	if (shot_rate % TORRENT_TACKLE_DAMAGE == 0)
+	{
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new TorrentBullet(ENEMY_TYPE::WATER, location, player_location));
+	}
+}
+
+//-----------------------------------
+//木の実を落とす攻撃
+//-----------------------------------
+void Torrent::DropNuts()
+{
+	attack_time--;
+	if (attack_time < 0)
+	{
+		drop_nuts_interval = DROP_NUTS_INTERVAL;
+
+		if (leaf_cutter_interval < 0) //木の実を落とす攻撃が可能かどうか
+		{
+			TORRENT_ATTACK next_attack; //次の攻撃
+			next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) * 2); //次の攻撃の設定
+
+			switch (next_attack) //次の攻撃に移行
+			{
+			case TORRENT_ATTACK::TACKLE:
+				attack_state = TORRENT_ATTACK::TACKLE;
+				break;
+			case TORRENT_ATTACK::LEAF_CUTTER:
+				attack_state = TORRENT_ATTACK::LEAF_CUTTER;
+				attack_time = LEAF_CUTTER_INTERVAL;
+				break;
+			case TORRENT_ATTACK::DROP_NUTS:
+			case TORRENT_ATTACK::NONE:
+			default:
+				break;
+			}
+		}
+		else
+		{
+			attack_state = TORRENT_ATTACK::TACKLE; //タックル攻撃に移行
+			if (left_move) //左に向いている
+			{
+				speed = -TORRENT_SPEED;
+			}
+			else
+			{
+				speed = TORRENT_SPEED;
+			}
+		}
+	}
+}
+
+//-----------------------------------
+//木の実の生成
+//-----------------------------------
+void Torrent::CreateNuts()
+{
+
+}
+
+//-----------------------------------
+// 攻撃していない
+//-----------------------------------
+void Torrent::AttackNone()
+{
+	TORRENT_ATTACK next_attack;	//次の攻撃
+	next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
+
+	switch (next_attack)
+	{
+	case TORRENT_ATTACK::LEAF_CUTTER:
+		attack_state = TORRENT_ATTACK::LEAF_CUTTER;
+		attack_time = LEAF_CUTTER_TIME;
+		break;
+	case TORRENT_ATTACK::DROP_NUTS:
+		attack_state = TORRENT_ATTACK::DROP_NUTS;
+		attack_time = DROP_NUTS_TIME;
+		break;
+	case TORRENT_ATTACK::TACKLE:
+	case TORRENT_ATTACK::NONE:
+	default:
+		break;
+	}
 }
 
 //-----------------------------------
@@ -81,6 +314,17 @@ AttackResource Torrent::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
+	if (attack_state == TORRENT_ATTACK::TACKLE)
+	{
+		if (!attack)
+		{
+			attack = true;
+			ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::SOIL };
+			ret.damage = TORRENT_TACKLE_DAMAGE;
+			ret.type = attack_type;
+			ret.type_count = 1;
+		}
+	}
 	return ret;
 }
 

@@ -28,8 +28,7 @@ private:
 public:
 
 	EnemySlime();
-	EnemySlime(float x, float y, float height, float width);
-	~EnemySlime() {};
+	~EnemySlime();
 
 	//描画以外の更新を実行
 	virtual void Update(const class Player* player, const class Stage* stage)override;

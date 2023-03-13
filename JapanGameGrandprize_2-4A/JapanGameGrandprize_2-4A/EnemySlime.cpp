@@ -41,7 +41,7 @@ EnemySlime::EnemySlime()
 	color = GetColor(0, 0, 255);
 
 	type = new ENEMY_TYPE;
-	*type = ENEMY_TYPE::WATER;
+	type[0] = ENEMY_TYPE::WATER;
 
 	state = ENEMY_STATE::IDOL;
 	slime_image = LoadGraph("Images/Enemy/Slime_.png");
@@ -61,6 +61,18 @@ EnemySlime::EnemySlime()
 		drop_volume += volume;
 	}
 
+}
+
+EnemySlime::~EnemySlime()
+{
+	for (int i = 0; i < SOIL_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+
+	delete[] drop_element;
+
+	delete[] type;
 }
 
 void EnemySlime::Update(const Player* player, const Stage* stage)

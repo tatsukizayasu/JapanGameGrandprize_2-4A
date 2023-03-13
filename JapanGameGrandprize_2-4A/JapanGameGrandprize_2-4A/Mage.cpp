@@ -41,9 +41,9 @@ Mage::Mage()
 	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
-	type = new ENEMY_TYPE;
+	type = new ENEMY_TYPE[1];
 	
-	*type = static_cast<ENEMY_TYPE>(1 + GetRand(3));
+	type[0] = static_cast<ENEMY_TYPE>(1 + GetRand(3));
 	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	image = 0xffffff;
@@ -139,7 +139,7 @@ Mage::Mage()
 //-----------------------------------
 Mage::~Mage()
 {
-	delete type;
+	delete[] type;
 
 	for (int i = 0; i < drop; i++)
 	{
@@ -329,7 +329,7 @@ void Mage::CreateBullet(Location player_location)
 	if (shot_rate % MAGE_SHOT_RATE == 0)
 	{
 		BulletManager::GetInstance()->CreateEnemyBullet
-		(new MageBullet(*type, location, player_location));
+		(new MageBullet(type[0], location, player_location));
 
 		shot_count++;
 	}

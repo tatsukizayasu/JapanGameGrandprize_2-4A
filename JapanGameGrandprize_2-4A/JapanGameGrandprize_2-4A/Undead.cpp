@@ -49,8 +49,8 @@ Undead::Undead()
 	image_argument = 0;
 	speed = UNDEAD_SPEED;
 	kind = ENEMY_KIND::UNDEAD;
-	type = new ENEMY_TYPE;
-	*type = ENEMY_TYPE::SOIL;
+	type = new ENEMY_TYPE[1];
+	type[0] = ENEMY_TYPE::SOIL;
 	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	attack_time = 0;
@@ -94,7 +94,7 @@ Undead::~Undead()
 
 	delete[] drop_element;
 
-	delete type;
+	delete[] type;
 
 	for (int i = 0; i < UNDEAD_MOVE_IMAGES; i++)
 	{

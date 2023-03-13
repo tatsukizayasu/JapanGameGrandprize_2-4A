@@ -8,7 +8,6 @@ class Undead :
     public EnemyBase
 {
 private:
-
     bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
     int damage; //ƒ_ƒ[ƒW
     int attack_interval; //Ÿ‚ÌUŒ‚‚Ü‚Å‚ÌŠÔ
