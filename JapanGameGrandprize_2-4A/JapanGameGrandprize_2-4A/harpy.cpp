@@ -48,7 +48,7 @@ Harpy::Harpy()
 	left_move = true;
 	attack = false;
 
-	hp = 10;
+	hp = 50;
 	location.x = 500;
 	location.y = 500;
 	standby_attack = 0;
