@@ -22,7 +22,7 @@ public:
 	//XV
 	void Update(Player* player) override;
 	////•`‰æ
-	void Draw() const override;
+	/*void Draw() const override;*/
 
 
 };

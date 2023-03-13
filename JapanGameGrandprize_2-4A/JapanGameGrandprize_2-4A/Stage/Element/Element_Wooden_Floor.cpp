@@ -13,6 +13,7 @@ Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_p
 	this->type = type;
 	this->location = location;
 	this->area = area;
+	this->margin_area = { -15.0f,0.0f };
 	original_collision = area;
 	original_image = *image;
 
@@ -59,9 +60,9 @@ void Element_Wooden_Floor::Update(Player* player)
 	//printfDx("x:%f, y:%f\n", mapchip->GetArea().height, mapchip->GetArea().width);
 }
 
-void Element_Wooden_Floor::Draw() const
-{
-	float x = location.x - CameraWork::GetCamera().x;
-	float y = location.y - CameraWork::GetCamera().y;
-	DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
-}
+//void Element_Wooden_Floor::Draw() const
+//{
+//	float x = location.x - CameraWork::GetCamera().x;
+//	float y = location.y - CameraWork::GetCamera().y;
+//	DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
+//}
