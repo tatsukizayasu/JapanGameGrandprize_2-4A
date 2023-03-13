@@ -44,7 +44,7 @@ public:
 protected:
 
 	const char* class_name = "default";
-	short type;
+	
 	int image;
 	Area image_size;
 	float ex_rate;
