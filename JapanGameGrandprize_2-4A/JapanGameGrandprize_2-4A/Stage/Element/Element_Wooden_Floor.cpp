@@ -28,21 +28,21 @@ Element_Wooden_Floor::~Element_Wooden_Floor()
 void Element_Wooden_Floor::Update(Player* player)
 {
 	//printfDx("%f\n", GetAnimationTime());
-	if (GetAnimationTime() >= 5.5f) {
+	/*if (GetAnimationTime() > 3.5f) {
 		area = { -MAP_CHIP_SIZE, -MAP_CHIP_SIZE };
 		image = 0;
-	}
+	}*/
 
 	//プレイヤーが上にいる場合、当たり判定範囲を0にする
 	if (HitPlayer(player) && player->GetLocation().y - player->GetArea().height / 2 - 4.0f < location.y) {
 		//左スティックを下方向に倒している
 		if (PAD_INPUT::GetLStick().y <= -10000)
 		{
-			//area = { -MAP_CHIP_SIZE, -MAP_CHIP_SIZE };
-			//SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
+			area = { -MAP_CHIP_SIZE, -MAP_CHIP_SIZE };
+			SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
 			//image = 0;
 			
-				StartAnimation(5.5f, nullptr);
+				//StartAnimation(5.5f, nullptr);
 			
 		}
 		
