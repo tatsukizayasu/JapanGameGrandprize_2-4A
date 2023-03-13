@@ -38,30 +38,107 @@ enum class PLAYER_STATE
 
 struct ChemicalFormulaMaterial
 {
-	int hydrogen;
-	int oxygen;
-	int carbon;
-	int nitrogen;
-	int sulfur;
-	int chlorine;
-	int uranium;
+	int carbon;		//íYëf
+	int hydrogen;	//êÖëf
+	int nitrogen;	//íÇëf
+	int oxygen;		//é_ëf
+	int sulfur;		//ó∞â©
+	int chlorine;	//âñëf
+	int uranium;	//ÉEÉâÉì
 };
 
 struct ChemicalFormulaParameter
 {
 	int number_of_bullets;
 	int time;
-	float damage;
+	int damage_per_second;
+	int damage;
 	const char* material_name[10];
 	ATTRIBUTE atribute;
 	ChemicalFormulaMaterial material;
 };
 
-struct ChemicalFormula
+struct ChemicalFormulaExplosion
 {
-	ChemicalFormulaParameter x;
+	ChemicalFormulaParameter nitroglycerin;
+	ChemicalFormulaParameter tnt;
+	ChemicalFormulaParameter diazodinitrophenol;
+	ChemicalFormulaParameter picric_acid;
+	ChemicalFormulaParameter pen_slit;
+	ChemicalFormulaParameter Hexogen;
+	ChemicalFormulaParameter hmx;
+	ChemicalFormulaParameter acetone_peroxide;
+	ChemicalFormulaParameter nitro_glycol;
+	ChemicalFormulaParameter hniw;
+	ChemicalFormulaParameter trimethylene_nitramine;
+	ChemicalFormulaParameter nitroguanidine;
+	ChemicalFormulaParameter fox_7;
 };
 
+struct ChemicalFormulaPoison
+{
+	ChemicalFormulaParameter dinitrogen_tetroxide;
+	ChemicalFormulaParameter mustard_gas;
+	ChemicalFormulaParameter aniline;
+	ChemicalFormulaParameter histamine;
+	ChemicalFormulaParameter cs_gus;
+	ChemicalFormulaParameter naphthol;
+	ChemicalFormulaParameter ciguatoxin;
+	ChemicalFormulaParameter tetrodotoxin;
+	ChemicalFormulaParameter toxiferin;
+	ChemicalFormulaParameter strychnine;
+	ChemicalFormulaParameter chrysanthemum_acid;
+	ChemicalFormulaParameter Rotenone;
+	ChemicalFormulaParameter saxitoxin;
+	ChemicalFormulaParameter lysine;
+	ChemicalFormulaParameter solanine;
+	ChemicalFormulaParameter anisatin;
+	ChemicalFormulaParameter hyoscyamine;
+	ChemicalFormulaParameter palytoxin;
+};
+
+struct ChemicalFormulaPararysis
+{
+	ChemicalFormulaParameter ether;
+	ChemicalFormulaParameter allylamine;
+	ChemicalFormulaParameter indole;
+	ChemicalFormulaParameter skatole;
+	ChemicalFormulaParameter heptanoic_acid;
+	ChemicalFormulaParameter thalidomaide;
+	ChemicalFormulaParameter nicotine;
+	ChemicalFormulaParameter lycorine;
+	ChemicalFormulaParameter lobeline;
+	ChemicalFormulaParameter batrachotoxin;
+	ChemicalFormulaParameter aconitine;
+};
+
+struct ChemicalFormulaHeal
+{
+	ChemicalFormulaParameter aspartic_acid;
+	ChemicalFormulaParameter ibotenic_acid;
+	ChemicalFormulaParameter glutamic_acid;
+	ChemicalFormulaParameter tricolominic_acid;
+	ChemicalFormulaParameter glutamine;
+	ChemicalFormulaParameter glucose;
+	ChemicalFormulaParameter sugar;
+};
+
+struct ChemicalFormulaMelt
+{
+	ChemicalFormulaParameter hydrochloric_acid;
+	ChemicalFormulaParameter aqua_regia;
+	ChemicalFormulaParameter suluric_acid;
+	ChemicalFormulaParameter acetic_acid;
+	ChemicalFormulaParameter nitric_acid;
+	ChemicalFormulaParameter formic_acid;
+	ChemicalFormulaParameter methanesulfonic_acid;
+	ChemicalFormulaParameter benzenesulfonic_acid;
+	ChemicalFormulaParameter p_toluenesulfonic_acid;
+	ChemicalFormulaParameter chloric_acid;
+	ChemicalFormulaParameter perchloric_acid;
+	ChemicalFormulaParameter thiosulfate;
+	ChemicalFormulaParameter hydrogen_sulfide;
+};
 
 
 class Player : public BoxCollider
