@@ -2,6 +2,14 @@
 
 class AbstractScene
 {
+protected:
+
+	//”wŒi‰æ‘œ
+	int background_image;
+
+	//”wŒi‰¹Šy
+	int background_music;
+
 public:
 
 	//ƒfƒXƒgƒ‰ƒNƒ^

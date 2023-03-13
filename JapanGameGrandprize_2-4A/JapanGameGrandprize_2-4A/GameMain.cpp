@@ -14,6 +14,10 @@
 //-----------------------------------
 GameMain::GameMain()
 {
+
+	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
+	background_image = LoadGraph("Images/Scene/gamemain.png");
+
 	stage = new Stage();
 	player = new Player(stage);
 	stage->SetPlayer(player);
@@ -141,8 +145,9 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
-	//”wŒi
 	SetBackgroundColor(149, 249, 253);
+	//”wŒi	•`‰æ
+	DrawGraph(0, 0, background_image, FALSE);
 
 	stage->Draw();
 	item_controller->Draw();
