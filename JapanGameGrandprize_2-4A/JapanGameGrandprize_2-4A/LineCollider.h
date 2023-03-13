@@ -48,23 +48,25 @@ private:
 		float x;
 		float y;
 
-		if (vector[LINE_START].x < vector[LINE_END].x)
+		if (GetLocation(LINE_START).x < GetLocation(LINE_END).x)
 		{
-			x = vector[LINE_START].x;
+			x = GetLocation(LINE_START).x;
 		}
 		else
 		{
-			x = vector[LINE_END].x;
+			x = GetLocation(LINE_END).x;
 		}
 
-		if (vector[LINE_START].y < vector[LINE_END].y)
+		if (GetLocation(LINE_START).y < GetLocation(LINE_END).y)
 		{
-			y = vector[LINE_START].y;
+			y = GetLocation(LINE_START).y;
 		}
 		else
 		{
-			y = vector[LINE_END].y;
+			y = GetLocation(LINE_END).y;
 		}
+
+		vector_min = { x,y };
 
 		return vector_min;
 	}
@@ -75,23 +77,25 @@ private:
 		float x;
 		float y;
 
-		if (vector[LINE_START].x > vector[LINE_END].x)
+		if (GetLocation(LINE_START).x > GetLocation(LINE_END).x)
 		{
-			x = vector[LINE_START].x;
+			x = GetLocation(LINE_START).x;
 		}
 		else
 		{
-			x = vector[LINE_END].x;
+			x = GetLocation(LINE_END).x;
 		}
 
-		if (vector[LINE_START].y > vector[LINE_END].y)
+		if (GetLocation(LINE_START).y > GetLocation(LINE_END).y)
 		{
-			y = vector[LINE_START].y;
+			y = GetLocation(LINE_START).y;
 		}
 		else
 		{
-			y = vector[LINE_END].y;
+			y = GetLocation(LINE_END).y;
 		}
+
+		vector_max = { x,y };
 
 		return vector_max;
 	}

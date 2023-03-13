@@ -35,7 +35,7 @@ StageBuilder::StageBuilder()
 	current_brush = MAP_CHIP;
 
 #ifdef _DEV
-	line_collider = new LineCollider_t({ 500,1080 }, { 700,1280 });
+	line_collider = new LineCollider_t({ 500,1280 }, { 700,1080 });
 
 	Location points[3] =
 	{
@@ -45,7 +45,7 @@ StageBuilder::StageBuilder()
 	};
 	line = new PolyLine(points,3);
 	
-	
+	mouse_box = new MapChip(&block_images[0], mouse->GetLocation(), { 40,40 });
 
 #endif // _DEV
 
@@ -73,6 +73,8 @@ StageBuilder::~StageBuilder()
 	delete line;
 
 	delete line_collider;
+
+	delete mouse_box;
 }
 
 //------------------------------------
@@ -146,6 +148,8 @@ void StageBuilder::Update()
 		line->Update();
 	}
 
+
+	mouse_box->SetLocation(mouse->GetLocation());
 #endif // _DEV
 }
 
@@ -180,7 +184,7 @@ void StageBuilder::Draw()const
 
 	if (line != nullptr)
 	{
-		line->Draw();
+		//line->Draw();
 	}
 
 	if (2 <= pending_sphere.size())
@@ -193,6 +197,8 @@ void StageBuilder::Draw()const
 	}
 	DrawSphere();
 
+	mouse_box->Draw();
+
 #endif // _DEV
 
 	DrawWhichMode();
@@ -200,7 +206,7 @@ void StageBuilder::Draw()const
 	DrawMouse();
 
 	line_collider->Draw();
-	if (line_collider->HitDot(mouse->GetLocation()))
+	if (line_collider->HitBox(mouse_box))
 	{
 		DrawString(600, 300, "hit", 0);
 	}

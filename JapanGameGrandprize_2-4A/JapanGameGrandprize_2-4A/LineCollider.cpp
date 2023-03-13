@@ -56,7 +56,13 @@ void LineCollider_t::Draw()const
 		GetLocation(LINE_END).y - CameraWork::GetCamera().y,
 		0xE9FF00, 3);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	//DrawCircle
+
+
+	DrawBoxAA(GetMin().x - CameraWork::GetCamera().x
+		, GetMin().y - CameraWork::GetCamera().y
+		, GetMax().x - CameraWork::GetCamera().x
+		, GetMax().y - CameraWork::GetCamera().y
+		, 0x000000, FALSE);
 }
 
 //-----------------------------------
@@ -68,22 +74,20 @@ bool LineCollider_t::HitDot(Location point)const
 	float closs_product;
 
 	Location vector1 =
-		GetLocation(LINE_END) - GetLocation(LINE_START);
+		GetLocation(LINE_START) - GetLocation(LINE_END);
 	Location vector2 =
-		point - GetLocation(LINE_START);
+		point - GetLocation(LINE_END);
 
 	closs_product = (vector1.x * vector2.y) - (vector1.y * vector2.x);
-
 	//ê¸ï™ÇÃîÕàÕì‡Ç©Ç«Ç§Ç©
 	if ((GetMin() <= point) && point <= GetMax())
 	{
-		is_hit = true;
+		if (closs_product == 0)
+		{
+			is_hit = true;
+		}
 	}
 
-	if (closs_product == 0)
-	{
-		is_hit = true;
-	}
 
 	return is_hit;
 }
@@ -103,6 +107,50 @@ bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 bool LineCollider_t::HitBox(const BoxCollider* box)const
 {
 	bool is_hit = false;
+	Location vertex[4] =
+	{
+		//élã˜
+		{box->GetLocation().x - box->GetArea().width / 2,
+		box->GetLocation().y - box->GetArea().height / 2 },
+
+		{box->GetLocation().x + box->GetArea().width / 2,
+		box->GetLocation().y - box->GetArea().height / 2 },
+
+		{box->GetLocation().x - box->GetArea().width / 2,
+		box->GetLocation().y + box->GetArea().height / 2 },
+
+		{box->GetLocation().x + box->GetArea().width / 2,
+		box->GetLocation().y + box->GetArea().height / 2},
+
+	};
+
+	float sign = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		float closs_product = 0;
+
+		Location vector1 =
+			GetLocation(LINE_START) - GetLocation(LINE_END);
+		Location vector2 =
+			vertex[i] - GetLocation(LINE_END);
+
+		closs_product = (vector1.x * vector2.y) - (vector1.y * vector2.x);
+		if (closs_product == 0)return true;	//0Ç»ÇÁê¸Ç∆í∏ì_Ç™èdÇ»Ç¡ÇƒÇ¢ÇÈÇÃÇ≈ìñÇΩÇË
+
+		if (i == 0)
+		{
+			sign = closs_product;
+		}
+		else
+		{
+			if ((sign * closs_product) < 0)
+			{
+				is_hit = true;
+				break;
+			}
+		}
+	}
+
 	return is_hit;
 }
 
