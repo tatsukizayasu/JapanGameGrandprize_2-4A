@@ -20,7 +20,7 @@ GameMain::GameMain()
 	enemy = new EnemyBase * [4];
 	enemy[0] = new EnemySlime();
 	enemy[1] = new Undead();
-	enemy[2] = new EnemyGhost();
+	enemy[2] = new Harpy();//new EnemyGhost();
 	enemy[3] = new Mage();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();

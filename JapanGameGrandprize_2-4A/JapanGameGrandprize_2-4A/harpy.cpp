@@ -11,7 +11,8 @@
 #define DETECTION_DISTANCE_Y 100
 
 //ï®óùçUåÇîÕàÕ
-#define ATTACK_RANGE 150
+#define ATTACK_RANGE 40
+#define ATTACK_RANGE_Y 80
 
 //ñÇñ@çUåÇîÕàÕ	
 #define ATTACK_MAGIC 300
@@ -181,9 +182,13 @@ void Harpy::Move(const Location player_location)
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
 		range_y <= DETECTION_DISTANCE && range_y >= -DETECTION_DISTANCE)
 	{
-		if (range <= ATTACK_MAGIC && range >= -ATTACK_MAGIC)
+		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE
+			&& range_y <= ATTACK_RANGE_Y && range >= -ATTACK_RANGE_Y)
 		{
-
+			state = ENEMY_STATE::ATTACK;
+			attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
+			standby_time = PHYSICAL_STANDBY;
+			physical_attack = true;
 		}
 		travel = range / vector;
 		travel_y = range_y / vector;
