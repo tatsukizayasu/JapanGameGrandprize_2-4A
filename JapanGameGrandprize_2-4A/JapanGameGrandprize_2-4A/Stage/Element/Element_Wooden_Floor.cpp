@@ -2,6 +2,7 @@
 #include "../Player.h"
 #include "../PadInput.h"
 #include "Stage_Element.h"
+#include "../CameraWork.h"
 
 
 Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : Stage_Element_Base(element, image, location, area)
@@ -10,6 +11,8 @@ Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_p
 	//SetLocation(Location{ location.x, location.y - 30.0f });
 	//SetArea(Area{ 10.0f, MAP_CHIP_SIZE });
 	this->type = type;
+	this->location = location;
+	this->area = area;
 	original_collision = area;
 	original_image = *image;
 
@@ -23,7 +26,7 @@ Element_Wooden_Floor::~Element_Wooden_Floor()
 
 void Element_Wooden_Floor::Update(Player* player)
 {
-	printfDx("%f\n", GetAnimationTime());
+	//printfDx("%f\n", GetAnimationTime());
 	if (GetAnimationTime() >= 5.5f) {
 		area = { -MAP_CHIP_SIZE, -MAP_CHIP_SIZE };
 		image = 0;
@@ -58,6 +61,7 @@ void Element_Wooden_Floor::Update(Player* player)
 
 void Element_Wooden_Floor::Draw() const
 {
-
-	MapChip::Draw();
+	float x = location.x - CameraWork::GetCamera().x;
+	float y = location.y - CameraWork::GetCamera().y;
+	DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
 }
