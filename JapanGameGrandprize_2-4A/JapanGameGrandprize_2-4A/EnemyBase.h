@@ -144,6 +144,7 @@ protected:
 
 	bool can_delete; //íœƒtƒ‰ƒO
 	bool left_move; //¶‚É“®‚¢‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	int* images; //‰æ‘œ
 	int hp;	//‘Ì—Í
 	int speed; //ˆÚ“®‘¬“x
 	int poison_time; //“Å‚ÌŒø‰ÊŠÔ

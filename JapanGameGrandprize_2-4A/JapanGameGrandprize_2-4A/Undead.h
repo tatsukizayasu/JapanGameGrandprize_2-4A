@@ -12,12 +12,15 @@ private:
     bool attack; //攻撃が当たったか
     int damage; //ダメージ
     int attack_interval; //次の攻撃までの時間
-    int image; //画像
+    int animation; //アニメーション
+    int image_argument; //画像の引数
     int attack_time; //攻撃している時間(デバッグ用)
 private:
-
     //プレイヤーとの距離
     void DistancePlayer(const Location player_location);
+
+    //移動時のアニメーション
+    void MoveAnimation();
 public:
 
     //コンストラクタ
