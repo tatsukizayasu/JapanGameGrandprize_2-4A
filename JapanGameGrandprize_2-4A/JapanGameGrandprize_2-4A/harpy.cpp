@@ -48,8 +48,8 @@ Harpy::Harpy()
 	attack = false;
 
 	hp = 10;
-	location.x = 1400;
-	location.y = 1050;
+	location.x = 500;
+	location.y = 500;
 	standby_attack = 0;
 	speed = 1.5;
 	area.width = HARPY_SIZE_X;
