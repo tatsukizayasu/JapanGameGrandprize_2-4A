@@ -74,5 +74,4 @@ public:
 
 	//À•W‚Ìæ“¾
 	Location GetLocation() const override;
-
 };

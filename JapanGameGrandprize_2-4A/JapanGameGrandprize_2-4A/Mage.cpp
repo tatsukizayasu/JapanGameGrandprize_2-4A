@@ -132,7 +132,6 @@ Mage::Mage()
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
-
 }
 
 //-----------------------------------
@@ -182,7 +181,6 @@ void Mage::Update(const Player* player, const Stage* stage)
 		break;
 	}
 
-
 	Poison();
 	Paralysis();
 
@@ -191,7 +189,6 @@ void Mage::Update(const Player* player, const Stage* stage)
 		state = ENEMY_STATE::DEATH;
 	}
 }
-
 
 //-----------------------------------
 //アイドル状態
@@ -250,6 +247,7 @@ void Mage::Teleport(const Stage* stage)
 	Location old_location = location; //元の地点
 
 	Location camera = CameraWork::GetCamera();
+
 	while (true)
 	{
 		//テレポートする距離設定
@@ -276,7 +274,6 @@ void Mage::Teleport(const Stage* stage)
 				break;
 			}
 		}
-		
 	}
 	can_teleport = false;
 }
@@ -286,7 +283,6 @@ void Mage::Teleport(const Stage* stage)
 //-----------------------------------
 void Mage::Fall()
 {
-
 }
 
 //-----------------------------------
@@ -374,7 +370,6 @@ void Mage::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Mage::Draw() const
 {
-
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;

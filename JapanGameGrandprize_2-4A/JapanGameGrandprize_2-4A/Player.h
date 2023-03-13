@@ -19,7 +19,6 @@
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
 
-
 #define BULLET_MAX 50
 #define GREEN GetColor(0,255,0)
 #define RED GetColor(255,0,0)
@@ -48,6 +47,7 @@ struct ChemicalFormulaMaterial
 };
 
 struct ChemicalFormulaParameter
+
 {
 	int number_of_bullets;
 	int time;
@@ -140,7 +140,6 @@ struct ChemicalFormulaMelt
 	ChemicalFormulaParameter hydrogen_sulfide;
 };
 
-
 class Player : public BoxCollider
 {
 private:
@@ -178,8 +177,6 @@ private:
 	Stage* stage;					 //ステージへのポインタ
 	EfectBeam* beam;
 	Pouch* pouch;					 //ポーチへのポインタ
-
-
 
 	ElementItem** element;	//元素
 public:

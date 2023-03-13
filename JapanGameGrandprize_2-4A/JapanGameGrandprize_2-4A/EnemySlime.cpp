@@ -1,9 +1,9 @@
-#include<dxlib.h>
+#include "EnemySlime.h"
+#include "dxlib.h"
 #define _USE_MATH_DEFINES
-#include<math.h>
-#include"EnemySlime.h"
-#include"Player.h"
-#include"Stage/Stage.h"
+#include <math.h>
+#include "Player.h"
+#include "Stage/Stage.h"
 
 #define SLIME_ATTACK_DISTANCE_Y 15
 #define SLIME_ATTACK_SPEED 5
@@ -28,11 +28,11 @@ EnemySlime::EnemySlime()
 	left_move = true;
 	kind = ENEMY_KIND::SLIME;
 
-	location.x = 1690.0f;
+	location.x = 3080.0;
 	location.y = 980.0f;
 
 	area.height = 40;
-	area.width = 46;
+	area.width = 40;
 	wait_time = 0;
 
 	hp = 100;
@@ -73,24 +73,19 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 	case ENEMY_STATE::IDOL:
 		Idol();
 		break;
+
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
 
 		hit_stage = HitStage(stage);
 		if (hit_stage.hit) //ステージとの当たり判定
 		{
-			Location chip_location = hit_stage.chip->GetLocation();
-			Area chip_area = hit_stage.chip->GetArea();
-			if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 			{
-				if (left_move)
-				{
-					location.x = chip_location.x + (chip_area.width / 2) + (area.width / 2) + 2;
-				}
-				else
-				{
-					location.x = chip_location.x - (chip_area.width / 2) - (area.width / 2) - 2;
-				}
+				location = old_location;
 				left_move = !left_move;
 				speed = -speed;
 			}
@@ -102,6 +97,7 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		}
 
 		break;
+
 	case ENEMY_STATE::FALL:
 		Fall();
 		hit_stage = HitStage(stage);
@@ -110,9 +106,14 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		{
 			Location chip_location = hit_stage.chip->GetLocation();
 			Area chip_area = hit_stage.chip->GetArea();
-			if ((chip_location.y - chip_area.height / 2) < (location.y + area.height / 2))
+
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
-				location.y = chip_location.y - (chip_area.height / 2) - (area.height / 2) + 2;
+				location.y = chip_location.y - 
+					(chip_area.height / 2)- (area.height / 2);
 				state = ENEMY_STATE::MOVE;
 				if (left_move)
 				{
@@ -125,18 +126,18 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			}
 		}
 		break;
+
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
 		break;
+
 	case ENEMY_STATE::DEATH:
 		Death();
 		break;
+
 	default:
 		break;
 	}
-
-
-	
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -184,12 +185,10 @@ void EnemySlime::Idol()
 //-----------------------------------
 void EnemySlime::Move(const Location player_location)
 {
-
 	float distance; //離れている距離
 
 	//プレイヤーとの距離の計算
 	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
-
 
 	if (distance < 120 )
 	{
@@ -265,6 +264,7 @@ void  EnemySlime::Attack(Location player_location)
 		attack = false;
 		slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 		state = ENEMY_STATE::MOVE;
+
 		if (left_move)
 		{
 			speed = -SLIME_SPEED;
@@ -320,7 +320,6 @@ void EnemySlime::Death()
 		}
 		else
 		{
-		
 			speed = -SLIME_ATTACK_SPEED;
 			slime_angle -= ROTATION_SPEED;
 		}
@@ -356,7 +355,6 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
-
 }
 
 //-----------------------------------

@@ -1,7 +1,7 @@
+#include "Item.h"
 #include "DxLib.h"
 #define _USE_MATH_DEFINES
-#include<math.h>
-#include "Item.h"
+#include <math.h>
 #include "CameraWork.h"
 
 //F
@@ -39,7 +39,6 @@ Item::Item(ELEMENT_ITEM type, Location location)
 	{
 		this->location.x += GetRand(RAND_LCOATION);
 		this->location.y += GetRand(RAND_LCOATION);
-
 	}
 	else
 	{

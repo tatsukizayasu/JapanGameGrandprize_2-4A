@@ -2,7 +2,6 @@
 #include "ElementItem.h"
 #include "Define.h"
 
-
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
 

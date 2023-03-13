@@ -42,9 +42,6 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 		image_size.width = (float)x;
 		image_size.height = (float)y;
 	}
-
-	collision_dir = { 0,0 };
-
 }
 
 //-----------------------------------
@@ -52,38 +49,13 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 //-----------------------------------
 MapChip::~MapChip()
 {
-
 }
 
 //-----------------------------------
 // çXêV
 //-----------------------------------
-void MapChip::Update(Player* player)
+void MapChip::Update()
 {
-
-	if (HitBox(player)) {
-		//è„
-		if (location.y < player->GetLocation().y) {
-			collision_dir.y = 1;
-		}
-		//â∫
-		else if (location.y > player->GetLocation().y) {
-			collision_dir.y = -1;
-		}
-
-
-
-		//âE
-		if (location.x > player->GetLocation().x) {
-			collision_dir.x = 1;
-		}
-
-		//ç∂
-		else if (location.x < player->GetLocation().x) {
-			collision_dir.x = -1;
-		}
-	
-	}
 }
 
 //-----------------------------------
@@ -103,7 +75,6 @@ void MapChip::Draw()const
 	DrawCollision();
 #endif
 
-
 #ifdef COLLLISION_DEBUG
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);
@@ -112,8 +83,6 @@ void MapChip::Draw()const
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #endif // COLLLISION_DEBUG
-
-	
 }
 
 //-----------------------------------

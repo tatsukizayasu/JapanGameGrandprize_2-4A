@@ -59,6 +59,7 @@ void ItemController::SpawnItem(const EnemyBase* enemy_base)
 	int old_item_max = item_max;//生成可能なエネミー数
 
 	item_volume += enemy_base->GetDropVolume();
+
 	if (item_max < item_volume)
 	{
 		item_max = item_volume;
@@ -79,7 +80,8 @@ void ItemController::SpawnItem(const EnemyBase* enemy_base)
 			{
 				if (item[n] == nullptr)
 				{
-					item[n] = new Item(enemy_base->GetDropItem(i).GetType(), enemy_base->GetLocation());
+					item[n] = new Item(enemy_base->GetDropItem(i).GetType(),
+						                enemy_base->GetLocation());
 					break;
 				}
 			}
@@ -136,6 +138,7 @@ void ItemController::ArrangementItem(const int old_item_max)
 		{
 			item[i] = nullptr;
 		}
+
 		delete[] temporary_item;
 	}
 
