@@ -7,20 +7,20 @@
 #define HARPY_SIZE_Y 80
 
 //プレイヤー発見距離
-#define DETECTION_DISTANCE_X 500
+#define DETECTION_DISTANCE 600
 #define DETECTION_DISTANCE_Y 100
 
 //物理攻撃範囲
-#define HARPY_ATTACK_RANGE 20
+#define ATTACK_RANGE 150
 
 //魔法攻撃範囲	
-#define HARPY_ATTACK_MAGIC 400
+#define ATTACK_MAGIC 300
 
 //魔法攻撃した時の硬直時間
-#define HARPY_MAGIC_STANDBY 60
+#define MAGIC_STANDBY 60
 
 //近接攻撃した時の硬直時間
-#define HARPY_PHYSICAL_STANDBY 100
+#define PHYSICAL_STANDBY 100
 
 //ハーピィの攻撃力
 #define HARPY_ATTACK_DAMAGE 4
@@ -127,7 +127,8 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		Area chip_area = hit_stage.chip->GetArea();
 		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
 		{
-			speed = 0.1;
+			speed = 0.1; //速度を落とすかもしくは、反転させる処理を作成
+			left_move != left_move;
 		}
 		else
 		{
@@ -159,67 +160,59 @@ void Harpy::Idol()
 //移動
 void Harpy::Move(const Location player_location)
 {
-	//double sb, sbx, sby, bx, by, sx, sy;
 
-	//sx = location.x + HARPY_SIZE_X / 2;
-	//sy = location.y+ HARPY_SIZE_Y / 2;
+	float range; //プレイヤーとの距離	
+	float range_y; //プレイヤーとの距離Y座標
+	float vector; //ベクトル
+	float travel; //X座標に動く量
+	float travel_y; //ｙ座標に動く量
 
-	//bx = BallX + Bw / 2;
-	//by = BallY + Bh / 2;
+	//プレイヤーとの距離計算
+	range = player_location.x - location.x;
+	range_y = player_location.y - location.y;
 
-	//sbx = bx - sx;
-	//sby = by - sy;
+	vector = sqrt(range * range + range_y * range_y);
 
-	//// 平方根を求めるのに標準関数の sqrt を使う、
-	//// これを使うには math.h をインクルードする必要がある
-	//sb = sqrt(sbx * sbx + sby * sby);
+	//プレイヤーが発見距離内にいたら
+	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
+		range_y <= DETECTION_DISTANCE && range_y >= -DETECTION_DISTANCE)
+	{
+		if (range <= ATTACK_MAGIC && range >= -ATTACK_MAGIC)
+		{
 
-	//// １フレーム当たり８ドット移動するようにする
-	//ETamaSx = sbx / sb * 8;
-	//ETamaSy = sby / sb * 8;
+		}
+		travel = range / vector;
+		travel_y = range_y / vector;
 
-	//float range_x; //プレイヤーとの距離X座標	
-	//float range_y; //プレイヤーとの距離Y座標
+		location.x += travel * speed;
+		location.y += travel_y * speed;
+	}
+	else //発見距離にプレイヤーがいなかったら。通常移動
+	{
+		if (left_move == true)
+		{
+			action_type = HARPY_STATE::NORMAL; //左
+		}
+		else
+		{
+			action_type = HARPY_STATE::NORMAL_RIGHT; //右
+		}
+		switch (action_type)
+		{
+		case HARPY_STATE::NORMAL:  //通常移動
+			location.x -= speed;
+			break;
+		case HARPY_STATE::NORMAL_RIGHT://右
+			location.x += speed;
+			break;
+		case HARPY_STATE::NONE:
+			break;
+		default:
+			break;
+		}
+	}
 
-	//range_x = fabsf(location.x - player_location.x);
-	//range_y = fabsf(location.y - player_location.y);
 
-	//if (range_x <= DETECTION_DISTANCE_X && range_x >= -DETECTION_DISTANCE_X
-	//	&& range_y <= DETECTION_DISTANCE_Y && -range_y >= -DETECTION_DISTANCE_Y)
-	//{
-	//	if (location.x > player_location.x)//左に移動
-	//	{
-	//		
-	//	}
-	//}
-
-	//switch (action_type)
-	//{
-	//case HARPY_STATE::NORMAL:  //通常移動
-	//	location.x -= speed;
-	//	break;
-	//case HARPY_STATE::NORMAL_RIGHT://右
-	//	location.x += speed;
-	//	break;
-	//case HARPY_STATE::LEFT_lOWER:  //左下を目指す
-	//	location.x -= speed;
-	//	location.y += speed;
-	//	break;
-	//case HARPY_STATE::LEFT_UPPER:  //左上を目指す
-	//	location.x -= speed;
-	//	location.y -= speed;
-	//	break;
-	//case HARPY_STATE::RIGHT_LOWER:  //右下を目指す
-	//	location.x += speed;
-	//	location.y += speed;
-	//	break;
-	//case HARPY_STATE::RIGHT_UPPER:  //右上を目指す。
-	//	location.x += speed;
-	//	location.y -= speed;
-	//	break;
-	//default:
-	//	break;
-	//}
 }
 
 //-----------------------------------
@@ -288,8 +281,8 @@ void Harpy::Draw()const
 	draw_location = draw_location - camera;
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-	draw_location.x + area.width / 2, draw_location.y + area.height / 2, 
-		GetColor(255,255,0),TRUE);
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
+		GetColor(255, 255, 0), TRUE);
 
 }
 

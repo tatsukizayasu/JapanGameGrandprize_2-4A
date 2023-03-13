@@ -6,10 +6,8 @@ enum class HARPY_STATE
 {
 	NORMAL,   //通常移動 左に移動
 	NORMAL_RIGHT, //通常移動 右に移動
-	LEFT_lOWER,   //左下に移動
-	LEFT_UPPER,   //左上に移動
-	RIGHT_LOWER,  //右下に移動
-	RIGHT_UPPER,  //右上に移動
+	NONE //何も行動しない。
+	
 };
 
 enum class HARPY_ATTACK
