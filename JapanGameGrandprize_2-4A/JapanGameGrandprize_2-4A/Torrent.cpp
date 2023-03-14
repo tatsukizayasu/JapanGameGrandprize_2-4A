@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Stage/Stage.h"
 #include "TorrentBullet.h"
+#include "TorrentNuts.h"
 #include "BulletManager.h"
 #include "CameraWork.h"
 
@@ -33,19 +34,32 @@
 //次の木の実を落とす攻撃に移る時間
 #define DROP_NUTS_INTERVAL 1200
 
+//木の実の生成する時間
+#define SPAWN_NUTS_INTERVAL 30
+
+//木の実の生成地点数
+#define SPAWN_NUTS_POINT 5
+
+//木の実のスポーン地点
+#define SPAWN_NUTS_Y 100
+
+//スポーン地点の間隔
+#define NUTS_SPAWN_SPACE 40
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
 Torrent::Torrent()
 {
-	left_move = false;
+	left_move = true;
 	attack = false;
 	tackle_end = false;
+	speed = -TORRENT_SPEED;
 	tackle_end_point = 0;
 	shot_rate = 0;
 	leaf_cutter_interval = 0;
 	drop_nuts_interval = 0;
+	spawn_interval = 0;
 	animation = 0;
 	image_argument = 0;
 	attack_time = 20;
@@ -56,7 +70,11 @@ Torrent::Torrent()
 	area.width = 160;
 	area.height = SCREEN_HEIGHT;
 	location.x = SCREEN_WIDTH - area.width / 2;
-	location.y = SCREEN_HEIGHT / 2;
+	location.y = SCREEN_HEIGHT + SCREEN_HEIGHT / 2;
+
+	type = new ENEMY_TYPE[1];
+	type[0] = ENEMY_TYPE::SOIL;
+	kind = ENEMY_KIND::TORRENT;
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [SOIL_DROP];
@@ -85,7 +103,7 @@ Torrent::~Torrent()
 
 	delete[] drop_element;
 
-	delete type;
+	delete[] type;
 }
 
 //-----------------------------------
@@ -182,13 +200,30 @@ void Torrent::Tackle()
 	{
 		location.x += speed;
 
-		if (location.x <= tackle_end_point || tackle_end_point <= location.x)
-		{
-			tackle_end = true;
-		}
+		Location scroll; //画面スクロールを考慮した座標
+		Location camera = CameraWork::GetCamera(); //カメラ
+		scroll = location - camera;
 
+		if (left_move)
+		{
+			if (scroll.x <= tackle_end_point)
+			{
+				tackle_end = true;
+				left_move = !left_move;
+			}
+		}
+		else
+		{
+			if (tackle_end_point <= scroll.x)
+			{
+				tackle_end = true;
+				left_move = !left_move;
+			}
+		}
+		
 		if (tackle_end) //タックル終了
 		{
+			attack = false;
 			TORRENT_ATTACK next_attack;	//次の攻撃
 			if (leaf_cutter_interval < 0 && drop_nuts_interval < 0) //2つの攻撃が可能な時
 			{
@@ -246,8 +281,8 @@ void Torrent::Tackle()
 //-----------------------------------
 void Torrent::LeafCutter(Location player_location)
 {
-	CreateLeaf(player_location);
 	attack_time--;
+	CreateLeaf(player_location);
 	if (attack_time < 0) //攻撃の終了
 	{
 		leaf_cutter_interval = LEAF_CUTTER_INTERVAL; //次の攻撃までの時間の設定
@@ -260,6 +295,18 @@ void Torrent::LeafCutter(Location player_location)
 			{
 			case TORRENT_ATTACK::TACKLE:
 				attack_state = TORRENT_ATTACK::TACKLE;
+				attack_time = TPRRENT_TACKLE_PREPARATION;
+				tackle_end = false;
+				if (left_move) //左に向いている
+				{
+					speed = -TORRENT_SPEED;
+					tackle_end_point = 0 + area.width / 2;
+				}
+				else
+				{
+					speed = TORRENT_SPEED;
+					tackle_end_point = SCREEN_WIDTH - area.width / 2;
+				}
 				break;
 			case TORRENT_ATTACK::DROP_NUTS:
 				attack_state = TORRENT_ATTACK::DROP_NUTS;
@@ -297,10 +344,12 @@ void Torrent::CreateLeaf(Location player_location)
 {
 	shot_rate++;
 
-	if (shot_rate % TORRENT_TACKLE_DAMAGE == 0)
+	if (shot_rate % TORRENT_SHOT_RATE == 0) //葉っぱの生成
 	{
-		BulletManager::GetInstance()->CreateEnemyBullet
-		(new TorrentBullet(ENEMY_TYPE::WATER, location, player_location));
+		Location spawn_location = location; //生成座標
+		spawn_location.y = location.y - area.height / 2;
+		BulletManager::GetInstance()->
+			CreateEnemyBullet(new TorrentBullet(ENEMY_TYPE::WIND, spawn_location, player_location));
 	}
 }
 
@@ -310,10 +359,11 @@ void Torrent::CreateLeaf(Location player_location)
 void Torrent::DropNuts()
 {
 	attack_time--;
+	CreateNuts();
 	if (attack_time < 0)
 	{
 		drop_nuts_interval = DROP_NUTS_INTERVAL;
-
+		spawn_interval = 0;
 		if (leaf_cutter_interval < 0) //木の実を落とす攻撃が可能かどうか
 		{
 			TORRENT_ATTACK next_attack; //次の攻撃
@@ -323,6 +373,18 @@ void Torrent::DropNuts()
 			{
 			case TORRENT_ATTACK::TACKLE:
 				attack_state = TORRENT_ATTACK::TACKLE;
+				attack_time = TPRRENT_TACKLE_PREPARATION;
+				tackle_end = false;
+				if (left_move) //左に向いている
+				{
+					speed = -TORRENT_SPEED;
+					tackle_end_point = 0 + area.width / 2;
+				}
+				else
+				{
+					speed = TORRENT_SPEED;
+					tackle_end_point = SCREEN_WIDTH - area.width / 2;
+				}
 				break;
 			case TORRENT_ATTACK::LEAF_CUTTER:
 				attack_state = TORRENT_ATTACK::LEAF_CUTTER;
@@ -358,6 +420,49 @@ void Torrent::DropNuts()
 //-----------------------------------
 void Torrent::CreateNuts()
 {
+	bool spawn_point[SPAWN_NUTS_POINT]; //スポーン地点
+	int spawn_volume = 0; //スポーン数
+	bool spawn = false; //スポーンした
+
+	spawn_interval++;
+	
+	if (spawn_interval % SPAWN_NUTS_INTERVAL == 0)
+	{
+		for (int i = 0; i < SPAWN_NUTS_POINT; i++)
+		{
+			spawn_point[i] = false;
+		}
+
+		spawn_volume = GetRand(SPAWN_NUTS_POINT - 1) + 1; //スポーン数の設定
+
+		for (int i = 0; i < spawn_volume; i++) //木の実の生成
+		{
+			spawn = false;
+
+			while (!spawn)
+			{
+				int spawn_point_rand; //スポーン地点
+				spawn_point_rand = GetRand(SPAWN_NUTS_POINT - 1); //スポーン地点の設定
+				if (!spawn_point[spawn_point_rand])
+				{
+					Location spawn_location; //スポーン地点
+					spawn_location.x = ((spawn_point_rand + 1) * NUTS_SPAWN_SPACE);
+					if (!left_move)
+					{
+						spawn_location.x += (area.width / 2);
+					}
+					spawn_location.y = SPAWN_NUTS_Y;
+					spawn_point[spawn_point_rand] = true;
+					spawn = true;
+
+					BulletManager::GetInstance()->
+						CreateEnemyNuts(new TorrentNuts(ENEMY_TYPE::WATER, spawn_location));
+				}
+
+			}
+		}
+	}
+	
 
 }
 
@@ -371,7 +476,8 @@ void Torrent::AttackNone()
 	{
 		TORRENT_ATTACK next_attack;	//次の攻撃
 		next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
-
+		
+		next_attack = TORRENT_ATTACK::DROP_NUTS;
 		switch (next_attack)
 		{
 		case TORRENT_ATTACK::LEAF_CUTTER:
@@ -435,7 +541,7 @@ void Torrent::Draw() const
 	draw_location = draw_location - camera;
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0x734e30, TRUE);
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffffff, TRUE);
 }
 
 //-----------------------------------

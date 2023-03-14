@@ -19,9 +19,6 @@ public:
 	//ステージとの当たり判定
 	bool HitStage(const class Stage* stage) const;
 
-	//プレイヤーの弾との当たり判定
-	bool HitPlayerBullet(const class BulletBase* player_bullet) const;
-
 	//ダメージの取得
 	int GetDamage() const;
 

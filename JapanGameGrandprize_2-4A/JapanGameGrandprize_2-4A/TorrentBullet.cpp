@@ -51,8 +51,8 @@ void TorrentBullet::Draw() const
 	Location draw_location = location; //ï`âÊç¿ïW
 	Location camera = CameraWork::GetCamera();
 
-	draw_location = draw_location + camera;
+	draw_location = draw_location - camera;
 
-	DrawCircle(draw_location.x, draw_location.y, radius, 0xffffff, TRUE);
+	DrawCircle(draw_location.x, draw_location.y, radius, 0x77ff00, TRUE);
 
 }

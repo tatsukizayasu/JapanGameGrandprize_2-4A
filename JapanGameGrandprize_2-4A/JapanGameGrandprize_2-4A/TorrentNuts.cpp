@@ -5,13 +5,12 @@
 #define TORRENT_NUTS_SPEED 5
 
 //弾のダメージ
-#define TORRENT_NUTS_DAMAGE 5
+#define TORRENT_NUTS_DAMAGE 10
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-TorrentNuts::TorrentNuts(ENEMY_TYPE type,
-	Location spawn_location)
+TorrentNuts::TorrentNuts(ENEMY_TYPE type,Location spawn_location)
 {
 	location = spawn_location;
 	radius = 20;
@@ -47,8 +46,8 @@ void TorrentNuts::Draw() const
 	Location draw_location = location; //描画座標
 	Location camera = CameraWork::GetCamera();
 
-	draw_location = draw_location + camera;
+	draw_location = draw_location - camera;
 
-	DrawCircle(draw_location.x, draw_location.y, radius, 0xffffff, TRUE);
+	DrawCircle(draw_location.x, draw_location.y, radius, 0xff0000, TRUE);
 
 }

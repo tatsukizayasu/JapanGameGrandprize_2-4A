@@ -62,20 +62,6 @@ bool EnemyBulletBase::HitStage(const Stage* stage) const
 }
 
 //-----------------------------------
-//プレイヤーの弾との当たり判定
-//-----------------------------------
-bool EnemyBulletBase::HitPlayerBullet(const BulletBase* player_bullet) const
-{
-	bool ret = false; //戻り値
-	if (HitSphere(player_bullet))
-	{
-		ret = true;
-	}
-
-	return ret;
-}
-
-//-----------------------------------
 //ダメージの取得
 //-----------------------------------
 int EnemyBulletBase::GetDamage() const

@@ -22,7 +22,7 @@ private:
     int attack_time; //攻撃している時間
     int leaf_cutter_interval; //次の葉っぱを飛ばす攻撃に移る時間
     int drop_nuts_interval; //次の木の実を落とす攻撃に移る時間
-  
+    int spawn_interval; //木の実の生成する時間
     int animation; //アニメーション
     int image_argument; //画像の引数
 

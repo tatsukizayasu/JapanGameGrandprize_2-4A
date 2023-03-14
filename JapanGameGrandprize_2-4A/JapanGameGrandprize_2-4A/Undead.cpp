@@ -227,7 +227,7 @@ void Undead::DistancePlayer(const Location player_location)
 //-----------------------------------
 void Undead::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
+	Location scroll; //画面スクロールを考慮した座標
 	Location camera  = CameraWork::GetCamera(); //カメラ
 	scroll = location - camera;
 

@@ -62,6 +62,27 @@ void BulletManager::Update(const Stage* stage)
 
             SortEnemyBullet(i);
             enemy_bullet_count--;
+            i--;
+        }
+    }
+
+    for (int i = 0; i < enemy_nuts_count; i++)
+    {
+        if (enemy_nuts[i] == nullptr)
+        {
+            break;
+        }
+
+        enemy_nuts[i]->Update();
+
+        if (enemy_nuts[i]->ScreenOut() || enemy_nuts[i]->HitStage(stage)) //‰æ–ÊŠO‚Éo‚½‚©
+        {
+            delete enemy_nuts[i];
+            enemy_nuts[i] = nullptr;
+
+            SortEnemyBullet(i);
+            enemy_bullet_count--;
+            i--;
         }
     }
 }
@@ -234,14 +255,29 @@ void BulletManager::DeleteEnemyNuts(const EnemyBulletBase* nuts)
     }
 }
 //-----------------------------------
-//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+//UŒ‚‚ª“–‚½‚Á‚½
 //-----------------------------------
-AttackResource BulletManager::Hit(const int i)
+AttackResource BulletManager::HitEnemyBullet(const int i)
 {
     AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
 
     ENEMY_TYPE attack_type[1] = { enemy_bullets[i]->GetType() };
     ret.damage = enemy_bullets[i]->GetDamage();
+    ret.type = attack_type;
+    ret.type_count = 1;
+
+    return ret;
+}
+
+//-----------------------------------
+//UŒ‚‚ª“–‚½‚Á‚½
+//-----------------------------------
+AttackResource BulletManager::HitEnemyNuts(const int i)
+{
+    AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
+
+    ENEMY_TYPE attack_type[1] = { enemy_nuts[i]->GetType() };
+    ret.damage = enemy_nuts[i]->GetDamage();
     ret.type = attack_type;
     ret.type_count = 1;
 
@@ -261,6 +297,16 @@ void BulletManager::Draw() const
         }
 
         enemy_bullets[i]->Draw();
+    }
+
+    for (int i = 0; i < enemy_nuts_count; i++)
+    {
+        if (enemy_nuts[i] == nullptr)
+        {
+            break;
+        }
+
+        enemy_nuts[i]->Draw();
     }
 }
 

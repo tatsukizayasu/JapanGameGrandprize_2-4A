@@ -8,6 +8,7 @@
 #include"Harpy.h"
 #include "BULLET.h"
 #include "Mage.h"
+#include "Torrent.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -25,7 +26,7 @@ GameMain::GameMain()
 	enemy[0] = new EnemySlime();
 	enemy[1] = new Undead();
 	enemy[2] = new EnemyGhost();
-	enemy[3] = new Mage();
+	enemy[3] = new Torrent();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
 
@@ -80,11 +81,15 @@ void GameMain::EnemyUpdate()
 	EnemyBulletBase** enemy_bullet;
 	enemy_bullet = bullet_manager->GetEnemyBullets();
 
+
+	EnemyBulletBase** enemy_nuts;
+	enemy_nuts = bullet_manager->GetEnemyNuts();
+
 	for (int i = 0; i < 4; i++)
 	{
 		if (enemy[i] != nullptr)
 		{
-			enemy[i]->Update(player,stage);
+			enemy[i]->Update(player, stage);
 
 			//エネミーの攻撃
 			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
@@ -109,6 +114,7 @@ void GameMain::EnemyUpdate()
 					delete player_bullet[j];
 					player_bullet[j] = nullptr;
 					player->SortBullet(j);
+					j--;
 				}
 			}
 
@@ -117,6 +123,7 @@ void GameMain::EnemyUpdate()
 				item_controller->SpawnItem(enemy[i]);
 				delete enemy[i];
 				enemy[i] = nullptr;
+				i--;
 			}
 		}
 	}
@@ -132,9 +139,51 @@ void GameMain::EnemyUpdate()
 			}
 			if (enemy_bullet[i]->HitBox(player))
 			{
-				player->HpDamage(bullet_manager->Hit(i));
+				player->HpDamage(bullet_manager->HitEnemyBullet(i));
 				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
 				i--;
+			}
+		}
+	}
+
+	if (enemy_nuts != nullptr) //木の実との当たり判定
+	{
+		for (int i = 0; i < bullet_manager->EnemyGetNutsMax(); i++)
+		{
+			if (enemy_nuts[i] == nullptr)
+			{
+				break;
+			}
+
+			if (enemy_nuts[i]->HitBox(player))
+			{
+				player->HpDamage(bullet_manager->HitEnemyNuts(i));
+				bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
+				i--;
+			}
+
+			if (enemy_nuts[i] == nullptr)
+			{
+				break;
+			}
+
+			for (int j = 0; j < BULLET_MAX; j++)
+			{
+				if (player_bullet[j] == nullptr)
+				{
+					break;
+				}
+
+				if (player_bullet[j]->HitSphere(enemy_nuts[i]))
+				{
+					bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
+					i--;
+
+					delete player_bullet[j];
+					player_bullet[j] = nullptr;
+					player->SortBullet(j);
+					j--;
+				}
 			}
 		}
 	}

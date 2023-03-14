@@ -57,8 +57,11 @@ public:
     //–Ø‚ÌÀ‚Ìíœ
     void DeleteEnemyNuts(const EnemyBulletBase* nuts);
 
-    //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
-    AttackResource Hit(const int i);
+    //UŒ‚‚ª“–‚½‚Á‚½
+    AttackResource HitEnemyBullet(const int i);
+
+    //UŒ‚‚ª“–‚½‚Á‚½
+    AttackResource HitEnemyNuts(const int i);
 
     //•`‰æ
     void Draw() const;
