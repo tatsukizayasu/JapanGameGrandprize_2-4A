@@ -6,13 +6,7 @@
 #include "Item.h"
 #include <iostream>
 
-#define FILE_GROUP_ONE (EXPLOSION_MAX_NUM)
-#define FILE_GROUP_TWO (FILE_GROUP_ONE + POISON_MAX_NUM)
-#define FILE_GROUP_THREE (FILE_GROUP_TWO + POISON_MAX_NUM)
-#define FILE_GROUP_FOUR (FILE_GROUP_THREE + POISON_MAX_NUM)
-#define FILE_GROUP_FIVE (FILE_GROUP_FOUR + POISON_MAX_NUM)
 
-#define MAX_STRING 40
 
 
 //-----------------------------------
@@ -85,7 +79,7 @@ Player::Player()
 
 	pouch = nullptr;
 
-	InitChemicalParameter();
+
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
@@ -152,7 +146,6 @@ Player::Player(Stage* stage)
 
 	hp = 100;
 
-	InitChemicalParameter();
 
 	beam = nullptr;
 
@@ -829,143 +822,3 @@ bool Player::GetMoveDirection()
 	return move_left;
 }
 
-void Player::InitChemicalParameter()
-{
-	int count = EXPLOSION_MAX_NUM;
-	FILE* fp; //FILE型構造体
-	errno_t error;     error = fopen_s(&fp, "Data/suuzi.csv", "r");
-	if (error != 0) //ファイルが開けてない
-	{                 
-		return;
-	}     
-	else     //ファイルが開けた
-	{                  
-		char line[100];
-		for (int i = 0; fgets(line, 100, fp) != NULL; i++)
-		{             
-			if (i < FILE_GROUP_ONE)
-			{
-				sscanf_s(line, "%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
-					chemical_formula_explosion[i].chemical_formula_name,
-					MAX_STRING,
-					chemical_formula_explosion[i].chemical_formula,
-					MAX_STRING,
-					&chemical_formula_explosion[i].material.carbon,
-					&chemical_formula_explosion[i].material.hydrogen,
-					&chemical_formula_explosion[i].material.nitrogen,
-					&chemical_formula_explosion[i].material.oxygen,
-					&chemical_formula_explosion[i].material.sulfur,
-					&chemical_formula_explosion[i].material.chlorine,
-					&chemical_formula_explosion[i].number_of_bullets,
-					&chemical_formula_explosion[i].damage,
-					&chemical_formula_explosion[i].damage_per_second,
-					&chemical_formula_explosion[i].time,
-					&chemical_formula_explosion[i].atribute);
-			}
-			else if (i < FILE_GROUP_TWO)
-			{
-				sscanf_s(line, "%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
-					chemical_formula_poison[i].chemical_formula_name,
-					MAX_STRING,
-					chemical_formula_poison[i].chemical_formula,
-					MAX_STRING,
-					&chemical_formula_poison[i].material.carbon,
-					&chemical_formula_poison[i].material.hydrogen,
-					&chemical_formula_poison[i].material.nitrogen,
-					&chemical_formula_poison[i].material.oxygen,
-					&chemical_formula_poison[i].material.sulfur,
-					&chemical_formula_poison[i].material.chlorine,
-					&chemical_formula_poison[i].number_of_bullets,
-					&chemical_formula_poison[i].damage,
-					&chemical_formula_poison[i].damage_per_second,
-					&chemical_formula_poison[i].time,
-					&chemical_formula_poison[i].atribute);
-			}
-			else if (i < FILE_GROUP_THREE)
-			{
-				sscanf_s(line, "%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
-					chemical_formula_pararysis[i].chemical_formula_name,
-					MAX_STRING,
-					chemical_formula_pararysis[i].chemical_formula,
-					MAX_STRING,
-					&chemical_formula_pararysis[i].material.carbon,
-					&chemical_formula_pararysis[i].material.hydrogen,
-					&chemical_formula_pararysis[i].material.nitrogen,
-					&chemical_formula_pararysis[i].material.oxygen,
-					&chemical_formula_pararysis[i].material.sulfur,
-					&chemical_formula_pararysis[i].material.chlorine,
-					&chemical_formula_pararysis[i].number_of_bullets,
-					&chemical_formula_pararysis[i].damage,
-					&chemical_formula_pararysis[i].damage_per_second,
-					&chemical_formula_pararysis[i].time,
-					&chemical_formula_pararysis[i].atribute);
-			}
-			else if (i < FILE_GROUP_FOUR)
-			{
-				sscanf_s(line, "%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
-					chemical_formula_heal[i].chemical_formula_name,
-					MAX_STRING,
-					chemical_formula_heal[i].chemical_formula,
-					MAX_STRING,
-					&chemical_formula_heal[i].material.carbon,
-					&chemical_formula_heal[i].material.hydrogen,
-					&chemical_formula_heal[i].material.nitrogen,
-					&chemical_formula_heal[i].material.oxygen,
-					&chemical_formula_heal[i].material.sulfur,
-					&chemical_formula_heal[i].material.chlorine,
-					&chemical_formula_heal[i].number_of_bullets,
-					&chemical_formula_heal[i].damage,
-					&chemical_formula_heal[i].damage_per_second,
-					&chemical_formula_heal[i].time,
-					&chemical_formula_heal[i].atribute);
-			}
-			else if (i < FILE_GROUP_FIVE)
-			{
-				sscanf_s(line, "%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
-					chemical_formula_melt[i].chemical_formula_name,
-					MAX_STRING,
-					chemical_formula_melt[i].chemical_formula,
-					MAX_STRING,
-					&chemical_formula_melt[i].material.carbon,
-					&chemical_formula_melt[i].material.hydrogen,
-					&chemical_formula_melt[i].material.nitrogen,
-					&chemical_formula_melt[i].material.oxygen,
-					&chemical_formula_melt[i].material.sulfur,
-					&chemical_formula_melt[i].material.chlorine,
-					&chemical_formula_melt[i].number_of_bullets,
-					&chemical_formula_melt[i].damage,
-					&chemical_formula_melt[i].damage_per_second,
-					&chemical_formula_melt[i].time,
-					&chemical_formula_melt[i].atribute);
-			}
-			else;
-		}         
-		return; 
-	}      
-	fclose(fp); //ファイルを閉じる
-}
-
-ChemicalFormulaParameter Player::GetExplosion(int i)
-{
-	return chemical_formula_explosion[i];
-}
-
-ChemicalFormulaParameter Player::GetPoison(int i)
-{
-	return chemical_formula_poison[i];
-}
-
-ChemicalFormulaParameter Player::GetPararysis(int i)
-{
-	return chemical_formula_pararysis[i];
-}
-
-ChemicalFormulaParameter Player::GetHeal(int i)
-{
-	return chemical_formula_heal[i];
-}
-
-ChemicalFormulaParameter Player::GetMelt(int i)
-{
-	return chemical_formula_melt[i];
-}

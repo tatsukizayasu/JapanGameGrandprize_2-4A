@@ -19,11 +19,7 @@
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
 
-#define EXPLOSION_MAX_NUM 13	//”š”­‚Ì‰»‡•¨‚ÌŒÂ”
-#define POISON_MAX_NUM 18		//“Å@‚Ì‰»‡•¨‚ÌŒÂ”
-#define MELT_MAX_NUM 13			//—n‰ğ‚Ì‰»‡•¨‚ÌŒÂ”
-#define PARARYSIS_MAX_NUM 11	//–ƒáƒ‚Ì‰»‡•¨‚ÌŒÂ”
-#define HEAL_MAX_NUM 7			//‰ñ•œ‚Ì‰»‡•¨‚ÌŒÂ”
+
 
 #define BULLET_MAX 50
 #define GREEN GetColor(0,255,0)
@@ -41,28 +37,7 @@ enum class PLAYER_STATE
 };
 
 
-struct ChemicalFormulaMaterial
-{
-	int carbon;		//’Y‘f
-	int hydrogen;	//…‘f
-	int nitrogen;	//’‚‘f
-	int oxygen;		//_‘f
-	int sulfur;		//—°‰©
-	int chlorine;	//‰–‘f
-	int uranium;	//ƒEƒ‰ƒ“
-};
 
-struct ChemicalFormulaParameter
-{
-	int number_of_bullets;
-	int time;
-	int damage_per_second;
-	int damage;
-	const char* chemical_formula_name[18];
-	const char* chemical_formula[10];
-	ATTRIBUTE atribute;
-	ChemicalFormulaMaterial material;
-};
 
 class Player : public BoxCollider
 {
@@ -104,11 +79,7 @@ private:
 
 	ElementItem** element;	//Œ³‘f
 
-	ChemicalFormulaParameter chemical_formula_explosion[13];
-	ChemicalFormulaParameter chemical_formula_poison[18];
-	ChemicalFormulaParameter chemical_formula_pararysis[11];
-	ChemicalFormulaParameter chemical_formula_heal[7];
-	ChemicalFormulaParameter chemical_formula_melt[13];
+
 public:
 
 	Player();
@@ -128,16 +99,11 @@ public:
 	void HpDamage(AttackResource);
 	void Hp_Heal(int);
 	bool HitBlock(const Stage*);
-	void InitChemicalParameter();
 	void OpenPouch();
 
 	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
-	ChemicalFormulaParameter GetExplosion(int);
-	ChemicalFormulaParameter GetPoison(int);
-	ChemicalFormulaParameter GetPararysis(int);
-	ChemicalFormulaParameter GetHeal(int);
-	ChemicalFormulaParameter GetMelt(int);
+	
 
 	//Œ³‘f‚Ì—Ê‚Ìİ’è
 	void SetElementItem(class Item* item);
