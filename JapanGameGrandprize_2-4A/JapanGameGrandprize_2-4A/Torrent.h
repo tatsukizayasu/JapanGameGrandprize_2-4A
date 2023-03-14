@@ -16,6 +16,8 @@ class Torrent :
 {
 private:
     bool attack; //攻撃が当たったか
+    bool tackle_end; //タックルが終わった
+    int tackle_end_point; //タックルの終了地点
     int shot_rate; //魔法弾の発射レート
     int attack_time; //攻撃している時間
     int leaf_cutter_interval; //次の葉っぱを飛ばす攻撃に移る時間
@@ -35,11 +37,14 @@ private:
 
     //タックル攻撃
     void Tackle();
+
     //葉っぱを飛ばす攻撃
     void LeafCutter(Location);
+
     //木の実を落とす攻撃
     void DropNuts();
-    /// 攻撃していない
+
+    // 攻撃していない
     void AttackNone();
 public:
 

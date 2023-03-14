@@ -4,12 +4,15 @@
 #include "Stage/Stage.h"
 #include "TorrentBullet.h"
 #include "BulletManager.h"
+#include "CameraWork.h"
 
 //移動速度
 #define TORRENT_SPEED 4
 
 //タックルのダメージ
 #define TORRENT_TACKLE_DAMAGE 10
+//タックル準備時間
+#define TPRRENT_TACKLE_PREPARATION 60
 
 //発射速度
 #define TORRENT_SHOT_RATE 30
@@ -38,14 +41,22 @@ Torrent::Torrent()
 {
 	left_move = false;
 	attack = false;
+	tackle_end = false;
+	tackle_end_point = 0;
 	shot_rate = 0;
 	leaf_cutter_interval = 0;
 	drop_nuts_interval = 0;
 	animation = 0;
 	image_argument = 0;
-	attack_time = 0;
+	attack_time = 20;
+	state = ENEMY_STATE::ATTACK;
 	attack_state = TORRENT_ATTACK::NONE;
 
+	/*当たり判定の設定*/
+	area.width = 160;
+	area.height = SCREEN_HEIGHT;
+	location.x = SCREEN_WIDTH - area.width / 2;
+	location.y = SCREEN_HEIGHT / 2;
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [SOIL_DROP];
@@ -167,7 +178,67 @@ void  Torrent::Attack(Location player_location)
 //-----------------------------------
 void Torrent::Tackle()
 {
+	if (attack_time < 0)
+	{
+		location.x += speed;
 
+		if (location.x <= tackle_end_point || tackle_end_point <= location.x)
+		{
+			tackle_end = true;
+		}
+
+		if (tackle_end) //タックル終了
+		{
+			TORRENT_ATTACK next_attack;	//次の攻撃
+			if (leaf_cutter_interval < 0 && drop_nuts_interval < 0) //2つの攻撃が可能な時
+			{
+				next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
+
+				switch (next_attack)
+				{
+				case TORRENT_ATTACK::LEAF_CUTTER:
+					attack_state = TORRENT_ATTACK::LEAF_CUTTER;
+					attack_time = LEAF_CUTTER_TIME;
+					break;
+				case TORRENT_ATTACK::DROP_NUTS:
+					attack_state = TORRENT_ATTACK::DROP_NUTS;
+					attack_time = DROP_NUTS_TIME;
+					break;
+				case TORRENT_ATTACK::TACKLE:
+				case TORRENT_ATTACK::NONE:
+				default:
+					break;
+				}
+			}
+			else if(leaf_cutter_interval < 0) //葉っぱを飛ばす攻撃だけが可能な時
+			{
+				attack_state = TORRENT_ATTACK::LEAF_CUTTER;
+				attack_time = LEAF_CUTTER_TIME;
+			}
+			else if (drop_nuts_interval < 0) //木の実を飛ばす攻撃が可能な時
+			{
+				attack_state = TORRENT_ATTACK::DROP_NUTS;
+				attack_time = DROP_NUTS_TIME;
+			}
+			else //どちらの攻撃も可能じゃないとき
+			{
+				if (leaf_cutter_interval < drop_nuts_interval)
+				{
+					attack_state = TORRENT_ATTACK::LEAF_CUTTER;
+					attack_time = LEAF_CUTTER_TIME;
+				}
+				else
+				{
+					attack_state = TORRENT_ATTACK::DROP_NUTS;
+					attack_time = DROP_NUTS_TIME;
+				}
+			}
+		}
+	}
+	else
+	{
+		attack_time--;
+	}
 }
 
 //-----------------------------------
@@ -203,13 +274,17 @@ void Torrent::LeafCutter(Location player_location)
 		else
 		{
 			attack_state = TORRENT_ATTACK::TACKLE; //タックル攻撃に移行
+			attack_time = TPRRENT_TACKLE_PREPARATION;
+			tackle_end = false;
 			if (left_move) //左に向いている
 			{
 				speed = -TORRENT_SPEED;
+				tackle_end_point = 0 + area.width / 2;
 			}
 			else
 			{
 				speed = TORRENT_SPEED;
+				tackle_end_point = SCREEN_WIDTH - area.width / 2;
 			}
 		}
 	}
@@ -262,13 +337,17 @@ void Torrent::DropNuts()
 		else
 		{
 			attack_state = TORRENT_ATTACK::TACKLE; //タックル攻撃に移行
+			attack_time = TPRRENT_TACKLE_PREPARATION;
+			tackle_end = false;
 			if (left_move) //左に向いている
 			{
 				speed = -TORRENT_SPEED;
+				tackle_end_point = 0 + area.width / 2;
 			}
 			else
 			{
 				speed = TORRENT_SPEED;
+				tackle_end_point = SCREEN_WIDTH - area.width / 2;
 			}
 		}
 	}
@@ -287,23 +366,27 @@ void Torrent::CreateNuts()
 //-----------------------------------
 void Torrent::AttackNone()
 {
-	TORRENT_ATTACK next_attack;	//次の攻撃
-	next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
-
-	switch (next_attack)
+	attack_time--;
+	if (attack_time < 0)
 	{
-	case TORRENT_ATTACK::LEAF_CUTTER:
-		attack_state = TORRENT_ATTACK::LEAF_CUTTER;
-		attack_time = LEAF_CUTTER_TIME;
-		break;
-	case TORRENT_ATTACK::DROP_NUTS:
-		attack_state = TORRENT_ATTACK::DROP_NUTS;
-		attack_time = DROP_NUTS_TIME;
-		break;
-	case TORRENT_ATTACK::TACKLE:
-	case TORRENT_ATTACK::NONE:
-	default:
-		break;
+		TORRENT_ATTACK next_attack;	//次の攻撃
+		next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
+
+		switch (next_attack)
+		{
+		case TORRENT_ATTACK::LEAF_CUTTER:
+			attack_state = TORRENT_ATTACK::LEAF_CUTTER;
+			attack_time = LEAF_CUTTER_TIME;
+			break;
+		case TORRENT_ATTACK::DROP_NUTS:
+			attack_state = TORRENT_ATTACK::DROP_NUTS;
+			attack_time = DROP_NUTS_TIME;
+			break;
+		case TORRENT_ATTACK::TACKLE:
+		case TORRENT_ATTACK::NONE:
+		default:
+			break;
+		}
 	}
 }
 
@@ -347,6 +430,12 @@ void Torrent::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Torrent::Draw() const
 {
+	Location draw_location = location; //描画座標
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
+
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0x734e30, TRUE);
 }
 
 //-----------------------------------

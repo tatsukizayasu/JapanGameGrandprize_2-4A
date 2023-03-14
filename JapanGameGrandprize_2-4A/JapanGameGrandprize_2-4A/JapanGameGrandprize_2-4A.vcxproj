@@ -195,6 +195,7 @@
     <ClInclude Include="Stage\Stage.h" />
     <ClInclude Include="Torrent.h" />
     <ClInclude Include="TorrentBullet.h" />
+    <ClInclude Include="TorrentNuts.h" />
     <ClInclude Include="Undead.h" />
   </ItemGroup>
   <ItemGroup>
@@ -238,6 +239,7 @@
     <ClCompile Include="Stage\Stage.cpp" />
     <ClCompile Include="Torrent.cpp" />
     <ClCompile Include="TorrentBullet.cpp" />
+    <ClCompile Include="TorrentNuts.cpp" />
     <ClCompile Include="Undead.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
