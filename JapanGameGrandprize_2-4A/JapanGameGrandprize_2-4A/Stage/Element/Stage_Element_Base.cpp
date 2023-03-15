@@ -3,16 +3,25 @@
 #include "../Player.h"
 #include <windef.h>
 
+
 Stage_Element_Base::Stage_Element_Base()
 {
+	type = 0;
 	this->mapchip = nullptr;
 	this->image = 0;
 	type = 0;
+	count = 0;
+	
 }
 
 Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : MapChip(image, location, area)
 {
+	type = 0;
 	this->mapchip = mapchip;
+	start_time = chrono::steady_clock::now();
+	std::chrono::duration<float> diff = chrono::steady_clock::now() - start_time;
+	elapsed = chrono::duration_cast<chrono::duration<long long, std::milli>>(diff);
+	count = 0;
 }
 
 Stage_Element_Base::~Stage_Element_Base()
@@ -56,6 +65,26 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 	return false;
 }
 
+void Stage_Element_Base::StartAnimation(float time, std::function<void()>* callback)
+{
+	auto end_time = chrono::steady_clock::now();
+	auto diff = end_time - start_time;
+	//elapsed = chrono::duration_cast<chrono::milliseconds>(diff);
+	elapsed = chrono::duration_cast<chrono::duration<long long, std::milli>>(diff);
+
+	if (elapsed.count() >= time * 1000.0f) {
+		start_time = end_time;
+		count++;
+		//printfDx("count:%d\n", count);
+		
+		if (callback != nullptr) {
+			(*callback)();
+		}
+		
+	}
+
+}
+
 
 //std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
 //{
@@ -75,3 +104,4 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 //		}
 //	}
 //}
+
