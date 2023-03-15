@@ -31,11 +31,15 @@ EnemySlime::EnemySlime()
 	location.x = 3080.0;
 	location.y = 980.0f;
 
-	area.height = 40;
-	area.width = 40;
-	wait_time = 0;
+	//location.x = 200.0;
+	//location.y = 700.0f;
 
-	hp = 100;
+	area.height = 50;
+	area.width = 50;
+	wait_time = 0;
+	image_type = 0;
+	image_change_time = 0;
+	hp = 15;
 	speed = SLIME_SPEED;
 
 	color = GetColor(0, 0, 255);
@@ -44,7 +48,7 @@ EnemySlime::EnemySlime()
 	*type = ENEMY_TYPE::WATER;
 
 	state = ENEMY_STATE::IDOL;
-	slime_image = LoadGraph("Images/Enemy/Slime_.png");
+	 LoadDivGraph("Images/Enemy/mov_slime1.png", 7, 7, 1, 450,269, slime_image, 0);
 	slime_angle = 0;
 
 	//ドロップアイテムの設定
@@ -128,7 +132,18 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		break;
 
 	case ENEMY_STATE::ATTACK:
+
 		Attack(player->GetLocation());
+
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			attack = false;
+			state = ENEMY_STATE::MOVE;
+			if (left_move) speed = -SLIME_SPEED;
+			else speed = SLIME_SPEED;
+		}
 		break;
 
 	case ENEMY_STATE::DEATH:
@@ -148,12 +163,13 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 void EnemySlime::Draw()const
 {
-
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawRotaGraph(draw_location.x, draw_location.y, 0.17, M_PI / 180 * slime_angle, slime_image, TRUE, !left_move);
+	DrawRotaGraph(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, slime_image[image_type], TRUE, !left_move);
+
+	//DrawBox(draw_location.x - (area.width / 2), draw_location.y - (area.height / 2), draw_location.x + (area.width / 2), draw_location.y + (area.height / 2), 0xff00ff, FALSE);
 }
 
 //-----------------------------------
@@ -182,22 +198,28 @@ void EnemySlime::Move(const Location player_location)
 	//プレイヤーとの距離の計算
 	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
 
-	if (distance < 120 )
+	if (distance < 120 &&
+	  ((left_move && player_location.x <= location.x) ||
+	  (!left_move && player_location.x >= location.x)))
 	{
-		if (wait_time != 0)
+		if (++wait_time >= WAIT_TIME)
 		{
-			wait_time++;
+			state = ENEMY_STATE::ATTACK;
+			jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
+			wait_time = 0;
 		}
 	}
 	else
 	{
-		location.x += speed;
-	}
+		if (++image_change_time > 2)
+		{
+			if (image_type < 6)image_type++;
+			else image_type = 0;
+			image_change_time = 0;
+		}
 
-	if (wait_time >= WAIT_TIME)
-	{
-		state = ENEMY_STATE::ATTACK;
-		jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
+
+		location.x += speed;
 		wait_time = 0;
 	}
 }
@@ -222,51 +244,10 @@ void  EnemySlime::Attack(Location player_location)
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
 
-	switch (slime_attack)
-	{
-	case SLIME_ATTACK::BEFORE_ATTACK:
+	if (left_move) speed = -SLIME_ATTACK_SPEED;
+	else speed = SLIME_ATTACK_SPEED;
 
-		if (left_move)
-		{
-			speed = -SLIME_ATTACK_SPEED;
-		}
-		else
-		{
-			speed = SLIME_ATTACK_SPEED;
-		}
-		break;
-
-	case SLIME_ATTACK::AFTER_ATTACK:
-
-		if (left_move)
-		{
-			speed = -SLIME_ATTACK_SPEED;
-		}
-		else
-		{
-			speed = SLIME_ATTACK_SPEED;
-		}
-
-		break;
-	}
 	location.x += speed;
-
-	if (location.y >= GROUND)
-	{
-		attack = false;
-		slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
-		state = ENEMY_STATE::MOVE;
-
-		if (left_move)
-		{
-			speed = -SLIME_SPEED;
-		}
-		else
-		{
-			speed = SLIME_SPEED;
-
-		}
-	}
 }
 
 //-----------------------------------
@@ -294,7 +275,9 @@ AttackResource EnemySlime::Hit()
 //-----------------------------------
 void EnemySlime::Death()
 {
-	if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
+	can_delete = true;
+
+	/*if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
 	{
 		can_delete = true;
 	}
@@ -316,7 +299,7 @@ void EnemySlime::Death()
 			slime_angle -= ROTATION_SPEED;
 		}
 		location.x += speed;
-	}
+	}*/
 }
 
 //-----------------------------------
