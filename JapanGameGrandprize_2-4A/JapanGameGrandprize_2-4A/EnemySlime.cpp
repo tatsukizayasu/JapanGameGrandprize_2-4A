@@ -48,7 +48,8 @@ EnemySlime::EnemySlime()
 	type[0] = ENEMY_TYPE::WATER;
 
 	state = ENEMY_STATE::IDOL;
-	 LoadDivGraph("Images/Enemy/mov_slime1.png", 7, 7, 1, 450,269, slime_image, 0);
+	images = new int[7];
+	 LoadDivGraph("Images/Enemy/mov_slime1.png", 7, 7, 1, 450,269, images);
 	slime_angle = 0;
 
 	//ドロップアイテムの設定
@@ -77,6 +78,16 @@ EnemySlime::~EnemySlime()
 	delete[] drop_element;
 
 	delete[] type;
+}
+
+	delete[] images;
+
+	for (int i = 0; i < WATER_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+
+	delete[] drop_element;
 }
 
 void EnemySlime::Update(const Player* player, const Stage* stage)
@@ -179,9 +190,7 @@ void EnemySlime::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawRotaGraph(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, slime_image[image_type], TRUE, !left_move);
-
-	//DrawBox(draw_location.x - (area.width / 2), draw_location.y - (area.height / 2), draw_location.x + (area.width / 2), draw_location.y + (area.height / 2), 0xff00ff, FALSE);
+	DrawRotaGraph(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 }
 
 //-----------------------------------
