@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include "StageBuilder/StageBuilder.h"
 #include "Element/Stage_Element_Base.h"
+#include <set>
 
 #define CHIP_SIZE	40
 
@@ -25,6 +26,13 @@ private:
 
 	//マップ配列データ
 	std::vector<std::vector<int>> map_data;
+
+
+	//エネミースポーン地点Location構造体
+	std::vector<Location> enemy_init_location;
+
+	//エネミーのID
+	std::set<short> enemy_id{ 200,201,202,203,204,205,206,207,208,209,210 };
 
 	//背景画像
 	int background_images;
@@ -89,4 +97,11 @@ public:
 	/// <returns>ベクター型(Stage_Element_Baseオブジェクト型)：Stage_Element_Base</returns>	
 	/// ※全要素をループして使わないこと
 	std::vector<Stage_Element_Base*> GetElement_MapChip() const;
+
+	
+	/// <summary>
+	///エネミースポーンLocation構造体	Getter
+	/// </summary>
+	/// <returns>ベクター型(Location構造体型)</returns>	
+	std::vector<Location> GetEnemy_SpawnLocation() const { return enemy_init_location; }
 };
