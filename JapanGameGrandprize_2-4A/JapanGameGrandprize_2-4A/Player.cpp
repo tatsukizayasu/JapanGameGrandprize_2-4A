@@ -6,6 +6,9 @@
 #include "Item.h"
 #include <iostream>
 
+
+
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -76,6 +79,8 @@ Player::Player()
 
 	pouch = nullptr;
 
+
+
 	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
@@ -140,6 +145,7 @@ Player::Player(Stage* stage)
 	display_attribute = 0;
 
 	hp = 100;
+
 
 	beam = nullptr;
 
@@ -815,3 +821,4 @@ bool Player::GetMoveDirection()
 {
 	return move_left;
 }
+

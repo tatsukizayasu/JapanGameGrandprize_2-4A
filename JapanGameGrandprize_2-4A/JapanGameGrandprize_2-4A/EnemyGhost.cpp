@@ -37,8 +37,6 @@
 //ゴーストの攻撃力
 #define GHOST_ATTACK_DAMAGE 10
 
-//今日やること
-//当たり判定、接近攻撃あれでいいのか
 
 //-----------------------------------
 // コンストラクタ
@@ -50,8 +48,10 @@ EnemyGhost::EnemyGhost()
 	attack = false;
 
 	hp = 10;
-	location.x = 1400;
-	location.y = 1200;
+	location.x = 1900;
+	location.y = 650;
+	standby_attack = 0;
+	speed = 1.5;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
@@ -87,6 +87,7 @@ EnemyGhost::EnemyGhost()
 //-----------------------------------
 EnemyGhost::~EnemyGhost()
 {
+
 }
 
 //-----------------------------------
@@ -95,6 +96,7 @@ EnemyGhost::~EnemyGhost()
 void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 {
 	Location old_location = location;	//前の座標
+	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
 	switch (state)
 	{
@@ -117,10 +119,20 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		break;
 	}
 
-	//if (HitStage(stage)) //ステージとの当たり判定
-	//{
-	//	location = old_location;
-	//}
+	hit_stage = HitStage(stage);
+	if (hit_stage.hit) //ステージとの当たり判定
+	{
+		Location chip_location = hit_stage.chip->GetLocation();
+		Area chip_area = hit_stage.chip->GetArea();
+		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+		{
+			speed = 0.1;
+		}
+		else
+		{
+			speed = 1.5;
+		}
+	}
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -151,26 +163,26 @@ void EnemyGhost::Move(const Location player_location)
 	switch (action_type)
 	{
 	case GHOST_STATE::NORMAL:  //通常移動
-		location.x -= GHOST_SPEED;
+		location.x -= speed;
 		break;
 	case GHOST_STATE::NORMAL_RIGHT://右
-		location.x += GHOST_SPEED;
+		location.x += speed;
 		break;
 	case GHOST_STATE::LEFT_lOWER:  //左下を目指す
-		location.x -= GHOST_SPEED;
-		location.y += GHOST_SPEED;
+		location.x -= speed;
+		location.y += speed;
 		break;
 	case GHOST_STATE::LEFT_UPPER:  //左上を目指す
-		location.x -= GHOST_SPEED;
-		location.y -= GHOST_SPEED;
+		location.x -= speed;
+		location.y -= speed;
 		break;
 	case GHOST_STATE::RIGHT_LOWER:  //右下を目指す
-		location.x += GHOST_SPEED;
-		location.y += GHOST_SPEED;
+		location.x += speed;
+		location.y += speed;
 		break;
 	case GHOST_STATE::RIGHT_UPPER:  //右上を目指す。
-		location.x += GHOST_SPEED;
-		location.y -= GHOST_SPEED;
+		location.x += speed;
+		location.y -= speed;
 		break;
 	default:
 		break;
@@ -271,10 +283,10 @@ void EnemyGhost::GhostMove(const Location player_location)
 		}
 		else //右に移動
 		{
-			//if (location.y + 10 >= player_location.y && location.y - 10 <= player_location.y)
-			//{
-			//	//action_type = GHOST_STATE::NORMAL_RIGHT;
-			//}
+			if (location.y + 10 >= player_location.y && location.y - 10 <= player_location.y)
+			{
+				action_type = GHOST_STATE::NORMAL_RIGHT;
+			}
 			if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
@@ -285,6 +297,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 			}
 		}
 	}
+
 	else //通常移動
 	{
 		action_type = GHOST_STATE::NORMAL;
@@ -307,6 +320,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 		standby_time = GHOST_MAGIC_STANDBY;
 		magic_attack = true;
 
+		//弾の生成
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new GhostBullet(location, player_location));
 	}

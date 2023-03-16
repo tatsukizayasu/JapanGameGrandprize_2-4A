@@ -18,7 +18,9 @@ private:
 	int color;
 	SLIME_ATTACK slime_attack;
 
-	int slime_image;
+	int image_type;
+	int image_change_time;
+	int slime_image[7];
 	int slime_angle;
 	int wait_time;
 
