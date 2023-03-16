@@ -4,7 +4,7 @@
 #include "BulletManager.h"
 
 //魔法弾の発射レート
-#define MAGE_SHOT_RATE 20
+#define MAGE_SHOT_RATE 40
 
 //移動速度
 #define MAGE_SPEED 2
@@ -13,17 +13,15 @@
 #define MAGE_MIN_DROP 0
 #define MAGE_MAX_DROP 6
 
-#define MAGE_SHOT_RATE 20
-
 //体力
 #define MAGE_HP 100
 
 //移動範囲(直径)
 #define MAGE_TELEPORT_AREA 600
-#define MAGE_TELEPORT_RATE 80
+#define MAGE_TELEPORT_RATE 160
 
 //攻撃間隔
-#define MAGE_ATTACK_INTERVAL 120
+#define MAGE_ATTACK_INTERVAL 240
 
 //-----------------------------------
 //コンストラクタ

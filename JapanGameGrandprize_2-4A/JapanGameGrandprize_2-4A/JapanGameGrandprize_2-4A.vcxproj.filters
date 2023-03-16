@@ -135,6 +135,9 @@
     <ClCompile Include="TorrentNuts.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
+      <ClCompile Include="EnemySlimeBoss.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="TorrentNuts.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+     <ClInclude Include="EnemySlimeBoss.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
