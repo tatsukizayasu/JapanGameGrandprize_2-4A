@@ -16,8 +16,8 @@
 //コンストラクタ
 Pouch::Pouch()
 {
-	x = 700;
-	y = 200;
+	x = 1080;
+	y = 100;
 	tab = Tab::Explosion_Tab;
 
 	//元素の初期化
@@ -87,6 +87,15 @@ void Pouch::Draw() const
 		break;
 	default:
 		break;
+	}
+
+	
+
+	DrawBox(x, y + 500, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff00ff, TRUE);
+
+	for (int i = 1; i < 4; i++)
+	{
+		DrawFormatString(x, y + (100 * i), 0x000000, "%d", chemical_formula_explosion[i].material.carbon);
 	}
 
 	for (int i = 0; i < 4; i++)
@@ -177,7 +186,7 @@ void Pouch::Update()
 
 void Pouch::ExplosionTabUpdate()
 {
-
+	
 }
 
 void Pouch::PoisonTabUpdate()
@@ -210,7 +219,7 @@ void Pouch::InitChemicalParameter()
 {
 	int count = EXPLOSION_MAX_NUM;
 	FILE* fp; //FILE型構造体
-	errno_t error;     error = fopen_s(&fp, "Data/suuzi.csv", "r");
+	errno_t error;     error = fopen_s(&fp, "Data/chemical_formula_data/ChemicalFormulaParameter.csv", "r");
 	if (error != 0) //ファイルが開けてない
 	{
 		return;
