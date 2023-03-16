@@ -20,7 +20,6 @@ private:
 
 	int image_type;
 	int image_change_time;
-	int slime_image[7];
 	int slime_angle;
 	int wait_time;
 
@@ -30,8 +29,7 @@ private:
 public:
 
 	EnemySlime();
-	EnemySlime(float x, float y, float height, float width);
-	~EnemySlime() {};
+	~EnemySlime();
 
 	//描画以外の更新を実行
 	virtual void Update(const class Player* player, const class Stage* stage)override;
