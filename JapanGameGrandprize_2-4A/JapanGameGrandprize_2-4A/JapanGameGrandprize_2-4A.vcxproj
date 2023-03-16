@@ -169,6 +169,7 @@
     <ClInclude Include="NormalBullet.h" />
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
+    <ClInclude Include="Pause.h" />
     <ClInclude Include="Stage\Element\Element_Move_Floor.h" />
     <ClInclude Include="Stage\Element\Stage_Element.h" />
     <ClInclude Include="Stage\Element\Stage_Element_Base.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="MageBullet.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
+    <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Stage\Element\Element_Move_Floor.cpp" />
     <ClCompile Include="Stage\Element\Stage_Element.cpp" />
     <ClCompile Include="Stage\Element\Stage_Element_Base.cpp" />

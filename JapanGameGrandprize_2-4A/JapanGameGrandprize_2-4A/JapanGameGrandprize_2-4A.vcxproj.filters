@@ -7,9 +7,6 @@
     <ClCompile Include="FpsController.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -135,6 +132,12 @@
     <ClCompile Include="Stage\Element\Element_Move_Floor.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -150,9 +153,6 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="FpsController.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameMain.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="PadInput.h">
@@ -281,6 +281,12 @@
     <ClInclude Include="Stage\Element\Element_Move_Floor.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
+    <ClInclude Include="GameMain.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -330,6 +336,12 @@
     </Filter>
     <Filter Include="ヘッダーファイル\Stage\Element">
       <UniqueIdentifier>{9246e21e-4ec4-45b4-bf72-12a753eea626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Scene">
+      <UniqueIdentifier>{d7b23c11-eabb-4fe5-adaa-c82fa1970a0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Scene">
+      <UniqueIdentifier>{acec3a04-f352-4059-94b1-1689604dcbfd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
