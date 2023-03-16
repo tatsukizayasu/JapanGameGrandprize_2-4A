@@ -30,8 +30,8 @@ struct ChemicalFormulaParameter
 	int time;
 	int damage_per_second;
 	int damage;
-	const char* chemical_formula_name[MAX_STRING];
-	const char* chemical_formula[MAX_STRING];
+	char chemical_formula_name[MAX_STRING];
+	char chemical_formula[MAX_STRING];
 	ATTRIBUTE atribute;
 	ChemicalFormulaMaterial material;
 };
@@ -60,7 +60,7 @@ private:
 	ChemicalFormulaParameter chemical_formula_melt[MELT_MAX_NUM];
 public:
 	Pouch();
-	~Pouch() {};
+	~Pouch();
 
 	void Update();
 	void Draw() const;

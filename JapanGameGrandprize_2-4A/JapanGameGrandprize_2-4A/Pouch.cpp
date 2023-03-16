@@ -28,6 +28,11 @@ Pouch::Pouch()
 	InitChemicalParameter();
 }
 
+Pouch::~Pouch()
+{
+
+}
+
 
 //爆発
 void Pouch::ExplosionTabDraw() const 
@@ -94,7 +99,7 @@ void Pouch::Draw() const
 
 	for (int i = 1; i < 4; i++)
 	{
-		DrawFormatString(x, y + (100 * i), 0x000000, "%d", chemical_formula_explosion[i].material.carbon);
+		DrawFormatString(x, y + (100 * i), 0x000000, "%s", chemical_formula_explosion[i].chemical_formula_name);
 	}
 
 	for (int i = 0; i < 4; i++)
@@ -218,7 +223,8 @@ void Pouch::InitChemicalParameter()
 {
 	int count = EXPLOSION_MAX_NUM;
 	FILE* fp; //FILE型構造体
-	errno_t error;     error = fopen_s(&fp, "Data/chemical_formula_data/ChemicalFormulaParameter.csv", "r");
+	errno_t error;    
+	error = fopen_s(&fp, "Data/chemical_formula_data/ChemicalFormulaParameter.csv", "r");
 	if (error != 0) //ファイルが開けてない
 	{
 		return;
