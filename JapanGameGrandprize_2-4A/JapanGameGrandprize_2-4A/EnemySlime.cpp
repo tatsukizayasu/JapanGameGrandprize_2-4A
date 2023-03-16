@@ -44,7 +44,7 @@ EnemySlime::EnemySlime()
 
 	color = GetColor(0, 0, 255);
 
-	type = new ENEMY_TYPE;
+	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::WATER;
 
 	state = ENEMY_STATE::IDOL;
@@ -77,17 +77,10 @@ EnemySlime::~EnemySlime()
 
 	delete[] drop_element;
 
-	delete[] type;
-}
+	delete type;
 
 	delete[] images;
 
-	for (int i = 0; i < WATER_DROP; i++)
-	{
-		delete drop_element[i];
-	}
-
-	delete[] drop_element;
 }
 
 void EnemySlime::Update(const Player* player, const Stage* stage)

@@ -79,7 +79,7 @@ Undead::Undead()
 	}
 
 	images = new int[UNDEAD_MOVE_IMAGES];
-	LoadDivGraph("images/Enemy/undead.png", 5, 5, 1, 40, 80, images);
+	LoadDivGraph("Images/Enemy/undead.png", 5, 5, 1, 40, 80, images);
 }
 
 //-----------------------------------

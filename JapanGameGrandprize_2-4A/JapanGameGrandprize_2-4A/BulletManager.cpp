@@ -81,7 +81,7 @@ void BulletManager::Update(const Stage* stage)
             enemy_nuts[i] = nullptr;
 
             SortEnemyBullet(i);
-            enemy_bullet_count--;
+            enemy_nuts_count--;
             i--;
         }
     }

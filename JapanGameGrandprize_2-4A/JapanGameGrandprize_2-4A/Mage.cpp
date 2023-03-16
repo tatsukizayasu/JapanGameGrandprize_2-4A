@@ -55,7 +55,7 @@ Mage::Mage()
 	//ドロップアイテムの設定
 	drop = 0;
 
-	switch (*type)
+	switch (type[0])
 	{
 	case ENEMY_TYPE::NORMAL:
 		break;
@@ -91,7 +91,7 @@ Mage::Mage()
 
 		volume = MAGE_MIN_DROP + GetRand(MAGE_MAX_DROP);
 
-		switch (*type)
+		switch (type[0])
 		{
 		case ENEMY_TYPE::NORMAL:
 			break;
