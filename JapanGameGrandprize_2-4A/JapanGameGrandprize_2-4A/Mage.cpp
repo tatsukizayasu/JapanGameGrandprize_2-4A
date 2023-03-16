@@ -13,8 +13,6 @@
 #define MAGE_MIN_DROP 0
 #define MAGE_MAX_DROP 6
 
-#define MAGE_SHOT_RATE 20
-
 //‘Ì—Í
 #define MAGE_HP 100
 
