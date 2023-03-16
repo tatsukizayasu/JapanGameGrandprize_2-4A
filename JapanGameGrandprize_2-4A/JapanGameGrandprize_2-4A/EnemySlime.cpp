@@ -34,6 +34,7 @@ EnemySlime::EnemySlime()
 	//location.x = 200.0;
 	//location.y = 700.0f;
 
+	jump_distance = location;
 	area.height = 50;
 	area.width = 50;
 	wait_time = 0;
@@ -42,7 +43,7 @@ EnemySlime::EnemySlime()
 	hp = 15;
 	speed = SLIME_SPEED;
 
-	color = GetColor(0, 0, 255);
+	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::WATER;

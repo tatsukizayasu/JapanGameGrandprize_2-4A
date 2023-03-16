@@ -234,9 +234,11 @@ void Pouch::InitChemicalParameter()
 		char line[100];
 		for (int i = 0; fgets(line, 100, fp) != NULL; i++)
 		{
+			int ret;
+
 			if (i < FILE_GROUP_ONE)
 			{
-				sscanf_s(line, "%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//“ü‚Á‚Ä‚¢‚é”Žš‚â•¶Žš‚É‡‚í‚¹‚Äd‚Æ‚©f‚Æ‚©•Ï‚¦‚é
+				ret = sscanf_s(line, "%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//“ü‚Á‚Ä‚¢‚é”Žš‚â•¶Žš‚É‡‚í‚¹‚Äd‚Æ‚©f‚Æ‚©•Ï‚¦‚é
 					chemical_formula_explosion[i].chemical_formula_name,
 					MAX_STRING,
 					chemical_formula_explosion[i].chemical_formula,

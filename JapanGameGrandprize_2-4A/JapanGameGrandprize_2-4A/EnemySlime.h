@@ -15,7 +15,6 @@ class EnemySlime :
 private:
 	bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
 
-	int color;
 	SLIME_ATTACK slime_attack;
 
 	int image_type;
@@ -25,7 +24,6 @@ private:
 
 	Location jump_distance;
 
-	ElementItem drop_item;
 public:
 
 	EnemySlime();
