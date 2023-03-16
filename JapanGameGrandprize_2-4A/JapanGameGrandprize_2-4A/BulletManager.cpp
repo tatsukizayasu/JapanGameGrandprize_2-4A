@@ -75,7 +75,7 @@ void BulletManager::Update(const Stage* stage)
 
         enemy_nuts[i]->Update();
 
-        if (enemy_nuts[i]->ScreenOut() || enemy_nuts[i]->HitStage(stage)) //画面外に出たか
+        if (enemy_nuts[i]->HitStage(stage)) //ステージにあたった
         {
             delete enemy_nuts[i];
             enemy_nuts[i] = nullptr;
@@ -241,7 +241,7 @@ void BulletManager::SortEnemyNuts(const int nuts_num)
 //-----------------------------------
 void BulletManager::DeleteEnemyNuts(const EnemyBulletBase* nuts)
 {
-    for (int i = 0; i < enemy_bullet_max; i++)
+    for (int i = 0; i < enemy_nuts_max; i++)
     {
         if (enemy_nuts[i] == nuts)
         {

@@ -26,7 +26,7 @@ GameMain::GameMain()
 	enemy[0] = new EnemySlime();
 	enemy[1] = new Undead();
 	enemy[2] = new EnemyGhost();
-	enemy[3] = new Mage();
+	enemy[3] = new Torrent();
 	enemy[4] = new Harpy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
@@ -77,12 +77,6 @@ void GameMain::EnemyUpdate()
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
-	bullet_manager->Update(stage);
-
-	EnemyBulletBase** enemy_bullet;
-	enemy_bullet = bullet_manager->GetEnemyBullets();
-	EnemyBulletBase** enemy_nuts;
-	enemy_nuts = bullet_manager->GetEnemyNuts();
 	for (int i = 0; i < 5; i++)
 	{
 		if (enemy[i] != nullptr)
@@ -126,6 +120,11 @@ void GameMain::EnemyUpdate()
 		}
 	}
 
+	bullet_manager->Update(stage);
+
+	EnemyBulletBase** enemy_bullet;
+	enemy_bullet = bullet_manager->GetEnemyBullets();
+
 	//“G‚Ì’e‚ÆƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è
 	if (enemy_bullet != nullptr)
 	{
@@ -143,6 +142,9 @@ void GameMain::EnemyUpdate()
 			}
 		}
 	}
+
+	EnemyBulletBase** enemy_nuts;
+	enemy_nuts = bullet_manager->GetEnemyNuts();
 
 	if (enemy_nuts != nullptr) //–Ø‚ÌŽÀ‚Æ‚Ì“–‚½‚è”»’è
 	{

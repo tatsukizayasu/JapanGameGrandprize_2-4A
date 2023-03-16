@@ -446,7 +446,7 @@ void Torrent::CreateNuts()
 				if (!spawn_point[spawn_point_rand])
 				{
 					Location spawn_location; //スポーン地点
-					spawn_location.x = ((spawn_point_rand + 1) * NUTS_SPAWN_SPACE);
+					spawn_location.x = (spawn_point_rand + 1) * NUTS_SPAWN_SPACE;
 					if (!left_move)
 					{
 						spawn_location.x += (area.width / 2);
