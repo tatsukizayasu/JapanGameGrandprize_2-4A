@@ -3,6 +3,8 @@
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 
+Location t = {};
+
 //------------------------------------
 // コンストラクタ
 //------------------------------------
@@ -63,6 +65,10 @@ void LineCollider_t::Draw()const
 		, GetMax().x - CameraWork::GetCamera().x
 		, GetMax().y - CameraWork::GetCamera().y
 		, 0x000000, FALSE);
+
+
+	DrawCircle(t.x - CameraWork::GetCamera().x,
+		t.y - CameraWork::GetCamera().y, 3, 0xFF0000, TRUE);
 }
 
 //-----------------------------------
@@ -98,6 +104,27 @@ bool LineCollider_t::HitDot(Location point)const
 bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 {
 	bool is_hit = false;
+	Location vector1 =
+		GetLocation(LINE_END) - GetLocation(LINE_START);
+	Location vector2 =
+		sphere->GetLocation() - GetLocation(LINE_START);
+
+	float len = powf(vector1.x * vector1.x + vector1.y * vector1.y, 0.5);
+
+	Location unit_vector;
+	unit_vector.x = vector1.x / len;
+	unit_vector.y = vector1.y / len;
+
+	float distance = unit_vector.x * vector2.x
+		+ unit_vector.y * vector2.y;
+
+	Location near_pos;
+
+	near_pos.x = unit_vector.x * distance;
+	near_pos.y = unit_vector.y * distance;
+
+	t = near_pos;
+
 	return is_hit;
 }
 

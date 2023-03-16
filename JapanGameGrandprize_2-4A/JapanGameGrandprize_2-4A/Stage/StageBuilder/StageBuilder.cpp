@@ -149,6 +149,7 @@ void StageBuilder::Update()
 	}
 
 
+	line_collider->HitSphere(mouse);
 	mouse_box->SetLocation(mouse->GetLocation());
 #endif // _DEV
 }
