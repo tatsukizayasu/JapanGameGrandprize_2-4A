@@ -129,6 +129,9 @@
     <ClCompile Include="Stage\Element\Stage_Element_Base.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
+    <ClCompile Include="EnemySlimeBoss.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -268,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="Stage\Element\Element_DamageWall.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySlimeBoss.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
