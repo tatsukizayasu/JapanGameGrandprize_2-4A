@@ -38,13 +38,16 @@
 #define SPAWN_NUTS_INTERVAL 30
 
 //木の実の生成地点数
-#define SPAWN_NUTS_POINT 5
+#define SPAWN_NUTS_POINT 16
+
+//木の実が一回でスポーンできる最大数
+#define SPAWN_NUTS_MAX 6
 
 //木の実のスポーン地点
 #define SPAWN_NUTS_Y 100
 
 //スポーン地点の間隔
-#define NUTS_SPAWN_SPACE 40
+#define NUTS_SPAWN_SPACE 60
 
 //-----------------------------------
 //コンストラクタ
@@ -433,7 +436,7 @@ void Torrent::CreateNuts()
 			spawn_point[i] = false;
 		}
 
-		spawn_volume = GetRand(SPAWN_NUTS_POINT - 1) + 1; //スポーン数の設定
+		spawn_volume = GetRand(SPAWN_NUTS_MAX - 1) + 1; //スポーン数の設定
 
 		for (int i = 0; i < spawn_volume; i++) //木の実の生成
 		{
@@ -475,7 +478,7 @@ void Torrent::AttackNone()
 	if (attack_time < 0)
 	{
 		TORRENT_ATTACK next_attack;	//次の攻撃
-		next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
+		next_attack = static_cast<TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
 		
 		next_attack = TORRENT_ATTACK::DROP_NUTS;
 		switch (next_attack)

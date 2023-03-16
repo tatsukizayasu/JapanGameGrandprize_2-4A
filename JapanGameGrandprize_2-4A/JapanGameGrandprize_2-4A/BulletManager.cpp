@@ -80,7 +80,7 @@ void BulletManager::Update(const Stage* stage)
             delete enemy_nuts[i];
             enemy_nuts[i] = nullptr;
 
-            SortEnemyBullet(i);
+            SortEnemyNuts(i);
             enemy_nuts_count--;
             i--;
         }
@@ -121,7 +121,6 @@ void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
             //”ð“ï‚µ‚Ä‚¢‚½’e‚ð–ß‚·
             enemy_bullets = temporary_bullets;
 
-            delete[] temporary_bullets;
             for (int i = enemy_bullet_count; i < enemy_bullet_max; i++)
             {
                 enemy_bullets[i] = nullptr;
@@ -205,7 +204,6 @@ void BulletManager::CreateEnemyNuts(class EnemyBulletBase* nuts)
             //”ð“ï‚µ‚Ä‚¢‚½’e‚ð–ß‚·
             enemy_nuts = temporary_nuts;
 
-            delete[] temporary_nuts;
             for (int i = enemy_nuts_count; i < enemy_nuts_max; i++)
             {
                 enemy_nuts[i] = nullptr;
