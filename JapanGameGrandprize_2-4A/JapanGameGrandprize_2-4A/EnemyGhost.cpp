@@ -48,8 +48,8 @@ EnemyGhost::EnemyGhost()
 	attack = false;
 
 	hp = 10;
-	location.x = 1400;
-	location.y = 1050;
+	location.x = 1900;
+	location.y = 650;
 	standby_attack = 0;
 	speed = 1.5;
 	area.width = GHOST_SIZE_X;
