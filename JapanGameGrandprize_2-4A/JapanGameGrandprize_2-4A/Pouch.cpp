@@ -4,13 +4,12 @@
 #include "Define.h"
 #include <stdlib.h>
 
-
-
 //コンストラクタ
 Pouch::Pouch()
 {
 	x = 1080;
 	y = 100;
+	cursol = 0;
 	tab = Tab::Explosion_Tab;
 
 	//元素の初期化
@@ -35,7 +34,7 @@ void Pouch::ExplosionTabDraw() const
 	DrawString(x, y + 50, "EXPLOSION", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_explosion[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_explosion[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -46,7 +45,7 @@ void Pouch::MeltTabDraw() const
 	DrawString(x, y + 50, "MELT", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_melt[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_melt[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -57,7 +56,7 @@ void Pouch::ParalysisTabDraw()const
 	DrawString(x, y + 50, "PARALYSIS", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_pararysis[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_pararysis[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -68,7 +67,7 @@ void Pouch::PoisonTabDraw()const
 	DrawString(x, y + 50, "POISON", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_poison[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_poison[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -79,7 +78,7 @@ void Pouch::HealTabDraw()const
 	DrawString(x, y + 50, "HEAL", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_heal[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_heal[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -201,7 +200,32 @@ void Pouch::Update()
 
 void Pouch::ExplosionTabUpdate()
 {
+	if (++count % CURSOL_SPEED == 0)
+	{
+		if (PAD_INPUT::GetRStick().y > 5000)
+		{
+			if (cursol > 0)
+			{
+				cursol--;
+			}
+			else
+			{
+				cursol = EXPLOSION_MAX_NUM;
+			}
+		}
 
+		if (PAD_INPUT::GetRStick().y < -5000)
+		{
+			if (cursol < EXPLOSION_MAX_NUM)
+			{
+				cursol++;
+			}
+			else
+			{
+				cursol = 0;
+			}
+		}
+	}
 }
 
 void Pouch::PoisonTabUpdate()
@@ -242,7 +266,7 @@ void Pouch::InitChemicalParameter()
 	}
 	else     //ファイルが開けた
 	{
-
+		int attribute;
 		char line[100];
 		for (int i = 0; i < EXPLOSION_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
@@ -261,8 +285,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_explosion[i].damage,
 				&chemical_formula_explosion[i].damage_per_second,
 				&chemical_formula_explosion[i].time,
-				&chemical_formula_explosion[i].atribute);
-
+				&attribute);
+			chemical_formula_explosion[i].atribute = static_cast <ATTRIBUTE>(attribute);
 		}
 		for (int i = 0; i < POISON_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
@@ -281,8 +305,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_poison[i].damage,
 				&chemical_formula_poison[i].damage_per_second,
 				&chemical_formula_poison[i].time,
-				&chemical_formula_poison[i].atribute);
-
+				&attribute);
+			chemical_formula_poison[i].atribute = static_cast <ATTRIBUTE>(attribute);
 		}
 
 		for (int i = 0; i < PARARYSIS_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
@@ -302,7 +326,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_pararysis[i].damage,
 				&chemical_formula_pararysis[i].damage_per_second,
 				&chemical_formula_pararysis[i].time,
-				&chemical_formula_pararysis[i].atribute);
+				&attribute);
+			chemical_formula_pararysis[i].atribute = static_cast <ATTRIBUTE>(attribute);
 
 		}
 
@@ -324,7 +349,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_heal[i].damage,
 				&chemical_formula_heal[i].damage_per_second,
 				&chemical_formula_heal[i].time,
-				&chemical_formula_heal[i].atribute);
+				&attribute);
+			chemical_formula_heal[i].atribute = static_cast <ATTRIBUTE>(attribute);
 
 		}
 
@@ -345,7 +371,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_melt[i].damage,
 				&chemical_formula_melt[i].damage_per_second,
 				&chemical_formula_melt[i].time,
-				&chemical_formula_melt[i].atribute);
+				&attribute);
+			chemical_formula_melt[i].atribute = static_cast <ATTRIBUTE>(attribute);
 		}
 		return;
 	}

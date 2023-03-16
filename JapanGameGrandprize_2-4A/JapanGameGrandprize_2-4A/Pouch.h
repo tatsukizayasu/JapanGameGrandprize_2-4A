@@ -9,6 +9,7 @@
 #define HEAL_MAX_NUM 7			//‰ñ•œ‚Ì‰»‡•¨‚ÌŒÂ”
 
 #define MAX_STRING 40
+#define CURSOL_SPEED 30
 
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
@@ -50,6 +51,8 @@ class Pouch
 {
 private:
 	float x, y;
+	int cursol;
+	int count;
 	Tab tab;
 	ElementItem* element[PLAYER_ELEMENT];
 
