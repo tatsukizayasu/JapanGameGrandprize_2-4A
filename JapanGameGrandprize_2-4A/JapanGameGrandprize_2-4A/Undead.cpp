@@ -365,7 +365,7 @@ void Undead::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawRotaGraph(draw_location.x, draw_location.y, 1.0, 0,
+	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0,
 		images[image_argument],TRUE, !left_move);
 }
 
