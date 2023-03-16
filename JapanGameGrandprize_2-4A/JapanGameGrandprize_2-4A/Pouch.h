@@ -8,6 +8,8 @@
 #define PARARYSIS_MAX_NUM 11	//–ƒáƒ‚Ì‰»‡•¨‚ÌŒÂ”
 #define HEAL_MAX_NUM 7			//‰ñ•œ‚Ì‰»‡•¨‚ÌŒÂ”
 
+#define MAX_STRING 40
+
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
 
@@ -28,8 +30,8 @@ struct ChemicalFormulaParameter
 	int time;
 	int damage_per_second;
 	int damage;
-	const char* chemical_formula_name[18];
-	const char* chemical_formula[10];
+	const char* chemical_formula_name[MAX_STRING];
+	const char* chemical_formula[MAX_STRING];
 	ATTRIBUTE atribute;
 	ChemicalFormulaMaterial material;
 };
