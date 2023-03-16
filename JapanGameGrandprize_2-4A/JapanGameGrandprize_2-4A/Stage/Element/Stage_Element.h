@@ -12,7 +12,8 @@
 namespace Element {
 	const short DEBUG_GRASS = 1;		//デバック用草ブロック
 	const short DEBUG_SOIL = 4;		//デバック用土ブロック
-	const short DEBUG_WOOD = 23;		//デバック用木ブロック
+	//const short DEBUG_WOOD = 23;		//デバック用木ブロック
+	const short DAMAGE_WALL = 40;		//ダメージ床
 	const short MoveFloor = 52;			//動く床
 	const short GreenButton = 61;		//緑のボタン
 	const short YellowButton = 62;	//黄色のボタン
@@ -28,7 +29,7 @@ private:
 	Player* player;
 
 	//ステージ要素のID
-	std::set<short> elements_id{ Element::DEBUG_GRASS,Element::DEBUG_SOIL, Element::DEBUG_WOOD,Element::MoveFloor,Element::GreenButton, Element::YellowButton };
+	std::set<short> elements_id{ Element::DEBUG_GRASS,Element::DEBUG_SOIL, /*Element::DEBUG_WOOD,*/ Element::DAMAGE_WALL, Element::MoveFloor,Element::GreenButton, Element::YellowButton };
 
 protected:
 
