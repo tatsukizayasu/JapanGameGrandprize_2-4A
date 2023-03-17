@@ -31,6 +31,9 @@ private:
 	StageBuilder* stage_builder;
 #endif
 
+	//スポーン地点
+	Location spawn_point;
+
 	//マップ配列データ
 	std::vector<std::vector<int>> map_data;
 
@@ -46,6 +49,8 @@ private:
 	//ブロック画像
 	int block_images[110];
 
+	//スポーン地点ID
+	const short spawn_point_id = 777;
 
 protected:
 
@@ -74,6 +79,11 @@ public:
 	/// ステージの読み込み
 	/// </summary>
 	void LoadMap();
+
+	/// <summary>
+	/// スポーン地点		Getter
+	/// </summary>
+	Location GetSpawnPoint() { return spawn_point; }
 
 	/// <summary>
 	/// StageクラスにPlayerオブジェクトを渡すSetter
@@ -108,6 +118,7 @@ public:
 	
 	/// <summary>
 	///エネミースポーンLocation構造体	Getter
+	///	idは200番台
 	/// </summary>
 	/// <returns>ベクター型(ENEMY_LOCATION構造体型)</returns>	
 	std::vector<ENEMY_LOCATION> GetEnemy_SpawnLocation() const { return enemy_init_location; }

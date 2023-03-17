@@ -21,7 +21,7 @@ MageBullet::MageBullet(ENEMY_TYPE type,
 	image = 0;
 	damage = MAGE_BULLET_DAMAGE;
 	float radian; //Šp“x
-	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
+	radian = atan2f((player_location.y - 10) - location.y, player_location.x - location.x);
 	x_speed = speed * cosf(radian);
 	y_speed = speed * sinf(radian);
 }
