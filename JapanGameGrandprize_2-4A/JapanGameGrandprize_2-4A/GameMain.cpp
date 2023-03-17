@@ -26,7 +26,7 @@ GameMain::GameMain()
 	enemy[0] = new EnemySlime();
 	enemy[1] = new Undead();
 	enemy[2] = new EnemyGhost();
-	enemy[3] = new Torrent();
+	enemy[3] = new Mage();
 	enemy[4] = new Harpy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
@@ -44,13 +44,13 @@ GameMain::~GameMain()
 	delete player;
 	delete stage;
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		delete enemy[i];
 	}
-
 	delete[] enemy;
 	delete camera_work;
+	delete item_controller;
 	delete bullet_manager;
 }
 
