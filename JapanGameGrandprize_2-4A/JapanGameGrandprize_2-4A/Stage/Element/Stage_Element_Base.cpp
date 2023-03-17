@@ -11,7 +11,7 @@ Stage_Element_Base::Stage_Element_Base()
 	this->image = 0;
 	type = 0;
 	count = 0;
-	
+
 }
 
 Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : MapChip(image, location, area)
@@ -30,7 +30,7 @@ Stage_Element_Base::~Stage_Element_Base()
 
 bool Stage_Element_Base::HitPlayer(Player* player) const
 {
-	
+
 
 	struct Rect
 	{
@@ -76,14 +76,35 @@ void Stage_Element_Base::StartAnimation(float time, std::function<void()>* callb
 		start_time = end_time;
 		count++;
 		//printfDx("count:%d\n", count);
-		
+
 		if (callback != nullptr) {
 			(*callback)();
 		}
-		
+
 	}
 
 }
+
+void Stage_Element_Base::LoopImages(int *images, float time, int total_images, std::function<void()>* callback)
+{
+	
+
+	auto end_time = std::chrono::steady_clock::now();
+	auto diff = end_time - start_time;
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+
+	if (elapsed.count() >= time * 1000.0f) {
+		start_time = end_time;
+		current_image = (current_image + 1) % total_images;
+		this->image = images[current_image];
+
+		if (callback != nullptr) {
+			(*callback)();
+		}
+
+	}
+}
+
 
 
 //std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)

@@ -24,6 +24,9 @@ protected:
 	//実行した回数
 	int count;
 
+	//描画している画像カウント
+	int current_image;
+
 
 public:
 	
@@ -50,7 +53,9 @@ public:
 	void StartAnimation(float time, std::function<void()>* callback);
 
 	/// <summary>
-	/// アニメーションSetter
+	/// アニメーションタイムGetter
 	/// </summary>
 	float GetAnimationTime() { return elapsed.count() / 1000.0f; };
+
+	void LoopImages(int *images, float time, int total_images, std::function<void()>* callback);
 };

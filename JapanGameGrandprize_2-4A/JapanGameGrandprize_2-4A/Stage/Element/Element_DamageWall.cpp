@@ -23,7 +23,8 @@ void Element_DamageWall::Update(Player* player)
 		image = anim_images[anim_count];
 	};
 
-	StartAnimation(0.1, &f);
+	//StartAnimation(0.1, &f);
+	LoopImages(anim_images, 0.1, 9, nullptr);
 
 
 	
