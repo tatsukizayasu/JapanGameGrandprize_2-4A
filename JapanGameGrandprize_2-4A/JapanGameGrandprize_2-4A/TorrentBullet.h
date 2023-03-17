@@ -1,7 +1,6 @@
 #pragma once
 #include "EnemyBulletBase.h"
-
-class MageBullet :
+class TorrentBullet :
     public EnemyBulletBase
 {
 private:
@@ -11,14 +10,16 @@ private:
 public:
 
     //コンストラクタ
-    MageBullet(ENEMY_TYPE ,Location , Location);
+    TorrentBullet(ENEMY_TYPE, Location, Location);
 
     //デストラクタ
-    ~MageBullet();
+    ~TorrentBullet();
 
     //更新
     void Update() override;
 
     //描画
-    void Draw() const override ;
+    void Draw() const override;
+
 };
+

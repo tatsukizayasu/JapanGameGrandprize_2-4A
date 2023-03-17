@@ -39,9 +39,9 @@ Mage::Mage()
 	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
-	type = new ENEMY_TYPE;
+	type = new ENEMY_TYPE[1];
 	
-	*type = static_cast<ENEMY_TYPE>(1 + GetRand(3));
+	type[0] = static_cast<ENEMY_TYPE>(1 + GetRand(3));
 	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	image = 0xffffff;
@@ -55,7 +55,7 @@ Mage::Mage()
 	//ドロップアイテムの設定
 	drop = 0;
 
-	switch (*type)
+	switch (type[0])
 	{
 	case ENEMY_TYPE::NORMAL:
 		break;
@@ -91,7 +91,7 @@ Mage::Mage()
 
 		volume = MAGE_MIN_DROP + GetRand(MAGE_MAX_DROP);
 
-		switch (*type)
+		switch (type[0])
 		{
 		case ENEMY_TYPE::NORMAL:
 			break;
@@ -137,7 +137,7 @@ Mage::Mage()
 //-----------------------------------
 Mage::~Mage()
 {
-	delete type;
+	delete[] type;
 
 	for (int i = 0; i < drop; i++)
 	{
@@ -160,10 +160,17 @@ void Mage::Update(const Player* player, const Stage* stage)
 		Idol();
 		break;
 	case ENEMY_STATE::MOVE:
+
 		Move(player->GetLocation());
+
 		if (can_teleport)
 		{
 			Teleport(stage);
+		}
+		
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
 		}
 		break;
 	case ENEMY_STATE::FALL:
@@ -178,7 +185,6 @@ void Mage::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-
 	Poison();
 	Paralysis();
 
@@ -193,12 +199,7 @@ void Mage::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void Mage::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
-	Location camera = CameraWork::GetCamera(); //カメラ
-	scroll = location - camera;
-
-	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
 	}
@@ -209,10 +210,6 @@ void Mage::Idol()
 //-----------------------------------
 void Mage::Move(const Location player_location)
 {
-	Location scroll = location;
-	Location camera = CameraWork::GetCamera();
-	scroll = scroll - camera;
-
 	teleport_count++;
 	attack_interval--;
 
@@ -224,12 +221,6 @@ void Mage::Move(const Location player_location)
 	if (attack_interval < 0) //攻撃に移行
 	{
 		state = ENEMY_STATE::ATTACK;
-	}
-
-	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) ||
-		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
-	{
-		state = ENEMY_STATE::IDOL;
 	}
 }
 
@@ -327,7 +318,7 @@ void Mage::CreateBullet(Location player_location)
 	if (shot_rate % MAGE_SHOT_RATE == 0)
 	{
 		BulletManager::GetInstance()->CreateEnemyBullet
-		(new MageBullet(*type, location, player_location));
+		(new MageBullet(type[0], location, player_location));
 
 		shot_count++;
 	}

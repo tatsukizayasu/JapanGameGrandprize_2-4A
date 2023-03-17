@@ -46,18 +46,19 @@ Undead::Undead()
 	damage = 0;
 	attack_interval = 0;
 	animation = 0;
+	old_distance = 0;
+
 	image_argument = 0;
 	speed = UNDEAD_SPEED;
 	kind = ENEMY_KIND::UNDEAD;
-	type = new ENEMY_TYPE;
-	*type = ENEMY_TYPE::SOIL;
+	type = new ENEMY_TYPE[1];
+	type[0] = ENEMY_TYPE::SOIL;
 	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	attack_time = 0;
 	poison_time = 0;
 	poison_damage = 0;
 	paralysis_time = 0;
-
 	/*当たり判定の設定*/
 	location.x = 3220.0f;
 	location.y = 970.0f;
@@ -79,7 +80,7 @@ Undead::Undead()
 	}
 
 	images = new int[UNDEAD_MOVE_IMAGES];
-	LoadDivGraph("images/Enemy/undead.png", 5, 5, 1, 40, 80, images);
+	LoadDivGraph("Images/Enemy/undead.png", 5, 5, 1, 40, 80, images);
 }
 
 //-----------------------------------
@@ -94,7 +95,7 @@ Undead::~Undead()
 
 	delete[] drop_element;
 
-	delete type;
+	delete[] type;
 
 	for (int i = 0; i < UNDEAD_MOVE_IMAGES; i++)
 	{
@@ -137,6 +138,12 @@ void Undead::Update(const Player* player, const Stage* stage)
 			state = ENEMY_STATE::FALL;
 			speed = 0;
 		}
+
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -166,6 +173,12 @@ void Undead::Update(const Player* player, const Stage* stage)
 					speed = UNDEAD_SPEED;
 				}
 			}
+		}
+
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
 		}
 		break;
 	case ENEMY_STATE::ATTACK:
@@ -205,11 +218,11 @@ void Undead::DistancePlayer(const Location player_location)
 	if ((distance < UNDEAD_ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
 		state = ENEMY_STATE::ATTACK;
-		attack_time = 20;
+		attack_time = 120;
 	}
-	else if(distance < UNDEAD_TRACKING_DISTANCE) //一定範囲内だとプレイヤーを追いかける
+	else if(distance < UNDEAD_TRACKING_DISTANCE && (UNDEAD_TRACKING_DISTANCE < old_distance)) //一定範囲内だとプレイヤーを追いかける
 	{
-		if (player_location.x < location.x)
+		if (player_location.x <= location.x)
 		{
 			left_move = true;
 			speed = -UNDEAD_SPEED;
@@ -220,6 +233,7 @@ void Undead::DistancePlayer(const Location player_location)
 			speed = UNDEAD_SPEED;
 		}
 	}
+	old_distance = distance;
 }
 
 //-----------------------------------
@@ -227,14 +241,17 @@ void Undead::DistancePlayer(const Location player_location)
 //-----------------------------------
 void Undead::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
-	Location camera  = CameraWork::GetCamera(); //カメラ
-	scroll = location - camera;
-
-	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
+		if (left_move)
+		{
+			speed = -UNDEAD_SPEED;
+		}
+		else
+		{
+			speed = UNDEAD_SPEED;
+		}
 	}
 }
 
@@ -242,23 +259,14 @@ void Undead::Idol()
 //移動
 //-----------------------------------
 void Undead::Move(const Location player_location)
-{
-	Location scroll; //画面スクロールを考慮したX座標
-	
+{	
 	DistancePlayer(player_location);
 
 	location.x += speed;
 
 	MoveAnimation();
 
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
-
-	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) || 
-		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
-	{
-		state = ENEMY_STATE::IDOL;
-	}
+	
 }
 
 //-----------------------------------
@@ -266,11 +274,11 @@ void Undead::Move(const Location player_location)
 //-----------------------------------
 void Undead::Fall()
 {
+	location.y += speed;
 	if (speed < GRAVITY)
 	{
 		speed += ENEMY_FALL_SPEED;
 	} 
-	location.y += speed;
 }
 
 //-----------------------------------
@@ -365,7 +373,7 @@ void Undead::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawRotaGraph(draw_location.x, draw_location.y, 1.0, 0,
+	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0,
 		images[image_argument],TRUE, !left_move);
 }
 
