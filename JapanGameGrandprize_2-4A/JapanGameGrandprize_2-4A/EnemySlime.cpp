@@ -117,10 +117,16 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			speed = 0;
 		}
 
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 
 	case ENEMY_STATE::FALL:
 		Fall();
+
 		hit_stage = HitStage(stage);
 
 		if (hit_stage.hit) //ステージとの当たり判定
@@ -145,6 +151,12 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 					speed = SLIME_SPEED;
 				}
 			}
+		}
+
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
 		}
 		break;
 
@@ -171,6 +183,9 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		break;
 	}
 
+	
+
+
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;
@@ -192,14 +207,17 @@ void EnemySlime::Draw()const
 //-----------------------------------
 void EnemySlime::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
-	Location camera = CameraWork::GetCamera(); //カメラ
-	scroll = location - camera;
-
-	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
+		if (left_move)
+		{
+			speed = -SLIME_SPEED;
+		}
+		else
+		{
+			speed = SLIME_SPEED;
+		}
 	}
 }
 
@@ -237,6 +255,8 @@ void EnemySlime::Move(const Location player_location)
 		location.x += speed;
 		wait_time = 0;
 	}
+
+	
 }
 
 //-----------------------------------
@@ -244,11 +264,11 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 void EnemySlime::Fall()
 {
+	location.y += speed;
 	if (speed < GRAVITY)
 	{
 		speed += ENEMY_FALL_SPEED;
 	}
-	location.y += speed;
 }
 
 //-----------------------------------

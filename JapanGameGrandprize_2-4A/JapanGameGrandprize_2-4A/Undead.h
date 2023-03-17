@@ -14,6 +14,7 @@ private:
     int animation; //アニメーション
     int image_argument; //画像の引数
     int attack_time; //攻撃している時間(デバッグ用)
+    float old_distance; //直前のプレイヤーとの距離
 private:
     //プレイヤーとの距離
     void DistancePlayer(const Location player_location);
