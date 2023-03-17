@@ -24,7 +24,10 @@ private:
 
 	int standby_attack; //次の攻撃待機時間
 	int standby_time; //硬直時間
+	int magic_num; //魔法攻撃した数
 	int harpy_image; //ハーピィの画像。
+	float travel; //X座標に動く量
+	float travel_y; //ｙ座標に動く量
 	bool magic_attack; //魔法攻撃
 	bool attack; //攻撃が当たったか
 	bool physical_attack; //物理攻撃に入る（true)なら

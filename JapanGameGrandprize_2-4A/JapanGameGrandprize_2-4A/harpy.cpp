@@ -9,14 +9,10 @@
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 600
-#define DETECTION_DISTANCE_Y 100
+#define DETECTION_DISTANCE_Y 400
 
-//物理攻撃範囲
-#define ATTACK_RANGE 40
-#define ATTACK_RANGE_Y 80
-
-//魔法攻撃範囲	
-#define ATTACK_MAGIC 300
+//攻撃範囲
+#define ATTACK_RANGE 400
 
 //魔法攻撃した時の硬直時間
 #define MAGIC_STANDBY 60
@@ -50,9 +46,12 @@ Harpy::Harpy()
 	attack = false;
 
 	hp = 50;
+	magic_num = 6;
 	location.x = 4500;
 	location.y = 550;
 	standby_attack = 0;
+	travel = 0; 
+	travel_y = 0;; 
 	speed = SPEED;
 	area.width = HARPY_SIZE_X;
 	area.height = HARPY_SIZE_Y;
@@ -170,8 +169,6 @@ void Harpy::Move(const Location player_location)
 	float range; //プレイヤーとの距離	
 	float range_y; //プレイヤーとの距離Y座標
 	float vector; //ベクトル
-	float travel; //X座標に動く量
-	float travel_y; //ｙ座標に動く量
 
 	//プレイヤーとの距離計算
 	range = player_location.x - location.x;
@@ -181,60 +178,72 @@ void Harpy::Move(const Location player_location)
 
 	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
-		range_y <= DETECTION_DISTANCE && range_y >= -DETECTION_DISTANCE)
+		range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
 	{
-		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE
-			&& range_y <= ATTACK_RANGE_Y && range >= -ATTACK_RANGE_Y)
-		{
-			state = ENEMY_STATE::ATTACK;
-			attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
-			standby_time = PHYSICAL_STANDBY;
-			physical_attack = true;
 
-			travel = range / vector;
-			travel_y = range_y / vector;
+		travel = range / vector;
+		travel_y = range_y / vector;
 
-			location.x += travel * speed;
-			location.y += travel_y * speed;
-		}
+		location.x += travel * speed;
+		location.y += travel_y * speed;
 
-		else if (range <= ATTACK_MAGIC && range >= -ATTACK_MAGIC)
-		{
-			state = ENEMY_STATE::ATTACK;
-			attack_state = HARPY_ATTACK::MAGIC_ATTACK;
-			standby_time = MAGIC_STANDBY;
-			magic_attack = true;
+	//	if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE)
+	//	{
+	//		if (magic_num > 5)
+	//		{
+	//			state = ENEMY_STATE::ATTACK;
+	//			attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
+	//			standby_time = PHYSICAL_STANDBY;
+	//			physical_attack = true;
+	//		}
 
-			//弾の生成
-			BulletManager::GetInstance()->CreateEnemyBullet
-			(new HarpyBullet(location, player_location));
-		}
+	//		else
+	//		{
+	//			//magic_num++;
+	//			state = ENEMY_STATE::ATTACK;
+	//			attack_state = HARPY_ATTACK::MAGIC_ATTACK;
+	//			standby_time = MAGIC_STANDBY;
+	//			magic_attack = true;
+
+	//			//弾の生成
+	//			BulletManager::GetInstance()->CreateEnemyBullet
+	//			(new HarpyBullet(location, player_location));
+	//		}
+
+	//	}
+	//	else  //発見後、攻撃範囲外の場合プレイヤーに近づく
+	//	{
+	//		travel = range / vector;
+	//		travel_y = range_y / vector;
+
+	//		location.x += travel * speed;
+	//		location.y += travel_y * speed;
+	//	}
+	//}
+	//else //発見距離にプレイヤーがいなかったら。通常移動
+	//{
+	//	if (left_move == true)
+	//	{
+	//		action_type = HARPY_STATE::NORMAL; //左
+	//	}
+	//	else
+	//	{
+	//		action_type = HARPY_STATE::NORMAL_RIGHT; //右
+	//	}
+	//	switch (action_type)
+	//	{
+	//	case HARPY_STATE::NORMAL:  //通常移動
+	//		location.x -= speed;
+	//		break;
+	//	case HARPY_STATE::NORMAL_RIGHT://右
+	//		location.x += speed;
+	//		break;
+	//	case HARPY_STATE::NONE:
+	//		break;
+	//	default:
+	//		break;
+	//	}
 	}
-	else //発見距離にプレイヤーがいなかったら。通常移動
-	{
-		if (left_move == true)
-		{
-			action_type = HARPY_STATE::NORMAL; //左
-		}
-		else
-		{
-			action_type = HARPY_STATE::NORMAL_RIGHT; //右
-		}
-		switch (action_type)
-		{
-		case HARPY_STATE::NORMAL:  //通常移動
-			location.x -= speed;
-			break;
-		case HARPY_STATE::NORMAL_RIGHT://右
-			location.x += speed;
-			break;
-		case HARPY_STATE::NONE:
-			break;
-		default:
-			break;
-		}
-	}
-
 
 }
 
@@ -249,9 +258,9 @@ void  Harpy::Attack(Location player_location)
 		switch (attack_state)
 		{
 		case HARPY_ATTACK::PHYSICAL_ATTACK:
-			attack = false;
-			physical_attack = false;
-			attack_state = HARPY_ATTACK::NONE;
+			//attack = false;
+			/*physical_attack = false;
+			attack_state = HARPY_ATTACK::NONE;*/
 			break;
 		case HARPY_ATTACK::MAGIC_ATTACK:
 			magic_attack = false;
