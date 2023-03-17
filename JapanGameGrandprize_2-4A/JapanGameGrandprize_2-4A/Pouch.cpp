@@ -4,14 +4,13 @@
 #include "Define.h"
 #include <stdlib.h>
 
-
-
 //コンストラクタ
 Pouch::Pouch()
 {
 	x = 1080;
 	y = 100;
-	tab = Tab::Explosion_Tab;
+	cursol = 0;
+	tab = ATTRIBUTE::EXPLOSION;
 
 	//元素の初期化
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
@@ -33,10 +32,28 @@ void Pouch::ExplosionTabDraw() const
 {
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 	DrawString(x, y + 50, "EXPLOSION", 0x000000);
-	for (int i = 0; i < 3; i++)
+
+	if (cursol - 1 < 0)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_explosion[i].chemical_formula_name);
+		DrawFormatString(x, y + 140, 0x000000, "%s", chemical_formula_explosion[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
 	}
+	else
+	{
+		DrawFormatString(x, y + 140, 0x000000, "%s", chemical_formula_explosion[cursol - 1].chemical_formula_name);
+	}
+
+	if (cursol + 1 > EXPLOSION_MAX_NUM - 1)
+	{
+		DrawFormatString(x, y + 340, 0x000000, "%s", chemical_formula_explosion[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+	}
+	else
+	{
+		DrawFormatString(x, y + 340, 0x000000, "%s", chemical_formula_explosion[cursol + 1].chemical_formula_name);
+	}
+
+	DrawBox(x, y + 200, x + POUCH_WIDTH, y + 300, 0xffffff, FALSE);
+
+	DrawFormatString(x, y + 240, 0x000000, "%s", chemical_formula_explosion[cursol].chemical_formula_name);
 }
 
 //溶解
@@ -46,7 +63,7 @@ void Pouch::MeltTabDraw() const
 	DrawString(x, y + 50, "MELT", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_melt[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_melt[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -57,7 +74,7 @@ void Pouch::ParalysisTabDraw()const
 	DrawString(x, y + 50, "PARALYSIS", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_pararysis[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_pararysis[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -68,7 +85,7 @@ void Pouch::PoisonTabDraw()const
 	DrawString(x, y + 50, "POISON", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_poison[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_poison[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -79,7 +96,7 @@ void Pouch::HealTabDraw()const
 	DrawString(x, y + 50, "HEAL", 0x000000);
 	for (int i = 0; i < 3; i++)
 	{
-		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_heal[i].chemical_formula_name);
+		DrawFormatString(x, y + (100 * (i + 1)), 0x000000, "%s", chemical_formula_heal[i + cursol].chemical_formula_name);
 	}
 }
 
@@ -88,19 +105,19 @@ void Pouch::Draw() const
 {
 	switch (tab)
 	{
-	case Tab::Explosion_Tab:
+	case ATTRIBUTE::EXPLOSION:
 		ExplosionTabDraw();
 		break;
-	case Tab::Melt_Tab:
+	case ATTRIBUTE::MELT:
 		MeltTabDraw();
 		break;
-	case Tab::Poison_Tab:
+	case ATTRIBUTE::POISON:
 		PoisonTabDraw();
 		break;
-	case Tab::Paralysis_Tab:
+	case ATTRIBUTE::PARALYSIS:
 		ParalysisTabDraw();
 		break;
-	case Tab::Heal_Tab:
+	case ATTRIBUTE::HEAL:
 		HealTabDraw();
 		break;
 	default:
@@ -109,9 +126,9 @@ void Pouch::Draw() const
 
 
 
-	DrawBox(x, y + 500, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff00ff, TRUE);
-
 	
+
+	DrawBox(x, y + 400, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x0000ff, TRUE);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -133,20 +150,20 @@ void Pouch::Update()
 	{
 		switch (tab)
 		{
-		case Tab::Explosion_Tab:
-			tab = Tab::Melt_Tab;
+		case ATTRIBUTE::EXPLOSION:
+			tab = ATTRIBUTE::MELT;
 			break;
-		case Tab::Melt_Tab:
-			tab = Tab::Poison_Tab;
+		case ATTRIBUTE::MELT:
+			tab = ATTRIBUTE::POISON;
 			break;
-		case Tab::Poison_Tab:
-			tab = Tab::Paralysis_Tab;
+		case ATTRIBUTE::POISON:
+			tab = ATTRIBUTE::PARALYSIS;
 			break;
-		case Tab::Paralysis_Tab:
-			tab = Tab::Heal_Tab;
+		case ATTRIBUTE::PARALYSIS:
+			tab = ATTRIBUTE::HEAL;
 			break;
-		case Tab::Heal_Tab:
-			tab = Tab::Explosion_Tab;
+		case ATTRIBUTE::HEAL:
+			tab = ATTRIBUTE::EXPLOSION;
 			break;
 		default:
 			break;
@@ -157,20 +174,20 @@ void Pouch::Update()
 	{
 		switch (tab)
 		{
-		case Tab::Explosion_Tab:
-			tab = Tab::Heal_Tab;
+		case ATTRIBUTE::EXPLOSION:
+			tab = ATTRIBUTE::HEAL;
 			break;
-		case Tab::Melt_Tab:
-			tab = Tab::Explosion_Tab;
+		case ATTRIBUTE::MELT:
+			tab = ATTRIBUTE::EXPLOSION;
 			break;
-		case Tab::Poison_Tab:
-			tab = Tab::Melt_Tab;
+		case ATTRIBUTE::POISON:
+			tab = ATTRIBUTE::MELT;
 			break;
-		case Tab::Paralysis_Tab:
-			tab = Tab::Poison_Tab;
+		case ATTRIBUTE::PARALYSIS:
+			tab = ATTRIBUTE::POISON;
 			break;
-		case Tab::Heal_Tab:
-			tab = Tab::Paralysis_Tab;
+		case ATTRIBUTE::HEAL:
+			tab = ATTRIBUTE::PARALYSIS;
 			break;
 		default:
 			break;
@@ -179,19 +196,19 @@ void Pouch::Update()
 
 	switch (tab)
 	{
-	case Tab::Explosion_Tab:
+	case ATTRIBUTE::EXPLOSION:
 		ExplosionTabUpdate();
 		break;
-	case Tab::Melt_Tab:
+	case ATTRIBUTE::MELT:
 		MeltTabUpdate();
 		break;
-	case Tab::Poison_Tab:
+	case ATTRIBUTE::POISON:
 		PoisonTabUpdate();
 		break;
-	case Tab::Paralysis_Tab:
+	case ATTRIBUTE::PARALYSIS:
 		ParalysisTabUpdate();
 		break;
-	case Tab::Heal_Tab:
+	case ATTRIBUTE::HEAL:
 		HealTabUpdate();
 		break;
 	default:
@@ -201,7 +218,26 @@ void Pouch::Update()
 
 void Pouch::ExplosionTabUpdate()
 {
+	if (++count % CURSOL_SPEED == 0)
+	{
+		if (PAD_INPUT::GetRStick().y > 5000)
+		{
+			cursol--;
+			if (cursol < 0)
+			{
+				cursol = EXPLOSION_MAX_NUM - 1;
+			}
+		}
 
+		if (PAD_INPUT::GetRStick().y < -5000)
+		{
+			cursol++;
+			if (cursol > EXPLOSION_MAX_NUM - 1)
+			{
+				cursol = 0;
+			}
+		}
+	}
 }
 
 void Pouch::PoisonTabUpdate()
@@ -242,7 +278,7 @@ void Pouch::InitChemicalParameter()
 	}
 	else     //ファイルが開けた
 	{
-
+		int attribute;
 		char line[100];
 		for (int i = 0; i < EXPLOSION_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
@@ -261,8 +297,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_explosion[i].damage,
 				&chemical_formula_explosion[i].damage_per_second,
 				&chemical_formula_explosion[i].time,
-				&chemical_formula_explosion[i].atribute);
-
+				&attribute);
+			chemical_formula_explosion[i].atribute = static_cast <ATTRIBUTE>(attribute);
 		}
 		for (int i = 0; i < POISON_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
@@ -281,8 +317,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_poison[i].damage,
 				&chemical_formula_poison[i].damage_per_second,
 				&chemical_formula_poison[i].time,
-				&chemical_formula_poison[i].atribute);
-
+				&attribute);
+			chemical_formula_poison[i].atribute = static_cast <ATTRIBUTE>(attribute);
 		}
 
 		for (int i = 0; i < PARARYSIS_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
@@ -302,7 +338,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_pararysis[i].damage,
 				&chemical_formula_pararysis[i].damage_per_second,
 				&chemical_formula_pararysis[i].time,
-				&chemical_formula_pararysis[i].atribute);
+				&attribute);
+			chemical_formula_pararysis[i].atribute = static_cast <ATTRIBUTE>(attribute);
 
 		}
 
@@ -324,7 +361,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_heal[i].damage,
 				&chemical_formula_heal[i].damage_per_second,
 				&chemical_formula_heal[i].time,
-				&chemical_formula_heal[i].atribute);
+				&attribute);
+			chemical_formula_heal[i].atribute = static_cast <ATTRIBUTE>(attribute);
 
 		}
 
@@ -345,34 +383,45 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_melt[i].damage,
 				&chemical_formula_melt[i].damage_per_second,
 				&chemical_formula_melt[i].time,
-				&chemical_formula_melt[i].atribute);
+				&attribute);
+			chemical_formula_melt[i].atribute = static_cast <ATTRIBUTE>(attribute);
 		}
 		return;
 	}
 	fclose(fp); //ファイルを閉じる
 }
 
-ChemicalFormulaParameter Pouch::GetExplosion(int i)
+ChemicalFormulaParameter Pouch::GetExplosion()
 {
-	return chemical_formula_explosion[i];
+	return select_explosion;
 }
 
-ChemicalFormulaParameter Pouch::GetPoison(int i)
+ChemicalFormulaParameter Pouch::GetPoison()
 {
-	return chemical_formula_poison[i];
+	return select_poison;
 }
 
-ChemicalFormulaParameter Pouch::GetPararysis(int i)
+ChemicalFormulaParameter Pouch::GetPararysis()
 {
-	return chemical_formula_pararysis[i];
+	return select_pararysis;
 }
 
-ChemicalFormulaParameter Pouch::GetHeal(int i)
+ChemicalFormulaParameter Pouch::GetHeal()
 {
-	return chemical_formula_heal[i];
+	return select_heal;
 }
 
-ChemicalFormulaParameter Pouch::GetMelt(int i)
+ChemicalFormulaParameter Pouch::GetMelt()
 {
-	return chemical_formula_melt[i];
+	return select_melt;
+}
+
+ATTRIBUTE Pouch::GetAttribute()
+{
+	return tab;
+}
+
+int Pouch::GetCursol()
+{
+	return cursol;
 }
