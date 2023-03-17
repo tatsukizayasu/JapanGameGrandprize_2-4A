@@ -99,6 +99,22 @@ private:
 
 		return vector_max;
 	}
+	//2‚Â‚ÌƒxƒNƒgƒ‹‚Ì‚È‚·Šp‚ğ‹‚ß‚é
+	double GetAngle(Location vector1, Location vector2)const
+	{
+		double angle = 0;
+
+		float vec_a = powf(powf(vector1.x, 2.0) + powf(vector1.y, 2.0), 0.5);
+		float vec_b = powf(powf(vector2.x, 2.0) + powf(vector2.y, 2.0), 0.5);
+
+		float component = vector1.x * vector2.x + vector1.y * vector2.y;
+
+		double rad = acos(component / (vec_a * vec_b));
+
+		angle = 180 / M_PI * rad;
+
+		return angle;
+	}
 
 
 public:

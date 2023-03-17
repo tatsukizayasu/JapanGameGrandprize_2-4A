@@ -4,6 +4,7 @@
 #include "SphereCollider.h"
 
 Location t = {};
+float nearpos = 0;
 
 //------------------------------------
 // コンストラクタ
@@ -66,9 +67,17 @@ void LineCollider_t::Draw()const
 		, GetMax().y - CameraWork::GetCamera().y
 		, 0x000000, FALSE);
 
+	float x = GetLocation(LINE_START).x + t.x - CameraWork::GetCamera().x;
+	float y = GetLocation(LINE_START).y + t.y - CameraWork::GetCamera().y;
 
-	DrawCircle(t.x - CameraWork::GetCamera().x,
-		t.y - CameraWork::GetCamera().y, 3, 0xFF0000, TRUE);
+	DrawCircle(GetLocation(LINE_START).x + t.x - CameraWork::GetCamera().x,
+		GetLocation(LINE_START).y + t.y - CameraWork::GetCamera().y,
+		3, 0xFF0000, TRUE);
+
+
+	DrawFormatString(GetLocation(LINE_START).x + t.x - CameraWork::GetCamera().x,
+		GetLocation(LINE_START).y + t.y - CameraWork::GetCamera().y - 30,
+		 0xFF00FF, "%lf", nearpos);
 }
 
 //-----------------------------------
@@ -115,16 +124,40 @@ bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 	unit_vector.x = vector1.x / len;
 	unit_vector.y = vector1.y / len;
 
-	float distance = unit_vector.x * vector2.x
+	float distance_near_pos = unit_vector.x * vector2.x
 		+ unit_vector.y * vector2.y;
 
 	Location near_pos;
 
-	near_pos.x = unit_vector.x * distance;
-	near_pos.y = unit_vector.y * distance;
+	near_pos.x = unit_vector.x * distance_near_pos;
+	near_pos.y = unit_vector.y * distance_near_pos;
 
 	t = near_pos;
 
+	float distance_circle_near_pos;
+
+	distance_circle_near_pos =
+		powf(powf(near_pos.x - vector2.x, 2.0) + powf(near_pos.y - vector2.y, 2.0), 0.5);
+
+	nearpos = distance_circle_near_pos;
+
+	if (distance_circle_near_pos > sphere->GetRadius())
+	{
+		return false;
+	}
+
+	bool is_start_acute;
+	bool is_end_acute;
+	double start_angle = GetAngle(GetLocation(LINE_END) - GetLocation(LINE_START), vector2);
+	double end_angle = GetAngle(GetLocation(LINE_START) - GetLocation(LINE_END), vector2);
+	is_start_acute = (start_angle <= 90);
+	is_end_acute = (end_angle <= 90);
+
+	if (is_start_acute ^ is_end_acute)
+	{
+		is_hit = true;
+	}
+	//始点をそろえる
 	return is_hit;
 }
 

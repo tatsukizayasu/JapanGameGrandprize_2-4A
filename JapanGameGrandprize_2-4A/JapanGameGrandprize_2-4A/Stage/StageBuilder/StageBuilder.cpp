@@ -45,7 +45,6 @@ StageBuilder::StageBuilder()
 	};
 	line = new PolyLine(points,3);
 	
-	mouse_box = new MapChip(&block_images[0], mouse->GetLocation(), { 40,40 });
 
 #endif // _DEV
 
@@ -73,8 +72,6 @@ StageBuilder::~StageBuilder()
 	delete line;
 
 	delete line_collider;
-
-	delete mouse_box;
 }
 
 //------------------------------------
@@ -150,7 +147,6 @@ void StageBuilder::Update()
 
 
 	line_collider->HitSphere(mouse);
-	mouse_box->SetLocation(mouse->GetLocation());
 #endif // _DEV
 }
 
@@ -198,8 +194,6 @@ void StageBuilder::Draw()const
 	}
 	DrawSphere();
 
-	mouse_box->Draw();
-
 #endif // _DEV
 
 	DrawWhichMode();
@@ -207,10 +201,11 @@ void StageBuilder::Draw()const
 	DrawMouse();
 
 	line_collider->Draw();
-	if (line_collider->HitBox(mouse_box))
+	if (line_collider->HitSphere(mouse))
 	{
 		DrawString(600, 300, "hit", 0);
 	}
+	mouse->Draw();
 }
 
 //--------------------------------------

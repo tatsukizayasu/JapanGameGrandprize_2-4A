@@ -56,7 +56,6 @@ private:
 	//todo:テスト 後々vector配列にして運用する
 	class PolyLine* line;
 	LineCollider_t* line_collider;
-	MapChip* mouse_box;
 
 public:
 	//コンストラクタ
