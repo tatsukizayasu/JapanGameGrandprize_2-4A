@@ -94,7 +94,7 @@ Player::Player(Stage* stage)
 
 	this->stage = stage;
 	location.x = stage->GetSpawnPoint().x;
-	location.y = stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2;
+	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0;
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
