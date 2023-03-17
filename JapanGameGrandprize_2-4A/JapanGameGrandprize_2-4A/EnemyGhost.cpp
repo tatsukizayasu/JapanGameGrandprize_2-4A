@@ -87,7 +87,14 @@ EnemyGhost::EnemyGhost()
 //-----------------------------------
 EnemyGhost::~EnemyGhost()
 {
+	delete[] images;
+	delete[] type;
 
+	for (int i = 0; i < WIND_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+	delete[] drop_element;
 }
 
 //-----------------------------------

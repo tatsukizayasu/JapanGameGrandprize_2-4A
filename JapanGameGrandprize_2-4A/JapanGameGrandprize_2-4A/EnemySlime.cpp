@@ -80,6 +80,11 @@ EnemySlime::~EnemySlime()
 
 	delete type;
 
+	for (int i = 0; i < 7; i++)
+	{
+		DeleteGraph(images[i]);
+	}
+
 	delete[] images;
 
 }
