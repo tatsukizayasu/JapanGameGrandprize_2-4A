@@ -168,10 +168,17 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 		if (hit_stage.hit) //ステージとの当たり判定
 		{
+			location = old_location;
 			attack = false;
 			state = ENEMY_STATE::MOVE;
-			if (left_move) speed = -SLIME_SPEED;
-			else speed = SLIME_SPEED;
+			if (left_move)
+			{
+				speed = -SLIME_SPEED;
+			}
+			else
+			{
+				speed = SLIME_SPEED;
+			}
 		}
 		break;
 
