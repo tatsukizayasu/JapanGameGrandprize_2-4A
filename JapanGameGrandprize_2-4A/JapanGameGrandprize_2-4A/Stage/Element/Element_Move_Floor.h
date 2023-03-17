@@ -6,6 +6,9 @@ class Element_Move_Floor : public Stage_Element_Base
 private:
 	//true=“®‚­,false=Ž~‚Ü‚é
 	bool is_move;
+	bool is_start_point;
+	Location next_location;
+
 	float speed_x, speed_y;
 public:
 	Element_Move_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area);
