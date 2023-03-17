@@ -6,6 +6,7 @@
 #include "CameraWork.h"
 #include "ItemController.h"
 #include "BulletManager.h"
+#include "Pause.h"
 
 class GameMain :
     public AbstractScene
@@ -17,6 +18,7 @@ private:
     Stage* stage;
     CameraWork* camera_work;
     EnemyBase** enemy; //敵
+    Pause* pause;
 
     //操作間隔時間
     int input_margin;

@@ -19,6 +19,8 @@ GameMain::GameMain()
 	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
 	background_image = LoadGraph("Images/Scene/gamemain.png");
 
+	pause = new Pause();
+
 	stage = new Stage();
 	player = new Player(stage);
 	stage->SetPlayer(player);
@@ -30,6 +32,7 @@ GameMain::GameMain()
 	enemy[4] = new Harpy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
+	
 
 	bullet_manager = BulletManager::GetInstance();
 
@@ -41,6 +44,7 @@ GameMain::GameMain()
 //-----------------------------------
 GameMain::~GameMain()
 {
+	delete pause;
 	delete player;
 	delete stage;
 
@@ -59,6 +63,10 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+	pause->Update();
+	if (pause->IsPause() == TRUE) { return this; }
+
+
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
@@ -194,9 +202,11 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
+	
 	SetBackgroundColor(149, 249, 253);
 	//”wŒi	•`‰æ
 	DrawGraph(0, 0, background_image, FALSE);
+
 
 	stage->Draw();
 	item_controller->Draw();
@@ -212,4 +222,7 @@ void GameMain::Draw()const
 	}
 	bullet_manager->Draw();
 
+
+	//ƒ|[ƒY		•`‰æ
+	if (pause->IsPause() == true) { pause->Draw(); }
 }

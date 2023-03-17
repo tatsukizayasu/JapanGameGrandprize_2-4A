@@ -11,8 +11,9 @@
 #define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage2";
 #define STAGE_NAME	"Stage01";
+//#define STAGE_NAME  "Stage01_test";
 
-#define NODEBUG
+//#define NODEBUG
 
 //-----------------------------------
 // コンストラクタ
@@ -39,6 +40,15 @@ Stage::Stage()
 			{
 
 #ifndef NODEBUG
+
+				//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
+				if (enemy_id.find(i) != enemy_id.end()) {
+					enemy_init_location.push_back({i,
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						});
+					continue;
+				}
 				
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
 					element->AddElement(i, &block_images[i], {
@@ -59,13 +69,26 @@ Stage::Stage()
 
 
 #else NODEBUG	//NODEBUG
+				
+				if (enemy_id.find(i) != enemy_id.end()) {
 
-				mapchip.push_back(new MapChip
-				(&block_images[i],
-					{
-						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-					}, { CHIP_SIZE,CHIP_SIZE }));
+					enemy_init_location.push_back({
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						});
+						
+
+				}
+				else {
+
+					mapchip.push_back(new MapChip
+					(&block_images[i],
+						{
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						}, { CHIP_SIZE,CHIP_SIZE }));
+				}
+
 
 #endif // NODEBUG	
 			}
