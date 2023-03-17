@@ -5,7 +5,8 @@
 class Element_DamageWall : public Stage_Element_Base
 {
 private:
-	
+	int anim_images[9];
+	short anim_count;
 public:
 
 	//コンストラクタ
