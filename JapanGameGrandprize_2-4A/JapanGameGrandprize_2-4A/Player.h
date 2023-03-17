@@ -79,6 +79,12 @@ private:
 
 	ElementItem** element;	//å≥ëf
 
+	ChemicalFormulaParameter explosion;
+	ChemicalFormulaParameter poison;
+	ChemicalFormulaParameter melt;
+	ChemicalFormulaParameter pararysis;
+	ChemicalFormulaParameter heal;
+
 
 public:
 
@@ -109,4 +115,10 @@ public:
 	void SetElementItem(class Item* item);
 	//ÉvÉåÉCÉÑÅ[ÇÃå¸Ç´
 	bool GetMoveDirection();
+
+	void SetExplosion(ChemicalFormulaParameter);
+	void SetPoison(ChemicalFormulaParameter);
+	void SetMelt(ChemicalFormulaParameter);
+	void SetPararysis(ChemicalFormulaParameter);
+	void SetHeal(ChemicalFormulaParameter);
 };

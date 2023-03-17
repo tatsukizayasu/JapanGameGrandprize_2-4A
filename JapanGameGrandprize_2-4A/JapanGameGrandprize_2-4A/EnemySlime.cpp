@@ -45,8 +45,23 @@ EnemySlime::EnemySlime()
 
 	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::WATER;
+	type = new ENEMY_TYPE;
+
+	switch (GetRand(4))
+	{
+	case 0:
+		*type = ENEMY_TYPE::FIRE;
+		break;
+	case 1:
+		*type = ENEMY_TYPE::WATER;
+		break;
+	case 2:
+		*type = ENEMY_TYPE::WIND;
+		break;
+	case 3:
+		*type = ENEMY_TYPE::SOIL;
+		break;
+	}
 
 	state = ENEMY_STATE::IDOL;
 	images = new int[7];
@@ -54,12 +69,29 @@ EnemySlime::EnemySlime()
 	slime_angle = 0;
 
 	//ドロップアイテムの設定
-	drop_element = new ElementItem * [SOIL_DROP];
-	drop_type_volume = SOIL_DROP;
+	switch (*type)
+	{
+	case ENEMY_TYPE::FIRE:
+		drop_element = new ElementItem * [FIRE_DROP];
+		drop_type_volume = FIRE_DROP;
+		break;
+	case ENEMY_TYPE::WATER:
+		drop_element = new ElementItem * [WATER_DROP];
+		drop_type_volume = WATER_DROP;
+		break;
+	case ENEMY_TYPE::WIND:
+		drop_element = new ElementItem * [WIND_DROP];
+		drop_type_volume = WIND_DROP;
+		break;
+	case ENEMY_TYPE::SOIL:
+		drop_element = new ElementItem * [SOIL_DROP];
+		drop_type_volume = SOIL_DROP;
+		break;
+	}
 
 	int volume = 0;
 
-	for (int i = 0; i < WATER_DROP; i++)
+	for (int i = 0; i < drop_type_volume; i++)
 	{
 		volume = SLIME_MIN_DROP + GetRand(SLIME_MAX_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
@@ -79,6 +111,11 @@ EnemySlime::~EnemySlime()
 	delete[] drop_element;
 
 	delete type;
+
+	for (int i = 0; i < 7; i++)
+	{
+		DeleteGraph(images[i]);
+	}
 
 	delete[] images;
 
@@ -117,10 +154,16 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			speed = 0;
 		}
 
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 
 	case ENEMY_STATE::FALL:
 		Fall();
+
 		hit_stage = HitStage(stage);
 
 		if (hit_stage.hit) //ステージとの当たり判定
@@ -146,6 +189,12 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 				}
 			}
 		}
+
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 
 	case ENEMY_STATE::ATTACK:
@@ -156,10 +205,17 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 		if (hit_stage.hit) //ステージとの当たり判定
 		{
+			location = old_location;
 			attack = false;
 			state = ENEMY_STATE::MOVE;
-			if (left_move) speed = -SLIME_SPEED;
-			else speed = SLIME_SPEED;
+			if (left_move)
+			{
+				speed = -SLIME_SPEED;
+			}
+			else
+			{
+				speed = SLIME_SPEED;
+			}
 		}
 		break;
 
@@ -170,6 +226,9 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
+
+	
+
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -192,14 +251,17 @@ void EnemySlime::Draw()const
 //-----------------------------------
 void EnemySlime::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
-	Location camera = CameraWork::GetCamera(); //カメラ
-	scroll = location - camera;
-
-	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
+		if (left_move)
+		{
+			speed = -SLIME_SPEED;
+		}
+		else
+		{
+			speed = SLIME_SPEED;
+		}
 	}
 }
 
@@ -237,6 +299,8 @@ void EnemySlime::Move(const Location player_location)
 		location.x += speed;
 		wait_time = 0;
 	}
+
+	
 }
 
 //-----------------------------------
@@ -244,11 +308,11 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 void EnemySlime::Fall()
 {
+	location.y += speed;
 	if (speed < GRAVITY)
 	{
 		speed += ENEMY_FALL_SPEED;
 	}
-	location.y += speed;
 }
 
 //-----------------------------------

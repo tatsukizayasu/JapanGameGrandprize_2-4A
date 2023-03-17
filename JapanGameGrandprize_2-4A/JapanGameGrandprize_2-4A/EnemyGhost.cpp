@@ -87,7 +87,14 @@ EnemyGhost::EnemyGhost()
 //-----------------------------------
 EnemyGhost::~EnemyGhost()
 {
+	delete[] images;
+	delete[] type;
 
+	for (int i = 0; i < WIND_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+	delete[] drop_element;
 }
 
 //-----------------------------------
@@ -105,6 +112,12 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
+		
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -143,16 +156,11 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 //アイドル状態
 void EnemyGhost::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
-	Location camera = CameraWork::GetCamera(); //カメラ
-	scroll = location - camera;
-
-	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
+		speed = 1.5;
 	}
-
 }
 
 //移動
@@ -187,6 +195,7 @@ void EnemyGhost::Move(const Location player_location)
 	default:
 		break;
 	}
+
 }
 
 //-----------------------------------

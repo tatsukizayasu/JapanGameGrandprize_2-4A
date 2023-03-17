@@ -77,8 +77,8 @@ Harpy::Harpy()
 		drop_volume += volume;
 	}
 
-	type = new ENEMY_TYPE;
-	*type = ENEMY_TYPE::WIND;
+	type = new ENEMY_TYPE[1];
+	type[0] = ENEMY_TYPE::WIND;
 	attack_state = HARPY_ATTACK::NONE;
 	state = ENEMY_STATE::IDOL;
 	action_type = HARPY_STATE::NORMAL;
@@ -89,7 +89,14 @@ Harpy::Harpy()
 //-----------------------------------
 Harpy::~Harpy()
 {
+	delete[] images;
+	delete[] type;
 
+	for (int i = 0; i < WIND_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+	delete[] drop_element;
 }
 
 //-----------------------------------

@@ -22,7 +22,10 @@ Stage::Stage()
 {
 	element = new Stage_Element();
 
-	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
+	//スポーン地点に初期値をセット
+	spawn_point = { MAP_CHIP_SIZE / 2, SCREEN_HEIGHT / 2 };
+
+	if (LoadDivGraph("Images/Stage/map_chips.png", 50, 10, 5, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
 	{
 		throw "Images/Stage/map_chips.png";
 	}
@@ -41,6 +44,13 @@ Stage::Stage()
 
 #ifndef NODEBUG
 
+				if (i == spawn_point_id) {
+					spawn_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2	
+					};
+					continue;
+				}
+
 				//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
 				if (enemy_id.find(i) != enemy_id.end()) {
 					enemy_init_location.push_back({i,
@@ -58,12 +68,14 @@ Stage::Stage()
 
 				}
 				else {
-					mapchip.push_back(new MapChip
-					(&block_images[i],
-						{
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						}, { CHIP_SIZE,CHIP_SIZE }));
+					if (i < 50) {
+						mapchip.push_back(new MapChip
+						(&block_images[i],
+							{
+								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+							}, { CHIP_SIZE,CHIP_SIZE }));
+					}
 				}
 
 
