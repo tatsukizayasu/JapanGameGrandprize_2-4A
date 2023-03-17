@@ -43,7 +43,7 @@ Stage::Stage()
 
 				//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
 				if (enemy_id.find(i) != enemy_id.end()) {
-					enemy_init_location.push_back({
+					enemy_init_location.push_back({i,
 							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 						});

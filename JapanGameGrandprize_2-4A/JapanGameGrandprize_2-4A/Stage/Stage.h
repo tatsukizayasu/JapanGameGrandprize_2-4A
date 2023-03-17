@@ -14,6 +14,13 @@ class Stage_Element;
 
 class Stage
 {
+public:
+	struct ENEMY_LOCATION {
+		short id;
+		float x;
+		float y;
+	};
+
 private:
 
 	//オブジェクト変数
@@ -29,7 +36,7 @@ private:
 
 
 	//エネミースポーン地点Location構造体
-	std::vector<Location> enemy_init_location;
+	std::vector<ENEMY_LOCATION> enemy_init_location;
 
 	//エネミーのID
 	std::set<short> enemy_id{ 200,201,202,203,204,205,206,207,208,209,210 };
@@ -102,6 +109,6 @@ public:
 	/// <summary>
 	///エネミースポーンLocation構造体	Getter
 	/// </summary>
-	/// <returns>ベクター型(Location構造体型)</returns>	
-	std::vector<Location> GetEnemy_SpawnLocation() const { return enemy_init_location; }
+	/// <returns>ベクター型(ENEMY_LOCATION構造体型)</returns>	
+	std::vector<ENEMY_LOCATION> GetEnemy_SpawnLocation() const { return enemy_init_location; }
 };
