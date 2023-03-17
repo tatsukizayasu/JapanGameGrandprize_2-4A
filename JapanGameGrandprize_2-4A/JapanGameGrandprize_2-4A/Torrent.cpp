@@ -136,6 +136,11 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
+
+	if (CheckHp() && state != ENEMY_STATE::DEATH)
+	{
+		state = ENEMY_STATE::DEATH;
+	}
 }
 
 //-----------------------------------
@@ -525,6 +530,7 @@ AttackResource Torrent::Hit()
 //-----------------------------------
 void Torrent::Death()
 {
+	can_delete = true;
 }
 
 //-----------------------------------
@@ -532,6 +538,29 @@ void Torrent::Death()
 //-----------------------------------
 void Torrent::HitBullet(const BulletBase* bullet)
 {
+	switch (bullet->GetAttribute())
+	{
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::POISON:
+		poison_damage = bullet->GetDamage() * 0;
+		poison_time = bullet->GetDebuffTime() * 0;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
+	}
 }
 
 //-----------------------------------
