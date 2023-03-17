@@ -34,6 +34,7 @@ EnemySlime::EnemySlime()
 	//location.x = 200.0;
 	//location.y = 700.0f;
 
+	jump_distance = location;
 	area.height = 50;
 	area.width = 50;
 	wait_time = 0;
@@ -42,10 +43,10 @@ EnemySlime::EnemySlime()
 	hp = 15;
 	speed = SLIME_SPEED;
 
-	color = GetColor(0, 0, 255);
+	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 
-	type = new ENEMY_TYPE;
-	*type = ENEMY_TYPE::WATER;
+	type = new ENEMY_TYPE[1];
+	type[0] = ENEMY_TYPE::WATER;
 
 	state = ENEMY_STATE::IDOL;
 	images = new int[7];
@@ -68,11 +69,15 @@ EnemySlime::EnemySlime()
 
 }
 
-//-----------------------------------
-//デストラクタ
-//-----------------------------------
 EnemySlime::~EnemySlime()
 {
+	for (int i = 0; i < SOIL_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+
+	delete[] drop_element;
+
 	delete type;
 
 	for (int i = 0; i < 7; i++)
@@ -82,12 +87,6 @@ EnemySlime::~EnemySlime()
 
 	delete[] images;
 
-	for (int i = 0; i < WATER_DROP; i++)
-	{
-		delete drop_element[i];
-	}
-
-	delete[] drop_element;
 }
 
 void EnemySlime::Update(const Player* player, const Stage* stage)
@@ -123,10 +122,16 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			speed = 0;
 		}
 
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 
 	case ENEMY_STATE::FALL:
 		Fall();
+
 		hit_stage = HitStage(stage);
 
 		if (hit_stage.hit) //ステージとの当たり判定
@@ -152,6 +157,12 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 				}
 			}
 		}
+
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 
 	case ENEMY_STATE::ATTACK:
@@ -162,10 +173,17 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 		if (hit_stage.hit) //ステージとの当たり判定
 		{
+			location = old_location;
 			attack = false;
 			state = ENEMY_STATE::MOVE;
-			if (left_move) speed = -SLIME_SPEED;
-			else speed = SLIME_SPEED;
+			if (left_move)
+			{
+				speed = -SLIME_SPEED;
+			}
+			else
+			{
+				speed = SLIME_SPEED;
+			}
 		}
 		break;
 
@@ -176,6 +194,9 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
+
+	
+
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -190,7 +211,7 @@ void EnemySlime::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawRotaGraph(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
+	DrawRotaGraphF(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 }
 
 //-----------------------------------
@@ -198,14 +219,17 @@ void EnemySlime::Draw()const
 //-----------------------------------
 void EnemySlime::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
-	Location camera = CameraWork::GetCamera(); //カメラ
-	scroll = location - camera;
-
-	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
+		if (left_move)
+		{
+			speed = -SLIME_SPEED;
+		}
+		else
+		{
+			speed = SLIME_SPEED;
+		}
 	}
 }
 
@@ -243,6 +267,8 @@ void EnemySlime::Move(const Location player_location)
 		location.x += speed;
 		wait_time = 0;
 	}
+
+	
 }
 
 //-----------------------------------
@@ -250,11 +276,11 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 void EnemySlime::Fall()
 {
+	location.y += speed;
 	if (speed < GRAVITY)
 	{
 		speed += ENEMY_FALL_SPEED;
 	}
-	location.y += speed;
 }
 
 //-----------------------------------

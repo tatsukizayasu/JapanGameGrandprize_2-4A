@@ -163,6 +163,9 @@ protected:
 	//HP‚ª0‚©‚Ç‚¤‚©”»’f(0‚É‚È‚Á‚½‚çtrue)
 	bool CheckHp();
 
+	//‰æ–ÊŠO‚Éo‚½
+	bool ScreenOut();
+
 	//“Åó‘Ô‚Ìˆ—
 	void Poison();
 

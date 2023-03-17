@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include "StageBuilder/StageBuilder.h"
 #include "Element/Stage_Element_Base.h"
+#include <set>
 
 #define CHIP_SIZE	40
 
@@ -13,6 +14,13 @@ class Stage_Element;
 
 class Stage
 {
+public:
+	struct ENEMY_LOCATION {
+		short id;
+		float x;
+		float y;
+	};
+
 private:
 
 	//オブジェクト変数
@@ -23,14 +31,26 @@ private:
 	StageBuilder* stage_builder;
 #endif
 
+	//スポーン地点
+	Location spawn_point;
+
 	//マップ配列データ
 	std::vector<std::vector<int>> map_data;
+
+
+	//エネミースポーン地点Location構造体
+	std::vector<ENEMY_LOCATION> enemy_init_location;
+
+	//エネミーのID
+	std::set<short> enemy_id{ 200,201,202,203,204,205,206,207,208,209,210 };
 
 	//背景画像
 	int background_images;
 	//ブロック画像
 	int block_images[110];
 
+	//スポーン地点ID
+	const short spawn_point_id = 777;
 
 protected:
 
@@ -61,6 +81,11 @@ public:
 	void LoadMap();
 
 	/// <summary>
+	/// スポーン地点		Getter
+	/// </summary>
+	Location GetSpawnPoint() { return spawn_point; }
+
+	/// <summary>
 	/// StageクラスにPlayerオブジェクトを渡すSetter
 	/// </summary>
 	/// <param name = "*player">Playerオブジェクトポインタ</param>
@@ -89,4 +114,12 @@ public:
 	/// <returns>ベクター型(Stage_Element_Baseオブジェクト型)：Stage_Element_Base</returns>	
 	/// ※全要素をループして使わないこと
 	std::vector<Stage_Element_Base*> GetElement_MapChip() const;
+
+	
+	/// <summary>
+	///エネミースポーンLocation構造体	Getter
+	///	idは200番台
+	/// </summary>
+	/// <returns>ベクター型(ENEMY_LOCATION構造体型)</returns>	
+	std::vector<ENEMY_LOCATION> GetEnemy_SpawnLocation() const { return enemy_init_location; }
 };

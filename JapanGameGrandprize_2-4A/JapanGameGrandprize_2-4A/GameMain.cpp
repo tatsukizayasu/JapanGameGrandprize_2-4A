@@ -8,6 +8,7 @@
 #include"Harpy.h"
 #include "BULLET.h"
 #include "Mage.h"
+#include "Torrent.h"
 
 //-----------------------------------
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
@@ -17,6 +18,8 @@ GameMain::GameMain()
 
 	//”wŒi‰æ‘œ“Ç‚İ‚İ
 	background_image = LoadGraph("Images/Scene/gamemain.png");
+
+	pause = new Pause();
 
 	stage = new Stage();
 	player = new Player(stage);
@@ -29,6 +32,7 @@ GameMain::GameMain()
 	enemy[4] = new Harpy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
+	
 
 	bullet_manager = BulletManager::GetInstance();
 
@@ -40,16 +44,17 @@ GameMain::GameMain()
 //-----------------------------------
 GameMain::~GameMain()
 {
+	delete pause;
 	delete player;
 	delete stage;
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		delete enemy[i];
 	}
-
 	delete[] enemy;
 	delete camera_work;
+	delete item_controller;
 	delete bullet_manager;
 }
 
@@ -58,6 +63,10 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+	pause->Update();
+	if (pause->IsPause() == TRUE) { return this; }
+
+
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
@@ -76,16 +85,11 @@ void GameMain::EnemyUpdate()
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
-	bullet_manager->Update(stage);
-
-	EnemyBulletBase** enemy_bullet;
-	enemy_bullet = bullet_manager->GetEnemyBullets();
-
 	for (int i = 0; i < 5; i++)
 	{
 		if (enemy[i] != nullptr)
 		{
-			enemy[i]->Update(player,stage);
+			enemy[i]->Update(player, stage);
 
 			//ƒGƒlƒ~[‚ÌUŒ‚
 			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
@@ -110,6 +114,7 @@ void GameMain::EnemyUpdate()
 					delete player_bullet[j];
 					player_bullet[j] = nullptr;
 					player->SortBullet(j);
+					j--;
 				}
 			}
 
@@ -118,9 +123,15 @@ void GameMain::EnemyUpdate()
 				item_controller->SpawnItem(enemy[i]);
 				delete enemy[i];
 				enemy[i] = nullptr;
+				i--;
 			}
 		}
 	}
+
+	bullet_manager->Update(stage);
+
+	EnemyBulletBase** enemy_bullet;
+	enemy_bullet = bullet_manager->GetEnemyBullets();
 
 	//“G‚Ì’e‚ÆƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è
 	if (enemy_bullet != nullptr)
@@ -133,9 +144,54 @@ void GameMain::EnemyUpdate()
 			}
 			if (enemy_bullet[i]->HitBox(player))
 			{
-				player->HpDamage(bullet_manager->Hit(i));
+				player->HpDamage(bullet_manager->HitEnemyBullet(i));
 				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
 				i--;
+			}
+		}
+	}
+
+	EnemyBulletBase** enemy_nuts;
+	enemy_nuts = bullet_manager->GetEnemyNuts();
+
+	if (enemy_nuts != nullptr) //–Ø‚ÌÀ‚Æ‚Ì“–‚½‚è”»’è
+	{
+		for (int i = 0; i < bullet_manager->EnemyGetNutsMax(); i++)
+		{
+			if (enemy_nuts[i] == nullptr)
+			{
+				break;
+			}
+
+			if (enemy_nuts[i]->HitBox(player))
+			{
+				player->HpDamage(bullet_manager->HitEnemyNuts(i));
+				bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
+				i--;
+			}
+
+			if (enemy_nuts[i] == nullptr)
+			{
+				break;
+			}
+
+			for (int j = 0; j < BULLET_MAX; j++)
+			{
+				if (player_bullet[j] == nullptr)
+				{
+					break;
+				}
+
+				if (player_bullet[j]->HitSphere(enemy_nuts[i]))
+				{
+					bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
+					i--;
+
+					delete player_bullet[j];
+					player_bullet[j] = nullptr;
+					player->SortBullet(j);
+					j--;
+				}
 			}
 		}
 	}
@@ -146,9 +202,11 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
+	
 	SetBackgroundColor(149, 249, 253);
 	//”wŒi	•`‰æ
 	DrawGraph(0, 0, background_image, FALSE);
+
 
 	stage->Draw();
 	item_controller->Draw();
@@ -164,4 +222,7 @@ void GameMain::Draw()const
 	}
 	bullet_manager->Draw();
 
+
+	//ƒ|[ƒY		•`‰æ
+	if (pause->IsPause() == true) { pause->Draw(); }
 }

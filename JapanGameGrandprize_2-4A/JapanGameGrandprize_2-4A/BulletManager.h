@@ -24,9 +24,12 @@ public:
 
 private:
 
-    EnemyBulletBase** enemy_bullets;
-    int enemy_bullet_count;
-    int enemy_bullet_max;
+    EnemyBulletBase** enemy_bullets; //“G‚Ì’e
+    EnemyBulletBase** enemy_nuts; //–Ø‚ÌÀ
+    int enemy_bullet_count; //’e‚Ì¶¬”
+    int enemy_nuts_count; //–Ø‚ÌÀ‚Ì¶¬”
+    int enemy_bullet_max; //’e‚Ì¶¬‰Â”\”
+    int enemy_nuts_max; //–Ø‚ÌÀ‚Ì¶¬‰Â”\”
 
 public:
     //ƒfƒXƒgƒ‰ƒNƒ^
@@ -44,8 +47,21 @@ public:
     //’e‚Ìíœ
     void DeleteEnemyBullet(const EnemyBulletBase* bullet);
 
-    //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
-    AttackResource Hit(const int i);
+
+    //–Ø‚ÌÀ‚Ì¶¬
+    void CreateEnemyNuts(class EnemyBulletBase* nuts);
+
+    //–Ø‚ÌÀ‚Ì•À‚×‘Ö‚¦
+    void SortEnemyNuts(const int nuts_num);
+
+    //–Ø‚ÌÀ‚Ìíœ
+    void DeleteEnemyNuts(const EnemyBulletBase* nuts);
+
+    //UŒ‚‚ª“–‚½‚Á‚½
+    AttackResource HitEnemyBullet(const int i);
+
+    //UŒ‚‚ª“–‚½‚Á‚½
+    AttackResource HitEnemyNuts(const int i);
 
     //•`‰æ
     void Draw() const;
@@ -55,4 +71,10 @@ public:
 
     //’e‚ÌÅ‘å’l‚Ìæ“¾
     int EnemyGetBulletMax() const;
+
+    //–Ø‚ÌÀ‚Ìæ“¾
+    EnemyBulletBase** GetEnemyNuts() const;
+
+    //–Ø‚ÌÀ‚ÌÅ‘å’l‚Ìæ“¾
+    int EnemyGetNutsMax() const;
 };

@@ -23,6 +23,7 @@ EnemyBase::EnemyBase()
 	kind = ENEMY_KIND::NONE; 
 	state = ENEMY_STATE::IDOL;
 	type = nullptr;
+	images = nullptr;
 }
 
 //-----------------------------------
@@ -33,6 +34,25 @@ bool EnemyBase::CheckHp()
 	bool ret = false;
 
 	if (hp <= 0)
+	{
+		ret = true;
+	}
+
+	return ret;
+}
+
+//-----------------------------------
+//画面外に出た
+//-----------------------------------
+bool EnemyBase::ScreenOut()
+{
+	bool ret = false; //戻り値
+	Location scroll; //画面スクロールを考慮した座標
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
+
+	if ((scroll.x < -(area.width / 2)) || (SCREEN_WIDTH + (area.width / 2) < scroll.x) ||
+		(scroll.y < -(area.height / 2)) || (SCREEN_HEIGHT + (area.height / 2) < scroll.y))
 	{
 		ret = true;
 	}
@@ -53,9 +73,6 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 	//カメラの位置
 	Location camera = CameraWork::GetCamera();
 
-	//描画範囲の設定
-	Area draw_area = { SCREEN_HEIGHT + CHIP_SIZE,SCREEN_WIDTH + CHIP_SIZE };
-
 	for (MapChip* chip : map_chip)
 	{
 		if (chip != nullptr)
@@ -63,9 +80,8 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 			Location chip_location = chip->GetLocation();
 			Area chip_area = chip->GetArea();
 
-			//描画範囲内にあるブロック
-			if ((camera.x < chip_location.x + chip_area.width) && (chip_location.x < camera.x + draw_area.width) &&
-				(camera.y < chip_location.y + chip_area.height) && (chip_location.y < camera.y + draw_area.height))
+			if ((location.x - (area.width / 2) <= chip_location.x + (chip_area.width / 2)) &&
+				(chip_location.x - (chip_area.width / 2) <= location.x + (area.width / 2)))
 			{
 				if (HitBox(chip))
 				{
