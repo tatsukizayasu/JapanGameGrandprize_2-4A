@@ -7,6 +7,14 @@
 #define SCREEN_WIDTH 1280	//画面サイズ (横)
 #define GRAVITY 10 //重力
 
+#define EXPLOSION_MAX_NUM 13	//爆発の化合物の個数
+#define POISON_MAX_NUM 18		//毒　の化合物の個数
+#define MELT_MAX_NUM 13			//溶解の化合物の個数
+#define PARARYSIS_MAX_NUM 12	//麻痺の化合物の個数
+#define HEAL_MAX_NUM 7			//回復の化合物の個数
+
+#define MAX_STRING 40			//弾の名前の最大文字数
+
 //化合物構造体
 struct Compound
 {
@@ -32,6 +40,29 @@ enum class ATTRIBUTE
 	POISON,
 	PARALYSIS,
 	HEAL
+};
+
+struct ChemicalFormulaMaterial
+{
+	int carbon;		//炭素
+	int hydrogen;	//水素
+	int nitrogen;	//窒素
+	int oxygen;		//酸素
+	int sulfur;		//硫黄
+	int chlorine;	//塩素
+	int uranium;	//ウラン
+};
+
+struct ChemicalFormulaParameter
+{
+	int number_of_bullets;
+	int time;
+	int damage_per_second;
+	int damage;
+	char chemical_formula_name[MAX_STRING];
+	char chemical_formula[MAX_STRING];
+	ATTRIBUTE atribute;
+	ChemicalFormulaMaterial material;
 };
 
 //中心座標

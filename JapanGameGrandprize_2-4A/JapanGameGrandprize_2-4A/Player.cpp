@@ -93,8 +93,8 @@ Player::Player(Stage* stage)
 	area.width = 40;
 
 	this->stage = stage;
-	location.x = 0;
-	location.y = 1100;
+	location.x = stage->GetSpawnPoint().x;
+	location.y = stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2;
 	image = 0;
 	image_size_x = 40;
 	image_size_y = 80;
@@ -272,7 +272,6 @@ void Player::Draw() const
 	if (display_attribute - 1 < 0)
 	{
 		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute + 5]);
-		cout << attribute_c[display_attribute + 5] << endl;
 	}
 	else
 	{
@@ -377,7 +376,7 @@ void Player::Update()
 	{
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 		{
-			if (shoot_count++ % 30 == 0)
+			if (shoot_count++ % 10 == 0)
 			{
 				bullet_count++;
 				Shoot_Gun();
@@ -822,3 +821,13 @@ bool Player::GetMoveDirection()
 	return move_left;
 }
 
+
+void Player::SetExplosion(ChemicalFormulaParameter a)
+{
+	explosion = a;
+}
+
+void Player::SetPoison(ChemicalFormulaParameter b)
+{
+	poison = b;
+}
