@@ -1,5 +1,6 @@
 #include "Harpy.h"
 #include "CameraWork.h"
+#include"BulletManager.h"
 #include"DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
@@ -189,12 +190,25 @@ void Harpy::Move(const Location player_location)
 			attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
 			standby_time = PHYSICAL_STANDBY;
 			physical_attack = true;
-		}
-		travel = range / vector;
-		travel_y = range_y / vector;
 
-		location.x += travel * speed;
-		location.y += travel_y * speed;
+			travel = range / vector;
+			travel_y = range_y / vector;
+
+			location.x += travel * speed;
+			location.y += travel_y * speed;
+		}
+
+		else if (range <= ATTACK_MAGIC && range >= -ATTACK_MAGIC)
+		{
+			state = ENEMY_STATE::ATTACK;
+			attack_state = HARPY_ATTACK::MAGIC_ATTACK;
+			standby_time = MAGIC_STANDBY;
+			magic_attack = true;
+
+			//弾の生成
+			BulletManager::GetInstance()->CreateEnemyBullet
+			(new HarpyBullet(location, player_location));
+		}
 	}
 	else //発見距離にプレイヤーがいなかったら。通常移動
 	{

@@ -132,7 +132,7 @@
     <ClCompile Include="TorrentNuts.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
-      <ClCompile Include="EnemySlimeBoss.cpp">
+    <ClCompile Include="EnemySlimeBoss.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Stage\Element\Element_Move_Floor.cpp">
@@ -143,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="Pause.cpp">
       <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="HarpyBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,7 +290,7 @@
     <ClInclude Include="TorrentNuts.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
-     <ClInclude Include="EnemySlimeBoss.h">
+    <ClInclude Include="EnemySlimeBoss.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Element\Element_Move_Floor.h">
@@ -298,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="Pause.h">
       <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="HarpyBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
