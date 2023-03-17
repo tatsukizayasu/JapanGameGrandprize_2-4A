@@ -2,7 +2,7 @@
 #include "MapChip.h"
 #include "../CameraWork.h"
 		
-#define		COLLLISION_DEBUG		//当たり判定デバック
+//#define		COLLLISION_DEBUG		//当たり判定デバック
 
 //-----------------------------------
 // コンストラクタ
