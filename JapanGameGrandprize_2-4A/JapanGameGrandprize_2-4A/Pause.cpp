@@ -13,45 +13,48 @@ Pause::Pause()
 Pause::~Pause()
 {
 	DeleteFontToHandle(title_font);
+	DeleteGraph(pause_graph);
 }
 
 void Pause::Update()
 {
+
 	//ウィジェットが非アクティブ、ウィンドウが最小化された場合にポーズ
-	if (GetWindowActiveFlag() == FALSE || GetWindowMinSizeFlag() == TRUE) { 
+	if (GetWindowActiveFlag() == FALSE || GetWindowMinSizeFlag() == TRUE) {
 		if (pause_graph == 0) {
 			pause_graph = MakeGraph(1280, 720);
 			GetDrawScreenGraph(0, 0, 1280, 720, pause_graph);
 		}
-		is_paused = true; 
+		is_paused = true;
 	}
 
+
 	//STARTボタンでポーズ切り替え
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_START)) { 
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_START)) {
 		if (pause_graph == 0) {
 			pause_graph = MakeGraph(1280, 720);
 			GetDrawScreenGraph(0, 0, 1280, 720, pause_graph);
 		}
-		else { 
-			DeleteGraph(pause_graph); 
+		else {
+			DeleteGraph(pause_graph);
 			pause_graph = 0;
 			pause_effect_timer = 0;
 		}
-		is_paused = !is_paused; 
+		is_paused = !is_paused;
 	}
 
-	
-
-}
-
-void Pause::Draw()
-{
-	if (pause_effect_timer < 50) {
+	//ポーズ時徐々にぼかす
+	if (pause_effect_timer < 50 && is_paused == true) {
 		pause_effect_timer++;
 		if (pause_effect_timer % 5 == 0) {
 			GraphFilter(pause_graph, DX_GRAPH_FILTER_GAUSS, 16, 70);
 		}
 	}
+
+}
+
+void Pause::Draw() const
+{
 
 	DrawGraph(0, 0, pause_graph, FALSE);
 

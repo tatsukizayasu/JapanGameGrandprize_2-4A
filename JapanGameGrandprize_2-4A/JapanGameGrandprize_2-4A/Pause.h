@@ -14,7 +14,7 @@ public:
 	~Pause();
 
 	void Update();
-	void Draw();
+	void Draw() const;
 
 	int GetDrawCenterX(const char* string, int font_handle)const;
 

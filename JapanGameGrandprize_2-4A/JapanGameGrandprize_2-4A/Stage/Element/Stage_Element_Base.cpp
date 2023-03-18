@@ -11,6 +11,7 @@ Stage_Element_Base::Stage_Element_Base()
 	this->image = 0;
 	type = 0;
 	count = 0;
+	current_image = 0;
 
 }
 
@@ -19,13 +20,33 @@ Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element
 	type = 0;
 	this->mapchip = mapchip;
 	start_time = chrono::steady_clock::now();
-	std::chrono::duration<float> diff = chrono::steady_clock::now() - start_time;
-	elapsed = chrono::duration_cast<chrono::duration<long long, std::milli>>(diff);
 	count = 0;
+	current_image = 0;
 }
 
 Stage_Element_Base::~Stage_Element_Base()
 {
+}
+
+
+void Stage_Element_Base::LoopImages(int* images, float time, int total_images, std::function<void()>* callback)
+{
+
+
+	auto end_time = std::chrono::steady_clock::now();
+	auto diff = end_time - start_time;
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+
+	if (elapsed.count() >= time * 1000.0f) {
+		start_time = end_time;
+		current_image = (current_image + 1) % total_images;
+		this->image = images[current_image];
+
+		if (callback != nullptr) {
+			(*callback)();
+		}
+
+	}
 }
 
 bool Stage_Element_Base::HitPlayer(Player* player) const
@@ -65,12 +86,20 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 	return false;
 }
 
-void Stage_Element_Base::StartAnimation(float time, std::function<void()>* callback)
+void Stage_Element_Base::LoopTimer(float time, std::function<void()>* callback)
 {
+
+	auto& start_time = start_time_map[time];
+	if (start_time == std::chrono::steady_clock::time_point{}) {
+		start_time = std::chrono::steady_clock::now();
+	}
+
 	auto end_time = chrono::steady_clock::now();
 	auto diff = end_time - start_time;
-	//elapsed = chrono::duration_cast<chrono::milliseconds>(diff);
-	elapsed = chrono::duration_cast<chrono::duration<long long, std::milli>>(diff);
+	auto elapsed = chrono::duration_cast<chrono::milliseconds>(diff);
+	//elapsed = chrono::duration_cast<chrono::duration<long long, std::milli>>(diff);
+
+	elapsed_time_map[time] = elapsed.count() / 1000.0f;
 
 	if (elapsed.count() >= time * 1000.0f) {
 		start_time = end_time;
@@ -85,25 +114,18 @@ void Stage_Element_Base::StartAnimation(float time, std::function<void()>* callb
 
 }
 
-void Stage_Element_Base::LoopImages(int *images, float time, int total_images, std::function<void()>* callback)
+float Stage_Element_Base::GetElapsedTime(float time)
 {
-	
-
-	auto end_time = std::chrono::steady_clock::now();
-	auto diff = end_time - start_time;
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
-
-	if (elapsed.count() >= time * 1000.0f) {
-		start_time = end_time;
-		current_image = (current_image + 1) % total_images;
-		this->image = images[current_image];
-
-		if (callback != nullptr) {
-			(*callback)();
-		}
-
+	auto it = elapsed_time_map.find(time);
+	if (it != elapsed_time_map.end()) {
+		return it->second;
+	}
+	else {
+		// エラー値（time値が見つからない場合）
+		return -1.0f; 
 	}
 }
+
 
 
 
