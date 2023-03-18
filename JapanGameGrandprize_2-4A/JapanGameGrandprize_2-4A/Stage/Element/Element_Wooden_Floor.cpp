@@ -5,7 +5,7 @@
 #include "../CameraWork.h"
 
 
-Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : Stage_Element_Base(element, image, location, area)
+Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
 {
 	this->type = type;
 	this->location = location;
@@ -13,9 +13,8 @@ Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_p
 	this->margin_area = { -15.0f,0.0f };
 	original_collision = area;
 
-	*image = LoadGraph("Images/Stage/Element/Wooden_Floor.png");
-	SetImage(*image);
-	original_image = *image;
+	SetImage(images.at(0));
+	original_image = images.at(0);
 	
 }
 

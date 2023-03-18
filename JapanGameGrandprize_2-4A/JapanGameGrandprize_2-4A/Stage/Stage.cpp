@@ -61,7 +61,7 @@ Stage::Stage()
 				}
 				
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
-					element->AddElement(i, &block_images[i], {
+					element->AddElement(i,  {
 							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 						}, { CHIP_SIZE,CHIP_SIZE });

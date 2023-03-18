@@ -11,7 +11,7 @@ private:
 
 	float speed_x, speed_y;
 public:
-	Element_Move_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area);
+	Element_Move_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area);
 	~Element_Move_Floor();
 	
 	//çXêV

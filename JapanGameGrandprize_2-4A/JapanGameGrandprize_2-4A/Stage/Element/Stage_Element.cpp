@@ -12,24 +12,28 @@ Stage_Element::~Stage_Element()
 {
 }
 
-void Stage_Element::AddElement(short type, int* image, Location location, Area area)
+void Stage_Element::AddElement(short type, Location location, Area area)
 {
 #ifndef NODEBUG
 
-
+	
+	std::vector<int> images = GetImage(type);
+	/*int* images = new int[buf.size()];
+	std::copy(buf.begin(), buf.end(), images);*/
+	
 
 	switch (type)
 	{
 	case Element::DAMAGE_WALL:
-		element.push_back(std::make_shared<Element_DamageWall>(type, element, image, location, Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_DamageWall>(type, element, images, location, Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE }));
 		break;
 
 	case Element::WOODEN_FLOOR:
-		element.push_back(std::make_shared <Element_Wooden_Floor>(type, element, image, location, Area{ 10.0f, MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared <Element_Wooden_Floor>(type, element, images, location, Area{ 10.0f, MAP_CHIP_SIZE }));
 		break;
 
 	case Element::MoveFloor:
-		element.push_back(std::make_shared<Element_Move_Floor>(type, element, image, location, area));
+		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
 		break;
 
 	default:
@@ -109,4 +113,94 @@ void Stage_Element::Draw() const
 		e->Draw();
 
 	}
+}
+
+std::vector<int> Stage_Element::GetImage(short type)
+{
+	
+
+	// すでに読み込まれた画像がキャッシュにあるかどうかを確認
+	if (image_cache.find(type) != image_cache.end()) {
+
+		return image_cache[type];
+	}
+
+	// 画像がキャッシュにない場合、読み込みを行う
+
+
+	std::string filename = "";
+
+	switch (type)
+	{
+	case Element::DAMAGE_WALL:
+		filename = "Images/Stage/Element/DamageWall.png";
+		break;
+
+	case Element::WOODEN_FLOOR:
+		filename = "Images/Stage/Element/Wooden_Floor.png";
+		break;
+
+	case Element::MoveFloor:
+		filename = "Images/Stage/Element/Wooden_Floor.png";
+		break;
+
+	default:
+		filename = "File name not found";
+		break;
+	}
+
+	// 読み込んだ画像をキャッシュに保存
+	image_cache[type] = LoadImage(filename);
+
+	
+	return image_cache[type];
+
+
+}
+
+std::vector<int> Stage_Element::LoadImage(const std::string& filename)
+{
+	std::vector<int> images;
+
+	int buf = LoadGraph(TEXT(filename.c_str()));
+
+	int image_width, image_height;
+
+	GetGraphSize(buf, &image_width, &image_height);
+
+	if (image_width == MAP_CHIP_SIZE && image_height == MAP_CHIP_SIZE) {
+		images.push_back(buf);
+		
+	}
+	else {
+		DeleteGraph(buf);
+
+		int x_num = image_width / MAP_CHIP_SIZE;
+		int y_num = image_height / MAP_CHIP_SIZE;
+		int total_num = x_num * y_num;
+
+		
+		std::vector<int> buf_images(total_num);
+
+		LoadDivGraph(TEXT(filename.c_str()), total_num, x_num, y_num, MAP_CHIP_SIZE, MAP_CHIP_SIZE, &buf_images[0]);
+
+		//要素数を変更し、コピー
+		images.resize(total_num);
+		std::copy(buf_images.begin(), buf_images.end(), images.begin());
+
+	}
+
+
+#if 0
+	//読み込みログ
+	for (int i = 0; i < images.size(); i++) {
+		printfDx("[%d]ID:%d\t%s\n", i, images.at(i), TEXT(filename.c_str()));
+}
+#endif // 0
+
+	
+
+	return images;
+
+	//return std::vector<int>();
 }

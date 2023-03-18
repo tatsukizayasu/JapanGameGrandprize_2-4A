@@ -8,6 +8,8 @@
 #include "Element_Move_Floor.h"
 #include <memory>
 #include <set>
+#include <map>
+#include <vector>
 
 namespace Element {
 	//const short DEBUG_GRASS = 1;		//デバック用草ブロック
@@ -22,6 +24,9 @@ namespace Element {
 class Stage_Element
 {
 private:
+
+	//読み込んだ画像のキャッシュマップ
+	std::map<short, std::vector<int>> image_cache;
 
 	//オブジェクト変数
 	std::vector<std::shared_ptr<Stage_Element_Base>> element;
@@ -49,6 +54,33 @@ public:
 	void SetPlayer(Player* player) { this->player = player; }
 
 	/// <summary>
+	/// ステージ要素の作成
+	/// </summary>
+	void AddElement(short type, Location location, Area area);
+
+	/// <summary>
+	/// ステージ要素の更新
+	/// </summary>
+	void Update(Player* player);
+
+	/// <summary>
+	/// ステージ要素の描画
+	/// </summary>
+	void Draw() const;
+
+	/// <summary>
+	/// マップチップ画像 Getter
+	/// </summary>
+	/// 既に読み込んでいる画像は同じハンドルを返す
+	std::vector<int> GetImage(short type);
+
+	/// <summary>
+	/// マップチップ画像の読み込み
+	/// </summary>
+	std::vector<int> LoadImage(const std::string& filename);
+
+
+	/// <summary>
 	/// ステージ要素ID		Getter
 	/// </summary>
 	const std::set<short>& GetElementID() { return elements_id; }
@@ -67,19 +99,4 @@ public:
 		return result;
 
 	};
-
-	/// <summary>
-	/// ステージ要素の作成
-	/// </summary>
-	void AddElement(short type, int* image, Location location, Area area);
-
-	/// <summary>
-	/// ステージ要素の更新
-	/// </summary>
-	void Update(Player* player);
-
-	/// <summary>
-	/// ステージ要素の描画
-	/// </summary>
-	void Draw() const;
 };
