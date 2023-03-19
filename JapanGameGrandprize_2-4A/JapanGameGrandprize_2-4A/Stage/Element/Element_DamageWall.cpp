@@ -40,32 +40,19 @@ void Element_DamageWall::Update(Player* player)
 	
 	if (abs(location.x - player->GetLocation().x) <= MAP_CHIP_SIZE 
 		&& abs(location.y - player->GetLocation().y) <= MAP_CHIP_SIZE) {
-		std::function<void()> Attack = [&]() { player->HpDamage(AttackResource{ 1, nullptr, 5 }); };
+		ENEMY_TYPE fireType = ENEMY_TYPE::FIRE;
+		std::function<void()> Attack = [&]() { player->HpDamage(AttackResource{ 1, &fireType, 5 }); };
 		Attack();
 		/*if (GetElapsedTime(5.2) == 0.0f) { Attack(); }
 		LoopTimer(5.2, &Attack);*/
-	}
-	
-	if (HitPlayer(player))
-	{
-		//printfDx("“–‚½‚Á‚Ä‚é‚æ\n");		
+
+
 		//std::function<void()> f = [&]() { player->HpDamage(AttackResource{ 1, nullptr, 5 }); };
 		//f();
 
 		//std::function<void()> damage_func = [player]() {
 		//	player->HpDamage(AttackResource{ 2, nullptr, 5 });
 		//};
-
-		//LoopTimer(5.2, &damage_func);
-		//StartAnimation(3.2, &f);
-		//if (GetAnimationTime() < 5.1) { image = 0; }
 	}
 
 }
-
-
-
-//void Element_DamageWall::Draw() const
-//{
-//
-//}
