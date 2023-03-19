@@ -133,15 +133,15 @@ std::vector<int> Stage_Element::GetImage(short type)
 	switch (type)
 	{
 	case Element::DAMAGE_WALL:
-		filename = "Images/Stage/Element/DamageWall.png";
+		filename = "DamageWall.png";
 		break;
 
 	case Element::WOODEN_FLOOR:
-		filename = "Images/Stage/Element/Wooden_Floor.png";
+		filename = "Wooden_Floor.png";
 		break;
 
 	case Element::MoveFloor:
-		filename = "Images/Stage/Element/Wooden_Floor.png";
+		filename = "Move_Floor.png";
 		break;
 
 	default:
@@ -160,9 +160,14 @@ std::vector<int> Stage_Element::GetImage(short type)
 
 std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 {
+	//デフォルトディレクトリ
+	const std::string default_dir = "Images/Stage/Element/";
+
+	const std::string file_dir = default_dir + filename;
+
 	std::vector<int> images;
 
-	int buf = LoadGraph(TEXT(filename.c_str()));
+	int buf = LoadGraph(TEXT(file_dir.c_str()));
 
 	int image_width, image_height;
 
@@ -182,7 +187,7 @@ std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 		
 		std::vector<int> buf_images(total_num);
 
-		LoadDivGraph(TEXT(filename.c_str()), total_num, x_num, y_num, MAP_CHIP_SIZE, MAP_CHIP_SIZE, &buf_images[0]);
+		LoadDivGraph(TEXT(file_dir.c_str()), total_num, x_num, y_num, MAP_CHIP_SIZE, MAP_CHIP_SIZE, &buf_images[0]);
 
 		//要素数を変更し、コピー
 		images.resize(total_num);

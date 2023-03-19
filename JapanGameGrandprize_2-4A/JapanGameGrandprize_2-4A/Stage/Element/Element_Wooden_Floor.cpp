@@ -42,15 +42,18 @@ void Element_Wooden_Floor::Update(Player* player)
 		}
 	}
 	// プレイヤーが上にいる&左スティックを下に倒した場合
-	else if (is_hit && is_hit_dir == HIT_DIRECTION::UP 
+	else if (is_hit && is_hit_dir == HIT_DIRECTION::UP
 		&& player->GetLocation().y + player->GetArea().height / 2 < location.y + margin_area.height
 		&& PAD_INPUT::GetLStick().y <= -10000) {
 		SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
 	}
 	// プレイヤーが接触していない状態で、一定距離離れると衝突エリアをリセット
-		
+	else if (abs(location.y - player->GetLocation().y) >= MAP_CHIP_SIZE - margin_area.height + 8.0f) {
+	
 		SetArea(original_collision);
 	}
+
+
 
 
 	//if (is_hit == true) {
