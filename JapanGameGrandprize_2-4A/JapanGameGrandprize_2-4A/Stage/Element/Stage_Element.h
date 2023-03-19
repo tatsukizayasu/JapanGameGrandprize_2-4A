@@ -8,7 +8,7 @@
 #include "Element_Move_Floor.h"
 #include <memory>
 #include <set>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 namespace Element {
@@ -26,7 +26,7 @@ class Stage_Element
 private:
 
 	//読み込んだ画像のキャッシュマップ
-	std::map<short, std::vector<int>> image_cache;
+	std::unordered_map<short, std::vector<int>> image_cache;
 
 	//オブジェクト変数
 	std::vector<std::shared_ptr<Stage_Element_Base>> element;
