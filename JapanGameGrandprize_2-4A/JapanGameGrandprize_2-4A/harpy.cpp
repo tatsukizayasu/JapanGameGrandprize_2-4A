@@ -46,7 +46,7 @@ Harpy::Harpy()
 	attack = false;
 
 	hp = 50;
-	magic_num = 6;
+	magic_num = 0;
 	location.x = 4500;
 	location.y = 550;
 	standby_attack = 0;
@@ -188,68 +188,75 @@ void Harpy::Move(const Location player_location)
 		range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
 	{
 
-		travel = range / vector;
-		travel_y = range_y / vector;
+		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE)
+		{
+			if (magic_num > 5)
+			{
+				state = ENEMY_STATE::ATTACK;
+				attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
+				standby_time = PHYSICAL_STANDBY;
+				physical_attack = true;
 
+				travel = range / vector;
+				travel_y = range_y / vector;
+				/*location.x += travel * speed;
+				location.y += travel_y * speed;*/
+
+			}
+
+			else
+			{
+				magic_num++;
+				state = ENEMY_STATE::ATTACK;
+				attack_state = HARPY_ATTACK::MAGIC_ATTACK;
+				standby_time = MAGIC_STANDBY;
+				magic_attack = true;
+
+				//弾の生成
+				BulletManager::GetInstance()->CreateEnemyBullet
+				(new HarpyBullet(location, player_location));
+			}
+
+		}
+		else  //発見後、攻撃範囲外の場合プレイヤーに近づく
+		{
+			travel = range / vector;
+			travel_y = range_y / vector;
+
+			location.x += travel * speed;
+			location.y += travel_y * speed;
+		}
+	}
+	else //発見距離にプレイヤーがいなかったら。通常移動
+	{
+		if (left_move == true)
+		{
+			action_type = HARPY_STATE::NORMAL; //左
+		}
+		else
+		{
+			action_type = HARPY_STATE::NORMAL_RIGHT; //右
+		}
+		switch (action_type)
+		{
+		case HARPY_STATE::NORMAL:  //通常移動
+			location.x -= speed;
+			break;
+		case HARPY_STATE::NORMAL_RIGHT://右
+			location.x += speed;
+			break;
+		case HARPY_STATE::NONE:
+			break;
+		default:
+			break;
+		}
+	}
+
+
+	if (physical_attack == true)
+	{
 		location.x += travel * speed;
 		location.y += travel_y * speed;
-
-	//	if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE)
-	//	{
-	//		if (magic_num > 5)
-	//		{
-	//			state = ENEMY_STATE::ATTACK;
-	//			attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
-	//			standby_time = PHYSICAL_STANDBY;
-	//			physical_attack = true;
-	//		}
-
-	//		else
-	//		{
-	//			//magic_num++;
-	//			state = ENEMY_STATE::ATTACK;
-	//			attack_state = HARPY_ATTACK::MAGIC_ATTACK;
-	//			standby_time = MAGIC_STANDBY;
-	//			magic_attack = true;
-
-	//			//弾の生成
-	//			BulletManager::GetInstance()->CreateEnemyBullet
-	//			(new HarpyBullet(location, player_location));
-	//		}
-
-	//	}
-	//	else  //発見後、攻撃範囲外の場合プレイヤーに近づく
-	//	{
-	//		travel = range / vector;
-	//		travel_y = range_y / vector;
-
-	//		location.x += travel * speed;
-	//		location.y += travel_y * speed;
-	//	}
-	//}
-	//else //発見距離にプレイヤーがいなかったら。通常移動
-	//{
-	//	if (left_move == true)
-	//	{
-	//		action_type = HARPY_STATE::NORMAL; //左
-	//	}
-	//	else
-	//	{
-	//		action_type = HARPY_STATE::NORMAL_RIGHT; //右
-	//	}
-	//	switch (action_type)
-	//	{
-	//	case HARPY_STATE::NORMAL:  //通常移動
-	//		location.x -= speed;
-	//		break;
-	//	case HARPY_STATE::NORMAL_RIGHT://右
-	//		location.x += speed;
-	//		break;
-	//	case HARPY_STATE::NONE:
-	//		break;
-	//	default:
-	//		break;
-	//	}
 	}
 
 }
@@ -265,8 +272,8 @@ void  Harpy::Attack(Location player_location)
 		switch (attack_state)
 		{
 		case HARPY_ATTACK::PHYSICAL_ATTACK:
-			//attack = false;
-			/*physical_attack = false;
+			/*attack = false;
+			physical_attack = false;
 			attack_state = HARPY_ATTACK::NONE;*/
 			break;
 		case HARPY_ATTACK::MAGIC_ATTACK:
