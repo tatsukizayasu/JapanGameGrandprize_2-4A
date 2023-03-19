@@ -48,10 +48,3 @@ void Element_Move_Floor::Update(Player* player)
 	}
 }
 
-void Element_Move_Floor::Draw() const
-{
-	float x = location.x - area.width / 2;
-	float y = location.y - area.height / 2;
-	
-	DrawBoxAA(x, y, x + area.width, y + area.height, 0xff0000, TRUE);
-}
