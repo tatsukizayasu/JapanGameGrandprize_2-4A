@@ -13,6 +13,7 @@ MapChip::MapChip()
 	area = { 60,60 };
 	image_size = { 600,600 };
 	ex_rate = area.height / image_size.height;
+	image = 0;
 }
 
 //-----------------------------------
