@@ -7,8 +7,26 @@
 #include <thread>
 #include <unordered_map>
 #include "../MapChip.h"
+#include <tuple>
 
 class Player;
+
+//struct RECT
+//{
+//	float x;
+//	float y;
+//	float width;
+//	float height;
+//};
+
+enum class HIT_DIRECTION
+{
+	NONE,
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
 
 
 class Stage_Element_Base : public MapChip
@@ -63,7 +81,22 @@ public:
 	/// </summary>
 	/// <returns>false:当たっていない
 	/// <para>true:当たっている</para></returns>	
-	bool HitPlayer(Player* player) const;
+	//bool HitPlayer(Player* player) const;
+
+
+	/// <summary>
+	/// プレイヤーとブロックが当たっているか
+	/// <para>と当たっている方向のGetter</para>
+	/// </summary>
+	/// <returns>tuple(bool型, HITDIRECTION構造体型)
+	// <para>false:当たっていない</para>
+	/// <para>true:当たっている</para>
+	/// <para>HITDIRECTION::NONE:当たっていない</para>
+	/// <para>HITDIRECTION::UP:上</para>
+	/// <para>HITDIRECTION::DOWN;下</para>
+	/// <para>HITDIRECTION::LEFT:左</para>
+	/// <para>HITDIRECTION::RIGHT:右</para></returns>	
+	std::tuple<bool, HIT_DIRECTION> HitPlayer(Player* player) const;
 
 	/// <summary>
 	/// ループタイマー		Setter

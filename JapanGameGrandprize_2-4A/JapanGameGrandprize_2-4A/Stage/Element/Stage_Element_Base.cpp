@@ -12,6 +12,7 @@ Stage_Element_Base::Stage_Element_Base()
 	type = 0;
 	count = 0;
 	current_image = 0;
+	margin_area = { 0, 0 };
 
 }
 
@@ -49,42 +50,100 @@ void Stage_Element_Base::LoopImages(int* images, float time, int total_images, s
 	}
 }
 
-bool Stage_Element_Base::HitPlayer(Player* player) const
+//bool Stage_Element_Base::HitPlayer(Player* player) const
+//{
+//
+//	//補正
+//
+//	struct Rect
+//	{
+//		float x;
+//		float y;
+//		float width;
+//		float height;
+//	};
+//
+//	Location p_location = player->GetLocation();
+//	Area p_area = player->GetArea();
+//
+//	const Rect mapchip_rect = { location.x - (area.width / 2), location.y - (area.height / 2), area.width, area.height };
+//	const Rect player_rect = { p_location.x - (p_area.width / 2), p_location.y - (p_area.height / 2), p_area.width, p_area.height };
+//
+//	// プレイヤーとマップチップの間の余白を設定
+//	const float margin_x = 1.0f - margin_area.width; 
+//	const float margin_y = 1.0f - margin_area.height;
+//
+//	if ((mapchip_rect.x - margin_x < player_rect.x + player_rect.width) && (player_rect.x < mapchip_rect.x + mapchip_rect.width + margin_x)
+//		&& (mapchip_rect.y - margin_y < player_rect.y + player_rect.height) && (player_rect.y < mapchip_rect.y + mapchip_rect.height + margin_y))
+//	{
+//		return true;
+//	}
+//	return false;
+//
+//}
+
+
+std::tuple<bool, HIT_DIRECTION> Stage_Element_Base::HitPlayer(Player* player) const
 {
-
-
 	struct Rect
 	{
 		float x;
 		float y;
-		float height;
 		float width;
+		float height;
 	};
-
-	//補正
-
-
-	Rect mapchip_rect = { location.x - (area.width / 2), location.y - (area.height / 2), area.height, area.width };
-
 
 	Location p_location = player->GetLocation();
 	Area p_area = player->GetArea();
 
-	//補正
-	const float x = 1.0f;
-	const float y = 1.0f;
+	const Rect mapchip_rect = { location.x - (area.width / 2), location.y - (area.height / 2), area.width, area.height };
+	const Rect player_rect = { p_location.x - (p_area.width / 2), p_location.y - (p_area.height / 2), p_area.width, p_area.height };
 
-	Rect player_rect = { p_location.x - (p_area.width / 2), p_location.y - (p_area.height / 2), p_area.height, p_area.width };
+	const float margin_x = 1.0f - margin_area.width;
+	const float margin_y = 1.0f - margin_area.height;
 
+	bool is_hit = ((mapchip_rect.x - margin_x < player_rect.x + player_rect.width) && (player_rect.x < mapchip_rect.x + mapchip_rect.width + margin_x)
+		&& (mapchip_rect.y - margin_y < player_rect.y + player_rect.height) && (player_rect.y < mapchip_rect.y + mapchip_rect.height + margin_y));
 
-
-	if ((mapchip_rect.x - x < player_rect.x + player_rect.width) && (player_rect.x < mapchip_rect.x + mapchip_rect.width + x)
-		&& (mapchip_rect.y - y < player_rect.y + player_rect.height) && (player_rect.y < mapchip_rect.y + mapchip_rect.height + y))
+	if (!is_hit)
 	{
-		return true;
+		return std::make_tuple(false, HIT_DIRECTION::NONE);
 	}
-	return false;
+
+	float dx = (player_rect.x + player_rect.width / 2) - (mapchip_rect.x + mapchip_rect.width / 2);
+	float dy = (player_rect.y + player_rect.height / 2) - (mapchip_rect.y + mapchip_rect.height / 2);
+
+	float width = (player_rect.width + mapchip_rect.width) / 2;
+	float height = (player_rect.height + mapchip_rect.height) / 2;
+
+	float cross_width = width * dy;
+	float cross_height = height * dx;
+
+	if (cross_width > cross_height)
+	{
+		if (cross_width > -cross_height)
+		{
+			return std::make_tuple(true, HIT_DIRECTION::DOWN);
+		}
+		else
+		{
+			return std::make_tuple(true, HIT_DIRECTION::LEFT);
+		}
+	}
+	else
+	{
+		if (cross_width > -cross_height)
+		{
+			return std::make_tuple(true, HIT_DIRECTION::RIGHT);
+		}
+		else
+		{
+			return std::make_tuple(true, HIT_DIRECTION::UP);
+		}
+	}
+
 }
+
 
 void Stage_Element_Base::LoopTimer(float time, std::function<void()>* callback)
 {
