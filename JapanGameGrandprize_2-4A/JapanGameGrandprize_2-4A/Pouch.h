@@ -27,11 +27,11 @@ private:
 	ChemicalFormulaParameter chemical_formula_heal[HEAL_MAX_NUM];
 	ChemicalFormulaParameter chemical_formula_melt[MELT_MAX_NUM];
 
-	ChemicalFormulaParameter select_explosion;
-	ChemicalFormulaParameter select_poison;
-	ChemicalFormulaParameter select_pararysis;
-	ChemicalFormulaParameter select_heal;
-	ChemicalFormulaParameter select_melt;
+	ChemicalFormulaParameter* select_explosion;
+	ChemicalFormulaParameter* select_poison;
+	ChemicalFormulaParameter* select_pararysis;
+	ChemicalFormulaParameter* select_heal;
+	ChemicalFormulaParameter* select_melt;
 
 public:
 	Pouch();
@@ -55,13 +55,17 @@ public:
 
 	void InitChemicalParameter();
 
-	ChemicalFormulaParameter GetExplosion();
-	ChemicalFormulaParameter GetPoison();
-	ChemicalFormulaParameter GetPararysis();
-	ChemicalFormulaParameter GetHeal();
-	ChemicalFormulaParameter GetMelt();
+	ChemicalFormulaParameter* GetExplosion();
+	ChemicalFormulaParameter* GetPoison();
+	ChemicalFormulaParameter* GetPararysis();
+	ChemicalFormulaParameter* GetHeal();
+	ChemicalFormulaParameter* GetMelt();
 	ATTRIBUTE GetAttribute();
+
+	void SetChemicalFormulaParameter();
 	int GetCursol();
 	bool GetOnBool();
+	bool ComparisonElement(ChemicalFormulaParameter) const;
 	void SetOnBool(bool);
+	void ReduceAmmo(ATTRIBUTE);
 };

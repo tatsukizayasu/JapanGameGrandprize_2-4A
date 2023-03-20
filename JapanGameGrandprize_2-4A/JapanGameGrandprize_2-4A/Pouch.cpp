@@ -7,6 +7,7 @@
 //コンストラクタ
 Pouch::Pouch()
 {
+
 	x = 1080;
 	y = 100;
 	cursol = 0;
@@ -31,30 +32,81 @@ Pouch::~Pouch()
 //爆発
 void Pouch::ExplosionTabDraw() const
 {
+	bool can_create[3];
+	int roop_body = cursol - 1;
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (ComparisonElement(chemical_formula_explosion[roop_body++]))
+		{
+			can_create[i] = true;
+		}
+		else
+		{
+			can_create[i] = false;
+		}
+	}
+	
+
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 	DrawString(x, y + 50, "EXPLOSION", 0x000000);
 
 	if (cursol - 1 < 0)
 	{
-		DrawFormatString(x, y + 140, 0x000000, "%s", chemical_formula_explosion[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+		if (can_create[0])
+		{
+			DrawFormatString(x, y + 140, 0x000000, "%s", chemical_formula_explosion[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+		}
+		else
+		{
+			DrawFormatString(x, y + 140, 0xffffff, "%s", chemical_formula_explosion[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+		}
 	}
 	else
 	{
-		DrawFormatString(x, y + 140, 0x000000, "%s", chemical_formula_explosion[cursol - 1].chemical_formula_name);
+		if (can_create[0])
+		{
+			DrawFormatString(x, y + 140, 0x000000, "%s", chemical_formula_explosion[cursol - 1].chemical_formula_name);
+		}
+		else
+		{
+			DrawFormatString(x, y + 140, 0xffffff, "%s", chemical_formula_explosion[cursol - 1].chemical_formula_name);
+		}
 	}
 
 	if (cursol + 1 > EXPLOSION_MAX_NUM - 1)
 	{
-		DrawFormatString(x, y + 340, 0x000000, "%s", chemical_formula_explosion[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+		if (can_create[2])
+		{
+			DrawFormatString(x, y + 340, 0x000000, "%s", chemical_formula_explosion[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+		}
+		else
+		{
+			DrawFormatString(x, y + 340, 0xffffff, "%s", chemical_formula_explosion[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+		}
 	}
 	else
 	{
-		DrawFormatString(x, y + 340, 0x000000, "%s", chemical_formula_explosion[cursol + 1].chemical_formula_name);
+		if(can_create[2])
+		{
+			DrawFormatString(x, y + 340, 0x000000, "%s", chemical_formula_explosion[cursol + 1].chemical_formula_name);
+		}
+		else
+		{
+			DrawFormatString(x, y + 340, 0xfffffff, "%s", chemical_formula_explosion[cursol + 1].chemical_formula_name);
+		}
 	}
 
 	DrawBox(x, y + 200, x + POUCH_WIDTH, y + 300, 0xffffff, FALSE);
 
-	DrawFormatString(x, y + 240, 0x000000, "%s", chemical_formula_explosion[cursol].chemical_formula_name);
+	if (can_create[1])
+	{
+		DrawFormatString(x, y + 240, 0x000000, "%s", chemical_formula_explosion[cursol].chemical_formula_name);
+	}
+	else
+	{
+		DrawFormatString(x, y + 240, 0xffffff, "%s", chemical_formula_explosion[cursol].chemical_formula_name);
+	}
 }
 
 //溶解
@@ -125,9 +177,6 @@ void Pouch::Draw() const
 		break;
 	}
 
-
-
-	
 
 	DrawBox(x, y + 400, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x0000ff, TRUE);
 
@@ -220,27 +269,7 @@ void Pouch::Update()
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_B))
 	{
-		on_bool = true;
-		switch (tab)
-		{
-		case ATTRIBUTE::EXPLOSION:
-			select_explosion = chemical_formula_explosion[cursol];
-			break;
-		case ATTRIBUTE::MELT:
-			select_melt = chemical_formula_melt[cursol];
-			break;
-		case ATTRIBUTE::POISON:
-			select_poison = chemical_formula_poison[cursol];
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			select_pararysis = chemical_formula_pararysis[cursol];
-			break;
-		case ATTRIBUTE::HEAL:
-			select_heal = chemical_formula_heal[cursol];
-			break;
-		default:
-			break;
-		}
+		SetChemicalFormulaParameter();
 	}
 
 }
@@ -420,27 +449,27 @@ void Pouch::InitChemicalParameter()
 	fclose(fp); //ファイルを閉じる
 }
 
-ChemicalFormulaParameter Pouch::GetExplosion()
+ChemicalFormulaParameter* Pouch::GetExplosion()
 {
 	return select_explosion;
 }
 
-ChemicalFormulaParameter Pouch::GetPoison()
+ChemicalFormulaParameter* Pouch::GetPoison()
 {
 	return select_poison;
 }
 
-ChemicalFormulaParameter Pouch::GetPararysis()
+ChemicalFormulaParameter* Pouch::GetPararysis()
 {
 	return select_pararysis;
 }
 
-ChemicalFormulaParameter Pouch::GetHeal()
+ChemicalFormulaParameter* Pouch::GetHeal()
 {
 	return select_heal;
 }
 
-ChemicalFormulaParameter Pouch::GetMelt()
+ChemicalFormulaParameter* Pouch::GetMelt()
 {
 	return select_melt;
 }
@@ -463,4 +492,99 @@ bool Pouch::GetOnBool()
 void Pouch::SetOnBool(bool a)
 {
 	on_bool = a;
+}
+
+
+//-----------------------------------
+// 弾を減らす
+//-----------------------------------
+void Pouch::ReduceAmmo(ATTRIBUTE a)
+{
+	switch (a)
+	{
+	case ATTRIBUTE::NORMAL:
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		if (select_explosion != nullptr)
+		{
+			select_explosion->number_of_bullets--;
+		}
+		break;
+	case ATTRIBUTE::MELT:
+		if (select_melt != nullptr)
+		{
+			select_melt->number_of_bullets--;
+		}
+		break;
+	case ATTRIBUTE::POISON:
+		if (select_poison != nullptr)
+		{
+			select_poison->number_of_bullets--;
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		if (select_pararysis != nullptr)
+		{
+			select_pararysis->number_of_bullets--;
+		}
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
+	}
+}
+
+void Pouch::SetChemicalFormulaParameter()
+{
+	on_bool = true;
+	switch (tab)
+	{
+	case ATTRIBUTE::EXPLOSION:
+		if (ComparisonElement(chemical_formula_explosion[cursol]))
+		{
+			select_explosion = &chemical_formula_explosion[cursol];
+		}
+		break;
+	case ATTRIBUTE::MELT:
+		if (ComparisonElement(chemical_formula_melt[cursol]))
+		{
+			select_melt = &chemical_formula_melt[cursol];
+		}
+		break;
+	case ATTRIBUTE::POISON:
+		if (ComparisonElement(chemical_formula_poison[cursol]))
+		{
+			select_poison = &chemical_formula_poison[cursol];
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		if (ComparisonElement(chemical_formula_pararysis[cursol]))
+		{
+			select_pararysis = &chemical_formula_pararysis[cursol];
+		}
+		break;
+	case ATTRIBUTE::HEAL:
+		if (ComparisonElement(chemical_formula_heal[cursol]))
+		{
+			select_heal = &chemical_formula_heal[cursol];
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+bool Pouch::ComparisonElement(ChemicalFormulaParameter subject) const
+{
+	if (subject.material.hydrogen <= element[0]->GetVolume() &&
+		subject.material.oxygen <= element[1]->GetVolume() &&
+		subject.material.carbon <= element[2]->GetVolume() &&
+		subject.material.nitrogen <= element[3]->GetVolume() &&
+		subject.material.sulfur <= element[4]->GetVolume() &&
+		subject.material.chlorine <= element[5]->GetVolume())
+	{
+		return true;
+	}
+	return false;
 }

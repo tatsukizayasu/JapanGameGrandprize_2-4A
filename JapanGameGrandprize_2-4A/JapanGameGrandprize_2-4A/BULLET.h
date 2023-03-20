@@ -5,6 +5,8 @@
 #include "Stage/Stage.h"
 #include "Stage/MapChip.h"
 
+#define BULLET_SPEED 15
+
 enum class PLAYER_STATE;
 
 class BulletBase : public SphereCollider
@@ -21,7 +23,7 @@ protected:
 	bool delete_flg;     //弾の削除フラグ
 	bool efect_end;		 //エフェクトの終わりフラグ
 	bool player_direction;//プレイヤーの向き
-	ChemicalFormulaParameter chemical_formula;//化合物
+	ChemicalFormulaParameter* chemical_formula;//化合物
 
 	PLAYER_STATE player_state;
 	ATTRIBUTE attribute;

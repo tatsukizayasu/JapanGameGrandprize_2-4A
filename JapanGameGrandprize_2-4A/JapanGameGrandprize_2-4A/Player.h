@@ -19,6 +19,10 @@
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
 
+#define PLAYER_IMAGES 7
+
+#define PLAYER_SPEED_X 5.0
+
 
 
 #define BULLET_MAX 50
@@ -43,7 +47,9 @@ class Player : public BoxCollider
 {
 private:
 
-	int image;						//画像用変数
+	int animation;					//画像アニメーション用
+	int image_count;				//画像の要素数用
+	int* image;						//画像用変数
 	int image_size_x, image_size_y; //画像のサイズ
 	int hp;							//体力
 	int bullet_count;				//撃った弾の数
@@ -81,11 +87,11 @@ private:
 
 	ChemicalFormulaParameter normal;
 
-	ChemicalFormulaParameter explosion;
-	ChemicalFormulaParameter poison;
-	ChemicalFormulaParameter melt;
-	ChemicalFormulaParameter pararysis;
-	ChemicalFormulaParameter heal;
+	ChemicalFormulaParameter* explosion;
+	ChemicalFormulaParameter* poison;
+	ChemicalFormulaParameter* melt;
+	ChemicalFormulaParameter* pararysis;
+	ChemicalFormulaParameter* heal;
 
 
 public:
@@ -118,9 +124,11 @@ public:
 	//プレイヤーの向き
 	bool GetMoveDirection();
 
-	void SetExplosion(ChemicalFormulaParameter);
-	void SetPoison(ChemicalFormulaParameter);
-	void SetMelt(ChemicalFormulaParameter);
-	void SetPararysis(ChemicalFormulaParameter);
-	void SetHeal(ChemicalFormulaParameter);
+	void SetExplosion(ChemicalFormulaParameter*);
+	void SetPoison(ChemicalFormulaParameter*);
+	void SetMelt(ChemicalFormulaParameter*);
+	void SetPararysis(ChemicalFormulaParameter*);
+	void SetHeal(ChemicalFormulaParameter*);
+
+	void MoveAnimation();
 };
