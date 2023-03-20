@@ -54,7 +54,7 @@ void Pause::Update()
 		}
 	}
 
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A)) {
+	if (is_paused && PAD_INPUT::OnButton(XINPUT_BUTTON_A)) {
 
 		next_menu = 1;
 
