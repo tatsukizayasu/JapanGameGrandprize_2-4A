@@ -26,7 +26,7 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-Mage::Mage() 
+Mage::Mage(Location spawn_location)
 {
 	/*初期化*/
 	can_delete = false;
@@ -47,8 +47,7 @@ Mage::Mage()
 	image = 0xffffff;
 
 	/*当たり判定の設定*/
-	location.x = 660.0f;
-	location.y = 1120.0f;
+	location = spawn_location;
 	area.width = 40;
 	area.height = 80;
 

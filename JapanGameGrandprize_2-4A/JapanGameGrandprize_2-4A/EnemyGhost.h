@@ -40,7 +40,7 @@ private:
 public:
 
 	//コンスタラクタ
-	EnemyGhost(); 
+	EnemyGhost(Location);
 
 	//デストラクタ
 	~EnemyGhost();
