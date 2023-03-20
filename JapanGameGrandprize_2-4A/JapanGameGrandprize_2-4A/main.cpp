@@ -1,7 +1,6 @@
 #include "DxLib.h"
 #include "Define.h"
 #include "SceneManager.h"
-#include "Title.h"
 #include "GameMain.h"
 #include "PadInput.h"
 #include "GameMain.h"
@@ -20,6 +19,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetMainWindowText("Stick To Wall");
 
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
+
+	SetAlwaysRunFlag(true);		//常にアクティブにする
 
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);	//画面サイズの設定
 
@@ -80,13 +81,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 
-
-				//フレームレートの設定
+		//フレームレートの設定
 		dNextTime += static_cast<double>(1.0 / 60.0 * 1000.0);
-		if (dNextTime > GetNowCount()) {
+
+		if (dNextTime > GetNowCount()) 
+		{
 			WaitTimer(static_cast<int>(dNextTime) - GetNowCount());
 		}
 		else { dNextTime = GetNowCount(); }		//補正
 	}
+
 	return 0;
 }

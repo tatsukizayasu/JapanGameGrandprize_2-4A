@@ -7,6 +7,14 @@
 #define SCREEN_WIDTH 1280	//‰æ–ÊƒTƒCƒY (‰¡)
 #define GRAVITY 10 //d—Í
 
+#define EXPLOSION_MAX_NUM 13	//”š”­‚Ì‰»‡•¨‚ÌŒÂ”
+#define POISON_MAX_NUM 18		//“Å@‚Ì‰»‡•¨‚ÌŒÂ”
+#define MELT_MAX_NUM 13			//—n‰ğ‚Ì‰»‡•¨‚ÌŒÂ”
+#define PARARYSIS_MAX_NUM 12	//–ƒáƒ‚Ì‰»‡•¨‚ÌŒÂ”
+#define HEAL_MAX_NUM 7			//‰ñ•œ‚Ì‰»‡•¨‚ÌŒÂ”
+
+#define MAX_STRING 40			//’e‚Ì–¼‘O‚ÌÅ‘å•¶š”
+
 //‰»‡•¨\‘¢‘Ì
 struct Compound
 {
@@ -32,6 +40,29 @@ enum class ATTRIBUTE
 	POISON,
 	PARALYSIS,
 	HEAL
+};
+
+struct ChemicalFormulaMaterial
+{
+	int carbon;		//’Y‘f
+	int hydrogen;	//…‘f
+	int nitrogen;	//’‚‘f
+	int oxygen;		//_‘f
+	int sulfur;		//—°‰©
+	int chlorine;	//‰–‘f
+	int uranium;	//ƒEƒ‰ƒ“
+};
+
+struct ChemicalFormulaParameter
+{
+	int number_of_bullets;
+	int time;
+	int damage_per_second;
+	int damage;
+	char chemical_formula_name[MAX_STRING];
+	char chemical_formula[MAX_STRING];
+	ATTRIBUTE atribute;
+	ChemicalFormulaMaterial material;
 };
 
 //’†SÀ•W
@@ -121,4 +152,3 @@ struct Area
 	float height;	//c
 	float width;	//‰¡
 };
-

@@ -125,5 +125,4 @@ public:
 	void SaveStage(char* stage_name);
 	//CSVƒtƒ@ƒCƒ‹‚©‚ç‚Ì“Ç‚İ‚İ
 	void LoadStage(char* stage_name);
-
 };

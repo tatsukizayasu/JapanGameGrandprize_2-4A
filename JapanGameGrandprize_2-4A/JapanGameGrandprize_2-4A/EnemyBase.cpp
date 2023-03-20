@@ -1,5 +1,5 @@
-#include "DxLib.h"
 #include "EnemyBase.h"
+#include "DxLib.h"
 #include "vector"
 #include "CameraWork.h"
 
@@ -23,6 +23,7 @@ EnemyBase::EnemyBase()
 	kind = ENEMY_KIND::NONE; 
 	state = ENEMY_STATE::IDOL;
 	type = nullptr;
+	images = nullptr;
 }
 
 //-----------------------------------
@@ -31,10 +32,31 @@ EnemyBase::EnemyBase()
 bool EnemyBase::CheckHp()
 {
 	bool ret = false;
+
 	if (hp <= 0)
 	{
 		ret = true;
 	}
+
+	return ret;
+}
+
+//-----------------------------------
+//画面外に出た
+//-----------------------------------
+bool EnemyBase::ScreenOut()
+{
+	bool ret = false; //戻り値
+	Location scroll; //画面スクロールを考慮した座標
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
+
+	if ((scroll.x < -(area.width / 2)) || (SCREEN_WIDTH + (area.width / 2) < scroll.x) ||
+		(scroll.y < -(area.height / 2)) || (SCREEN_HEIGHT + (area.height / 2) < scroll.y))
+	{
+		ret = true;
+	}
+
 	return ret;
 }
 
@@ -51,9 +73,6 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 	//カメラの位置
 	Location camera = CameraWork::GetCamera();
 
-	//描画範囲の設定
-	Area draw_area = { SCREEN_HEIGHT + CHIP_SIZE,SCREEN_WIDTH + CHIP_SIZE };
-
 	for (MapChip* chip : map_chip)
 	{
 		if (chip != nullptr)
@@ -61,9 +80,8 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 			Location chip_location = chip->GetLocation();
 			Area chip_area = chip->GetArea();
 
-			//描画範囲内にあるブロック
-			if ((camera.x < chip_location.x + chip_area.width) && (chip_location.x < camera.x + draw_area.width) &&
-				(camera.y < chip_location.y + chip_area.height) && (chip_location.y < camera.y + draw_area.height))
+			if ((location.x - (area.width / 2) <= chip_location.x + (chip_area.width / 2)) &&
+				(chip_location.x - (chip_area.width / 2) <= location.x + (area.width / 2)))
 			{
 				if (HitBox(chip))
 				{
@@ -72,6 +90,95 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 					break;
 				}
 			}
+		}
+	}
+
+	return ret;
+}
+
+//-----------------------------------
+//ステージのどの面と当たったを判断
+//-----------------------------------
+STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
+{
+	STAGE_DIRECTION ret = STAGE_DIRECTION::TOP; //戻り値
+
+	Location chip_location = map_chip->GetLocation();
+	Area chip_area = map_chip->GetArea();
+	Location vertex = location; //頂点
+	float distance[4]; //距離
+	int min_vertex; //当たった頂点
+	float min_distance; //最低距離
+
+	//左上との距離
+	distance[0] = sqrtf(powf(chip_location.x - (location.x + area.width / 2), 2) +
+		powf(chip_location.y - (location.y - area.height / 2), 2));
+
+	//右上との距離
+	distance[1] = sqrtf(powf(chip_location.x - (location.x - area.width / 2), 2) +
+		powf(chip_location.y - (location.y - area.height / 2), 2));
+
+	//左下との距離
+	distance[2] = sqrtf(powf(chip_location.x - (location.x - area.width / 2), 2) +
+		powf(chip_location.y - (location.y + area.height / 2), 2));
+
+	//右下との距離
+	distance[3] = sqrtf(powf(chip_location.x - (location.x + area.width / 2), 2) +
+		powf(chip_location.y - (location.y + area.height / 2), 2));
+
+	min_distance = distance[0];
+	min_vertex = 0;
+
+	for (int i = 1; i < 4; i++)
+	{
+		if (distance[i] < min_distance)
+		{
+			min_distance = distance[i];
+			min_vertex = i;
+		}
+	}
+	
+	switch (min_vertex)
+	{
+	case 0:
+		vertex = {location.x - 1,location.y - 1};
+		break;
+	case 1:
+		vertex = {location.x + 1 ,location.y - 1};
+		break;
+	case 2:
+		vertex = {location.x - 1,location.y + 1};
+		break;
+	case 3:
+		vertex = {location.x + 1,location.y + 1};
+		break;
+	default:
+		break;
+	}
+
+	//上面との距離
+	distance[0] = sqrtf(powf(chip_location.x - vertex.x, 2) +
+		powf((chip_location.y - chip_area.height / 2) - vertex.y, 2));
+
+	//下面との距離
+	distance[1] = sqrtf(powf(chip_location.x - vertex.x, 2) +
+		powf((chip_location.y + chip_area.height / 2) - vertex.y, 2));
+
+	//左面との距離
+	distance[2] = sqrtf(powf((chip_location.x - chip_area.width / 2) - vertex.x, 2) +
+		powf(chip_location.y - vertex.y, 2));
+
+	//右面との距離
+	distance[3] = sqrtf(powf((chip_location.x + chip_area.width / 2) - vertex.x, 2) +
+		powf(chip_location.y - vertex.y, 2));
+
+	min_distance = distance[0];
+	for (int i = 1; i < 4; i++)
+	{
+		if (distance[i] < min_distance)
+		{
+			min_distance = distance[i];
+			ret = static_cast<STAGE_DIRECTION>(i);
 		}
 	}
 
@@ -104,6 +211,7 @@ void EnemyBase::Paralysis()
 		speed *= 0.7;
 	}
 }
+
 //-----------------------------------
 //ドロップする種類の量の取得
 //-----------------------------------
@@ -115,7 +223,7 @@ int EnemyBase::GetDropTypeVolume() const
 //-----------------------------------
 //ドロップするアイテムの量の取得
 //-----------------------------------
-int EnemyBase::GetDropVolume()const
+int EnemyBase::GetDropVolume() const
 {
 	return drop_volume;
 }

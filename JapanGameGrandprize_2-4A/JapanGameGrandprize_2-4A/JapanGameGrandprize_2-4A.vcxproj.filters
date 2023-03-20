@@ -7,9 +7,6 @@
     <ClCompile Include="FpsController.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -35,9 +32,6 @@
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="CameraWork.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="EfectExplosion.cpp">
@@ -132,6 +126,24 @@
     <ClCompile Include="Stage\Element\Stage_Element_Base.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
+    <ClCompile Include="TorrentBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="TorrentNuts.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
+      <ClCompile Include="EnemySlimeBoss.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_Move_Floor.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -149,9 +161,6 @@
     <ClInclude Include="FpsController.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameMain.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="PadInput.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
@@ -162,9 +171,6 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="SphereCollider.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Stage.h">
@@ -275,6 +281,24 @@
     <ClInclude Include="Stage\Element\Element_DamageWall.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
+    <ClInclude Include="TorrentBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="TorrentNuts.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+     <ClInclude Include="EnemySlimeBoss.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_Move_Floor.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMain.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -324,6 +348,12 @@
     </Filter>
     <Filter Include="ヘッダーファイル\Stage\Element">
       <UniqueIdentifier>{9246e21e-4ec4-45b4-bf72-12a753eea626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Scene">
+      <UniqueIdentifier>{d7b23c11-eabb-4fe5-adaa-c82fa1970a0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Scene">
+      <UniqueIdentifier>{acec3a04-f352-4059-94b1-1689604dcbfd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

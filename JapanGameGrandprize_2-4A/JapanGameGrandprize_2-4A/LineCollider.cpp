@@ -366,7 +366,6 @@ bool LineCollider::HitBox(class BoxCollider* box_collider)
 	{
 		my_x[0] = location[0].x;
 		my_x[1] = location[1].x;
-
 	}
 	else
 	{

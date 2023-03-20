@@ -1,6 +1,6 @@
+#include "StageBuilder.h"
 #include "DxLib.h"
 #include "../../Define.h"
-#include "StageBuilder.h"
 #include "../../CameraWork.h"
 #include "Directory.h"
 #include <string>
@@ -24,8 +24,8 @@ StageBuilder::StageBuilder()
 	{
 		throw "Images/Stage/map_chips_.png";
 	}
-	mode = BRUSH_MODE;
 
+	mode = BRUSH_MODE;
 
 	for (int i = 1; i < ARROW_NUM; i++)
 	{
@@ -47,7 +47,6 @@ StageBuilder::StageBuilder()
 	
 
 #endif // _DEV
-
 }
 
 //------------------------------------
@@ -113,7 +112,6 @@ void StageBuilder::Update()
 		break;
 	}
 
-
 #ifdef _DEV
 
 	if (line != nullptr)
@@ -145,8 +143,6 @@ void StageBuilder::Update()
 		line->Update();
 	}
 
-
-	line_collider->HitSphere(mouse);
 #endif // _DEV
 }
 
@@ -239,7 +235,6 @@ void StageBuilder::DrawWhichMode()const
 		DrawFileInfo();
 		break;
 	}
-
 }
 
 //------------------------------------
@@ -288,7 +283,6 @@ void StageBuilder::UpdateBrush()
 		MakePolyLine();
 		break;
 	}
-
 }
 
 //------------------------------------
@@ -537,7 +531,6 @@ void StageBuilder::DrawClassName()const
 	DrawBoxAA(0, 0, (float)draw_width+8, (float)font_size+4, 0xFFFFFF, FALSE, 3);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	DrawFormatString(4, 4, 0xffffff,"%s", class_name[current_brush]);
-
 }
 
 //---------------------------------------------
@@ -612,7 +605,6 @@ void StageBuilder::MakePolyLine()
 void StageBuilder::MakeSphere()
 {
 	pending_sphere.push_back(new SphereCollider(mouse->GetLocation()));
-
 }
 
 //--------------------------------------

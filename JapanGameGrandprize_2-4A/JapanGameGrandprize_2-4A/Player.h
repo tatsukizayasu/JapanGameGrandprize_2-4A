@@ -20,6 +20,7 @@
 #define FUEL_BAR_HEIGHT 100
 
 
+
 #define BULLET_MAX 50
 #define GREEN GetColor(0,255,0)
 #define RED GetColor(255,0,0)
@@ -35,20 +36,6 @@ enum class PLAYER_STATE
 	DEATH
 };
 
-
-struct MaterialParameter
-{
-	int number_of_bullets;
-	int time;
-	float damage;
-	const char* material_name[10];
-	ATTRIBUTE atribute;
-};
-
-struct ChemicalFormula
-{
-	MaterialParameter x;
-};
 
 
 
@@ -90,9 +77,15 @@ private:
 	EfectBeam* beam;
 	Pouch* pouch;					 //ポーチへのポインタ
 
-
-
 	ElementItem** element;	//元素
+
+	ChemicalFormulaParameter explosion;
+	ChemicalFormulaParameter poison;
+	ChemicalFormulaParameter melt;
+	ChemicalFormulaParameter pararysis;
+	ChemicalFormulaParameter heal;
+
+
 public:
 
 	Player();
@@ -116,9 +109,16 @@ public:
 
 	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
+	
 
 	//元素の量の設定
 	void SetElementItem(class Item* item);
 	//プレイヤーの向き
 	bool GetMoveDirection();
+
+	void SetExplosion(ChemicalFormulaParameter);
+	void SetPoison(ChemicalFormulaParameter);
+	void SetMelt(ChemicalFormulaParameter);
+	void SetPararysis(ChemicalFormulaParameter);
+	void SetHeal(ChemicalFormulaParameter);
 };

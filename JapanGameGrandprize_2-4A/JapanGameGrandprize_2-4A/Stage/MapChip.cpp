@@ -42,9 +42,6 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 		image_size.width = (float)x;
 		image_size.height = (float)y;
 	}
-
-	collision_dir = { 0,0 };
-
 }
 
 //-----------------------------------
@@ -52,38 +49,13 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 //-----------------------------------
 MapChip::~MapChip()
 {
-
 }
 
 //-----------------------------------
 // 更新
 //-----------------------------------
-void MapChip::Update(Player* player)
+void MapChip::Update()
 {
-
-	if (HitBox(player)) {
-		//上
-		if (location.y < player->GetLocation().y) {
-			collision_dir.y = 1;
-		}
-		//下
-		else if (location.y > player->GetLocation().y) {
-			collision_dir.y = -1;
-		}
-
-
-
-		//右
-		if (location.x > player->GetLocation().x) {
-			collision_dir.x = 1;
-		}
-
-		//左
-		else if (location.x < player->GetLocation().x) {
-			collision_dir.x = -1;
-		}
-	
-	}
 }
 
 //-----------------------------------
@@ -91,15 +63,17 @@ void MapChip::Update(Player* player)
 //-----------------------------------
 void MapChip::Draw()const
 {
+	//画像がない又はエラーの場合は描画しない
+	if (image == 0) { return; }
+
 	//printfDx("camera_x:%f\tcamera_y:%f\n", CameraWork::GetCamera().x, CameraWork::GetCamera().y);
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	DrawRotaGraphF(x, y, ex_rate, 0, image, TRUE);
+	DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
 #ifdef _SHOW_COLLISION
 	DrawCollision();
 #endif
-
 
 #ifdef COLLLISION_DEBUG
 
@@ -109,8 +83,6 @@ void MapChip::Draw()const
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #endif // COLLLISION_DEBUG
-
-	
 }
 
 //-----------------------------------

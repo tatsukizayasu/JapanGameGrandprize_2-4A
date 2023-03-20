@@ -6,7 +6,6 @@
 #include "BoxCollider.h"
 #include "Stage/Stage.h"
 
-
 //各属性のドロップ数
 #define FIRE_DROP 3
 #define WATER_DROP 4
@@ -36,6 +35,16 @@ struct HitMapChip
 {
 	bool hit; //当たったか
 	MapChip* chip; //マップチップ
+};
+
+
+//ステージブロックと当たった面
+enum class STAGE_DIRECTION
+{
+	TOP,	//上面
+	BOTTOM,	//下面
+	LEFT,	//左面
+	RIGHT	//右面
 };
 
 //エネミーの種類
@@ -102,6 +111,9 @@ public:
 	//ステージとの当たり判定
 	HitMapChip HitStage(const class Stage* stage);
 
+	//ステージのどの面と当たったを判断
+	STAGE_DIRECTION HitDirection(const class MapChip* map_chip);
+
 	//死亡
 	virtual void Death() = 0;
 
@@ -132,6 +144,7 @@ protected:
 
 	bool can_delete; //削除フラグ
 	bool left_move; //左に動いているかどうか
+	int* images; //画像
 	int hp;	//体力
 	int speed; //移動速度
 	int poison_time; //毒の効果時間
@@ -149,6 +162,9 @@ protected:
 
 	//HPが0かどうか判断(0になったらtrue)
 	bool CheckHp();
+
+	//画面外に出た
+	bool ScreenOut();
 
 	//毒状態の処理
 	void Poison();

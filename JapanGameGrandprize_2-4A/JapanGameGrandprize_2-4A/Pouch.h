@@ -3,37 +3,62 @@
 #include "Define.h"
 
 
+#define CURSOL_SPEED 30
+
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
 
-enum class Tab
-{
-	Explosion_Tab = 0,
-	Melt_Tab,
-	Poison_Tab,
-	Paralysis_Tab,
-	Heal_Tab
-};
+
+
 
 class Pouch
 {
 private:
-
 	float x, y;
-	Tab tab;
+	int cursol;
+	int count;
+	ATTRIBUTE tab;
 	ElementItem* element[PLAYER_ELEMENT];
-public:
 
+	ChemicalFormulaParameter chemical_formula_explosion[EXPLOSION_MAX_NUM];
+	ChemicalFormulaParameter chemical_formula_poison[POISON_MAX_NUM];
+	ChemicalFormulaParameter chemical_formula_pararysis[PARARYSIS_MAX_NUM];
+	ChemicalFormulaParameter chemical_formula_heal[HEAL_MAX_NUM];
+	ChemicalFormulaParameter chemical_formula_melt[MELT_MAX_NUM];
+
+	ChemicalFormulaParameter select_explosion;
+	ChemicalFormulaParameter select_poison;
+	ChemicalFormulaParameter select_pararysis;
+	ChemicalFormulaParameter select_heal;
+	ChemicalFormulaParameter select_melt;
+
+public:
 	Pouch();
-	~Pouch() {};
+	~Pouch();
 
 	void Update();
 	void Draw() const;
 
-	void ExplosionTab() const;
-	void PoisonTab() const;
-	void MeltTab() const;
-	void ParalysisTab() const;
-	void HealTab() const;
+	void ExplosionTabUpdate();
+	void PoisonTabUpdate();
+	void MeltTabUpdate();
+	void ParalysisTabUpdate();
+	void HealTabUpdate();
+
+	void ExplosionTabDraw() const;
+	void PoisonTabDraw() const;
+	void MeltTabDraw() const;
+	void ParalysisTabDraw() const;
+	void HealTabDraw() const;
 	void SetElement(ElementItem*,int i);
+
+	void InitChemicalParameter();
+
+	ChemicalFormulaParameter GetExplosion();
+	ChemicalFormulaParameter GetPoison();
+	ChemicalFormulaParameter GetPararysis();
+	ChemicalFormulaParameter GetHeal();
+	ChemicalFormulaParameter GetMelt();
+	ATTRIBUTE GetAttribute();
+	int GetCursol();
 };

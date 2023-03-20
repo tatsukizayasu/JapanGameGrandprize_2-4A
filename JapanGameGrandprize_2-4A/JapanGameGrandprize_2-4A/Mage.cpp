@@ -4,7 +4,7 @@
 #include "BulletManager.h"
 
 //魔法弾の発射レート
-#define MAGE_SHOT_RATE 20
+#define MAGE_SHOT_RATE 40
 
 //移動速度
 #define MAGE_SPEED 2
@@ -13,16 +13,15 @@
 #define MAGE_MIN_DROP 0
 #define MAGE_MAX_DROP 6
 
-#define MAGE_SHOT_RATE 20
-
 //体力
 #define MAGE_HP 100
 
 //移動範囲(直径)
-#define MAGE_TELEPORT_AREA 400
+#define MAGE_TELEPORT_AREA 600
+#define MAGE_TELEPORT_RATE 160
 
 //攻撃間隔
-#define MAGE_ATTACK_INTERVAL 120
+#define MAGE_ATTACK_INTERVAL 240
 
 //-----------------------------------
 //コンストラクタ
@@ -36,12 +35,13 @@ Mage::Mage()
 	hp = MAGE_HP;
 	shot_rate = 0;
 	shot_count = 0;
+	teleport_count = 0;
 	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
-	type = new ENEMY_TYPE;
+	type = new ENEMY_TYPE[1];
 	
-	*type = static_cast<ENEMY_TYPE>(1 + GetRand(3));
+	type[0] = static_cast<ENEMY_TYPE>(1 + GetRand(3));
 	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	image = 0xffffff;
@@ -55,7 +55,7 @@ Mage::Mage()
 	//ドロップアイテムの設定
 	drop = 0;
 
-	switch (*type)
+	switch (type[0])
 	{
 	case ENEMY_TYPE::NORMAL:
 		break;
@@ -91,7 +91,7 @@ Mage::Mage()
 
 		volume = MAGE_MIN_DROP + GetRand(MAGE_MAX_DROP);
 
-		switch (*type)
+		switch (type[0])
 		{
 		case ENEMY_TYPE::NORMAL:
 			break;
@@ -130,7 +130,6 @@ Mage::Mage()
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
-
 }
 
 //-----------------------------------
@@ -138,7 +137,7 @@ Mage::Mage()
 //-----------------------------------
 Mage::~Mage()
 {
-	delete type;
+	delete[] type;
 
 	for (int i = 0; i < drop; i++)
 	{
@@ -161,12 +160,18 @@ void Mage::Update(const Player* player, const Stage* stage)
 		Idol();
 		break;
 	case ENEMY_STATE::MOVE:
+
+		Move(player->GetLocation());
+
 		if (can_teleport)
 		{
 			Teleport(stage);
 		}
-		Move(player->GetLocation());
 		
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+		}
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -180,12 +185,6 @@ void Mage::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-
-	if (0 <= attack_interval)
-	{
-		attack_interval--;
-	}
-
 	Poison();
 	Paralysis();
 
@@ -195,20 +194,12 @@ void Mage::Update(const Player* player, const Stage* stage)
 	}
 }
 
-
 //-----------------------------------
 //アイドル状態
 //-----------------------------------
 void Mage::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
-	Location camera = CameraWork::GetCamera(); //カメラ
-	scroll = location - camera;
-
-	
-
-	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
 	}
@@ -219,20 +210,17 @@ void Mage::Idol()
 //-----------------------------------
 void Mage::Move(const Location player_location)
 {
-	Location scroll; //画面スクロールを考慮したX座標
+	teleport_count++;
+	attack_interval--;
 
-	scroll.x = location.x - CameraWork::GetCamera().x;
-	scroll.y = location.y - CameraWork::GetCamera().y;
-
-	if (attack_interval < 0)
+	if (teleport_count % MAGE_TELEPORT_RATE  == 0) //テレポートする
 	{
-		state = ENEMY_STATE::ATTACK;
+		can_teleport =true;
 	}
 
-	if ((scroll.x < -area.width) || (SCREEN_WIDTH + area.width < scroll.x) ||
-		(scroll.y < -area.height) || (SCREEN_HEIGHT + area.height < scroll.y))
+	if (attack_interval < 0) //攻撃に移行
 	{
-		state = ENEMY_STATE::IDOL;
+		state = ENEMY_STATE::ATTACK;
 	}
 }
 
@@ -246,6 +234,9 @@ void Mage::Teleport(const Stage* stage)
 	float radian; //角度
 	int teleport; //テレポートの場所距離
 	Location old_location = location; //元の地点
+
+	Location camera = CameraWork::GetCamera();
+
 	while (true)
 	{
 		//テレポートする距離設定
@@ -257,10 +248,20 @@ void Mage::Teleport(const Stage* stage)
 		location.x = old_location.x + (teleport * cosf(radian));
 		location.y = old_location.y + (teleport * sinf(radian));
 
+		Location scroll = location; //画面スクロールを考慮した座標
+		//画面スクロールを考慮した座標の計算
+		scroll = scroll - camera;
+
+		//ステージとの当たり判定の取得
 		hit_stage = HitStage(stage);
-		if (!hit_stage.hit)
+
+		if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+			(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
 		{
-			break;
+			if (!hit_stage.hit)
+			{
+				break;
+			}
 		}
 	}
 	can_teleport = false;
@@ -271,7 +272,6 @@ void Mage::Teleport(const Stage* stage)
 //-----------------------------------
 void Mage::Fall()
 {
-
 }
 
 //-----------------------------------
@@ -286,7 +286,7 @@ void  Mage::Attack(Location player_location)
 		state = ENEMY_STATE::MOVE;
 		shot_count = 0;
 		attack_interval = MAGE_ATTACK_INTERVAL;
-		can_teleport = true;
+		teleport_count = 0;
 	}
 }
 
@@ -318,7 +318,7 @@ void Mage::CreateBullet(Location player_location)
 	if (shot_rate % MAGE_SHOT_RATE == 0)
 	{
 		BulletManager::GetInstance()->CreateEnemyBullet
-		(new MageBullet(*type, location, player_location));
+		(new MageBullet(type[0], location, player_location));
 
 		shot_count++;
 	}
@@ -359,7 +359,6 @@ void Mage::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Mage::Draw() const
 {
-
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;

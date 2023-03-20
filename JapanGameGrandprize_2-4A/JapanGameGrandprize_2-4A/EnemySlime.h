@@ -3,8 +3,6 @@
 #include"CameraWork.h"
 #include"BoxCollider.h"
 
-
-
 enum class SLIME_ATTACK
 {
 	BEFORE_ATTACK,//攻撃する前
@@ -17,21 +15,19 @@ class EnemySlime :
 private:
 	bool attack; //攻撃が当たったか
 
-	int color;
 	SLIME_ATTACK slime_attack;
 
-	int slime_image;
+	int image_type;
+	int image_change_time;
 	int slime_angle;
 	int wait_time;
 
 	Location jump_distance;
 
-	ElementItem drop_item;
 public:
 
 	EnemySlime();
-	EnemySlime(float x, float y, float height, float width);
-	~EnemySlime() {};
+	~EnemySlime();
 
 	//描画以外の更新を実行
 	virtual void Update(const class Player* player, const class Stage* stage)override;

@@ -3,27 +3,34 @@
 #include "../Player.h"
 #include <windef.h>
 
+
 Stage_Element_Base::Stage_Element_Base()
 {
+	type = 0;
 	this->mapchip = nullptr;
-	this->image = nullptr;
+	this->image = 0;
+	type = 0;
+	count = 0;
+
 }
 
-Stage_Element_Base::Stage_Element_Base(MapChip* mapchip, int* image)
+Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : MapChip(image, location, area)
 {
+	type = 0;
 	this->mapchip = mapchip;
-	this->image = image;
+	start_time = chrono::steady_clock::now();
+	std::chrono::duration<float> diff = chrono::steady_clock::now() - start_time;
+	elapsed = chrono::duration_cast<chrono::duration<long long, std::milli>>(diff);
+	count = 0;
 }
 
 Stage_Element_Base::~Stage_Element_Base()
 {
 }
 
-
 bool Stage_Element_Base::HitPlayer(Player* player) const
 {
-	Location location = mapchip->GetLocation();
-	Area area = mapchip->GetArea();
+
 
 	struct Rect
 	{
@@ -57,3 +64,65 @@ bool Stage_Element_Base::HitPlayer(Player* player) const
 	}
 	return false;
 }
+
+void Stage_Element_Base::StartAnimation(float time, std::function<void()>* callback)
+{
+	auto end_time = chrono::steady_clock::now();
+	auto diff = end_time - start_time;
+	//elapsed = chrono::duration_cast<chrono::milliseconds>(diff);
+	elapsed = chrono::duration_cast<chrono::duration<long long, std::milli>>(diff);
+
+	if (elapsed.count() >= time * 1000.0f) {
+		start_time = end_time;
+		count++;
+		//printfDx("count:%d\n", count);
+
+		if (callback != nullptr) {
+			(*callback)();
+		}
+
+	}
+
+}
+
+void Stage_Element_Base::LoopImages(int *images, float time, int total_images, std::function<void()>* callback)
+{
+	
+
+	auto end_time = std::chrono::steady_clock::now();
+	auto diff = end_time - start_time;
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(diff);
+
+	if (elapsed.count() >= time * 1000.0f) {
+		start_time = end_time;
+		current_image = (current_image + 1) % total_images;
+		this->image = images[current_image];
+
+		if (callback != nullptr) {
+			(*callback)();
+		}
+
+	}
+}
+
+
+
+//std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
+//{
+//	for (auto elem : element) {
+//		if (elem != nullptr && elem->GetType() == type) {
+//			//MapChip* mapchip = elem->GetMapChip();
+//
+//			if (mapchip->GetLocation().y > elem->GetMapChip()->GetLocation().y
+//				&& mapchip->GetLocation().x == elem->GetMapChip()->GetLocation().x) {
+//
+//				SearchElement(type)->GetMapChip()->SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
+//				SearchElement(type)->GetMapChip()->SetImage(0);
+//				printfDx("aa");
+//				return elem;
+//			}
+//			
+//		}
+//	}
+//}
+

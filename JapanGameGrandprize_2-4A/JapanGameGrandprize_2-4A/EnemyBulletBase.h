@@ -31,4 +31,3 @@ protected:
 
 	ENEMY_TYPE type; //‘®«	
 };
-

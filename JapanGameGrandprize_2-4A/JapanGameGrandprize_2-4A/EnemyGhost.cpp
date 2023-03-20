@@ -1,10 +1,11 @@
 #include "EnemyGhost.h"
-#include"DxLib.h"
+#include "DxLib.h"
 #include "CameraWork.h"
 #include "BulletManager.h"
+
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 40
-#define GHOST_SIZE_Y 60
+#define GHOST_SIZE_Y 80
 
 //プレイヤー発見距離
 #define GHOST_DETECTION_DISTANCE 500
@@ -36,8 +37,6 @@
 //ゴーストの攻撃力
 #define GHOST_ATTACK_DAMAGE 10
 
-//今日やること
-//当たり判定、接近攻撃あれでいいのか
 
 //-----------------------------------
 // コンストラクタ
@@ -49,8 +48,10 @@ EnemyGhost::EnemyGhost()
 	attack = false;
 
 	hp = 10;
-	location.x = 640.0f;
-	location.y = 1120.0f;
+	location.x = 1900;
+	location.y = 650;
+	standby_attack = 0;
+	speed = 1.5;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
 	standby_time = 0;
@@ -58,11 +59,14 @@ EnemyGhost::EnemyGhost()
 	magic_attack = false;
 	kind = ENEMY_KIND::GHOST;
 
+	ghost_image = LoadGraph("Images/Enemy/Ghostimage.png"); //画像読込み
+
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
 	drop_type_volume = WIND_DROP;
 
 	int volume = 0;
+
 	for (int i = 0; i < WIND_DROP; i++)
 	{
 		volume = GHOST_MIN_DROP + GetRand(GHOST_MAX_DROP);
@@ -83,6 +87,14 @@ EnemyGhost::EnemyGhost()
 //-----------------------------------
 EnemyGhost::~EnemyGhost()
 {
+	delete[] images;
+	delete[] type;
+
+	for (int i = 0; i < WIND_DROP; i++)
+	{
+		delete drop_element[i];
+	}
+	delete[] drop_element;
 }
 
 //-----------------------------------
@@ -91,6 +103,7 @@ EnemyGhost::~EnemyGhost()
 void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 {
 	Location old_location = location;	//前の座標
+	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
 	switch (state)
 	{
@@ -99,6 +112,12 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
+		
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -113,10 +132,20 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		break;
 	}
 
-	//if (HitStage(stage)) //ステージとの当たり判定
-	//{
-	//	location = old_location;
-	//}
+	hit_stage = HitStage(stage);
+	if (hit_stage.hit) //ステージとの当たり判定
+	{
+		Location chip_location = hit_stage.chip->GetLocation();
+		Area chip_area = hit_stage.chip->GetArea();
+		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+		{
+			speed = 0.1;
+		}
+		else
+		{
+			speed = 1.5;
+		}
+	}
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -127,16 +156,11 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 //アイドル状態
 void EnemyGhost::Idol()
 {
-	Location scroll; //画面スクロールを考慮したX座標
-	Location camera = CameraWork::GetCamera(); //カメラ
-	scroll = location - camera;
-
-	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
+		speed = 1.5;
 	}
-
 }
 
 //移動
@@ -147,27 +171,31 @@ void EnemyGhost::Move(const Location player_location)
 	switch (action_type)
 	{
 	case GHOST_STATE::NORMAL:  //通常移動
-		location.x -= GHOST_SPEED;
+		location.x -= speed;
+		break;
+	case GHOST_STATE::NORMAL_RIGHT://右
+		location.x += speed;
 		break;
 	case GHOST_STATE::LEFT_lOWER:  //左下を目指す
-		location.x -= GHOST_SPEED;
-		location.y += GHOST_SPEED;
+		location.x -= speed;
+		location.y += speed;
 		break;
 	case GHOST_STATE::LEFT_UPPER:  //左上を目指す
-		location.x -= GHOST_SPEED;
-		location.y -= GHOST_SPEED;
+		location.x -= speed;
+		location.y -= speed;
 		break;
 	case GHOST_STATE::RIGHT_LOWER:  //右下を目指す
-		location.x += GHOST_SPEED;
-		location.y += GHOST_SPEED;
+		location.x += speed;
+		location.y += speed;
 		break;
 	case GHOST_STATE::RIGHT_UPPER:  //右上を目指す。
-		location.x += GHOST_SPEED;
-		location.y -= GHOST_SPEED;
+		location.x += speed;
+		location.y -= speed;
 		break;
 	default:
 		break;
 	}
+
 }
 
 //-----------------------------------
@@ -193,6 +221,7 @@ void  EnemyGhost::Attack(Location player_location)
 		default:
 			break;
 		}
+
 		standby_time = 0;
 		state = ENEMY_STATE::MOVE;
 	}
@@ -222,7 +251,7 @@ AttackResource EnemyGhost::Hit()
 //-----------------------------------
 void EnemyGhost::Death()
 {
-
+	can_delete = true;
 }
 
 //-----------------------------------
@@ -235,18 +264,8 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK)
-	{
-		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xff0000, TRUE);
-	}
-	else
-	{
-		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffff00, TRUE);
-	}
+	DrawRotaGraph(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
 }
-
 
 //-----------------------------------
 // ゴーストの動き
@@ -254,25 +273,29 @@ void EnemyGhost::Draw()const
 void EnemyGhost::GhostMove(const Location player_location)
 {
 	float range; //プレイヤーとの距離	
-	
+
 	range = fabsf(location.x - player_location.x);
 
 	//プレイヤーが発見距離内にいたら
 	if (range <= GHOST_DETECTION_DISTANCE && range >= -GHOST_DETECTION_DISTANCE)
 	{
-		if (range > player_location.x) //左に移動
+		if (location.x > player_location.x) //左に移動
 		{
 			if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::LEFT_lOWER;
 			}
-			else 
+			else
 			{
 				action_type = GHOST_STATE::LEFT_UPPER;
 			}
 		}
 		else //右に移動
 		{
+			if (location.y + 10 >= player_location.y && location.y - 10 <= player_location.y)
+			{
+				action_type = GHOST_STATE::NORMAL_RIGHT;
+			}
 			if (player_location.y > location.y)
 			{
 				action_type = GHOST_STATE::RIGHT_LOWER;
@@ -283,6 +306,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 			}
 		}
 	}
+
 	else //通常移動
 	{
 		action_type = GHOST_STATE::NORMAL;
@@ -305,6 +329,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 		standby_time = GHOST_MAGIC_STANDBY;
 		magic_attack = true;
 
+		//弾の生成
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new GhostBullet(location, player_location));
 	}
@@ -315,7 +340,6 @@ void EnemyGhost::GhostMove(const Location player_location)
 //-----------------------------------
 void EnemyGhost::Fall()
 {
-
 }
 
 //-----------------------------------
@@ -326,26 +350,26 @@ void EnemyGhost::HitBullet(const BulletBase* bullet)
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * 10; //無効
+		hp -= bullet->GetDamage() * 0; //無効
 		break;
-		//	case ATTRIBUTE::EXPLOSION:
-		//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
-		//		break;
-		//	case ATTRIBUTE::MELT:
-		//		hp -= bullet->GetDamage() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::POISON:
-		//		poison_damage = bullet->GetDamage() * 0; //無効
-		//		poison_time = bullet->GetDebuffTime() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::PARALYSIS:
-		//		paralysis_time = bullet->GetDebuffTime() * 0; //無効
-		//		paralysis_time = bullet->GetDamage() * 0; //無効
-		//		break;
-		//	case ATTRIBUTE::HEAL:
-		//		break;
-		//	default:
-		//		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * 0; //無効
+		break;
+	case ATTRIBUTE::POISON:
+		poison_damage = bullet->GetDamage() * 0; //無効
+		poison_time = bullet->GetDebuffTime() * 0; //無効
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * 0; //無効
+		paralysis_time = bullet->GetDamage() * 0; //無効
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
 	}
 }
 

@@ -2,6 +2,7 @@
 #include "Define.h"
 #include "CameraWork.h"
 #include "Stage/Stage.h"
+#include "BULLET.h"
 
 //-----------------------------------
 //画面外に出たかどうか
@@ -59,6 +60,7 @@ bool EnemyBulletBase::HitStage(const Stage* stage) const
 
 	return ret;
 }
+
 //-----------------------------------
 //ダメージの取得
 //-----------------------------------

@@ -30,5 +30,4 @@ public:
 
 	//ƒAƒCƒeƒ€‚Ì®—
 	void ArrangementItem(const int old_item_volume);
-
 };
