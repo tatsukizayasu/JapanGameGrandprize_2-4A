@@ -64,7 +64,9 @@ GameMain::~GameMain()
 AbstractScene* GameMain::Update()
 {
 	pause->Update();
+	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
 	if (pause->IsPause() == TRUE) { return this; }
+	
 
 
 	camera_work->Update();
