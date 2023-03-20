@@ -60,6 +60,9 @@ public:
 	//ˆÚ“®
 	void Move(const Location player_location) override;
 
+	//Ú‹ßUŒ‚i•¨—UŒ‚j‚Ì“®‚«
+	void PhysicalMove();
+
 	//—‰º
 	void Fall() override;
 
