@@ -37,7 +37,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case MoveFloor:
-		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, Area{MAP_CHIP_SIZE / 2, MAP_CHIP_SIZE}));
+		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
 		break;
 
 	default:
