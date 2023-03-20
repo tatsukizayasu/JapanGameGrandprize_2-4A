@@ -50,8 +50,8 @@ Harpy::Harpy(Location spawn_location)
 	physical_time = 0;
 	magic_num = 0;
 	magic_time = 1;
-	location.x = 1000;
-	location.y = 550;
+	/*location.x = 1000;
+	location.y = 550;*/
 	location = spawn_location;
 	standby_attack = 0;
 	travel = 0;
@@ -195,8 +195,8 @@ void Harpy::Move(const Location player_location)
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
 		range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
 	{
-
-		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE || physical_time > 0)
+		//ê⁄ãﬂçUåÇ
+		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE )
 		{
 
 			state = ENEMY_STATE::ATTACK;
@@ -209,8 +209,12 @@ void Harpy::Move(const Location player_location)
 			location.x += travel * speed;
 			location.y += travel_y * speed;
 
+		/*	if (physical_time++ % 5 == 0)
+			{
+				magic_num = 1;
+			}*/
 		}
-
+		//âìãóó£çUåÇ
 		else
 		{
 
@@ -220,10 +224,10 @@ void Harpy::Move(const Location player_location)
 			magic_attack = true;
 
 			//î≠éÀä‘äu
-			if (magic_time++ % 2 == 0)
+			if (magic_time++ % 40 == 0)
 			{
 				//íeÇÃê∂ê¨
-				magic_num++;
+				/*magic_num++;*/
 				BulletManager::GetInstance()->CreateEnemyBullet
 				(new HarpyBullet(location, player_location));
 			}
