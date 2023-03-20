@@ -44,23 +44,9 @@ EnemySlime::EnemySlime(Location spawn_location)
 
 	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 
-	type = new ENEMY_TYPE;
+	type = new ENEMY_TYPE[1];
 
-	switch (GetRand(4))
-	{
-	case 0:
-		*type = ENEMY_TYPE::FIRE;
-		break;
-	case 1:
-		*type = ENEMY_TYPE::WATER;
-		break;
-	case 2:
-		*type = ENEMY_TYPE::WIND;
-		break;
-	case 3:
-		*type = ENEMY_TYPE::SOIL;
-		break;
-	}
+	type[0] = static_cast<ENEMY_TYPE>(1 + GetRand(3));
 
 	state = ENEMY_STATE::IDOL;
 	images = new int[7];
@@ -68,7 +54,7 @@ EnemySlime::EnemySlime(Location spawn_location)
 	slime_angle = 0;
 
 	//ドロップアイテムの設定
-	switch (*type)
+	switch (type[0])
 	{
 	case ENEMY_TYPE::FIRE:
 		drop_element = new ElementItem * [FIRE_DROP];
@@ -85,6 +71,10 @@ EnemySlime::EnemySlime(Location spawn_location)
 	case ENEMY_TYPE::SOIL:
 		drop_element = new ElementItem * [SOIL_DROP];
 		drop_type_volume = SOIL_DROP;
+		break;
+	case ENEMY_TYPE::NORMAL:
+	case ENEMY_TYPE::THUNDER:
+	default:
 		break;
 	}
 
@@ -109,7 +99,7 @@ EnemySlime::~EnemySlime()
 
 	delete[] drop_element;
 
-	delete type;
+	delete[] type;
 
 	for (int i = 0; i < 7; i++)
 	{
