@@ -126,6 +126,15 @@ private:
 
 		return scalar;
 	}
+	//ˆø”‚P‚©‚çˆø”‚Q‚É‘Î‚·‚éŠOÏ‚ğ•Ô‚·
+	float MakeCrossProduct(Location vector1, Location vector2)const
+	{
+		float cross_product;
+
+		cross_product = (vector1.x * vector2.y) - (vector1.y * vector2.x);
+
+		return cross_product;
+	}
 
 
 public:

@@ -20,7 +20,7 @@ StageBuilder::StageBuilder()
 	menu_cursor = 0;	
 	arrow[0] = '>';
 
-	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, 40, 40, block_images) == -1)
+	if (LoadDivGraph("Images/Stage/map_chips.png", 50, 10, 5, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
 	{
 		throw "Images/Stage/map_chips_.png";
 	}

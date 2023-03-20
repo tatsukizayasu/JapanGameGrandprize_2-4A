@@ -86,18 +86,18 @@ void LineCollider_t::Draw()const
 bool LineCollider_t::HitDot(Location point)const
 {
 	bool is_hit = false;
-	float closs_product;
+	float cross_product;
 
 	Location vector1 =
 		GetLocation(LINE_START) - GetLocation(LINE_END);
 	Location vector2 =
 		point - GetLocation(LINE_END);
 
-	closs_product = (vector1.x * vector2.y) - (vector1.y * vector2.x);
+	cross_product = (vector1.x * vector2.y) - (vector1.y * vector2.x);
 	//ê¸ï™ÇÃîÕàÕì‡Ç©Ç«Ç§Ç©
 	if ((GetMin() <= point) && point <= GetMax())
 	{
-		if (closs_product == 0)
+		if (cross_product == 0)
 		{
 			is_hit = true;
 		}
@@ -245,6 +245,30 @@ bool LineCollider_t::HitBox(const BoxCollider* box)const
 bool LineCollider_t::HitLine(const LineCollider_t* line)const
 {
 	bool is_hit = false;
+
+	float cross_product_start
+		= MakeCrossProduct
+		(this->GetLocation(LINE_END) - this->GetLocation(LINE_START)
+		,line->GetLocation(LINE_START) - this->GetLocation(LINE_START));
+
+	float cross_product_end
+		= MakeCrossProduct
+		(this->GetLocation(LINE_END) - this->GetLocation(LINE_START)
+			, line->GetLocation(LINE_END) - this->GetLocation(LINE_START));
+
+	if (0 < cross_product_start * cross_product_end)
+	{
+		return false;
+	}
+	else if(cross_product_start * cross_product_end < 0)
+	{
+		return true;
+	}
+	else
+	{
+
+	}
+
 	return is_hit;
 }
 
