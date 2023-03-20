@@ -1,35 +1,15 @@
 #include "Element_Move_Floor.h"
 
-Element_Move_Floor::Element_Move_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
+Element_Move_Floor::Element_Move_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, { MAP_CHIP_SIZE,MAP_CHIP_SIZE })
 {
 	this->type = type;
 	this->location = location;
-	this->area = area;
+	next_location = { location.x + area.width + MAP_CHIP_SIZE / 2 ,location.y };
+	this->area = { MAP_CHIP_SIZE,MAP_CHIP_SIZE };
 
 	is_move = true;
-	speed_x = 5.0f;
-	speed_y = 0.0f;
-
-
-
-	for (auto& e : element) {
-
-		//	自分自身のオブジェクトの場合はスキップ
-		if (this->GetLocation().x == e->GetLocation().x) { continue; }
-
-		//自分のオブジェクトの
-		if (e->GetLocation().x - this->GetLocation().x < 2000
-			&& e->GetLocation().x - this->GetLocation().x > 0) {
-			is_start_point = true;
-			next_location = e->GetLocation();
-	
-		}
-		
-		else
-		{
-			is_start_point = false;
-		}
-	}
+	speed.x = 5.0f;
+	speed.y = 0.0f;
 }
 
 Element_Move_Floor::~Element_Move_Floor()
@@ -39,12 +19,18 @@ Element_Move_Floor::~Element_Move_Floor()
 
 void Element_Move_Floor::Update(Player* player)
 {
-	if (this->GetLocation().x == next_location.x) { return; }
+	Location location = this->GetLocation();
 
-	if (is_move && this->GetLocation().x < next_location.x)
+	if (location.x == next_location.x) { return; }
+
+	//目的位置まで動く
+	if (is_move && location.x < next_location.x)
 	{
-		float x = GetLocation().x;
-		SetLocation({ x + speed_x , GetLocation().y});
+		SetLocation({ location.x + speed.x , location.y + speed.y });
+		//目的位置を通り過ぎたら目的位置に戻す
+		if (location.x > next_location.x) {
+			SetLocation(next_location);
+		}
 	}
 }
 

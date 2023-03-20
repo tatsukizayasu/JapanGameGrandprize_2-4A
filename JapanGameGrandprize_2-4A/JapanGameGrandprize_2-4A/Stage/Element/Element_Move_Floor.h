@@ -7,9 +7,10 @@ private:
 	//true=“®‚­,false=Ž~‚Ü‚é
 	bool is_move;
 	bool is_start_point;
+	//–Ú“IˆÊ’u
 	Location next_location;
-
-	float speed_x, speed_y;
+	//ˆÚ“®‘¬“x
+	Location speed;
 public:
 	Element_Move_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area);
 	~Element_Move_Floor();

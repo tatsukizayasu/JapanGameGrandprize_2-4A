@@ -64,10 +64,26 @@ Stage::Stage()
 				}
 				
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
-					element->AddElement(i,  {
+					if (i != Element::MoveFloor) {
+						element->AddElement(i, {
 							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						}, { CHIP_SIZE,CHIP_SIZE });
+							}, { CHIP_SIZE,CHIP_SIZE });
+					}
+					else {
+						float goal_distance = 0;
+						for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
+							goal_distance++;
+							if (map_data.at(y).at(wx) == 53) {
+								element->AddElement(i, {
+								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+									}, { CHIP_SIZE,goal_distance * CHIP_SIZE });	
+								break;
+							}
+						}
+					}
+					
 
 				}
 				else {
