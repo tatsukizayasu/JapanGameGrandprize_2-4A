@@ -99,21 +99,31 @@ private:
 
 		return vector_max;
 	}
-	//2つのベクトルのなす角を求める
-	double GetAngle(Location vector1, Location vector2)const
+	//2つのベクトルのなす角が鋭角かどうかを求める
+	bool CheckIsAcute(Location vector1, Location vector2)const
 	{
-		double angle = 0;
+		bool is_acute = false;
 
 		float vec_a = powf(powf(vector1.x, 2.0) + powf(vector1.y, 2.0), 0.5);
 		float vec_b = powf(powf(vector2.x, 2.0) + powf(vector2.y, 2.0), 0.5);
 
-		float component = vector1.x * vector2.x + vector1.y * vector2.y;
+		float inner_product = vector1.x * vector2.x + vector1.y * vector2.y;
 
-		double rad = acos(component / (vec_a * vec_b));
+		if (inner_product >= 0)
+		{
+			is_acute = true;
+		}
 
-		angle = 180 / M_PI * rad;
+		return is_acute;
+	}
+	//受け取ったベクターのスカラを返す
+	float MakeScalar(Location vector)const
+	{
+		float scalar;
 
-		return angle;
+		scalar = powf((vector.x * vector.x) + (vector.y * vector.y), 0.5);
+
+		return scalar;
 	}
 
 

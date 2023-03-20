@@ -112,6 +112,7 @@ bool LineCollider_t::HitDot(Location point)const
 //-----------------------------------
 bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 {
+	//
 	bool is_hit = false;
 	Location vector1 =
 		GetLocation(LINE_END) - GetLocation(LINE_START);
@@ -134,30 +135,42 @@ bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 
 	t = near_pos;
 
-	float distance_circle_near_pos;
+	float distance_sphere_near_pos;
 
-	distance_circle_near_pos =
+	distance_sphere_near_pos =
 		powf(powf(near_pos.x - vector2.x, 2.0) + powf(near_pos.y - vector2.y, 2.0), 0.5);
 
-	nearpos = distance_circle_near_pos;
+	nearpos = distance_sphere_near_pos;
 
-	if (distance_circle_near_pos > sphere->GetRadius())
+	if (distance_sphere_near_pos > sphere->GetRadius())
 	{
 		return false;
 	}
 
-	bool is_start_acute;
-	bool is_end_acute;
-	double start_angle = GetAngle(GetLocation(LINE_END) - GetLocation(LINE_START), vector2);
-	double end_angle = GetAngle(GetLocation(LINE_START) - GetLocation(LINE_END), vector2);
-	is_start_acute = (start_angle <= 90);
-	is_end_acute = (end_angle <= 90);
+	bool is_start_acute = CheckIsAcute(GetLocation(LINE_END)
+		- GetLocation(LINE_START), vector2);
+	bool is_end_acute 
+		= CheckIsAcute(GetLocation(LINE_END) - GetLocation(LINE_START)
+			,sphere->GetLocation() - GetLocation(LINE_END) );
 
 	if (is_start_acute ^ is_end_acute)
 	{
 		is_hit = true;
 	}
-	//Žn“_‚ð‚»‚ë‚¦‚é
+
+	float distance_tips_sphere
+		= MakeScalar(sphere->GetLocation() - GetLocation(LINE_START));
+	if (distance_tips_sphere <= sphere->GetRadius())
+	{
+		is_hit = true;
+	}
+	distance_tips_sphere
+		= MakeScalar(sphere->GetLocation() - GetLocation(LINE_END));
+	if (distance_tips_sphere <= sphere->GetRadius())
+	{
+		is_hit = true;
+	}
+
 	return is_hit;
 }
 
