@@ -53,6 +53,10 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	speed = 1.5;
 	area.width = GHOST_SIZE_X;
 	area.height = GHOST_SIZE_Y;
+
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
+
 	standby_time = 0;
 	physical_attack = false;
 	magic_attack = false;
@@ -263,7 +267,7 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawRotaGraph(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
+	DrawRotaGraphF(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
 }
 
 //-----------------------------------
