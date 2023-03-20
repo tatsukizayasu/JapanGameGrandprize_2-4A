@@ -24,16 +24,20 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 
 	switch (type)
 	{
-	case Element::DAMAGE_WALL:
+	case DAMAGE_WALL:
 		element.push_back(std::make_shared<Element_DamageWall>(type, element, images, location, Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE }));
 		break;
 
-	case Element::WOODEN_FLOOR:
+	case WOODEN_FLOOR:
 		element.push_back(std::make_shared <Element_Wooden_Floor>(type, element, images, location, Area{ 10.0f, MAP_CHIP_SIZE }));
 		break;
 
-	case Element::MoveFloor:
-		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
+	case FALL_FLOOR:
+		element.push_back(std::make_shared<Element_Fall_Floor>(type, element, images, location, Area{ 10.0f , MAP_CHIP_SIZE }));
+		break;
+
+	case MoveFloor:
+		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, Area{MAP_CHIP_SIZE / 2, MAP_CHIP_SIZE}));
 		break;
 
 	default:
@@ -132,15 +136,19 @@ std::vector<int> Stage_Element::GetImage(short type)
 
 	switch (type)
 	{
-	case Element::DAMAGE_WALL:
+	case DAMAGE_WALL:
 		filename = "DamageWall.png";
 		break;
 
-	case Element::WOODEN_FLOOR:
+	case WOODEN_FLOOR:
 		filename = "Wooden_Floor.png";
 		break;
 
-	case Element::MoveFloor:
+	case FALL_FLOOR:
+		filename = "Wooden_Floor.png";
+		break;
+
+	case MoveFloor:
 		filename = "Move_Floor.png";
 		break;
 

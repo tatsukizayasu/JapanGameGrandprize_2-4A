@@ -66,6 +66,8 @@ public:
 	////描画
 	//virtual void Draw() const {};
 
+	short GetType() const { return type; };
+
 	/// <summary>
 	/// アニメーション用ループタイマー
 	/// </summary>
