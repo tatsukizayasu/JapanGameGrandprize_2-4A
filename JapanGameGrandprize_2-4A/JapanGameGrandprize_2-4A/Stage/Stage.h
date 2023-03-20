@@ -12,14 +12,14 @@ class Player;
 
 class Stage_Element;
 
+struct ENEMY_LOCATION {
+	short id;
+	Location location;
+};
+
 class Stage
 {
-public:
-	struct ENEMY_LOCATION {
-		short id;
-		float x;
-		float y;
-	};
+
 
 private:
 
@@ -47,10 +47,8 @@ private:
 	//背景画像
 	int background_images;
 	//ブロック画像
-	int block_images[110];
+	int block_images[50];
 
-	//スポーン地点ID
-	const short spawn_point_id = 777;
 
 protected:
 

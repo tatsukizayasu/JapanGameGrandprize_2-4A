@@ -5,18 +5,20 @@
 #include "../CameraWork.h"
 
 
-Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : Stage_Element_Base(element, image, location, area)
+
+Element_Wooden_Floor::Element_Wooden_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
 {
 	this->type = type;
 	this->location = location;
 	this->area = area;
-	this->margin_area = { -15.0f,0.0f };
+
+	margin_area = { -18.0f,0.0f };
+
 	original_collision = area;
 
-	*image = LoadGraph("Images/Stage/Element/Wooden_Floor.png");
-	SetImage(*image);
-	original_image = *image;
-	
+	SetImage(images.at(0));
+	original_image = images.at(0);
+
 }
 
 Element_Wooden_Floor::~Element_Wooden_Floor()
@@ -25,41 +27,39 @@ Element_Wooden_Floor::~Element_Wooden_Floor()
 
 void Element_Wooden_Floor::Update(Player* player)
 {
-	//printfDx("%f\n", GetAnimationTime());
-	/*if (GetAnimationTime() > 3.5f) {
-		area = { -MAP_CHIP_SIZE, -MAP_CHIP_SIZE };
-		image = 0;
-	}*/
 
-	//プレイヤーが上にいる場合、当たり判定範囲を0にする
-	if (/*HitPlayer(player) && */player->GetLocation().y - player->GetArea().height / 2 - 4.0f < location.y) {
-		//左スティックを下方向に倒している
-		if (PAD_INPUT::GetLStick().y <= -10000)
-		{
-			//area = { -MAP_CHIP_SIZE, -MAP_CHIP_SIZE };
+	bool is_hit = std::get<0>(HitPlayer(player));
+	HIT_DIRECTION is_hit_dir = std::get<1>(HitPlayer(player));
+
+
+	// プレイヤーが下にいる&ステートがジャンプの場合
+	if (is_hit && is_hit_dir == HIT_DIRECTION::DOWN) {
+		if (player->GetState() == PLAYER_STATE::JUMP) {
 			SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
-			//SetImage(0);
-			
 		}
-		
-
+		else {
+			SetArea(original_collision);
+		}
 	}
-
-
-	//プレイヤーがマップチップよりも下に行ったら元の当たり判定範囲に戻す
-	else if (player->GetLocation().y - player->GetArea().height / 2 - 4.0f> location.y) {
-		
+	// プレイヤーが上にいる&左スティックを下に倒した場合
+	else if (is_hit && is_hit_dir == HIT_DIRECTION::UP
+		&& player->GetLocation().y + player->GetArea().height / 2 < location.y + margin_area.height
+		&& PAD_INPUT::GetLStick().y <= -10000) {
+		SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
+	}
+	// プレイヤーが接触していない状態で、一定距離離れると衝突エリアをリセット
+	else if (abs(location.y - player->GetLocation().y) >= MAP_CHIP_SIZE - margin_area.height + 8.0f) {
+	
 		SetArea(original_collision);
-		image = original_image;
 	}
 
-	//当たり判定範囲のデバック表示
-	//printfDx("x:%f, y:%f\n", mapchip->GetArea().height, mapchip->GetArea().width);
-}
 
-//void Element_Wooden_Floor::Draw() const
-//{
-//	float x = location.x - CameraWork::GetCamera().x;
-//	float y = location.y - CameraWork::GetCamera().y;
-//	DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
-//}
+
+
+	//if (is_hit == true) {
+	//	//SetArea(original_collision);
+	//	static int count = 0;
+	//	printfDx("当たり～ %d回目\n", count);
+	//	count++;
+	//}
+}

@@ -26,7 +26,7 @@ private:
 
 public:
 
-	EnemySlime();
+	EnemySlime(Location);
 	~EnemySlime();
 
 	//描画以外の更新を実行
