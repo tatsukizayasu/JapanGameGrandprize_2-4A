@@ -40,7 +40,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		element.push_back(std::make_shared<Element_Trap>(type, element, images, location, Area{ MAP_CHIP_SIZE , MAP_CHIP_SIZE }));
 		break;
 
-	case MoveFloor:
+	case MOVE_FLOOR:
 		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
 		break;
 
@@ -156,7 +156,7 @@ std::vector<int> Stage_Element::GetImage(short type)
 		filename = "TRAP.png";
 		break;
 
-	case MoveFloor:
+	case MOVE_FLOOR:
 		filename = "Move_Floor.png";
 		break;
 
