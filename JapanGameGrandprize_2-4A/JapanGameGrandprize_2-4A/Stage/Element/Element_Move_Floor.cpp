@@ -41,4 +41,4 @@ void Element_Move_Floor::Update(Player* player)
     //{
     //    player->SetLocation({ player->GetLocation().x + speed_x, player->GetLocation().y });
     //}
-}
+
