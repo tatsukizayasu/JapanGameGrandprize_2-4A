@@ -64,7 +64,7 @@ Stage::Stage()
 				}
 				
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
-					if (i != Element::MoveFloor) {
+					if (i != MOVE_FLOOR) {
 						element->AddElement(i, {
 							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
@@ -74,7 +74,7 @@ Stage::Stage()
 						float goal_distance = 0;
 						for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
 							goal_distance++;
-							if (map_data.at(y).at(wx) == 53) {
+							if (map_data.at(y).at(wx) == MOVE_FLOOR_GOAL) {
 								element->AddElement(i, {
 								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2

@@ -4,7 +4,7 @@ Element_Move_Floor::Element_Move_Floor(short type, std::vector<std::shared_ptr<S
 {
 	this->type = type;
 	this->location = location;
-	next_location = { location.x + area.width + MAP_CHIP_SIZE / 2 ,location.y };
+	next_location = { location.x + area.width ,location.y };
 	this->area = { MAP_CHIP_SIZE,MAP_CHIP_SIZE };
 
 	is_move = true;
@@ -19,12 +19,11 @@ Element_Move_Floor::~Element_Move_Floor()
 
 void Element_Move_Floor::Update(Player* player)
 {
-    if (GetLocation().x == next_location.x) {
-        is_move = false;
-    }
 	Location location = this->GetLocation();
 
-	
+    if (location.x == next_location.x) {
+        is_move = false;
+    }
 
 	//–Ú“IˆÊ’u‚Ü‚Å“®‚­
 	if (is_move && location.x < next_location.x)

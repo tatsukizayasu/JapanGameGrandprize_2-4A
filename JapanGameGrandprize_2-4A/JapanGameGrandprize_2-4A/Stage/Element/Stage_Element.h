@@ -19,7 +19,8 @@ namespace Element {
 	const short WOODEN_FLOOR = 41;		//すり抜ける床
 	const short FALL_FLOOR = 42;		//落ちる床
 	const short TRAP = 51;		//トラップ	(爆発物)
-	const short MoveFloor = 52;			//動く床
+	const short MOVE_FLOOR = 52;			//動く床
+	const short MOVE_FLOOR_GOAL = 53;			//動く床の目的位置
 	const short GreenButton = 61;		//緑のボタン
 	const short YellowButton = 62;	//黄色のボタン
 }
@@ -40,7 +41,7 @@ private:
 
 	//ステージ要素のID
 	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, TRAP,
-		MoveFloor,GreenButton, YellowButton };
+		MOVE_FLOOR,GreenButton, YellowButton };
 
 protected:
 
