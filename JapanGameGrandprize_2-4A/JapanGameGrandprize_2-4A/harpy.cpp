@@ -127,10 +127,10 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
-		if (physical_attack == true)
+		/*if (physical_attack == true)
 		{
 			Move(player->GetLocation());
-		}
+		}*/
 		break;
 	case ENEMY_STATE::DEATH:
 		Death();
@@ -224,10 +224,10 @@ void Harpy::Move(const Location player_location)
 			magic_attack = true;
 
 			//発射間隔
-			if (magic_time++ % 40 == 0)
+			if (magic_time++ % 4 == 0)
 			{
 				//弾の生成
-				/*magic_num++;*/
+				//magic_num++;
 				BulletManager::GetInstance()->CreateEnemyBullet
 				(new HarpyBullet(location, player_location));
 			}
@@ -237,14 +237,14 @@ void Harpy::Move(const Location player_location)
 	}
 	else //発見距離にプレイヤーがいなかったら。通常移動
 	{
-		if (left_move == true)
-		{
-			action_type = HARPY_STATE::NORMAL; //左
-		}
-		else
-		{
-			action_type = HARPY_STATE::NORMAL_RIGHT; //右
-		}
+		//if (left_move == true)
+		//{
+		//	action_type = HARPY_STATE::NORMAL; //左
+		//}
+		//else
+		//{
+		//	action_type = HARPY_STATE::NORMAL_RIGHT; //右
+		//}
 		switch (action_type)
 		{
 		case HARPY_STATE::NORMAL:  //通常移動
@@ -262,6 +262,7 @@ void Harpy::Move(const Location player_location)
 
 
 }
+
 
 //-----------------------------------
 //攻撃
@@ -373,6 +374,16 @@ void Harpy::HitBullet(const BulletBase* bullet)
 		break;
 	}
 }
+
+//-----------------------------------
+//接近攻撃（物理攻撃）時の動き
+//-----------------------------------
+void Harpy::PhysicalMove()
+{
+
+}
+
+
 
 //-----------------------------------
 //座標の取得
