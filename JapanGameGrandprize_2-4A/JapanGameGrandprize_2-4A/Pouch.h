@@ -17,6 +17,7 @@ private:
 	float x, y;
 	int cursol;
 	int count;
+	bool on_bool;
 	ATTRIBUTE tab;
 	ElementItem* element[PLAYER_ELEMENT];
 
@@ -61,4 +62,6 @@ public:
 	ChemicalFormulaParameter GetMelt();
 	ATTRIBUTE GetAttribute();
 	int GetCursol();
+	bool GetOnBool();
+	void SetOnBool(bool);
 };

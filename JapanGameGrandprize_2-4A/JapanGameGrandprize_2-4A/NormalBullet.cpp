@@ -31,7 +31,7 @@ NormalBullet::NormalBullet()
 // コンストラクタ					 //
 //-----------------------------------//
 NormalBullet::NormalBullet(float player_x, float player_y,
-	                         bool direction,ATTRIBUTE attribute)
+	                         bool direction,ChemicalFormulaParameter chemical)
 {
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
@@ -39,9 +39,10 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 
 	location.x = player_x;
 	location.y = player_y - 10;
-	this->attribute = attribute;
-	damage = 10;
-	debuff_time = 0;
+	chemical_formula = chemical;
+	damage = chemical.damage;
+	debuff_time = chemical.time;
+	attribute = chemical.atribute;
 	this->player_state = player_state;
 	player_direction = direction;
 

@@ -13,6 +13,7 @@ protected:
 
 	Area area;           //範囲
 	float damage;        //弾のダメージ
+	float damage_second; //秒間ダメージ
 	int debuff_time;	 //弾の効果時間
 	int efect_count;	 //エフェクトの時間
 	float scrool_x;      //弾のスクロールの値(X)
@@ -20,6 +21,7 @@ protected:
 	bool delete_flg;     //弾の削除フラグ
 	bool efect_end;		 //エフェクトの終わりフラグ
 	bool player_direction;//プレイヤーの向き
+	ChemicalFormulaParameter chemical_formula;//化合物
 
 	PLAYER_STATE player_state;
 	ATTRIBUTE attribute;

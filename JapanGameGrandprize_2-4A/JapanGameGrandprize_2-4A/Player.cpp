@@ -115,6 +115,21 @@ Player::Player(Stage* stage)
 	fuel = 100.0;
 	gravity_down = 0.0;
 
+	normal.atribute = ATTRIBUTE::NORMAL;
+	normal.chemical_formula[0] = 'n';
+	normal.chemical_formula_name[0] = 'a';
+	normal.damage = 10;
+	normal.damage_per_second = 0;
+	normal.material.carbon = 0;
+	normal.material.chlorine = 0;
+	normal.material.hydrogen = 0;
+	normal.material.nitrogen = 0;
+	normal.material.oxygen = 0;
+	normal.material.sulfur = 0;
+	normal.material.uranium = 0;
+	normal.number_of_bullets = 50;
+	normal.time = 0;
+
 	bullet = new BulletBase * [BULLET_MAX];
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
@@ -198,17 +213,17 @@ void Player::Draw() const
 	if (fuel >= 50)
 	{
 		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
+			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
 	}
 	else if (fuel >= 20)
 	{
 		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
+			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
 	}
 	else
 	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), 
-			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
+			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
 	}
 	//ここまで
 
@@ -348,9 +363,35 @@ void Player::Update()
 		pouch_open = false;
 	}
 
+
+	//ポーチオープン
 	if (pouch_open)
 	{
 		pouch->Update();
+		if (pouch->GetOnBool())
+		{
+			switch (pouch->GetAttribute())
+			{
+
+			case ATTRIBUTE::EXPLOSION:
+				explosion = pouch->GetExplosion();
+				break;
+			case ATTRIBUTE::MELT:
+				melt = pouch->GetMelt();
+				break;
+			case ATTRIBUTE::POISON:
+				poison = pouch->GetPoison();
+				break;
+			case ATTRIBUTE::PARALYSIS:
+				pararysis = pouch->GetPararysis();
+				break;
+			case ATTRIBUTE::HEAL:
+				heal = pouch->GetHeal();
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	//スティック右入力
@@ -594,8 +635,8 @@ void Player::Jump()
 	{
 		location.y -= jump;
 	}
-	
-	if(HitBlock(stage))
+
+	if (HitBlock(stage))
 	{
 		jump = 0.0;
 		location.y = old_y;
@@ -635,8 +676,8 @@ void Player::NotJump()
 	{
 		location.y -= jump;
 	}
-	
-	if(HitBlock(stage))
+
+	if (HitBlock(stage))
 	{
 		jump = 0;
 		location.y = old_y;
@@ -656,10 +697,13 @@ void Player::Shoot_Gun()
 			switch (display_attribute)
 			{
 			case 0:
-				bullet[i] = new NormalBullet(location.x, location.y, move_left, attribute[display_attribute]);
+				bullet[i] = new NormalBullet(location.x, location.y, move_left, normal);
 				break;
 			case 1:
+				bullet[i] = new NormalBullet(location.x, location.y, move_left, explosion);
+				break;
 			case 2:
+
 			case 3:
 			case 4:
 			case 5:
@@ -827,7 +871,24 @@ void Player::SetExplosion(ChemicalFormulaParameter a)
 	explosion = a;
 }
 
-void Player::SetPoison(ChemicalFormulaParameter b)
+void Player::SetPoison(ChemicalFormulaParameter a)
 {
-	poison = b;
+	poison = a;
 }
+
+void Player::SetMelt(ChemicalFormulaParameter a)
+{
+	melt = a;
+}
+
+void Player::SetPararysis(ChemicalFormulaParameter a)
+{
+	pararysis = a;
+}
+
+void Player::SetHeal(ChemicalFormulaParameter a)
+{
+	heal = a;
+}
+
+

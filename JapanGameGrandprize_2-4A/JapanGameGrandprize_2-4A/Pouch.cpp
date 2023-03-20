@@ -10,6 +10,7 @@ Pouch::Pouch()
 	x = 1080;
 	y = 100;
 	cursol = 0;
+	on_bool = false;
 	tab = ATTRIBUTE::EXPLOSION;
 
 	//å≥ëfÇÃèâä˙âª
@@ -148,6 +149,7 @@ void Pouch::Update()
 {
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
+		cursol = 0;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
@@ -172,6 +174,7 @@ void Pouch::Update()
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
+		cursol = 0;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
@@ -214,6 +217,32 @@ void Pouch::Update()
 	default:
 		break;
 	}
+
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_B))
+	{
+		on_bool = true;
+		switch (tab)
+		{
+		case ATTRIBUTE::EXPLOSION:
+			select_explosion = chemical_formula_explosion[cursol];
+			break;
+		case ATTRIBUTE::MELT:
+			select_melt = chemical_formula_melt[cursol];
+			break;
+		case ATTRIBUTE::POISON:
+			select_poison = chemical_formula_poison[cursol];
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			select_pararysis = chemical_formula_pararysis[cursol];
+			break;
+		case ATTRIBUTE::HEAL:
+			select_heal = chemical_formula_heal[cursol];
+			break;
+		default:
+			break;
+		}
+	}
+
 }
 
 void Pouch::ExplosionTabUpdate()
@@ -424,4 +453,14 @@ ATTRIBUTE Pouch::GetAttribute()
 int Pouch::GetCursol()
 {
 	return cursol;
+}
+
+bool Pouch::GetOnBool()
+{
+	return on_bool;
+}
+
+void Pouch::SetOnBool(bool a)
+{
+	on_bool = a;
 }

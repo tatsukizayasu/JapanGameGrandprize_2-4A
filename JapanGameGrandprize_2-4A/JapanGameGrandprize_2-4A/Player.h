@@ -79,6 +79,8 @@ private:
 
 	ElementItem** element;	//Œ³‘f
 
+	ChemicalFormulaParameter normal;
+
 	ChemicalFormulaParameter explosion;
 	ChemicalFormulaParameter poison;
 	ChemicalFormulaParameter melt;
