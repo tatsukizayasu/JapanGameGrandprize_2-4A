@@ -173,7 +173,7 @@ void Stage_Element_Base::LoopTimer(float time, std::function<void()>* callback)
 
 }
 
-float Stage_Element_Base::GetElapsedTime(float time)
+float Stage_Element_Base::GetElapsedTime(float time) const
 {
 	auto it = elapsed_time_map.find(time);
 	if (it != elapsed_time_map.end()) {

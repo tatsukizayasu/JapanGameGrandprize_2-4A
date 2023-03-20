@@ -116,5 +116,5 @@ public:
 	/// </summary>
 	/// <param name = "time">取得したいタイマーの秒数</param>
 	/// <returns>経過時間</returns>	
-	float GetElapsedTime(float time);
+	float GetElapsedTime(float time) const;
 };
