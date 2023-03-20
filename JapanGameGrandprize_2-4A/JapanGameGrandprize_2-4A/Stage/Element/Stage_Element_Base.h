@@ -38,6 +38,9 @@ protected:
 
 	//LoopImagesの開始時間
 	std::chrono::steady_clock::time_point start_time;
+
+	//グラフィックハンドル用Vector
+	std::vector<int> images;
 	
 	//実行した回数
 	int count;
@@ -65,6 +68,8 @@ public:
 	virtual void Update(Player* player) {};
 	////描画
 	//virtual void Draw() const {};
+
+	short GetType() const { return type; };
 
 	/// <summary>
 	/// アニメーション用ループタイマー

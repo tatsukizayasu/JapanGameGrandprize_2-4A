@@ -6,8 +6,11 @@ Pause::Pause()
 {
 	is_paused = false;
 	title_font = CreateFontToHandle("UD デジタル 教科書体 N-B", 140, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
+	menu_font = CreateFontToHandle("UD デジタル 教科書体 N-B", 80, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 	pause_graph = 0;
 	pause_effect_timer = 0;
+
+	cursor_osition = 0;
 }
 
 Pause::~Pause()
@@ -51,6 +54,12 @@ void Pause::Update()
 		}
 	}
 
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A)) {
+
+		next_menu = 1;
+
+	}
+
 }
 
 void Pause::Draw() const
@@ -59,6 +68,8 @@ void Pause::Draw() const
 	DrawGraph(0, 0, pause_graph, FALSE);
 
 	DrawStringToHandle(GetDrawCenterX("ポーズ", title_font), 100, "ポーズ", 0xF4948E, title_font, 0x000000);
+
+	DrawStringToHandle(GetDrawCenterX("リスタート", menu_font), 300, "リスタート", 0xF4058E, menu_font, 0x000000);
 }
 
 int Pause::GetDrawCenterX(const char* string, int font_handle)const {

@@ -19,9 +19,12 @@ Element_Move_Floor::~Element_Move_Floor()
 
 void Element_Move_Floor::Update(Player* player)
 {
+    if (GetLocation().x == next_location.x) {
+        is_move = false;
+    }
 	Location location = this->GetLocation();
 
-	if (location.x == next_location.x) { return; }
+	
 
 	//目的位置まで動く
 	if (is_move && location.x < next_location.x)
@@ -34,3 +37,8 @@ void Element_Move_Floor::Update(Player* player)
 	}
 }
 
+    //if (/*プレイヤーが上に当たっている時*/)
+    //{
+    //    player->SetLocation({ player->GetLocation().x + speed_x, player->GetLocation().y });
+    //}
+}

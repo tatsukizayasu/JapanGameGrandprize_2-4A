@@ -6,6 +6,7 @@
 #include "Element_DamageWall.h"
 #include "Element_Wooden_Floor.h"
 #include "Element_Move_Floor.h"
+#include "Element_Fall_Floor.h"
 #include <memory>
 #include <set>
 #include <unordered_map>
@@ -15,11 +16,13 @@ namespace Element {
 	//const short DEBUG_GRASS = 1;		//デバック用草ブロック
 	const short DAMAGE_WALL = 40;		//ダメージ床
 	const short WOODEN_FLOOR = 41;		//すり抜ける床
+	const short FALL_FLOOR = 42;		//落ちる床
 	const short MoveFloor = 52;			//動く床
 	const short GreenButton = 61;		//緑のボタン
 	const short YellowButton = 62;	//黄色のボタン
 }
 
+using namespace Element;
 
 class Stage_Element
 {
@@ -32,9 +35,10 @@ private:
 	std::vector<std::shared_ptr<Stage_Element_Base>> element;
 	Player* player;
 
+
 	//ステージ要素のID
-	std::set<short> elements_id{ /*Element::DEBUG_GRASS,*/ Element::DAMAGE_WALL, Element::WOODEN_FLOOR, 
-		Element::MoveFloor,Element::GreenButton, Element::YellowButton };
+	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR,
+		MoveFloor,GreenButton, YellowButton };
 
 protected:
 
