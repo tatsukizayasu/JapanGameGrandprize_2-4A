@@ -38,6 +38,9 @@ protected:
 
 	//LoopImagesの開始時間
 	std::chrono::steady_clock::time_point start_time;
+
+	//グラフィックハンドル用Vector
+	std::vector<int> images;
 	
 	//実行した回数
 	int count;

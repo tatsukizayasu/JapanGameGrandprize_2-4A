@@ -1,6 +1,7 @@
 #include "Element_Fall_Floor.h"
 #include "../Player.h"
 
+#define TIMER	4.0f
 
 Element_Fall_Floor::Element_Fall_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
 {
@@ -13,16 +14,13 @@ Element_Fall_Floor::Element_Fall_Floor(short type, std::vector<std::shared_ptr<S
 	is_flash = false;
 	fall_speed = 5.0f;
 	
+	state = STATE::NONE;
 }
 
 Element_Fall_Floor::~Element_Fall_Floor()
 {
-	for (int i = 0; i < 9; i++) {
-		if (anim_images[i] != -1) {
-			DeleteGraph(anim_images[i]);
-			//解放した事を示す為、-1を代入
-			anim_images[i] = -1;
-		}
+	for (int& image : images) {
+		DeleteGraph(image);
 	}
 }
 
@@ -38,8 +36,6 @@ void Element_Fall_Floor::Update(Player* player)
 		std::function<void()> flash = [&]() {
 			is_flash = !is_flash;
 
-			//state = STATE::FLASH;
-
 			if (is_flash) {
 				SetImage(0);
 			}
@@ -49,10 +45,11 @@ void Element_Fall_Floor::Update(Player* player)
 			
 		};
 
+		//点滅するタイマーをセット
 		if (state == STATE::WORKING) { LoopTimer(0.3f, &flash); };
 
-
-		if (GetElapsedTime(4.0f) >= 2.0f) { state = STATE::WORKING; }
+		//落ちる時間の半分の時間が経過したらステートをWORKING!!にセットし、点滅させる
+		if (GetElapsedTime(TIMER) >= TIMER / 2) { state = STATE::WORKING; }
 
 		std::function<void()> fall = [&]() {
 
@@ -60,7 +57,8 @@ void Element_Fall_Floor::Update(Player* player)
 			
 		};
 
-		LoopTimer(4.0f, &fall);
+		//落ちる時間のタイマーをセット
+		LoopTimer(TIMER, &fall);
 		
 	}
 	//else {
@@ -68,6 +66,10 @@ void Element_Fall_Floor::Update(Player* player)
 	//}
 
 	if (state == STATE::FALL) {
+
+		
+		SetImage(images.at(0));
+		
 		if (GetLocation().y < 2000) {
 			SetLocation({ GetLocation().x, GetLocation().y + fall_speed });
 		}

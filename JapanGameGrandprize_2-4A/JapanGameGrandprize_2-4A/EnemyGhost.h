@@ -2,7 +2,7 @@
 #include"EnemyBase.h"
 #include"BoxCollider.h"
 #include"Stage/Stage.h"
-#include"GhostBullet.h"
+#include"GhostBullet.h"	
 
 enum class GHOST_STATE
 {

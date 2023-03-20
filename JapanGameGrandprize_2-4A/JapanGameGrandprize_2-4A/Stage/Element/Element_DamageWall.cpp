@@ -6,7 +6,6 @@ Element_DamageWall::Element_DamageWall(short type, std::vector<std::shared_ptr<S
 {
 	this->area = area;
 	this->type = type;
-	//LoadDivGraph("Images/Stage/Element/DamageWall.png", 9, 9, 1, 40, 40, anim_images);
 	
 	this->images = images;
 

@@ -3,19 +3,18 @@
 class Element_Fall_Floor : public Stage_Element_Base
 {
 private:
-	int anim_images[9];
 	
-	std::vector<int> images;
 
-	
+	//点滅
 	bool is_flash;
+
+	//落下スピード
 	float fall_speed;
 	
 	enum class STATE {
-		NONE,
-		WORKING,
-		FLASH,
-		FALL,
+		NONE,		//なし
+		WORKING,	//落ちる前
+		FALL,		//落下
 	} state;
 
 public:
