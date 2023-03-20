@@ -43,7 +43,7 @@ private:
 public:
 
 	//コンスタラクタ
-	Harpy();
+	Harpy(Location);
 
 	//デストラクタ
 	~Harpy();

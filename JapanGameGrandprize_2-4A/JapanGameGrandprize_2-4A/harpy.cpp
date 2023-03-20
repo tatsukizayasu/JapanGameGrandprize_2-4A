@@ -40,7 +40,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Harpy::Harpy()
+Harpy::Harpy(Location spawn_location)
 {
 	can_delete = false;
 	left_move = true;
@@ -52,6 +52,7 @@ Harpy::Harpy()
 	magic_time = 1;
 	location.x = 1000;
 	location.y = 550;
+	location = spawn_location;
 	standby_attack = 0;
 	travel = 0;
 	travel_y = 0;

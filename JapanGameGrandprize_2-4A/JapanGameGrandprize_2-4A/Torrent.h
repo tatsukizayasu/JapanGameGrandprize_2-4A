@@ -49,7 +49,7 @@ private:
 public:
 
     //コンストラクタ
-    Torrent();
+    Torrent(Location);
 
     //デストラクタ
     ~Torrent();
