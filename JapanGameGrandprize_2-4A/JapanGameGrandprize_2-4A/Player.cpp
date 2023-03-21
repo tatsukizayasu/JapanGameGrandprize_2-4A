@@ -6,7 +6,7 @@
 #include "Item.h"
 #include <iostream>
 
-
+#define ANIMATION_MOVE 10
 
 
 //-----------------------------------
@@ -14,9 +14,11 @@
 //-----------------------------------
 Player::Player()
 {
+	animation = 0;
 	location.x = 0;
 	location.y = 420;
-	image = 0;
+	image = new int[PLAYER_IMAGES];
+	LoadDivGraph("Images/Player/ Player.png", PLAYER_IMAGES, PLAYER_IMAGES, 1, 40, 80, image);
 	image_size_x = 40;
 	image_size_y = 80;
 	area.width = image_size_x;
@@ -34,6 +36,7 @@ Player::Player()
 	old_x = 0.0;
 	old_y = 0.0;
 	damage = 0;
+	image_count = 0;
 
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
@@ -60,6 +63,13 @@ Player::Player()
 	attribute_c[4] = "PARALYSIS";
 	attribute_c[5] = "HEAL";
 
+	explosion = nullptr;
+	melt = nullptr;
+	poison = nullptr;
+	pararysis = nullptr;
+	heal = nullptr;
+
+
 	player_state = PLAYER_STATE::STOP;
 
 	display_attribute = 0;
@@ -79,9 +89,6 @@ Player::Player()
 
 	pouch = nullptr;
 
-
-
-	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
 //-----------------------------------
@@ -89,13 +96,16 @@ Player::Player()
 //-----------------------------------
 Player::Player(Stage* stage)
 {
+	animation = 0;
 	area.height = 80;
 	area.width = 40;
 
 	this->stage = stage;
 	location.x = stage->GetSpawnPoint().x;
 	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0;
-	image = 0;
+	image = new int[PLAYER_IMAGES];
+	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 40, 80, image);
+
 	image_size_x = 40;
 	image_size_y = 80;
 	area.width = image_size_x;
@@ -114,6 +124,22 @@ Player::Player(Stage* stage)
 	old_y = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
+	image_count = 0;
+
+	normal.atribute = ATTRIBUTE::NORMAL;
+	normal.chemical_formula[0] = 'n';
+	normal.chemical_formula_name[0] = 'a';
+	normal.damage = 2;
+	normal.damage_per_second = 0;
+	normal.material.carbon = 0;
+	normal.material.chlorine = 0;
+	normal.material.hydrogen = 0;
+	normal.material.nitrogen = 0;
+	normal.material.oxygen = 0;
+	normal.material.sulfur = 0;
+	normal.material.uranium = 0;
+	normal.number_of_bullets = 50;
+	normal.time = 0;
 
 	bullet = new BulletBase * [BULLET_MAX];
 	for (int i = 0; i < BULLET_MAX; i++)
@@ -146,6 +172,11 @@ Player::Player(Stage* stage)
 
 	hp = 100;
 
+	explosion = nullptr;
+	melt = nullptr;
+	poison = nullptr;
+	pararysis = nullptr;
+	heal = nullptr;
 
 	beam = nullptr;
 
@@ -187,7 +218,6 @@ Player::~Player()
 //-----------------------------------
 void Player::Draw() const
 {
-
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
@@ -198,17 +228,17 @@ void Player::Draw() const
 	if (fuel >= 50)
 	{
 		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
+			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
 	}
 	else if (fuel >= 20)
 	{
 		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
+			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
 	}
 	else
 	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel), 
-			      (x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
+		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
+			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
 	}
 	//ここまで
 
@@ -244,18 +274,19 @@ void Player::Draw() const
 		if (flashing_count < 5)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
-			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
+			DrawRotaGraphF(x, y, 1, 0, image[image_count], TRUE, move_left);
+
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
 		else if (flashing_count < 10)
 		{
-			DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
+			DrawRotaGraphF(x, y, 1, 0, image[image_count], TRUE, move_left);
 		}
 		else {}
 	}
 	else
 	{
-		DrawBox(x - (area.width / 2), y - (area.height / 2), x - (area.width / 2) + area.width, y - (area.height / 2) + area.height, 0x00ff00, TRUE);
+		DrawRotaGraphF(x, y, 1, 0, image[image_count], TRUE, move_left);
 	}
 
 #ifdef _DEBUG
@@ -348,9 +379,35 @@ void Player::Update()
 		pouch_open = false;
 	}
 
+
+	//ポーチオープン
 	if (pouch_open)
 	{
 		pouch->Update();
+		if (pouch->GetOnBool())
+		{
+			switch (pouch->GetAttribute())
+			{
+
+			case ATTRIBUTE::EXPLOSION:
+				explosion = pouch->GetExplosion();
+				break;
+			case ATTRIBUTE::MELT:
+				melt = pouch->GetMelt();
+				break;
+			case ATTRIBUTE::POISON:
+				poison = pouch->GetPoison();
+				break;
+			case ATTRIBUTE::PARALYSIS:
+				pararysis = pouch->GetPararysis();
+				break;
+			case ATTRIBUTE::HEAL:
+				heal = pouch->GetHeal();
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	//スティック右入力
@@ -429,6 +486,7 @@ void Player::Update()
 //スティックを入力していないとき
 void Player::NotInputStick()
 {
+	image_count = 0;
 	if (speed_x > 0)
 	{
 		if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
@@ -484,27 +542,33 @@ void Player::NotInputStick()
 //左移動
 void Player::LeftMove()
 {
+
+
+
+
 	if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 	{
-		if (speed_x > -5.0)
+		if (speed_x > -PLAYER_SPEED_X)
 		{
 			speed_x = speed_x - JUMP_INERTIA;
 		}
 		else
 		{
-			speed_x = -5.0;
+			speed_x = -PLAYER_SPEED_X;
 		}
 	}
 	else
 	{
+
+		MoveAnimation();
 		player_state = PLAYER_STATE::MOVE_LEFT;
-		if (speed_x > -5.0)
+		if (speed_x > -PLAYER_SPEED_X)
 		{
 			speed_x = speed_x - WARK_INERTIA;
 		}
 		else
 		{
-			speed_x = -5.0;
+			speed_x = -PLAYER_SPEED_X;
 		}
 	}
 
@@ -527,27 +591,30 @@ void Player::LeftMove()
 //右移動
 void Player::RightMove()
 {
+
+
 	if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 	{
-		if (speed_x < 5.0)
+		if (speed_x < PLAYER_SPEED_X)
 		{
 			speed_x = speed_x + JUMP_INERTIA;
 		}
 		else
 		{
-			speed_x = 5.0;
+			speed_x = PLAYER_SPEED_X;
 		}
 	}
 	else
 	{
+		MoveAnimation();
 		player_state = PLAYER_STATE::MOVE_RIGHT;
-		if (speed_x < 5.0)
+		if (speed_x < PLAYER_SPEED_X)
 		{
 			speed_x = speed_x + WARK_INERTIA;
 		}
 		else
 		{
-			speed_x = 5.0;
+			speed_x = PLAYER_SPEED_X;
 		}
 	}
 
@@ -571,6 +638,7 @@ void Player::RightMove()
 //ジャンプ
 void Player::Jump()
 {
+	image_count = 0;
 	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;
 
@@ -594,8 +662,8 @@ void Player::Jump()
 	{
 		location.y -= jump;
 	}
-	
-	if(HitBlock(stage))
+
+	if (HitBlock(stage))
 	{
 		jump = 0.0;
 		location.y = old_y;
@@ -635,8 +703,8 @@ void Player::NotJump()
 	{
 		location.y -= jump;
 	}
-	
-	if(HitBlock(stage))
+
+	if (HitBlock(stage))
 	{
 		jump = 0;
 		location.y = old_y;
@@ -656,13 +724,78 @@ void Player::Shoot_Gun()
 			switch (display_attribute)
 			{
 			case 0:
-				bullet[i] = new NormalBullet(location.x, location.y, move_left, attribute[display_attribute]);
+				bullet[i] = new NormalBullet(location.x, location.y, move_left, &normal);
 				break;
 			case 1:
+				if (explosion != nullptr)
+				{
+					if (explosion->number_of_bullets > 0)
+					{
+						bullet[i] = new NormalBullet(location.x, location.y, move_left, explosion);
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					else
+					{
+						explosion = nullptr;
+					}
+				}
+				break;
 			case 2:
+				if (melt != nullptr)
+				{
+					if (melt->number_of_bullets > 0)
+					{
+						bullet[i] = new NormalBullet(location.x, location.y, move_left, melt);
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					else
+					{
+						melt = nullptr;
+					}
+				}
+				break;
 			case 3:
+				if (poison != nullptr)
+				{
+					if (poison->number_of_bullets > 0)
+					{
+						bullet[i] = new NormalBullet(location.x, location.y, move_left, poison);
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					else
+					{
+						poison = nullptr;
+					}
+				}
+				break;
 			case 4:
+				if (pararysis != nullptr)
+				{
+					if (pararysis->number_of_bullets > 0)
+					{
+						bullet[i] = new NormalBullet(location.x, location.y, move_left, pararysis);
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					else
+					{
+						pararysis = nullptr;
+					}
+				}
+				break;
 			case 5:
+				if (heal != nullptr)
+				{
+					if (heal->number_of_bullets > 0)
+					{
+						bullet[i] = new NormalBullet(location.x, location.y, move_left, pararysis);
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					else
+					{
+						heal = nullptr;
+					}
+				}
+				break;
 			default:
 				break;
 			}
@@ -822,12 +955,41 @@ bool Player::GetMoveDirection()
 }
 
 
-void Player::SetExplosion(ChemicalFormulaParameter a)
+void Player::SetExplosion(ChemicalFormulaParameter* a)
 {
 	explosion = a;
 }
 
-void Player::SetPoison(ChemicalFormulaParameter b)
+void Player::SetPoison(ChemicalFormulaParameter* a)
 {
-	poison = b;
+	poison = a;
+}
+
+void Player::SetMelt(ChemicalFormulaParameter* a)
+{
+	melt = a;
+}
+
+void Player::SetPararysis(ChemicalFormulaParameter* a)
+{
+	pararysis = a;
+}
+
+void Player::SetHeal(ChemicalFormulaParameter* a)
+{
+	heal = a;
+}
+
+void Player::MoveAnimation()
+{
+	animation++;
+	if (animation % ANIMATION_MOVE == 0)
+	{
+		image_count++;
+	}
+
+	if (image_count >= PLAYER_IMAGES)
+	{
+		image_count = 0;
+	}
 }

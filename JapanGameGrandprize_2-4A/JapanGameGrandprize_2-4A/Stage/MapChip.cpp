@@ -2,7 +2,7 @@
 #include "MapChip.h"
 #include "../CameraWork.h"
 		
-#define		COLLLISION_DEBUG		//当たり判定デバック
+//#define		COLLLISION_DEBUG		//当たり判定デバック
 
 //-----------------------------------
 // コンストラクタ
@@ -13,6 +13,7 @@ MapChip::MapChip()
 	area = { 60,60 };
 	image_size = { 600,600 };
 	ex_rate = area.height / image_size.height;
+	image = 0;
 }
 
 //-----------------------------------

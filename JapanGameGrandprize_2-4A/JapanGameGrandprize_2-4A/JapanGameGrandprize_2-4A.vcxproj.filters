@@ -144,6 +144,15 @@
     <ClCompile Include="Pause.cpp">
       <Filter>ソースファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\Element\Element_Fall_Floor.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_Trap.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_Conveyor_Belt.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
     <ClCompile Include="HarpyBullet.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
@@ -301,6 +310,15 @@
     </ClInclude>
     <ClInclude Include="Pause.h">
       <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_Fall_Floor.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_Conveyor_Belt.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_Trap.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
     <ClInclude Include="HarpyBullet.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>

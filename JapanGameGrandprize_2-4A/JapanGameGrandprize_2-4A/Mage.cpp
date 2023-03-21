@@ -51,6 +51,8 @@ Mage::Mage(Location spawn_location)
 	area.width = 40;
 	area.height = 80;
 
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
 	//ドロップアイテムの設定
 	drop = 0;
 

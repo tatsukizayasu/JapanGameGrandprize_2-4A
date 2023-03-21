@@ -33,6 +33,9 @@ EnemySlime::EnemySlime(Location spawn_location)
 	jump_distance = location;
 	area.height = 50;
 	area.width = 50;
+
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
 	wait_time = 0;
 	image_type = 0;
 	image_change_time = 0;

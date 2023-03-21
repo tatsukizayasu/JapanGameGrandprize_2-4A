@@ -44,6 +44,9 @@ Stage::Stage()
 
 #ifndef NODEBUG
 
+
+				//スポーン地点ID
+				const short spawn_point_id = 777;
 				if (i == spawn_point_id) {
 					spawn_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2	
@@ -61,10 +64,26 @@ Stage::Stage()
 				}
 				
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
-					element->AddElement(i, &block_images[i], {
+					if (i != MOVE_FLOOR) {
+						element->AddElement(i, {
 							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						}, { CHIP_SIZE,CHIP_SIZE });
+							}, { CHIP_SIZE,CHIP_SIZE });
+					}
+					else {
+						float goal_distance = 0;
+						for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
+							goal_distance++;
+							if (map_data.at(y).at(wx) == MOVE_FLOOR_GOAL) {
+								element->AddElement(i, {
+								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+									}, { CHIP_SIZE,goal_distance * CHIP_SIZE });	
+								break;
+							}
+						}
+					}
+					
 
 				}
 				else {

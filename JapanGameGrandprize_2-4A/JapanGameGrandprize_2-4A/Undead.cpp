@@ -64,6 +64,8 @@ Undead::Undead(Location spawn_location)
 	area.width = 40;
 	area.height = 80;
 
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [SOIL_DROP];
 	drop_type_volume = SOIL_DROP;

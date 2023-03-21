@@ -47,10 +47,8 @@ private:
 	//背景画像
 	int background_images;
 	//ブロック画像
-	int block_images[110];
+	int block_images[50];
 
-	//スポーン地点ID
-	const short spawn_point_id = 777;
 
 protected:
 

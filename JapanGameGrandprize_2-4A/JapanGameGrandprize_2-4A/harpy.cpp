@@ -62,6 +62,10 @@ Harpy::Harpy(Location spawn_location)
 	speed = SPEED;
 	area.width = HARPY_SIZE_X;
 	area.height = HARPY_SIZE_Y;
+
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
+
 	standby_time = 0;
 	physical_attack = false;
 	magic_attack = false;
