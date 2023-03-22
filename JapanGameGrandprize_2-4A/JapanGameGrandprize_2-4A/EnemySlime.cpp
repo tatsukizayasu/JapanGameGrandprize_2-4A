@@ -83,10 +83,40 @@ EnemySlime::EnemySlime(Location spawn_location)
 	for (int i = 0; i < drop_type_volume; i++)
 	{
 		volume = SLIME_MIN_DROP + GetRand(SLIME_MAX_DROP);
-		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+
+		switch (type[0])
+		{
+		case ENEMY_TYPE::NORMAL:
+			break;
+		case ENEMY_TYPE::FIRE:
+			drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+			break;
+		case ENEMY_TYPE::WATER:
+			if (i < 2)
+			{
+				drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+			}
+			else
+			{
+				drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+			}
+			break;
+		case ENEMY_TYPE::WIND:
+			drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+			break;
+		case ENEMY_TYPE::SOIL:
+			drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+			break;
+		case ENEMY_TYPE::THUNDER:
+			break;
+		default:
+			break;
+		}
+
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+
 
 }
 
