@@ -7,9 +7,9 @@
 #include "Stage/Stage.h"
 
 //各属性のドロップ数
-#define FIRE_DROP 3
+#define FIRE_DROP 4
 #define WATER_DROP 4
-#define WIND_DROP 3
+#define WIND_DROP 4
 #define SOIL_DROP 4
 #define THUNDER_DROP 7
 

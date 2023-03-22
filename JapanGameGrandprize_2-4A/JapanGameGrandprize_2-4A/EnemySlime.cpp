@@ -44,23 +44,9 @@ EnemySlime::EnemySlime(Location spawn_location)
 
 	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 
-	type = new ENEMY_TYPE;
+	type = new ENEMY_TYPE[1];
 
-	switch (GetRand(4))
-	{
-	case 0:
-		*type = ENEMY_TYPE::FIRE;
-		break;
-	case 1:
-		*type = ENEMY_TYPE::WATER;
-		break;
-	case 2:
-		*type = ENEMY_TYPE::WIND;
-		break;
-	case 3:
-		*type = ENEMY_TYPE::SOIL;
-		break;
-	}
+	type[0] = static_cast<ENEMY_TYPE>(1 + GetRand(3));
 
 	state = ENEMY_STATE::IDOL;
 	images = new int[7];
@@ -68,7 +54,7 @@ EnemySlime::EnemySlime(Location spawn_location)
 	slime_angle = 0;
 
 	//ドロップアイテムの設定
-	switch (*type)
+	switch (type[0])
 	{
 	case ENEMY_TYPE::FIRE:
 		drop_element = new ElementItem * [FIRE_DROP];
@@ -86,6 +72,10 @@ EnemySlime::EnemySlime(Location spawn_location)
 		drop_element = new ElementItem * [SOIL_DROP];
 		drop_type_volume = SOIL_DROP;
 		break;
+	case ENEMY_TYPE::NORMAL:
+	case ENEMY_TYPE::THUNDER:
+	default:
+		break;
 	}
 
 	int volume = 0;
@@ -93,10 +83,40 @@ EnemySlime::EnemySlime(Location spawn_location)
 	for (int i = 0; i < drop_type_volume; i++)
 	{
 		volume = SLIME_MIN_DROP + GetRand(SLIME_MAX_DROP);
-		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+
+		switch (type[0])
+		{
+		case ENEMY_TYPE::NORMAL:
+			break;
+		case ENEMY_TYPE::FIRE:
+			drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+			break;
+		case ENEMY_TYPE::WATER:
+			if (i < 2)
+			{
+				drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+			}
+			else
+			{
+				drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+			}
+			break;
+		case ENEMY_TYPE::WIND:
+			drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
+			break;
+		case ENEMY_TYPE::SOIL:
+			drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+			break;
+		case ENEMY_TYPE::THUNDER:
+			break;
+		default:
+			break;
+		}
+
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+
 
 }
 
@@ -109,7 +129,7 @@ EnemySlime::~EnemySlime()
 
 	delete[] drop_element;
 
-	delete type;
+	delete[] type;
 
 	for (int i = 0; i < 7; i++)
 	{

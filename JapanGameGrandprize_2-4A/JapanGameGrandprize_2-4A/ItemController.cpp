@@ -45,7 +45,7 @@ void ItemController::Update(Player* player)
 			delete item[i];
 			item[i] = nullptr;
 			SortItem(i);
-			item_volume--;
+			i--;
 		}
 	}
 }
