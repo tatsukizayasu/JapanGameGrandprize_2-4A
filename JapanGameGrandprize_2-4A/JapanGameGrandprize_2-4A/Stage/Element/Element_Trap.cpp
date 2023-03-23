@@ -73,7 +73,7 @@ void Element_Trap::Update(Player* player)
 
 		};
 
-		LoopTimer(1.0f, nullptr);
+		LoopTimer(1.0f, &explosion);
 	}
 }
 
