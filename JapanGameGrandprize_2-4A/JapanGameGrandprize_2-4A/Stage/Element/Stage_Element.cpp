@@ -158,7 +158,7 @@ std::vector<int> Stage_Element::GetImage(short type)
 		break;
 
 	case FALL_FLOOR:
-		filename = "Wooden_Floor.png";
+		filename = "Fall_Floor.png";
 		break;
 
 	case TRAP:
