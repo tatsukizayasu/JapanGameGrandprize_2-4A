@@ -45,7 +45,7 @@ void ItemController::Update(Player* player)
 			delete item[i];
 			item[i] = nullptr;
 			SortItem(i);
-			item_volume--;
+			i--;
 		}
 	}
 }
@@ -139,7 +139,6 @@ void ItemController::ArrangementItem(const int old_item_max)
 			item[i] = nullptr;
 		}
 
-		delete[] temporary_item;
 	}
 
 }

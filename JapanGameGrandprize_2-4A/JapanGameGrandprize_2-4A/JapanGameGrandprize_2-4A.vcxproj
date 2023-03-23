@@ -166,6 +166,7 @@
     <ClInclude Include="EnumEnemyType.h" />
     <ClInclude Include="GhostBullet.h" />
     <ClInclude Include="Harpy.h" />
+    <ClInclude Include="HarpyBullet.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemController.h" />
     <ClInclude Include="Mage.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="Stage\Element\Element_Barricade.h" />
     <ClInclude Include="Stage\Element\Element_Conveyor_Belt.h" />
     <ClInclude Include="Stage\Element\Element_Fall_Floor.h" />
     <ClInclude Include="Stage\Element\Element_Move_Floor.h" />
@@ -221,6 +223,7 @@
     <ClCompile Include="EnemySlimeBoss.cpp" />
     <ClCompile Include="GhostBullet.cpp" />
     <ClCompile Include="Harpy.cpp" />
+    <ClCompile Include="HarpyBullet.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemController.cpp" />
     <ClCompile Include="Mage.cpp" />
@@ -228,6 +231,7 @@
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="Stage\Element\Element_Barricade.cpp" />
     <ClCompile Include="Stage\Element\Element_Conveyor_Belt.cpp" />
     <ClCompile Include="Stage\Element\Element_Fall_Floor.cpp" />
     <ClCompile Include="Stage\Element\Element_Move_Floor.cpp" />

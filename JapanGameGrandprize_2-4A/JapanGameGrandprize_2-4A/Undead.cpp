@@ -18,8 +18,8 @@
 #define UNDEAD_SPEED 2
 
 //ÉhÉçÉbÉvó 
-#define UNDEAD_MIN_DROP 0u
-#define UNDEAD_MAX_DROP 5u
+#define UNDEAD_MIN_DROP 1
+#define UNDEAD_DROP 7
 
 //çUåÇóÕ
 #define UNDEAD_ATTACK_DAMAGE 10
@@ -74,7 +74,7 @@ Undead::Undead(Location spawn_location)
 
 	for (int i = 0; i < SOIL_DROP; i++)
 	{
-		volume = UNDEAD_MIN_DROP + GetRand(UNDEAD_MAX_DROP);
+		volume = UNDEAD_MIN_DROP + GetRand(UNDEAD_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;

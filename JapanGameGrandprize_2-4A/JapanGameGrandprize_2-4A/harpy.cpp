@@ -1,5 +1,6 @@
 #include "Harpy.h"
 #include "CameraWork.h"
+#include"BulletManager.h"
 #include"DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
@@ -8,14 +9,11 @@
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 600
-#define DETECTION_DISTANCE_Y 100
+#define DETECTION_DISTANCE_Y 250
 
-//物理攻撃範囲
-#define ATTACK_RANGE 40
-#define ATTACK_RANGE_Y 80
+//攻撃範囲
+#define ATTACK_RANGE 150
 
-//魔法攻撃範囲	
-#define ATTACK_MAGIC 300
 
 //魔法攻撃した時の硬直時間
 #define MAGIC_STANDBY 60
@@ -33,10 +31,10 @@
 #define ATTACK_SPEED 5
 
 //ドロップ量(最小)
-#define HARPY_MIN_DROP 0u
+#define HARPY_MIN_DROP 1
 
 //ドロップ量(最大)
-#define HARPY_MAX_DROP 4u
+#define HARPY_DROP 6
 
 
 //-----------------------------------
@@ -49,8 +47,16 @@ Harpy::Harpy(Location spawn_location)
 	attack = false;
 
 	hp = 50;
+	physical_time = 0;
+	magic_num = 0;
+	magic_time = 1;
 	location = spawn_location;
 	standby_attack = 0;
+	travel = 0;
+	travel_y = 0;
+	range = 0;
+	range_y = 0;
+	vector = 0;
 	speed = SPEED;
 	area.width = HARPY_SIZE_X;
 	area.height = HARPY_SIZE_Y;
@@ -74,7 +80,7 @@ Harpy::Harpy(Location spawn_location)
 	int volume = 0;
 	for (int i = 0; i < WIND_DROP; i++)
 	{
-		volume = HARPY_MIN_DROP + GetRand(HARPY_MAX_DROP);
+		volume = HARPY_MIN_DROP + GetRand(HARPY_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
@@ -123,6 +129,10 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
+		if (physical_attack == true)
+		{
+			PhysicalMove(player->GetLocation());
+		}
 		break;
 	case ENEMY_STATE::DEATH:
 		Death();
@@ -138,7 +148,7 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		Area chip_area = hit_stage.chip->GetArea();
 		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
 		{
-			speed = SPEED; //速度を落とすかもしくは、反転させる処理を作成
+			//speed = SPEED; //速度を落とすかもしくは、反転させる処理を作成
 			/*if (left_move ==true)
 			{
 				left_move = false;
@@ -176,35 +186,47 @@ void Harpy::Idol()
 void Harpy::Move(const Location player_location)
 {
 
-	float range; //プレイヤーとの距離	
-	float range_y; //プレイヤーとの距離Y座標
-	float vector; //ベクトル
-	float travel; //X座標に動く量
-	float travel_y; //ｙ座標に動く量
-
 	//プレイヤーとの距離計算
 	range = player_location.x - location.x;
 	range_y = player_location.y - location.y;
 
 	vector = sqrt(range * range + range_y * range_y);
 
+
 	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
-		range_y <= DETECTION_DISTANCE && range_y >= -DETECTION_DISTANCE)
+		range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
 	{
-		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE
-			&& range_y <= ATTACK_RANGE_Y && range >= -ATTACK_RANGE_Y)
+		//接近攻撃
+		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE || magic_num > 4)
 		{
+
 			state = ENEMY_STATE::ATTACK;
 			attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
 			standby_time = PHYSICAL_STANDBY;
 			physical_attack = true;
-		}
-		travel = range / vector;
-		travel_y = range_y / vector;
 
-		location.x += travel * speed;
-		location.y += travel_y * speed;
+		}
+		//遠距離攻撃
+		else
+		{
+
+			state = ENEMY_STATE::ATTACK;
+			attack_state = HARPY_ATTACK::MAGIC_ATTACK;
+			standby_time = MAGIC_STANDBY;
+			magic_attack = true;
+
+			//発射間隔
+			if (magic_time++ % 2 == 0)
+			{
+				//弾の生成
+				magic_num++;
+				BulletManager::GetInstance()->CreateEnemyBullet
+				(new HarpyBullet(location, player_location));
+			}
+
+
+		}
 	}
 	else //発見距離にプレイヤーがいなかったら。通常移動
 	{
@@ -233,6 +255,7 @@ void Harpy::Move(const Location player_location)
 
 
 }
+
 
 //-----------------------------------
 //攻撃
@@ -277,6 +300,7 @@ AttackResource Harpy::Hit()
 		ret.type = attack_type;
 		ret.type_count = 1;
 	}
+
 
 	return ret;
 }
@@ -343,6 +367,31 @@ void Harpy::HitBullet(const BulletBase* bullet)
 		break;
 	}
 }
+
+//-----------------------------------
+//接近攻撃（物理攻撃）時の動き
+//-----------------------------------
+void Harpy::PhysicalMove(const Location player_location)
+{
+
+	range = player_location.x - location.x;
+	range_y = player_location.y - location.y;
+
+	vector = sqrt(range * range + range_y * range_y);
+
+	travel = range / vector;
+	travel_y = range_y / vector;
+	location.x += travel * speed;
+	location.y += travel_y * speed;
+
+	if (physical_time++ % 5 == 0)
+	{
+		magic_num = 0;
+	}
+
+}
+
+
 
 //-----------------------------------
 //座標の取得
