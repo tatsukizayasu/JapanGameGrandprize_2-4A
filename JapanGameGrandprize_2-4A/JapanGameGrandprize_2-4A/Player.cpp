@@ -390,23 +390,39 @@ void Player::Update()
 			switch (pouch->GetAttribute())
 			{
 			case ATTRIBUTE::EXPLOSION:
-				explosion = pouch->GetExplosion();
+				if (pouch->GetExplosion() != nullptr)
+				{
+					explosion = pouch->GetExplosion();
+				}
 				break;
 			case ATTRIBUTE::MELT:
-				melt = pouch->GetMelt();
+				if (pouch->GetMelt() != nullptr)
+				{
+					melt = pouch->GetMelt();
+				}
 				break;
 			case ATTRIBUTE::POISON:
-				poison = pouch->GetPoison();
+				if (pouch->GetPoison() != nullptr)
+				{
+					poison = pouch->GetPoison();
+				}
 				break;
 			case ATTRIBUTE::PARALYSIS:
-				pararysis = pouch->GetPararysis();
+				if (pouch->GetPararysis() != nullptr)
+				{
+					pararysis = pouch->GetPararysis();
+				}
 				break;
 			case ATTRIBUTE::HEAL:
-				heal = pouch->GetHeal();
+				if (pouch->GetHeal() != nullptr)
+				{
+					heal = pouch->GetHeal();
+				}
 				break;
 			default:
 				break;
 			}
+			pouch->SetOnBool(false);
 		}
 	}
 
@@ -591,8 +607,6 @@ void Player::LeftMove()
 //‰EˆÚ“®
 void Player::RightMove()
 {
-
-
 	if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 	{
 		if (speed_x < PLAYER_SPEED_X)

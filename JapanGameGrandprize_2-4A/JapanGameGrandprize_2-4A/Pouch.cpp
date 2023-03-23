@@ -546,6 +546,7 @@ void Pouch::Update()
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_B))
 	{
+		on_bool = true;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
@@ -960,7 +961,6 @@ void Pouch::ReduceAmmo(ATTRIBUTE a)
 
 void Pouch::SetChemicalFormulaParameter()
 {
-	on_bool = true;
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
@@ -1048,7 +1048,7 @@ void Pouch::ConsumptionMaterial()
 		difference[static_cast<int>(ELEMENT_ITEM::NITROGEN)] = element[3]->GetVolume() - chemical_formula_poison[cursol].material.nitrogen;
 		difference[static_cast<int>(ELEMENT_ITEM::SULFUR)] = element[4]->GetVolume() - chemical_formula_poison[cursol].material.sulfur;
 		difference[static_cast<int>(ELEMENT_ITEM::CHLORINE)] = element[5]->GetVolume() - chemical_formula_poison[cursol].material.chlorine;
-		for (int i = 0; i < PLAYER_ELEMENT; i++)
+		for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
 		{
 			element[i]->SetVolume(difference[i]);
 		}
