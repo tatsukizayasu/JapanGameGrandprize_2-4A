@@ -99,13 +99,12 @@ Stage::Stage()
 
 					//固定マップチップ
 					if (i < 50) {
-						MapChip* temp = new MapChip
+						mapchip.push_back(new MapChip
 						(&block_images[i],
 							{
 								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-							}, { CHIP_SIZE,CHIP_SIZE });
-						mapchip.push_back(temp);
+							}, { CHIP_SIZE,CHIP_SIZE }));
 					}
 				}
 			}
