@@ -50,7 +50,7 @@ Harpy::Harpy(Location spawn_location)
 	physical_time = 0;
 	magic_num = 0;
 	magic_time = 1;
-	//location = spawn_location;
+	location = spawn_location;
 	standby_attack = 0;
 	travel = 0;
 	travel_y = 0;
