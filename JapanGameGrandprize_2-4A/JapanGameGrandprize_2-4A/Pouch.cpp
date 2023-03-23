@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "PadInput.h"
 #include "Define.h"
+#include "EnumElementItem.h"
 #include <stdlib.h>
 
 //コンストラクタ
@@ -671,9 +672,40 @@ void Pouch::ParalysisTabUpdate()
 }
 
 
+
 void Pouch::SetElement(ElementItem* item, int i)
 {
 	element[i] = item;
+}
+
+void Pouch::SetElementConstruct(int i)
+{
+	switch (element[i]->GetType())
+	{
+	case ELEMENT_ITEM::HYDROGEN:
+		element[i]->SetVolume(50);
+		break;
+	case ELEMENT_ITEM::OXYGEN:
+		element[i]->SetVolume(30);
+		break;
+	case ELEMENT_ITEM::CARBON:
+		element[i]->SetVolume(30);
+		break;
+	case ELEMENT_ITEM::NITROGEN:
+		element[i]->SetVolume(30);
+		break;
+	case ELEMENT_ITEM::SULFUR:
+		element[i]->SetVolume(10);
+		break;
+	case ELEMENT_ITEM::CHLORINE:
+		element[i]->SetVolume(10);
+		break;
+	case ELEMENT_ITEM::URANIUM:
+		element[i]->SetVolume(1);
+		break;
+	default:
+		break;
+	}
 }
 
 void Pouch::InitChemicalParameter()
