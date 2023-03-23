@@ -546,7 +546,46 @@ void Pouch::Update()
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_B))
 	{
-		SetChemicalFormulaParameter();
+		switch (tab)
+		{
+		case ATTRIBUTE::EXPLOSION:
+			if (select_explosion == nullptr)
+			{
+				SetChemicalFormulaParameter();
+				ConsumptionMaterial();
+			}
+			break;
+		case ATTRIBUTE::MELT:
+			if (select_melt == nullptr)
+			{
+				SetChemicalFormulaParameter();
+				ConsumptionMaterial();
+			}
+			break;
+		case ATTRIBUTE::POISON:
+			if (select_poison == nullptr)
+			{
+				SetChemicalFormulaParameter();
+				ConsumptionMaterial();
+			}			
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			if (select_pararysis == nullptr)
+			{
+				SetChemicalFormulaParameter();
+				ConsumptionMaterial();
+			}			
+			break;
+		case ATTRIBUTE::HEAL:
+			if (select_heal == nullptr)
+			{
+				SetChemicalFormulaParameter();
+				ConsumptionMaterial();
+			}			
+			break;
+		default:
+			break;
+		}
 	}
 
 }
@@ -971,4 +1010,99 @@ bool Pouch::ComparisonElement(ChemicalFormulaParameter subject) const
 		return true;
 	}
 	return false;
+}
+
+void Pouch::ConsumptionMaterial()
+{
+	int difference[PLAYER_ELEMENT];
+	switch (tab)
+	{
+	case ATTRIBUTE::EXPLOSION:
+		difference[static_cast<int>(ELEMENT_ITEM::HYDROGEN)] = element[0]->GetVolume() - chemical_formula_explosion[cursol].material.hydrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::OXYGEN)] = element[1]->GetVolume() - chemical_formula_explosion[cursol].material.oxygen;
+		difference[static_cast<int>(ELEMENT_ITEM::CARBON)] = element[2]->GetVolume() - chemical_formula_explosion[cursol].material.carbon;
+		difference[static_cast<int>(ELEMENT_ITEM::NITROGEN)] = element[3]->GetVolume() - chemical_formula_explosion[cursol].material.nitrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::SULFUR)] = element[4]->GetVolume() - chemical_formula_explosion[cursol].material.sulfur;
+		difference[static_cast<int>(ELEMENT_ITEM::CHLORINE)] = element[5]->GetVolume() - chemical_formula_explosion[cursol].material.chlorine;
+		for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
+		{
+			element[i]->SetVolume(difference[i]);
+		}
+		break;
+	case ATTRIBUTE::MELT:
+		difference[static_cast<int>(ELEMENT_ITEM::HYDROGEN)] = element[0]->GetVolume() - chemical_formula_melt[cursol].material.hydrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::OXYGEN)] = element[1]->GetVolume() - chemical_formula_melt[cursol].material.oxygen;
+		difference[static_cast<int>(ELEMENT_ITEM::CARBON)] = element[2]->GetVolume() - chemical_formula_melt[cursol].material.carbon;
+		difference[static_cast<int>(ELEMENT_ITEM::NITROGEN)] = element[3]->GetVolume() - chemical_formula_melt[cursol].material.nitrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::SULFUR)] = element[4]->GetVolume() - chemical_formula_melt[cursol].material.sulfur;
+		difference[static_cast<int>(ELEMENT_ITEM::CHLORINE)] = element[5]->GetVolume() - chemical_formula_melt[cursol].material.chlorine;
+		for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
+		{
+			element[i]->SetVolume(difference[i]);
+		}
+		break;
+	case ATTRIBUTE::POISON:
+		difference[static_cast<int>(ELEMENT_ITEM::HYDROGEN)] = element[0]->GetVolume() - chemical_formula_poison[cursol].material.hydrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::OXYGEN)] = element[1]->GetVolume() - chemical_formula_poison[cursol].material.oxygen;
+		difference[static_cast<int>(ELEMENT_ITEM::CARBON)] = element[2]->GetVolume() - chemical_formula_poison[cursol].material.carbon;
+		difference[static_cast<int>(ELEMENT_ITEM::NITROGEN)] = element[3]->GetVolume() - chemical_formula_poison[cursol].material.nitrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::SULFUR)] = element[4]->GetVolume() - chemical_formula_poison[cursol].material.sulfur;
+		difference[static_cast<int>(ELEMENT_ITEM::CHLORINE)] = element[5]->GetVolume() - chemical_formula_poison[cursol].material.chlorine;
+		for (int i = 0; i < PLAYER_ELEMENT; i++)
+		{
+			element[i]->SetVolume(difference[i]);
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		difference[static_cast<int>(ELEMENT_ITEM::HYDROGEN)] = element[0]->GetVolume() - chemical_formula_pararysis[cursol].material.hydrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::OXYGEN)] = element[1]->GetVolume() - chemical_formula_pararysis[cursol].material.oxygen;
+		difference[static_cast<int>(ELEMENT_ITEM::CARBON)] = element[2]->GetVolume() - chemical_formula_pararysis[cursol].material.carbon;
+		difference[static_cast<int>(ELEMENT_ITEM::NITROGEN)] = element[3]->GetVolume() - chemical_formula_pararysis[cursol].material.nitrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::SULFUR)] = element[4]->GetVolume() - chemical_formula_pararysis[cursol].material.sulfur;
+		difference[static_cast<int>(ELEMENT_ITEM::CHLORINE)] = element[5]->GetVolume() - chemical_formula_pararysis[cursol].material.chlorine;
+		for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
+		{
+			element[i]->SetVolume(difference[i]);
+		}
+		break;
+	case ATTRIBUTE::HEAL:
+		difference[static_cast<int>(ELEMENT_ITEM::HYDROGEN)] = element[0]->GetVolume() - chemical_formula_heal[cursol].material.hydrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::OXYGEN)] = element[1]->GetVolume() - chemical_formula_heal[cursol].material.oxygen;
+		difference[static_cast<int>(ELEMENT_ITEM::CARBON)] = element[2]->GetVolume() - chemical_formula_heal[cursol].material.carbon;
+		difference[static_cast<int>(ELEMENT_ITEM::NITROGEN)] = element[3]->GetVolume() - chemical_formula_heal[cursol].material.nitrogen;
+		difference[static_cast<int>(ELEMENT_ITEM::SULFUR)] = element[4]->GetVolume() - chemical_formula_heal[cursol].material.sulfur;
+		difference[static_cast<int>(ELEMENT_ITEM::CHLORINE)] = element[5]->GetVolume() - chemical_formula_heal[cursol].material.chlorine;
+		for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
+		{
+			element[i]->SetVolume(difference[i]);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void Pouch::DeleteExplosion()
+{
+	select_explosion = nullptr;
+}
+
+void Pouch::DeleteHeal()
+{
+	select_heal = nullptr;
+}
+
+void Pouch::DeleteMelt()
+{
+	select_melt = nullptr;
+}
+
+void Pouch::DeletePararysis()
+{
+	select_pararysis = nullptr;
+}
+
+void Pouch::DeletePoison()
+{
+	select_poison = nullptr;
 }

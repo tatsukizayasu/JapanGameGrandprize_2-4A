@@ -1,9 +1,11 @@
 #pragma once
 
+
+
 //Œ³‘f—ñ‹“‘Ì
 enum class  ELEMENT_ITEM
 {
-	HYDROGEN,	 //…‘f
+	HYDROGEN = 0,	 //…‘f
 	OXYGEN,      //Ž_‘f
 	CARBON,		 //’Y‘f
 	NITROGEN,	 //’‚‘f

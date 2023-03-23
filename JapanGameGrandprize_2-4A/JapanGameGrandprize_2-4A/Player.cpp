@@ -389,7 +389,6 @@ void Player::Update()
 		{
 			switch (pouch->GetAttribute())
 			{
-
 			case ATTRIBUTE::EXPLOSION:
 				explosion = pouch->GetExplosion();
 				break;
@@ -738,6 +737,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						explosion = nullptr;
+						pouch->DeleteExplosion();
 					}
 				}
 				break;
@@ -752,6 +752,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						melt = nullptr;
+						pouch->DeleteMelt();
 					}
 				}
 				break;
@@ -766,6 +767,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						poison = nullptr;
+						pouch->DeletePoison();
 					}
 				}
 				break;
@@ -780,6 +782,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						pararysis = nullptr;
+						pouch->DeletePararysis();
 					}
 				}
 				break;
@@ -794,6 +797,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						heal = nullptr;
+						pouch->DeleteHeal();
 					}
 				}
 				break;
@@ -994,3 +998,4 @@ void Player::MoveAnimation()
 		image_count = 0;
 	}
 }
+
