@@ -131,10 +131,10 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
-		/*if (physical_attack == true)
+		if (physical_attack == true)
 		{
-			Move(player->GetLocation());
-		}*/
+			PhysicalMove(player->GetLocation());
+		}
 		break;
 	case ENEMY_STATE::DEATH:
 		Death();
@@ -200,7 +200,7 @@ void Harpy::Move(const Location player_location)
 		range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
 	{
 		//接近攻撃
-		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE )
+		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE || magic_num > 4)
 		{
 
 			state = ENEMY_STATE::ATTACK;
@@ -208,15 +208,6 @@ void Harpy::Move(const Location player_location)
 			standby_time = PHYSICAL_STANDBY;
 			physical_attack = true;
 
-			travel = range / vector;
-			travel_y = range_y / vector;
-			location.x += travel * speed;
-			location.y += travel_y * speed;
-
-		/*	if (physical_time++ % 5 == 0)
-			{
-				magic_num = 1;
-			}*/
 		}
 		//遠距離攻撃
 		else
@@ -228,10 +219,10 @@ void Harpy::Move(const Location player_location)
 			magic_attack = true;
 
 			//発射間隔
-			if (magic_time++ % 4 == 0)
+			if (magic_time++ % 2 == 0)
 			{
 				//弾の生成
-				//magic_num++;
+				magic_num++;
 				BulletManager::GetInstance()->CreateEnemyBullet
 				(new HarpyBullet(location, player_location));
 			}
@@ -241,14 +232,14 @@ void Harpy::Move(const Location player_location)
 	}
 	else //発見距離にプレイヤーがいなかったら。通常移動
 	{
-		//if (left_move == true)
-		//{
-		//	action_type = HARPY_STATE::NORMAL; //左
-		//}
-		//else
-		//{
-		//	action_type = HARPY_STATE::NORMAL_RIGHT; //右
-		//}
+		if (left_move == true)
+		{
+			action_type = HARPY_STATE::NORMAL; //左
+		}
+		else
+		{
+			action_type = HARPY_STATE::NORMAL_RIGHT; //右
+		}
 		switch (action_type)
 		{
 		case HARPY_STATE::NORMAL:  //通常移動
@@ -382,8 +373,23 @@ void Harpy::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 //接近攻撃（物理攻撃）時の動き
 //-----------------------------------
-void Harpy::PhysicalMove()
+void Harpy::PhysicalMove(const Location player_location)
 {
+
+	range = player_location.x - location.x;
+	range_y = player_location.y - location.y;
+
+	vector = sqrt(range * range + range_y * range_y);
+
+	travel = range / vector;
+	travel_y = range_y / vector;
+	location.x += travel * speed;
+	location.y += travel_y * speed;
+
+	if (physical_time++ % 5 == 0)
+	{
+		magic_num = 0;
+	}
 
 }
 
