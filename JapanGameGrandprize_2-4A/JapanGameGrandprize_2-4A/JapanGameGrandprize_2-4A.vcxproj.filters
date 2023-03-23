@@ -323,6 +323,10 @@
     <ClInclude Include="Stage\Element\Element_Trap.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
+    <ClInclude Include="HarpyBullet.h" />
+    <ClInclude Include="Stage\Element\Element_Barricade.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
