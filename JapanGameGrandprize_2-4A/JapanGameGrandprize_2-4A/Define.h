@@ -90,6 +90,60 @@ struct Location
 
 		return ret;
 	}
+
+	bool operator <(Location location)
+	{
+		bool ret;
+
+		ret = (this->x < location.x) && (this->y < location.y);
+
+		return ret;
+	}
+
+	bool operator >(Location location)
+	{
+		bool ret;
+
+		ret = (this->x > location.x) && (this->y > location.y);
+
+		return ret;
+	}
+
+	bool operator <=(Location location)
+	{
+		bool ret;
+
+		ret = (this->x <= location.x) && (this->y <= location.y);
+
+		return ret;
+	}
+
+	bool operator >=(Location location)
+	{
+		bool ret;
+
+		ret = (this->x >= location.x) && (this->y >= location.y);
+
+		return ret;
+	}
+
+	bool operator !=(Location location)
+	{
+		bool ret;
+
+		ret = (this->x != location.x) && (this->y != location.y);
+
+		return ret;
+	}
+
+	bool operator ==(Location location)
+	{
+		bool ret;
+
+		ret = (this->x == location.x) && (this->y == location.y);
+
+		return ret;
+	}
 };
 
 //ÉTÉCÉY
