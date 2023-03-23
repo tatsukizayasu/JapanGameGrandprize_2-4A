@@ -10,6 +10,11 @@ Stage_Element::Stage_Element()
 
 Stage_Element::~Stage_Element()
 {
+	for (const auto& entry : image_cache) {
+		for (auto& value : entry.second) {
+			DeleteGraph(value);
+		}
+	}
 }
 
 void Stage_Element::AddElement(short type, Location location, Area area)
@@ -41,6 +46,10 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case MOVE_FLOOR:
+		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
+		break;
+
+	case BARRICADE:
 		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
 		break;
 
@@ -158,6 +167,10 @@ std::vector<int> Stage_Element::GetImage(short type)
 
 	case MOVE_FLOOR:
 		filename = "Move_Floor.png";
+		break;
+
+	case BARRICADE:
+		filename = "Wooden_Floor.png";
 		break;
 
 	default:
