@@ -196,6 +196,7 @@ Player::Player(Stage* stage)
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
 		pouch->SetElement(element[i], i);
+		pouch->SetElementConstruct(i);
 	}
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
