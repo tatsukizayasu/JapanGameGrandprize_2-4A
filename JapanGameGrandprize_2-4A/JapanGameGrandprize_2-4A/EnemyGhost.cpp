@@ -47,6 +47,9 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	left_move = true;
 	attack = false;
 
+	magic_time = 1;
+	magic_num = 0;
+	physical_time = 0;
 	hp = 10;
 	location = spawn_location;
 	standby_attack = 0;
@@ -331,10 +334,12 @@ void EnemyGhost::GhostMove(const Location player_location)
 		attack_state = GHOST_ATTACK::MAGIC_ATTACK;
 		standby_time = GHOST_MAGIC_STANDBY;
 		magic_attack = true;
-
-		//’e‚Ì¶¬
-		BulletManager::GetInstance()->CreateEnemyBullet
-		(new GhostBullet(location, player_location));
+		if (magic_time++ % 3 == 0)
+		{
+			//’e‚Ì¶¬
+			BulletManager::GetInstance()->CreateEnemyBullet
+			(new GhostBullet(location, player_location));
+		}
 	}
 }
 
