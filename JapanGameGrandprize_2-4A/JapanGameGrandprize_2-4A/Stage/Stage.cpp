@@ -88,12 +88,13 @@ Stage::Stage()
 				}
 				else {
 					if (i < 50) {
-						mapchip.push_back(new MapChip
+						MapChip* temp = new MapChip
 						(&block_images[i],
 							{
 								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-							}, { CHIP_SIZE,CHIP_SIZE }));
+							}, { CHIP_SIZE,CHIP_SIZE });
+						mapchip.push_back(temp);
 					}
 				}
 

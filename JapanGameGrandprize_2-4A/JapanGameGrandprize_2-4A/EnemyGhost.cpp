@@ -29,10 +29,10 @@
 #define ATTACK_SPEED 4.5
 
 //ドロップ量(最小)
-#define GHOST_MIN_DROP 0u
+#define GHOST_MIN_DROP 1
 
 //ドロップ量(最大)
-#define GHOST_MAX_DROP 4u
+#define GHOST_DROP 7
 
 //ゴーストの攻撃力
 #define GHOST_ATTACK_DAMAGE 10
@@ -72,7 +72,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 
 	for (int i = 0; i < WIND_DROP; i++)
 	{
-		volume = GHOST_MIN_DROP + GetRand(GHOST_MAX_DROP);
+		volume = GHOST_MIN_DROP + GetRand(GHOST_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;

@@ -33,10 +33,10 @@
 #define ATTACK_SPEED 5
 
 //ドロップ量(最小)
-#define HARPY_MIN_DROP 0u
+#define HARPY_MIN_DROP 1
 
 //ドロップ量(最大)
-#define HARPY_MAX_DROP 4u
+#define HARPY_DROP 6
 
 
 //-----------------------------------
@@ -74,7 +74,7 @@ Harpy::Harpy(Location spawn_location)
 	int volume = 0;
 	for (int i = 0; i < WIND_DROP; i++)
 	{
-		volume = HARPY_MIN_DROP + GetRand(HARPY_MAX_DROP);
+		volume = HARPY_MIN_DROP + GetRand(HARPY_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;

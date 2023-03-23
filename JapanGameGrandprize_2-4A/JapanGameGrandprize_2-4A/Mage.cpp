@@ -10,8 +10,8 @@
 #define MAGE_SPEED 2
 
 //ƒhƒƒbƒv”
-#define MAGE_MIN_DROP 0
-#define MAGE_MAX_DROP 6
+#define MAGE_MIN_DROP 1
+#define MAGE_DROP 8
 
 //‘Ì—Í
 #define MAGE_HP 100
@@ -90,7 +90,7 @@ Mage::Mage(Location spawn_location)
 	for (int i = 0; i < drop; i++)
 	{
 
-		volume = MAGE_MIN_DROP + GetRand(MAGE_MAX_DROP);
+		volume = MAGE_MIN_DROP + GetRand(MAGE_DROP);
 
 		switch (type[0])
 		{

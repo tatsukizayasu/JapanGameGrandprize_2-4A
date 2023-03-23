@@ -12,8 +12,8 @@
 #define SLIME_SPEED 2
 #define SLIME_ATTACK_DAMAGE 10
 
-#define SLIME_MIN_DROP 0u
-#define SLIME_MAX_DROP 3u
+#define SLIME_MIN_DROP 1
+#define SLIME_DROP 5
 
 #define GROUND 1200
 #define WAIT_TIME 30 //ƒvƒŒƒCƒ„[‚ğŒ©‚Â‚¯‚ÄUŒ‚‚·‚é‚Ü‚Å‚ÌŠÔ
@@ -82,7 +82,7 @@ EnemySlime::EnemySlime(Location spawn_location)
 
 	for (int i = 0; i < drop_type_volume; i++)
 	{
-		volume = SLIME_MIN_DROP + GetRand(SLIME_MAX_DROP);
+		volume = SLIME_MIN_DROP + GetRand(SLIME_DROP);
 
 		switch (type[0])
 		{
