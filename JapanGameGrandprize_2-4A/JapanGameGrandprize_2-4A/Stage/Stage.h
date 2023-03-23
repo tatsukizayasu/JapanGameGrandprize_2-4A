@@ -34,6 +34,9 @@ private:
 	//スポーン地点
 	Location spawn_point;
 
+	//中間地点
+	Location halfway_point;
+
 	//マップ配列データ
 	std::vector<std::vector<int>> map_data;
 
@@ -82,6 +85,12 @@ public:
 	/// スポーン地点		Getter
 	/// </summary>
 	Location GetSpawnPoint() { return spawn_point; }
+
+
+	/// <summary>
+	/// 中間地点		Getter
+	/// </summary>
+	Location GetHalfwayPoint() { return halfway_point; }
 
 	/// <summary>
 	/// StageクラスにPlayerオブジェクトを渡すSetter

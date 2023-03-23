@@ -4,7 +4,7 @@
 
 #define TIMER	4.0f
 
-#define ATTACK_RANGE 200.0f
+#define ATTACK_RANGE 300.0f
 
 Element_Trap::Element_Trap(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
 {
@@ -41,7 +41,13 @@ void Element_Trap::Update(Player* player)
 
 		if (player_bullet[j]->HitBox(this))
 		{
-			printfDx("a");
+			//範囲内にプレイヤーがいたらダメージを与える
+			if (abs(location.x - player->GetLocation().x) <= ATTACK_RANGE
+				&& abs(location.y - player->GetLocation().y) <= ATTACK_RANGE) {
+				ENEMY_TYPE fireType = ENEMY_TYPE::FIRE;
+				player->HpDamage(AttackResource{ 10, &fireType, 5 });
+			}
+
 			state = STATE::EXPLOSION;
 
 			delete player_bullet[j];
@@ -55,15 +61,13 @@ void Element_Trap::Update(Player* player)
 
 	if (state == STATE::EXPLOSION) {
 
-		std::function<void()> explosion = [&]() {
-			if (abs(location.x - player->GetLocation().x) <= ATTACK_RANGE
-				&& abs(location.y - player->GetLocation().y) <= ATTACK_RANGE) {
-				ENEMY_TYPE fireType = ENEMY_TYPE::FIRE;
-				player->HpDamage(AttackResource{ 10, &fireType, 5 });
-			}
 
+		if (GetElapsedTime(1.0f) > 0.3f) {
 			SetImage(0);
 			SetArea({ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
+		}
+
+		std::function<void()> explosion = [&]() {
 
 			state = STATE::EXTINGUISHMENT;
 
@@ -89,7 +93,7 @@ void Element_Trap::Draw()const
 	if (state == STATE::EXPLOSION) {
 		float elapsed_time = GetElapsedTime(1.0f) * 255;
 		SetDrawBlendMode(DX_BLENDMODE_ADD, 255 - elapsed_time);
-		DrawCircleAA(x, y, ATTACK_RANGE, 30, 0xFFFFFF, TRUE);
+		DrawCircleAA(x, y, ATTACK_RANGE, 40, 0xFFFFFF, TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 }
