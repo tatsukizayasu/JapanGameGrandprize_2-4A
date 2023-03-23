@@ -246,28 +246,39 @@ bool LineCollider_t::HitLine(const LineCollider_t* line)const
 {
 	bool is_hit = false;
 
-	float cross_product_start
-		= MakeCrossProduct
-		(this->GetLocation(LINE_END) - this->GetLocation(LINE_START)
-		,line->GetLocation(LINE_START) - this->GetLocation(LINE_START));
+	Location this_vector
+		= this->GetLocation(LINE_END) - this->GetLocation(LINE_START);
+	 
+	Location arg_vector
+		= line->GetLocation(LINE_END) - line->GetLocation(LINE_START);
 
-	float cross_product_end
-		= MakeCrossProduct
-		(this->GetLocation(LINE_END) - this->GetLocation(LINE_START)
-			, line->GetLocation(LINE_END) - this->GetLocation(LINE_START));
+	float cross_product[2];
+	cross_product[0]
+		= MakeCrossProduct(this_vector,
+			line->GetLocation(LINE_START) - this->GetLocation(LINE_START));
+	
+	cross_product[1]
+		= MakeCrossProduct(this_vector,
+			line->GetLocation(LINE_END) - this->GetLocation(LINE_START));
 
-	if (0 < cross_product_start * cross_product_end)
+	if (0 < cross_product[0] * cross_product[1])
 	{
 		return false;
 	}
-	else if(cross_product_start * cross_product_end < 0)
-	{
-		return true;
-	}
-	else
-	{
 
+	cross_product[0]
+		= MakeCrossProduct(arg_vector,
+			this->GetLocation(LINE_START) - line->GetLocation(LINE_START));
+	
+	cross_product[1]
+		= MakeCrossProduct(arg_vector,
+			this->GetLocation(LINE_END) - line->GetLocation(LINE_START));
+
+	if (cross_product[0] * cross_product[1] <= 0)
+	{
+		is_hit = true;
 	}
+
 
 	return is_hit;
 }
