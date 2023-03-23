@@ -10,6 +10,9 @@ private:
 
 	//落下スピード
 	float fall_speed;
+
+	//増加分
+	float increment;
 	
 	enum class STATE {
 		NONE,		//なし
