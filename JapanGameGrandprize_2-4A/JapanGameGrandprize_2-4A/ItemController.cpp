@@ -139,7 +139,6 @@ void ItemController::ArrangementItem(const int old_item_max)
 			item[i] = nullptr;
 		}
 
-		delete[] temporary_item;
 	}
 
 }
