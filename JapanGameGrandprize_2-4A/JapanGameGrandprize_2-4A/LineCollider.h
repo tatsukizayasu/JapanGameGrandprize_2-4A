@@ -21,8 +21,8 @@ private:
 
 		return middle_point;
 	}
-	//座標を中心座標からのベクターに相対化する
 
+	//座標を中心座標からのベクターに相対化する
 	void Relativize()
 	{
 		vector[LINE_START].x = vector[LINE_START].x - location.x;
@@ -31,8 +31,8 @@ private:
 		vector[LINE_END].x = vector[LINE_END].x - location.x;
 		vector[LINE_END].y = vector[LINE_END].y - location.y;
 	}
-	//線分の端の絶対座標を返す
 
+	//線分の端の絶対座標を返す
 	Location MakeTip(int index)const
 	{
 		//線分の端の絶対座標を計算する
@@ -42,6 +42,7 @@ private:
 
 		return tip;
 	}
+
 	//線分を対角線とした矩形の左上の座標を返す
 	Location GetMin()const
 	{
@@ -71,6 +72,7 @@ private:
 
 		return vector_min;
 	}
+
 	//線分を対角線とした矩形の右下の座標を返す
 	Location GetMax()const
 	{
@@ -100,6 +102,7 @@ private:
 
 		return vector_max;
 	}
+
 	//2つのベクトルのなす角が鋭角かどうかを求める
 	bool CheckIsAcute(Location vector1, Location vector2)const
 	{
@@ -117,6 +120,7 @@ private:
 
 		return is_acute;
 	}
+
 	//受け取ったベクターのスカラを返す
 	float MakeScalar(Location vector)const
 	{
@@ -126,6 +130,7 @@ private:
 
 		return scalar;
 	}
+
 	//引数１から引数２に対する外積を返す
 	float MakeCrossProduct(Location vector1, Location vector2)const
 	{
@@ -162,6 +167,7 @@ public:
 
 	//始点、終点座標の設定
 	void SetLocation(Location location, int i);
+
 protected:
 
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)

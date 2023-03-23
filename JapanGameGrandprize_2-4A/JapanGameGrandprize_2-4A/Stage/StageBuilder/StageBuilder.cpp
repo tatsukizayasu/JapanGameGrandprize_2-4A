@@ -35,7 +35,8 @@ StageBuilder::StageBuilder()
 	current_brush = MAP_CHIP;
 
 #ifdef _DEV
-	line_collider = new LineCollider_t({ 500,1280 }, { 300,1080 });
+	line_collider = new LineCollider_t({ 500,600 }, { 300,300 });
+	mouse_line = new LineCollider_t({ 300,300 }, { 500,500 });
 
 	Location points[3] =
 	{
@@ -71,6 +72,7 @@ StageBuilder::~StageBuilder()
 	delete line;
 
 	delete line_collider;
+	delete mouse_line;
 }
 
 //------------------------------------
@@ -143,6 +145,8 @@ void StageBuilder::Update()
 		line->Update();
 	}
 
+	mouse_line->ColliderBase::SetLocation(mouse->GetLocation());
+
 #endif // _DEV
 }
 
@@ -196,8 +200,10 @@ void StageBuilder::Draw()const
 
 	DrawMouse();
 
+	mouse_line->Draw();
+
 	line_collider->Draw();
-	if (line_collider->HitSphere(mouse))
+	if (line_collider->HitLine(mouse_line))
 	{
 		DrawString(600, 300, "hit", 0);
 	}
@@ -564,7 +570,7 @@ void StageBuilder::MakeMapChip()
 		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
 	float pos_y = (int)(mouse->GetLocation().y
 		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
-	map_chips.push_back(new MapChip(&block_images[0],
+	map_chips.push_back(new MapChip(&block_images[1],
 		{ pos_x + MAP_CHIP_SIZE / 2,pos_y + MAP_CHIP_SIZE / 2 },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
@@ -574,7 +580,7 @@ void StageBuilder::MakeMapChip()
 //------------------------------------
 void StageBuilder::MakeMapChip(float x, float y, float width, float height)
 {
-	map_chips.push_back(new MapChip(&block_images[0],
+	map_chips.push_back(new MapChip(&block_images[1],
 		{ x ,y },{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
 
