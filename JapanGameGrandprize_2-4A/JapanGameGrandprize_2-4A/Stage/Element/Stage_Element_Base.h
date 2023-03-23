@@ -117,4 +117,10 @@ public:
 	/// <param name = "time">取得したいタイマーの秒数</param>
 	/// <returns>経過時間</returns>	
 	float GetElapsedTime(float time) const;
+
+	/// <summary>
+	/// ルームタイマー	の経過時間リセット
+	/// </summary>
+	/// <param name = "time">リセットしたいタイマーの秒数</param>
+	void ResetElapsedTime(float time);
 };

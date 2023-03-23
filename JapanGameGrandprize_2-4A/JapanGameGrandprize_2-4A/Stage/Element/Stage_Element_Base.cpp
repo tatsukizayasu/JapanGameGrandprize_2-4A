@@ -185,6 +185,17 @@ float Stage_Element_Base::GetElapsedTime(float time) const
 	}
 }
 
+void Stage_Element_Base::ResetElapsedTime(float time)
+{
+	auto it = elapsed_time_map.find(time);
+	if (it != elapsed_time_map.end()) {
+		it->second = 0.0f;
+		start_time_map[time] = std::chrono::steady_clock::now();
+	}
+}
+
+
+
 
 
 

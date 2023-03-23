@@ -14,15 +14,16 @@
 #include <vector>
 
 namespace Element {
-	//const short DEBUG_GRASS = 1;		//デバック用草ブロック
+	//const short DEBUG_GRASS = 1;			//デバック用草ブロック
 	const short DAMAGE_WALL = 40;		//ダメージ床
 	const short WOODEN_FLOOR = 41;		//すり抜ける床
 	const short FALL_FLOOR = 42;		//落ちる床
-	const short TRAP = 51;		//トラップ	(爆発物)
-	const short MOVE_FLOOR = 52;			//動く床
-	const short MOVE_FLOOR_GOAL = 53;			//動く床の目的位置
+	const short TRAP = 51;				//トラップ	(爆発物)
+	const short MOVE_FLOOR = 52;		//動く床
+	const short MOVE_FLOOR_GOAL = 53;	//動く床の目的位置
+	const short BARRICADE = 60;			//バリケード
 	const short GreenButton = 61;		//緑のボタン
-	const short YellowButton = 62;	//黄色のボタン
+	const short YellowButton = 62;		//黄色のボタン
 }
 
 using namespace Element;
