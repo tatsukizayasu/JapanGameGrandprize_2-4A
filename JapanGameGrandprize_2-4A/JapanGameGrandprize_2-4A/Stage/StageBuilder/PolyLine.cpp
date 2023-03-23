@@ -12,7 +12,7 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 	}
 	for (int i = 0; i < size - 1; i++)
 	{
-		lines.push_back(new LineCollider_t(bend_points[i], bend_points[i + 1]));
+		lines.push_back(new LineCollider(bend_points[i], bend_points[i + 1]));
 	}
 }
 
@@ -28,7 +28,7 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 
 	for (int i = 0; i < spheres.size() - 1; i++)
 	{
-		lines.push_back(new LineCollider_t(
+		lines.push_back(new LineCollider(
 			spheres[i]->GetLocation(), spheres[i + 1]->GetLocation()
 		));
 	}

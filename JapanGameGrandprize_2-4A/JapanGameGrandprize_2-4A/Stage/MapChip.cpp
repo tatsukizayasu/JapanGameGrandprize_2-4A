@@ -72,10 +72,6 @@ void MapChip::Draw()const
 	float y = location.y - CameraWork::GetCamera().y;
 
 	DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
-#ifdef _SHOW_COLLISION
-	DrawCollision();
-#endif
-
 #ifdef COLLLISION_DEBUG
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);

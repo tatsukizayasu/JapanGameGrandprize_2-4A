@@ -63,58 +63,65 @@ bool SphereCollider::HitBox(const BoxCollider* box_collider) const
 	return ret;
 }
 
-bool SphereCollider::HitLine(const LineCollider_t* line_collider) const
+bool SphereCollider::HitLine(const LineCollider* line_collider) const
 {
-	bool ret = false; //返り値
+	bool is_hit = false;
+	Location vector1 =
+		line_collider->GetLocation(LINE_END)
+		- line_collider->GetLocation(LINE_START);
+	Location vector2 =
+		GetLocation() - line_collider->GetLocation(LINE_START);
 
-	float vector_x[3]; //X座標のベクトル
-	float vector_y[3]; //Y座標のベクトル
+	float len = powf(vector1.x * vector1.x + vector1.y * vector1.y, 0.5);
 
-	float unit_vector;	//単位ベクトル
-	float shortest_distance; //線分と円の最短の距離
+	Location unit_vector;
+	unit_vector.x = vector1.x / len;
+	unit_vector.y = vector1.y / len;
 
-	float inner_product[2]; //内積(0:x,1:y)
-	float center_distance[2]; //円の中心との距離(0:線分の始点　1:線分の終点)
+	float distance_near_pos = unit_vector.x * vector2.x
+		+ unit_vector.y * vector2.y;
 
-	//LineColliderの始点と終点とのベクトルの計算
-	vector_x[0] = line_collider->GetLocation(1).x - line_collider->GetLocation(0).x;
-	vector_y[0] = line_collider->GetLocation(1).y - line_collider->GetLocation(0).y;
+	Location near_pos;
 
-	//LineColliderの始点とphereColliderの中心とのベクトルの計算
-	vector_x[1] = location.x - line_collider->GetLocation(0).x;
-	vector_y[1] = location.y - line_collider->GetLocation(0).y;
+	near_pos.x = unit_vector.x * distance_near_pos;
+	near_pos.y = unit_vector.y * distance_near_pos;
 
-	//LineColliderの終点とSphereColliderの中心とのベクトルの計算
-	vector_x[2] = location.x - line_collider->GetLocation(1).x;
-	vector_y[2] = location.y - line_collider->GetLocation(1).y;
+	float distance_sphere_near_pos;
 
-	//単位ベクトルの計算
-	unit_vector = sqrtf(powf(vector_x[0], 2) + powf(vector_y[0], 2));
+	distance_sphere_near_pos =
+		powf(powf(near_pos.x - vector2.x, 2.0) + powf(near_pos.y - vector2.y, 2.0), 0.5);
 
-	//最短距離の計算
-	shortest_distance = (vector_x[1] * (vector_x[0] / unit_vector)) - (vector_y[1] * (vector_y[0] / unit_vector));
-
-	if (fabsf(shortest_distance) <= radius)
+	if (distance_sphere_near_pos > GetRadius())
 	{
-		//内積の計算
-		for (int i = 0; i < 2; i++)
-		{
-			inner_product[i] = (vector_x[i + 1] * vector_x[0]) 
-				               - (vector_y[i + 1] * vector_y[0]);
-		}
-
-		//円の中心との距離の計算
-		for (int i = 0; i < 2; i++)
-		{
-			center_distance[i] = sqrt(pow(vector_x[i + 1], 2) + pow(vector_y[i + 1], 2));
-		}
-
-		if ((inner_product[0] * inner_product[1] <= 0.0f) || (center_distance[0] < radius) ||
-			(center_distance[1] < radius))
-		{
-			ret = true;
-		}
+		return false;
 	}
 
-	return ret;
+	bool is_start_acute =
+		CheckIsAcute(line_collider->GetLocation(LINE_END)
+		- line_collider->GetLocation(LINE_START), vector2);
+	bool is_end_acute
+		= CheckIsAcute(
+			line_collider->GetLocation(LINE_END)
+			- line_collider->GetLocation(LINE_START)
+			, GetLocation() - line_collider->GetLocation(LINE_END));
+
+	if (is_start_acute ^ is_end_acute)
+	{
+		is_hit = true;
+	}
+
+	float distance_tips_sphere
+		= MakeScalar(GetLocation() - line_collider->GetLocation(LINE_START));
+	if (distance_tips_sphere <= GetRadius())
+	{
+		is_hit = true;
+	}
+	distance_tips_sphere
+		= MakeScalar(GetLocation() - line_collider->GetLocation(LINE_END));
+	if (distance_tips_sphere <= GetRadius())
+	{
+		is_hit = true;
+	}
+
+	return is_hit;
 }

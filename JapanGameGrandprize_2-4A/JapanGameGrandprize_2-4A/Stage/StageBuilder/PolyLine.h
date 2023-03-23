@@ -11,7 +11,7 @@ class PolyLine
 private:
 
     vector<SphereCollider*>bend_points;   //Ü‚ê
-    vector<LineCollider_t*>lines;          //ü
+    vector<LineCollider*>lines;          //ü
 public:
 
     PolyLine(Location bend_points[], unsigned int size);
