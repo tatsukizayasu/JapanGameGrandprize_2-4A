@@ -35,7 +35,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Undead::Undead()
+Undead::Undead(Location spawn_location)
 {
 	/*初期化*/
 	can_delete = false;
@@ -59,12 +59,13 @@ Undead::Undead()
 	poison_time = 0;
 	poison_damage = 0;
 	paralysis_time = 0;
+	location = spawn_location;
 	/*当たり判定の設定*/
-	location.x = 3220.0f;
-	location.y = 970.0f;
 	area.width = 40;
 	area.height = 80;
 
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [SOIL_DROP];
 	drop_type_volume = SOIL_DROP;

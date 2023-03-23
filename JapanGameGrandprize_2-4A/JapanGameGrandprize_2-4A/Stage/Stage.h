@@ -12,14 +12,14 @@ class Player;
 
 class Stage_Element;
 
+struct ENEMY_LOCATION {
+	short id;
+	Location location;
+};
+
 class Stage
 {
-public:
-	struct ENEMY_LOCATION {
-		short id;
-		float x;
-		float y;
-	};
+
 
 private:
 

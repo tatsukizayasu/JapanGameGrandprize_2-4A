@@ -27,7 +27,7 @@ private:
 public:
 
     //コンストラクタ
-    Mage();
+    Mage(Location);
 
     //デストラクタ
     ~Mage();

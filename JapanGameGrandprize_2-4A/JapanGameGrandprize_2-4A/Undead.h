@@ -24,7 +24,7 @@ private:
 public:
 
     //コンストラクタ
-    Undead();
+    Undead(Location);
 
     //デストラクタ
     ~Undead();

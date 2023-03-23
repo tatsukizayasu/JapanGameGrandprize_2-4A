@@ -36,6 +36,9 @@ public:
     //更新
     AbstractScene* Update() override;
 
+    //エネミーの生成
+    void SpawnEnemy();
+
     //エネミーの更新処理
     void EnemyUpdate();
 

@@ -51,7 +51,7 @@ enum class STAGE_DIRECTION
 enum class ENEMY_KIND
 {
 	/*雑魚敵*/
-	SLIME = 0,	//スライム
+	SLIME = 200,	//スライム
 	UNDEAD,		//アンデット
 	HARPY,		//ハーピィ
 	MAGE,		//メイジ
@@ -59,7 +59,7 @@ enum class ENEMY_KIND
 	WYVERN,		//ワイバーン
 
 	/*ボス*/
-	KING_SLIME, //スライムキング
+	SLIME_BOSS, //スライムキング
 	TORRENT,	//トレント
 	GARGOYLE,	//ガーゴイル
 	DRAGON,		//ドラゴン
