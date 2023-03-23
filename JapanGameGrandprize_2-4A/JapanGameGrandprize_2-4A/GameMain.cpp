@@ -9,6 +9,7 @@
 #include "BULLET.h"
 #include "Mage.h"
 #include "Torrent.h"
+#include "EnemySlimeBoss.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -24,12 +25,16 @@ GameMain::GameMain()
 	stage = new Stage();
 	player = new Player(stage);
 	stage->SetPlayer(player);
-	enemy = new EnemyBase * [5];
-	enemy[0] = new EnemySlime();
-	enemy[1] = new Undead();
-	enemy[2] = new EnemyGhost();
-	enemy[3] = new Mage();
-	enemy[4] = new Harpy();
+	Location location;
+	location.x = 200;
+	location.y = 300;
+	/*enemy = new EnemyBase * [5];
+	enemy[0] = new EnemySlime(location);
+	enemy[1] = new Undead(location);
+	enemy[2] = new EnemyGhost(location);
+	enemy[3] = new Mage(location);
+	enemy[4] = new Harpy(location);*/
+	SpawnEnemy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
 	
@@ -64,7 +69,9 @@ GameMain::~GameMain()
 AbstractScene* GameMain::Update()
 {
 	pause->Update();
+	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
 	if (pause->IsPause() == TRUE) { return this; }
+	
 
 
 	camera_work->Update();
@@ -75,6 +82,58 @@ AbstractScene* GameMain::Update()
 	item_controller->Update(player);
 
 	return this;
+}
+
+//-----------------------------------
+//エネミーの生成
+//-----------------------------------
+void GameMain::SpawnEnemy()
+{
+	vector<ENEMY_LOCATION> spawn;
+	spawn = stage->GetEnemy_SpawnLocation();
+
+	int spawn_volume; //スポーン数
+	spawn_volume = spawn.size();
+	enemy = new EnemyBase * [spawn_volume];
+
+	for (int i = 0; i < spawn_volume;i++)
+	{
+		switch (static_cast<ENEMY_KIND>(spawn[i].id))
+		{
+		case ENEMY_KIND::SLIME: //スライムの生成
+			enemy[i] = new EnemySlime(spawn[i].location);
+			break;
+		case ENEMY_KIND::UNDEAD:	//アンデットの生成
+			enemy[i] = new Undead(spawn[i].location);
+			break;
+		case ENEMY_KIND::HARPY:		//ハーピーの生成
+			enemy[i] = new Harpy(spawn[i].location);
+			break;
+		case ENEMY_KIND::MAGE:		//メイジの生成
+			enemy[i] = new Mage(spawn[i].location);
+			break;
+		case ENEMY_KIND::GHOST:		//ゴーストの生成
+			enemy[i] = new EnemyGhost(spawn[i].location);
+			break;
+		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
+			break;
+		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
+			//enemy[count] = new EnemySlimeBoss();
+			break;
+		case ENEMY_KIND::TORRENT:	//トレントボスの生成
+			enemy[i] = new Torrent(spawn[i].location);
+			break;
+		case ENEMY_KIND::GARGOYLE:	//ガーゴイルボスの生成
+			break;
+		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
+			break;
+		case ENEMY_KIND::END_BOSS:	//ラスボスの生成
+			break;
+		case ENEMY_KIND::NONE:
+		default:
+			break;
+		}
+	}
 }
 
 //-----------------------------------

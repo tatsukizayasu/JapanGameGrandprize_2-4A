@@ -52,7 +52,7 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-Torrent::Torrent()
+Torrent::Torrent(Location spawn_location)
 {
 	left_move = true;
 	attack = false;
@@ -72,8 +72,10 @@ Torrent::Torrent()
 	/*当たり判定の設定*/
 	area.width = 160;
 	area.height = SCREEN_HEIGHT;
-	location.x = SCREEN_WIDTH - area.width / 2;
-	location.y = SCREEN_HEIGHT + SCREEN_HEIGHT / 2;
+	location = spawn_location;
+
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
 
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::SOIL;

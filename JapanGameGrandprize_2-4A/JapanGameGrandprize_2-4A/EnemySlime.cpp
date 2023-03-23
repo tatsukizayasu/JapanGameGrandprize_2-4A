@@ -22,21 +22,20 @@
 #define ROTATION_SPEED 15 //スライムが回転するスピード
 
 
-EnemySlime::EnemySlime()
+EnemySlime::EnemySlime(Location spawn_location)
 {
 	attack = false;
 	left_move = true;
 	kind = ENEMY_KIND::SLIME;
 
-	location.x = 3080.0;
-	location.y = 980.0f;
-
-	//location.x = 200.0;
-	//location.y = 700.0f;
+	location = spawn_location;
 
 	jump_distance = location;
 	area.height = 50;
 	area.width = 50;
+
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
 	wait_time = 0;
 	image_type = 0;
 	image_change_time = 0;

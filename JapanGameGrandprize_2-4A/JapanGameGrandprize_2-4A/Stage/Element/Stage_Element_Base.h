@@ -5,9 +5,28 @@
 #include <functional>
 #include <vector>
 #include <thread>
+#include <unordered_map>
 #include "../MapChip.h"
+#include <tuple>
 
 class Player;
+
+//struct RECT
+//{
+//	float x;
+//	float y;
+//	float width;
+//	float height;
+//};
+
+enum class HIT_DIRECTION
+{
+	NONE,
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
 
 
 class Stage_Element_Base : public MapChip
@@ -17,12 +36,20 @@ protected:
 	MapChip* mapchip;
 	short type;
 
-	//間隔時間の開始時間
+	//LoopImagesの開始時間
 	std::chrono::steady_clock::time_point start_time;
-	//ミリ秒単位の時間間隔
-	std::chrono::duration<long long, std::milli> elapsed;
+
+	//グラフィックハンドル用Vector
+	std::vector<int> images;
+	
 	//実行した回数
 	int count;
+
+	//各time値に対応する開始時刻を格納するマップ
+	std::unordered_map<float, std::chrono::steady_clock::time_point> start_time_map;
+
+	//各time値に対応するミリ秒単位の経過時間を格納するマップ
+	std::unordered_map<float, float> elapsed_time_map;
 
 	//描画している画像カウント
 	int current_image;
@@ -42,20 +69,52 @@ public:
 	////描画
 	//virtual void Draw() const {};
 
+	short GetType() const { return type; };
+
+	/// <summary>
+	/// アニメーション用ループタイマー
+	/// </summary>
+	/// <param name = "*images">画像列ポインタ</param>
+	/// <param name = "time">秒数</param>
+	/// <param name = "total_images">画像総数</param>
+	/// <param name = "std::function* callback">timeで指定した秒数毎に呼ぶ関数
+	/// <para>　　　　　　　　　呼び出したい関数がない場合はnullptr</para></param>
+	void LoopImages(int* images, float time, int total_images, std::function<void()>* callback);
+
 	/// <summary>
 	/// プレイヤーとブロックが当たっているかのGetter
 	/// </summary>
-	bool HitPlayer(Player* player) const;
+	/// <returns>false:当たっていない
+	/// <para>true:当たっている</para></returns>	
+	//bool HitPlayer(Player* player) const;
+
 
 	/// <summary>
-	/// アニメーションSetter
+	/// プレイヤーとブロックが当たっているか
+	/// <para>と当たっている方向のGetter</para>
 	/// </summary>
-	void StartAnimation(float time, std::function<void()>* callback);
+	/// <returns>tuple(bool型, HITDIRECTION構造体型)
+	// <para>false:当たっていない</para>
+	/// <para>true:当たっている</para>
+	/// <para>HITDIRECTION::NONE:当たっていない</para>
+	/// <para>HITDIRECTION::UP:上</para>
+	/// <para>HITDIRECTION::DOWN;下</para>
+	/// <para>HITDIRECTION::LEFT:左</para>
+	/// <para>HITDIRECTION::RIGHT:右</para></returns>	
+	std::tuple<bool, HIT_DIRECTION> HitPlayer(Player* player) const;
 
 	/// <summary>
-	/// アニメーションタイムGetter
+	/// ループタイマー		Setter
 	/// </summary>
-	float GetAnimationTime() { return elapsed.count() / 1000.0f; };
+	/// <param name = "time">秒数</param>
+	/// <param name = "std::function* callback">timeで指定した秒数毎に呼ぶ関数
+	/// <para>　　　　　　　　　呼び出したい関数がない場合はnullptr</para></param>
+	void LoopTimer(float time, std::function<void()>* callback);
 
-	void LoopImages(int *images, float time, int total_images, std::function<void()>* callback);
+	/// <summary>
+	/// ルームタイマー	の経過時間	Getter
+	/// </summary>
+	/// <param name = "time">取得したいタイマーの秒数</param>
+	/// <returns>経過時間</returns>	
+	float GetElapsedTime(float time) const;
 };
