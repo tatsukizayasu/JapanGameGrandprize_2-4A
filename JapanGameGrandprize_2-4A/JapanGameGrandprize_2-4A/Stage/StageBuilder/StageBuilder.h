@@ -55,9 +55,7 @@ private:
 
 	//todo:テスト 後々vector配列にして運用する
 	class PolyLine* line;
-	LineCollider* line_collider;
-	LineCollider* mouse_line;
-	MapChip* mouse_box;
+	class PolyLine* line_copy;
 
 public:
 	//コンストラクタ
@@ -100,6 +98,10 @@ public:
 	void DrawSphere()const;
 	//保留中のラインの描画
 	void DrawLine(Location start, Location end)const;
+	//マウス入力によるオブジェクトの移動
+	void MovementByMouse();
+	//キーボード入力によるオブジェクトの移動
+	void MovementByKey();
 
 	//マップチップを作成する
 	void MakeMapChip(); //クリックしたとき用

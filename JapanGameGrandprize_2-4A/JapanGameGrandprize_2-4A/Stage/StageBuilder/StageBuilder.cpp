@@ -25,7 +25,8 @@ StageBuilder::StageBuilder()
 		throw "Images/Stage/map_chips_.png";
 	}
 
-	mode = BRUSH_MODE;
+	//TODO: BRUSH_MODEに戻す
+	mode = MODULATION_MODE;
 
 	for (int i = 1; i < ARROW_NUM; i++)
 	{
@@ -35,8 +36,8 @@ StageBuilder::StageBuilder()
 	current_brush = MAP_CHIP;
 
 #ifdef _DEV
-	line_collider = new LineCollider({ 500,600 }, { 300,300 });
-	mouse_line = new LineCollider({ 300,300 }, { 500,500 });
+
+	line_copy = new PolyLine();
 
 	Location points[3] =
 	{
@@ -47,8 +48,7 @@ StageBuilder::StageBuilder()
 	line = new PolyLine(points,3);
 	
 
-	mouse_box = new MapChip(&block_images[1],
-		{ 0,0 }, { MAP_CHIP_SIZE,MAP_CHIP_SIZE });
+
 #endif // _DEV
 }
 
@@ -72,10 +72,6 @@ StageBuilder::~StageBuilder()
 	pending_sphere.clear();
 
 	delete line;
-
-	delete line_collider;
-	delete mouse_line;
-	delete mouse_box;
 }
 
 //------------------------------------
@@ -97,11 +93,11 @@ void StageBuilder::Update()
 	case MENU_MODE:
 		UpdateMenu();
 		break;
-	
+
 	case BRUSH_MODE:
 		UpdateBrush();
 		break;
-	
+
 	case MODULATION_MODE:
 		UpdateModulation();
 		break;
@@ -110,7 +106,7 @@ void StageBuilder::Update()
 		Directory::Open("\\Stage\\StageBuilder\\dat");
 		UpdateSave();
 		break;
-		
+
 	case LOAD_MODE:
 		Directory::Open("\\Stage\\StageBuilder\\dat");
 		UpdateLoad();
@@ -119,34 +115,9 @@ void StageBuilder::Update()
 
 #ifdef _DEV
 
-	if (line != nullptr)
-	{
-		vector<SphereCollider*> points = line->GetPoint();
-		for (int i = 0; i < points.size(); i++)
-		{
-			if (KeyManager::OnMouseClicked(MOUSE_INPUT_RIGHT))
-			{
-				if (mouse->HitSphere(points[i]))
-				{
-					select_collider = points[i];
-				}
-			}
-
-			if (KeyManager::OnMouseReleased(MOUSE_INPUT_RIGHT))
-			{
-				select_collider = nullptr;
-			}
-
-		}
-	}
-
-	if (select_collider != nullptr)
-	{
-		float set_x = (int)(mouse->GetLocation().x) / 10 * 10;
-		float set_y = (int)(mouse->GetLocation().y) / 10 * 10;
-		select_collider->SetLocation({ set_x,set_y });
-		line->Update();
 	
+
+
 #endif // _DEV
 }
 
@@ -300,6 +271,35 @@ void StageBuilder::UpdateModulation()
 				break;
 			}
 		}
+	}
+
+	if (line != nullptr)
+	{
+		vector<SphereCollider*> points = line->GetPoint();
+
+		if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+		{
+			for (int i = 0; i < points.size(); i++)
+			{
+				if (mouse->HitSphere(points[i]))
+				{
+					select_collider = points[i];
+					break;
+				}
+				else
+				{
+					select_collider = nullptr;
+				}
+			}
+		}
+	}
+
+
+	if (select_collider != nullptr)
+	{
+		MovementByMouse();
+		MovementByKey();
+		line->Update();
 	}
 }
 
@@ -552,6 +552,27 @@ void StageBuilder::DrawLine(Location start, Location end)const
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	DrawLineAA(start.x, start.y, end.x, end.y, 0xE9FF00, 3);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+//---------------------------------------------
+// マウス入力によるオブジェクトの移動
+//---------------------------------------------
+void StageBuilder::MovementByMouse()
+{
+	if (KeyManager::OnMousePressed(MOUSE_INPUT_LEFT))
+	{
+		float set_x = (int)(mouse->GetLocation().x) / 10 * 10;
+		float set_y = (int)(mouse->GetLocation().y) / 10 * 10;
+		select_collider->SetLocation({ set_x,set_y });
+	}
+}
+
+//---------------------------------------------
+// キーボード入力によるオブジェクトの移動
+//---------------------------------------------
+void StageBuilder::MovementByKey()
+{
+	select_collider->MoveLocation();
 }
 
 //------------------------------------

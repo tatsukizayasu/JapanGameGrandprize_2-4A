@@ -56,14 +56,6 @@ void LineCollider::Draw()const
 		GetLocation(LINE_END).y - CameraWork::GetCamera().y,
 		0xE9FF00, 3);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-
-	DrawBoxAA(GetMin().x - CameraWork::GetCamera().x
-		, GetMin().y - CameraWork::GetCamera().y
-		, GetMax().x - CameraWork::GetCamera().x
-		, GetMax().y - CameraWork::GetCamera().y
-		, 0x000000, FALSE);
-
 }
 
 //-----------------------------------

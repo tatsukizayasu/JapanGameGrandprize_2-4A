@@ -13,7 +13,7 @@ private:
     vector<SphereCollider*>bend_points;   //Ü‚ê
     vector<LineCollider*>lines;          //ü
 public:
-
+    PolyLine();
     PolyLine(Location bend_points[], unsigned int size);
     PolyLine(const vector<SphereCollider*>spheres);
     ~PolyLine();
