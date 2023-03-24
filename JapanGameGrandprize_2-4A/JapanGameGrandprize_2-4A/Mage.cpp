@@ -20,6 +20,9 @@
 #define MAGE_TELEPORT_AREA 600
 #define MAGE_TELEPORT_RATE 160
 
+//麻痺状態の処理
+#define MAGE_PARALYSIS_RATE 1.5f
+
 //攻撃間隔
 #define MAGE_ATTACK_INTERVAL 240
 
@@ -36,6 +39,7 @@ Mage::Mage(Location spawn_location)
 	shot_rate = 0;
 	shot_count = 0;
 	teleport_count = 0;
+	teleport_rate = 0;
 	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
@@ -196,6 +200,14 @@ void Mage::Idol()
 	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
+		if (paralysis)
+		{
+			teleport_rate = MAGE_TELEPORT_RATE * MAGE_PARALYSIS_RATE;
+		}
+		else
+		{
+			teleport_rate = MAGE_TELEPORT_RATE;
+		}
 	}
 }
 
@@ -207,9 +219,9 @@ void Mage::Move(const Location player_location)
 	teleport_count++;
 	attack_interval--;
 
-	if (teleport_count % MAGE_TELEPORT_RATE  == 0) //テレポートする
+	if (teleport_count % teleport_rate == 0) //テレポートする
 	{
-		can_teleport =true;
+		can_teleport = true;
 	}
 
 	if (attack_interval < 0) //攻撃に移行
@@ -279,8 +291,18 @@ void  Mage::Attack(Location player_location)
 	{
 		state = ENEMY_STATE::MOVE;
 		shot_count = 0;
-		attack_interval = MAGE_ATTACK_INTERVAL;
 		teleport_count = 0;
+
+		if (paralysis)
+		{
+			teleport_rate = MAGE_TELEPORT_RATE * MAGE_PARALYSIS_RATE;
+			attack_interval = MAGE_ATTACK_INTERVAL * MAGE_PARALYSIS_RATE;
+		}
+		else
+		{
+			teleport_rate = MAGE_TELEPORT_RATE;
+			attack_interval = MAGE_ATTACK_INTERVAL;
+		}
 	}
 }
 
@@ -335,11 +357,19 @@ void Mage::HitBullet(const BulletBase* bullet)
 		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
 		break;
 	case ATTRIBUTE::POISON:
-		poison_damage = bullet->GetDamage();
-		poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
+		if (!poison)
+		{
+			poison = true;
+			poison_damage = bullet->GetDamage();
+			poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
+		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		if (!paralysis)
+		{
+			paralysis = true;
+			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		}
 		break;
 	case ATTRIBUTE::HEAL:
 		break;

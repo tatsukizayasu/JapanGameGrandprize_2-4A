@@ -40,6 +40,9 @@ private:
 	//マップ配列データ
 	std::vector<std::vector<int>> map_data;
 
+	//MapChipオブジェクト
+	std::vector<MapChip*> mapchip;
+
 
 	//エネミースポーン地点Location構造体
 	std::vector<ENEMY_LOCATION> enemy_init_location;
@@ -55,8 +58,7 @@ private:
 
 protected:
 
-	//MapChipオブジェクト
-	std::vector<MapChip*> mapchip;
+
 public:
 
 	/// <summary>

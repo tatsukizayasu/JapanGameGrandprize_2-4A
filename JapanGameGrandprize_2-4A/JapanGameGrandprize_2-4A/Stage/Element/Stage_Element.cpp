@@ -10,11 +10,18 @@ Stage_Element::Stage_Element()
 
 Stage_Element::~Stage_Element()
 {
+
+	// 読み込んだ全Elementの画像を解放
 	for (const auto& entry : image_cache) {
 		for (auto& value : entry.second) {
 			DeleteGraph(value);
 		}
 	}
+
+	// element Vectorを解放
+	// 各インスタンスは自動的に解放される。
+	element.clear();
+	element.shrink_to_fit();
 }
 
 void Stage_Element::AddElement(short type, Location location, Area area)

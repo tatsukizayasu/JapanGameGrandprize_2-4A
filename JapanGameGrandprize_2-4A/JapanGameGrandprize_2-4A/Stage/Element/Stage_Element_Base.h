@@ -64,7 +64,7 @@ public:
 	//コンストラクタ
 	//Stage_Element(const int* p_image, Location location, Area area);
 	//デストラクタ
-	~Stage_Element_Base();
+	virtual ~Stage_Element_Base();
 	virtual void Update(Player* player) {};
 	////描画
 	//virtual void Draw() const {};
@@ -79,7 +79,7 @@ public:
 	/// <param name = "total_images">画像総数</param>
 	/// <param name = "std::function* callback">timeで指定した秒数毎に呼ぶ関数
 	/// <para>　　　　　　　　　呼び出したい関数がない場合はnullptr</para></param>
-	void LoopImages(int* images, float time, int total_images, std::function<void()>* callback);
+	void LoopImages(std::vector<int>& images, float time, int total_images, std::function<void()>* callback);
 
 	/// <summary>
 	/// プレイヤーとブロックが当たっているかのGetter

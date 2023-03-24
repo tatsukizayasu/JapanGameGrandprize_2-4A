@@ -19,6 +19,7 @@ private:
 
 	int image_type;
 	int image_change_time;
+	int image_addition;
 	int slime_angle;
 	int wait_time;
 

@@ -124,20 +124,41 @@ Stage::Stage()
 //-----------------------------------
 Stage::~Stage()
 {
-	//マップチップの描画情報オブジェクトを削除
-	for (int i = 0; i < mapchip.size(); i++)
-	{
-		delete mapchip.at(i);
-	}
+	
 
-	mapchip.clear();
-	mapchip.shrink_to_fit();
-
-	//マップチップ画像を削除
-	for (int i = 0; i < 100; i++)
+	// マップチップ画像を削除
+	for (int i = 0; i < 50; i++)
 	{
 		DeleteGraph(block_images[i]);
 	}
+
+	//vectorの解放
+
+
+	// map_data内の各vectorを解放
+	for (auto& inner_vec : map_data) {
+		inner_vec.clear();
+		inner_vec.shrink_to_fit();
+	}
+
+	// map_data自体を解放
+	map_data.clear();
+	map_data.shrink_to_fit();
+
+
+	// MapChipオブジェクトを解放
+	for (MapChip* chip : mapchip) {
+		delete chip;
+	}
+
+	// mapchip自体を解放
+	mapchip.clear();
+	mapchip.shrink_to_fit();
+
+	enemy_init_location.clear();
+	enemy_init_location.shrink_to_fit();
+
+
 
 #ifdef _STAGE_BUILDER
 	delete stage_builder;
@@ -228,7 +249,7 @@ void Stage::Draw()
 
 		m->Draw();
 
-}
+	}
 
 
 #ifdef _STAGE_BUILDER

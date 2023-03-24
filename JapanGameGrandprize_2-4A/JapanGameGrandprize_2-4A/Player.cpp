@@ -342,7 +342,7 @@ void Player::Update()
 	if (damage_flg == true)
 	{
 		damage_count++;
-		if (damage_count < damage)
+		if (damage_count <= damage)
 		{
 			if (hp > 0)
 			{
@@ -815,14 +815,13 @@ void Player::SortBullet(int delete_bullet)
 {
 	for (int i = delete_bullet + 1; i < BULLET_MAX; i++)
 	{
-		if (bullet[i - 1] == nullptr)
+		if ((bullet[i] == nullptr))
 		{
-			bullet[i - 1] = bullet[i];
-			bullet[i] = nullptr;
+			break;
 		}
-		if (bullet[i] == nullptr)
-		{
-		}
+
+		bullet[i - 1] = bullet[i];
+		bullet[i] = nullptr;
 	}
 	bullet_count--;
 }
