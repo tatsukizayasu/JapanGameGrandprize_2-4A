@@ -206,6 +206,11 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 				{
 					speed = SLIME_SPEED;
 				}
+
+				if (paralysis)
+				{
+					speed *= PARALYSIS_SPEED;
+				}
 			}
 		}
 
@@ -235,6 +240,10 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			{
 				speed = SLIME_SPEED;
 			}
+			if (paralysis)
+			{
+				speed *= PARALYSIS_SPEED;
+			}
 		}
 		break;
 
@@ -247,7 +256,7 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 	}
 
 	
-
+	Paralysis();
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -280,6 +289,10 @@ void EnemySlime::Idol()
 		else
 		{
 			speed = SLIME_SPEED;
+		}
+		if (paralysis)
+		{
+			speed *= PARALYSIS_SPEED;
 		}
 	}
 }
@@ -417,11 +430,16 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
 		break;
 	case ATTRIBUTE::POISON:
-		//poison_damage = bullet->GetDamage();
-		//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		poison_damage = bullet->GetDamage() * 0;
+		poison_time = bullet->GetDebuffTime() * 0;
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		paralysis_time = bullet->GetDebuffTime() * 0;
+		if (!paralysis)
+		{
+			paralysis = true;
+			paralysis_time = bullet->GetDebuffTime();
+			speed *= PARALYSIS_SPEED;
+		}
 		break;
 	case ATTRIBUTE::HEAL:
 		break;

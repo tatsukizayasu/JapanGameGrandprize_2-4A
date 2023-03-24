@@ -10,6 +10,8 @@ EnemyBase::EnemyBase()
 {
 	can_delete = false;
 	left_move = true;
+	poison = false;
+	paralysis = false;
 	hp = 0;
 	speed = 0;
 	paralysis_time = 0;
@@ -190,12 +192,19 @@ STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 //-----------------------------------
 void EnemyBase::Poison()
 {
-	if (0 < poison_time)
+	if (poison)
 	{
 		poison_time--;
-		if (poison_time % POISON_DAMAGE_FLAME == 0)
+		if (0 < poison_time)
 		{
-			hp -= poison_damage;
+			if (poison_time % POISON_DAMAGE_FLAME == 0)
+			{
+				hp -= poison_damage;
+			}
+		}
+		else
+		{
+			poison = false;
 		}
 	}
 }
@@ -205,10 +214,13 @@ void EnemyBase::Poison()
 //-----------------------------------
 void EnemyBase::Paralysis()
 {
-	if (0 < paralysis_time)
+	if (paralysis)
 	{
 		paralysis_time--;
-		speed *= 0.7;
+		if (paralysis_time < 0)
+		{
+			paralysis = false;
+		}
 	}
 }
 
