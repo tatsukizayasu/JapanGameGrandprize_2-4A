@@ -8,32 +8,17 @@ Element_DamageWall::Element_DamageWall(short type, std::vector<std::shared_ptr<S
 	this->type = type;
 	
 	this->images = images;
-
-	anim_count = 0;
 }
 
 Element_DamageWall::~Element_DamageWall()
 {
-	for (int i = 0; i < 9; i++) {
-		if (anim_images[i] != -1) {
-			DeleteGraph(anim_images[i]);
-			//解放した事を示す為、-1を代入
-			anim_images[i] = -1;
-		}
-	}
+
 }
 
 void Element_DamageWall::Update(Player* player)
 {
 	//アニメーション更新
-	std::function<void()> f = [&]() {
-		if (anim_count < 8) { anim_count++; }
-		else { anim_count = 0; }
-		image = images.at(anim_count);
-	};
-
-	LoopTimer(0.1, &f);
-	//LoopImages(anim_images, 0.1, 9, nullptr);
+	LoopImages(images, 0.1, 9, nullptr);
 
 
 	
