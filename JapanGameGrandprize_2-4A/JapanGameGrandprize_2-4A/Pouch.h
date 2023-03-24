@@ -69,4 +69,10 @@ public:
 	bool ComparisonElement(ChemicalFormulaParameter) const;
 	void SetOnBool(bool);
 	void ReduceAmmo(ATTRIBUTE);
+	void ConsumptionMaterial();
+	void DeleteExplosion();
+	void DeletePoison();
+	void DeleteMelt();
+	void DeleteHeal();
+	void DeletePararysis();
 };
