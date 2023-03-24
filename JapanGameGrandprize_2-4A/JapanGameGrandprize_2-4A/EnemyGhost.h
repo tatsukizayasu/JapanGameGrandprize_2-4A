@@ -27,6 +27,9 @@ private:
 	int standby_attack; //次の攻撃待機時間
 	int standby_time; //硬直時間
 	int ghost_image; //ゴーストの画像。
+	int physical_time; //物理攻撃時間
+	int magic_num; //魔法攻撃した数
+	int magic_time; //魔法攻撃時間
 	float speed; //ゴーストの移動速度
 	bool magic_attack; //魔法攻撃
 	bool attack; //攻撃が当たったか

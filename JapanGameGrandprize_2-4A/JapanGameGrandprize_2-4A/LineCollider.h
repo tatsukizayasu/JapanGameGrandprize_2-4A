@@ -12,25 +12,27 @@
 class LineCollider_t :public ColliderBase
 {
 private:
-
-	Location GetMiddlePoint(Location point1, Location point2)const
+	//中点を返す
+	Location GetMiddlePoint()const
 	{
 		Location middle_point;
-		middle_point.x = (point1.x + point2.x) / 2;
-		middle_point.y = (point1.y + point2.y) / 2;
+		middle_point.x = (vector[LINE_START].x + vector[LINE_END].x) / 2;
+		middle_point.y = (vector[LINE_START].y + vector[LINE_END].y) / 2;
 
 		return middle_point;
 	}
 
+	//座標を中心座標からのベクターに相対化する
 	void Relativize()
 	{
-		vector[0].x = vector[0].x - location.x;
-		vector[0].y = vector[0].y - location.y;
+		vector[LINE_START].x = vector[LINE_START].x - location.x;
+		vector[LINE_START].y = vector[LINE_START].y - location.y;
 
-		vector[1].x = vector[1].x - location.x;
-		vector[1].y = vector[1].y - location.y;
+		vector[LINE_END].x = vector[LINE_END].x - location.x;
+		vector[LINE_END].y = vector[LINE_END].y - location.y;
 	}
 
+	//線分の端の絶対座標を返す
 	Location MakeTip(int index)const
 	{
 		//線分の端の絶対座標を計算する
@@ -40,6 +42,106 @@ private:
 
 		return tip;
 	}
+
+	//線分を対角線とした矩形の左上の座標を返す
+	Location GetMin()const
+	{
+		Location vector_min = {};
+		float x;
+		float y;
+
+		if (GetLocation(LINE_START).x < GetLocation(LINE_END).x)
+		{
+			x = GetLocation(LINE_START).x;
+		}
+		else
+		{
+			x = GetLocation(LINE_END).x;
+		}
+
+		if (GetLocation(LINE_START).y < GetLocation(LINE_END).y)
+		{
+			y = GetLocation(LINE_START).y;
+		}
+		else
+		{
+			y = GetLocation(LINE_END).y;
+		}
+
+		vector_min = { x,y };
+
+		return vector_min;
+	}
+
+	//線分を対角線とした矩形の右下の座標を返す
+	Location GetMax()const
+	{
+		Location vector_max{};
+		float x;
+		float y;
+
+		if (GetLocation(LINE_START).x > GetLocation(LINE_END).x)
+		{
+			x = GetLocation(LINE_START).x;
+		}
+		else
+		{
+			x = GetLocation(LINE_END).x;
+		}
+
+		if (GetLocation(LINE_START).y > GetLocation(LINE_END).y)
+		{
+			y = GetLocation(LINE_START).y;
+		}
+		else
+		{
+			y = GetLocation(LINE_END).y;
+		}
+
+		vector_max = { x,y };
+
+		return vector_max;
+	}
+
+	//2つのベクトルのなす角が鋭角かどうかを求める
+	bool CheckIsAcute(Location vector1, Location vector2)const
+	{
+		bool is_acute = false;
+
+		float vec_a = powf(powf(vector1.x, 2.0) + powf(vector1.y, 2.0), 0.5);
+		float vec_b = powf(powf(vector2.x, 2.0) + powf(vector2.y, 2.0), 0.5);
+
+		float inner_product = vector1.x * vector2.x + vector1.y * vector2.y;
+
+		if (inner_product >= 0)
+		{
+			is_acute = true;
+		}
+
+		return is_acute;
+	}
+
+	//受け取ったベクターのスカラを返す
+	float MakeScalar(Location vector)const
+	{
+		float scalar;
+
+		scalar = powf((vector.x * vector.x) + (vector.y * vector.y), 0.5);
+
+		return scalar;
+	}
+
+	//引数１から引数２に対する外積を返す
+	float MakeCrossProduct(Location vector1, Location vector2)const
+	{
+		float cross_product;
+
+		cross_product = (vector1.x * vector2.y) - (vector1.y * vector2.x);
+
+		return cross_product;
+	}
+
+
 public:
 	LineCollider_t();
 	LineCollider_t(Location point1, Location point2);
@@ -47,6 +149,9 @@ public:
 
 	//描画
 	virtual void Draw()const;
+
+	//点との当たり判定
+	bool HitDot(Location point)const;
 
 	//SphereColliderとの当たり判定
 	bool HitSphere(const class SphereCollider* sphere_collider)const override;
@@ -62,6 +167,7 @@ public:
 
 	//始点、終点座標の設定
 	void SetLocation(Location location, int i);
+
 protected:
 
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)

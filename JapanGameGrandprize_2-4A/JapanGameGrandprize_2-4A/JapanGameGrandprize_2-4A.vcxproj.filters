@@ -153,6 +153,12 @@
     <ClCompile Include="Stage\Element\Element_Conveyor_Belt.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
+    <ClCompile Include="HarpyBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_Barricade.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -315,6 +321,10 @@
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Element\Element_Trap.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="HarpyBullet.h" />
+    <ClInclude Include="Stage\Element\Element_Barricade.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
   </ItemGroup>

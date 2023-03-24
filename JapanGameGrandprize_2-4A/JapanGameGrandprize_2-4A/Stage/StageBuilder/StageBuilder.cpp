@@ -20,7 +20,7 @@ StageBuilder::StageBuilder()
 	menu_cursor = 0;	
 	arrow[0] = '>';
 
-	if (LoadDivGraph("Images/Stage/map_chips.png", 110, 10, 11, 40, 40, block_images) == -1)
+	if (LoadDivGraph("Images/Stage/map_chips.png", 50, 10, 5, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
 	{
 		throw "Images/Stage/map_chips_.png";
 	}
@@ -35,6 +35,9 @@ StageBuilder::StageBuilder()
 	current_brush = MAP_CHIP;
 
 #ifdef _DEV
+	line_collider = new LineCollider_t({ 500,600 }, { 300,300 });
+	mouse_line = new LineCollider_t({ 300,300 }, { 500,500 });
+
 	Location points[3] =
 	{
 		{200,200},
@@ -43,6 +46,7 @@ StageBuilder::StageBuilder()
 	};
 	line = new PolyLine(points,3);
 	
+
 #endif // _DEV
 }
 
@@ -66,6 +70,9 @@ StageBuilder::~StageBuilder()
 	pending_sphere.clear();
 
 	delete line;
+
+	delete line_collider;
+	delete mouse_line;
 }
 
 //------------------------------------
@@ -76,7 +83,11 @@ void StageBuilder::Update()
 	KeyManager::Update(); //StageBuilder上でしか使わないため、ソースコードの散らばりを避けています。
 	UpdateMouse();
 
-	if (KeyManager::OnKeyClicked(KEY_INPUT_ESCAPE))mode = MENU_MODE;
+	if (KeyManager::OnKeyClicked(KEY_INPUT_ESCAPE))
+	{
+		mode = MENU_MODE;
+		Trash();
+	}
 
 	switch (mode)
 	{
@@ -134,6 +145,8 @@ void StageBuilder::Update()
 		line->Update();
 	}
 
+	mouse_line->ColliderBase::SetLocation(mouse->GetLocation());
+
 #endif // _DEV
 }
 
@@ -168,7 +181,7 @@ void StageBuilder::Draw()const
 
 	if (line != nullptr)
 	{
-		line->Draw();
+		//line->Draw();
 	}
 
 	if (2 <= pending_sphere.size())
@@ -186,6 +199,15 @@ void StageBuilder::Draw()const
 	DrawWhichMode();
 
 	DrawMouse();
+
+	mouse_line->Draw();
+
+	line_collider->Draw();
+	if (line_collider->HitLine(mouse_line))
+	{
+		DrawString(600, 300, "hit", 0);
+	}
+	mouse->Draw();
 }
 
 //--------------------------------------
@@ -193,19 +215,31 @@ void StageBuilder::Draw()const
 //--------------------------------------
 void StageBuilder::DrawWhichMode()const
 {
-	if (mode == BRUSH_MODE)
+	switch (mode)
 	{
-		DrawClassName();
-	}
 
-	if (mode == MENU_MODE)
-	{
+	case MENU_MODE:
 		DrawMenu();
-	}
-
-	if (mode == SAVE_MODE || mode == LOAD_MODE)
-	{
+		break;
+	
+	case BRUSH_MODE:
+		DrawClassName();
+		break;
+	
+	case MODULATION_MODE:
+		if (select_collider != nullptr)
+		{
+			DrawCircleAA(
+				select_collider->GetLocation().x - CameraWork::GetCamera().x,
+				select_collider->GetLocation().y - CameraWork::GetCamera().y,
+				6, 20, 0xFFFF22, TRUE);
+		}
+		break;
+	
+	case SAVE_MODE:
+	case LOAD_MODE:
 		DrawFileInfo();
+		break;
 	}
 }
 
@@ -536,7 +570,7 @@ void StageBuilder::MakeMapChip()
 		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
 	float pos_y = (int)(mouse->GetLocation().y
 		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
-	map_chips.push_back(new MapChip(&block_images[0],
+	map_chips.push_back(new MapChip(&block_images[1],
 		{ pos_x + MAP_CHIP_SIZE / 2,pos_y + MAP_CHIP_SIZE / 2 },
 		{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
@@ -546,7 +580,7 @@ void StageBuilder::MakeMapChip()
 //------------------------------------
 void StageBuilder::MakeMapChip(float x, float y, float width, float height)
 {
-	map_chips.push_back(new MapChip(&block_images[0],
+	map_chips.push_back(new MapChip(&block_images[1],
 		{ x ,y },{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
 

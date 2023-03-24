@@ -52,6 +52,7 @@ public:
 	void ParalysisTabDraw() const;
 	void HealTabDraw() const;
 	void SetElement(ElementItem*,int i);
+	void SetElementConstruct(int i);
 
 	void InitChemicalParameter();
 

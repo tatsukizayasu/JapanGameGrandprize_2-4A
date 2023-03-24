@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
 #include"BoxCollider.h"
+#include"HarpyBullet.h"
 
 enum class HARPY_STATE
 {
@@ -23,7 +24,15 @@ private:
 
 	int standby_attack; //次の攻撃待機時間
 	int standby_time; //硬直時間
-	int harpy_image; //ハーピィの画像。
+	int magic_num; //魔法攻撃した数
+	int harpy_image; //ハーピィの画像
+	int magic_time; //魔法攻撃の間隔。標
+	float vector; //ベクトル
+	int physical_time; //物理攻撃時間
+	float range; //プレイヤーとの距離	
+	float range_y; //プレイヤーとの距離Y座
+	float travel; //X座標に動く量
+	float travel_y; //ｙ座標に動く量
 	bool magic_attack; //魔法攻撃
 	bool attack; //攻撃が当たったか
 	bool physical_attack; //物理攻撃に入る（true)なら
@@ -50,6 +59,9 @@ public:
 
 	//移動
 	void Move(const Location player_location) override;
+
+	//接近攻撃（物理攻撃）時の動き
+	void PhysicalMove(const Location player_location);
 
 	//落下
 	void Fall() override;
