@@ -49,6 +49,7 @@ GameMain::GameMain()
 //-----------------------------------
 GameMain::~GameMain()
 {
+	delete camera_work;
 	delete pause;
 	delete player;
 	delete stage;
@@ -58,7 +59,7 @@ GameMain::~GameMain()
 		delete enemy[i];
 	}
 	delete[] enemy;
-	delete camera_work;
+	
 	delete item_controller;
 	delete bullet_manager;
 }
