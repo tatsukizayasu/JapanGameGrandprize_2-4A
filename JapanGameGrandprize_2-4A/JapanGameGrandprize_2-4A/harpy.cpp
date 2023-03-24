@@ -68,7 +68,7 @@ Harpy::Harpy(Location spawn_location)
 	physical_attack = false;
 	magic_attack = false;
 	inversion = false;
-	kind = ENEMY_KIND::GHOST;
+	kind = ENEMY_KIND::HARPY;
 
 	//harpy_image = LoadGraph("Images/Enemy/???????.png"); //画像読込み
 	harpy_image = 0; //画像をもらい次第上記の処理に変更
@@ -148,7 +148,8 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		Area chip_area = hit_stage.chip->GetArea();
 		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
 		{
-			//speed = SPEED; //速度を落とすかもしくは、反転させる処理を作成
+			//速度を落とすかもしくは、反転させる処理を作成
+			location = old_location;
 			/*if (left_move ==true)
 			{
 				left_move = false;

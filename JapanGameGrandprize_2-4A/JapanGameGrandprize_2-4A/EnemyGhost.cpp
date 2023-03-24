@@ -4,7 +4,7 @@
 #include "BulletManager.h"
 
 //ゴーストの画像サイズ
-#define GHOST_SIZE_X 40
+#define GHOST_SIZE_X 75
 #define GHOST_SIZE_Y 80
 
 //プレイヤー発見距離
@@ -47,11 +47,14 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	left_move = true;
 	attack = false;
 
+	animation = 0;
+	animation_time = 0;
 	magic_time = 1;
 	magic_num = 0;
 	physical_time = 0;
 	hp = 10;
 	location = spawn_location;
+	location.y = 120; //テスト
 	standby_attack = 0;
 	speed = 1.5;
 	area.width = GHOST_SIZE_X;
@@ -65,8 +68,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	magic_attack = false;
 	kind = ENEMY_KIND::GHOST;
 
-	ghost_image = LoadGraph("Images/Enemy/Ghostimage.png"); //画像読込み
-
+	LoadDivGraph("Images/Enemy/ghostimages2.png", 5, 5, 1, 75, 80, ghost_image);
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
 	drop_type_volume = WIND_DROP;
@@ -111,6 +113,16 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
+	if (animation_time++%5==0)
+	{
+		animation++;
+	}
+
+	if (animation > 4)
+	{
+		animation = 0;
+	}
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -145,11 +157,7 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		Area chip_area = hit_stage.chip->GetArea();
 		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
 		{
-			speed = 0.1;
-		}
-		else
-		{
-			speed = 1.5;
+			location = old_location;
 		}
 	}
 
@@ -270,7 +278,7 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
+	DrawRotaGraphF(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image[animation], TRUE);
 }
 
 //-----------------------------------
@@ -320,27 +328,27 @@ void EnemyGhost::GhostMove(const Location player_location)
 		physical_attack = false;
 	}
 
-	//攻撃範囲内にいる場合
-	if ((range <= GHOST_ATTACK_RANGE) && (!physical_attack))
-	{
-		state = ENEMY_STATE::ATTACK;
-		attack_state = GHOST_ATTACK::PHYSICAL_ATTACK;
-		standby_time = GHOST_PHYSICAL_STANDBY;
-		physical_attack = true;
-	}
-	else if ((range <= GHOST_ATTACK_MAGIC) && (!magic_attack))
-	{
-		state = ENEMY_STATE::ATTACK;
-		attack_state = GHOST_ATTACK::MAGIC_ATTACK;
-		standby_time = GHOST_MAGIC_STANDBY;
-		magic_attack = true;
-		if (magic_time++ % 3 == 0)
-		{
-			//弾の生成
-			BulletManager::GetInstance()->CreateEnemyBullet
-			(new GhostBullet(location, player_location));
-		}
-	}
+	////攻撃範囲内にいる場合
+	//if ((range <= GHOST_ATTACK_RANGE) && (!physical_attack))
+	//{
+	//	state = ENEMY_STATE::ATTACK;
+	//	attack_state = GHOST_ATTACK::PHYSICAL_ATTACK;
+	//	standby_time = GHOST_PHYSICAL_STANDBY;
+	//	physical_attack = true;
+	//}
+	//else if ((range <= GHOST_ATTACK_MAGIC) && (!magic_attack))
+	//{
+	//	state = ENEMY_STATE::ATTACK;
+	//	attack_state = GHOST_ATTACK::MAGIC_ATTACK;
+	//	standby_time = GHOST_MAGIC_STANDBY;
+	//	magic_attack = true;
+	//	if (magic_time++ % 3 == 0)
+	//	{
+	//		//弾の生成
+	//		BulletManager::GetInstance()->CreateEnemyBullet
+	//		(new GhostBullet(location, player_location));
+	//	}
+	//}
 }
 
 //-----------------------------------
