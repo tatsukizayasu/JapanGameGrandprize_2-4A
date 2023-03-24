@@ -39,6 +39,7 @@ EnemySlime::EnemySlime(Location spawn_location)
 	wait_time = 0;
 	image_type = 0;
 	image_change_time = 0;
+	image_addition = 1;
 	hp = 15;
 	speed = SLIME_SPEED;
 
@@ -322,8 +323,9 @@ void EnemySlime::Move(const Location player_location)
 	{
 		if (++image_change_time > 2)
 		{
-			if (image_type < 6)image_type++;
-			else image_type = 0;
+			image_type += image_addition;
+			if (image_type == 6)image_addition = -1;
+			else if(image_type == 0) image_addition = 1;
 			image_change_time = 0;
 		}
 
