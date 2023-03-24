@@ -159,6 +159,9 @@
     <ClCompile Include="Stage\Element\Element_Barricade.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
+    <ClCompile Include="DotByDot.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -326,6 +329,9 @@
     <ClInclude Include="HarpyBullet.h" />
     <ClInclude Include="Stage\Element\Element_Barricade.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="DotByDot.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
