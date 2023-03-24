@@ -49,12 +49,15 @@ GameMain::GameMain()
 //-----------------------------------
 GameMain::~GameMain()
 {
+	int spawn_volume; //スポーン数
+	spawn_volume = stage->GetEnemy_SpawnLocation().size();
+
 	delete camera_work;
 	delete pause;
 	delete player;
 	delete stage;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < spawn_volume; i++)
 	{
 		delete enemy[i];
 	}
@@ -145,7 +148,10 @@ void GameMain::EnemyUpdate()
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
-	for (int i = 0; i < 5; i++)
+	int spawn_volume; //スポーン数
+	spawn_volume = stage->GetEnemy_SpawnLocation().size();
+
+	for (int i = 0; i < spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
 		{
@@ -273,7 +279,10 @@ void GameMain::Draw()const
 
 	player->Draw();
 
-	for (int i = 0; i < 5; i++)
+	int spawn_volume; //スポーン数
+	spawn_volume = stage->GetEnemy_SpawnLocation().size();
+
+	for (int i = 0; i < spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
 		{
