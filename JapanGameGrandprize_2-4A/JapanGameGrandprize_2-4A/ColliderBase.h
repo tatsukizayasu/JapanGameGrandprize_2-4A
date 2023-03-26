@@ -70,7 +70,11 @@ public:
 	//LineColliderとの当たり判定
 	virtual bool HitLine(const class LineCollider* line_collider)const = 0;
 
+	const char* GetName() { return class_name; }
+
 protected:
+
+	const char* class_name = "default";
 
 	//2つのベクトルのなす角が鋭角かどうかを求める
 	bool CheckIsAcute(Location vector1, Location vector2)const
@@ -109,7 +113,6 @@ protected:
 
 		return cross_product;
 	}
-
 
 	Location location;	//中心座標
 };

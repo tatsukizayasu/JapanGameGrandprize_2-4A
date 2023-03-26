@@ -7,6 +7,10 @@
 #include "../../LineCollider.h"
 #include "PolyLine.h"
 #include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+
 
 //モードの数とその種類------
 #define MENU_NUM 4
@@ -45,6 +49,7 @@ private:
 	//デフォルトマップチップ
 	int block_images[110];		//ブロック画像
 	vector<MapChip*> map_chips;
+	vector<PolyLine*>poly_lines;
 
 	//保留中のスフィア
 	vector<SphereCollider*> pending_sphere;
@@ -54,8 +59,6 @@ private:
 	int current_brush;
 
 	//todo:テスト 後々vector配列にして運用する
-	class PolyLine* line;
-	class PolyLine* line_copy;
 
 public:
 	//コンストラクタ
@@ -103,6 +106,11 @@ public:
 	//キーボード入力によるオブジェクトの移動
 	void MovementByKey();
 
+	//オブジェクトの削除
+	void DeleteObject();
+	//折れ線の変形
+	void TransformPolyLine();
+
 	//マップチップを作成する
 	void MakeMapChip(); //クリックしたとき用
 	void MakeMapChip(float x, float y, float width, float height); //CSVファイルからの読み込み用
@@ -129,4 +137,14 @@ public:
 	void SaveStage(char* stage_name);
 	//CSVファイルからの読み込み
 	void LoadStage(char* stage_name);
+
+	//マップチップの保存
+	void SaveMapChips(FILE* fp);
+	//折れ線の保存
+	void SavePolyLine(FILE* fp);
+
+	//マップチップの読み込み
+	void LoadMapChip(istringstream* i_stringstream);
+	//折れ線の読み込み
+	void LoadPolyLine(istringstream* i_stringstream);
 };

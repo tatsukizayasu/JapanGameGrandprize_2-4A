@@ -23,8 +23,6 @@ public:
 	//•`‰æ
 	virtual void Draw() const;
 
-	const char* GetName() { return class_name; }
-
 	/// <summary>
 	/// “–‚½‚è”»’è”ÍˆÍ‚ÌSetter
 	/// </summary>
@@ -43,7 +41,6 @@ public:
 	}
 protected:
 
-	const char* class_name = "default";
 	
 	int image;
 	Area image_size;
