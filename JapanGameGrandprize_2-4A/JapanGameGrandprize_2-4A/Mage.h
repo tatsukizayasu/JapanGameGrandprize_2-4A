@@ -11,6 +11,7 @@ class Mage :
 private:
     bool can_teleport; //テレポート可能か
     int teleport_count; //テレポートするまでの時間
+    int teleport_rate; //テレポートのレート
     int shot_rate; //魔法弾の発射レート
     int shot_count; //発射した弾の数
     int image; //画像

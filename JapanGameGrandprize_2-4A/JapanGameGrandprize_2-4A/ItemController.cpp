@@ -46,6 +46,7 @@ void ItemController::Update(Player* player)
 			item[i] = nullptr;
 			SortItem(i);
 			i--;
+			item_volume--;
 		}
 	}
 }
