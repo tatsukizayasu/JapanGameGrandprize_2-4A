@@ -8,7 +8,6 @@ enum class HARPY_STATE
 	NORMAL,   //通常移動 左に移動
 	NORMAL_RIGHT, //通常移動 右に移動
 	NONE //何も行動しない。
-	
 };
 
 enum class HARPY_ATTACK
@@ -39,7 +38,6 @@ private:
 	bool inversion; //反転（壁にあったった)
 	HARPY_STATE action_type; //行動パターン
 	HARPY_ATTACK attack_state; //攻撃状態
-
 public:
 
 	//コンスタラクタ
@@ -80,5 +78,4 @@ public:
 
 	//座標の取得
 	Location GetLocation() const override;
-
 };

@@ -3,9 +3,9 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 #include "Undead.h"
-#include"EnemySlime.h"
-#include"EnemyGhost.h"
-#include"Harpy.h"
+#include "EnemySlime.h"
+#include "EnemyGhost.h"
+#include "Harpy.h"
 #include "BULLET.h"
 #include "Mage.h"
 #include "Torrent.h"
@@ -38,7 +38,6 @@ GameMain::GameMain()
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
 	
-
 	bullet_manager = BulletManager::GetInstance();
 
 	input_margin = 0;
@@ -49,6 +48,7 @@ GameMain::GameMain()
 //-----------------------------------
 GameMain::~GameMain()
 {
+
 	int spawn_volume; //ƒXƒ|[ƒ“”
 	spawn_volume = stage->GetEnemy_SpawnLocation().size();
 
@@ -72,11 +72,10 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+
 	pause->Update();
 	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
 	if (pause->IsPause() == TRUE) { return this; }
-	
-
 
 	camera_work->Update();
 	player->Update();
@@ -93,6 +92,7 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::SpawnEnemy()
 {
+
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
@@ -145,6 +145,7 @@ void GameMain::SpawnEnemy()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
+
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
@@ -273,7 +274,6 @@ void GameMain::Draw()const
 	//”wŒi	•`‰æ
 	DrawGraph(0, 0, background_image, FALSE);
 
-
 	stage->Draw();
 	item_controller->Draw();
 
@@ -290,7 +290,6 @@ void GameMain::Draw()const
 		}
 	}
 	bullet_manager->Draw();
-
 
 	//ƒ|[ƒY		•`‰æ
 	if (pause->IsPause() == true) { pause->Draw(); }

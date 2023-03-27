@@ -8,6 +8,7 @@
 //-----------------------------------
 EnemyBase::EnemyBase() 
 {
+
 	can_delete = false;
 	left_move = true;
 	poison = false;
@@ -33,6 +34,7 @@ EnemyBase::EnemyBase()
 //-----------------------------------
 bool EnemyBase::CheckHp()
 {
+
 	bool ret = false;
 
 	if (hp <= 0)
@@ -48,6 +50,7 @@ bool EnemyBase::CheckHp()
 //-----------------------------------
 bool EnemyBase::ScreenOut()
 {
+
 	bool ret = false; //戻り値
 	Location scroll; //画面スクロールを考慮した座標
 	Location camera = CameraWork::GetCamera(); //カメラ
@@ -67,6 +70,7 @@ bool EnemyBase::ScreenOut()
 //-----------------------------------
 HitMapChip EnemyBase::HitStage(const Stage* stage)
 {
+
 	HitMapChip ret = { false,nullptr }; //戻り値
 
 	//マップチップ
@@ -103,6 +107,7 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 //-----------------------------------
 STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 {
+
 	STAGE_DIRECTION ret = STAGE_DIRECTION::TOP; //戻り値
 
 	Location chip_location = map_chip->GetLocation();
@@ -192,6 +197,7 @@ STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 //-----------------------------------
 void EnemyBase::Poison()
 {
+
 	if (poison)
 	{
 		poison_time--;
@@ -214,6 +220,7 @@ void EnemyBase::Poison()
 //-----------------------------------
 void EnemyBase::Paralysis()
 {
+
 	if (paralysis)
 	{
 		paralysis_time--;
@@ -229,6 +236,7 @@ void EnemyBase::Paralysis()
 //-----------------------------------
 int EnemyBase::GetDropTypeVolume() const
 {
+
 	return drop_type_volume;
 }
 
@@ -237,6 +245,7 @@ int EnemyBase::GetDropTypeVolume() const
 //-----------------------------------
 int EnemyBase::GetDropVolume() const
 {
+
 	return drop_volume;
 }
 
@@ -245,6 +254,7 @@ int EnemyBase::GetDropVolume() const
 //-----------------------------------
 ElementItem EnemyBase::GetDropItem(int i) const
 { 
+
 	return *drop_element[i]; 
 }
 
@@ -253,6 +263,7 @@ ElementItem EnemyBase::GetDropItem(int i) const
 //-----------------------------------
 ENEMY_KIND EnemyBase::GetEnemyKind() const
 {
+
 	return kind;
 }
 
@@ -261,6 +272,7 @@ ENEMY_KIND EnemyBase::GetEnemyKind() const
 //-----------------------------------
 ENEMY_STATE EnemyBase::GetState()const
 {
+
 	return state;
 }
 
@@ -269,5 +281,6 @@ ENEMY_STATE EnemyBase::GetState()const
 //-----------------------------------
 bool EnemyBase::GetCanDelete() const
 {
+
 	return can_delete;
 }

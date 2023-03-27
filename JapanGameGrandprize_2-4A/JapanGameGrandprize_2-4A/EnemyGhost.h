@@ -24,6 +24,7 @@ enum class GHOST_ATTACK
 class EnemyGhost :public EnemyBase
 {
 private:
+
 	int standby_attack; //次の攻撃待機時間
 	int standby_time; //硬直時間
 	int ghost_image[6]; //ゴーストの画像。

@@ -12,6 +12,7 @@
 class LineCollider_t :public ColliderBase
 {
 private:
+
 	//中点を返す
 	Location GetMiddlePoint()const
 	{
@@ -140,9 +141,8 @@ private:
 
 		return cross_product;
 	}
-
-
 public:
+
 	LineCollider_t();
 	LineCollider_t(Location point1, Location point2);
 	~LineCollider_t();
@@ -167,7 +167,6 @@ public:
 
 	//始点、終点座標の設定
 	void SetLocation(Location location, int i);
-
 protected:
 
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)

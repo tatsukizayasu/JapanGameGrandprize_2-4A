@@ -30,6 +30,7 @@ using namespace std;
 class StageBuilder
 {
 private:
+
 	const char* class_name[CLASS_NUM] =
 	{
 		"default_map_chip",

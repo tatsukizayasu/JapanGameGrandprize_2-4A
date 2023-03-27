@@ -28,7 +28,6 @@ enum class HIT_DIRECTION
 	RIGHT
 };
 
-
 class Stage_Element_Base : public MapChip
 {
 protected:
@@ -53,8 +52,6 @@ protected:
 
 	//描画している画像カウント
 	int current_image;
-
-
 public:
 	
 	//デフォルトコンストラクタ
@@ -87,7 +84,6 @@ public:
 	/// <returns>false:当たっていない
 	/// <para>true:当たっている</para></returns>	
 	//bool HitPlayer(Player* player) const;
-
 
 	/// <summary>
 	/// プレイヤーとブロックが当たっているか

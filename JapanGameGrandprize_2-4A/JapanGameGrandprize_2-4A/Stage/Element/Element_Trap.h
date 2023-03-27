@@ -1,5 +1,6 @@
 #pragma once
 #include "Stage_Element_Base.h"
+
 class Element_Trap : public Stage_Element_Base
 {
 private:
@@ -9,7 +10,6 @@ private:
 		EXPLOSION,	//爆発
 		EXTINGUISHMENT	//消滅
 	}state;
-
 public:
 
 	//コンストラクタ
@@ -20,6 +20,4 @@ public:
 	void Update(Player* player) override;
 
 	void Draw()const override;
-
-
 };

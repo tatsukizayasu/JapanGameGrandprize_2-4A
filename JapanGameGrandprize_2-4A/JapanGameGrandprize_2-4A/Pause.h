@@ -2,6 +2,7 @@
 
 class Pause {
 private:
+
 	bool is_paused;
 
 	int title_font;
@@ -17,8 +18,8 @@ private:
 	short next_menu;
 
 	int pause_effect_timer;
-
 public:
+
 	Pause();
 	~Pause();
 
@@ -31,4 +32,3 @@ public:
 
 	short GetNextMenu() { return next_menu; }
 };
-

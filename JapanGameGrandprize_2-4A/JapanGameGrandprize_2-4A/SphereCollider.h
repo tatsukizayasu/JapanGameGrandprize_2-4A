@@ -8,10 +8,12 @@ protected:
 
 	int radius;			//”¼Œa
 public:
+
 	SphereCollider():ColliderBase()
 	{
 		radius = 5;
 	}
+
 	SphereCollider(Location location) :ColliderBase(location)
 	{
 		radius = 5;

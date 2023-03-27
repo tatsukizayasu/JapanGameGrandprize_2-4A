@@ -8,6 +8,7 @@
 class ColliderBase
 {
 public:
+
 	ColliderBase()
 	{
 		location = { 0,0 };
@@ -61,6 +62,7 @@ public:
 			this->location = location;
 		}
 	}
+
 	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è
 	virtual bool HitSphere(const class SphereCollider* sphere_collider) const = 0;
 
