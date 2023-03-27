@@ -4,8 +4,6 @@
 //#include"CameraWork.h"
 //#include"BoxCollider.h"
 //
-//
-//
 //enum class SLIME_ATTACK
 //{
 //	BEFORE_ATTACK,//UŒ‚‚·‚é‘O
@@ -15,6 +13,7 @@
 //class EnemySlimeBoss : public EnemyBase
 //{
 //private:
+//
 //	bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
 //
 //	int color;

@@ -31,6 +31,7 @@
 //-----------------------------------
 Mage::Mage(Location spawn_location)
 {
+
 	/*初期化*/
 	can_delete = false;
 	can_teleport = true;
@@ -135,6 +136,7 @@ Mage::Mage(Location spawn_location)
 //-----------------------------------
 Mage::~Mage()
 {
+
 	delete[] type;
 
 	for (int i = 0; i < drop; i++)
@@ -150,6 +152,7 @@ Mage::~Mage()
 //-----------------------------------
 void Mage::Update(const Player* player, const Stage* stage)
 {
+
 	Location old_location = location;	//前の座標
 
 	switch (state)
@@ -197,6 +200,7 @@ void Mage::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void Mage::Idol()
 {
+
 	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
@@ -216,6 +220,7 @@ void Mage::Idol()
 //-----------------------------------
 void Mage::Move(const Location player_location)
 {
+
 	teleport_count++;
 	attack_interval--;
 
@@ -235,6 +240,7 @@ void Mage::Move(const Location player_location)
 //-----------------------------------
 void Mage::Teleport(const Stage* stage)
 {
+
 	HitMapChip hit_stage;
 
 	float radian; //角度
@@ -278,6 +284,7 @@ void Mage::Teleport(const Stage* stage)
 //-----------------------------------
 void Mage::Fall()
 {
+
 }
 
 //-----------------------------------
@@ -285,6 +292,7 @@ void Mage::Fall()
 //-----------------------------------
 void  Mage::Attack(Location player_location)
 {
+
 	CreateBullet(player_location);
 	
 	if (shot_count >= MAGE_BULLET_MAX)
@@ -311,6 +319,7 @@ void  Mage::Attack(Location player_location)
 //-----------------------------------
 AttackResource Mage::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	return ret;
@@ -321,6 +330,7 @@ AttackResource Mage::Hit()
 //-----------------------------------
 void Mage::Death()
 {
+
 	can_delete = true;
 }
 
@@ -329,6 +339,7 @@ void Mage::Death()
 //-----------------------------------
 void Mage::CreateBullet(Location player_location)
 {
+
 	shot_rate++;
 
 	if (shot_rate % MAGE_SHOT_RATE == 0)
@@ -345,6 +356,7 @@ void Mage::CreateBullet(Location player_location)
 //-----------------------------------
 void Mage::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
@@ -383,6 +395,7 @@ void Mage::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Mage::Draw() const
 {
+
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
@@ -396,6 +409,7 @@ void Mage::Draw() const
 //-----------------------------------
 Location Mage::GetLocation() const
 {
+
 	return location;
 }
 

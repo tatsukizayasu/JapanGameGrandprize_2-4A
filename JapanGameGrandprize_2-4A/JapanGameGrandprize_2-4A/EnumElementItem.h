@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 //Œ³‘f—ñ‹“‘Ì
 enum class  ELEMENT_ITEM
 {

@@ -2,18 +2,15 @@
 #include "ElementItem.h"
 #include "Define.h"
 
-
 #define CURSOL_SPEED 30
 
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
 
-
-
-
 class Pouch
 {
 private:
+
 	float x, y;
 	int cursol;
 	int count;
@@ -32,8 +29,8 @@ private:
 	ChemicalFormulaParameter* select_pararysis;
 	ChemicalFormulaParameter* select_heal;
 	ChemicalFormulaParameter* select_melt;
-
 public:
+
 	Pouch();
 	~Pouch();
 

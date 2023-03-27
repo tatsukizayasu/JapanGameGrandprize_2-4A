@@ -5,11 +5,12 @@ class BulletManager
 {
     // シングルトン
 private:
+
     //コンストラクタ
     BulletManager();
     static BulletManager* instance; //インスタンス
-
 public:
+
     //インスタンスの取得
     static BulletManager* GetInstance()
     {
@@ -21,7 +22,6 @@ public:
         return instance;
     }
     // シングルトン　ここまで
-
 private:
 
     EnemyBulletBase** enemy_bullets; //敵の弾
@@ -30,8 +30,8 @@ private:
     int enemy_nuts_count; //木の実の生成数
     int enemy_bullet_max; //弾の生成可能数
     int enemy_nuts_max; //木の実の生成可能数
-
 public:
+
     //デストラクタ
     ~BulletManager();
 
@@ -46,7 +46,6 @@ public:
 
     //弾の削除
     void DeleteEnemyBullet(const EnemyBulletBase* bullet);
-
 
     //木の実の生成
     void CreateEnemyNuts(class EnemyBulletBase* nuts);
