@@ -138,7 +138,8 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-
+	
+	Paralysis();
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;
@@ -556,7 +557,11 @@ void Torrent::HitBullet(const BulletBase* bullet)
 		poison_time = bullet->GetDebuffTime() * 0;
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		if (!paralysis)
+		{
+			paralysis = true;
+			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		}
 		break;
 	case ATTRIBUTE::HEAL:
 		break;

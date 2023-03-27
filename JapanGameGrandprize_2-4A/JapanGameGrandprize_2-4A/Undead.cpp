@@ -340,8 +340,12 @@ void Undead::HitBullet(const BulletBase* bullet)
 		hp -= bullet->GetDamage();
 		break;
 	case ATTRIBUTE::POISON:
-		poison_damage = bullet->GetDamage();
-		poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		if (poison)
+		{
+			poison = true;
+			poison_damage = bullet->GetDamage();
+			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
 		paralysis_time = bullet->GetDebuffTime() * 0;

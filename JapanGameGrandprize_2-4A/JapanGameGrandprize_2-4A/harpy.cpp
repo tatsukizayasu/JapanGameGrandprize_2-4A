@@ -355,11 +355,19 @@ void Harpy::HitBullet(const BulletBase* bullet)
 		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE; //効きにくい
 		break;
 	case ATTRIBUTE::POISON: //毒　弱点
-		poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
-		poison_damage = bullet->GetDamage();
+		if (!poison)
+		{
+			poison = true;
+			poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
+			poison_damage = bullet->GetDamage();
+		}
 		break;
 	case ATTRIBUTE::PARALYSIS: //麻痺 弱点
-		paralysis_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;  //弱点
+		if (!paralysis)
+		{
+			paralysis = true;
+			paralysis_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;  //弱点
+		}
 		break;
 	case ATTRIBUTE::HEAL:
 		break;
