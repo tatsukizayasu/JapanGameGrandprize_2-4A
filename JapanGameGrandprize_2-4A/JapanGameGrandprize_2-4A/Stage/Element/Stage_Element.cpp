@@ -10,6 +10,18 @@ Stage_Element::Stage_Element()
 
 Stage_Element::~Stage_Element()
 {
+
+	// 読み込んだ全Elementの画像を解放
+	for (const auto& entry : image_cache) {
+		for (auto& value : entry.second) {
+			DeleteGraph(value);
+		}
+	}
+
+	// element Vectorを解放
+	// 各インスタンスは自動的に解放される。
+	element.clear();
+	element.shrink_to_fit();
 }
 
 void Stage_Element::AddElement(short type, Location location, Area area)
@@ -41,6 +53,10 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case MOVE_FLOOR:
+		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
+		break;
+
+	case BARRICADE:
 		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
 		break;
 
@@ -149,7 +165,7 @@ std::vector<int> Stage_Element::GetImage(short type)
 		break;
 
 	case FALL_FLOOR:
-		filename = "Wooden_Floor.png";
+		filename = "Fall_Floor.png";
 		break;
 
 	case TRAP:
@@ -158,6 +174,10 @@ std::vector<int> Stage_Element::GetImage(short type)
 
 	case MOVE_FLOOR:
 		filename = "Move_Floor.png";
+		break;
+
+	case BARRICADE:
+		filename = "Wooden_Floor.png";
 		break;
 
 	default:

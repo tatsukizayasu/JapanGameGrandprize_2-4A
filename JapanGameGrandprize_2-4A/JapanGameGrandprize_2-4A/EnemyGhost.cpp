@@ -29,10 +29,10 @@
 #define ATTACK_SPEED 4.5
 
 //ドロップ量(最小)
-#define GHOST_MIN_DROP 0u
+#define GHOST_MIN_DROP 1
 
 //ドロップ量(最大)
-#define GHOST_MAX_DROP 4u
+#define GHOST_DROP 7
 
 //ゴーストの攻撃力
 #define GHOST_ATTACK_DAMAGE 10
@@ -47,6 +47,9 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	left_move = true;
 	attack = false;
 
+	magic_time = 1;
+	magic_num = 0;
+	physical_time = 0;
 	hp = 10;
 	location = spawn_location;
 	standby_attack = 0;
@@ -72,7 +75,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 
 	for (int i = 0; i < WIND_DROP; i++)
 	{
-		volume = GHOST_MIN_DROP + GetRand(GHOST_MAX_DROP);
+		volume = GHOST_MIN_DROP + GetRand(GHOST_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
@@ -331,10 +334,12 @@ void EnemyGhost::GhostMove(const Location player_location)
 		attack_state = GHOST_ATTACK::MAGIC_ATTACK;
 		standby_time = GHOST_MAGIC_STANDBY;
 		magic_attack = true;
-
-		//弾の生成
-		BulletManager::GetInstance()->CreateEnemyBullet
-		(new GhostBullet(location, player_location));
+		if (magic_time++ % 3 == 0)
+		{
+			//弾の生成
+			BulletManager::GetInstance()->CreateEnemyBullet
+			(new GhostBullet(location, player_location));
+		}
 	}
 }
 

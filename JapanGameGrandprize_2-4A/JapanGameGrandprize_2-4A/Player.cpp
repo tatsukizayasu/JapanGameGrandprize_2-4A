@@ -196,6 +196,7 @@ Player::Player(Stage* stage)
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
 		pouch->SetElement(element[i], i);
+		pouch->SetElementConstruct(i);
 	}
 
 	//GetGraphSize(image, &image_size_x, &image_size_y);
@@ -341,7 +342,7 @@ void Player::Update()
 	if (damage_flg == true)
 	{
 		damage_count++;
-		if (damage_count < damage)
+		if (damage_count <= damage)
 		{
 			if (hp > 0)
 			{
@@ -388,7 +389,6 @@ void Player::Update()
 		{
 			switch (pouch->GetAttribute())
 			{
-
 			case ATTRIBUTE::EXPLOSION:
 				explosion = pouch->GetExplosion();
 				break;
@@ -737,6 +737,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						explosion = nullptr;
+						pouch->DeleteExplosion();
 					}
 				}
 				break;
@@ -751,6 +752,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						melt = nullptr;
+						pouch->DeleteMelt();
 					}
 				}
 				break;
@@ -765,6 +767,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						poison = nullptr;
+						pouch->DeletePoison();
 					}
 				}
 				break;
@@ -779,6 +782,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						pararysis = nullptr;
+						pouch->DeletePararysis();
 					}
 				}
 				break;
@@ -793,6 +797,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						heal = nullptr;
+						pouch->DeleteHeal();
 					}
 				}
 				break;
@@ -810,14 +815,13 @@ void Player::SortBullet(int delete_bullet)
 {
 	for (int i = delete_bullet + 1; i < BULLET_MAX; i++)
 	{
-		if (bullet[i - 1] == nullptr)
+		if ((bullet[i] == nullptr))
 		{
-			bullet[i - 1] = bullet[i];
-			bullet[i] = nullptr;
+			break;
 		}
-		if (bullet[i] == nullptr)
-		{
-		}
+
+		bullet[i - 1] = bullet[i];
+		bullet[i] = nullptr;
 	}
 	bullet_count--;
 }
@@ -993,3 +997,4 @@ void Player::MoveAnimation()
 		image_count = 0;
 	}
 }
+

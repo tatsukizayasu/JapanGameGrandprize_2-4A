@@ -66,7 +66,7 @@ CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* st
 //-----------------------------------
 CameraWork::~CameraWork()
 {
-	delete player;
+	
 }
 
 //-----------------------------------

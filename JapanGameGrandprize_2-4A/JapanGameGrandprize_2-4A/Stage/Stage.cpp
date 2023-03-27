@@ -13,7 +13,7 @@
 #define STAGE_NAME	"Stage01";
 //#define STAGE_NAME  "Stage01_test";
 
-//#define NODEBUG
+
 
 //-----------------------------------
 // コンストラクタ
@@ -42,27 +42,36 @@ Stage::Stage()
 			if (i != 0 && i != -1)
 			{
 
-#ifndef NODEBUG
+
 
 
 				//スポーン地点ID
 				const short spawn_point_id = 777;
 				if (i == spawn_point_id) {
 					spawn_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2	
+						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+					};
+					continue;
+				}
+
+				//中間地点ID
+				const short halfway_point_id = 100;
+				if (i == halfway_point_id) {
+					halfway_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 					};
 					continue;
 				}
 
 				//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
 				if (enemy_id.find(i) != enemy_id.end()) {
-					enemy_init_location.push_back({i,
+					enemy_init_location.push_back({ i,
 							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
 						});
 					continue;
 				}
-				
+
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
 					if (i != MOVE_FLOOR) {
 						element->AddElement(i, {
@@ -78,15 +87,17 @@ Stage::Stage()
 								element->AddElement(i, {
 								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-									}, { CHIP_SIZE,goal_distance * CHIP_SIZE });	
+									}, { CHIP_SIZE,goal_distance * CHIP_SIZE });
 								break;
 							}
 						}
 					}
-					
+
 
 				}
 				else {
+
+					//固定マップチップ
 					if (i < 50) {
 						mapchip.push_back(new MapChip
 						(&block_images[i],
@@ -96,32 +107,6 @@ Stage::Stage()
 							}, { CHIP_SIZE,CHIP_SIZE }));
 					}
 				}
-
-
-
-#else NODEBUG	//NODEBUG
-				
-				if (enemy_id.find(i) != enemy_id.end()) {
-
-					enemy_init_location.push_back({
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						});
-						
-
-				}
-				else {
-
-					mapchip.push_back(new MapChip
-					(&block_images[i],
-						{
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						}, { CHIP_SIZE,CHIP_SIZE }));
-				}
-
-
-#endif // NODEBUG	
 			}
 
 
@@ -139,25 +124,46 @@ Stage::Stage()
 //-----------------------------------
 Stage::~Stage()
 {
-	//マップチップの描画情報オブジェクトを削除
-	for (int i = 0; i < mapchip.size(); i++)
-	{
-		delete mapchip.at(i);
-	}
+	
 
-	mapchip.clear();
-	mapchip.shrink_to_fit();
-
-	//マップチップ画像を削除
-	for (int i = 0; i < 100; i++)
+	// マップチップ画像を削除
+	for (int i = 0; i < 50; i++)
 	{
 		DeleteGraph(block_images[i]);
 	}
 
+	//vectorの解放
+
+
+	// map_data内の各vectorを解放
+	for (auto& inner_vec : map_data) {
+		inner_vec.clear();
+		inner_vec.shrink_to_fit();
+	}
+
+	// map_data自体を解放
+	map_data.clear();
+	map_data.shrink_to_fit();
+
+
+	// MapChipオブジェクトを解放
+	for (MapChip* chip : mapchip) {
+		delete chip;
+	}
+
+	// mapchip自体を解放
+	mapchip.clear();
+	mapchip.shrink_to_fit();
+
+	enemy_init_location.clear();
+	enemy_init_location.shrink_to_fit();
+
+
+
 #ifdef _STAGE_BUILDER
 	delete stage_builder;
 #endif
-	}
+}
 
 //-----------------------------------
 // 更新
@@ -189,13 +195,13 @@ void Stage::Update(Player* player)
 		h = MAP_CHIP_SIZE;
 
 		// 画面内にあるMapChipオブジェクトだけUpdateする
-		if (x + w < camera.x || camera.x + draw.width < x || 
-			  y + h < camera.y || camera.y + draw.height < y) continue;
+		if (x + w < camera.x || camera.x + draw.width < x ||
+			y + h < camera.y || camera.y + draw.height < y) continue;
 
 
 
 		m->Update();
-		
+
 
 	}
 
@@ -205,7 +211,7 @@ void Stage::Update(Player* player)
 
 	element->Update(player);
 
-	}
+}
 
 //-----------------------------------
 // 描画
@@ -242,7 +248,7 @@ void Stage::Draw()
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
 
 		m->Draw();
-		
+
 	}
 
 

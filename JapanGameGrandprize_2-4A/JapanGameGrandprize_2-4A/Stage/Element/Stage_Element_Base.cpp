@@ -1,4 +1,3 @@
-#include "Stage_Element_Base.h"
 #include "../MapChip.h"
 #include "../Player.h"
 #include <windef.h>
@@ -27,10 +26,13 @@ Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element
 
 Stage_Element_Base::~Stage_Element_Base()
 {
+	images.clear();
+	images.shrink_to_fit();
+
 }
 
 
-void Stage_Element_Base::LoopImages(int* images, float time, int total_images, std::function<void()>* callback)
+void Stage_Element_Base::LoopImages(std::vector<int>& images, float time, int total_images, std::function<void()>* callback)
 {
 
 
@@ -184,6 +186,17 @@ float Stage_Element_Base::GetElapsedTime(float time) const
 		return -1.0f; 
 	}
 }
+
+void Stage_Element_Base::ResetElapsedTime(float time)
+{
+	auto it = elapsed_time_map.find(time);
+	if (it != elapsed_time_map.end()) {
+		it->second = 0.0f;
+		start_time_map[time] = std::chrono::steady_clock::now();
+	}
+}
+
+
 
 
 

@@ -52,6 +52,7 @@ public:
 	void ParalysisTabDraw() const;
 	void HealTabDraw() const;
 	void SetElement(ElementItem*,int i);
+	void SetElementConstruct(int i);
 
 	void InitChemicalParameter();
 
@@ -68,4 +69,10 @@ public:
 	bool ComparisonElement(ChemicalFormulaParameter) const;
 	void SetOnBool(bool);
 	void ReduceAmmo(ATTRIBUTE);
+	void ConsumptionMaterial();
+	void DeleteExplosion();
+	void DeletePoison();
+	void DeleteMelt();
+	void DeleteHeal();
+	void DeletePararysis();
 };
