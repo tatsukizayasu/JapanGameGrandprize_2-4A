@@ -37,7 +37,6 @@ struct HitMapChip
 	MapChip* chip; //マップチップ
 };
 
-
 //ステージブロックと当たった面
 enum class STAGE_DIRECTION
 {

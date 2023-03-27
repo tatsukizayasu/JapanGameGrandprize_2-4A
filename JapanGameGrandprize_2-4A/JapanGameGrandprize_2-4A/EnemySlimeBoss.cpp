@@ -14,7 +14,6 @@
 //
 //
 //
-//
 //EnemySlimeBoss::EnemySlimeBoss()
 //{
 //	for (int i = 0; i < BODY_MAX; i++)

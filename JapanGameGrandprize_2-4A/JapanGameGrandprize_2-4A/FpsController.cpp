@@ -3,6 +3,7 @@
 
 void FpsController::Init(float RefreshRate, int UpdateTime)
 {
+
     frame_time = (int)(1000.0f / RefreshRate); //1フレームの時間の計算
     update_time = UpdateTime;
     wait_time = 0;
@@ -17,6 +18,7 @@ void FpsController::Init(float RefreshRate, int UpdateTime)
 //-----------------------------------
 void FpsController::Wait() 
 {
+
     now_time = GetNowCount();
     wait_time = frame_time - (now_time - last_time);
 
@@ -33,6 +35,7 @@ void FpsController::Wait()
 //-----------------------------------
 float FpsController::Get() 
 {
+
     count += 1.0f;
 
     if (update_time < (last_time - last_update)) //アップデート時間になっていれば

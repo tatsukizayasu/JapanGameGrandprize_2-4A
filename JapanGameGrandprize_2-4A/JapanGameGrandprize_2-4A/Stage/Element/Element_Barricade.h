@@ -1,8 +1,10 @@
 #pragma once
 #include "Stage_Element_Base.h"
+
 class Element_Barricade : public Stage_Element_Base
 {
 private:
+
 	enum class DIRECTION {
 		NONE,
 		UP,
@@ -11,7 +13,6 @@ private:
 		RIGHT,
 		CENTER
 	} direction;
-
 public:
 
 	//コンストラクタ
@@ -20,7 +21,4 @@ public:
 	~Element_Barricade();
 	//更新
 	void Update(Player* player) override;
-
-
-
 };

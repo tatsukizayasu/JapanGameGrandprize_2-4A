@@ -13,6 +13,7 @@ class EnemySlime :
 	public EnemyBase
 {
 private:
+
 	bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
 
 	SLIME_ATTACK slime_attack;
@@ -24,7 +25,6 @@ private:
 	int wait_time;
 
 	Location jump_distance;
-
 public:
 
 	EnemySlime(Location);

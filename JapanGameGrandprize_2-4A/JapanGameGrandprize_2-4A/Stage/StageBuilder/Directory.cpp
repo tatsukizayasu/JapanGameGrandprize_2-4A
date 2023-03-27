@@ -7,6 +7,7 @@ string Directory::current_dir;
 
 bool Directory::Open(const char* path)
 {
+
 	bool is_success = false;
 
 	current_dir += path;

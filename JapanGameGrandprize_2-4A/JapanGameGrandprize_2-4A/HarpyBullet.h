@@ -1,14 +1,16 @@
 #pragma once
 #include"EnemyBulletBase.h"
+
 class HarpyBullet :public EnemyBulletBase
 {
 private:
+
     int image; //画像
 
     int x_speed; //Xのスピード
     int y_speed; //Yのスピード
-
 public:
+
     //コンスタラクタ
     HarpyBullet(Location, Location);
 
@@ -21,4 +23,3 @@ public:
     //描画
     void Draw() const override;
 };
-

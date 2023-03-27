@@ -33,6 +33,7 @@ Pouch::~Pouch()
 //爆発
 void Pouch::ExplosionTabDraw() const
 {
+
 	bool can_create[3];
 	int roop_body = cursol - 1;
 
@@ -47,7 +48,6 @@ void Pouch::ExplosionTabDraw() const
 			can_create[i] = false;
 		}
 	}
-	
 
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 	DrawString(x, y + 50, "EXPLOSION", 0x000000);
@@ -113,6 +113,7 @@ void Pouch::ExplosionTabDraw() const
 //溶解
 void Pouch::MeltTabDraw() const
 {
+
 	bool can_create[3];
 	int roop_body = cursol - 1;
 
@@ -127,7 +128,6 @@ void Pouch::MeltTabDraw() const
 			can_create[i] = false;
 		}
 	}
-
 
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 	DrawString(x, y + 50, "MELT", 0x000000);
@@ -193,6 +193,7 @@ void Pouch::MeltTabDraw() const
 //麻痺
 void Pouch::ParalysisTabDraw()const
 {
+
 	bool can_create[3];
 	int roop_body = cursol - 1;
 
@@ -207,7 +208,6 @@ void Pouch::ParalysisTabDraw()const
 			can_create[i] = false;
 		}
 	}
-
 
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 	DrawString(x, y + 50, "PARARYSIS", 0x000000);
@@ -273,6 +273,7 @@ void Pouch::ParalysisTabDraw()const
 //毒
 void Pouch::PoisonTabDraw()const
 {
+
 	bool can_create[3];
 	int roop_body = cursol - 1;
 
@@ -287,7 +288,6 @@ void Pouch::PoisonTabDraw()const
 			can_create[i] = false;
 		}
 	}
-
 
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 	DrawString(x, y + 50, "POISON", 0x000000);
@@ -353,6 +353,7 @@ void Pouch::PoisonTabDraw()const
 //回復
 void Pouch::HealTabDraw()const
 {
+
 	bool can_create[3];
 	int roop_body = cursol - 1;
 
@@ -367,7 +368,6 @@ void Pouch::HealTabDraw()const
 			can_create[i] = false;
 		}
 	}
-
 
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0xff99ff, TRUE);
 	DrawString(x, y + 50, "HEAL", 0x000000);
@@ -433,6 +433,7 @@ void Pouch::HealTabDraw()const
 //描画
 void Pouch::Draw() const
 {
+
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
@@ -454,7 +455,6 @@ void Pouch::Draw() const
 		break;
 	}
 
-
 	DrawBox(x, y + 400, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x0000ff, TRUE);
 
 	for (int i = 0; i < 4; i++)
@@ -473,6 +473,7 @@ void Pouch::Draw() const
 //アップデート
 void Pouch::Update()
 {
+
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
 		cursol = 0;
@@ -587,11 +588,11 @@ void Pouch::Update()
 			break;
 		}
 	}
-
 }
 
 void Pouch::ExplosionTabUpdate()
 {
+
 	if (++count % CURSOL_SPEED == 0)
 	{
 		if (PAD_INPUT::GetRStick().y > 5000)
@@ -616,6 +617,7 @@ void Pouch::ExplosionTabUpdate()
 
 void Pouch::PoisonTabUpdate()
 {
+
 	if (++count % CURSOL_SPEED == 0)
 	{
 		if (PAD_INPUT::GetRStick().y > 5000)
@@ -640,6 +642,7 @@ void Pouch::PoisonTabUpdate()
 
 void Pouch::HealTabUpdate()
 {
+
 	if (++count % CURSOL_SPEED == 0)
 	{
 		if (PAD_INPUT::GetRStick().y > 5000)
@@ -664,6 +667,7 @@ void Pouch::HealTabUpdate()
 
 void Pouch::MeltTabUpdate()
 {
+
 	if (++count % CURSOL_SPEED == 0)
 	{
 		if (PAD_INPUT::GetRStick().y > 5000)
@@ -688,6 +692,7 @@ void Pouch::MeltTabUpdate()
 
 void Pouch::ParalysisTabUpdate()
 {
+
 	if (++count % CURSOL_SPEED == 0)
 	{
 		if (PAD_INPUT::GetRStick().y > 5000)
@@ -714,11 +719,13 @@ void Pouch::ParalysisTabUpdate()
 
 void Pouch::SetElement(ElementItem* item, int i)
 {
+
 	element[i] = item;
 }
 
 void Pouch::SetElementConstruct(int i)
 {
+
 	switch (element[i]->GetType())
 	{
 	case ELEMENT_ITEM::HYDROGEN:
@@ -749,6 +756,7 @@ void Pouch::SetElementConstruct(int i)
 
 void Pouch::InitChemicalParameter()
 {
+
 	int count = EXPLOSION_MAX_NUM;
 	FILE* fp; //FILE型構造体
 	errno_t error;
@@ -824,7 +832,6 @@ void Pouch::InitChemicalParameter()
 
 		}
 
-
 		for (int i = 0; i < HEAL_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
 			sscanf_s(line, "%[^,],%[^,],%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
@@ -874,46 +881,55 @@ void Pouch::InitChemicalParameter()
 
 ChemicalFormulaParameter* Pouch::GetExplosion()
 {
+
 	return select_explosion;
 }
 
 ChemicalFormulaParameter* Pouch::GetPoison()
 {
+
 	return select_poison;
 }
 
 ChemicalFormulaParameter* Pouch::GetPararysis()
 {
+
 	return select_pararysis;
 }
 
 ChemicalFormulaParameter* Pouch::GetHeal()
 {
+
 	return select_heal;
 }
 
 ChemicalFormulaParameter* Pouch::GetMelt()
 {
+
 	return select_melt;
 }
 
 ATTRIBUTE Pouch::GetAttribute()
 {
+
 	return tab;
 }
 
 int Pouch::GetCursol()
 {
+
 	return cursol;
 }
 
 bool Pouch::GetOnBool()
 {
+
 	return on_bool;
 }
 
 void Pouch::SetOnBool(bool a)
 {
+
 	on_bool = a;
 }
 
@@ -923,6 +939,7 @@ void Pouch::SetOnBool(bool a)
 //-----------------------------------
 void Pouch::ReduceAmmo(ATTRIBUTE a)
 {
+
 	switch (a)
 	{
 	case ATTRIBUTE::NORMAL:
@@ -960,6 +977,7 @@ void Pouch::ReduceAmmo(ATTRIBUTE a)
 
 void Pouch::SetChemicalFormulaParameter()
 {
+
 	on_bool = true;
 	switch (tab)
 	{
@@ -1000,6 +1018,7 @@ void Pouch::SetChemicalFormulaParameter()
 
 bool Pouch::ComparisonElement(ChemicalFormulaParameter subject) const
 {
+
 	if (subject.material.hydrogen <= element[0]->GetVolume() &&
 		subject.material.oxygen <= element[1]->GetVolume() &&
 		subject.material.carbon <= element[2]->GetVolume() &&
@@ -1014,6 +1033,7 @@ bool Pouch::ComparisonElement(ChemicalFormulaParameter subject) const
 
 void Pouch::ConsumptionMaterial()
 {
+
 	int difference[PLAYER_ELEMENT];
 	switch (tab)
 	{
@@ -1084,25 +1104,30 @@ void Pouch::ConsumptionMaterial()
 
 void Pouch::DeleteExplosion()
 {
+
 	select_explosion = nullptr;
 }
 
 void Pouch::DeleteHeal()
 {
+
 	select_heal = nullptr;
 }
 
 void Pouch::DeleteMelt()
 {
+
 	select_melt = nullptr;
 }
 
 void Pouch::DeletePararysis()
 {
+
 	select_pararysis = nullptr;
 }
 
 void Pouch::DeletePoison()
 {
+
 	select_poison = nullptr;
 }
