@@ -32,6 +32,7 @@ public:
 
 	//描画以外の更新を実行
 	virtual void Update(const class Player* player, const class Stage* stage)override;
+
 	//描画
 	virtual void Draw()const override;
 
@@ -57,4 +58,12 @@ public:
 
 	//座標の取得
 	Location GetLocation() const override;
+
+#ifdef _DEBUG
+	//更新(DotByDot)
+	void Update(const ENEMY_STATE state) override;
+
+	//描画(DotByDot)
+	void DebugDraw() override;
+#endif //_DEBUG
 };

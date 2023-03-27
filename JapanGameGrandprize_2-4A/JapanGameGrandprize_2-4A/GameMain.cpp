@@ -10,13 +10,14 @@
 #include "Mage.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
+#include "DotByDot.h"
 
 //-----------------------------------
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 //-----------------------------------
 GameMain::GameMain()
 {
-
+#undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
 	background_image = LoadGraph("Images/Scene/gamemain.png");
 
@@ -37,7 +38,7 @@ GameMain::GameMain()
 	SpawnEnemy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
-	
+
 
 	bullet_manager = BulletManager::GetInstance();
 
@@ -62,7 +63,7 @@ GameMain::~GameMain()
 		delete enemy[i];
 	}
 	delete[] enemy;
-	
+
 	delete item_controller;
 	delete bullet_manager;
 }
@@ -75,7 +76,15 @@ AbstractScene* GameMain::Update()
 	pause->Update();
 	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
 	if (pause->IsPause() == TRUE) { return this; }
-	
+
+
+#ifdef _DEBUG
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_LEFT))
+	{
+		return new DotByDot();
+	}
+#endif
+
 
 
 	camera_work->Update();
@@ -100,7 +109,7 @@ void GameMain::SpawnEnemy()
 	spawn_volume = spawn.size();
 	enemy = new EnemyBase * [spawn_volume];
 
-	for (int i = 0; i < spawn_volume;i++)
+	for (int i = 0; i < spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -268,8 +277,7 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
-	
-	SetBackgroundColor(149, 249, 253);
+
 	//”wŒi	•`‰æ
 	DrawGraph(0, 0, background_image, FALSE);
 
