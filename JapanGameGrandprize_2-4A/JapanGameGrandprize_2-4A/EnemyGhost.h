@@ -33,9 +33,15 @@ private:
 	int magic_num; //魔法攻撃した数
 	int magic_time; //魔法攻撃時間
 	float speed; //ゴーストの移動速度
+	float travel; //X座標に動く量
+	float travel_y; //ｙ座標に動く量
+	float range; //プレイヤーとの距離	
+	float range_y; //プレイヤーとの距離Y座
+	float vector; //ベクトル
 	bool magic_attack; //魔法攻撃
 	bool attack; //攻撃が当たったか
 	bool physical_attack; //物理攻撃に入る（true)なら
+	bool hit_ground; //地面との当たり判定
 	GHOST_STATE action_type; //行動パターン
 	GHOST_ATTACK attack_state; //攻撃状態
 private:

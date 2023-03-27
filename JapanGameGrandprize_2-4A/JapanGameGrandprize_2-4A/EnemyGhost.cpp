@@ -5,7 +5,7 @@
 
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 75
-#define GHOST_SIZE_Y 80
+#define GHOST_SIZE_Y 85
 
 //プレイヤー発見距離
 #define GHOST_DETECTION_DISTANCE 500
@@ -47,6 +47,11 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	left_move = true;
 	attack = false;
 
+	vector = 0;
+	travel = 0;
+	travel_y = 0;
+	range = 0;
+	range_y = 0;
 	animation = 0;
 	animation_time = 0;
 	magic_time = 1;
@@ -82,7 +87,6 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
-
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WIND;
 	attack_state = GHOST_ATTACK::NONE;
@@ -113,7 +117,8 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
-	if (animation_time++%5==0)
+	//アニメーションゴースト
+	if (animation_time++ % 5 == 0)
 	{
 		animation++;
 	}
@@ -130,7 +135,7 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
-		
+
 		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
@@ -153,11 +158,17 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	hit_stage = HitStage(stage);
 	if (hit_stage.hit) //ステージとの当たり判定
 	{
-		Location chip_location = hit_stage.chip->GetLocation();
-		Area chip_area = hit_stage.chip->GetArea();
-		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+		hit_direction = HitDirection(hit_stage.chip);
+
+		if (hit_direction == STAGE_DIRECTION::TOP) 
+		{
+			location= old_location;
+		}
+		 if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 		{
 			location = old_location;
+			left_move = !left_move;
 		}
 	}
 
@@ -180,35 +191,81 @@ void EnemyGhost::Idol()
 //移動
 void EnemyGhost::Move(const Location player_location)
 {
-	GhostMove(player_location);
 
-	switch (action_type)
+	//プレイヤーとの距離計算
+	range = player_location.x - location.x;
+	range_y = player_location.y - location.y;
+
+	vector = sqrt(range * range + range_y * range_y);
+
+
+	//プレイヤーが発見距離内にいたら
+	if (range <= GHOST_DETECTION_DISTANCE && range >= -GHOST_DETECTION_DISTANCE)
 	{
-	case GHOST_STATE::NORMAL:  //通常移動
-		location.x -= speed;
-		break;
-	case GHOST_STATE::NORMAL_RIGHT://右
-		location.x += speed;
-		break;
-	case GHOST_STATE::LEFT_lOWER:  //左下を目指す
-		location.x -= speed;
-		location.y += speed;
-		break;
-	case GHOST_STATE::LEFT_UPPER:  //左上を目指す
-		location.x -= speed;
-		location.y -= speed;
-		break;
-	case GHOST_STATE::RIGHT_LOWER:  //右下を目指す
-		location.x += speed;
-		location.y += speed;
-		break;
-	case GHOST_STATE::RIGHT_UPPER:  //右上を目指す。
-		location.x += speed;
-		location.y -= speed;
-		break;
-	default:
-		break;
+		travel = range / vector;
+		travel_y = range_y / vector;
+		location.x += travel * speed;
+		location.y += travel_y * speed;
 	}
+
+	else //通常移動
+	{
+		magic_attack = false;
+		physical_attack = false;
+	}
+
+	////攻撃範囲内にいる場合
+	//if ((range <= GHOST_ATTACK_RANGE) && (!physical_attack))
+	//{
+	//	state = ENEMY_STATE::ATTACK;
+	//	attack_state = GHOST_ATTACK::PHYSICAL_ATTACK;
+	//	standby_time = GHOST_PHYSICAL_STANDBY;
+	//	physical_attack = true;
+	//}
+	//else if ((range <= GHOST_ATTACK_MAGIC) && (!magic_attack))
+	//{
+	//	state = ENEMY_STATE::ATTACK;
+	//	attack_state = GHOST_ATTACK::MAGIC_ATTACK;
+	//	standby_time = GHOST_MAGIC_STANDBY;
+	//	magic_attack = true;
+	//	if (magic_time++ % 3 == 0)
+	//	{
+	//		//弾の生成
+	//		BulletManager::GetInstance()->CreateEnemyBullet
+	//		(new GhostBullet(location, player_location));
+	//	}
+	//}
+
+
+	//GhostMove(player_location);
+
+	//switch (action_type)
+	//{
+	//case GHOST_STATE::NORMAL:  //通常移動
+	//	location.x -= speed;
+	//	break;
+	//case GHOST_STATE::NORMAL_RIGHT://右
+	//	location.x += speed;
+	//	break;
+	//case GHOST_STATE::LEFT_lOWER:  //左下を目指す
+	//	location.x -= speed;
+	//	location.y += speed;
+	//	break;
+	//case GHOST_STATE::LEFT_UPPER:  //左上を目指す
+	//	location.x -= speed;
+	//	location.y -= speed;
+	//	break;
+	//case GHOST_STATE::RIGHT_LOWER:  //右下を目指す
+	//	location.x += speed;
+	//	location.y += speed;
+	//	break;
+	//case GHOST_STATE::RIGHT_UPPER:  //右上を目指す。
+	//	location.x += speed;
+	//	location.y -= speed;
+	//	break;
+	//default:
+	//	break;
+	//}
 
 }
 
@@ -278,7 +335,9 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, 1.5f, M_PI / 180, ghost_image[animation], TRUE);
+
+	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		M_PI / 180, ghost_image[animation], TRUE);
 }
 
 //-----------------------------------

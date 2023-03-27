@@ -191,7 +191,6 @@ void Harpy::Move(const Location player_location)
 	range = player_location.x - location.x;
 	range_y = player_location.y - location.y;
 
-	vector = sqrt(range * range + range_y * range_y);
 
 
 	//ÉvÉåÉCÉÑÅ[Ç™î≠å©ãóó£ì‡Ç…Ç¢ÇΩÇÁ
@@ -399,7 +398,6 @@ void Harpy::PhysicalMove(const Location player_location)
 	}
 
 }
-
 
 
 //-----------------------------------
