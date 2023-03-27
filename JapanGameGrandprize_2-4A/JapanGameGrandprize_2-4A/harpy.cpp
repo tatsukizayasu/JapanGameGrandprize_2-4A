@@ -1,7 +1,7 @@
 #include "Harpy.h"
 #include "CameraWork.h"
-#include"BulletManager.h"
-#include"DxLib.h"
+#include "BulletManager.h"
+#include "DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
 #define HARPY_SIZE_X 40
@@ -13,7 +13,6 @@
 
 //攻撃範囲
 #define ATTACK_RANGE 150
-
 
 //魔法攻撃した時の硬直時間
 #define MAGIC_STANDBY 60
@@ -36,12 +35,12 @@
 //ドロップ量(最大)
 #define HARPY_DROP 6
 
-
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
 Harpy::Harpy(Location spawn_location)
 {
+
 	can_delete = false;
 	left_move = true;
 	attack = false;
@@ -98,6 +97,7 @@ Harpy::Harpy(Location spawn_location)
 //-----------------------------------
 Harpy::~Harpy()
 {
+
 	delete[] images;
 	delete[] type;
 
@@ -113,6 +113,7 @@ Harpy::~Harpy()
 //-----------------------------------
 void Harpy::Update(const class Player* player, const class Stage* stage)
 {
+
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -170,6 +171,7 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 //アイドル状態
 void Harpy::Idol()
 {
+
 	Location scroll; //画面スクロールを考慮したX座標
 	Location camera = CameraWork::GetCamera(); //カメラ
 	scroll = location - camera;
@@ -179,7 +181,6 @@ void Harpy::Idol()
 	{
 		state = ENEMY_STATE::MOVE;
 	}
-
 }
 
 //移動
@@ -191,7 +192,6 @@ void Harpy::Move(const Location player_location)
 	range_y = player_location.y - location.y;
 
 	vector = sqrt(range * range + range_y * range_y);
-
 
 	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
@@ -224,8 +224,6 @@ void Harpy::Move(const Location player_location)
 				BulletManager::GetInstance()->CreateEnemyBullet
 				(new HarpyBullet(location, player_location));
 			}
-
-
 		}
 	}
 	else //発見距離にプレイヤーがいなかったら。通常移動
@@ -252,16 +250,14 @@ void Harpy::Move(const Location player_location)
 			break;
 		}
 	}
-
-
 }
-
 
 //-----------------------------------
 //攻撃
 //-----------------------------------
 void  Harpy::Attack(Location player_location)
 {
+
 	standby_time--;
 	if (standby_time < 0)
 	{
@@ -290,6 +286,7 @@ void  Harpy::Attack(Location player_location)
 //-----------------------------------
 AttackResource Harpy::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	if (attack_state == HARPY_ATTACK::PHYSICAL_ATTACK && (!attack))
@@ -301,7 +298,6 @@ AttackResource Harpy::Hit()
 		ret.type_count = 1;
 	}
 
-
 	return ret;
 }
 
@@ -310,6 +306,7 @@ AttackResource Harpy::Hit()
 //-----------------------------------
 void Harpy::Death()
 {
+
 	can_delete = true;
 }
 
@@ -318,6 +315,7 @@ void Harpy::Death()
 //-----------------------------------
 void Harpy::Draw()const
 {
+
 	//スクロールに合わせて描画
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
@@ -326,9 +324,7 @@ void Harpy::Draw()const
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
 		GetColor(255, 255, 0), TRUE);
-
 }
-
 
 //-----------------------------------
 //落下
@@ -343,6 +339,7 @@ void Harpy::Fall()
 //-----------------------------------
 void Harpy::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL: //通常弾 
@@ -396,15 +393,13 @@ void Harpy::PhysicalMove(const Location player_location)
 	{
 		magic_num = 0;
 	}
-
 }
-
-
 
 //-----------------------------------
 //座標の取得
 //-----------------------------------
 Location Harpy::GetLocation() const
 {
+
 	return location;
 }

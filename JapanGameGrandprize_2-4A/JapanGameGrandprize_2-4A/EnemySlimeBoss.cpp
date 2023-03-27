@@ -21,9 +21,9 @@
 //#define ONE_ROUND 360 //一周の角度
 //#define ROTATION_SPEED 15 //スライムが回転するスピード
 //
-//
 //EnemySlimeBoss::EnemySlimeBoss()
 //{
+// 
 //	attack = false;
 //	left_move = true;
 //	kind = ENEMY_KIND::SLIME;
@@ -56,11 +56,11 @@
 //		drop_element[i]->SetVolume(volume);
 //		drop_volume += volume;
 //	}
-//
 //}
 //
 //void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 //{
+// 
 //	Location old_location = location;	//前の座標
 //	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 //
@@ -131,9 +131,6 @@
 //		break;
 //	}
 //
-//
-//
-//
 //	if (CheckHp() && state != ENEMY_STATE::DEATH)
 //	{
 //		state = ENEMY_STATE::DEATH;
@@ -156,6 +153,7 @@
 ////-----------------------------------
 //void EnemySlimeBoss::Idol()
 //{
+// 
 //	Location scroll; //画面スクロールを考慮したX座標
 //	Location camera = CameraWork::GetCamera(); //カメラ
 //	scroll = location - camera;
@@ -177,7 +175,6 @@
 //
 //	//プレイヤーとの距離の計算
 //	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
-//
 //}
 //
 ////-----------------------------------
@@ -185,6 +182,7 @@
 ////-----------------------------------
 //void EnemySlimeBoss::Fall()
 //{
+// 
 //	if (speed < GRAVITY)
 //	{
 //		speed += ENEMY_FALL_SPEED;
@@ -197,6 +195,7 @@
 ////-----------------------------------
 //void  EnemySlimeBoss::Attack(Location player_location)
 //{
+// 
 //	location.y -= (jump_distance.y / 3);
 //	jump_distance.y -= 1;
 //
@@ -251,6 +250,7 @@
 ////-----------------------------------
 //AttackResource EnemySlimeBoss::Hit()
 //{
+// 
 //	AttackResource ret = { 0,nullptr,0 }; //戻り値
 //
 //	if (!attack)
@@ -271,6 +271,7 @@
 ////-----------------------------------
 //void EnemySlimeBoss::Death()
 //{
+// 
 //	if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
 //	{
 //		can_delete = true;
@@ -289,7 +290,6 @@
 //		}
 //		else
 //		{
-//
 //			speed = -SLIME_ATTACK_SPEED;
 //			slime_angle -= ROTATION_SPEED;
 //		}
@@ -302,6 +302,7 @@
 ////-----------------------------------
 //void EnemySlimeBoss::HitBullet(const BulletBase* bullet)
 //{
+// 
 //	switch (bullet->GetAttribute())
 //	{
 //	case ATTRIBUTE::NORMAL:
@@ -325,7 +326,6 @@
 //	default:
 //		break;
 //	}
-//
 //}
 //
 ////-----------------------------------
@@ -333,5 +333,6 @@
 ////-----------------------------------
 //Location EnemySlimeBoss::GetLocation() const
 //{
+// 
 //	return location;
 //}

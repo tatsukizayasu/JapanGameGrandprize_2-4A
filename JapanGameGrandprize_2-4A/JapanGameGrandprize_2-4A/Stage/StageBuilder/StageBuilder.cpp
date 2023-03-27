@@ -14,6 +14,7 @@
 //------------------------------------
 StageBuilder::StageBuilder()
 {
+
 	Directory::Init();
 	mouse = new SphereCollider();
 	select_collider = nullptr;
@@ -45,7 +46,6 @@ StageBuilder::StageBuilder()
 		{940,350}
 	};
 	line = new PolyLine(points,3);
-	
 
 #endif // _DEV
 }
@@ -55,6 +55,7 @@ StageBuilder::StageBuilder()
 //------------------------------------
 StageBuilder::~StageBuilder()
 {
+
 	delete mouse;
 
 	for (int i = 0; i < map_chips.size(); i++)
@@ -80,6 +81,7 @@ StageBuilder::~StageBuilder()
 //------------------------------------
 void StageBuilder::Update()
 {
+
 	KeyManager::Update(); //StageBuilder上でしか使わないため、ソースコードの散らばりを避けています。
 	UpdateMouse();
 
@@ -215,6 +217,7 @@ void StageBuilder::Draw()const
 //--------------------------------------
 void StageBuilder::DrawWhichMode()const
 {
+
 	switch (mode)
 	{
 
@@ -248,6 +251,7 @@ void StageBuilder::DrawWhichMode()const
 //------------------------------------
 void StageBuilder::UpdateMenu()
 {
+
 	Select(MENU_NUM);
 	
 	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
@@ -296,6 +300,7 @@ void StageBuilder::UpdateBrush()
 //------------------------------------
 void StageBuilder::UpdateModulation()
 {
+
 	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 	{
 		for (int i = 0; i < map_chips.size(); i++)
@@ -315,6 +320,7 @@ void StageBuilder::UpdateModulation()
 //------------------------------------
 void StageBuilder::UpdateSave()
 {
+
 	static int stage_max = 0;
 
 	if (stage_max == 0)
@@ -392,6 +398,7 @@ void StageBuilder::UpdateLoad()
 //------------------------------------
 void StageBuilder::UpdateMouse()
 {
+
 	int x, y;
 	GetMousePoint(&x, &y);
 
@@ -406,6 +413,7 @@ void StageBuilder::UpdateMouse()
 //------------------------------------
 void StageBuilder::DrawMenu()const
 {
+
 	int font_size = 20;
 	int current = 0;
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
@@ -428,6 +436,7 @@ void StageBuilder::DrawMenu()const
 //------------------------------------
 void StageBuilder::DrawFileInfo()const
 {
+
 	string file_name(Directory::GetCurrent());
 	int scale = 0;
 	int current = 0;
@@ -467,6 +476,7 @@ void StageBuilder::DrawFileInfo()const
 //------------------------------------
 void StageBuilder::DrawFrame()const
 {
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 127);
 
 	for (int i = 0; i * MAP_CHIP_SIZE < SCREEN_HEIGHT; i++)
@@ -487,6 +497,7 @@ void StageBuilder::DrawFrame()const
 //-------------------------------------
 void StageBuilder::DrawMouse()const
 {
+
 	DrawCircleAA(mouse->GetLocation().x - CameraWork::GetCamera().x,
 		mouse->GetLocation().y - CameraWork::GetCamera().y, 2, 10, 0xFFFFFF);
 	DrawCircleAA(mouse->GetLocation().x - CameraWork::GetCamera().x,
@@ -498,6 +509,7 @@ void StageBuilder::DrawMouse()const
 //------------------------------------
 void StageBuilder::DrawFile(float x, float y, const char* path, int font_size)const
 {
+
 	FILEINFO file_info;
 	int count_y = 0;
 
@@ -526,6 +538,7 @@ void StageBuilder::DrawFile(float x, float y, const char* path, int font_size)co
 //-------------------------------------
 void StageBuilder::DrawClassName()const
 {
+
 	int draw_width;
 
 	int font_size = 20;
@@ -544,6 +557,7 @@ void StageBuilder::DrawClassName()const
 //---------------------------------------------
 void StageBuilder::DrawSphere()const
 {
+
 	for (int i = 0; i < pending_sphere.size(); i++)
 	{
 		pending_sphere[i]->Draw();
@@ -566,6 +580,7 @@ void StageBuilder::DrawLine(Location start, Location end)const
 //------------------------------------
 void StageBuilder::MakeMapChip()
 {
+
 	float pos_x = (int)(mouse->GetLocation().x 
 		/ MAP_CHIP_SIZE) * MAP_CHIP_SIZE;
 	float pos_y = (int)(mouse->GetLocation().y
@@ -580,6 +595,7 @@ void StageBuilder::MakeMapChip()
 //------------------------------------
 void StageBuilder::MakeMapChip(float x, float y, float width, float height)
 {
+
 	map_chips.push_back(new MapChip(&block_images[1],
 		{ x ,y },{ MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
@@ -589,6 +605,7 @@ void StageBuilder::MakeMapChip(float x, float y, float width, float height)
 //------------------------------------
 void StageBuilder::MakePolyLine()
 {
+
 	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 	{
 		MakeSphere();
@@ -610,6 +627,7 @@ void StageBuilder::MakePolyLine()
 //------------------------------------
 void StageBuilder::MakeSphere()
 {
+
 	pending_sphere.push_back(new SphereCollider(mouse->GetLocation()));
 }
 
@@ -618,6 +636,7 @@ void StageBuilder::MakeSphere()
 //--------------------------------------
 void StageBuilder::Trash()
 {
+
 	for (int i = 0; i < pending_sphere.size(); i++)
 	{
 		delete pending_sphere[i];
@@ -630,6 +649,7 @@ void StageBuilder::Trash()
 //------------------------------------
 int StageBuilder::FileCount(const char* path)const
 {
+
 	int count = 0;
 
 	FILEINFO file_info;
@@ -690,6 +710,7 @@ void StageBuilder::Select(int menu_max)
 //------------------------------------
 const int* StageBuilder::GetImage(int image_index)const
 {
+
 	return &block_images[image_index];
 }
 
@@ -728,6 +749,7 @@ void StageBuilder::SaveStage(int stage_num)
 //------------------------------------
 void StageBuilder::SaveStage(char* stage_name)
 {
+
 	FILE* fp = NULL;
 
 	//ファイルオープン
@@ -758,6 +780,7 @@ void StageBuilder::SaveStage(char* stage_name)
 //------------------------------------
 void StageBuilder::LoadStage(char* stage_name)
 {
+
 	string class_name;
 	float x;
 	float y;

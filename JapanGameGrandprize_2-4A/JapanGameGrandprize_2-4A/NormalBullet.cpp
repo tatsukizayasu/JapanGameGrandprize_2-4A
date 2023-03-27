@@ -8,6 +8,7 @@
 //-----------------------------------
 NormalBullet::NormalBullet()
 {
+
 	location.x = 0.0;
 	location.y = 0.0;
 	radius = 4;
@@ -33,6 +34,7 @@ NormalBullet::NormalBullet()
 NormalBullet::NormalBullet(float player_x, float player_y,
 	                         bool direction,ChemicalFormulaParameter* chemical)
 {
+
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
 	scrool_y = CameraWork::GetCamera().y;
@@ -68,6 +70,7 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 //-----------------------------------
 void NormalBullet::Draw() const
 {
+
 	float scrool_x = CameraWork::GetCamera().x;
 	float scrool_y = CameraWork::GetCamera().y;
 
@@ -90,6 +93,7 @@ void NormalBullet::Draw() const
 //-----------------------------------
 void NormalBullet::Update(const Stage* stage_pointa)
 {
+
 	float scrool_x = CameraWork::GetCamera().x;
 	if (!player_direction)
 	{
@@ -139,6 +143,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 
 bool NormalBullet::NormalBulletEfect()
 {
+
 	if (!efect_end)
 	{
 		if (++efect_count % 30 != 0)

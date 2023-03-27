@@ -11,6 +11,7 @@ float nearpos = 0;
 //------------------------------------
 LineCollider_t::LineCollider_t()
 {
+
 	//絶対座標
 	vector[LINE_START] = { 0,0 };
 	vector[LINE_END] = { SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -24,12 +25,14 @@ LineCollider_t::LineCollider_t()
 //------------------------------------
 LineCollider_t::LineCollider_t(Location point1, Location point2)
 {
+
 	//点じゃないことを保証する
 	if (point1 == point2)
 	{
 		point2.x += 1;
 		point2.y += 1;
 	}
+
 	//絶対座標
 	vector[LINE_START] = point1;
 	vector[LINE_END] = point2;
@@ -51,6 +54,7 @@ LineCollider_t::~LineCollider_t()
 //--------------------------------------
 void LineCollider_t::Draw()const
 {
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	DrawLineAA(
 		GetLocation(LINE_START).x - CameraWork::GetCamera().x, 
@@ -59,7 +63,6 @@ void LineCollider_t::Draw()const
 		GetLocation(LINE_END).y - CameraWork::GetCamera().y,
 		0xE9FF00, 3);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
 
 	DrawBoxAA(GetMin().x - CameraWork::GetCamera().x
 		, GetMin().y - CameraWork::GetCamera().y
@@ -74,7 +77,6 @@ void LineCollider_t::Draw()const
 		GetLocation(LINE_START).y + t.y - CameraWork::GetCamera().y,
 		3, 0xFF0000, TRUE);
 
-
 	DrawFormatString(GetLocation(LINE_START).x + t.x - CameraWork::GetCamera().x,
 		GetLocation(LINE_START).y + t.y - CameraWork::GetCamera().y - 30,
 		 0xFF00FF, "%lf", nearpos);
@@ -85,6 +87,7 @@ void LineCollider_t::Draw()const
 //-----------------------------------
 bool LineCollider_t::HitDot(Location point)const
 {
+
 	bool is_hit = false;
 	float cross_product;
 
@@ -103,7 +106,6 @@ bool LineCollider_t::HitDot(Location point)const
 		}
 	}
 
-
 	return is_hit;
 }
 
@@ -112,6 +114,7 @@ bool LineCollider_t::HitDot(Location point)const
 //-----------------------------------
 bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 {
+
 	//
 	bool is_hit = false;
 	Location vector1 =
@@ -179,6 +182,7 @@ bool LineCollider_t::HitSphere(const SphereCollider* sphere)const
 //-----------------------------------
 bool LineCollider_t::HitBox(const BoxCollider* box)const
 {
+
 	bool is_hit = false;
 	bool box_ishit = false;
 	float sign = 0;
@@ -208,7 +212,6 @@ bool LineCollider_t::HitBox(const BoxCollider* box)const
 		}
 	}
 	if (box_ishit == false)return false; //線分を囲う四角形にすら当たってない
-
 	
 	for (int i = 0; i < 4; i++)
 	{
@@ -244,6 +247,7 @@ bool LineCollider_t::HitBox(const BoxCollider* box)const
 //-----------------------------------
 bool LineCollider_t::HitLine(const LineCollider_t* line)const
 {
+
 	bool is_hit = false;
 
 	Location this_vector
@@ -279,7 +283,6 @@ bool LineCollider_t::HitLine(const LineCollider_t* line)const
 		is_hit = true;
 	}
 
-
 	return is_hit;
 }
 
@@ -288,6 +291,7 @@ bool LineCollider_t::HitLine(const LineCollider_t* line)const
 //-----------------------------------------------------
 Location LineCollider_t::GetLocation(int index)const
 {
+
 	if (index < 2)
 	{
 		return MakeTip(index);
@@ -303,6 +307,7 @@ Location LineCollider_t::GetLocation(int index)const
 //--------------------------------------------------
 void LineCollider_t::SetLocation(Location location, int index)
 {
+
 	if (index < 2)
 	{
 		vector[LINE_START] = MakeTip(LINE_START);
@@ -379,6 +384,7 @@ bool LineCollider::HitSphere(class SphereCollider* sphere_collider)
 //-----------------------------------
 bool LineCollider::HitBox(class BoxCollider* box_collider)
 {
+
 	bool ret = false; //返り値
 
 	float vector_x[3]; //X座標のベクトル
@@ -424,7 +430,6 @@ bool LineCollider::HitBox(class BoxCollider* box_collider)
 	sub_y[0] = box_collider->GetLocation().y - (box_collider->GetArea().height / 2);
 	sub_x[1] = sub_x[0] + box_collider->GetArea().width;
 	sub_y[1] = sub_y[0] + box_collider->GetArea().height;
-
 
 	if ((my_x[0] < sub_x[1]) && (my_x[1] < sub_x[1]) 
 			&& (my_y[0] < sub_y[1]) && (sub_y[0] < my_y[1]))
@@ -528,6 +533,7 @@ bool LineCollider::HitLine(LineCollider* line_collider)
 //-----------------------------------
 Location  LineCollider::GetLocation(int i)const
 {
+
 	return location[i];
 }
 
@@ -536,5 +542,6 @@ Location  LineCollider::GetLocation(int i)const
 //-----------------------------------
 void  LineCollider::SetLocation(Location location, int i)
 {
+
 	this->location[i] = location;
 }

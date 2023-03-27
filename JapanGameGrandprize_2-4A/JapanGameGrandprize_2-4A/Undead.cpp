@@ -37,6 +37,7 @@
 //-----------------------------------
 Undead::Undead(Location spawn_location)
 {
+
 	/*初期化*/
 	can_delete = false;
 	left_move = true;
@@ -89,6 +90,7 @@ Undead::Undead(Location spawn_location)
 //-----------------------------------
 Undead::~Undead()
 {
+
 	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		delete drop_element[i];
@@ -111,6 +113,7 @@ Undead::~Undead()
 //-----------------------------------
 void Undead::Update(const Player* player, const Stage* stage)
 {
+
 	HitMapChip hit_stage = {false,nullptr}; //ステージとの当たり判定
 	Location old_location = location; //移動前の座標
 	switch (state)
@@ -210,6 +213,7 @@ void Undead::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void Undead::DistancePlayer(const Location player_location)
 {
+
 	float distance; //離れている距離
 
 	//プレイヤーとの距離の計算
@@ -242,6 +246,7 @@ void Undead::DistancePlayer(const Location player_location)
 //-----------------------------------
 void Undead::Idol()
 {
+
 	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
@@ -261,13 +266,12 @@ void Undead::Idol()
 //-----------------------------------
 void Undead::Move(const Location player_location)
 {	
+
 	DistancePlayer(player_location);
 
 	location.x += speed;
 
 	MoveAnimation();
-
-	
 }
 
 //-----------------------------------
@@ -275,6 +279,7 @@ void Undead::Move(const Location player_location)
 //-----------------------------------
 void Undead::Fall()
 {
+
 	location.y += speed;
 	if (speed < GRAVITY)
 	{
@@ -287,6 +292,7 @@ void Undead::Fall()
 //-----------------------------------
 void  Undead::Attack(Location player_location)
 {
+
 	attack_time--;
 	if (attack_time < 0)
 	{
@@ -301,6 +307,7 @@ void  Undead::Attack(Location player_location)
 //-----------------------------------
 AttackResource Undead::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	if (!attack)
@@ -320,6 +327,7 @@ AttackResource Undead::Hit()
 //-----------------------------------
 void Undead::Death()
 {
+
 	can_delete = true;
 }
 
@@ -328,6 +336,7 @@ void Undead::Death()
 //-----------------------------------
 void Undead::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
@@ -362,6 +371,7 @@ void Undead::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Undead::MoveAnimation()
 {
+
 	animation++;
 	if (animation % UNDEAD_MOVE_ANIMATION == 0)
 	{
@@ -374,6 +384,7 @@ void Undead::MoveAnimation()
 //-----------------------------------
 void Undead::Draw() const
 {
+
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
@@ -387,5 +398,6 @@ void Undead::Draw() const
 //-----------------------------------
 Location Undead::GetLocation() const
 {
+
 	return location;
 }

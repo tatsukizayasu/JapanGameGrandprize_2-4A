@@ -1,10 +1,10 @@
 #pragma once
 #include "Stage_Element_Base.h"
+
 class Element_Fall_Floor : public Stage_Element_Base
 {
 private:
 	
-
 	//点滅
 	bool is_flash;
 
@@ -19,7 +19,6 @@ private:
 		WORKING,	//落ちる前
 		FALL,		//落下
 	} state;
-
 public:
 
 	//コンストラクタ
@@ -28,7 +27,4 @@ public:
 	~Element_Fall_Floor();
 	//更新
 	void Update(Player* player) override;
-
-
-
 };

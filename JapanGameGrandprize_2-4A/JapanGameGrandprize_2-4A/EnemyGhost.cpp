@@ -37,12 +37,12 @@
 //ゴーストの攻撃力
 #define GHOST_ATTACK_DAMAGE 10
 
-
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
 EnemyGhost::EnemyGhost(Location spawn_location)
 {
+
 	can_delete = false;
 	left_move = true;
 	attack = false;
@@ -93,6 +93,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 //-----------------------------------
 EnemyGhost::~EnemyGhost()
 {
+
 	delete[] images;
 	delete[] type;
 
@@ -108,6 +109,7 @@ EnemyGhost::~EnemyGhost()
 //-----------------------------------
 void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 {
+
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -162,6 +164,7 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 //アイドル状態
 void EnemyGhost::Idol()
 {
+
 	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
@@ -172,6 +175,7 @@ void EnemyGhost::Idol()
 //移動
 void EnemyGhost::Move(const Location player_location)
 {
+
 	GhostMove(player_location);
 
 	switch (action_type)
@@ -201,7 +205,6 @@ void EnemyGhost::Move(const Location player_location)
 	default:
 		break;
 	}
-
 }
 
 //-----------------------------------
@@ -209,6 +212,7 @@ void EnemyGhost::Move(const Location player_location)
 //-----------------------------------
 void  EnemyGhost::Attack(Location player_location)
 {
+
 	standby_time--;
 	if (standby_time < 0)
 	{
@@ -238,6 +242,7 @@ void  EnemyGhost::Attack(Location player_location)
 //-----------------------------------
 AttackResource EnemyGhost::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK && (!attack))
@@ -257,6 +262,7 @@ AttackResource EnemyGhost::Hit()
 //-----------------------------------
 void EnemyGhost::Death()
 {
+
 	can_delete = true;
 }
 
@@ -265,6 +271,7 @@ void EnemyGhost::Death()
 //-----------------------------------
 void EnemyGhost::Draw()const
 {
+
 	//スクロールに合わせて描画
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
@@ -278,6 +285,7 @@ void EnemyGhost::Draw()const
 //-----------------------------------
 void EnemyGhost::GhostMove(const Location player_location)
 {
+
 	float range; //プレイヤーとの距離	
 
 	range = fabsf(location.x - player_location.x);
@@ -348,6 +356,7 @@ void EnemyGhost::GhostMove(const Location player_location)
 //-----------------------------------
 void EnemyGhost::Fall()
 {
+
 }
 
 //-----------------------------------
@@ -355,6 +364,7 @@ void EnemyGhost::Fall()
 //-----------------------------------
 void EnemyGhost::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL:
@@ -386,5 +396,6 @@ void EnemyGhost::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 Location EnemyGhost::GetLocation() const
 {
+
 	return location;
 }

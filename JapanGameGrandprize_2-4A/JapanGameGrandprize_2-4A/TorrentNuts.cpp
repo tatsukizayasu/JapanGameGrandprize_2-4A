@@ -12,6 +12,7 @@
 //-----------------------------------
 TorrentNuts::TorrentNuts(ENEMY_TYPE type,Location spawn_location)
 {
+
 	location = spawn_location;
 	radius = 20;
 	speed = TORRENT_NUTS_SPEED;
@@ -19,7 +20,6 @@ TorrentNuts::TorrentNuts(ENEMY_TYPE type,Location spawn_location)
 
 	image = 0;
 	damage = TORRENT_NUTS_DAMAGE;
-	
 }
 
 //-----------------------------------
@@ -35,6 +35,7 @@ TorrentNuts::~TorrentNuts()
 //-----------------------------------
 void TorrentNuts::Update()
 {
+
 	location.y += speed;
 }
 
@@ -43,11 +44,11 @@ void TorrentNuts::Update()
 //-----------------------------------
 void TorrentNuts::Draw() const
 {
+
 	Location draw_location = location; //ï`âÊç¿ïW
 	Location camera = CameraWork::GetCamera();
 
 	draw_location = draw_location - camera;
 
 	DrawCircle(draw_location.x, draw_location.y, radius, 0xff0000, TRUE);
-
 }

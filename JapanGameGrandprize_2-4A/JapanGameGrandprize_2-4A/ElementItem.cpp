@@ -5,6 +5,7 @@
 //-----------------------------------
 ElementItem::ElementItem()
 {
+
 	volume = 0;
 	type = ELEMENT_ITEM::NONE;
 }
@@ -14,6 +15,7 @@ ElementItem::ElementItem()
 //-----------------------------------
 ElementItem::ElementItem(ELEMENT_ITEM type)
 {
+
 	volume = 0;
 	this->type = type;
 }
@@ -23,6 +25,7 @@ ElementItem::ElementItem(ELEMENT_ITEM type)
 //-----------------------------------
 unsigned int ElementItem::GetVolume()const
 {
+
 	return volume;
 }
 
@@ -31,6 +34,7 @@ unsigned int ElementItem::GetVolume()const
 //-----------------------------------
 ELEMENT_ITEM ElementItem::GetType() const
 {
+
 	return type; 
 }
 
@@ -39,5 +43,6 @@ ELEMENT_ITEM ElementItem::GetType() const
 //-----------------------------------
 void ElementItem::SetVolume(unsigned int num)
 {
+
 	volume = num;
 }

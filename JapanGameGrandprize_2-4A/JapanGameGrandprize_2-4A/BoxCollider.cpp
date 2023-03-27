@@ -10,6 +10,7 @@
 //-----------------------------------
 bool BoxCollider::HitSphere(const SphereCollider* sphere_collider) const
 {
+
 	bool ret = false;//返り値
 	float rad; //2点の角度
 	float sphere_x; //円の座標(x)
@@ -35,7 +36,6 @@ bool BoxCollider::HitSphere(const SphereCollider* sphere_collider) const
 	my_x[1] = my_x[0] + area.width;
 	my_y[1] = my_y[0] + area.height;
 
-
 	if ((my_x[0] <= sphere_x) && (sphere_x <= my_x[1]) 
 		    && (my_y[0] <= sphere_y) && (sphere_y <= my_y[1])) //当たり判定
 	{
@@ -50,6 +50,7 @@ bool BoxCollider::HitSphere(const SphereCollider* sphere_collider) const
 //-----------------------------------
 bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 {
+
 	bool ret = false; //返り値
 
 	//当たり判定範囲の誤差修正
@@ -89,6 +90,7 @@ bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 //-----------------------------------
 bool BoxCollider::HitLine(const LineCollider_t* line_collider) const
 {
+
 	bool ret = false; //返り値
 
 	float vector_x[3]; //X座標のベクトル
@@ -117,7 +119,6 @@ bool BoxCollider::HitLine(const LineCollider_t* line_collider) const
 	{
 		sub_x[0] = line_collider->GetLocation(0).x;
 		sub_x[1] = line_collider->GetLocation(1).x;
-
 	}
 	else
 	{
@@ -194,6 +195,7 @@ bool BoxCollider::HitLine(const LineCollider_t* line_collider) const
 //-----------------------------------
 Location BoxCollider::GetLocation()const
 {
+
 	return location;
 }
 
@@ -202,6 +204,7 @@ Location BoxCollider::GetLocation()const
 //-----------------------------------
 Area BoxCollider::GetArea()const
 {
+
 	return area;
 }
 
@@ -210,5 +213,6 @@ Area BoxCollider::GetArea()const
 //-----------------------------------
 void BoxCollider::SetLocation(Location location)
 {
+
 	this->location = location;
 }
