@@ -5,9 +5,6 @@
 //#include"Player.h"
 //#include"Stage/Stage.h"
 //
-//#define SLIME_ATTACK_DISTANCE_Y 15
-//#define SLIME_ATTACK_SPEED 5
-//
 ////移動速度
 //#define SLIME_SPEED 2
 //#define SLIME_ATTACK_DAMAGE 10
@@ -15,323 +12,52 @@
 //#define SLIME_MIN_DROP 0u
 //#define SLIME_MAX_DROP 3u
 //
-//#define GROUND 1200
-//#define WAIT_TIME 30 //プレイヤーを見つけて攻撃するまでの時間
 //
-//#define ONE_ROUND 360 //一周の角度
-//#define ROTATION_SPEED 15 //スライムが回転するスピード
 //
 //
 //EnemySlimeBoss::EnemySlimeBoss()
 //{
-//	attack = false;
-//	left_move = true;
-//	kind = ENEMY_KIND::SLIME;
-//
-//	location.x = 1690.0f;
-//	location.y = 980.0f;
-//
-//	area.height = 40;
-//	area.width = 46;
-//
-//	hp = 100;
-//	speed = SLIME_SPEED;
-//
-//	type = new ENEMY_TYPE;
-//	*type = ENEMY_TYPE::WATER;
-//
-//	state = ENEMY_STATE::IDOL;
-//	slimeboss_image = LoadGraph("Images/Enemy/Slime_.png");
-//	
-//	//ドロップアイテムの設定
-//	drop_element = new ElementItem * [SOIL_DROP];
-//	drop_type_volume = SOIL_DROP;
-//
-//	int volume = 0;
-//
-//	for (int i = 0; i < WATER_DROP; i++)
+//	for (int i = 0; i > BODY_MAX; i++)
 //	{
-//		volume = SLIME_MIN_DROP + GetRand(SLIME_MAX_DROP);
-//		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
-//		drop_element[i]->SetVolume(volume);
-//		drop_volume += volume;
+//		if (i == 0)slime_boss_body[i] = new SlimeBossBody(100, 100, 5, 100, 5, 10, BODY_TYPE::head);
+//		else slime_boss_body[i] = new SlimeBossBody(100, 100, 5, 100, 5, 10, BODY_TYPE::body);
 //	}
-//
 //}
 //
-//void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
+//void EnemySlimeBoss::Update(const Stage* stage, const Player* player)
 //{
-//	Location old_location = location;	//前の座標
-//	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
-//
-//	switch (state)
+//	for (int i = 0; i > BODY_MAX; i++)
 //	{
-//	case ENEMY_STATE::IDOL:
-//		Idol();
-//		break;
-//	case ENEMY_STATE::MOVE:
-//		Move(player->GetLocation());
-//
-//		hit_stage = HitStage(stage);
-//		if (hit_stage.hit) //ステージとの当たり判定
+//		if (slime_boss_body[i]->GetBodyType() == BODY_TYPE::head)
 //		{
-//			Location chip_location = hit_stage.chip->GetLocation();
-//			Area chip_area = hit_stage.chip->GetArea();
-//			if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
-//			{
-//				if (left_move)
-//				{
-//					location.x = chip_location.x + (chip_area.width / 2) + (area.width / 2) + 2;
-//				}
-//				else
-//				{
-//					location.x = chip_location.x - (chip_area.width / 2) - (area.width / 2) - 2;
-//				}
-//				left_move = !left_move;
-//				speed = -speed;
-//			}
+//			slime_boss_body[i]->Update(player, stage);
 //		}
 //		else
 //		{
-//			state = ENEMY_STATE::FALL;
-//			speed = 0;
+//			slime_boss_body[i]->SetLocation(location_data[DATA / (i * BODY_MAX)]);
 //		}
-//
-//		break;
-//	case ENEMY_STATE::FALL:
-//		Fall();
-//		hit_stage = HitStage(stage);
-//
-//		if (hit_stage.hit) //ステージとの当たり判定
-//		{
-//			Location chip_location = hit_stage.chip->GetLocation();
-//			Area chip_area = hit_stage.chip->GetArea();
-//			if ((chip_location.y - chip_area.height / 2) < (location.y + area.height / 2))
-//			{
-//				location.y = chip_location.y - (chip_area.height / 2) - (area.height / 2) + 2;
-//				state = ENEMY_STATE::MOVE;
-//				if (left_move)
-//				{
-//					speed = -SLIME_SPEED;
-//				}
-//				else
-//				{
-//					speed = SLIME_SPEED;
-//				}
-//			}
-//		}
-//		break;
-//	case ENEMY_STATE::ATTACK:
-//		Attack(player->GetLocation());
-//		break;
-//	case ENEMY_STATE::DEATH:
-//		Death();
-//		break;
-//	default:
-//		break;
 //	}
 //
-//
-//
-//
-//	if (CheckHp() && state != ENEMY_STATE::DEATH)
+//	Location now = slime_boss_body[0]->GetLocation();
+//	Location old;
+//	
+//	for (int i = 0; i < DATA; i++)
 //	{
-//		state = ENEMY_STATE::DEATH;
-//		jump_distance.y = 15;
+//		old.x = location_data[i].x;
+//		old.y = location_data[i].y;
+//
+//		location_data[i].x = now.x;
+//		location_data[i].y = now.y;
+//		
+//		now.x = old.x;
+//		now.y = old.y;
 //	}
 //}
 //
 //void EnemySlimeBoss::Draw()const
 //{
-//
-//	Location draw_location = location;
-//	Location camera = CameraWork::GetCamera();
-//	draw_location = draw_location - camera;
-//
-//	//DrawRotaGraph(draw_location.x, draw_location.y, 0.17, M_PI / 180 * slime_angle, slime_image, TRUE, !left_move);
-//}
-//
-////-----------------------------------
-////アイドル状態
-////-----------------------------------
-//void EnemySlimeBoss::Idol()
-//{
-//	Location scroll; //画面スクロールを考慮したX座標
-//	Location camera = CameraWork::GetCamera(); //カメラ
-//	scroll = location - camera;
-//
-//	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-//		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+//	for (int i = 0; i > BODY_MAX; i++)
 //	{
-//		state = ENEMY_STATE::MOVE;
+//		slime_boss_body[i]->Draw();
 //	}
-//}
-//
-////-----------------------------------
-////移動
-////-----------------------------------
-//void EnemySlimeBoss::Move(const Location player_location)
-//{
-//
-//	float distance; //離れている距離
-//
-//	//プレイヤーとの距離の計算
-//	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
-//
-//}
-//
-////-----------------------------------
-////落下
-////-----------------------------------
-//void EnemySlimeBoss::Fall()
-//{
-//	if (speed < GRAVITY)
-//	{
-//		speed += ENEMY_FALL_SPEED;
-//	}
-//	location.y += speed;
-//}
-//
-////-----------------------------------
-////攻撃
-////-----------------------------------
-//void  EnemySlimeBoss::Attack(Location player_location)
-//{
-//	location.y -= (jump_distance.y / 3);
-//	jump_distance.y -= 1;
-//
-//	switch (slime_attack)
-//	{
-//	case SLIME_ATTACK::BEFORE_ATTACK:
-//
-//		if (left_move)
-//		{
-//			speed = -SLIME_ATTACK_SPEED;
-//		}
-//		else
-//		{
-//			speed = SLIME_ATTACK_SPEED;
-//		}
-//		break;
-//
-//	case SLIME_ATTACK::AFTER_ATTACK:
-//
-//		if (left_move)
-//		{
-//			speed = -SLIME_ATTACK_SPEED;
-//		}
-//		else
-//		{
-//			speed = SLIME_ATTACK_SPEED;
-//		}
-//
-//		break;
-//	}
-//	location.x += speed;
-//
-//	if (location.y >= GROUND)
-//	{
-//		attack = false;
-//		slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
-//		state = ENEMY_STATE::MOVE;
-//		if (left_move)
-//		{
-//			speed = -SLIME_SPEED;
-//		}
-//		else
-//		{
-//			speed = SLIME_SPEED;
-//
-//		}
-//	}
-//}
-//
-////-----------------------------------
-////攻撃が当たっているか
-////-----------------------------------
-//AttackResource EnemySlimeBoss::Hit()
-//{
-//	AttackResource ret = { 0,nullptr,0 }; //戻り値
-//
-//	if (!attack)
-//	{
-//		attack = true;
-//		slime_attack = SLIME_ATTACK::AFTER_ATTACK;
-//		ENEMY_TYPE attack_type[1] = { *type };
-//		ret.damage = SLIME_ATTACK_DAMAGE;
-//		ret.type = attack_type;
-//		ret.type_count = 1;
-//	}
-//
-//	return ret;
-//}
-//
-////-----------------------------------
-////死亡
-////-----------------------------------
-//void EnemySlimeBoss::Death()
-//{
-//	if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
-//	{
-//		can_delete = true;
-//	}
-//	else
-//	{
-//		if (location.y <= GROUND)
-//		{
-//			location.y -= (jump_distance.y / 3);
-//			jump_distance.y--;
-//		}
-//		if (left_move)
-//		{
-//			speed = SLIME_ATTACK_SPEED;
-//			slime_angle += ROTATION_SPEED;
-//		}
-//		else
-//		{
-//
-//			speed = -SLIME_ATTACK_SPEED;
-//			slime_angle -= ROTATION_SPEED;
-//		}
-//		location.x += speed;
-//	}
-//}
-//
-////-----------------------------------
-//// プレイヤーの弾との当たり判定
-////-----------------------------------
-//void EnemySlimeBoss::HitBullet(const BulletBase* bullet)
-//{
-//	switch (bullet->GetAttribute())
-//	{
-//	case ATTRIBUTE::NORMAL:
-//		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
-//		break;
-//	case ATTRIBUTE::EXPLOSION:
-//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
-//		break;
-//	case ATTRIBUTE::MELT:
-//		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
-//		break;
-//	case ATTRIBUTE::POISON:
-//		//poison_damage = bullet->GetDamage();
-//		//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
-//		break;
-//	case ATTRIBUTE::PARALYSIS:
-//		paralysis_time = bullet->GetDebuffTime() * 0;
-//		break;
-//	case ATTRIBUTE::HEAL:
-//		break;
-//	default:
-//		break;
-//	}
-//
-//}
-//
-////-----------------------------------
-////座標の取得
-////-----------------------------------
-//Location EnemySlimeBoss::GetLocation() const
-//{
-//	return location;
 //}

@@ -175,6 +175,7 @@
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="SlimeBossBody.h" />
     <ClInclude Include="Stage\Element\Element_Barricade.h" />
     <ClInclude Include="Stage\Element\Element_Conveyor_Belt.h" />
     <ClInclude Include="Stage\Element\Element_Fall_Floor.h" />
@@ -231,6 +232,7 @@
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="SlimeBossBody.cpp" />
     <ClCompile Include="Stage\Element\Element_Barricade.cpp" />
     <ClCompile Include="Stage\Element\Element_Conveyor_Belt.cpp" />
     <ClCompile Include="Stage\Element\Element_Fall_Floor.cpp" />
