@@ -27,7 +27,7 @@ private:
 
 	int standby_attack; //次の攻撃待機時間
 	int standby_time; //硬直時間
-	int ghost_image[6]; //ゴーストの画像。
+	int ghost_image[7]; //ゴーストの画像。
 	int animation; //アニメーション
 	int animation_time; //アニメーションの時間
 	int physical_time; //物理攻撃時間
@@ -45,10 +45,6 @@ private:
 	bool hit_ground; //地面との当たり判定
 	GHOST_STATE action_type; //行動パターン
 	GHOST_ATTACK attack_state; //攻撃状態
-private:
-
-	//ゴーストの動きを決める
-	void GhostMove(const Location player_location);
 public:
 
 	//コンスタラクタ
@@ -68,6 +64,9 @@ public:
 
 	//移動
 	void Move(const Location player_location) override;
+
+	//接近攻撃
+	void AttackMove(const Location player_location);
 
 	//落下
 	void Fall() override;
