@@ -406,6 +406,7 @@ Location Undead::GetLocation() const
 //-----------------------------------
 void Undead::Update(const ENEMY_STATE state)
 {
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -424,9 +425,12 @@ void Undead::Update(const ENEMY_STATE state)
 	}
 }
 
+//-----------------------------------
 //•`‰æ(DotByDot)
+//-----------------------------------
 void Undead::DebugDraw()
 {
+
 	DrawRotaGraphF(location.x, location.y, 1.0, 0,
 		images[image_argument], TRUE, !left_move);
 
