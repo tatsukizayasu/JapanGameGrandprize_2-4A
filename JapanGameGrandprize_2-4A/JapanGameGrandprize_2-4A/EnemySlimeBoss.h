@@ -10,7 +10,6 @@
 //private:
 //	
 //	Location location_data[DATA];
-//
 //	ENEMY_STATE state;
 //	SlimeBossBody* slime_boss_body[BODY_MAX];
 //

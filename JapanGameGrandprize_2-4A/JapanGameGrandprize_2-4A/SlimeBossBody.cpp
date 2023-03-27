@@ -81,29 +81,31 @@
 //
 //		hit_stage = HitStage(stage);
 //
-//		if (hit_stage.hit) //ステージとの当たり判定
-//		{
-//			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-//			hit_direction = HitDirection(hit_stage.chip);
+//		//if (hit_stage.hit) //ステージとの当たり判定
+//		//{
+//		//	STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+//		//	hit_direction = HitDirection(hit_stage.chip);
 //
-//			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
-//			{
-//				location = old_location;
-//				left_move = !left_move;
-//				speed = -speed;
-//			}
-//		}
-//		else
-//		{
-//			state = ENEMY_STATE::FALL;
-//			speed = 0;
-//		}
+//		//	if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
+//		//	{
+//		//		location = old_location;
+//		//		left_move = !left_move;
+//		//		speed = -speed;
+//		//	}
+//		//}
+//		//else
+//		//{
+//		//	state = ENEMY_STATE::FALL;
+//		//	speed = 0;
+//		//}
 //
-//		if (ScreenOut())
-//		{
-//			state = ENEMY_STATE::IDOL;
-//			speed = 0;
-//		}
+//		//if (ScreenOut())
+//		//{
+//		//	state = ENEMY_STATE::IDOL;
+//		//	speed = 0;
+//		//}
+//
+//		location.x += speed;
 //
 //		break;
 //

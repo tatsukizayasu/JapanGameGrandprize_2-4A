@@ -8,8 +8,7 @@
 //	body
 //};
 //
-//class SlimeBossBody:
-//	public EnemyBase
+//class SlimeBossBody: public EnemyBase
 //{
 //private:
 //

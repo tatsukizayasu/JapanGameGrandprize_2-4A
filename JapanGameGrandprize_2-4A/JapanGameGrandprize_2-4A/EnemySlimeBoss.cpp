@@ -17,16 +17,16 @@
 //
 //EnemySlimeBoss::EnemySlimeBoss()
 //{
-//	for (int i = 0; i > BODY_MAX; i++)
+//	for (int i = 0; i < BODY_MAX; i++)
 //	{
-//		if (i == 0)slime_boss_body[i] = new SlimeBossBody(100, 100, 5, 100, 5, 10, BODY_TYPE::head);
+//		if (i == 0)slime_boss_body[i] = new SlimeBossBody(100, 700, 5, 100, 5, 10, BODY_TYPE::head);
 //		else slime_boss_body[i] = new SlimeBossBody(100, 100, 5, 100, 5, 10, BODY_TYPE::body);
 //	}
 //}
 //
 //void EnemySlimeBoss::Update(const Stage* stage, const Player* player)
 //{
-//	for (int i = 0; i > BODY_MAX; i++)
+//	for(int i = 0; i < BODY_MAX; i++)
 //	{
 //		if (slime_boss_body[i]->GetBodyType() == BODY_TYPE::head)
 //		{
@@ -41,7 +41,7 @@
 //	Location now = slime_boss_body[0]->GetLocation();
 //	Location old;
 //	
-//	for (int i = 0; i < DATA; i++)
+//	for(int i = 0; i < DATA; i++)
 //	{
 //		old.x = location_data[i].x;
 //		old.y = location_data[i].y;
@@ -56,7 +56,7 @@
 //
 //void EnemySlimeBoss::Draw()const
 //{
-//	for (int i = 0; i > BODY_MAX; i++)
+//	for (int i = 0; i < BODY_MAX; i++)
 //	{
 //		slime_boss_body[i]->Draw();
 //	}
