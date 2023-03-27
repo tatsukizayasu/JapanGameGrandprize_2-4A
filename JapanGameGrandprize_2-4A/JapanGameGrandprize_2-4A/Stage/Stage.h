@@ -54,6 +54,7 @@ private:
 	int background_images;
 	//ƒuƒƒbƒN‰æ‘œ
 	int block_images[50];
+	int stage1_block_images[10];
 
 
 protected:
