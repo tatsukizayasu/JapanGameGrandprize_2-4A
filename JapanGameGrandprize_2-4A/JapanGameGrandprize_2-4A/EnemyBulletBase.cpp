@@ -2,13 +2,13 @@
 #include "Define.h"
 #include "CameraWork.h"
 #include "Stage/Stage.h"
-#include "BULLET.h"
 
 //-----------------------------------
 //画面外に出たかどうか
 //-----------------------------------
 bool EnemyBulletBase::ScreenOut()
 {
+
 	bool ret = false; //戻り値
 	float x, y;
 	x = location.x - CameraWork::GetCamera().x;
@@ -27,9 +27,10 @@ bool EnemyBulletBase::ScreenOut()
 //-----------------------------------
 bool EnemyBulletBase::HitStage(const Stage* stage) const
 {
+
 	bool ret = false; //戻り値
 
-//マップチップ
+	//マップチップ
 	std::vector<MapChip*>map_chip = stage->GetMapChip();
 
 	//カメラの位置
@@ -66,6 +67,7 @@ bool EnemyBulletBase::HitStage(const Stage* stage) const
 //-----------------------------------
 int EnemyBulletBase::GetDamage() const
 {
+
 	return damage;
 }
 
@@ -74,5 +76,6 @@ int EnemyBulletBase::GetDamage() const
 //-----------------------------------
 ENEMY_TYPE EnemyBulletBase::GetType() const
 {
+
 	return type;
 }

@@ -43,10 +43,6 @@ private:
 	//ステージ要素のID
 	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, TRAP,
 		MOVE_FLOOR,GreenButton, YellowButton };
-
-protected:
-
-
 public:
 
 	//コンストラクタ
@@ -87,7 +83,6 @@ public:
 	/// </summary>
 	std::vector<int> LoadImage(const std::string& filename);
 
-
 	/// <summary>
 	/// ステージ要素ID		Getter
 	/// </summary>
@@ -98,13 +93,14 @@ public:
 	/// </summary>
 	/// <returns>ベクター型(Stage_Element_Baseオブジェクト型)：Stage_Element_Base</returns>	
 	/// ※全要素をループして使わないこと
-	std::vector<Stage_Element_Base*> GetMapChip() const {
+	std::vector<Stage_Element_Base*> GetMapChip() const 
+	{
 		std::vector<Stage_Element_Base*> result;
 		result.reserve(element.size());
-		for (const auto& e : element) {
+		for (const auto& e : element)
+		{
 			result.push_back(e.get());
 		}
 		return result;
-
 	};
 };

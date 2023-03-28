@@ -4,8 +4,8 @@ class TorrentNuts :
     public EnemyBulletBase
 {
 private:
+
     int image; //画像
-  
 public:
 
     //コンストラクタ
@@ -20,4 +20,3 @@ public:
     //描画
     void Draw() const override;
 };
-

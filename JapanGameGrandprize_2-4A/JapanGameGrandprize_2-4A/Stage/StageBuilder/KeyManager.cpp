@@ -11,6 +11,7 @@ int KeyManager::nowMouse;
 //---------------------
 void KeyManager::Update()
 {
+
 	for (int i = 0; i < 256; i++)
 	{
 		oldKey[i] = nowKey[i];
@@ -32,6 +33,7 @@ void KeyManager::Update()
 //----------------
 bool KeyManager::OnKeyClicked(int Key)
 {
+
 	bool ret = (oldKey[Key] != TRUE) && (nowKey[Key] == TRUE);
 
 	return ret;
@@ -42,6 +44,7 @@ bool KeyManager::OnKeyClicked(int Key)
 //----------------
 bool KeyManager::OnKeyReleased(int Key)
 {
+
 	bool ret = (oldKey[Key] == TRUE) && (nowKey[Key] != TRUE);
 
 	return ret;
@@ -52,6 +55,7 @@ bool KeyManager::OnKeyReleased(int Key)
 //----------------
 bool KeyManager::OnKeyPressed(int Key)
 {
+
 	bool ret = (oldKey[Key] == TRUE) && (nowKey[Key] == TRUE);
 
 	return ret;
@@ -64,6 +68,7 @@ bool KeyManager::OnKeyPressed(int Key)
 //----------------
 bool KeyManager::OnMouseClicked(int Key)
 {
+
 	bool ret = ~(oldMouse & Key) & (nowMouse & Key);
 	return ret;
 }
@@ -73,6 +78,7 @@ bool KeyManager::OnMouseClicked(int Key)
 //----------------
 bool KeyManager::OnMouseReleased(int Key)
 {
+
 	bool ret = (oldMouse & Key) & ~(nowMouse & Key);
 	return ret;
 }
@@ -82,6 +88,7 @@ bool KeyManager::OnMouseReleased(int Key)
 //----------------
 bool KeyManager::OnMousePressed(int Key)
 {
+
 	bool ret = (oldMouse & Key) & (nowMouse & Key);
 	return ret;
 }

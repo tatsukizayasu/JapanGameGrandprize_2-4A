@@ -2,9 +2,9 @@
 #include "../Player.h"
 #include <windef.h>
 
-
 Stage_Element_Base::Stage_Element_Base()
 {
+
 	type = 0;
 	this->mapchip = nullptr;
 	this->image = 0;
@@ -12,11 +12,11 @@ Stage_Element_Base::Stage_Element_Base()
 	count = 0;
 	current_image = 0;
 	margin_area = { 0, 0 };
-
 }
 
 Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : MapChip(image, location, area)
 {
+
 	type = 0;
 	this->mapchip = mapchip;
 	start_time = chrono::steady_clock::now();
@@ -26,15 +26,13 @@ Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element
 
 Stage_Element_Base::~Stage_Element_Base()
 {
+
 	images.clear();
 	images.shrink_to_fit();
-
 }
-
 
 void Stage_Element_Base::LoopImages(std::vector<int>& images, float time, int total_images, std::function<void()>* callback)
 {
-
 
 	auto end_time = std::chrono::steady_clock::now();
 	auto diff = end_time - start_time;
@@ -48,7 +46,6 @@ void Stage_Element_Base::LoopImages(std::vector<int>& images, float time, int to
 		if (callback != nullptr) {
 			(*callback)();
 		}
-
 	}
 }
 
@@ -84,9 +81,9 @@ void Stage_Element_Base::LoopImages(std::vector<int>& images, float time, int to
 //
 //}
 
-
 std::tuple<bool, HIT_DIRECTION> Stage_Element_Base::HitPlayer(Player* player) const
 {
+
 	struct Rect
 	{
 		float x;
@@ -143,15 +140,14 @@ std::tuple<bool, HIT_DIRECTION> Stage_Element_Base::HitPlayer(Player* player) co
 			return std::make_tuple(true, HIT_DIRECTION::UP);
 		}
 	}
-
 }
-
 
 void Stage_Element_Base::LoopTimer(float time, std::function<void()>* callback)
 {
 
 	auto& start_time = start_time_map[time];
-	if (start_time == std::chrono::steady_clock::time_point{}) {
+	if (start_time == std::chrono::steady_clock::time_point{}) 
+	{
 		start_time = std::chrono::steady_clock::now();
 	}
 
@@ -170,18 +166,19 @@ void Stage_Element_Base::LoopTimer(float time, std::function<void()>* callback)
 		if (callback != nullptr) {
 			(*callback)();
 		}
-
 	}
-
 }
 
 float Stage_Element_Base::GetElapsedTime(float time) const
 {
+
 	auto it = elapsed_time_map.find(time);
-	if (it != elapsed_time_map.end()) {
+	if (it != elapsed_time_map.end())
+	{
 		return it->second;
 	}
-	else {
+	else 
+	{
 		// エラー値（time値が見つからない場合）
 		return -1.0f; 
 	}
@@ -189,34 +186,30 @@ float Stage_Element_Base::GetElapsedTime(float time) const
 
 void Stage_Element_Base::ResetElapsedTime(float time)
 {
+
 	auto it = elapsed_time_map.find(time);
-	if (it != elapsed_time_map.end()) {
+	if (it != elapsed_time_map.end()) 
+	{
 		it->second = 0.0f;
 		start_time_map[time] = std::chrono::steady_clock::now();
 	}
 }
 
-
-
-
-
-
 //std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
 //{
 //	for (auto elem : element) {
-//		if (elem != nullptr && elem->GetType() == type) {
+//		if (elem != nullptr && elem->GetType() == type) 
+//		{
 //			//MapChip* mapchip = elem->GetMapChip();
 //
 //			if (mapchip->GetLocation().y > elem->GetMapChip()->GetLocation().y
-//				&& mapchip->GetLocation().x == elem->GetMapChip()->GetLocation().x) {
-//
+//				&& mapchip->GetLocation().x == elem->GetMapChip()->GetLocation().x)
+//			{
 //				SearchElement(type)->GetMapChip()->SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
 //				SearchElement(type)->GetMapChip()->SetImage(0);
 //				printfDx("aa");
 //				return elem;
 //			}
-//			
 //		}
 //	}
 //}
-

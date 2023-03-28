@@ -8,6 +8,7 @@ class Undead :
     public EnemyBase
 {
 private:
+
     bool attack; //攻撃が当たったか
     int damage; //ダメージ
     int attack_interval; //次の攻撃までの時間
@@ -16,6 +17,7 @@ private:
     int attack_time; //攻撃している時間(デバッグ用)
     float old_distance; //直前のプレイヤーとの距離
 private:
+
     //プレイヤーとの距離
     void DistancePlayer(const Location player_location);
 

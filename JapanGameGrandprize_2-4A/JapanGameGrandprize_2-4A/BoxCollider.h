@@ -11,7 +11,6 @@ protected:
 	
 	Area area; //”ÍˆÍ
 	Area margin_area;	//“–‚½‚è”»’è”ÍˆÍ‚ÌŒë·C³
-
 public:
 
 	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è

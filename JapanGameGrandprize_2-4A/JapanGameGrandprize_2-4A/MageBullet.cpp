@@ -13,6 +13,7 @@
 MageBullet::MageBullet(ENEMY_TYPE type,
 	Location spawn_location,Location player_location)
 {
+
 	location = spawn_location;
 	radius = 6;
 	speed = MAGE_BULLET_SPEED;
@@ -39,6 +40,7 @@ MageBullet::~MageBullet()
 //-----------------------------------
 void MageBullet::Update()
 {
+
 	location.x += x_speed;
 	location.y += y_speed;
 }
@@ -48,6 +50,7 @@ void MageBullet::Update()
 //-----------------------------------
 void MageBullet::Draw() const
 {
+
 	Location draw_location = location; //ï`âÊç¿ïW
 	Location camera = CameraWork::GetCamera();
 

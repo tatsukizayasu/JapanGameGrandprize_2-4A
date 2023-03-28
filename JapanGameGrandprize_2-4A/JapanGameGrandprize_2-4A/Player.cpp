@@ -8,12 +8,12 @@
 
 #define ANIMATION_MOVE 10
 
-
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
 Player::Player()
 {
+
 	animation = 0;
 	location.x = 0;
 	location.y = 420;
@@ -69,7 +69,6 @@ Player::Player()
 	pararysis = nullptr;
 	heal = nullptr;
 
-
 	player_state = PLAYER_STATE::STOP;
 
 	display_attribute = 0;
@@ -88,7 +87,6 @@ Player::Player()
 	}
 
 	pouch = nullptr;
-
 }
 
 //-----------------------------------
@@ -96,6 +94,7 @@ Player::Player()
 //-----------------------------------
 Player::Player(Stage* stage)
 {
+
 	animation = 0;
 	area.height = 80;
 	area.width = 40;
@@ -142,6 +141,7 @@ Player::Player(Stage* stage)
 	normal.time = 0;
 
 	bullet = new BulletBase * [BULLET_MAX];
+
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet[i] = nullptr;
@@ -207,6 +207,7 @@ Player::Player(Stage* stage)
 //-----------------------------------
 Player::~Player()
 {
+
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		delete bullet[i];
@@ -219,6 +220,7 @@ Player::~Player()
 //-----------------------------------
 void Player::Draw() const
 {
+
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
@@ -337,6 +339,7 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
+
 	old_x = location.x;
 	old_y = location.y;
 	if (damage_flg == true)
@@ -502,6 +505,7 @@ void Player::Update()
 //スティックを入力していないとき
 void Player::NotInputStick()
 {
+
 	image_count = 0;
 	if (speed_x > 0)
 	{
@@ -558,9 +562,6 @@ void Player::NotInputStick()
 //左移動
 void Player::LeftMove()
 {
-
-
-
 
 	if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 	{
@@ -652,6 +653,7 @@ void Player::RightMove()
 //ジャンプ
 void Player::Jump()
 {
+
 	image_count = 0;
 	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;
@@ -687,6 +689,7 @@ void Player::Jump()
 //ジャンプしてない
 void Player::NotJump()
 {
+
 	player_state = PLAYER_STATE::DOWN;
 
 	jump -= 0.25;
@@ -731,6 +734,7 @@ void Player::NotJump()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
+
 	for (i = 0; i < bullet_count; i++)
 	{
 		if (bullet[i] == nullptr)
@@ -827,6 +831,7 @@ void Player::Shoot_Gun()
 //-----------------------------------
 void Player::SortBullet(int delete_bullet)
 {
+
 	for (int i = delete_bullet + 1; i < BULLET_MAX; i++)
 	{
 		if ((bullet[i] == nullptr))
@@ -845,6 +850,7 @@ void Player::SortBullet(int delete_bullet)
 //-----------------------------------
 void Player::ElementUpdate()
 {
+
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
 		if (select_count % 20 == 0)
@@ -877,6 +883,7 @@ void Player::ElementUpdate()
 //-----------------------------------
 void Player::HpDamage(AttackResource attack)
 {
+
 	if (!damage_flg)
 	{
 		if (attack.damage > 0)
@@ -919,6 +926,7 @@ void Player::HpDamage(AttackResource attack)
 //-----------------------------------
 void Player::Hp_Heal(int heal_value)
 {
+
 	hp += heal_value;
 	if (hp >= HP_MAX)
 	{
@@ -931,6 +939,7 @@ void Player::Hp_Heal(int heal_value)
 //-----------------------------------
 void Player::SetElementItem(class Item* item)
 {
+
 	int num = static_cast<int>(item->GetElementType());
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);
@@ -939,6 +948,7 @@ void Player::SetElementItem(class Item* item)
 
 bool Player::HitBlock(const Stage* stage_pointa)
 {
+
 	//マップチップ
 	std::vector<MapChip*>map_chip = stage_pointa->GetMapChip();
 
@@ -969,37 +979,44 @@ bool Player::HitBlock(const Stage* stage_pointa)
 
 bool Player::GetMoveDirection()
 {
+
 	return move_left;
 }
 
 
 void Player::SetExplosion(ChemicalFormulaParameter* a)
 {
+
 	explosion = a;
 }
 
 void Player::SetPoison(ChemicalFormulaParameter* a)
 {
+
 	poison = a;
 }
 
 void Player::SetMelt(ChemicalFormulaParameter* a)
 {
+
 	melt = a;
 }
 
 void Player::SetPararysis(ChemicalFormulaParameter* a)
 {
+
 	pararysis = a;
 }
 
 void Player::SetHeal(ChemicalFormulaParameter* a)
 {
+
 	heal = a;
 }
 
 void Player::MoveAnimation()
 {
+
 	animation++;
 	if (animation % ANIMATION_MOVE == 0)
 	{
@@ -1011,4 +1028,3 @@ void Player::MoveAnimation()
 		image_count = 0;
 	}
 }
-
