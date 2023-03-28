@@ -653,7 +653,6 @@ void Player::RightMove()
 //ƒWƒƒƒ“ƒv
 void Player::Jump()
 {
-
 	image_count = 0;
 	player_state = PLAYER_STATE::JUMP;
 	not_jet_count = 0;

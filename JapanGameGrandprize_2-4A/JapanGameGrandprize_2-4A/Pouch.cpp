@@ -551,28 +551,28 @@ void Pouch::Update()
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
-			if (select_explosion.make_bool == false)
+			if (!select_explosion.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
 			}
 			break;
 		case ATTRIBUTE::MELT:
-			if (select_melt == nullptr)
+			if (!select_melt.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
 			}
 			break;
 		case ATTRIBUTE::POISON:
-			if (select_poison == nullptr)
+			if (!select_poison.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
 			}			
 			break;
 		case ATTRIBUTE::PARALYSIS:
-			if (select_pararysis == nullptr)
+			if (!select_pararysis.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
@@ -892,13 +892,13 @@ ChemicalFormulaParameter* Pouch::GetExplosion()
 ChemicalFormulaParameter* Pouch::GetPoison()
 {
 
-	return select_poison;
+	return &select_poison;
 }
 
 ChemicalFormulaParameter* Pouch::GetPararysis()
 {
 
-	return select_pararysis;
+	return &select_pararysis;
 }
 
 ChemicalFormulaParameter* Pouch::GetHeal()
@@ -910,7 +910,7 @@ ChemicalFormulaParameter* Pouch::GetHeal()
 ChemicalFormulaParameter* Pouch::GetMelt()
 {
 
-	return select_melt;
+	return &select_melt;
 }
 
 ATTRIBUTE Pouch::GetAttribute()
@@ -949,27 +949,27 @@ void Pouch::ReduceAmmo(ATTRIBUTE a)
 	case ATTRIBUTE::NORMAL:
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		if (&select_explosion != nullptr)
+		if (select_explosion.make_bool)
 		{
 			select_explosion.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::MELT:
-		if (select_melt != nullptr)
+		if (select_melt.make_bool)
 		{
-			select_melt->number_of_bullets--;
+			select_melt.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::POISON:
-		if (select_poison != nullptr)
+		if (select_poison.make_bool)
 		{
-			select_poison->number_of_bullets--;
+			select_poison.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		if (select_pararysis != nullptr)
+		if (select_pararysis.make_bool)
 		{
-			select_pararysis->number_of_bullets--;
+			select_pararysis.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::HEAL:
@@ -992,19 +992,19 @@ void Pouch::SetChemicalFormulaParameter()
 	case ATTRIBUTE::MELT:
 		if (ComparisonElement(chemical_formula_melt[cursol]))
 		{
-			select_melt = &chemical_formula_melt[cursol];
+			select_melt = chemical_formula_melt[cursol];
 		}
 		break;
 	case ATTRIBUTE::POISON:
 		if (ComparisonElement(chemical_formula_poison[cursol]))
 		{
-			select_poison = &chemical_formula_poison[cursol];
+			select_poison = chemical_formula_poison[cursol];
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
 		if (ComparisonElement(chemical_formula_pararysis[cursol]))
 		{
-			select_pararysis = &chemical_formula_pararysis[cursol];
+			select_pararysis = chemical_formula_pararysis[cursol];
 		}
 		break;
 	case ATTRIBUTE::HEAL:
@@ -1112,24 +1112,24 @@ void Pouch::InitializeExplosion()
 
 void Pouch::DeleteHeal()
 {
-
 	select_heal = nullptr;
 }
 
 void Pouch::DeleteMelt()
 {
-
-	select_melt = nullptr;
+	select_melt = {0};
+	select_melt.make_bool = false;
 }
 
 void Pouch::DeletePararysis()
 {
 
-	select_pararysis = nullptr;
+	select_pararysis = { 0 };
+	select_pararysis.make_bool = false;
 }
 
 void Pouch::DeletePoison()
 {
-
-	select_poison = nullptr;
+	select_poison = { 0 };
+	select_poison.make_bool = false;
 }
