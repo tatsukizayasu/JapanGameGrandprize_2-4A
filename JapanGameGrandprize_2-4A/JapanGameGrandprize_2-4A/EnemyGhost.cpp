@@ -395,3 +395,39 @@ Location EnemyGhost::GetLocation() const
 
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// çXêV(DotByDot)
+//-----------------------------------
+void EnemyGhost::Update(const ENEMY_STATE state)
+{
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//ï`âÊ(DotByDot)
+//-----------------------------------
+void EnemyGhost::DebugDraw()
+{
+	DrawRotaGraphF(location.x, location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
+
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xffffff, FALSE);
+}
+#endif //_DEBUG

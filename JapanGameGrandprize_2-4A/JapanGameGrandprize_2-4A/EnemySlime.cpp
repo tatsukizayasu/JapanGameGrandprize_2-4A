@@ -461,3 +461,53 @@ Location EnemySlime::GetLocation() const
 
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// XV(DotByDot)
+//-----------------------------------
+void EnemySlime::Update(const ENEMY_STATE state)
+{
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		if (++image_change_time > 2)
+		{
+			image_type += image_addition;
+			if (image_type == 6)
+			{
+				image_addition = -1;
+			}
+			else if (image_type == 0)
+			{
+				image_addition = 1;
+			}
+			image_change_time = 0;
+		}
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//•`‰æ(DotByDot)
+//-----------------------------------
+void EnemySlime::DebugDraw()
+{
+	DrawRotaGraphF(location.x, location.y, 0.23,
+		M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
+
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xffffff, FALSE);
+}
+#endif //_DEBUG

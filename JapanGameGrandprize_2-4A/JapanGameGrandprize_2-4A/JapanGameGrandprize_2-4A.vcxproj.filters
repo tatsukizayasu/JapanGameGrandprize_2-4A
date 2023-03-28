@@ -162,6 +162,9 @@
     <ClCompile Include="SlimeBossBody.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
+       <ClCompile Include="DotByDot.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -332,6 +335,9 @@
     </ClInclude>
     <ClInclude Include="SlimeBossBody.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+     <ClInclude Include="DotByDot.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

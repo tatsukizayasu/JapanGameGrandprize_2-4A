@@ -78,4 +78,13 @@ public:
 
 	//À•W‚Ìæ“¾
 	Location GetLocation() const override;
+
+#ifdef _DEBUG
+	//XV(DotByDot)
+	void Update(const ENEMY_STATE state) override;
+
+	//•`‰æ(DotByDot)
+	void DebugDraw() override;
+#endif //_DEBUG
+
 };

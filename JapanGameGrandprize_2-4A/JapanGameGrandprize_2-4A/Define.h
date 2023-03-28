@@ -15,6 +15,7 @@
 
 #define MAX_STRING 40			//’e‚Ì–¼‘O‚ÌÅ‘å•¶š”
 
+
 //‰»‡•¨\‘¢‘Ì
 struct Compound
 {
