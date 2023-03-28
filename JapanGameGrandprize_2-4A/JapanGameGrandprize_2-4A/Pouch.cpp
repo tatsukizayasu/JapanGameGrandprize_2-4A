@@ -551,7 +551,7 @@ void Pouch::Update()
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
-			if (&select_explosion == nullptr)
+			if (select_explosion.make_bool == false)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
@@ -789,6 +789,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_explosion[i].time,
 				&attribute);
 			chemical_formula_explosion[i].atribute = static_cast <ATTRIBUTE>(attribute);
+			chemical_formula_explosion[i].make_bool = true;
 		}
 		for (int i = 0; i < POISON_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
@@ -809,6 +810,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_poison[i].time,
 				&attribute);
 			chemical_formula_poison[i].atribute = static_cast <ATTRIBUTE>(attribute);
+			chemical_formula_poison[i].make_bool = true;
 		}
 
 		for (int i = 0; i < PARARYSIS_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
@@ -830,7 +832,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_pararysis[i].time,
 				&attribute);
 			chemical_formula_pararysis[i].atribute = static_cast <ATTRIBUTE>(attribute);
-
+			chemical_formula_pararysis[i].make_bool = true;
 		}
 
 		for (int i = 0; i < HEAL_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
@@ -852,6 +854,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_heal[i].time,
 				&attribute);
 			chemical_formula_heal[i].atribute = static_cast <ATTRIBUTE>(attribute);
+			chemical_formula_heal[i].make_bool = true;
 
 		}
 
@@ -874,6 +877,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_melt[i].time,
 				&attribute);
 			chemical_formula_melt[i].atribute = static_cast <ATTRIBUTE>(attribute);
+			chemical_formula_melt[i].make_bool = true;
 		}
 		return;
 	}
@@ -1103,6 +1107,7 @@ void Pouch::ConsumptionMaterial()
 void Pouch::InitializeExplosion()
 {
 	select_explosion = { 0 };
+	select_explosion.make_bool = false;
 }
 
 void Pouch::DeleteHeal()

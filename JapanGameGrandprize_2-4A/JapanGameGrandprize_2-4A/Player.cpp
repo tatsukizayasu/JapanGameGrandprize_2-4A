@@ -755,7 +755,7 @@ void Player::Shoot_Gun()
 					else
 					{
 						explosion = nullptr;
-						pouch->DeleteExplosion();
+						pouch->InitializeExplosion();
 					}
 				}
 				break;

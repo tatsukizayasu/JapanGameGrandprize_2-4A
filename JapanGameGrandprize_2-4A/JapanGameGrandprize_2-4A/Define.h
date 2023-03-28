@@ -63,6 +63,7 @@ struct ChemicalFormulaParameter
 	char chemical_formula[MAX_STRING];
 	ATTRIBUTE atribute;
 	ChemicalFormulaMaterial material;
+	bool make_bool;
 };
 
 //’†SÀ•W
