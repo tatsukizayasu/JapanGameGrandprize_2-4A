@@ -20,8 +20,11 @@ GameMain::GameMain()
 #undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
 	background_image = LoadGraph("Images/Scene/gamemain.png");
+#ifdef _DEBUG
 
+#else
 	pause = new Pause();
+#endif
 
 	stage = new Stage();
 	player = new Player(stage);
@@ -54,7 +57,11 @@ GameMain::~GameMain()
 	spawn_volume = stage->GetEnemy_SpawnLocation().size();
 
 	delete camera_work;
+#ifdef _DEBUG
+
+#else
 	delete pause;
+#endif
 	delete player;
 	delete stage;
 
@@ -73,10 +80,13 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+#ifdef _DEBUG
 
+#else
 	pause->Update();
 	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
 	if (pause->IsPause() == TRUE) { return this; }
+#endif
 
 
 #ifdef _DEBUG
@@ -300,7 +310,10 @@ void GameMain::Draw()const
 		}
 	}
 	bullet_manager->Draw();
+#ifdef _DEBUG
 
+#else
 	//ƒ|[ƒY		•`‰æ
 	if (pause->IsPause() == true) { pause->Draw(); }
+#endif
 }

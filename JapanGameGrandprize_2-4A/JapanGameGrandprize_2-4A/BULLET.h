@@ -6,6 +6,10 @@
 #include "Stage/MapChip.h"
 
 #define BULLET_SPEED 15
+#define ORANGE 0xff8f00
+#define PURPLE 0x00ff00
+#define BLUE 0x0000ff
+#define GLAY 0xbebebe
 
 enum class PLAYER_STATE;
 
