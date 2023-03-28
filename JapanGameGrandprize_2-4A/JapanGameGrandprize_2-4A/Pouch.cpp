@@ -550,7 +550,7 @@ void Pouch::Update()
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
-			if (select_explosion == nullptr)
+			if (&select_explosion == nullptr)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
@@ -875,7 +875,7 @@ void Pouch::InitChemicalParameter()
 
 ChemicalFormulaParameter* Pouch::GetExplosion()
 {
-	return select_explosion;
+	return &select_explosion;
 }
 
 ChemicalFormulaParameter* Pouch::GetPoison()
@@ -929,9 +929,9 @@ void Pouch::ReduceAmmo(ATTRIBUTE a)
 	case ATTRIBUTE::NORMAL:
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		if (select_explosion != nullptr)
+		if (&select_explosion != nullptr)
 		{
-			select_explosion->number_of_bullets--;
+			select_explosion.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::MELT:
@@ -966,7 +966,7 @@ void Pouch::SetChemicalFormulaParameter()
 	case ATTRIBUTE::EXPLOSION:
 		if (ComparisonElement(chemical_formula_explosion[cursol]))
 		{
-			select_explosion = &chemical_formula_explosion[cursol];
+			select_explosion = chemical_formula_explosion[cursol];
 		}
 		break;
 	case ATTRIBUTE::MELT:
@@ -1082,9 +1082,9 @@ void Pouch::ConsumptionMaterial()
 	}
 }
 
-void Pouch::DeleteExplosion()
+void Pouch::InitializeExplosion()
 {
-	select_explosion = nullptr;
+	select_explosion = { 0 };
 }
 
 void Pouch::DeleteHeal()

@@ -27,7 +27,7 @@ private:
 	ChemicalFormulaParameter chemical_formula_heal[HEAL_MAX_NUM];
 	ChemicalFormulaParameter chemical_formula_melt[MELT_MAX_NUM];
 
-	ChemicalFormulaParameter* select_explosion;
+	ChemicalFormulaParameter select_explosion;
 	ChemicalFormulaParameter* select_poison;
 	ChemicalFormulaParameter* select_pararysis;
 	ChemicalFormulaParameter* select_heal;
@@ -70,7 +70,7 @@ public:
 	void SetOnBool(bool);
 	void ReduceAmmo(ATTRIBUTE);
 	void ConsumptionMaterial();
-	void DeleteExplosion();
+	void InitializeExplosion();
 	void DeletePoison();
 	void DeleteMelt();
 	void DeleteHeal();
