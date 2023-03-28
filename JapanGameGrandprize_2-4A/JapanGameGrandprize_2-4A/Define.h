@@ -13,6 +13,10 @@
 #define PARARYSIS_MAX_NUM 12	//–ƒáƒ‚Ì‰»‡•¨‚ÌŒÂ”
 #define HEAL_MAX_NUM 7			//‰ñ•œ‚Ì‰»‡•¨‚ÌŒÂ”
 
+#define GREEN GetColor(0,255,0)
+#define RED GetColor(255,0,0)
+#define YELLOW GetColor(255,239,0)
+
 #define MAX_STRING 40			//’e‚Ì–¼‘O‚ÌÅ‘å•¶š”
 
 //‰»‡•¨\‘¢‘Ì

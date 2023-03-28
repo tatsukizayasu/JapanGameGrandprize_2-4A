@@ -25,10 +25,10 @@ private:
 	ChemicalFormulaParameter chemical_formula_melt[MELT_MAX_NUM];
 
 	ChemicalFormulaParameter select_explosion;
-	ChemicalFormulaParameter* select_poison;
-	ChemicalFormulaParameter* select_pararysis;
+	ChemicalFormulaParameter select_poison;
+	ChemicalFormulaParameter select_pararysis;
 	ChemicalFormulaParameter* select_heal;
-	ChemicalFormulaParameter* select_melt;
+	ChemicalFormulaParameter select_melt;
 public:
 
 	Pouch();

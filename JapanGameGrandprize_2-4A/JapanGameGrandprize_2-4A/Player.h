@@ -24,9 +24,7 @@
 #define PLAYER_SPEED_X 5.0
 
 #define BULLET_MAX 50
-#define GREEN GetColor(0,255,0)
-#define RED GetColor(255,0,0)
-#define YELLOW GetColor(255,239,0)
+
 
 enum class PLAYER_STATE
 {
