@@ -22,6 +22,16 @@ Pouch::Pouch()
 	}
 
 	InitChemicalParameter();
+
+	InitializeExplosion();
+
+	InitializeMelt();
+
+	InitializePararysis();
+	
+	InitializeHeal();
+
+	InitializePoison();
 }
 
 Pouch::~Pouch()
@@ -545,7 +555,7 @@ void Pouch::Update()
 		break;
 	}
 
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_B))
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A))
 	{
 		on_bool = true;
 		switch (tab)
@@ -579,7 +589,7 @@ void Pouch::Update()
 			}			
 			break;
 		case ATTRIBUTE::HEAL:
-			if (select_heal == nullptr)
+			if (!select_heal.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
@@ -904,7 +914,7 @@ ChemicalFormulaParameter* Pouch::GetPararysis()
 ChemicalFormulaParameter* Pouch::GetHeal()
 {
 
-	return select_heal;
+	return &select_heal;
 }
 
 ChemicalFormulaParameter* Pouch::GetMelt()
@@ -1010,7 +1020,7 @@ void Pouch::SetChemicalFormulaParameter()
 	case ATTRIBUTE::HEAL:
 		if (ComparisonElement(chemical_formula_heal[cursol]))
 		{
-			select_heal = &chemical_formula_heal[cursol];
+			select_heal = chemical_formula_heal[cursol];
 		}
 		break;
 	default:
@@ -1110,25 +1120,26 @@ void Pouch::InitializeExplosion()
 	select_explosion.make_bool = false;
 }
 
-void Pouch::DeleteHeal()
+void Pouch::InitializeHeal()
 {
-	select_heal = nullptr;
+	select_heal = { 0 };
+	select_heal.make_bool = false;
 }
 
-void Pouch::DeleteMelt()
+void Pouch::InitializeMelt()
 {
 	select_melt = {0};
 	select_melt.make_bool = false;
 }
 
-void Pouch::DeletePararysis()
+void Pouch::InitializePararysis()
 {
 
 	select_pararysis = { 0 };
 	select_pararysis.make_bool = false;
 }
 
-void Pouch::DeletePoison()
+void Pouch::InitializePoison()
 {
 	select_poison = { 0 };
 	select_poison.make_bool = false;

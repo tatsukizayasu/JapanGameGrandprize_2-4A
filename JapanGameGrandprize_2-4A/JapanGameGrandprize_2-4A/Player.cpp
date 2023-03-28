@@ -393,31 +393,31 @@ void Player::Update()
 			switch (pouch->GetAttribute())
 			{
 			case ATTRIBUTE::EXPLOSION:
-				if (pouch->GetExplosion() != nullptr)
+				if (pouch->GetExplosion()->make_bool)
 				{
 					explosion = pouch->GetExplosion();
 				}
 				break;
 			case ATTRIBUTE::MELT:
-				if (pouch->GetMelt() != nullptr)
+				if (pouch->GetMelt()->make_bool)
 				{
 					melt = pouch->GetMelt();
 				}
 				break;
 			case ATTRIBUTE::POISON:
-				if (pouch->GetPoison() != nullptr)
+				if (pouch->GetPoison()->make_bool)
 				{
 					poison = pouch->GetPoison();
 				}
 				break;
 			case ATTRIBUTE::PARALYSIS:
-				if (pouch->GetPararysis() != nullptr)
+				if (pouch->GetPararysis()->make_bool)
 				{
 					pararysis = pouch->GetPararysis();
 				}
 				break;
 			case ATTRIBUTE::HEAL:
-				if (pouch->GetHeal() != nullptr)
+				if (pouch->GetHeal()->make_bool)
 				{
 					heal = pouch->GetHeal();
 				}
@@ -744,7 +744,7 @@ void Player::Shoot_Gun()
 				bullet[i] = new NormalBullet(location.x, location.y, move_left, &normal);
 				break;
 			case 1:
-				if (explosion != nullptr)
+				if (pouch->GetExplosion()->make_bool)
 				{
 					if (explosion->number_of_bullets > 0)
 					{
@@ -759,7 +759,7 @@ void Player::Shoot_Gun()
 				}
 				break;
 			case 2:
-				if (melt != nullptr)
+				if (pouch->GetMelt()->make_bool)
 				{
 					if (melt->number_of_bullets > 0)
 					{
@@ -769,12 +769,12 @@ void Player::Shoot_Gun()
 					else
 					{
 						melt = nullptr;
-						pouch->DeleteMelt();
+						pouch->InitializeMelt();
 					}
 				}
 				break;
 			case 3:
-				if (poison != nullptr)
+				if (pouch->GetPoison()->make_bool)
 				{
 					if (poison->number_of_bullets > 0)
 					{
@@ -784,12 +784,12 @@ void Player::Shoot_Gun()
 					else
 					{
 						poison = nullptr;
-						pouch->DeletePoison();
+						pouch->InitializePoison();
 					}
 				}
 				break;
 			case 4:
-				if (pararysis != nullptr)
+				if (pouch->GetPararysis()->make_bool)
 				{
 					if (pararysis->number_of_bullets > 0)
 					{
@@ -799,22 +799,22 @@ void Player::Shoot_Gun()
 					else
 					{
 						pararysis = nullptr;
-						pouch->DeletePararysis();
+						pouch->InitializePararysis();
 					}
 				}
 				break;
 			case 5:
-				if (heal != nullptr)
+				if (pouch->GetHeal()->make_bool)
 				{
 					if (heal->number_of_bullets > 0)
 					{
-						bullet[i] = new NormalBullet(location.x, location.y, move_left, pararysis);
+						Hp_Heal(pouch->GetHeal()->damage);
 						pouch->ReduceAmmo(attribute[display_attribute]);
 					}
 					else
 					{
 						heal = nullptr;
-						pouch->DeleteHeal();
+						pouch->InitializeHeal();
 					}
 				}
 				break;
