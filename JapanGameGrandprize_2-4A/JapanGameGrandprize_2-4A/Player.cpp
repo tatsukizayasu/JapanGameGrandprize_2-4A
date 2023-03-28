@@ -198,8 +198,6 @@ Player::Player(Stage* stage)
 		pouch->SetElement(element[i], i);
 		pouch->SetElementConstruct(i);
 	}
-
-	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
 //-----------------------------------
@@ -269,8 +267,6 @@ void Player::Draw() const
 		}
 	}
 
-	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
-
 	//ダメージを受けた時点滅する
 	if (damage_flg)
 	{
@@ -292,20 +288,13 @@ void Player::Draw() const
 		DrawRotaGraphF(x, y, 1, 0, image[image_count], TRUE, move_left);
 	}
 
-#ifdef _DEBUG
-	for (int i = 0; i < PLAYER_ELEMENT; i++)
-	{
-		DrawFormatString(20 * i, 100, 0x000000, "%d", element[i]->GetVolume());
-	}
-
-#endif
-
 	SetFontSize(30);
 
 	//上の選択肢
 	if (display_attribute - 1 < 0)
 	{
 		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute + 5]);
+
 	}
 	else
 	{
@@ -316,6 +305,7 @@ void Player::Draw() const
 	if (display_attribute + 1 > 5)
 	{
 		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute - 5]);
+
 	}
 	else
 	{

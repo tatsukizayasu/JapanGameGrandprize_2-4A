@@ -15,6 +15,7 @@ private:
 	int cursol;
 	int count;
 	bool on_bool;
+	char element_char[PLAYER_ELEMENT];
 	ATTRIBUTE tab;
 	ElementItem* element[PLAYER_ELEMENT];
 

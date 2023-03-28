@@ -32,6 +32,14 @@ Pouch::Pouch()
 	InitializeHeal();
 
 	InitializePoison();
+
+	element_char[0] = 'H';
+	element_char[1] = 'O';
+	element_char[2] = 'C';
+	element_char[3] = 'N';
+	element_char[4] = 'S';
+	element_char[5] = 'Ch';
+	element_char[6] = 'U';
 }
 
 Pouch::~Pouch()
@@ -471,12 +479,14 @@ void Pouch::Draw() const
 	{
 		DrawBox(x + (50 * i), y + 400, (x + (50 * i)) + 50, y + 450, 0xffffff, FALSE);
 		DrawFormatString(x + (50 * i), y + 400, 0x000000, "%d", element[i]->GetVolume());
+		DrawFormatString(x + (50 * i), y + 430, 0x000000, "%c", element_char[i]);
 	}
 
 	for (int i = 0; i < 3; i++)
 	{
 		DrawBox(x + (50 * i) + 25, y + 450, (x + (50 * i) + 50) + 25, y + POUCH_HEIGHT, 0xffffff, FALSE);
 		DrawFormatString(x + (50 * i) + 25, y + 450, 0xffffff, "%d", element[i + 4]->GetVolume());
+		DrawFormatString(x + (50 * i) + 25, y + 480, 0xffffff, "%c", element_char[i + 4]);
 	}
 }
 
