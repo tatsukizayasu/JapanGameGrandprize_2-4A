@@ -72,7 +72,8 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	magic_attack = false;
 	kind = ENEMY_KIND::GHOST;
 
-	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, ghost_image);
+	images = new int[7];
+	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, images);
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
 	drop_type_volume = WIND_DROP;
@@ -118,6 +119,7 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
+
 
 	//アニメーションゴースト
 	if (animation_time++ % 10 == 0)
@@ -323,7 +325,7 @@ void EnemyGhost::Draw()const
 
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-		M_PI / 180, ghost_image[animation], TRUE);
+		M_PI / 180, images[animation], TRUE);
 }
 
 //-----------------------------------
@@ -402,11 +404,22 @@ Location EnemyGhost::GetLocation() const
 //-----------------------------------
 void EnemyGhost::Update(const ENEMY_STATE state)
 {
+	
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
 		break;
 	case ENEMY_STATE::MOVE:
+		//アニメーションゴースト
+		if (animation_time++ % 10 == 0)
+		{
+			animation++;
+		}
+
+		if (animation > 5)
+		{
+			animation = 0;
+		}
 		break;
 	case ENEMY_STATE::FALL:
 		break;
@@ -424,7 +437,7 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 //-----------------------------------
 void EnemyGhost::DebugDraw()
 {
-	DrawRotaGraphF(location.x, location.y, 1.5f, M_PI / 180, ghost_image, TRUE);
+	DrawRotaGraphF(location.x, location.y, 1.5f, M_PI / 180, images[animation], TRUE);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

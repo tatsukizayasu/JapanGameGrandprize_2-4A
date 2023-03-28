@@ -190,13 +190,14 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			Location chip_location = hit_stage.chip->GetLocation();
 			Area chip_area = hit_stage.chip->GetArea();
 
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
 			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
 			hit_direction = HitDirection(hit_stage.chip);
 
 			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
-				location.y = chip_location.y - 
-					(chip_area.height / 2)- (area.height / 2);
 				state = ENEMY_STATE::MOVE;
 				if (left_move)
 				{
