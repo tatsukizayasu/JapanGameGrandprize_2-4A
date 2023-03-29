@@ -79,13 +79,13 @@ void PolyLine::Update()
 //-------------------------------------
 void PolyLine::Draw()const
 {
-	for (int i = 0; i < lines.size(); i++)
-	{
-		lines[i]->Draw();
-	}
 	for (int i = 0; i < bend_points.size(); i++)
 	{
 		bend_points[i]->Draw();
+	}
+	for (int i = 0; i < lines.size(); i++)
+	{
+		lines[i]->Draw();
 	}
 }
 

@@ -1,9 +1,95 @@
 #include "BoxCollider.h"
 #include "SphereCollider.h"
 #include "LineCollider.h"
+#include "CameraWork.h"
 #include <math.h>
 
 #define _USE_MATH_DEFINES
+
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
+ BoxCollider::BoxCollider()
+{
+
+}
+
+//-----------------------------------
+// コンストラクタ
+//-----------------------------------
+ BoxCollider::BoxCollider(Location location, Area area):ColliderBase(location)
+ {
+	 this->area = area;
+
+#ifdef _STAGE_BUILDER
+
+	 pivot = new SphereCollider(location);
+
+	 spheres[0] = new SphereCollider(
+		 {
+			 location.x - area.width / 2,location.y - area.height / 2
+		 }
+	 );
+
+	 spheres[1] = new SphereCollider(
+		 {
+			 location.x + area.width / 2,location.y - area.height / 2
+		 }
+	 );
+
+	 spheres[2] = new SphereCollider(
+		 {
+			 location.x - area.width / 2,location.y + area.height / 2
+		 }
+	 );
+
+	 spheres[3] = new SphereCollider(
+		 {
+			 location.x + area.width / 2,location.y + area.height / 2
+		 }
+	 );
+
+#endif
+ }
+
+//-----------------------------------
+// デストラクタ
+//-----------------------------------
+ BoxCollider::~BoxCollider()
+ {
+#ifdef _STAGE_BUILDER
+	 delete[] spheres;
+	 delete pivot;
+#endif
+ }
+
+ //----------------------------------
+ // 描画
+ //----------------------------------
+ void BoxCollider::Draw()const
+ {
+	 DrawBoxAA(location.x - area.width / 2 - CameraWork::GetCamera().x, 
+		 location.y - area.height / 2 - CameraWork::GetCamera().y,
+		 location.x + area.width / 2 - CameraWork::GetCamera().x,
+		 location.y + area.height / 2 - CameraWork::GetCamera().y
+		 , 0xff00ff, FALSE, 5);
+
+#ifdef _STAGE_BUILDER
+
+	 for (int i = 0; i < 4; i++)
+	 {
+		 if (spheres[i] != nullptr)
+		 {
+			 spheres[i]->Draw();
+		 }
+	 }
+	 if (pivot != nullptr)
+	 {
+		 pivot->Draw();
+	 }
+
+#endif
+ }
 
 //-----------------------------------
 // SphereColliderとの当たり判定
@@ -172,5 +258,42 @@ Area BoxCollider::GetArea()const
 //-----------------------------------
 void BoxCollider::SetLocation(Location location)
 {
+
+#ifdef _STAGE_BUILDER
+
+	Location distance = location - this->location;
+
+	pivot->SetLocation(location);
+	for (int i = 0; i < 4; i++)
+	{
+		spheres[i]->SetLocation(spheres[i]->GetLocation() + distance);
+	}
+
+#endif
+
 	this->location = location;
+
 }
+
+#ifdef _STAGE_BUILDER
+
+//---------------------------------------
+// 座標の更新 四角形になるように合わせる
+//---------------------------------------
+void BoxCollider::UpdatePos()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (spheres[i]->GetLocation() != old_pos[i])
+		{
+			 
+		}
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		old_pos[i] = spheres[i]->GetLocation();
+	}
+}
+
+#endif

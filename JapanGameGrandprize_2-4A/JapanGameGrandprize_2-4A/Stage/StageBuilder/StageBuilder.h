@@ -11,6 +11,8 @@
 #include <fstream>
 #include <sstream>
 
+//sphereColliderは約3600個程度ならフレームレートを落とさず更新できる
+
 
 //モードの数とその種類------
 #define MENU_NUM 4
@@ -58,7 +60,8 @@ private:
 	int mode;
 	int current_brush;
 
-	//todo:テスト 後々vector配列にして運用する
+	//todo:テスト 
+	BoxCollider* box;
 
 public:
 	//コンストラクタ

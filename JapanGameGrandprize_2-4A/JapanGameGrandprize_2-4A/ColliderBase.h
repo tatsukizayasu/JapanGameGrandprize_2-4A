@@ -49,7 +49,7 @@ public:
 	}
 
 	//’†SÀ•W‚Ìİ’è
-	void SetLocation(Location location)
+	virtual void SetLocation(Location location)
 	{
 		const float distance_limit = 700.f;
 		Location distance;

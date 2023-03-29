@@ -14,6 +14,12 @@ protected:
 
 public:
 
+	BoxCollider();
+	BoxCollider(Location location, Area area);
+	~BoxCollider();
+
+	virtual void Draw()const;
+
 	//SphereCollider‚Æ‚Ì“–‚½‚è”»’è
 	bool HitSphere(const class SphereCollider* sphere_collider) const override;
 
@@ -30,6 +36,16 @@ public:
 	Area GetArea()const;
 
 	//’†SÀ•W‚Ìİ’è
-	void SetLocation(Location location);
+	virtual void SetLocation(Location location);
+
+#ifdef _STAGE_BUILDER
+protected:
+	SphereCollider* spheres[4];
+	SphereCollider* pivot;
+	Location old_pos[4];
+
+	SphereCollider** GetSpheres() { return spheres; }
+	void UpdatePos();
+#endif
 
 };

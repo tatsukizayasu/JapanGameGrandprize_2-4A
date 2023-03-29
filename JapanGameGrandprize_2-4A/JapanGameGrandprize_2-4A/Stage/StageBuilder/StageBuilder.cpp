@@ -42,7 +42,18 @@ StageBuilder::StageBuilder()
 	};
 	poly_lines.push_back(new PolyLine(points,3));
 	
+	for (int i = 0; i < 1; i++)
+	{
+		Location test[3] =
+		{
+			{i * 10,i * 10},
+			{i * 15,i * 10},
+			{i * 20,i * 15}
+		};
+		poly_lines.push_back(new PolyLine(test, 3));
+	}
 
+	box = new BoxCollider({ 640,360 }, { 100,100 });
 
 #endif // _DEV
 }
@@ -71,6 +82,9 @@ StageBuilder::~StageBuilder()
 		delete poly_lines[i];
 	}
 	poly_lines.clear();
+
+
+	delete box;
 }
 
 //------------------------------------
@@ -131,6 +145,11 @@ void StageBuilder::Draw()const
 		map_chips[i]->Draw();
 	}
 
+	for (int i = 0; i < poly_lines.size(); i++)
+	{
+		poly_lines[i]->Draw();
+	}
+
 	DrawFrame();
 
 #ifdef _DEBUG
@@ -149,20 +168,16 @@ void StageBuilder::Draw()const
 
 #ifdef _DEV
 
+
 	for (int i = 0; i < poly_lines.size(); i++)
 	{
-		poly_lines[i]->Draw();
-	}
-
-	if (2 <= pending_sphere.size())
-	{
-		for (int i = 0; i + 1 < pending_sphere.size(); i++)
+		if(poly_lines[i]->HitSphere(mouse))
 		{
-			DrawLine(pending_sphere[i]->GetLocation() - CameraWork::GetCamera()
-				, pending_sphere[i + 1]->GetLocation() - CameraWork::GetCamera());
+			DrawString(640, 300, "hit", 0);
 		}
 	}
-	DrawSphere();
+
+	box->Draw();
 
 #endif // _DEV
 
@@ -172,13 +187,6 @@ void StageBuilder::Draw()const
 	
 	mouse->Draw();
 
-	for (int i = 0; i < poly_lines.size(); i++)
-	{
-		if(poly_lines[i]->HitSphere(mouse))
-		{
-			DrawString(640, 300, "hit", 0);
-		}
-	}
 }
 
 //--------------------------------------
@@ -195,6 +203,15 @@ void StageBuilder::DrawWhichMode()const
 	
 	case BRUSH_MODE:
 		DrawClassName();
+		if (2 <= pending_sphere.size())
+		{
+			for (int i = 0; i + 1 < pending_sphere.size(); i++)
+			{
+				DrawLine(pending_sphere[i]->GetLocation() - CameraWork::GetCamera()
+					, pending_sphere[i + 1]->GetLocation() - CameraWork::GetCamera());
+			}
+		}
+		DrawSphere();
 		break;
 	
 	case MODULATION_MODE:
@@ -267,6 +284,12 @@ void StageBuilder::UpdateBrush()
 //------------------------------------
 void StageBuilder::UpdateModulation()
 {
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_S))
+	{
+		box->SetLocation(box->GetLocation() + Location{ -20,-20 });
+	}
+
 	DeleteObject();
 
 	TransformPolyLine();
