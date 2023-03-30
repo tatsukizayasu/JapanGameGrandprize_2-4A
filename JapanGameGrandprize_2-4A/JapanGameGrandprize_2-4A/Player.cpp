@@ -402,7 +402,6 @@ void Player::ChemicalFormulaDraw(int i,int plus_y) const
 //-----------------------------------
 void Player::Update()
 {
-
 	old_x = location.x;
 	old_y = location.y;
 	if (damage_flg == true)
@@ -585,7 +584,6 @@ void Player::Update()
 //スティックを入力していないとき
 void Player::NotInputStick()
 {
-
 	image_count = 0;
 	if (speed_x > 0)
 	{

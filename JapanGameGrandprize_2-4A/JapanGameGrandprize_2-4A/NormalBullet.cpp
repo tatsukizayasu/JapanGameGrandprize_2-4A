@@ -38,6 +38,7 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
 	scrool_y = CameraWork::GetCamera().y;
+	radius = 10.0f;
 
 	location.x = player_x;
 	location.y = player_y - 5;
