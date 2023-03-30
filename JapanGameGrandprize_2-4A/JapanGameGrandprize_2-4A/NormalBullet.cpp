@@ -40,7 +40,7 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 	scrool_y = CameraWork::GetCamera().y;
 
 	location.x = player_x;
-	location.y = player_y - 10;
+	location.y = player_y - 5;
 	chemical_formula = chemical;
 	damage = chemical->damage;
 	debuff_time = chemical->time;

@@ -993,6 +993,7 @@ void Pouch::ReduceAmmo(ATTRIBUTE a)
 		}
 		break;
 	case ATTRIBUTE::HEAL:
+		select_heal.number_of_bullets--;
 		break;
 	default:
 		break;
@@ -1040,7 +1041,6 @@ void Pouch::SetChemicalFormulaParameter()
 
 bool Pouch::ComparisonElement(ChemicalFormulaParameter subject) const
 {
-
 	if (subject.material.hydrogen <= element[0]->GetVolume() &&
 		subject.material.oxygen <= element[1]->GetVolume() &&
 		subject.material.carbon <= element[2]->GetVolume() &&

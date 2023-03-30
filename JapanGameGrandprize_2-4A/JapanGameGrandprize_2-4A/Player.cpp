@@ -294,33 +294,99 @@ void Player::Draw() const
 	if (display_attribute - 1 < 0)
 	{
 		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute + 5]);
-
+		ChemicalFormulaDraw(display_attribute + 5, -40);
 	}
 	else
 	{
 		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute - 1]);
+		ChemicalFormulaDraw(display_attribute - 1, -40);
 	}
 
 	//‰º‚Ì‘I‘ðŽˆ
 	if (display_attribute + 1 > 5)
 	{
 		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute - 5]);
-
+		ChemicalFormulaDraw(display_attribute + 5, 40);
 	}
 	else
 	{
 		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute + 1]);
+		ChemicalFormulaDraw(display_attribute + 1, 40);
 	}
 
 	//Œ»Ý‚Ì‘I‘ðŽˆ
 	DrawCircle(990, 60, 5, 0x000000, TRUE);
 	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
+	ChemicalFormulaDraw(display_attribute, 0);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
 
 	if (pouch_open)
 	{
 		pouch->Draw();
+	}
+}
+
+void Player::ChemicalFormulaDraw(int i,int plus_y) const
+{
+	switch (i)
+	{
+	case 0: //’Êí’e
+		DrawFormatString(1240, 50 + plus_y, 0x778877, "--");
+		break;
+	case 1: //”š”­
+		if (explosion != nullptr)
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", explosion->number_of_bullets);
+		}
+		else
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+
+		}
+		break;
+	case 2: //—n‰ð
+		if (melt != nullptr)
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", melt->number_of_bullets);
+		}
+		else
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+		}
+		break;
+	case 3: //“Å
+		if (poison != nullptr)
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", poison->number_of_bullets);
+		}
+		else
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+		}
+		break;
+	case 4: //–ƒáƒ
+		if (pararysis != nullptr)
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", pararysis->number_of_bullets);
+		}
+		else
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+		}
+		break;
+	case 5: //‰ñ•œ
+		if (heal != nullptr)
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", heal->number_of_bullets);
+		}
+		else
+		{
+			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -442,11 +508,29 @@ void Player::Update()
 	{
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 		{
-			if (shoot_count++ % 10 == 0)
+			if(display_attribute == 5)
+			{
+				if (pouch->GetHeal()->make_bool)
+				{
+					if (heal != nullptr)
+					{
+						if (heal->number_of_bullets > 0)
+						{
+							Hp_Heal(pouch->GetHeal()->damage);
+						}
+						else
+						{
+							heal = nullptr;
+						}
+					}
+				}
+			}
+			else if(shoot_count++ % 10 == 0)
 			{
 				bullet_count++;
 				Shoot_Gun();
 			}
+			else{}
 		}
 	}
 
@@ -723,88 +807,82 @@ void Player::NotJump()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
-
-	for (i = 0; i < bullet_count; i++)
-	{
-		if (bullet[i] == nullptr)
+		if (bullet[bullet_count] == nullptr)
 		{
 			switch (display_attribute)
 			{
 			case 0:
-				bullet[i] = new NormalBullet(location.x, location.y, move_left, &normal);
+				bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, &normal);
 				break;
 			case 1:
 				if (pouch->GetExplosion()->make_bool)
 				{
-					if (explosion->number_of_bullets > 0)
+					if (explosion != nullptr)
 					{
-						bullet[i] = new NormalBullet(location.x, location.y, move_left, explosion);
-						pouch->ReduceAmmo(attribute[display_attribute]);
-					}
-					else
-					{
-						explosion = nullptr;
-						pouch->InitializeExplosion();
+						if (explosion->number_of_bullets > 0)
+						{
+							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, explosion);
+							pouch->ReduceAmmo(attribute[display_attribute]);
+						}
+						if(explosion->number_of_bullets <= 0)
+						{
+							explosion = nullptr;
+							pouch->InitializeExplosion();
+						}
 					}
 				}
 				break;
 			case 2:
 				if (pouch->GetMelt()->make_bool)
 				{
-					if (melt->number_of_bullets > 0)
+					if (melt != nullptr)
 					{
-						bullet[i] = new NormalBullet(location.x, location.y, move_left, melt);
-						pouch->ReduceAmmo(attribute[display_attribute]);
-					}
-					else
-					{
-						melt = nullptr;
-						pouch->InitializeMelt();
+						if (melt->number_of_bullets > 0)
+						{
+							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, melt);
+							pouch->ReduceAmmo(attribute[display_attribute]);
+						}
+						if(melt->number_of_bullets <= 0)
+						{
+							melt = nullptr;
+							pouch->InitializeMelt();
+						}
 					}
 				}
 				break;
 			case 3:
 				if (pouch->GetPoison()->make_bool)
 				{
-					if (poison->number_of_bullets > 0)
+					if (poison != nullptr)
 					{
-						bullet[i] = new NormalBullet(location.x, location.y, move_left, poison);
-						pouch->ReduceAmmo(attribute[display_attribute]);
-					}
-					else
-					{
-						poison = nullptr;
-						pouch->InitializePoison();
+						if (poison->number_of_bullets > 0)
+						{
+							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, poison);
+							pouch->ReduceAmmo(attribute[display_attribute]);
+						}
+						if(poison->number_of_bullets <= 0)
+						{
+							poison = nullptr;
+							pouch->InitializePoison();
+						}
 					}
 				}
 				break;
 			case 4:
 				if (pouch->GetPararysis()->make_bool)
 				{
-					if (pararysis->number_of_bullets > 0)
+					if (pararysis != nullptr)
 					{
-						bullet[i] = new NormalBullet(location.x, location.y, move_left, pararysis);
-						pouch->ReduceAmmo(attribute[display_attribute]);
-					}
-					else
-					{
-						pararysis = nullptr;
-						pouch->InitializePararysis();
-					}
-				}
-				break;
-			case 5:
-				if (pouch->GetHeal()->make_bool)
-				{
-					if (heal->number_of_bullets > 0)
-					{
-						Hp_Heal(pouch->GetHeal()->damage);
-						pouch->ReduceAmmo(attribute[display_attribute]);
-					}
-					else
-					{
-						heal = nullptr;
-						pouch->InitializeHeal();
+						if (pararysis->number_of_bullets > 0)
+						{
+							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, pararysis);
+							pouch->ReduceAmmo(attribute[display_attribute]);
+						}
+						if(pararysis->number_of_bullets <= 0)
+						{
+							pararysis = nullptr;
+							pouch->InitializePararysis();
+						}
 					}
 				}
 				break;
@@ -812,7 +890,7 @@ void Player::Shoot_Gun()
 				break;
 			}
 		}
-	}
+	
 }
 
 //-----------------------------------
@@ -825,13 +903,13 @@ void Player::SortBullet(int delete_bullet)
 	{
 		if ((bullet[i] == nullptr))
 		{
+			bullet_count--;
 			break;
 		}
 
 		bullet[i - 1] = bullet[i];
 		bullet[i] = nullptr;
 	}
-	bullet_count--;
 }
 
 //-----------------------------------
@@ -915,7 +993,7 @@ void Player::HpDamage(AttackResource attack)
 //-----------------------------------
 void Player::Hp_Heal(int heal_value)
 {
-
+	pouch->ReduceAmmo(attribute[display_attribute]);
 	hp += heal_value;
 	if (hp >= HP_MAX)
 	{
