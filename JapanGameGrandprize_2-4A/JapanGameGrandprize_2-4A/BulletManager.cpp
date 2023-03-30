@@ -125,12 +125,19 @@ void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
             enemy_bullets = new EnemyBulletBase * [enemy_bullet_max];
 
             //”ð“ï‚µ‚Ä‚¢‚½’e‚ð–ß‚·
-            enemy_bullets = temporary_bullets;
-
-            for (int i = enemy_bullet_count; i < enemy_bullet_max; i++)
+            for (int i = 0; i < enemy_bullet_max; i++)
             {
-                enemy_bullets[i] = nullptr;
+                if (i < enemy_bullet_count)
+                {
+                    enemy_bullets[i] = temporary_bullets[i];
+                }
+                else
+                {
+                    enemy_bullets[i] = nullptr;
+                }
             }
+            delete[] temporary_bullets;
+
         }
     }
     //’e‚Ì¶¬
@@ -210,13 +217,19 @@ void BulletManager::CreateEnemyNuts(class EnemyBulletBase* nuts)
             //’e‚ÌÄ¶¬
             enemy_nuts = new EnemyBulletBase * [enemy_nuts_max];
 
-            //”ð“ï‚µ‚Ä‚¢‚½’e‚ð–ß‚·
-            enemy_nuts = temporary_nuts;
-
-            for (int i = enemy_nuts_count; i < enemy_nuts_max; i++)
+           //”ð“ï‚µ‚Ä‚¢‚½’e‚ð–ß‚·
+            for (int i = 0; i < enemy_nuts_max; i++)
             {
-                enemy_nuts[i] = nullptr;
+                if (i < enemy_nuts_count)
+                {
+                    enemy_bullets[i] = temporary_nuts[i];
+                }
+                else
+                {
+                    enemy_bullets[i] = nullptr;
+                }
             }
+            delete[] temporary_nuts;
         }
     }
     //’e‚Ì¶¬
