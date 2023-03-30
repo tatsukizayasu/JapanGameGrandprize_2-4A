@@ -15,6 +15,7 @@ private:
 	int cursol;
 	int count;
 	bool on_bool;
+	char element_char[PLAYER_ELEMENT];
 	ATTRIBUTE tab;
 	ElementItem* element[PLAYER_ELEMENT];
 
@@ -27,7 +28,7 @@ private:
 	ChemicalFormulaParameter select_explosion;
 	ChemicalFormulaParameter select_poison;
 	ChemicalFormulaParameter select_pararysis;
-	ChemicalFormulaParameter* select_heal;
+	ChemicalFormulaParameter select_heal;
 	ChemicalFormulaParameter select_melt;
 public:
 
@@ -68,8 +69,8 @@ public:
 	void ReduceAmmo(ATTRIBUTE);
 	void ConsumptionMaterial();
 	void InitializeExplosion();
-	void DeletePoison();
-	void DeleteMelt();
-	void DeleteHeal();
-	void DeletePararysis();
+	void InitializePoison();
+	void InitializeMelt();
+	void InitializeHeal();
+	void InitializePararysis();
 };
