@@ -12,15 +12,14 @@ class Player;
 
 class Stage_Element;
 
-struct ENEMY_LOCATION {
+struct ENEMY_LOCATION
+{
 	short id;
 	Location location;
 };
 
 class Stage
 {
-
-
 private:
 
 	//オブジェクト変数
@@ -42,7 +41,6 @@ private:
 
 	//MapChipオブジェクト
 	std::vector<MapChip*> mapchip;
-
 
 	//エネミースポーン地点Location構造体
 	std::vector<ENEMY_LOCATION> enemy_init_location;
@@ -66,14 +64,17 @@ public:
 	/// コンストラクタ
 	/// </summary>
 	Stage();
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
 	~Stage();
+
 	/// <summary>
 	/// ステージの更新
 	/// </summary>
 	void Update(Player* player);
+
 	/// <summary>
 	/// ステージの描画
 	/// </summary>
@@ -88,7 +89,6 @@ public:
 	/// スポーン地点		Getter
 	/// </summary>
 	Location GetSpawnPoint() { return spawn_point; }
-
 
 	/// <summary>
 	/// 中間地点		Getter
@@ -124,7 +124,6 @@ public:
 	/// <returns>ベクター型(Stage_Element_Baseオブジェクト型)：Stage_Element_Base</returns>	
 	/// ※全要素をループして使わないこと
 	std::vector<Stage_Element_Base*> GetElement_MapChip() const;
-
 	
 	/// <summary>
 	///エネミースポーンLocation構造体	Getter

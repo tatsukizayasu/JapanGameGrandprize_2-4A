@@ -8,6 +8,7 @@
 //-----------------------------------
 NormalBullet::NormalBullet()
 {
+
 	location.x = 0.0;
 	location.y = 0.0;
 	radius = 4;
@@ -33,6 +34,7 @@ NormalBullet::NormalBullet()
 NormalBullet::NormalBullet(float player_x, float player_y,
 	                         bool direction,ChemicalFormulaParameter* chemical)
 {
+
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
 	scrool_y = CameraWork::GetCamera().y;
@@ -68,20 +70,79 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 //-----------------------------------
 void NormalBullet::Draw() const
 {
+
 	float scrool_x = CameraWork::GetCamera().x;
 	float scrool_y = CameraWork::GetCamera().y;
 
-	if (!delete_flg)
+	switch (attribute)
 	{
-		DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, 0xff00ff, TRUE);
-	}
-
-	if (!efect_end && delete_flg)
-	{
-		for (int i = 0; i < PIXEL_MAX; i++)
+	case ATTRIBUTE::NORMAL:
+		if (!efect_end && delete_flg)
 		{
-			DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+			for (int i = 0; i < PIXEL_MAX; i++)
+			{
+				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+			}
 		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, GLAY, TRUE);
+		}
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		if (!efect_end && delete_flg)
+		{
+			for (int i = 0; i < PIXEL_MAX; i++)
+			{
+				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+			}
+		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, ORANGE, TRUE);
+		}
+		break;
+	case ATTRIBUTE::MELT:
+		if (!efect_end && delete_flg)
+		{
+			for (int i = 0; i < PIXEL_MAX; i++)
+			{
+				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+			}
+		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, BLUE, TRUE);
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		if (!efect_end && delete_flg)
+		{
+			for (int i = 0; i < PIXEL_MAX; i++)
+			{
+				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+			}
+		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, YELLOW, TRUE);
+		}
+		break;
+	case ATTRIBUTE::POISON:
+		if (!efect_end && delete_flg)
+		{
+			for (int i = 0; i < PIXEL_MAX; i++)
+			{
+				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+			}
+		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, PURPLE, TRUE);
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -90,6 +151,7 @@ void NormalBullet::Draw() const
 //-----------------------------------
 void NormalBullet::Update(const Stage* stage_pointa)
 {
+
 	float scrool_x = CameraWork::GetCamera().x;
 	if (!player_direction)
 	{
@@ -139,6 +201,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 
 bool NormalBullet::NormalBulletEfect()
 {
+
 	if (!efect_end)
 	{
 		if (++efect_count % 30 != 0)

@@ -23,12 +23,8 @@
 
 #define PLAYER_SPEED_X 5.0
 
-
-
 #define BULLET_MAX 50
-#define GREEN GetColor(0,255,0)
-#define RED GetColor(255,0,0)
-#define YELLOW GetColor(255,239,0)
+
 
 enum class PLAYER_STATE
 {
@@ -39,9 +35,6 @@ enum class PLAYER_STATE
 	DOWN,
 	DEATH
 };
-
-
-
 
 class Player : public BoxCollider
 {
@@ -92,8 +85,6 @@ private:
 	ChemicalFormulaParameter* melt;
 	ChemicalFormulaParameter* pararysis;
 	ChemicalFormulaParameter* heal;
-
-
 public:
 
 	Player();
@@ -117,7 +108,6 @@ public:
 
 	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
-	
 
 	//å≥ëfÇÃó ÇÃê›íË
 	void SetElementItem(class Item* item);

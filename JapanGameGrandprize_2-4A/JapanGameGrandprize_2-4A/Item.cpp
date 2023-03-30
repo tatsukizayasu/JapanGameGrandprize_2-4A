@@ -20,6 +20,7 @@
 //-----------------------------------
 Item::Item()
 {
+
 	element_type = ELEMENT_ITEM::NONE;
 	color = 0;
 	speed = 0;
@@ -33,6 +34,7 @@ Item::Item()
 //-----------------------------------
 Item::Item(ELEMENT_ITEM type, Location location)
 {
+
 	element_type = type;
 	this->location = location;
 	if (GetRand(1))
@@ -90,6 +92,7 @@ Item::Item(ELEMENT_ITEM type, Location location)
 //-----------------------------------
 void Item::Update(const Location player_location)
 {
+
 	float radian; //角度
 	//プレイヤーとアイテムの角度の計算
 	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
@@ -103,6 +106,7 @@ void Item::Update(const Location player_location)
 //-----------------------------------
 void Item::Draw()const
 {
+
 	Location draw_location; //描画用の座標
 
 	draw_location.x = location.x - CameraWork::GetCamera().x;
@@ -119,5 +123,6 @@ void Item::Draw()const
 //-----------------------------------
 ELEMENT_ITEM Item::GetElementType() const
 {
+
 	return element_type;
 }

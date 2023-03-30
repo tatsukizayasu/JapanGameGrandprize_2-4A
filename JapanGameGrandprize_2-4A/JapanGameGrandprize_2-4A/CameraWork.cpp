@@ -10,6 +10,7 @@ Location CameraWork::camera;
 //-----------------------------------
 CameraWork::CameraWork()
 {
+
 	camera.x = 0.0f;
 	camera.y = 0.0f;
 
@@ -38,6 +39,7 @@ CameraWork::CameraWork()
 //-----------------------------------
 CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* stage)
 {
+
 	this->camera.x = camera_x;
 	this->camera.y = camera_y;
 
@@ -74,6 +76,7 @@ CameraWork::~CameraWork()
 //-----------------------------------
 void CameraWork::Update()
 {
+
 	//printfDx("state:%d\n", state);
 
 	//clsDx();

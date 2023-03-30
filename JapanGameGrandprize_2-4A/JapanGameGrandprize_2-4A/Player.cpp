@@ -8,12 +8,12 @@
 
 #define ANIMATION_MOVE 10
 
-
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
 Player::Player()
 {
+
 	animation = 0;
 	location.x = 0;
 	location.y = 420;
@@ -69,7 +69,6 @@ Player::Player()
 	pararysis = nullptr;
 	heal = nullptr;
 
-
 	player_state = PLAYER_STATE::STOP;
 
 	display_attribute = 0;
@@ -88,7 +87,6 @@ Player::Player()
 	}
 
 	pouch = nullptr;
-
 }
 
 //-----------------------------------
@@ -96,6 +94,7 @@ Player::Player()
 //-----------------------------------
 Player::Player(Stage* stage)
 {
+
 	animation = 0;
 	area.height = 80;
 	area.width = 40;
@@ -142,6 +141,7 @@ Player::Player(Stage* stage)
 	normal.time = 0;
 
 	bullet = new BulletBase * [BULLET_MAX];
+
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		bullet[i] = nullptr;
@@ -198,8 +198,6 @@ Player::Player(Stage* stage)
 		pouch->SetElement(element[i], i);
 		pouch->SetElementConstruct(i);
 	}
-
-	//GetGraphSize(image, &image_size_x, &image_size_y);
 }
 
 //-----------------------------------
@@ -207,6 +205,7 @@ Player::Player(Stage* stage)
 //-----------------------------------
 Player::~Player()
 {
+
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		delete bullet[i];
@@ -219,6 +218,7 @@ Player::~Player()
 //-----------------------------------
 void Player::Draw() const
 {
+
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
@@ -267,8 +267,6 @@ void Player::Draw() const
 		}
 	}
 
-	DrawFormatString(0, 0, 0x00ff00, "%f %f", jump_power, fuel);
-
 	//ダメージを受けた時点滅する
 	if (damage_flg)
 	{
@@ -290,20 +288,13 @@ void Player::Draw() const
 		DrawRotaGraphF(x, y, 1, 0, image[image_count], TRUE, move_left);
 	}
 
-#ifdef _DEBUG
-	for (int i = 0; i < PLAYER_ELEMENT; i++)
-	{
-		DrawFormatString(20 * i, 100, 0x000000, "%d", element[i]->GetVolume());
-	}
-
-#endif
-
 	SetFontSize(30);
 
 	//上の選択肢
 	if (display_attribute - 1 < 0)
 	{
 		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute + 5]);
+
 	}
 	else
 	{
@@ -314,6 +305,7 @@ void Player::Draw() const
 	if (display_attribute + 1 > 5)
 	{
 		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute - 5]);
+
 	}
 	else
 	{
@@ -337,12 +329,13 @@ void Player::Draw() const
 //-----------------------------------
 void Player::Update()
 {
+
 	old_x = location.x;
 	old_y = location.y;
 	if (damage_flg == true)
 	{
 		damage_count++;
-		if (damage_count < damage)
+		if (damage_count <= damage)
 		{
 			if (hp > 0)
 			{
@@ -390,23 +383,39 @@ void Player::Update()
 			switch (pouch->GetAttribute())
 			{
 			case ATTRIBUTE::EXPLOSION:
-				explosion = pouch->GetExplosion();
+				if (pouch->GetExplosion()->make_bool)
+				{
+					explosion = pouch->GetExplosion();
+				}
 				break;
 			case ATTRIBUTE::MELT:
-				melt = pouch->GetMelt();
+				if (pouch->GetMelt()->make_bool)
+				{
+					melt = pouch->GetMelt();
+				}
 				break;
 			case ATTRIBUTE::POISON:
-				poison = pouch->GetPoison();
+				if (pouch->GetPoison()->make_bool)
+				{
+					poison = pouch->GetPoison();
+				}
 				break;
 			case ATTRIBUTE::PARALYSIS:
-				pararysis = pouch->GetPararysis();
+				if (pouch->GetPararysis()->make_bool)
+				{
+					pararysis = pouch->GetPararysis();
+				}
 				break;
 			case ATTRIBUTE::HEAL:
-				heal = pouch->GetHeal();
+				if (pouch->GetHeal()->make_bool)
+				{
+					heal = pouch->GetHeal();
+				}
 				break;
 			default:
 				break;
 			}
+			pouch->SetOnBool(false);
 		}
 	}
 
@@ -486,6 +495,7 @@ void Player::Update()
 //スティックを入力していないとき
 void Player::NotInputStick()
 {
+
 	image_count = 0;
 	if (speed_x > 0)
 	{
@@ -543,9 +553,6 @@ void Player::NotInputStick()
 void Player::LeftMove()
 {
 
-
-
-
 	if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 	{
 		if (speed_x > -PLAYER_SPEED_X)
@@ -591,8 +598,6 @@ void Player::LeftMove()
 //右移動
 void Player::RightMove()
 {
-
-
 	if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
 	{
 		if (speed_x < PLAYER_SPEED_X)
@@ -673,6 +678,7 @@ void Player::Jump()
 //ジャンプしてない
 void Player::NotJump()
 {
+
 	player_state = PLAYER_STATE::DOWN;
 
 	jump -= 0.25;
@@ -717,6 +723,7 @@ void Player::NotJump()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
+
 	for (i = 0; i < bullet_count; i++)
 	{
 		if (bullet[i] == nullptr)
@@ -727,7 +734,7 @@ void Player::Shoot_Gun()
 				bullet[i] = new NormalBullet(location.x, location.y, move_left, &normal);
 				break;
 			case 1:
-				if (explosion != nullptr)
+				if (pouch->GetExplosion()->make_bool)
 				{
 					if (explosion->number_of_bullets > 0)
 					{
@@ -737,12 +744,12 @@ void Player::Shoot_Gun()
 					else
 					{
 						explosion = nullptr;
-						pouch->DeleteExplosion();
+						pouch->InitializeExplosion();
 					}
 				}
 				break;
 			case 2:
-				if (melt != nullptr)
+				if (pouch->GetMelt()->make_bool)
 				{
 					if (melt->number_of_bullets > 0)
 					{
@@ -752,12 +759,12 @@ void Player::Shoot_Gun()
 					else
 					{
 						melt = nullptr;
-						pouch->DeleteMelt();
+						pouch->InitializeMelt();
 					}
 				}
 				break;
 			case 3:
-				if (poison != nullptr)
+				if (pouch->GetPoison()->make_bool)
 				{
 					if (poison->number_of_bullets > 0)
 					{
@@ -767,12 +774,12 @@ void Player::Shoot_Gun()
 					else
 					{
 						poison = nullptr;
-						pouch->DeletePoison();
+						pouch->InitializePoison();
 					}
 				}
 				break;
 			case 4:
-				if (pararysis != nullptr)
+				if (pouch->GetPararysis()->make_bool)
 				{
 					if (pararysis->number_of_bullets > 0)
 					{
@@ -782,22 +789,22 @@ void Player::Shoot_Gun()
 					else
 					{
 						pararysis = nullptr;
-						pouch->DeletePararysis();
+						pouch->InitializePararysis();
 					}
 				}
 				break;
 			case 5:
-				if (heal != nullptr)
+				if (pouch->GetHeal()->make_bool)
 				{
 					if (heal->number_of_bullets > 0)
 					{
-						bullet[i] = new NormalBullet(location.x, location.y, move_left, pararysis);
+						Hp_Heal(pouch->GetHeal()->damage);
 						pouch->ReduceAmmo(attribute[display_attribute]);
 					}
 					else
 					{
 						heal = nullptr;
-						pouch->DeleteHeal();
+						pouch->InitializeHeal();
 					}
 				}
 				break;
@@ -813,16 +820,16 @@ void Player::Shoot_Gun()
 //-----------------------------------
 void Player::SortBullet(int delete_bullet)
 {
+
 	for (int i = delete_bullet + 1; i < BULLET_MAX; i++)
 	{
-		if (bullet[i - 1] == nullptr)
+		if ((bullet[i] == nullptr))
 		{
-			bullet[i - 1] = bullet[i];
-			bullet[i] = nullptr;
+			break;
 		}
-		if (bullet[i] == nullptr)
-		{
-		}
+
+		bullet[i - 1] = bullet[i];
+		bullet[i] = nullptr;
 	}
 	bullet_count--;
 }
@@ -832,6 +839,7 @@ void Player::SortBullet(int delete_bullet)
 //-----------------------------------
 void Player::ElementUpdate()
 {
+
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
 		if (select_count % 20 == 0)
@@ -864,6 +872,7 @@ void Player::ElementUpdate()
 //-----------------------------------
 void Player::HpDamage(AttackResource attack)
 {
+
 	if (!damage_flg)
 	{
 		if (attack.damage > 0)
@@ -906,6 +915,7 @@ void Player::HpDamage(AttackResource attack)
 //-----------------------------------
 void Player::Hp_Heal(int heal_value)
 {
+
 	hp += heal_value;
 	if (hp >= HP_MAX)
 	{
@@ -918,6 +928,7 @@ void Player::Hp_Heal(int heal_value)
 //-----------------------------------
 void Player::SetElementItem(class Item* item)
 {
+
 	int num = static_cast<int>(item->GetElementType());
 
 	element[num]->SetVolume(element[num]->GetVolume() + 1);
@@ -926,6 +937,7 @@ void Player::SetElementItem(class Item* item)
 
 bool Player::HitBlock(const Stage* stage_pointa)
 {
+
 	//マップチップ
 	std::vector<MapChip*>map_chip = stage_pointa->GetMapChip();
 
@@ -956,37 +968,44 @@ bool Player::HitBlock(const Stage* stage_pointa)
 
 bool Player::GetMoveDirection()
 {
+
 	return move_left;
 }
 
 
 void Player::SetExplosion(ChemicalFormulaParameter* a)
 {
+
 	explosion = a;
 }
 
 void Player::SetPoison(ChemicalFormulaParameter* a)
 {
+
 	poison = a;
 }
 
 void Player::SetMelt(ChemicalFormulaParameter* a)
 {
+
 	melt = a;
 }
 
 void Player::SetPararysis(ChemicalFormulaParameter* a)
 {
+
 	pararysis = a;
 }
 
 void Player::SetHeal(ChemicalFormulaParameter* a)
 {
+
 	heal = a;
 }
 
 void Player::MoveAnimation()
 {
+
 	animation++;
 	if (animation % ANIMATION_MOVE == 0)
 	{
@@ -998,4 +1017,3 @@ void Player::MoveAnimation()
 		image_count = 0;
 	}
 }
-

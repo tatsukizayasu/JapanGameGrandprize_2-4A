@@ -6,13 +6,13 @@
 class CameraWork
 {
 public:
+
 	//カメラ座標構造体
 	struct Camera
 	{
 		float x;
 		float y;
 	};
-
 protected:
 
 	//カメラ座標

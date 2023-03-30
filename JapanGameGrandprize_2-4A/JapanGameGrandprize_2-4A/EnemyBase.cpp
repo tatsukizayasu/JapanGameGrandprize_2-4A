@@ -8,8 +8,11 @@
 //-----------------------------------
 EnemyBase::EnemyBase() 
 {
+
 	can_delete = false;
 	left_move = true;
+	poison = false;
+	paralysis = false;
 	hp = 0;
 	speed = 0;
 	paralysis_time = 0;
@@ -31,6 +34,7 @@ EnemyBase::EnemyBase()
 //-----------------------------------
 bool EnemyBase::CheckHp()
 {
+
 	bool ret = false;
 
 	if (hp <= 0)
@@ -46,6 +50,7 @@ bool EnemyBase::CheckHp()
 //-----------------------------------
 bool EnemyBase::ScreenOut()
 {
+
 	bool ret = false; //戻り値
 	Location scroll; //画面スクロールを考慮した座標
 	Location camera = CameraWork::GetCamera(); //カメラ
@@ -65,6 +70,7 @@ bool EnemyBase::ScreenOut()
 //-----------------------------------
 HitMapChip EnemyBase::HitStage(const Stage* stage)
 {
+
 	HitMapChip ret = { false,nullptr }; //戻り値
 
 	//マップチップ
@@ -101,6 +107,7 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 //-----------------------------------
 STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 {
+
 	STAGE_DIRECTION ret = STAGE_DIRECTION::TOP; //戻り値
 
 	Location chip_location = map_chip->GetLocation();
@@ -190,12 +197,20 @@ STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 //-----------------------------------
 void EnemyBase::Poison()
 {
-	if (0 < poison_time)
+
+	if (poison)
 	{
 		poison_time--;
-		if (poison_time % POISON_DAMAGE_FLAME == 0)
+		if (0 < poison_time)
 		{
-			hp -= poison_damage;
+			if (poison_time % POISON_DAMAGE_FLAME == 0)
+			{
+				hp -= poison_damage;
+			}
+		}
+		else
+		{
+			poison = false;
 		}
 	}
 }
@@ -205,10 +220,14 @@ void EnemyBase::Poison()
 //-----------------------------------
 void EnemyBase::Paralysis()
 {
-	if (0 < paralysis_time)
+
+	if (paralysis)
 	{
 		paralysis_time--;
-		speed *= 0.7;
+		if (paralysis_time < 0)
+		{
+			paralysis = false;
+		}
 	}
 }
 
@@ -217,6 +236,7 @@ void EnemyBase::Paralysis()
 //-----------------------------------
 int EnemyBase::GetDropTypeVolume() const
 {
+
 	return drop_type_volume;
 }
 
@@ -225,6 +245,7 @@ int EnemyBase::GetDropTypeVolume() const
 //-----------------------------------
 int EnemyBase::GetDropVolume() const
 {
+
 	return drop_volume;
 }
 
@@ -233,6 +254,7 @@ int EnemyBase::GetDropVolume() const
 //-----------------------------------
 ElementItem EnemyBase::GetDropItem(int i) const
 { 
+
 	return *drop_element[i]; 
 }
 
@@ -241,6 +263,7 @@ ElementItem EnemyBase::GetDropItem(int i) const
 //-----------------------------------
 ENEMY_KIND EnemyBase::GetEnemyKind() const
 {
+
 	return kind;
 }
 
@@ -249,6 +272,7 @@ ENEMY_KIND EnemyBase::GetEnemyKind() const
 //-----------------------------------
 ENEMY_STATE EnemyBase::GetState()const
 {
+
 	return state;
 }
 
@@ -257,5 +281,6 @@ ENEMY_STATE EnemyBase::GetState()const
 //-----------------------------------
 bool EnemyBase::GetCanDelete() const
 {
+
 	return can_delete;
 }

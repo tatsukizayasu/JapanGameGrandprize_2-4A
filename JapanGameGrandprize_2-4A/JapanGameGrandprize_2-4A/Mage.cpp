@@ -20,6 +20,9 @@
 #define MAGE_TELEPORT_AREA 600
 #define MAGE_TELEPORT_RATE 160
 
+//麻痺状態の処理
+#define MAGE_PARALYSIS_RATE 1.5f
+
 //攻撃間隔
 #define MAGE_ATTACK_INTERVAL 240
 
@@ -28,6 +31,7 @@
 //-----------------------------------
 Mage::Mage(Location spawn_location)
 {
+
 	/*初期化*/
 	can_delete = false;
 	can_teleport = true;
@@ -36,6 +40,7 @@ Mage::Mage(Location spawn_location)
 	shot_rate = 0;
 	shot_count = 0;
 	teleport_count = 0;
+	teleport_rate = 0;
 	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
@@ -131,6 +136,7 @@ Mage::Mage(Location spawn_location)
 //-----------------------------------
 Mage::~Mage()
 {
+
 	delete[] type;
 
 	for (int i = 0; i < drop; i++)
@@ -146,6 +152,7 @@ Mage::~Mage()
 //-----------------------------------
 void Mage::Update(const Player* player, const Stage* stage)
 {
+
 	Location old_location = location;	//前の座標
 
 	switch (state)
@@ -193,9 +200,18 @@ void Mage::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void Mage::Idol()
 {
+
 	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
+		if (paralysis)
+		{
+			teleport_rate = MAGE_TELEPORT_RATE * MAGE_PARALYSIS_RATE;
+		}
+		else
+		{
+			teleport_rate = MAGE_TELEPORT_RATE;
+		}
 	}
 }
 
@@ -204,12 +220,13 @@ void Mage::Idol()
 //-----------------------------------
 void Mage::Move(const Location player_location)
 {
+
 	teleport_count++;
 	attack_interval--;
 
-	if (teleport_count % MAGE_TELEPORT_RATE  == 0) //テレポートする
+	if (teleport_count % teleport_rate == 0) //テレポートする
 	{
-		can_teleport =true;
+		can_teleport = true;
 	}
 
 	if (attack_interval < 0) //攻撃に移行
@@ -223,6 +240,7 @@ void Mage::Move(const Location player_location)
 //-----------------------------------
 void Mage::Teleport(const Stage* stage)
 {
+
 	HitMapChip hit_stage;
 
 	float radian; //角度
@@ -266,6 +284,7 @@ void Mage::Teleport(const Stage* stage)
 //-----------------------------------
 void Mage::Fall()
 {
+
 }
 
 //-----------------------------------
@@ -273,14 +292,25 @@ void Mage::Fall()
 //-----------------------------------
 void  Mage::Attack(Location player_location)
 {
+
 	CreateBullet(player_location);
 	
 	if (shot_count >= MAGE_BULLET_MAX)
 	{
 		state = ENEMY_STATE::MOVE;
 		shot_count = 0;
-		attack_interval = MAGE_ATTACK_INTERVAL;
 		teleport_count = 0;
+
+		if (paralysis)
+		{
+			teleport_rate = MAGE_TELEPORT_RATE * MAGE_PARALYSIS_RATE;
+			attack_interval = MAGE_ATTACK_INTERVAL * MAGE_PARALYSIS_RATE;
+		}
+		else
+		{
+			teleport_rate = MAGE_TELEPORT_RATE;
+			attack_interval = MAGE_ATTACK_INTERVAL;
+		}
 	}
 }
 
@@ -289,6 +319,7 @@ void  Mage::Attack(Location player_location)
 //-----------------------------------
 AttackResource Mage::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	return ret;
@@ -299,6 +330,7 @@ AttackResource Mage::Hit()
 //-----------------------------------
 void Mage::Death()
 {
+
 	can_delete = true;
 }
 
@@ -307,6 +339,7 @@ void Mage::Death()
 //-----------------------------------
 void Mage::CreateBullet(Location player_location)
 {
+
 	shot_rate++;
 
 	if (shot_rate % MAGE_SHOT_RATE == 0)
@@ -323,6 +356,7 @@ void Mage::CreateBullet(Location player_location)
 //-----------------------------------
 void Mage::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
@@ -335,11 +369,19 @@ void Mage::HitBullet(const BulletBase* bullet)
 		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
 		break;
 	case ATTRIBUTE::POISON:
-		poison_damage = bullet->GetDamage();
-		poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
+		if (!poison)
+		{
+			poison = true;
+			poison_damage = bullet->GetDamage();
+			poison_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;
+		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		if (!paralysis)
+		{
+			paralysis = true;
+			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		}
 		break;
 	case ATTRIBUTE::HEAL:
 		break;
@@ -353,6 +395,7 @@ void Mage::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Mage::Draw() const
 {
+
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
@@ -366,5 +409,6 @@ void Mage::Draw() const
 //-----------------------------------
 Location Mage::GetLocation() const
 {
+
 	return location;
 }

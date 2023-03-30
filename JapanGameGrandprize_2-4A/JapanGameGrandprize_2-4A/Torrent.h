@@ -15,6 +15,7 @@ class Torrent :
     public EnemyBase
 {
 private:
+
     bool attack; //攻撃が当たったか
     bool tackle_end; //タックルが終わった
     int tackle_end_point; //タックルの終了地点
@@ -27,8 +28,8 @@ private:
     int image_argument; //画像の引数
 
     TORRENT_ATTACK attack_state; //攻撃の状態
-
 private:
+
     //葉っぱの生成
     void CreateLeaf(Location);
 

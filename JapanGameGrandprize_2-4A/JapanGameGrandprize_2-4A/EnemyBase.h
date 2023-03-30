@@ -25,7 +25,7 @@
 #define POISON_DAMAGE_FLAME 10
 
 //麻痺状態の移動スピードの倍率
-#define PARALYSIS_SPEED 0.7f
+#define PARALYSIS_SPEED 0.5f
 
 //落下速度
 #define ENEMY_FALL_SPEED 1
@@ -36,7 +36,6 @@ struct HitMapChip
 	bool hit; //当たったか
 	MapChip* chip; //マップチップ
 };
-
 
 //ステージブロックと当たった面
 enum class STAGE_DIRECTION
@@ -67,6 +66,7 @@ enum class ENEMY_KIND
 	NONE
 };
 
+//エネミーの状態
 enum class ENEMY_STATE
 {
 	IDOL,   //アイドル状態
@@ -144,6 +144,8 @@ protected:
 
 	bool can_delete; //削除フラグ
 	bool left_move; //左に動いているかどうか
+	bool poison;	//毒状態
+	bool paralysis; //麻痺状態
 	int* images; //画像
 	int hp;	//体力
 	int speed; //移動速度

@@ -13,13 +13,12 @@
 #define STAGE_NAME	"Stage01";
 //#define STAGE_NAME  "Stage01_test";
 
-
-
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
 Stage::Stage()
 {
+
 	element = new Stage_Element();
 
 	//スポーン地点に初期値をセット
@@ -137,7 +136,6 @@ Stage::Stage()
 		}
 	}
 
-
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
 #endif
@@ -149,7 +147,6 @@ Stage::Stage()
 Stage::~Stage()
 {
 	
-
 	// マップチップ画像を削除
 	for (int i = 0; i < 50; i++)
 	{
@@ -157,7 +154,6 @@ Stage::~Stage()
 	}
 
 	//vectorの解放
-
 
 	// map_data内の各vectorを解放
 	for (auto& inner_vec : map_data) {
@@ -168,7 +164,6 @@ Stage::~Stage()
 	// map_data自体を解放
 	map_data.clear();
 	map_data.shrink_to_fit();
-
 
 	// MapChipオブジェクトを解放
 	for (MapChip* chip : mapchip) {
@@ -182,8 +177,6 @@ Stage::~Stage()
 	enemy_init_location.clear();
 	enemy_init_location.shrink_to_fit();
 
-
-
 #ifdef _STAGE_BUILDER
 	delete stage_builder;
 #endif
@@ -194,6 +187,7 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
+
 	//当たり判定演算範囲
 	struct DrawArea
 	{
@@ -222,11 +216,7 @@ void Stage::Update(Player* player)
 		if (x + w < camera.x || camera.x + draw.width < x ||
 			y + h < camera.y || camera.y + draw.height < y) continue;
 
-
-
 		m->Update();
-
-
 	}
 
 #ifdef _STAGE_BUILDER
@@ -234,7 +224,6 @@ void Stage::Update(Player* player)
 #endif
 
 	element->Update(player);
-
 }
 
 //-----------------------------------
@@ -242,6 +231,7 @@ void Stage::Update(Player* player)
 //-----------------------------------
 void Stage::Draw()
 {
+
 	//マップチップ		描画
 
 	//描画範囲
@@ -272,16 +262,13 @@ void Stage::Draw()
 		if (x + w < camera.x || camera.x + draw.width < x || y + h < camera.y || camera.y + draw.height < y) continue;
 
 		m->Draw();
-
 	}
-
 
 #ifdef _STAGE_BUILDER
 	stage_builder->Draw();
 #endif
 
 	element->Draw();
-
 }
 
 //-----------------------------------
@@ -289,6 +276,7 @@ void Stage::Draw()
 //-----------------------------------
 void Stage::LoadMap()
 {
+
 	const char* stage_name = STAGE_NAME;
 
 	char buf[37];
@@ -330,6 +318,7 @@ void Stage::LoadMap()
 
 std::vector<MapChip*> Stage::GetMapChip() const
 {
+
 	std::vector<MapChip*>map_chip = mapchip;
 	std::vector<Stage_Element_Base*>e_map_chip = GetElement_MapChip();
 	map_chip.insert(map_chip.end(), e_map_chip.begin(), e_map_chip.end());
@@ -338,5 +327,6 @@ std::vector<MapChip*> Stage::GetMapChip() const
 
 std::vector<Stage_Element_Base*> Stage::GetElement_MapChip() const
 {
+
 	return	element->GetMapChip();
 }

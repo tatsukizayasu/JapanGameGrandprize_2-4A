@@ -9,21 +9,22 @@ class Mage :
     public EnemyBase
 {
 private:
+
     bool can_teleport; //テレポート可能か
     int teleport_count; //テレポートするまでの時間
+    int teleport_rate; //テレポートのレート
     int shot_rate; //魔法弾の発射レート
     int shot_count; //発射した弾の数
     int image; //画像
     int drop; //ドロップするアイテムの種類の数
     int attack_interval; //攻撃の間隔
-
 private:
+
     //テレポート
     void Teleport(const class Stage* stage);
 
     //弾の生成
     void CreateBullet(Location);
-
 public:
 
     //コンストラクタ

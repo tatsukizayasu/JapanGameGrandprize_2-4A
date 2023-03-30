@@ -21,9 +21,9 @@
 #define ONE_ROUND 360 //一周の角度
 #define ROTATION_SPEED 15 //スライムが回転するスピード
 
-
 EnemySlime::EnemySlime(Location spawn_location)
 {
+
 	attack = false;
 	left_move = true;
 	kind = ENEMY_KIND::SLIME;
@@ -117,12 +117,11 @@ EnemySlime::EnemySlime(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
-
-
 }
 
 EnemySlime::~EnemySlime()
 {
+
 	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		delete drop_element[i];
@@ -138,11 +137,11 @@ EnemySlime::~EnemySlime()
 	}
 
 	delete[] images;
-
 }
 
 void EnemySlime::Update(const Player* player, const Stage* stage)
 {
+
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -207,6 +206,11 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 				{
 					speed = SLIME_SPEED;
 				}
+
+				if (paralysis)
+				{
+					speed *= PARALYSIS_SPEED;
+				}
 			}
 		}
 
@@ -236,6 +240,10 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			{
 				speed = SLIME_SPEED;
 			}
+			if (paralysis)
+			{
+				speed *= PARALYSIS_SPEED;
+			}
 		}
 		break;
 
@@ -246,9 +254,8 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-
 	
-
+	Paralysis();
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -259,6 +266,7 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 void EnemySlime::Draw()const
 {
+
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
@@ -271,6 +279,7 @@ void EnemySlime::Draw()const
 //-----------------------------------
 void EnemySlime::Idol()
 {
+
 	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
@@ -282,6 +291,10 @@ void EnemySlime::Idol()
 		{
 			speed = SLIME_SPEED;
 		}
+		if (paralysis)
+		{
+			speed *= PARALYSIS_SPEED;
+		}
 	}
 }
 
@@ -290,6 +303,7 @@ void EnemySlime::Idol()
 //-----------------------------------
 void EnemySlime::Move(const Location player_location)
 {
+
 	float distance; //離れている距離
 
 	//プレイヤーとの距離の計算
@@ -316,12 +330,9 @@ void EnemySlime::Move(const Location player_location)
 			image_change_time = 0;
 		}
 
-
 		location.x += speed;
 		wait_time = 0;
 	}
-
-	
 }
 
 //-----------------------------------
@@ -329,6 +340,7 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 void EnemySlime::Fall()
 {
+
 	location.y += speed;
 	if (speed < GRAVITY)
 	{
@@ -341,6 +353,7 @@ void EnemySlime::Fall()
 //-----------------------------------
 void  EnemySlime::Attack(Location player_location)
 {
+
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
 
@@ -355,6 +368,7 @@ void  EnemySlime::Attack(Location player_location)
 //-----------------------------------
 AttackResource EnemySlime::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	if (!attack)
@@ -375,6 +389,7 @@ AttackResource EnemySlime::Hit()
 //-----------------------------------
 void EnemySlime::Death()
 {
+
 	can_delete = true;
 
 	/*if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
@@ -407,6 +422,7 @@ void EnemySlime::Death()
 //-----------------------------------
 void EnemySlime::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
@@ -419,11 +435,16 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
 		break;
 	case ATTRIBUTE::POISON:
-		//poison_damage = bullet->GetDamage();
-		//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		poison_damage = bullet->GetDamage() * 0;
+		poison_time = bullet->GetDebuffTime() * 0;
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		paralysis_time = bullet->GetDebuffTime() * 0;
+		if (!paralysis)
+		{
+			paralysis = true;
+			paralysis_time = bullet->GetDebuffTime();
+			speed *= PARALYSIS_SPEED;
+		}
 		break;
 	case ATTRIBUTE::HEAL:
 		break;
@@ -437,5 +458,6 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 Location EnemySlime::GetLocation() const
 {
+
 	return location;
 }

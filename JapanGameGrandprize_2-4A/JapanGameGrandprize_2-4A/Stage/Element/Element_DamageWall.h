@@ -1,12 +1,8 @@
 #pragma once
 #include "Stage_Element_Base.h"
 
-
 class Element_DamageWall : public Stage_Element_Base
 {
-private:
-	
-
 public:
 
 	//コンストラクタ
@@ -15,6 +11,4 @@ public:
 	~Element_DamageWall();
 	//更新
 	void Update(Player *player) override;
-
-
 };

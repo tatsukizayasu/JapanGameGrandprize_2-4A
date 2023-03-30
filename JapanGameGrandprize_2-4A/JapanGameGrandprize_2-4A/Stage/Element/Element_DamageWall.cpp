@@ -1,9 +1,9 @@
 #include "Element_DamageWall.h"
 #include "../Player.h"
 
-
 Element_DamageWall::Element_DamageWall(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
 {
+
 	this->area = area;
 	this->type = type;
 	
@@ -17,11 +17,10 @@ Element_DamageWall::~Element_DamageWall()
 
 void Element_DamageWall::Update(Player* player)
 {
+
 	//アニメーション更新
 	LoopImages(images, 0.1, 9, nullptr);
 
-
-	
 	if (abs(location.x - player->GetLocation().x) <= MAP_CHIP_SIZE 
 		&& abs(location.y - player->GetLocation().y) <= MAP_CHIP_SIZE) {
 		ENEMY_TYPE fireType = ENEMY_TYPE::FIRE;
@@ -30,7 +29,6 @@ void Element_DamageWall::Update(Player* player)
 		/*if (GetElapsedTime(5.2) == 0.0f) { Attack(); }
 		LoopTimer(5.2, &Attack);*/
 
-
 		//std::function<void()> f = [&]() { player->HpDamage(AttackResource{ 1, nullptr, 5 }); };
 		//f();
 
@@ -38,5 +36,4 @@ void Element_DamageWall::Update(Player* player)
 		//	player->HpDamage(AttackResource{ 2, nullptr, 5 });
 		//};
 	}
-
 }

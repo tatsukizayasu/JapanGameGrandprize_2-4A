@@ -7,6 +7,7 @@
 //-----------------------------------
 ItemController::ItemController()
 {
+
 	item_volume = 0;
 	item_max = 0;
 	item = nullptr;
@@ -17,6 +18,7 @@ ItemController::ItemController()
 //-----------------------------------
 ItemController::~ItemController()
 {
+
 	for (int i = 0; i < item_volume; i++)
 	{
 		delete item[i];
@@ -30,6 +32,7 @@ ItemController::~ItemController()
 //-----------------------------------
 void ItemController::Update(Player* player)
 {
+
 	for (int i = 0; i < item_volume; i++)
 	{
 		if (item[i] == nullptr)
@@ -46,6 +49,7 @@ void ItemController::Update(Player* player)
 			item[i] = nullptr;
 			SortItem(i);
 			i--;
+			item_volume--;
 		}
 	}
 }
@@ -94,6 +98,7 @@ void ItemController::SpawnItem(const EnemyBase* enemy_base)
 //-----------------------------------
 void ItemController::SortItem(const int item_num)
 {
+
 	//弾の中身をソートする
 	for (int i = item_num + 1; i < item_max; i++)
 	{
@@ -112,6 +117,7 @@ void ItemController::SortItem(const int item_num)
 //-----------------------------------
 void ItemController::ArrangementItem(const int old_item_max)
 {
+
 	if (item == nullptr)
 	{
 		//アイテムの初期化
@@ -138,9 +144,7 @@ void ItemController::ArrangementItem(const int old_item_max)
 		{
 			item[i] = nullptr;
 		}
-
 	}
-
 }
 
 //-----------------------------------
@@ -148,6 +152,7 @@ void ItemController::ArrangementItem(const int old_item_max)
 //-----------------------------------
 void ItemController::Draw() const
 {
+
 	for (int i = 0; i < item_volume; i++)
 	{
 		if (item[i] == nullptr)

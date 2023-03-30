@@ -2,22 +2,20 @@
 #include "ElementItem.h"
 #include "Define.h"
 
-
 #define CURSOL_SPEED 30
 
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
 
-
-
-
 class Pouch
 {
 private:
+
 	float x, y;
 	int cursol;
 	int count;
 	bool on_bool;
+	char element_char[PLAYER_ELEMENT];
 	ATTRIBUTE tab;
 	ElementItem* element[PLAYER_ELEMENT];
 
@@ -27,13 +25,13 @@ private:
 	ChemicalFormulaParameter chemical_formula_heal[HEAL_MAX_NUM];
 	ChemicalFormulaParameter chemical_formula_melt[MELT_MAX_NUM];
 
-	ChemicalFormulaParameter* select_explosion;
-	ChemicalFormulaParameter* select_poison;
-	ChemicalFormulaParameter* select_pararysis;
-	ChemicalFormulaParameter* select_heal;
-	ChemicalFormulaParameter* select_melt;
-
+	ChemicalFormulaParameter select_explosion;
+	ChemicalFormulaParameter select_poison;
+	ChemicalFormulaParameter select_pararysis;
+	ChemicalFormulaParameter select_heal;
+	ChemicalFormulaParameter select_melt;
 public:
+
 	Pouch();
 	~Pouch();
 
@@ -70,9 +68,9 @@ public:
 	void SetOnBool(bool);
 	void ReduceAmmo(ATTRIBUTE);
 	void ConsumptionMaterial();
-	void DeleteExplosion();
-	void DeletePoison();
-	void DeleteMelt();
-	void DeleteHeal();
-	void DeletePararysis();
+	void InitializeExplosion();
+	void InitializePoison();
+	void InitializeMelt();
+	void InitializeHeal();
+	void InitializePararysis();
 };

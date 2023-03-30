@@ -4,14 +4,15 @@
 
 #define TIMER	4.0f
 
-Element_Fall_Floor::Element_Fall_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
+Element_Fall_Floor::Element_Fall_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element,
+	std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
 {
+
 	this->area = area;
 	this->type = type;
 	margin_area = { -18.0f,0.0f };
 	this->images = images;
 
-	
 	is_flash = false;
 	fall_speed = 4.0f;
 	increment = 0.1f;
@@ -21,7 +22,9 @@ Element_Fall_Floor::Element_Fall_Floor(short type, std::vector<std::shared_ptr<S
 
 Element_Fall_Floor::~Element_Fall_Floor()
 {
-	for (int& image : images) {
+
+	for (int& image : images) 
+	{
 		DeleteGraph(image);
 	}
 }
@@ -33,20 +36,23 @@ void Element_Fall_Floor::Update(Player* player)
 
 	HIT_DIRECTION is_hit_dir = std::get<1>(HitPlayer(player));
 
-	if (state != STATE::FALL) {
-
-		if (is_hit_dir == HIT_DIRECTION::UP) {
+	if (state != STATE::FALL) 
+	{
+		if (is_hit_dir == HIT_DIRECTION::UP)
+		{
 			//アニメーション更新
-			std::function<void()> flash = [&]() {
+			std::function<void()> flash = [&]()
+			{
 				is_flash = !is_flash;
 
-				if (is_flash) {
+				if (is_flash) 
+				{
 					SetImage(0);
 				}
-				else {
+				else 
+				{
 					SetImage(images.at(0));
 				}
-
 			};
 
 			//点滅するタイマーをセット
@@ -55,38 +61,30 @@ void Element_Fall_Floor::Update(Player* player)
 			//落ちる時間の半分の時間が経過したらステートをWORKING!!にセットし、点滅させる
 			if (GetElapsedTime(TIMER) >= TIMER / 2) { state = STATE::WORKING; }
 
-			std::function<void()> fall = [&]() {
-
+			std::function<void()> fall = [&]() 
+			{
 				state = STATE::FALL;
-
 			};
 
 			//落ちる時間のタイマーをセット
 			LoopTimer(TIMER, &fall);
-
 		}
-		else {
+		else 
+		{
 			state = STATE::NONE;
 			SetImage(images.at(0));
 			ResetElapsedTime(TIMER);
-
-
 		}
 	}
 
-
-	if (state == STATE::FALL) {
-
-		
+	if (state == STATE::FALL)
+	{
 		SetImage(images.at(0));
 
-		
-
-		if (GetLocation().y < CameraWork::GetCamera().y + static_cast<float>(SCREEN_HEIGHT) + MAP_CHIP_SIZE) {
+		if (GetLocation().y < CameraWork::GetCamera().y + static_cast<float>(SCREEN_HEIGHT) + MAP_CHIP_SIZE) 
+		{
 			fall_speed += increment;
 			SetLocation({ GetLocation().x, GetLocation().y + fall_speed });
 		}
-		
 	}
-
 }

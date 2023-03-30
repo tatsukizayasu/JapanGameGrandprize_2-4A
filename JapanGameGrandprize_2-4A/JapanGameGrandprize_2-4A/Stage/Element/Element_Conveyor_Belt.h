@@ -1,10 +1,8 @@
 #pragma once
 #include "Stage_Element_Base.h"
+
 class Element_Conveyor_Belt : public Stage_Element_Base
 {
-private:
-
-
 public:
 
 	//コンストラクタ
@@ -13,7 +11,4 @@ public:
 	~Element_Conveyor_Belt();
 	//更新
 	void Update(Player* player) override;
-
-
-
 };

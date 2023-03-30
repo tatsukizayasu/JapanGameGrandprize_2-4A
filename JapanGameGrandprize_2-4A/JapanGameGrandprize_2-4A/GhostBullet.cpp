@@ -9,6 +9,7 @@
 //-----------------------------------
 GhostBullet::GhostBullet( Location spawn_location, Location player_location)
 {
+
 	type = ENEMY_TYPE::WIND;
 	location = spawn_location;
 	radius = 5;
@@ -34,6 +35,7 @@ GhostBullet::~GhostBullet()
 //-----------------------------------
 void GhostBullet::Update()
 {
+
 	location.x += x_speed;
 	location.y += y_speed;
 }
@@ -43,6 +45,7 @@ void GhostBullet::Update()
 //-----------------------------------
 void GhostBullet::Draw() const
 {
+
 	float x, y;
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
