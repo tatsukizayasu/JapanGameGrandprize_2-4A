@@ -38,9 +38,10 @@ Player::Player()
 	damage = 0;
 	image_count = 0;
 
+	bullet = new BulletBase * [BULLET_MAX];
+
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
-		bullet = new BulletBase * [BULLET_MAX];
 		bullet[i] = nullptr;
 	}
 
