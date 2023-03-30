@@ -440,7 +440,7 @@ void Player::Update()
 	{
 		if (!damage_flg)
 		{
-			if (!fire_second_bool && damage_count++ % 60 == 0)
+			if (!fire_second_bool && ++damage_count % 60 == 0)
 			{
 				fire_second_bool = true;
 			}
@@ -450,9 +450,11 @@ void Player::Update()
 				if (damage_second++ < damage_by_second)
 				{
 					hp--;
+
 				}
 				else 
 				{
+					damage_second = 0;
 					fire_second_bool = false;
 				}
 			}
