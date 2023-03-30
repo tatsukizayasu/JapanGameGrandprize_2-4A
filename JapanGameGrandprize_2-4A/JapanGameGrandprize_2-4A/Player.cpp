@@ -15,10 +15,10 @@ Player::Player()
 {
 
 	animation = 0;
-	location.x = 0;
-	location.y = 420;
+	location.x = 100;
+	location.y = 80;
 	image = new int[PLAYER_IMAGES];
-	LoadDivGraph("Images/Player/ Player.png", PLAYER_IMAGES, PLAYER_IMAGES, 1, 40, 80, image);
+	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 40, 80, image);
 	image_size_x = 40;
 	image_size_y = 80;
 	area.width = image_size_x;
@@ -1017,3 +1017,41 @@ void Player::MoveAnimation()
 		image_count = 0;
 	}
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// çXêV(DotByDot)
+//-----------------------------------
+void Player::Update(const PLAYER_STATE state)
+{
+	switch (state)
+	{
+	case PLAYER_STATE::STOP:
+		break;
+	case PLAYER_STATE::MOVE_LEFT:
+		MoveAnimation();
+		break;
+	case PLAYER_STATE::MOVE_RIGHT:
+		break;
+	case PLAYER_STATE::JUMP:
+		break;
+	case PLAYER_STATE::DOWN:
+		break;
+	case PLAYER_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+//-----------------------------------
+//ï`âÊ(DotByDot)
+//-----------------------------------
+void Player::DebugDraw()
+{
+	DrawRotaGraphF(location.x, location.y, 1, 0, image[image_count], TRUE);
+
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
+}
+#endif

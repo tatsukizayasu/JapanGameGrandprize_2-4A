@@ -117,6 +117,11 @@ EnemySlime::EnemySlime(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+#ifdef _DEBUG
+	old_state  = ENEMY_STATE::IDOL;
+	attack_time = 0;
+	debug_location = location;
+#endif // _DEBUG
 }
 
 EnemySlime::~EnemySlime()
@@ -362,8 +367,14 @@ void  EnemySlime::Attack(Location player_location)
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
 
-	if (left_move) speed = -SLIME_ATTACK_SPEED;
-	else speed = SLIME_ATTACK_SPEED;
+	if (left_move)
+	{
+		speed = -SLIME_ATTACK_SPEED;
+	}
+	else
+	{
+		speed = SLIME_ATTACK_SPEED;
+	}
 
 	location.x += speed;
 }
@@ -473,6 +484,10 @@ Location EnemySlime::GetLocation() const
 //-----------------------------------
 void EnemySlime::Update(const ENEMY_STATE state)
 {
+	if ((old_state != state) || (attack_time < 0))
+	{
+		location = debug_location;
+	}
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -495,12 +510,36 @@ void EnemySlime::Update(const ENEMY_STATE state)
 	case ENEMY_STATE::FALL:
 		break;
 	case ENEMY_STATE::ATTACK:
+		if ((old_state != state) || (attack_time < 0))
+		{
+			jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
+			attack_time = SLIME_ATTACK_DISTANCE_Y * 3;
+			location = debug_location;
+		}
+		if (SLIME_ATTACK_DISTANCE_Y < attack_time)
+		{
+			location.y -= (jump_distance.y / 3);
+			jump_distance.y--;
+			if (left_move)
+			{
+				speed = -SLIME_ATTACK_SPEED;
+			}
+			else
+			{
+				speed = SLIME_ATTACK_SPEED;
+			}
+			location.x += speed;
+
+		}
+		attack_time--;
+
 		break;
 	case ENEMY_STATE::DEATH:
 		break;
 	default:
 		break;
 	}
+	old_state = state;
 }
 
 //-----------------------------------
@@ -513,6 +552,6 @@ void EnemySlime::DebugDraw()
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,
-		0xffffff, FALSE);
+		0xff0000, FALSE);
 }
 #endif //_DEBUG

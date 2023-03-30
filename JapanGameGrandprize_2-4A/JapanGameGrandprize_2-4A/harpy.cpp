@@ -434,6 +434,6 @@ void Harpy::DebugDraw()
 {
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,
-		0xffffff, FALSE);
+		0xff0000, FALSE);
 }
 #endif //_DEBUG

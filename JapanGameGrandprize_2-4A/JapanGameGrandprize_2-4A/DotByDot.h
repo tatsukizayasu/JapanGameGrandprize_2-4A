@@ -9,11 +9,10 @@ class DotByDot :
     public AbstractScene
 {
 private:
-
+    int font;
     int state;
     EnemyBase** enemy;
     Player* player;
-    Stage* stage;
 
     const char str[5][10] = { "idol","move","fall","attack","death" };
 public:

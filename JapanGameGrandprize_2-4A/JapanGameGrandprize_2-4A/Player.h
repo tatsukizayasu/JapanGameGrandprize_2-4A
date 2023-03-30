@@ -121,4 +121,12 @@ public:
 	void SetHeal(ChemicalFormulaParameter*);
 
 	void MoveAnimation();
+
+#ifdef _DEBUG
+	//çXêV(DotByDot)
+	void Update(const PLAYER_STATE state);
+
+	//ï`âÊ(DotByDot)
+	void DebugDraw();
+#endif //_DEBUG
 };

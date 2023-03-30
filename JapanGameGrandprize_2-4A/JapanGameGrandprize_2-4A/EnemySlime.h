@@ -25,6 +25,13 @@ private:
 	int wait_time;
 
 	Location jump_distance;
+private:
+#ifdef _DEBUG
+	ENEMY_STATE old_state; //一つ前の状態
+	int attack_time; //攻撃の時間
+	Location debug_location; //デバック用の座標
+#endif // _DEBUG
+
 public:
 
 	EnemySlime(Location);
