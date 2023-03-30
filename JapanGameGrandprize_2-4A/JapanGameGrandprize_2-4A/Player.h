@@ -91,6 +91,7 @@ public:
 	Player(Stage*);
 	~Player();
 	void Draw()const;
+	void ChemicalFormulaDraw(int,int) const;
 	void Update();
 	void ElementUpdate();
 
