@@ -98,7 +98,7 @@ void BulletManager::Update(const Stage* stage)
 void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
 {
 
-    if (enemy_bullet_count == enemy_bullet_max)
+    if (enemy_bullet_max <= enemy_bullet_count)
     {
         if (enemy_bullets == nullptr)
         {
@@ -137,7 +137,6 @@ void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
                 }
             }
             delete[] temporary_bullets;
-
         }
     }
     //’e‚Ì¶¬
@@ -191,7 +190,7 @@ void BulletManager::DeleteEnemyBullet(const EnemyBulletBase* bullet)
 void BulletManager::CreateEnemyNuts(class EnemyBulletBase* nuts)
 {
 
-    if (enemy_nuts_count == enemy_nuts_max)
+    if (enemy_nuts_max <= enemy_nuts_count)
     {
         if (enemy_nuts == nullptr)
         {

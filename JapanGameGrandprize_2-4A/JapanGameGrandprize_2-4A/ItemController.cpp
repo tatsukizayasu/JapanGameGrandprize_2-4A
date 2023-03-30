@@ -140,7 +140,7 @@ void ItemController::ArrangementItem(const int old_item_max)
 		//”ğ“ï‚³‚¹‚½ƒAƒCƒeƒ€‚ğŒ³‚É–ß‚·
 		for (int i = 0; i < item_max; i++)
 		{
-			if (i < item_volume)
+			if (i < old_item_max)
 			{
 				item[i] = temporary_item[i];
 			}
