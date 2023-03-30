@@ -278,10 +278,6 @@ void EnemySlime::Draw()const
 	draw_location = draw_location - camera;
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
-
-	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
-		0xffffff, FALSE);
 }
 
 //-----------------------------------

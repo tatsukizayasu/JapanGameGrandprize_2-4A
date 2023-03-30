@@ -41,6 +41,8 @@ BulletManager::~BulletManager()
         delete enemy_nuts[i];
     }
     delete[] enemy_nuts;
+
+    instance = nullptr;
 }
 
 //-----------------------------------
