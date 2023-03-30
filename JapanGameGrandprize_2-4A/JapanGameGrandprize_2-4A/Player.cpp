@@ -817,6 +817,7 @@ void Player::Shoot_Gun()
 			{
 			case 0:
 				bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, &normal);
+				bullet_count++;
 				break;
 			case 1:
 				if (pouch->GetExplosion()->make_bool)
@@ -826,6 +827,7 @@ void Player::Shoot_Gun()
 						if (explosion->number_of_bullets > 0)
 						{
 							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, explosion);
+							bullet_count++;
 							pouch->ReduceAmmo(attribute[display_attribute]);
 						}
 						if(explosion->number_of_bullets <= 0)
@@ -844,6 +846,7 @@ void Player::Shoot_Gun()
 						if (melt->number_of_bullets > 0)
 						{
 							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, melt);
+							bullet_count++;
 							pouch->ReduceAmmo(attribute[display_attribute]);
 						}
 						if(melt->number_of_bullets <= 0)
@@ -862,6 +865,7 @@ void Player::Shoot_Gun()
 						if (poison->number_of_bullets > 0)
 						{
 							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, poison);
+							bullet_count++;
 							pouch->ReduceAmmo(attribute[display_attribute]);
 						}
 						if(poison->number_of_bullets <= 0)
@@ -880,6 +884,7 @@ void Player::Shoot_Gun()
 						if (pararysis->number_of_bullets > 0)
 						{
 							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, pararysis);
+							bullet_count++;
 							pouch->ReduceAmmo(attribute[display_attribute]);
 						}
 						if(pararysis->number_of_bullets <= 0)
@@ -894,7 +899,6 @@ void Player::Shoot_Gun()
 				break;
 			}
 		}
-		bullet_count++;
 }
 
 //-----------------------------------
@@ -906,13 +910,13 @@ void Player::SortBullet(int delete_bullet)
 	{
 		if ((bullet[i] == nullptr))
 		{
-			bullet_count--;
 			break;
 		}
 
 		bullet[i - 1] = bullet[i];
 		bullet[i] = nullptr;
 	}
+	bullet_count--;
 }
 
 //-----------------------------------
