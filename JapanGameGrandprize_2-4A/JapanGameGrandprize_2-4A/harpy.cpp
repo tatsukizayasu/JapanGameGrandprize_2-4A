@@ -145,20 +145,17 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 	hit_stage = HitStage(stage);
 	if (hit_stage.hit) //ステージとの当たり判定
 	{
-		Location chip_location = hit_stage.chip->GetLocation();
-		Area chip_area = hit_stage.chip->GetArea();
-		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+		hit_direction = HitDirection(hit_stage.chip);
+
+		if (hit_direction == STAGE_DIRECTION::TOP)
 		{
-			//速度を落とすかもしくは、反転させる処理を作成
 			location = old_location;
-			/*if (left_move ==true)
-			{
-				left_move = false;
-			}
-			else
-			{
-				left_move = false;
-			}*/
+		}
+		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
+		{
+			location = old_location;
+			left_move = !left_move;
 		}
 
 	}
