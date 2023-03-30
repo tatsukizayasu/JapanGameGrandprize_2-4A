@@ -29,6 +29,11 @@ Stage::Stage()
 		throw "Images/Stage/map_chips.png";
 	}
 
+	if (LoadDivGraph("Images/Stage/stage1_blocks.png", 10, 5, 2, CHIP_SIZE, CHIP_SIZE, stage1_block_images) == -1)
+	{
+		throw "Images/Stage/stage1_blocks.png";
+	}
+
 	//マップデータの読み込み
 	LoadMap();
 
@@ -40,7 +45,26 @@ Stage::Stage()
 			short i = map_data.at(y).at(x);
 			if (i != 0 && i != -1)
 			{
+				if (i == 5) {
+					int rand = GetRand(4);
+					rand += 5;
+					mapchip.push_back(new MapChip
+					(&stage1_block_images[rand],
+						{
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						}, { CHIP_SIZE,CHIP_SIZE }));
+				}
 
+				if (i == 4) {
+					int rand = GetRand(4);
+					mapchip.push_back(new MapChip
+					(&stage1_block_images[rand],
+						{
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						}, { CHIP_SIZE,CHIP_SIZE }));
+				}
 
 
 
@@ -97,7 +121,7 @@ Stage::Stage()
 				else {
 
 					//固定マップチップ
-					if (i < 50) {
+					if (i < 50 && i != 4 && i != 5) {
 						mapchip.push_back(new MapChip
 						(&block_images[i],
 							{
