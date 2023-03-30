@@ -7,6 +7,8 @@
 #include <iostream>
 
 #define ANIMATION_MOVE 10
+#define CHEMICAL_FORMURA_DRAW_X 50
+#define CHEMICAL_FORMURA_DRAW_Y 150
 
 //-----------------------------------
 // コンストラクタ
@@ -332,57 +334,61 @@ void Player::ChemicalFormulaDraw(int i,int plus_y) const
 	switch (i)
 	{
 	case 0: //通常弾
-		DrawFormatString(1240, 50 + plus_y, 0x778877, "--");
+		DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "--");
 		break;
 	case 1: //爆発
 		if (explosion != nullptr)
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", explosion->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", explosion->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", explosion->chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
-
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
 		}
 		break;
 	case 2: //溶解
 		if (melt != nullptr)
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", melt->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", melt->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", melt->chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
 		}
 		break;
 	case 3: //毒
 		if (poison != nullptr)
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", poison->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", poison->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", poison->chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
 		}
 		break;
 	case 4: //麻痺
 		if (pararysis != nullptr)
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", pararysis->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", pararysis->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", pararysis->chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
 		}
 		break;
 	case 5: //回復
 		if (heal != nullptr)
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "%d", heal->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", heal->number_of_bullets);
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", heal->chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(1240, 50 + plus_y, 0x778877, "0");
+			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
 		}
 		break;
 	default:
@@ -527,7 +533,6 @@ void Player::Update()
 			}
 			else if(shoot_count++ % 10 == 0)
 			{
-				bullet_count++;
 				Shoot_Gun();
 			}
 			else{}
@@ -890,7 +895,7 @@ void Player::Shoot_Gun()
 				break;
 			}
 		}
-	
+		bullet_count++;
 }
 
 //-----------------------------------
@@ -898,7 +903,6 @@ void Player::Shoot_Gun()
 //-----------------------------------
 void Player::SortBullet(int delete_bullet)
 {
-
 	for (int i = delete_bullet + 1; i < BULLET_MAX; i++)
 	{
 		if ((bullet[i] == nullptr))
@@ -950,7 +954,6 @@ void Player::ElementUpdate()
 //-----------------------------------
 void Player::HpDamage(AttackResource attack)
 {
-
 	if (!damage_flg)
 	{
 		if (attack.damage > 0)
