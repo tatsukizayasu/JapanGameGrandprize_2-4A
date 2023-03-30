@@ -72,7 +72,7 @@
 		 location.y - area.height / 2 - CameraWork::GetCamera().y,
 		 location.x + area.width / 2 - CameraWork::GetCamera().x,
 		 location.y + area.height / 2 - CameraWork::GetCamera().y
-		 , 0xff00ff, FALSE, 5);
+		 , 0xff00ff, FALSE);
 
 #ifdef _STAGE_BUILDER
 
@@ -94,7 +94,7 @@
 //-----------------------------------
 // SphereCollider‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-bool BoxCollider::HitSphere(const SphereCollider* sphere_collider) const
+bool BoxCollider::HitSphere(const class SphereCollider* sphere_collider) const
 {
 	bool ret = false;//•Ô‚è’l
 	float rad; //2“_‚ÌŠp“x
@@ -173,7 +173,7 @@ bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 //-----------------------------------
 // LineCollider‚Æ‚Ì“–‚½‚è”»’è
 //-----------------------------------
-bool BoxCollider::HitLine(const LineCollider* line_collider) const
+bool BoxCollider::HitLine(const class LineCollider* line_collider) const
 {
 	bool is_hit = false;
 	bool box_ishit = false;
@@ -286,9 +286,38 @@ void BoxCollider::UpdatePos()
 	{
 		if (spheres[i]->GetLocation() != old_pos[i])
 		{
-			 
+			 //3‚©‚ç“Y‚¦Žš‚ðˆø‚­‚Æ‘ÎŠp‚Ì“Y‚¦Žš‚É‚È‚éB
+			area.height = fabsf(spheres[3 - i]->GetLocation().y -
+				spheres[i]->GetLocation().y);
+
+			area.width = fabsf(spheres[3 - i]->GetLocation().x -
+				spheres[i]->GetLocation().x);
+
+			pivot->SetLocation(
+				{
+					(spheres[3 - i]->GetLocation() +
+					spheres[i]->GetLocation()) / Location{2,2}
+				}
+			);
+
+
+			break;
 		}
 	}
+
+	SetLocation(pivot->GetLocation());
+
+	spheres[0]->SetLocation
+	({ location.x - area.width / 2,location.y - area.height / 2 });
+
+	spheres[1]->SetLocation
+	({ location.x + area.width / 2,location.y - area.height / 2 });
+
+	spheres[2]->SetLocation
+	({ location.x - area.width / 2,location.y + area.height / 2 });
+
+	spheres[3]->SetLocation
+	({ location.x + area.width / 2,location.y + area.height / 2 });
 
 	for (int i = 0; i < 4; i++)
 	{

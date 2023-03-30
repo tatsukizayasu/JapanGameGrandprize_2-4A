@@ -13,8 +13,7 @@ PolyLine::PolyLine()
 // コンストラクタ 引数：点の座標と数
 //-------------------------------------
 PolyLine::PolyLine(Location bend_points[], unsigned int size)
-{
-	
+{	
 	for (int i = 0; i < size; i++)
 	{
 		this->bend_points.push_back(new SphereCollider(bend_points[i]));
@@ -23,6 +22,8 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 	{
 		lines.push_back(new LineCollider(bend_points[i], bend_points[i + 1]));
 	}
+
+	location = (bend_points[0] + bend_points[size - 1]) / 2;
 }
 
 //-------------------------------------
@@ -41,6 +42,9 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 			spheres[i]->GetLocation(), spheres[i + 1]->GetLocation()
 		));
 	}
+
+	location = (bend_points[0]->GetLocation() +
+		bend_points[bend_points.size() - 1]->GetLocation()) / 2;
 }
 
 //---------------------------------

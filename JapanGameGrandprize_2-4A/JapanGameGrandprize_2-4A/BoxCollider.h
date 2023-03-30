@@ -44,7 +44,9 @@ protected:
 	SphereCollider* pivot;
 	Location old_pos[4];
 
+public:
 	SphereCollider** GetSpheres() { return spheres; }
+	SphereCollider* GetPivot() { return pivot; }
 	void UpdatePos();
 #endif
 

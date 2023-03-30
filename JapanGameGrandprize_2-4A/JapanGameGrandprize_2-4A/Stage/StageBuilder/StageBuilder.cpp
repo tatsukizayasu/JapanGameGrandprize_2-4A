@@ -34,14 +34,6 @@ StageBuilder::StageBuilder()
 
 #ifdef _DEV
 
-	Location points[3] =
-	{
-		{200,200},
-		{640,500},
-		{940,350}
-	};
-	poly_lines.push_back(new PolyLine(points,3));
-	
 	for (int i = 0; i < 1; i++)
 	{
 		Location test[3] =
@@ -52,8 +44,11 @@ StageBuilder::StageBuilder()
 		};
 		poly_lines.push_back(new PolyLine(test, 3));
 	}
+	
+	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
 
-	box = new BoxCollider({ 640,360 }, { 100,100 });
+	objects.push_back(new ObjectBase({ 640,360 }));
+
 
 #endif // _DEV
 }
@@ -83,8 +78,18 @@ StageBuilder::~StageBuilder()
 	}
 	poly_lines.clear();
 
+	for (int i = 0; i < boxes.size(); i++)
+	{
+		delete boxes[i];
+	}
+	boxes.clear();
 
-	delete box;
+	for (int i = 0; i < objects.size(); i++)
+	{
+		delete objects[i];
+	}
+	objects.clear();
+
 }
 
 //------------------------------------
@@ -177,7 +182,29 @@ void StageBuilder::Draw()const
 		}
 	}
 
-	box->Draw();
+	for (int i = 0; i < objects.size(); i++)
+	{
+		if(objects[i]->HitSphere(mouse))
+		{
+			DrawString(640, 300, "hit", 0);
+		}
+	}
+
+	if (mouse->HitCheck(objects[0]->GetColllider()))
+	{
+		DrawString(640, 300, "hit", 0);
+	}
+	
+	for (int i = 0; i < boxes.size(); i++)
+	{
+		boxes[i]->Draw();
+	}
+	
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Draw();
+	}
+
 
 #endif // _DEV
 
@@ -284,24 +311,25 @@ void StageBuilder::UpdateBrush()
 //------------------------------------
 void StageBuilder::UpdateModulation()
 {
-
-	if (KeyManager::OnKeyClicked(KEY_INPUT_S))
-	{
-		box->SetLocation(box->GetLocation() + Location{ -20,-20 });
-	}
-
 	DeleteObject();
 
 	TransformPolyLine();
+	TransformBox();
 
 	if (select_collider != nullptr)
 	{
 		MovementByMouse();
 		MovementByKey();	
 
+
 		for (int i = 0; i < poly_lines.size(); i++)
 		{
 			poly_lines[i]->Update();
+		}
+		
+		for (int i = 0; i < boxes.size(); i++)
+		{
+			boxes[i]->UpdatePos();
 		}
 	}
 }
@@ -641,6 +669,47 @@ void StageBuilder::TransformPolyLine()
 			}
 
 			points.clear();
+		}
+
+	}
+
+}
+
+//---------------------------------------------
+// ‹éŒ`‚Ì•ÏŒ`
+//---------------------------------------------
+void StageBuilder::TransformBox()
+{
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+	{
+		for (int i = 0; i < boxes.size(); i++)
+		{
+			SphereCollider** points = boxes[i]->GetSpheres();
+			
+
+			for (int j = 0; j < 4; j++)
+			{
+				if (mouse->HitSphere(points[j]))
+				{
+					select_collider = points[j];
+					return;
+				}
+				else
+				{
+					select_collider = nullptr;
+				}
+			}
+
+			if (mouse->HitSphere(boxes[i]->GetPivot()))
+			{
+				select_collider = boxes[i]->GetPivot();
+				return;
+			}
+			else
+			{
+				select_collider = nullptr;
+			}
+
 		}
 
 	}

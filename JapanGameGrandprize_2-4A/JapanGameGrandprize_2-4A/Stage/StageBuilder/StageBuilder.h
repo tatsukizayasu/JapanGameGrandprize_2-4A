@@ -6,6 +6,7 @@
 #include "../SphereCollider.h"
 #include "../../LineCollider.h"
 #include "PolyLine.h"
+#include "ObjectBase.h"
 #include <vector>
 #include <string>
 #include <fstream>
@@ -52,6 +53,7 @@ private:
 	int block_images[110];		//ブロック画像
 	vector<MapChip*> map_chips;
 	vector<PolyLine*>poly_lines;
+	vector<ObjectBase*>objects;
 
 	//保留中のスフィア
 	vector<SphereCollider*> pending_sphere;
@@ -61,7 +63,7 @@ private:
 	int current_brush;
 
 	//todo:テスト 
-	BoxCollider* box;
+	vector<BoxCollider*> boxes;
 
 public:
 	//コンストラクタ
@@ -113,6 +115,8 @@ public:
 	void DeleteObject();
 	//折れ線の変形
 	void TransformPolyLine();
+	//矩形の変形
+	void TransformBox();
 
 	//マップチップを作成する
 	void MakeMapChip(); //クリックしたとき用

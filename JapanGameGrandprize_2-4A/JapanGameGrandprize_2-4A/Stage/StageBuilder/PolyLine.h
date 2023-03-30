@@ -7,6 +7,7 @@
 using namespace std;
 
 class PolyLine 
+    :public ColliderBase
 {
 private:
 
