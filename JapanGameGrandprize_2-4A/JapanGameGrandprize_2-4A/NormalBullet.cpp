@@ -78,11 +78,14 @@ void NormalBullet::Draw() const
 	switch (attribute)
 	{
 	case ATTRIBUTE::NORMAL:
-		if (!efect_end && delete_flg)
+		if (delete_flg)
 		{
-			for (int i = 0; i < PIXEL_MAX; i++)
+			if (!efect_end)
 			{
-				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
 			}
 		}
 		else
@@ -91,11 +94,14 @@ void NormalBullet::Draw() const
 		}
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		if (!efect_end && delete_flg)
+		if (delete_flg)
 		{
-			for (int i = 0; i < PIXEL_MAX; i++)
+			if (!efect_end)
 			{
-				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
 			}
 		}
 		else
@@ -104,11 +110,14 @@ void NormalBullet::Draw() const
 		}
 		break;
 	case ATTRIBUTE::MELT:
-		if (!efect_end && delete_flg)
+		if (delete_flg)
 		{
-			for (int i = 0; i < PIXEL_MAX; i++)
+			if (!efect_end)
 			{
-				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
 			}
 		}
 		else
@@ -117,11 +126,14 @@ void NormalBullet::Draw() const
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		if (!efect_end && delete_flg)
+		if (delete_flg)
 		{
-			for (int i = 0; i < PIXEL_MAX; i++)
+			if (!efect_end)
 			{
-				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
 			}
 		}
 		else
@@ -130,11 +142,14 @@ void NormalBullet::Draw() const
 		}
 		break;
 	case ATTRIBUTE::POISON:
-		if (!efect_end && delete_flg)
+		if (delete_flg)
 		{
-			for (int i = 0; i < PIXEL_MAX; i++)
+			if (!efect_end)
 			{
-				DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
 			}
 		}
 		else
