@@ -20,6 +20,8 @@ enum class CHARACTER_STATE
 	DEATH,  //死亡
 };
 
+
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -73,12 +75,16 @@ AbstractScene* DotByDot::Update()
 		state++;
 	}
 
+#ifdef _DEBUG
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
 		enemy[i]->Update(static_cast<ENEMY_STATE>(state % 5));
 	}
 
 	player->Update(static_cast<PLAYER_STATE>(state % 6));
+#endif // _DEBUG
+
+	
 
 	return this;
 }
@@ -89,12 +95,16 @@ AbstractScene* DotByDot::Update()
 void DotByDot::Draw() const
 {
 	SetBackgroundColor(0,255,255);
+#ifdef _DEBUG
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
 		enemy[i]->DebugDraw();
 	}
 
 	player->DebugDraw();
+#endif // _DEBUG
+
+	
 
 	DrawFormatStringToHandle(1160, 660, 0x000000, font, "%s", str[state % 5]);
 

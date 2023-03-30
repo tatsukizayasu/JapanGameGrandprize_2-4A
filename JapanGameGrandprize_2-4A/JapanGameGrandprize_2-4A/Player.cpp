@@ -151,9 +151,13 @@ Player::Player(Stage* stage)
 	}
 
 	damage_flg = false;
+	fire_flg = false;
+	fire_second_bool = false;
 	pouch_open = false;
 	move_left = false;
 	i = 0;
+	damage_by_second = 0;
+	damage_time = 0;
 
 	attribute[0] = ATTRIBUTE::NORMAL;
 	attribute[1] = ATTRIBUTE::EXPLOSION;
@@ -429,6 +433,35 @@ void Player::Update()
 		{
 			damage_flg = false;
 			damage_count = 0;
+		}
+	}
+
+	if (fire_flg)
+	{
+		if (!damage_flg)
+		{
+			if (!fire_second_bool && damage_count++ % 60 == 0)
+			{
+				fire_second_bool = true;
+			}
+
+			if (fire_second_bool)
+			{
+				if (damage_second++ < damage_by_second)
+				{
+					hp--;
+				}
+				else 
+				{
+					fire_second_bool = false;
+				}
+			}
+
+			if (damage_count >= damage_time)
+			{
+				fire_flg = false;
+				damage_count = 0;
+			}
 		}
 	}
 
@@ -973,6 +1006,12 @@ void Player::HpDamage(AttackResource attack)
 					case ENEMY_TYPE::NORMAL:
 						break;
 					case ENEMY_TYPE::FIRE:
+						if (damage_time <= 0)
+						{
+							damage_by_second = 2;
+							damage_time = 240;
+							fire_flg = true;
+						}
 						break;
 					case ENEMY_TYPE::WATER:
 						break;
