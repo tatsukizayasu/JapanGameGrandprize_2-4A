@@ -10,13 +10,15 @@ Element_Move_Floor::Element_Move_Floor(short type,
 	this->type = type;
 	this->location = location;
 
-	this->area = { MAP_CHIP_SIZE,MAP_CHIP_SIZE - 20 };
+	this->area = { MAP_CHIP_SIZE - 20,MAP_CHIP_SIZE };
+	margin_area = { 0.0f,0.0f };
 
-	is_move = true;
+	is_move = false;
 	speed.x = 5.0f;
 	speed.y = 0.0f;
 
 	next_location = { location.x + area.width ,location.y };
+	move_timer = 0;
 }
 
 Element_Move_Floor::~Element_Move_Floor()
@@ -26,36 +28,57 @@ Element_Move_Floor::~Element_Move_Floor()
 
 void Element_Move_Floor::Update(Player* player)
 {
+	//debug
+	if (CheckHitKey(KEY_INPUT_A))
+	{
+		SetLocation({ 200.f,500.f });
+	}
 
 	Location location = this->GetLocation();
 	Location p_location = player->GetLocation();
 	HIT_DIRECTION hit_direction = std::get<1>(HitPlayer(player));
 
-    if (location.x == next_location.x) 
+	if (hit_direction == HIT_DIRECTION::UP)
 	{
-        is_move = false;
-    }
-
-	//目的位置まで動く
-	if (is_move && location.x < next_location.x)
-	{
-		SetLocation({ location.x + speed.x , location.y + speed.y });
-		//目的位置を通り過ぎたら目的位置に戻す
-		if (location.x > next_location.x) 
+		if (MOVE_START_TIME <= move_timer++)
 		{
-			SetLocation(next_location);
+			is_move = true;
 		}
 	}
 
-	/*if (hit_direction == HIT_DIRECTION::UP && player->GetState() != PLAYER_STATE::JUMP)
+    if (location.x == next_location.x) 
 	{
-		player->SetLocation({ p_location.x,location.y - MAP_CHIP_SIZE - 5 });
-	}*/
+        is_move = false;
+		move_timer = 0;
+    }
 
+	
+	//動く条件である場合
+	if (is_move)
+	{
+		//目的位置まで動く
+		if (location.x != next_location.x)
+		{
+			SetLocation({ location.x + speed.x , location.y + speed.y });
+			//目的位置を通り過ぎたら目的位置に戻す
+			if (location.x > next_location.x)
+			{
+				SetLocation(next_location);
+			}
+		}
+		//プレイヤーが乗っているとき、プレイヤー座標に床のスピードを加算する
+		if (hit_direction == HIT_DIRECTION::UP && player->GetState() != PLAYER_STATE::JUMP)
+		{
+			player->SetLocation({ p_location.x + speed.x,p_location.y + speed.y });
+		}
+
+	}
+
+	
 	/*if (abs(abs(location.x - p_location.x) <= MAP_CHIP_SIZE
 		&& abs(location.y - p_location.y) <= MAP_CHIP_SIZE))
 	{
-		player->SetLocation({ p_location.x,location.y - MAP_CHIP_SIZE });
+		player->SetLocation({ p_location.x + speed.x,p_location.y - speed.y });
 	}*/
 }
 
