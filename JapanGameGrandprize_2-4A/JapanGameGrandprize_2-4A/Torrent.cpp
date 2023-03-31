@@ -141,7 +141,7 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-	
+
 	Paralysis();
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -238,7 +238,7 @@ void Torrent::Tackle()
 				left_move = !left_move;
 			}
 		}
-		
+
 		if (tackle_end) //タックル終了
 		{
 			attack = false;
@@ -263,7 +263,7 @@ void Torrent::Tackle()
 					break;
 				}
 			}
-			else if(leaf_cutter_interval < 0) //葉っぱを飛ばす攻撃だけが可能な時
+			else if (leaf_cutter_interval < 0) //葉っぱを飛ばす攻撃だけが可能な時
 			{
 				attack_state = TORRENT_ATTACK::LEAF_CUTTER;
 				attack_time = LEAF_CUTTER_TIME;
@@ -447,7 +447,7 @@ void Torrent::CreateNuts()
 	bool spawn = false; //スポーンした
 
 	spawn_interval++;
-	
+
 	if (spawn_interval % SPAWN_NUTS_INTERVAL == 0)
 	{
 		for (int i = 0; i < SPAWN_NUTS_POINT; i++)
@@ -497,7 +497,7 @@ void Torrent::AttackNone()
 	{
 		TORRENT_ATTACK next_attack;	//次の攻撃
 		next_attack = static_cast<TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
-		
+
 		next_attack = TORRENT_ATTACK::DROP_NUTS;
 		switch (next_attack)
 		{
@@ -605,3 +605,37 @@ Location Torrent::GetLocation() const
 
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// 更新(DotByDot)
+//-----------------------------------
+void Torrent::Update(const ENEMY_STATE state)
+{
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//描画(DotByDot)
+//-----------------------------------
+void Torrent::DebugDraw()
+{
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
+}
+#endif //_DEBUG

@@ -165,18 +165,18 @@ STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 
 	//è„ñ Ç∆ÇÃãóó£
 	distance[0] = sqrtf(powf(chip_location.x - vertex.x, 2) +
-		powf((chip_location.y - chip_area.height / 2) - vertex.y, 2));
+		powf((chip_location.y - CHIP_SIZE / 2) - vertex.y, 2));
 
 	//â∫ñ Ç∆ÇÃãóó£
 	distance[1] = sqrtf(powf(chip_location.x - vertex.x, 2) +
-		powf((chip_location.y + chip_area.height / 2) - vertex.y, 2));
+		powf((chip_location.y + CHIP_SIZE / 2) - vertex.y, 2));
 
 	//ç∂ñ Ç∆ÇÃãóó£
-	distance[2] = sqrtf(powf((chip_location.x - chip_area.width / 2) - vertex.x, 2) +
+	distance[2] = sqrtf(powf((chip_location.x - CHIP_SIZE / 2) - vertex.x, 2) +
 		powf(chip_location.y - vertex.y, 2));
 
 	//âEñ Ç∆ÇÃãóó£
-	distance[3] = sqrtf(powf((chip_location.x + chip_area.width / 2) - vertex.x, 2) +
+	distance[3] = sqrtf(powf((chip_location.x + CHIP_SIZE / 2) - vertex.x, 2) +
 		powf(chip_location.y - vertex.y, 2));
 
 	min_distance = distance[0];

@@ -168,7 +168,7 @@ void Mage::Update(const Player* player, const Stage* stage)
 		{
 			Teleport(stage);
 		}
-		
+
 		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
@@ -412,3 +412,37 @@ Location Mage::GetLocation() const
 
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// çXêV(DotByDot)
+//-----------------------------------
+void Mage::Update(const ENEMY_STATE state)
+{
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//ï`âÊ(DotByDot)
+//-----------------------------------
+void Mage::DebugDraw()
+{
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
+}
+#endif //_DEBUG

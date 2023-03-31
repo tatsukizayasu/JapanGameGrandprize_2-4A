@@ -67,7 +67,7 @@ Harpy::Harpy(Location spawn_location)
 	physical_attack = false;
 	magic_attack = false;
 	inversion = false;
-	kind = ENEMY_KIND::GHOST;
+	kind = ENEMY_KIND::HARPY;
 
 	//harpy_image = LoadGraph("Images/Enemy/???????.png"); //画像読込み
 	harpy_image = 0; //画像をもらい次第上記の処理に変更
@@ -145,19 +145,17 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 	hit_stage = HitStage(stage);
 	if (hit_stage.hit) //ステージとの当たり判定
 	{
-		Location chip_location = hit_stage.chip->GetLocation();
-		Area chip_area = hit_stage.chip->GetArea();
-		if ((chip_location.y + chip_area.height / 2) < (location.y + area.height / 2))
+		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+		hit_direction = HitDirection(hit_stage.chip);
+
+		if (hit_direction == STAGE_DIRECTION::TOP)
 		{
-			//speed = SPEED; //速度を落とすかもしくは、反転させる処理を作成
-			/*if (left_move ==true)
-			{
-				left_move = false;
-			}
-			else
-			{
-				left_move = false;
-			}*/
+			location = old_location;
+		}
+		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
+		{
+			location = old_location;
+			left_move = !left_move;
 		}
 
 	}
@@ -191,7 +189,6 @@ void Harpy::Move(const Location player_location)
 	range = player_location.x - location.x;
 	range_y = player_location.y - location.y;
 
-	vector = sqrt(range * range + range_y * range_y);
 
 	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
@@ -403,3 +400,37 @@ Location Harpy::GetLocation() const
 
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// 更新(DotByDot)
+//-----------------------------------
+void Harpy::Update(const ENEMY_STATE state)
+{
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//描画(DotByDot)
+//-----------------------------------
+void Harpy::DebugDraw()
+{
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
+}
+#endif //_DEBUG

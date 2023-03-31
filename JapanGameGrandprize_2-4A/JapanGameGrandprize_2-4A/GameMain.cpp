@@ -10,17 +10,21 @@
 #include "Mage.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
+#include "DotByDot.h"
 
 //-----------------------------------
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 //-----------------------------------
 GameMain::GameMain()
 {
-
+#undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
 	background_image = LoadGraph("Images/Scene/gamemain.png");
+#ifdef _DEBUG
 
+#else
 	pause = new Pause();
+#endif
 
 	stage = new Stage();
 	player = new Player(stage);
@@ -53,7 +57,11 @@ GameMain::~GameMain()
 	spawn_volume = stage->GetEnemy_SpawnLocation().size();
 
 	delete camera_work;
+#ifdef _DEBUG
+
+#else
 	delete pause;
+#endif
 	delete player;
 	delete stage;
 
@@ -62,7 +70,7 @@ GameMain::~GameMain()
 		delete enemy[i];
 	}
 	delete[] enemy;
-	
+
 	delete item_controller;
 	delete bullet_manager;
 }
@@ -72,10 +80,23 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+#ifdef _DEBUG
 
+#else
 	pause->Update();
 	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
 	if (pause->IsPause() == TRUE) { return this; }
+#endif
+
+
+#ifdef _DEBUG
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_LEFT))
+	{
+		return new DotByDot();
+	}
+#endif
+
+
 
 	camera_work->Update();
 	player->Update();
@@ -100,7 +121,7 @@ void GameMain::SpawnEnemy()
 	spawn_volume = spawn.size();
 	enemy = new EnemyBase * [spawn_volume];
 
-	for (int i = 0; i < spawn_volume;i++)
+	for (int i = 0; i < spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -269,8 +290,7 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
-	
-	SetBackgroundColor(149, 249, 253);
+
 	//”wŒi	•`‰æ
 	DrawGraph(0, 0, background_image, FALSE);
 
@@ -290,7 +310,10 @@ void GameMain::Draw()const
 		}
 	}
 	bullet_manager->Draw();
+#ifdef _DEBUG
 
+#else
 	//ƒ|[ƒY		•`‰æ
 	if (pause->IsPause() == true) { pause->Draw(); }
+#endif
 }

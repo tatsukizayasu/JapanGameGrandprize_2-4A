@@ -22,6 +22,24 @@ Pouch::Pouch()
 	}
 
 	InitChemicalParameter();
+
+	InitializeExplosion();
+
+	InitializeMelt();
+
+	InitializePararysis();
+	
+	InitializeHeal();
+
+	InitializePoison();
+
+	element_char[0] = 'H';
+	element_char[1] = 'O';
+	element_char[2] = 'C';
+	element_char[3] = 'N';
+	element_char[4] = 'S';
+	element_char[5] = 'Ch';
+	element_char[6] = 'U';
 }
 
 Pouch::~Pouch()
@@ -461,12 +479,14 @@ void Pouch::Draw() const
 	{
 		DrawBox(x + (50 * i), y + 400, (x + (50 * i)) + 50, y + 450, 0xffffff, FALSE);
 		DrawFormatString(x + (50 * i), y + 400, 0x000000, "%d", element[i]->GetVolume());
+		DrawFormatString(x + (50 * i), y + 430, 0x000000, "%c", element_char[i]);
 	}
 
 	for (int i = 0; i < 3; i++)
 	{
 		DrawBox(x + (50 * i) + 25, y + 450, (x + (50 * i) + 50) + 25, y + POUCH_HEIGHT, 0xffffff, FALSE);
 		DrawFormatString(x + (50 * i) + 25, y + 450, 0xffffff, "%d", element[i + 4]->GetVolume());
+		DrawFormatString(x + (50 * i) + 25, y + 480, 0xffffff, "%c", element_char[i + 4]);
 	}
 }
 
@@ -545,40 +565,41 @@ void Pouch::Update()
 		break;
 	}
 
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_B))
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A))
 	{
+		on_bool = true;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
-			if (select_explosion == nullptr)
+			if (!select_explosion.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
 			}
 			break;
 		case ATTRIBUTE::MELT:
-			if (select_melt == nullptr)
+			if (!select_melt.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
 			}
 			break;
 		case ATTRIBUTE::POISON:
-			if (select_poison == nullptr)
+			if (!select_poison.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
 			}			
 			break;
 		case ATTRIBUTE::PARALYSIS:
-			if (select_pararysis == nullptr)
+			if (!select_pararysis.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
 			}			
 			break;
 		case ATTRIBUTE::HEAL:
-			if (select_heal == nullptr)
+			if (!select_heal.make_bool)
 			{
 				SetChemicalFormulaParameter();
 				ConsumptionMaterial();
@@ -788,6 +809,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_explosion[i].time,
 				&attribute);
 			chemical_formula_explosion[i].atribute = static_cast <ATTRIBUTE>(attribute);
+			chemical_formula_explosion[i].make_bool = true;
 		}
 		for (int i = 0; i < POISON_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
@@ -808,6 +830,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_poison[i].time,
 				&attribute);
 			chemical_formula_poison[i].atribute = static_cast <ATTRIBUTE>(attribute);
+			chemical_formula_poison[i].make_bool = true;
 		}
 
 		for (int i = 0; i < PARARYSIS_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
@@ -829,7 +852,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_pararysis[i].time,
 				&attribute);
 			chemical_formula_pararysis[i].atribute = static_cast <ATTRIBUTE>(attribute);
-
+			chemical_formula_pararysis[i].make_bool = true;
 		}
 
 		for (int i = 0; i < HEAL_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
@@ -851,6 +874,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_heal[i].time,
 				&attribute);
 			chemical_formula_heal[i].atribute = static_cast <ATTRIBUTE>(attribute);
+			chemical_formula_heal[i].make_bool = true;
 
 		}
 
@@ -873,6 +897,7 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_melt[i].time,
 				&attribute);
 			chemical_formula_melt[i].atribute = static_cast <ATTRIBUTE>(attribute);
+			chemical_formula_melt[i].make_bool = true;
 		}
 		return;
 	}
@@ -881,32 +906,31 @@ void Pouch::InitChemicalParameter()
 
 ChemicalFormulaParameter* Pouch::GetExplosion()
 {
-
-	return select_explosion;
+	return &select_explosion;
 }
 
 ChemicalFormulaParameter* Pouch::GetPoison()
 {
 
-	return select_poison;
+	return &select_poison;
 }
 
 ChemicalFormulaParameter* Pouch::GetPararysis()
 {
 
-	return select_pararysis;
+	return &select_pararysis;
 }
 
 ChemicalFormulaParameter* Pouch::GetHeal()
 {
 
-	return select_heal;
+	return &select_heal;
 }
 
 ChemicalFormulaParameter* Pouch::GetMelt()
 {
 
-	return select_melt;
+	return &select_melt;
 }
 
 ATTRIBUTE Pouch::GetAttribute()
@@ -945,30 +969,31 @@ void Pouch::ReduceAmmo(ATTRIBUTE a)
 	case ATTRIBUTE::NORMAL:
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		if (select_explosion != nullptr)
+		if (select_explosion.make_bool)
 		{
-			select_explosion->number_of_bullets--;
+			select_explosion.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::MELT:
-		if (select_melt != nullptr)
+		if (select_melt.make_bool)
 		{
-			select_melt->number_of_bullets--;
+			select_melt.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::POISON:
-		if (select_poison != nullptr)
+		if (select_poison.make_bool)
 		{
-			select_poison->number_of_bullets--;
+			select_poison.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		if (select_pararysis != nullptr)
+		if (select_pararysis.make_bool)
 		{
-			select_pararysis->number_of_bullets--;
+			select_pararysis.number_of_bullets--;
 		}
 		break;
 	case ATTRIBUTE::HEAL:
+		select_heal.number_of_bullets--;
 		break;
 	default:
 		break;
@@ -977,38 +1002,36 @@ void Pouch::ReduceAmmo(ATTRIBUTE a)
 
 void Pouch::SetChemicalFormulaParameter()
 {
-
-	on_bool = true;
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
 		if (ComparisonElement(chemical_formula_explosion[cursol]))
 		{
-			select_explosion = &chemical_formula_explosion[cursol];
+			select_explosion = chemical_formula_explosion[cursol];
 		}
 		break;
 	case ATTRIBUTE::MELT:
 		if (ComparisonElement(chemical_formula_melt[cursol]))
 		{
-			select_melt = &chemical_formula_melt[cursol];
+			select_melt = chemical_formula_melt[cursol];
 		}
 		break;
 	case ATTRIBUTE::POISON:
 		if (ComparisonElement(chemical_formula_poison[cursol]))
 		{
-			select_poison = &chemical_formula_poison[cursol];
+			select_poison = chemical_formula_poison[cursol];
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
 		if (ComparisonElement(chemical_formula_pararysis[cursol]))
 		{
-			select_pararysis = &chemical_formula_pararysis[cursol];
+			select_pararysis = chemical_formula_pararysis[cursol];
 		}
 		break;
 	case ATTRIBUTE::HEAL:
 		if (ComparisonElement(chemical_formula_heal[cursol]))
 		{
-			select_heal = &chemical_formula_heal[cursol];
+			select_heal = chemical_formula_heal[cursol];
 		}
 		break;
 	default:
@@ -1018,7 +1041,6 @@ void Pouch::SetChemicalFormulaParameter()
 
 bool Pouch::ComparisonElement(ChemicalFormulaParameter subject) const
 {
-
 	if (subject.material.hydrogen <= element[0]->GetVolume() &&
 		subject.material.oxygen <= element[1]->GetVolume() &&
 		subject.material.carbon <= element[2]->GetVolume() &&
@@ -1068,7 +1090,7 @@ void Pouch::ConsumptionMaterial()
 		difference[static_cast<int>(ELEMENT_ITEM::NITROGEN)] = element[3]->GetVolume() - chemical_formula_poison[cursol].material.nitrogen;
 		difference[static_cast<int>(ELEMENT_ITEM::SULFUR)] = element[4]->GetVolume() - chemical_formula_poison[cursol].material.sulfur;
 		difference[static_cast<int>(ELEMENT_ITEM::CHLORINE)] = element[5]->GetVolume() - chemical_formula_poison[cursol].material.chlorine;
-		for (int i = 0; i < PLAYER_ELEMENT; i++)
+		for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
 		{
 			element[i]->SetVolume(difference[i]);
 		}
@@ -1102,32 +1124,33 @@ void Pouch::ConsumptionMaterial()
 	}
 }
 
-void Pouch::DeleteExplosion()
+void Pouch::InitializeExplosion()
 {
-
-	select_explosion = nullptr;
+	select_explosion = { 0 };
+	select_explosion.make_bool = false;
 }
 
-void Pouch::DeleteHeal()
+void Pouch::InitializeHeal()
 {
-
-	select_heal = nullptr;
+	select_heal = { 0 };
+	select_heal.make_bool = false;
 }
 
-void Pouch::DeleteMelt()
+void Pouch::InitializeMelt()
 {
-
-	select_melt = nullptr;
+	select_melt = {0};
+	select_melt.make_bool = false;
 }
 
-void Pouch::DeletePararysis()
+void Pouch::InitializePararysis()
 {
 
-	select_pararysis = nullptr;
+	select_pararysis = { 0 };
+	select_pararysis.make_bool = false;
 }
 
-void Pouch::DeletePoison()
+void Pouch::InitializePoison()
 {
-
-	select_poison = nullptr;
+	select_poison = { 0 };
+	select_poison.make_bool = false;
 }

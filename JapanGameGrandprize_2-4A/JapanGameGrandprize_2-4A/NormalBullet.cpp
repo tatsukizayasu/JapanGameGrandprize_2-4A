@@ -38,9 +38,10 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
 	scrool_y = CameraWork::GetCamera().y;
+	radius = 10.0f;
 
 	location.x = player_x;
-	location.y = player_y - 10;
+	location.y = player_y - 5;
 	chemical_formula = chemical;
 	damage = chemical->damage;
 	debuff_time = chemical->time;
@@ -74,17 +75,90 @@ void NormalBullet::Draw() const
 	float scrool_x = CameraWork::GetCamera().x;
 	float scrool_y = CameraWork::GetCamera().y;
 
-	if (!delete_flg)
+	switch (attribute)
 	{
-		DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, 0xff00ff, TRUE);
-	}
-
-	if (!efect_end && delete_flg)
-	{
-		for (int i = 0; i < PIXEL_MAX; i++)
+	case ATTRIBUTE::NORMAL:
+		if (delete_flg)
 		{
-			DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+			if (!efect_end)
+			{
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
+			}
 		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, GLAY, TRUE);
+		}
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		if (delete_flg)
+		{
+			if (!efect_end)
+			{
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
+			}
+		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, ORANGE, TRUE);
+		}
+		break;
+	case ATTRIBUTE::MELT:
+		if (delete_flg)
+		{
+			if (!efect_end)
+			{
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
+			}
+		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, BLUE, TRUE);
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		if (delete_flg)
+		{
+			if (!efect_end)
+			{
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
+			}
+		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, YELLOW, TRUE);
+		}
+		break;
+	case ATTRIBUTE::POISON:
+		if (delete_flg)
+		{
+			if (!efect_end)
+			{
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
+			}
+		}
+		else
+		{
+			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, PURPLE, TRUE);
+		}
+		break;
+	default:
+		break;
 	}
 }
 

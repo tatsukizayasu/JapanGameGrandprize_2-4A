@@ -159,14 +159,14 @@ void Undead::Update(const Player* player, const Stage* stage)
 			Location chip_location = hit_stage.chip->GetLocation();
 			Area chip_area = hit_stage.chip->GetArea();
 
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
 			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
 			hit_direction = HitDirection(hit_stage.chip);
 
 			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
-				location.y = chip_location.y - 
-					(chip_area.height / 2) - (area.height / 2);
-
 				state = ENEMY_STATE::MOVE;
 				if (left_move)
 				{
@@ -390,7 +390,8 @@ void Undead::Draw() const
 	draw_location = draw_location - camera;
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0,
-		images[image_argument],TRUE, !left_move);
+		images[image_argument], TRUE, !left_move);
+
 }
 
 //-----------------------------------
@@ -401,3 +402,43 @@ Location Undead::GetLocation() const
 
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// 更新(DotByDot)
+//-----------------------------------
+void Undead::Update(const ENEMY_STATE state)
+{
+
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		MoveAnimation();
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//描画(DotByDot)
+//-----------------------------------
+void Undead::DebugDraw()
+{
+
+	DrawRotaGraphF(location.x, location.y, 1.0, 0,
+		images[image_argument], TRUE, !left_move);
+
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
+}
+#endif //_DEBUG

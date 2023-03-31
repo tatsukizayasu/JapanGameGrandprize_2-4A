@@ -31,7 +31,7 @@ public:
     //デストラクタ
     ~Undead();
 
-    //描画以外の更新
+    //更新
     void Update(const class Player* player, const class Stage* stage) override;
 
     //アイドル状態
@@ -60,4 +60,12 @@ public:
 
     //座標の取得
     Location GetLocation() const override;
+
+#ifdef _DEBUG
+    //更新(DotByDot)
+    void Update(const ENEMY_STATE state) override;
+
+    //描画(DotByDot)
+    void DebugDraw() override;
+#endif //_DEBUG
 };
