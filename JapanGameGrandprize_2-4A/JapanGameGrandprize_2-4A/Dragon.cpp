@@ -1,5 +1,6 @@
 #include "Dragon.h"
 #include "CameraWork.h"
+#include"BulletManager.h"
 #include "DxLib.h"
 
 //ドラゴンの画像サイズ(未定、画像が出来次第調整）
@@ -24,6 +25,10 @@
 Dragon::Dragon(Location spawn_location)
 {
 	location = spawn_location;
+	location.x -= MAP_CHIP_SIZE / 2;
+	location.y -= MAP_CHIP_SIZE / 2;
+	area.height = DRAGON_SIZE_Y;
+	area.width = DRAGON_SIZE_X;
 
 	animation = 0;
 	animation_time = 0;
@@ -123,6 +128,14 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 //-----------------------------------
 void Dragon::Draw() const
 {
+	//スクロールに合わせて描画
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
+
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
+		GetColor(255, 0, 0), TRUE);
 
 }
 
@@ -189,10 +202,13 @@ void Dragon::TailMove(const Location player_location)
 //-----------------------------------
 void Dragon::DreathMove(const Location player_location)
 {
-
+	BulletManager::GetInstance()->CreateEnemyBullet
+	(new DragonBullet(location, player_location));
 }
 
-
+//-----------------------------------
+//遠距離攻撃（咆哮）
+//-----------------------------------
 void Dragon::RoarMove(const Location player_location)
 {
 
@@ -219,7 +235,7 @@ void Dragon::Fall()
 //-----------------------------------
 void Dragon::Death()
 {
-
+	can_delete = true;
 }
 
 //-----------------------------------
@@ -227,7 +243,37 @@ void Dragon::Death()
 //-----------------------------------
 void Dragon::HitBullet(const BulletBase* bullet)
 {
-
+	switch (bullet->GetAttribute()) //受けた化合物の属性
+	{
+	case ATTRIBUTE::NORMAL: //通常弾 
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE; //効きにくい
+		break;
+	case ATTRIBUTE::EXPLOSION: //爆発 
+		hp -= bullet->GetDamage() * 0; //効かない
+		break;
+	case ATTRIBUTE::MELT: //溶かす 　通常
+		hp -= bullet->GetDamage(); //通常ダメージ
+		break;
+	case ATTRIBUTE::POISON: //毒　
+		if (!poison)
+		{
+			poison = true;
+			poison_time = bullet->GetDebuffTime();
+			poison_damage = bullet->GetDamage();
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS: //麻痺 弱点
+		if (!paralysis)
+		{
+			paralysis = true;
+			paralysis_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;  //弱点
+		}
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
+	}
 }
 
 //-----------------------------------

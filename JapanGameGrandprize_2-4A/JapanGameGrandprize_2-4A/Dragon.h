@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
 #include"BoxCollider.h"
+#include"DragonBullet.h"
 
 enum class DRAGON_ATTACK
 {
