@@ -19,7 +19,13 @@
 //	for (int i = 0; i < BODY_MAX; i++)
 //	{
 //		if (i == 0)slime_boss_body[i] = new SlimeBossBody(100, 700, 5, 100, 5, 10, BODY_TYPE::head);
-//		else slime_boss_body[i] = new SlimeBossBody(100, 100, 5, 100, 5, 10, BODY_TYPE::body);
+//		else slime_boss_body[i] = new SlimeBossBody(100, 700, 5, 100, 5, 10, BODY_TYPE::body);
+//	}
+//
+//	for (int i = 0; i < DATA; i++)
+//	{
+//		location_data[i].x = 100;
+//		location_data[i].y = 700;
 //	}
 //}
 //
