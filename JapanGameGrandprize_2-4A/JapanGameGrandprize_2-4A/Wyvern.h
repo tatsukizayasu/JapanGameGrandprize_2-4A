@@ -17,7 +17,10 @@ private:
 
     bool attack; //攻撃が当たったか
     int damage; //ダメージ
-    int attack_interval; //次の攻撃までの時間
+    int bless_interval;         //次のブレス攻撃までの時間
+    int triple_bless_interval;  //次の3連ブレス攻撃までの時間
+    int assault_interval;       //次の強襲攻撃までの時間
+    int shot_rate;  //ブレスの発射レート
     int image_argument; //画像の引数
 
     WYVERN_ATTACK attack_state; //攻撃

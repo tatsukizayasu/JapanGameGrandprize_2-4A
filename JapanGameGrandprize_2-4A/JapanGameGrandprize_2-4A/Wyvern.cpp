@@ -10,6 +10,9 @@
 #define WYVERN_MIN_DROP 1
 #define WYVERN_DROP 8
 
+#define BLESS_INTERVAL 300
+#define TRIPLE_BLESS_INTERVAL 600
+#define ASSAULT_INTERVAL 480
 
 //-----------------------------------
 //コンストラクタ
@@ -23,8 +26,12 @@ Wyvern::Wyvern(Location spawn_location)
 
 	hp = 100;
 	damage = 0;
-	attack_interval = 0;
 
+	bless_interval = BLESS_INTERVAL;
+	triple_bless_interval = TRIPLE_BLESS_INTERVAL;
+	assault_interval = ASSAULT_INTERVAL;
+
+	shot_rate = 0;
 	image_argument = 0;
 	speed = 0;
 	kind = ENEMY_KIND::WYVERN;
