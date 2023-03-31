@@ -290,7 +290,7 @@ void Undead::Fall()
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  Undead::Attack(Location player_location)
+void  Undead::Attack(const Location player_location)
 {
 
 	attack_time--;

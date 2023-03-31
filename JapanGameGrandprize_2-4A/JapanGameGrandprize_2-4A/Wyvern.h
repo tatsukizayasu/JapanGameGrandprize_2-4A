@@ -1,37 +1,46 @@
 #pragma once
 #include "EnemyBase.h"
-#include "BoxCollider.h"
-#include "EnemyBulletBase.h"
 
-#define MAGE_BULLET_MAX 5
 
-class Mage :
+enum class WYVERN_ATTACK
+{
+    BLESS,          //ブレス
+    TRIPLE_BRACE,   //3連ブレス
+    ASSAULT,        //強襲攻撃
+    NONE
+};
+
+class Wyvern :
     public EnemyBase
 {
 private:
 
-    bool can_teleport; //テレポート可能か
-    int teleport_count; //テレポートするまでの時間
-    int teleport_rate; //テレポートのレート
-    int shot_rate; //魔法弾の発射レート
-    int shot_count; //発射した弾の数
-    int image; //画像
-    int drop; //ドロップするアイテムの種類の数
-    int attack_interval; //攻撃の間隔
+    bool attack; //攻撃が当たったか
+    int damage; //ダメージ
+    int attack_interval; //次の攻撃までの時間
+    int image_argument; //画像の引数
+
+    WYVERN_ATTACK attack_state; //攻撃
 private:
 
-    //テレポート
-    void Teleport(const class Stage* stage);
+    //移動時のアニメーション
+    void MoveAnimation();
 
-    //弾の生成
-    void CreateBullet(Location);
+    //ブレスの生成
+    void CreateBless(const Location);
+
+    //強襲攻撃
+    void Assault(const Location);
+
+    // 攻撃していない
+    void AttackNone();
 public:
 
     //コンストラクタ
-    Mage(Location);
+    Wyvern(Location);
 
     //デストラクタ
-    ~Mage();
+    ~Wyvern();
 
     //更新
     void Update(const class Player* player, const class Stage* stage) override;
@@ -70,4 +79,6 @@ public:
     //描画(DotByDot)
     void DebugDraw() override;
 #endif //_DEBUG
+
 };
+

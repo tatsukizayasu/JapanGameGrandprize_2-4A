@@ -114,7 +114,7 @@ public:
 	virtual void Fall() = 0;
 
 	//UŒ‚
-	virtual void  Attack(Location) = 0;
+	virtual void  Attack(const Location) = 0;
 
 	//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
 	virtual AttackResource Hit() = 0;

@@ -357,7 +357,7 @@ void EnemySlime::Fall()
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  EnemySlime::Attack(Location player_location)
+void  EnemySlime::Attack(const Location player_location)
 {
 
 	location.y -= (jump_distance.y / 3);

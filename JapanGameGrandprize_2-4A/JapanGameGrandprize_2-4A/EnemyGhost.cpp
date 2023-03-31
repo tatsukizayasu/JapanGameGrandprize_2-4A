@@ -256,7 +256,7 @@ void EnemyGhost::Move(const Location player_location)
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  EnemyGhost::Attack(Location player_location)
+void  EnemyGhost::Attack(const Location player_location)
 {
 
 	standby_time--;
