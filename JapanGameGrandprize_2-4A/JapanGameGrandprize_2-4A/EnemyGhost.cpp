@@ -51,7 +51,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	travel_y = 0;
 	range = 0;
 	range_y = 0;
-	animation = 0;
+	animation = 5;
 	animation_time = 0;
 	magic_time = 1;
 	magic_num = 0;
@@ -122,14 +122,14 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 
 
 	//アニメーションゴースト
-	if (animation_time++ % 10 == 0)
+	if (++animation_time % 10 == 0)
 	{
-		animation++;
+		--animation;
 	}
 
-	if (animation > 5)
+	if (animation < 0)
 	{
-		animation = 0;
+		animation = 5;
 	}
 
 	switch (state)
@@ -411,14 +411,14 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 		break;
 	case ENEMY_STATE::MOVE:
 		//アニメーションゴースト
-		if (animation_time++ % 10 == 0)
+		if (++animation_time % 10 == 0)
 		{
-			animation++;
+			--animation;
 		}
 
-		if (animation > 5)
+		if (animation < 0)
 		{
-			animation = 0;
+			animation = 5;
 		}
 		break;
 	case ENEMY_STATE::FALL:
