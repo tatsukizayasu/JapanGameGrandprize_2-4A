@@ -13,6 +13,7 @@ Element_Trap::Element_Trap(short type,
 {
 	this->area = area;
 	this->type = type;
+	
 
 	this->images = images;
 
@@ -88,7 +89,7 @@ void Element_Trap::Draw()const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
+	DrawRotaGraphF(x, y, 1.3f, 0, image, TRUE);
 
 	if (state == STATE::EXPLOSION) 
 	{
