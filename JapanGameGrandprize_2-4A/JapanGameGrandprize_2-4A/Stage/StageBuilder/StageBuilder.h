@@ -117,6 +117,7 @@ public:
 	void TransformPolyLine();
 	//矩形の変形
 	void TransformBox();
+	void TransformBox(BoxCollider* box);
 
 	//マップチップを作成する
 	void MakeMapChip(); //クリックしたとき用

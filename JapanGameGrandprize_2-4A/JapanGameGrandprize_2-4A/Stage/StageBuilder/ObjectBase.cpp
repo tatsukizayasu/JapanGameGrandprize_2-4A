@@ -1,12 +1,13 @@
 #include "ObjectBase.h"
 #include "../../BoxCollider.h"
+#include "../CameraWork.h"
 
 //--------------------------------
 // コンストラクタ
 //--------------------------------
 ObjectBase::ObjectBase()
 {
-	pivot = { 640,360 };
+	pivot = new SphereCollider({ 640,360 });
 }
 
 //--------------------------------
@@ -14,15 +15,14 @@ ObjectBase::ObjectBase()
 //--------------------------------
 ObjectBase::ObjectBase(Location pivot)
 {
-	this->pivot = pivot;
+	this->pivot = new SphereCollider(pivot);
 	image = LoadGraph("images/Stage/yuka_1.png");
 
 	collider =  new BoxCollider({ 640,360 }, { 100,100 });
 
 	vector = collider->GetLocation() - pivot;
 	is_reverse = FALSE;
-
-
+	
 }
 
 //--------------------------------
@@ -30,7 +30,7 @@ ObjectBase::ObjectBase(Location pivot)
 //--------------------------------
 ObjectBase::~ObjectBase()
 {
-
+	
 }
 
 //--------------------------------
@@ -38,9 +38,14 @@ ObjectBase::~ObjectBase()
 //--------------------------------
 void ObjectBase::Draw()const
 {
-	DrawRotaGraphF(pivot.x, pivot.y, 1.0, 0, image, TRUE, is_reverse);
+	Location draw_pos = pivot->GetLocation() + CameraWork::GetCamera();
 
+	DrawRotaGraphF(draw_pos.x,draw_pos.y,1.0, 0, image, TRUE, is_reverse);
+
+#ifdef _STAGE_BUILDER
+	DrawCircleAA(draw_pos.x, draw_pos.y, 5, 10, 0xFF0000, TRUE);
 	collider->Draw();
+#endif
 }
 
 //--------------------------------

@@ -314,22 +314,46 @@ void StageBuilder::UpdateModulation()
 	DeleteObject();
 
 	TransformPolyLine();
+	for (int i = 0; i < objects.size(); i++)
+	{
+		if (mouse->HitSphere(objects[i]->GetPivot()))
+		{
+			if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+			{
+				select_collider = objects[i]->GetPivot();
+				return;
+			}
+			else
+			{
+				select_collider = nullptr;
+			}
+		}
+
+		BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
+		TransformBox(box);
+	}
 	TransformBox();
 
 	if (select_collider != nullptr)
 	{
 		MovementByMouse();
-		MovementByKey();	
+		MovementByKey();
 
 
 		for (int i = 0; i < poly_lines.size(); i++)
 		{
 			poly_lines[i]->Update();
 		}
+
 		
 		for (int i = 0; i < boxes.size(); i++)
 		{
 			boxes[i]->UpdatePos();
+		}
+		for (int i = 0; i < objects.size(); i++)
+		{
+			BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
+			box->UpdatePos();
 		}
 	}
 }
@@ -710,6 +734,44 @@ void StageBuilder::TransformBox()
 				select_collider = nullptr;
 			}
 
+		}
+
+	}
+
+}
+
+
+//---------------------------------------------
+// ‹éŒ`‚Ì•ÏŒ`
+//---------------------------------------------
+void StageBuilder::TransformBox(BoxCollider* box)
+{
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+	{
+		SphereCollider** points = box->GetSpheres();
+
+
+		for (int j = 0; j < 4; j++)
+		{
+			if (mouse->HitSphere(points[j]))
+			{
+				select_collider = points[j];
+				return;
+			}
+			else
+			{
+				select_collider = nullptr;
+			}
+		}
+
+		if (mouse->HitSphere(box->GetPivot()))
+		{
+			select_collider = box->GetPivot();
+			return;
+		}
+		else
+		{
+			select_collider = nullptr;
 		}
 
 	}

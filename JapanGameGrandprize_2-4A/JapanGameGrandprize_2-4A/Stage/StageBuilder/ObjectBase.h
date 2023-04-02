@@ -7,7 +7,7 @@ class ObjectBase
 private:
 	class ColliderBase* collider;
 	int image;
-	Location pivot;
+	SphereCollider* pivot;
 	Location vector;
 	bool is_reverse;
 
@@ -34,6 +34,7 @@ public:
 	}
 
 	ColliderBase* GetColllider()const { return collider; }
+	SphereCollider* GetPivot()const { return pivot; }
 };
 
 
