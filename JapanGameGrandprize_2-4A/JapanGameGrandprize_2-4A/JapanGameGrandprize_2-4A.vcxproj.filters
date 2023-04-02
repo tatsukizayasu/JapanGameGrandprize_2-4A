@@ -168,6 +168,7 @@
     <ClCompile Include="Dragon.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="DragonBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -347,6 +348,7 @@
     <ClInclude Include="Dragon.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="DragonBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
