@@ -11,6 +11,7 @@
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
 #include "DotByDot.h"
+#include <math.h>
 
 //-----------------------------------
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
@@ -291,9 +292,15 @@ void GameMain::EnemyUpdate()
 void GameMain::Draw()const
 {
 
-	//”wŒi	•`‰æ
-	DrawGraph(0, 0, background_image, FALSE);
-
+	////”wŒi	•`‰æ
+	 DrawGraph(0, 0, background_image, FALSE);
+	//Location background = CameraWork::GetCamera();
+	//background.x = fmodf(background.x, SCREEN_WIDTH);
+	//
+	//DrawGraphF(-background.x + SCREEN_WIDTH, 0, background_image, TRUE);
+	//DrawGraphF(-background.x, 0, background_image, TRUE);
+	////DrawTurnGraphF(-background.x, 0, background_image, TRUE);
+	//
 	stage->Draw();
 	item_controller->Draw();
 
