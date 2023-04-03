@@ -4,8 +4,8 @@
 #include "BulletManager.h"
 
 //ゴーストの画像サイズ
-#define GHOST_SIZE_X 60
-#define GHOST_SIZE_Y 66
+#define GHOST_SIZE_X 80
+#define GHOST_SIZE_Y 85
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 500
