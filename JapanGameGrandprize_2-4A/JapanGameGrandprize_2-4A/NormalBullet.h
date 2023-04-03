@@ -24,9 +24,5 @@ public:
 	void Draw() const override;
 	void Update(const Stage*) override;
 
-	//void Explosion(float, float) const;
-	//void Melt(float x, float y);
-	//void Paralysis(float x, float y);
-
 	bool NormalBulletEfect();
 };

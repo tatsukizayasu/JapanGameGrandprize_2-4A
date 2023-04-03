@@ -174,8 +174,26 @@ void NormalBullet::Update(const Stage* stage_pointa)
 	{
 		if (!HitBlock(stage_pointa) && location.x - scrool_x < 1280 && !delete_flg)//弾の座標更新(右
 		{
+			switch (attribute)
+			{
+			case ATTRIBUTE::NORMAL:
+				location.x += BULLET_SPEED;
+				break;
+			case ATTRIBUTE::EXPLOSION:
+				location.x += 5;
+				break;
+			case ATTRIBUTE::MELT:
+				location.x += 2;
+				break;
+			case ATTRIBUTE::PARALYSIS:
+				location.x += 2;
+				break;
+			case ATTRIBUTE::POISON:
+				location.x += 2;
+				break;
+			}
 
-			location.x += BULLET_SPEED;
+			//location.x += BULLET_SPEED;
 
 		}
 		else                   //着弾時のエフェクトの座標更新(右
@@ -261,13 +279,3 @@ bool NormalBullet::NormalBulletEfect()		//着弾エフェクト
 	}
 	return false;
 }
-
-//void NormalBullet::Explosion(float x, float y) const {
-//
-//}
-//void NormalBullet::Melt(float x, float y) {
-//
-//}
-//void NormalBullet::Paralysis(float x, float y) {
-//
-//}
