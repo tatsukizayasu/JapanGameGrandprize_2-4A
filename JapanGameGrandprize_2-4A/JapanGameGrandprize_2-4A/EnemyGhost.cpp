@@ -36,6 +36,7 @@
 //ゴーストの攻撃力
 #define ATTACK_DAMAGE 10
 
+#define GHOST_HP 20
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -56,7 +57,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	magic_time = 1;
 	magic_num = 0;
 	physical_time = 0;
-	hp = 10;
+	hp = GHOST_HP;
 	location = spawn_location;
 	//location.y = 250; //テスト
 	standby_attack = 0;
@@ -323,6 +324,7 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	HPBar(GHOST_HP);
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 		M_PI / 180, images[animation], TRUE);

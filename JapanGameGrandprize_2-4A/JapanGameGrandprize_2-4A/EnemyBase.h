@@ -90,19 +90,11 @@ public:
 	//更新
 	virtual void Update(const class Player* player, const class Stage* stage) = 0;
 
-#ifdef _DEBUG
-	//更新(DotByDot)
-	virtual void Update(const ENEMY_STATE state) = 0;
-
-	//描画(DotByDot)
-	virtual void DebugDraw() = 0;
-#endif // _DEBUG
-
-
-	
-
 	//描画
 	virtual void Draw() const = 0;
+
+	//HPバーの描画
+	virtual void HPBar(const int) const;
 
 	//アイドル状態
 	virtual void Idol() = 0;
@@ -151,12 +143,21 @@ public:
 
 	//座標の取得
 	virtual Location GetLocation() const = 0;
+
+#ifdef _DEBUG
+	//更新(DotByDot)
+	virtual void Update(const ENEMY_STATE state) = 0;
+
+	//描画(DotByDot)
+	virtual void DebugDraw() = 0;
+#endif // _DEBUG
 protected:
 
 	bool can_delete; //削除フラグ
 	bool left_move; //左に動いているかどうか
 	bool poison;	//毒状態
 	bool paralysis; //麻痺状態
+	int damage;		//ダメージ
 	int* images; //画像
 	int hp;	//体力
 	int speed; //移動速度

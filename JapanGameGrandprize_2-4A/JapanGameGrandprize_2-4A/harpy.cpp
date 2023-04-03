@@ -35,6 +35,7 @@
 //ドロップ量(最大)
 #define HARPY_DROP 6
 
+#define HARPY_HP 50
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -45,7 +46,7 @@ Harpy::Harpy(Location spawn_location)
 	left_move = true;
 	attack = false;
 
-	hp = 50;
+	hp = HARPY_HP;
 	physical_time = 0;
 	magic_num = 0;
 	magic_time = 1;
@@ -317,6 +318,8 @@ void Harpy::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+
+	HPBar(HARPY_HP);
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2,

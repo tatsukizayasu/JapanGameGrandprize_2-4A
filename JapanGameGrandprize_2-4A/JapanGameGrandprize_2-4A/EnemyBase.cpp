@@ -15,6 +15,7 @@ EnemyBase::EnemyBase()
 	paralysis = false;
 	hp = 0;
 	speed = 0;
+	damage = 0;
 	paralysis_time = 0;
 	poison_damage = 0;
 	poison_time = 0;
@@ -229,6 +230,23 @@ void EnemyBase::Paralysis()
 			paralysis = false;
 		}
 	}
+}
+
+//-----------------------------------
+//HPÉoÅ[ÇÃï`âÊ
+//-----------------------------------
+void EnemyBase::HPBar(const int max_hp) const
+{
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+
+	draw_location = draw_location - camera;
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - 80,
+		draw_location.x + area.width / 2, draw_location.y - 70, 0xff0000, TRUE);
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - 80,
+		draw_location.x - area.width / 2 + (area.width * (static_cast<float>(hp) / max_hp)), draw_location.y - 70, 0x07ff00, TRUE);
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - 80,
+		draw_location.x + area.width / 2, draw_location.y - 70, 0x000000, FALSE);
 }
 
 //-----------------------------------

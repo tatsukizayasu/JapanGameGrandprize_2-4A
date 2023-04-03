@@ -400,6 +400,8 @@ void Mage::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	HPBar(MAGE_HP);
+
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2, image, TRUE);
 }

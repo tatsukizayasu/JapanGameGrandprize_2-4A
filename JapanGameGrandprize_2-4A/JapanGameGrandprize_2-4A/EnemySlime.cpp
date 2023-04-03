@@ -21,6 +21,7 @@
 #define ONE_ROUND 360 //一周の角度
 #define ROTATION_SPEED 15 //スライムが回転するスピード
 
+#define SLIME_HP 75
 EnemySlime::EnemySlime(Location spawn_location)
 {
 
@@ -40,7 +41,7 @@ EnemySlime::EnemySlime(Location spawn_location)
 	image_type = 0;
 	image_change_time = 0;
 	image_addition = 1;
-	hp = 15;
+	hp = SLIME_HP;
 	speed = SLIME_SPEED;
 
 	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
@@ -276,6 +277,8 @@ void EnemySlime::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+
+	HPBar(SLIME_HP);
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 }
