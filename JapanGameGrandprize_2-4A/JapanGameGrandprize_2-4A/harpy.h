@@ -22,6 +22,7 @@ class Harpy :public EnemyBase
 private:
 
 	int standby_attack; //次の攻撃待機時間
+	int time; //時間測定
 	int standby_time; //硬直時間
 	int magic_num; //魔法攻撃した数
 	int harpy_image; //ハーピィの画像
