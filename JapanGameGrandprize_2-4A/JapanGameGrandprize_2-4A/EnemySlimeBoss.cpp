@@ -18,14 +18,14 @@
 //{
 //	for (int i = 0; i < BODY_MAX; i++)
 //	{
-//		if (i == 0)slime_boss_body[i] = new SlimeBossBody(100, 700, 5, 100, 5, 10, BODY_TYPE::head);
-//		else slime_boss_body[i] = new SlimeBossBody(100, 700, 5, 100, 5, 10, BODY_TYPE::body);
+//		if (i == 0)slime_boss_body[i] = new SlimeBossBody(15500, 300, 100, 5, 10, BODY_TYPE::HEAD);
+//		else slime_boss_body[i] = new SlimeBossBody(15500, 300, 100, 5, 10, BODY_TYPE::BODY);
 //	}
 //
 //	for (int i = 0; i < DATA; i++)
 //	{
-//		location_data[i].x = 100;
-//		location_data[i].y = 700;
+//		location_data[i].x = 15500;
+//		location_data[i].y = 300;
 //	}
 //}
 //
@@ -33,13 +33,13 @@
 //{
 //	for(int i = 0; i < BODY_MAX; i++)
 //	{
-//		if (slime_boss_body[i]->GetBodyType() == BODY_TYPE::head)
+//		if (slime_boss_body[i]->GetBodyType() == BODY_TYPE::HEAD)
 //		{
 //			slime_boss_body[i]->Update(player, stage);
 //		}
 //		else
 //		{
-//			slime_boss_body[i]->SetLocation(location_data[DATA / (i * BODY_MAX)]);
+//			slime_boss_body[i]->SetLocation(location_data[(DATA /BODY_MAX) * i]);
 //		}
 //	}
 //
