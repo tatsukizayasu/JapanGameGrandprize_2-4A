@@ -2,6 +2,8 @@
 #include "Stage_Element_Base.h"
 #include <windef.h>
 
+#define MOVE_START_TIME 10
+
 class Element_Move_Floor : public Stage_Element_Base
 {
 private:
@@ -13,6 +15,8 @@ private:
 	Location next_location;
 	//ˆÚ“®‘¬“x
 	Location speed;
+	//ˆÚ“®ŠJŽn‚Ü‚Å‚ÌŽžŠÔ
+	short move_timer;
 public:
 
 	Element_Move_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area);

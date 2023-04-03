@@ -2,10 +2,12 @@
 #include "ElementItem.h"
 #include "Define.h"
 
-#define CURSOL_SPEED 30
+#define CURSOL_SPEED 12
 
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
+#define POUCH_START_X 1080
+#define POUCH_START_Y 100
 
 class Pouch
 {
@@ -14,7 +16,10 @@ private:
 	float x, y;
 	int cursol;
 	int count;
+	int move_string;	//選択肢の移動量
 	bool on_bool;
+	bool move_up;		//選択肢を上に動かす時のフラグ
+	bool move_down;		//選択肢を下に動かす時のフラグ
 	char element_char[PLAYER_ELEMENT];
 	ATTRIBUTE tab;
 	ElementItem* element[PLAYER_ELEMENT];
