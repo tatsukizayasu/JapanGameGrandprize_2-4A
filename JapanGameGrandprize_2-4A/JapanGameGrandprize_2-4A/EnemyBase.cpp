@@ -241,12 +241,12 @@ void EnemyBase::HPBar(const int max_hp) const
 	Location camera = CameraWork::GetCamera();
 
 	draw_location = draw_location - camera;
-	DrawBox(draw_location.x - area.width / 2, draw_location.y - 80,
-		draw_location.x + area.width / 2, draw_location.y - 70, 0xff0000, TRUE);
-	DrawBox(draw_location.x - area.width / 2, draw_location.y - 80,
-		draw_location.x - area.width / 2 + (area.width * (static_cast<float>(hp) / max_hp)), draw_location.y - 70, 0x07ff00, TRUE);
-	DrawBox(draw_location.x - area.width / 2, draw_location.y - 80,
-		draw_location.x + area.width / 2, draw_location.y - 70, 0x000000, FALSE);
+	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
+		draw_location.x + max_hp / 4, draw_location.y - 70, 0xff0000, TRUE);
+	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
+		draw_location.x - max_hp / 4 + (max_hp / 2 * (static_cast<float>(hp) / max_hp)), draw_location.y - 70, 0x07ff00, TRUE);
+	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
+		draw_location.x + max_hp / 4, draw_location.y - 70, 0x000000, FALSE);
 }
 
 //-----------------------------------
