@@ -2,22 +2,25 @@
 #include "ElementItem.h"
 #include "Define.h"
 
-
-#define CURSOL_SPEED 30
+#define CURSOL_SPEED 12
 
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
-
-
-
+#define POUCH_START_X 1080
+#define POUCH_START_Y 100
 
 class Pouch
 {
 private:
+
 	float x, y;
 	int cursol;
 	int count;
+	int move_string;	//選択肢の移動量
 	bool on_bool;
+	bool move_up;		//選択肢を上に動かす時のフラグ
+	bool move_down;		//選択肢を下に動かす時のフラグ
+	char element_char[PLAYER_ELEMENT];
 	ATTRIBUTE tab;
 	ElementItem* element[PLAYER_ELEMENT];
 
@@ -27,13 +30,13 @@ private:
 	ChemicalFormulaParameter chemical_formula_heal[HEAL_MAX_NUM];
 	ChemicalFormulaParameter chemical_formula_melt[MELT_MAX_NUM];
 
-	ChemicalFormulaParameter* select_explosion;
-	ChemicalFormulaParameter* select_poison;
-	ChemicalFormulaParameter* select_pararysis;
-	ChemicalFormulaParameter* select_heal;
-	ChemicalFormulaParameter* select_melt;
-
+	ChemicalFormulaParameter select_explosion;
+	ChemicalFormulaParameter select_poison;
+	ChemicalFormulaParameter select_pararysis;
+	ChemicalFormulaParameter select_heal;
+	ChemicalFormulaParameter select_melt;
 public:
+
 	Pouch();
 	~Pouch();
 
@@ -70,9 +73,9 @@ public:
 	void SetOnBool(bool);
 	void ReduceAmmo(ATTRIBUTE);
 	void ConsumptionMaterial();
-	void DeleteExplosion();
-	void DeletePoison();
-	void DeleteMelt();
-	void DeleteHeal();
-	void DeletePararysis();
+	void InitializeExplosion();
+	void InitializePoison();
+	void InitializeMelt();
+	void InitializeHeal();
+	void InitializePararysis();
 };

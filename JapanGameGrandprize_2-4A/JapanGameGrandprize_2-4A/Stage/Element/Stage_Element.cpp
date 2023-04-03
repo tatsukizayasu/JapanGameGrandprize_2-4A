@@ -5,6 +5,7 @@
 
 Stage_Element::Stage_Element()
 {
+
 	player = nullptr;
 }
 
@@ -12,8 +13,10 @@ Stage_Element::~Stage_Element()
 {
 
 	// 読み込んだ全Elementの画像を解放
-	for (const auto& entry : image_cache) {
-		for (auto& value : entry.second) {
+	for (const auto& entry : image_cache) 
+	{
+		for (auto& value : entry.second) 
+		{
 			DeleteGraph(value);
 		}
 	}
@@ -26,13 +29,12 @@ Stage_Element::~Stage_Element()
 
 void Stage_Element::AddElement(short type, Location location, Area area)
 {
-#ifndef NODEBUG
 
+#ifndef NODEBUG
 	
 	std::vector<int> images = GetImage(type);
 	/*int* images = new int[buf.size()];
 	std::copy(buf.begin(), buf.end(), images);*/
-	
 
 	switch (type)
 	{
@@ -49,7 +51,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case TRAP:
-		element.push_back(std::make_shared<Element_Trap>(type, element, images, location, Area{ MAP_CHIP_SIZE , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Trap>(type, element, images, Location{location.x, location.y - 5.0f}, Area{ 50.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case MOVE_FLOOR:
@@ -68,6 +70,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 
 void Stage_Element::Update(Player* player)
 {
+
 	//当たり判定演算範囲
 	struct DrawArea
 	{
@@ -96,9 +99,7 @@ void Stage_Element::Update(Player* player)
 		if (x + w < camera.x || camera.x + draw.width < x ||
 			y + h < camera.y || camera.y + draw.height < y) continue;
 
-
 		e->Update(player);
-
 	}
 }
 
@@ -133,15 +134,12 @@ void Stage_Element::Draw() const
 		if (x + w < camera.x || camera.x + draw.width < x ||
 			y + h < camera.y || camera.y + draw.height < y) continue;
 
-
 		e->Draw();
-
 	}
 }
 
 std::vector<int> Stage_Element::GetImage(short type)
 {
-	
 
 	// すでに読み込まれた画像がキャッシュにあるかどうかを確認
 	if (image_cache.find(type) != image_cache.end()) {
@@ -150,7 +148,6 @@ std::vector<int> Stage_Element::GetImage(short type)
 	}
 
 	// 画像がキャッシュにない場合、読み込みを行う
-
 
 	std::string filename = "";
 
@@ -188,14 +185,12 @@ std::vector<int> Stage_Element::GetImage(short type)
 	// 読み込んだ画像をキャッシュに保存
 	image_cache[type] = LoadImage(filename);
 
-	
 	return image_cache[type];
-
-
 }
 
 std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 {
+
 	//デフォルトディレクトリ
 	const std::string default_dir = "Images/Stage/Element/";
 
@@ -209,17 +204,17 @@ std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 
 	GetGraphSize(buf, &image_width, &image_height);
 
-	if (image_width == MAP_CHIP_SIZE && image_height == MAP_CHIP_SIZE) {
+	if (image_width == MAP_CHIP_SIZE && image_height == MAP_CHIP_SIZE) 
+	{
 		images.push_back(buf);
-		
 	}
-	else {
+	else 
+	{
 		DeleteGraph(buf);
 
 		int x_num = image_width / MAP_CHIP_SIZE;
 		int y_num = image_height / MAP_CHIP_SIZE;
 		int total_num = x_num * y_num;
-
 		
 		std::vector<int> buf_images(total_num);
 
@@ -228,9 +223,7 @@ std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 		//要素数を変更し、コピー
 		images.resize(total_num);
 		std::copy(buf_images.begin(), buf_images.end(), images.begin());
-
 	}
-
 
 #if 0
 	//読み込みログ
@@ -238,8 +231,6 @@ std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 		printfDx("[%d]ID:%d\t%s\n", i, images.at(i), TEXT(filename.c_str()));
 }
 #endif // 0
-
-	
 
 	return images;
 

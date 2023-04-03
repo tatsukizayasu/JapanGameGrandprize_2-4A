@@ -8,6 +8,7 @@
 //------------------------------------
 LineCollider::LineCollider()
 {
+
 	//絶対座標
 	vector[LINE_START] = { 0,0 };
 	vector[LINE_END] = { SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -21,12 +22,14 @@ LineCollider::LineCollider()
 //------------------------------------
 LineCollider::LineCollider(Location point1, Location point2)
 {
+
 	//点じゃないことを保証する
 	if (point1 == point2)
 	{
 		point2.x += 1;
 		point2.y += 1;
 	}
+
 	//絶対座標
 	vector[LINE_START] = point1;
 	vector[LINE_END] = point2;
@@ -48,6 +51,7 @@ LineCollider::~LineCollider()
 //--------------------------------------
 void LineCollider::Draw()const
 {
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);
 	DrawLineAA(
 		GetLocation(LINE_START).x - CameraWork::GetCamera().x, 
@@ -63,6 +67,7 @@ void LineCollider::Draw()const
 //-----------------------------------
 bool LineCollider::HitDot(Location point)const
 {
+
 	bool is_hit = false;
 	float cross_product;
 
@@ -80,7 +85,6 @@ bool LineCollider::HitDot(Location point)const
 			is_hit = true;
 		}
 	}
-
 
 	return is_hit;
 }
@@ -152,6 +156,7 @@ bool LineCollider::HitSphere(const SphereCollider* sphere)const
 //-----------------------------------
 bool LineCollider::HitBox(const BoxCollider* box)const
 {
+
 	bool is_hit = false;
 	bool box_ishit = false;
 	float sign = 0;
@@ -181,7 +186,6 @@ bool LineCollider::HitBox(const BoxCollider* box)const
 		}
 	}
 	if (box_ishit == false)return false; //線分を囲う四角形にすら当たってない
-
 	
 	for (int i = 0; i < 4; i++)
 	{
@@ -217,6 +221,7 @@ bool LineCollider::HitBox(const BoxCollider* box)const
 //-----------------------------------
 bool LineCollider::HitLine(const LineCollider* line)const
 {
+
 	bool is_hit = false;
 
 	Location this_vector
@@ -252,7 +257,6 @@ bool LineCollider::HitLine(const LineCollider* line)const
 		is_hit = true;
 	}
 
-
 	return is_hit;
 }
 
@@ -261,6 +265,7 @@ bool LineCollider::HitLine(const LineCollider* line)const
 //-----------------------------------------------------
 Location LineCollider::GetLocation(int index)const
 {
+
 	if (index < 2)
 	{
 		return MakeTip(index);
@@ -276,6 +281,7 @@ Location LineCollider::GetLocation(int index)const
 //--------------------------------------------------
 void LineCollider::SetLocation(Location location, int index)
 {
+
 	if (index < 2)
 	{
 		vector[LINE_START] = MakeTip(LINE_START);

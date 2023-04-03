@@ -54,6 +54,7 @@
 //-----------------------------------
 Torrent::Torrent(Location spawn_location)
 {
+
 	left_move = true;
 	attack = false;
 	tackle_end = false;
@@ -101,6 +102,7 @@ Torrent::Torrent(Location spawn_location)
 //-----------------------------------
 Torrent::~Torrent()
 {
+
 	delete[] images;
 	delete[] type;
 
@@ -116,6 +118,7 @@ Torrent::~Torrent()
 //-----------------------------------
 void Torrent::Update(const Player* player, const Stage* stage)
 {
+
 	Location old_location = location;	//前の座標
 
 	switch (state)
@@ -138,7 +141,7 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-	
+
 	Paralysis();
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -151,6 +154,7 @@ void Torrent::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void Torrent::Idol()
 {
+
 }
 
 //-----------------------------------
@@ -158,6 +162,7 @@ void Torrent::Idol()
 //-----------------------------------
 void Torrent::Move(const Location player_location)
 {
+
 }
 
 //-----------------------------------
@@ -165,6 +170,7 @@ void Torrent::Move(const Location player_location)
 //-----------------------------------
 void Torrent::Fall()
 {
+
 }
 
 //-----------------------------------
@@ -207,6 +213,7 @@ void  Torrent::Attack(Location player_location)
 //-----------------------------------
 void Torrent::Tackle()
 {
+
 	if (attack_time < 0)
 	{
 		location.x += speed;
@@ -231,7 +238,7 @@ void Torrent::Tackle()
 				left_move = !left_move;
 			}
 		}
-		
+
 		if (tackle_end) //タックル終了
 		{
 			attack = false;
@@ -256,7 +263,7 @@ void Torrent::Tackle()
 					break;
 				}
 			}
-			else if(leaf_cutter_interval < 0) //葉っぱを飛ばす攻撃だけが可能な時
+			else if (leaf_cutter_interval < 0) //葉っぱを飛ばす攻撃だけが可能な時
 			{
 				attack_state = TORRENT_ATTACK::LEAF_CUTTER;
 				attack_time = LEAF_CUTTER_TIME;
@@ -292,6 +299,7 @@ void Torrent::Tackle()
 //-----------------------------------
 void Torrent::LeafCutter(Location player_location)
 {
+
 	attack_time--;
 	CreateLeaf(player_location);
 	if (attack_time < 0) //攻撃の終了
@@ -353,6 +361,7 @@ void Torrent::LeafCutter(Location player_location)
 //-----------------------------------
 void Torrent::CreateLeaf(Location player_location)
 {
+
 	shot_rate++;
 
 	if (shot_rate % TORRENT_SHOT_RATE == 0) //葉っぱの生成
@@ -369,6 +378,7 @@ void Torrent::CreateLeaf(Location player_location)
 //-----------------------------------
 void Torrent::DropNuts()
 {
+
 	attack_time--;
 	CreateNuts();
 	if (attack_time < 0)
@@ -431,12 +441,13 @@ void Torrent::DropNuts()
 //-----------------------------------
 void Torrent::CreateNuts()
 {
+
 	bool spawn_point[SPAWN_NUTS_POINT]; //スポーン地点
 	int spawn_volume = 0; //スポーン数
 	bool spawn = false; //スポーンした
 
 	spawn_interval++;
-	
+
 	if (spawn_interval % SPAWN_NUTS_INTERVAL == 0)
 	{
 		for (int i = 0; i < SPAWN_NUTS_POINT; i++)
@@ -473,8 +484,6 @@ void Torrent::CreateNuts()
 			}
 		}
 	}
-	
-
 }
 
 //-----------------------------------
@@ -482,12 +491,13 @@ void Torrent::CreateNuts()
 //-----------------------------------
 void Torrent::AttackNone()
 {
+
 	attack_time--;
 	if (attack_time < 0)
 	{
 		TORRENT_ATTACK next_attack;	//次の攻撃
 		next_attack = static_cast<TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
-		
+
 		next_attack = TORRENT_ATTACK::DROP_NUTS;
 		switch (next_attack)
 		{
@@ -512,6 +522,7 @@ void Torrent::AttackNone()
 //-----------------------------------
 AttackResource Torrent::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	if (attack_state == TORRENT_ATTACK::TACKLE)
@@ -533,6 +544,7 @@ AttackResource Torrent::Hit()
 //-----------------------------------
 void Torrent::Death()
 {
+
 	can_delete = true;
 }
 
@@ -541,6 +553,7 @@ void Torrent::Death()
 //-----------------------------------
 void Torrent::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
@@ -575,6 +588,7 @@ void Torrent::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Torrent::Draw() const
 {
+
 	Location draw_location = location; //描画座標
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
@@ -588,5 +602,40 @@ void Torrent::Draw() const
 //-----------------------------------
 Location Torrent::GetLocation() const
 {
+
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// 更新(DotByDot)
+//-----------------------------------
+void Torrent::Update(const ENEMY_STATE state)
+{
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//描画(DotByDot)
+//-----------------------------------
+void Torrent::DebugDraw()
+{
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
+}
+#endif //_DEBUG

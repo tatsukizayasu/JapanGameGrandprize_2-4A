@@ -159,6 +159,9 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BulletManager.h" />
+    <ClInclude Include="DotByDot.h" />
+    <ClInclude Include="Dragon.h" />
+    <ClInclude Include="DragonBullet.h" />
     <ClInclude Include="ElementItem.h" />
     <ClInclude Include="EnemyBulletBase.h" />
     <ClInclude Include="EnemySlimeBoss.h" />
@@ -176,6 +179,7 @@
     <ClInclude Include="LineCollider.h" />
     <ClInclude Include="Stage\StageBuilder\ObjectBase.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="SlimeBossBody.h" />
     <ClInclude Include="Stage\Element\Element_Barricade.h" />
     <ClInclude Include="Stage\Element\Element_Conveyor_Belt.h" />
     <ClInclude Include="Stage\Element\Element_Fall_Floor.h" />
@@ -215,6 +219,9 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="DotByDot.cpp" />
+    <ClCompile Include="Dragon.cpp" />
+    <ClCompile Include="DragonBullet.cpp" />
     <ClCompile Include="EnemyBulletBase.cpp" />
     <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />
@@ -233,6 +240,7 @@
     <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="SlimeBossBody.cpp" />
     <ClCompile Include="Stage\Element\Element_Barricade.cpp" />
     <ClCompile Include="Stage\Element\Element_Conveyor_Belt.cpp" />
     <ClCompile Include="Stage\Element\Element_Fall_Floor.cpp" />

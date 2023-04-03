@@ -3,13 +3,9 @@
 
 #define MAP_CHIP_SIZE 40.f
 
-
 class MapChip :
 	public BoxCollider
 {
-private:
-
-
 public:
 
 	//コンストラクタ

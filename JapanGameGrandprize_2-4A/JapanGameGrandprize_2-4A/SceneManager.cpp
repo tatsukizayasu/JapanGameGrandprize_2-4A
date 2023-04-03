@@ -8,6 +8,7 @@
 //-----------------------------------
 AbstractScene* SceneManager::Update()
 {
+
 	AbstractScene* NextScene;
 	try
 	{
@@ -43,5 +44,6 @@ AbstractScene* SceneManager::Update()
 //-----------------------------------
 void SceneManager::Draw() const
 {
+
 	mScene->Draw();
 }

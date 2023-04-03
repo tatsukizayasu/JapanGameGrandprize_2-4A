@@ -96,6 +96,7 @@
 //-----------------------------------
 bool BoxCollider::HitSphere(const class SphereCollider* sphere_collider) const
 {
+
 	bool ret = false;//•Ô‚è’l
 	float rad; //2“_‚ÌŠp“x
 	float sphere_x; //‰~‚ÌÀ•W(x)
@@ -121,7 +122,6 @@ bool BoxCollider::HitSphere(const class SphereCollider* sphere_collider) const
 	my_x[1] = my_x[0] + area.width;
 	my_y[1] = my_y[0] + area.height;
 
-
 	if ((my_x[0] <= sphere_x) && (sphere_x <= my_x[1]) 
 		    && (my_y[0] <= sphere_y) && (sphere_y <= my_y[1])) //“–‚½‚è”»’è
 	{
@@ -136,6 +136,7 @@ bool BoxCollider::HitSphere(const class SphereCollider* sphere_collider) const
 //-----------------------------------
 bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 {
+
 	bool ret = false; //•Ô‚è’l
 
 	//“–‚½‚è”»’è”ÍˆÍ‚ÌŒë·C³
@@ -242,6 +243,7 @@ bool BoxCollider::HitLine(const class LineCollider* line_collider) const
 //-----------------------------------
 Location BoxCollider::GetLocation()const
 {
+
 	return location;
 }
 
@@ -250,6 +252,7 @@ Location BoxCollider::GetLocation()const
 //-----------------------------------
 Area BoxCollider::GetArea()const
 {
+
 	return area;
 }
 

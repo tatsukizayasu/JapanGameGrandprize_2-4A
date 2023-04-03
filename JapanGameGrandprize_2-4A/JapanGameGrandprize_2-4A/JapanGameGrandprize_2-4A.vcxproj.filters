@@ -159,6 +159,16 @@
     <ClCompile Include="Stage\Element\Element_Barricade.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
+    <ClCompile Include="SlimeBossBody.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="DotByDot.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Dragon.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="DragonBullet.cpp" />
     <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
@@ -326,10 +336,22 @@
     <ClInclude Include="Stage\Element\Element_Trap.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
-    <ClInclude Include="HarpyBullet.h" />
     <ClInclude Include="Stage\Element\Element_Barricade.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
+    <ClInclude Include="SlimeBossBody.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="DotByDot.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="HarpyBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Dragon.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="DragonBullet.h" />
     <ClInclude Include="Stage\StageBuilder\ObjectBase.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>

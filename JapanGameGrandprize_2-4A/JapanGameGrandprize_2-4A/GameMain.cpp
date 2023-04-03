@@ -3,24 +3,28 @@
 #include "CameraWork.h"
 #include "PadInput.h"
 #include "Undead.h"
-#include"EnemySlime.h"
-#include"EnemyGhost.h"
-#include"Harpy.h"
+#include "EnemySlime.h"
+#include "EnemyGhost.h"
+#include "Harpy.h"
 #include "BULLET.h"
 #include "Mage.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
+#include "DotByDot.h"
 
 //-----------------------------------
 // ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 //-----------------------------------
 GameMain::GameMain()
 {
-
+#undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
 	background_image = LoadGraph("Images/Scene/gamemain.png");
+#ifdef _DEBUG
 
+#else
 	pause = new Pause();
+#endif
 
 	stage = new Stage();
 	player = new Player(stage);
@@ -38,7 +42,6 @@ GameMain::GameMain()
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
 	
-
 	bullet_manager = BulletManager::GetInstance();
 
 	input_margin = 0;
@@ -49,11 +52,16 @@ GameMain::GameMain()
 //-----------------------------------
 GameMain::~GameMain()
 {
+
 	int spawn_volume; //ƒXƒ|[ƒ“”
 	spawn_volume = stage->GetEnemy_SpawnLocation().size();
 
 	delete camera_work;
+#ifdef _DEBUG
+
+#else
 	delete pause;
+#endif
 	delete player;
 	delete stage;
 
@@ -62,7 +70,7 @@ GameMain::~GameMain()
 		delete enemy[i];
 	}
 	delete[] enemy;
-	
+
 	delete item_controller;
 	delete bullet_manager;
 }
@@ -72,10 +80,22 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+#ifdef _DEBUG
+
+#else
 	pause->Update();
 	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
 	if (pause->IsPause() == TRUE) { return this; }
-	
+#endif
+
+
+#ifdef _DEBUG
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_LEFT))
+	{
+		return new DotByDot();
+	}
+#endif
+
 
 
 	camera_work->Update();
@@ -93,6 +113,7 @@ AbstractScene* GameMain::Update()
 //-----------------------------------
 void GameMain::SpawnEnemy()
 {
+
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
@@ -100,7 +121,7 @@ void GameMain::SpawnEnemy()
 	spawn_volume = spawn.size();
 	enemy = new EnemyBase * [spawn_volume];
 
-	for (int i = 0; i < spawn_volume;i++)
+	for (int i = 0; i < spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -145,6 +166,7 @@ void GameMain::SpawnEnemy()
 //-----------------------------------
 void GameMain::EnemyUpdate()
 {
+
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
@@ -268,11 +290,9 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
-	
-	SetBackgroundColor(149, 249, 253);
+
 	//”wŒi	•`‰æ
 	DrawGraph(0, 0, background_image, FALSE);
-
 
 	stage->Draw();
 	item_controller->Draw();
@@ -290,8 +310,10 @@ void GameMain::Draw()const
 		}
 	}
 	bullet_manager->Draw();
+#ifdef _DEBUG
 
-
+#else
 	//ƒ|[ƒY		•`‰æ
 	if (pause->IsPause() == true) { pause->Draw(); }
+#endif
 }

@@ -7,6 +7,7 @@
 //-----------------------------------
 ItemController::ItemController()
 {
+
 	item_volume = 0;
 	item_max = 0;
 	item = nullptr;
@@ -17,7 +18,8 @@ ItemController::ItemController()
 //-----------------------------------
 ItemController::~ItemController()
 {
-	for (int i = 0; i < item_volume; i++)
+
+	for (int i = 0; i < item_max; i++)
 	{
 		delete item[i];
 	}
@@ -30,6 +32,7 @@ ItemController::~ItemController()
 //-----------------------------------
 void ItemController::Update(Player* player)
 {
+
 	for (int i = 0; i < item_volume; i++)
 	{
 		if (item[i] == nullptr)
@@ -54,12 +57,12 @@ void ItemController::Update(Player* player)
 //-----------------------------------
 //アイテムの生成
 //-----------------------------------
-void ItemController::SpawnItem(const EnemyBase* enemy_base)
+void ItemController::SpawnItem(const EnemyBase* enemy)
 {
 
 	int old_item_max = item_max;//生成可能なエネミー数
 
-	item_volume += enemy_base->GetDropVolume();
+	item_volume += enemy->GetDropVolume();
 
 	if (item_max < item_volume)
 	{
@@ -71,9 +74,9 @@ void ItemController::SpawnItem(const EnemyBase* enemy_base)
 	int j = 0;
 
 	//アイテムの生成
-	for (int i = 0; i < enemy_base->GetDropTypeVolume(); i++)
+	for (int i = 0; i < enemy->GetDropTypeVolume(); i++)
 	{
-		volume = enemy_base->GetDropItem(i).GetVolume();
+		volume = enemy->GetDropItem(i).GetVolume();
 
 		for (int j = 0; j < volume; j++)
 		{
@@ -81,8 +84,8 @@ void ItemController::SpawnItem(const EnemyBase* enemy_base)
 			{
 				if (item[n] == nullptr)
 				{
-					item[n] = new Item(enemy_base->GetDropItem(i).GetType(),
-						                enemy_base->GetLocation());
+					item[n] = new Item(enemy->GetDropItem(i).GetType(),
+						                enemy->GetLocation());
 					break;
 				}
 			}
@@ -95,6 +98,7 @@ void ItemController::SpawnItem(const EnemyBase* enemy_base)
 //-----------------------------------
 void ItemController::SortItem(const int item_num)
 {
+
 	//弾の中身をソートする
 	for (int i = item_num + 1; i < item_max; i++)
 	{
@@ -113,6 +117,7 @@ void ItemController::SortItem(const int item_num)
 //-----------------------------------
 void ItemController::ArrangementItem(const int old_item_max)
 {
+
 	if (item == nullptr)
 	{
 		//アイテムの初期化
@@ -133,15 +138,20 @@ void ItemController::ArrangementItem(const int old_item_max)
 		item = new Item * [item_max];
 
 		//避難させたアイテムを元に戻す
-		item = temporary_item;
-
-		for (int i = old_item_max; i < item_max; i++)
+		for (int i = 0; i < item_max; i++)
 		{
-			item[i] = nullptr;
+			if (i < old_item_max)
+			{
+				item[i] = temporary_item[i];
+			}
+			else
+			{
+				item[i] = nullptr;
+			}
 		}
 
+		delete[] temporary_item;
 	}
-
 }
 
 //-----------------------------------
@@ -149,6 +159,7 @@ void ItemController::ArrangementItem(const int old_item_max)
 //-----------------------------------
 void ItemController::Draw() const
 {
+
 	for (int i = 0; i < item_volume; i++)
 	{
 		if (item[i] == nullptr)

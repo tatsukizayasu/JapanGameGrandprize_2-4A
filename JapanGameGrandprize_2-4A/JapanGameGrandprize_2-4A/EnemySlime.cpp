@@ -21,9 +21,9 @@
 #define ONE_ROUND 360 //一周の角度
 #define ROTATION_SPEED 15 //スライムが回転するスピード
 
-
 EnemySlime::EnemySlime(Location spawn_location)
 {
+
 	attack = false;
 	left_move = true;
 	kind = ENEMY_KIND::SLIME;
@@ -31,8 +31,8 @@ EnemySlime::EnemySlime(Location spawn_location)
 	location = spawn_location;
 
 	jump_distance = location;
-	area.height = 50;
-	area.width = 50;
+	area.height = 61;
+	area.width = 60;
 
 	location.x -= MAP_CHIP_SIZE / 2;
 	location.y -= MAP_CHIP_SIZE / 2;
@@ -117,12 +117,16 @@ EnemySlime::EnemySlime(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
-
-
+#ifdef _DEBUG
+	old_state  = ENEMY_STATE::IDOL;
+	attack_time = 0;
+	debug_location = location;
+#endif // _DEBUG
 }
 
 EnemySlime::~EnemySlime()
 {
+
 	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		delete drop_element[i];
@@ -138,11 +142,11 @@ EnemySlime::~EnemySlime()
 	}
 
 	delete[] images;
-
 }
 
 void EnemySlime::Update(const Player* player, const Stage* stage)
 {
+
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -191,13 +195,14 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			Location chip_location = hit_stage.chip->GetLocation();
 			Area chip_area = hit_stage.chip->GetArea();
 
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
 			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
 			hit_direction = HitDirection(hit_stage.chip);
 
 			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
-				location.y = chip_location.y - 
-					(chip_area.height / 2)- (area.height / 2);
 				state = ENEMY_STATE::MOVE;
 				if (left_move)
 				{
@@ -255,7 +260,6 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-
 	
 	Paralysis();
 
@@ -268,6 +272,7 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 void EnemySlime::Draw()const
 {
+
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
@@ -280,6 +285,7 @@ void EnemySlime::Draw()const
 //-----------------------------------
 void EnemySlime::Idol()
 {
+
 	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
@@ -303,6 +309,7 @@ void EnemySlime::Idol()
 //-----------------------------------
 void EnemySlime::Move(const Location player_location)
 {
+
 	float distance; //離れている距離
 
 	//プレイヤーとの距離の計算
@@ -329,12 +336,9 @@ void EnemySlime::Move(const Location player_location)
 			image_change_time = 0;
 		}
 
-
 		location.x += speed;
 		wait_time = 0;
 	}
-
-	
 }
 
 //-----------------------------------
@@ -342,6 +346,7 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 void EnemySlime::Fall()
 {
+
 	location.y += speed;
 	if (speed < GRAVITY)
 	{
@@ -354,11 +359,18 @@ void EnemySlime::Fall()
 //-----------------------------------
 void  EnemySlime::Attack(Location player_location)
 {
+
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
 
-	if (left_move) speed = -SLIME_ATTACK_SPEED;
-	else speed = SLIME_ATTACK_SPEED;
+	if (left_move)
+	{
+		speed = -SLIME_ATTACK_SPEED;
+	}
+	else
+	{
+		speed = SLIME_ATTACK_SPEED;
+	}
 
 	location.x += speed;
 }
@@ -368,6 +380,7 @@ void  EnemySlime::Attack(Location player_location)
 //-----------------------------------
 AttackResource EnemySlime::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	if (!attack)
@@ -388,6 +401,7 @@ AttackResource EnemySlime::Hit()
 //-----------------------------------
 void EnemySlime::Death()
 {
+
 	can_delete = true;
 
 	/*if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
@@ -420,6 +434,7 @@ void EnemySlime::Death()
 //-----------------------------------
 void EnemySlime::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
@@ -455,5 +470,84 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 Location EnemySlime::GetLocation() const
 {
+
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// 更新(DotByDot)
+//-----------------------------------
+void EnemySlime::Update(const ENEMY_STATE state)
+{
+	if ((old_state != state) || (attack_time < 0))
+	{
+		location = debug_location;
+	}
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		if (++image_change_time > 2)
+		{
+			image_type += image_addition;
+			if (image_type == 6)
+			{
+				image_addition = -1;
+			}
+			else if (image_type == 0)
+			{
+				image_addition = 1;
+			}
+			image_change_time = 0;
+		}
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		if ((old_state != state) || (attack_time < 0))
+		{
+			jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
+			attack_time = SLIME_ATTACK_DISTANCE_Y * 3;
+			location = debug_location;
+		}
+		if (SLIME_ATTACK_DISTANCE_Y < attack_time)
+		{
+			location.y -= (jump_distance.y / 3);
+			jump_distance.y--;
+			if (left_move)
+			{
+				speed = -SLIME_ATTACK_SPEED;
+			}
+			else
+			{
+				speed = SLIME_ATTACK_SPEED;
+			}
+			location.x += speed;
+
+		}
+		attack_time--;
+
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+	old_state = state;
+}
+
+//-----------------------------------
+//描画(DotByDot)
+//-----------------------------------
+void EnemySlime::DebugDraw()
+{
+	DrawRotaGraphF(location.x, location.y, 0.23,
+		M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
+
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
+}
+#endif //_DEBUG

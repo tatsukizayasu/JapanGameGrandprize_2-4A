@@ -9,6 +9,7 @@ class Mage :
     public EnemyBase
 {
 private:
+
     bool can_teleport; //テレポート可能か
     int teleport_count; //テレポートするまでの時間
     int teleport_rate; //テレポートのレート
@@ -17,14 +18,13 @@ private:
     int image; //画像
     int drop; //ドロップするアイテムの種類の数
     int attack_interval; //攻撃の間隔
-
 private:
+
     //テレポート
     void Teleport(const class Stage* stage);
 
     //弾の生成
     void CreateBullet(Location);
-
 public:
 
     //コンストラクタ
@@ -62,4 +62,12 @@ public:
 
     //座標の取得
     Location GetLocation() const override;
+
+#ifdef _DEBUG
+    //更新(DotByDot)
+    void Update(const ENEMY_STATE state) override;
+
+    //描画(DotByDot)
+    void DebugDraw() override;
+#endif //_DEBUG
 };

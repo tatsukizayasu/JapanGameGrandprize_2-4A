@@ -12,7 +12,7 @@
 #define UNDEAD_ATTACK_INTERVAL 30
 
 //追いかける範囲
-#define UNDEAD_TRACKING_DISTANCE 340
+#define UNDEAD_TRACKING_DISTANCE 170
 
 //歩くスピード
 #define UNDEAD_SPEED 2
@@ -37,6 +37,7 @@
 //-----------------------------------
 Undead::Undead(Location spawn_location)
 {
+
 	/*初期化*/
 	can_delete = false;
 	left_move = true;
@@ -89,6 +90,7 @@ Undead::Undead(Location spawn_location)
 //-----------------------------------
 Undead::~Undead()
 {
+
 	for (int i = 0; i < SOIL_DROP; i++)
 	{
 		delete drop_element[i];
@@ -111,6 +113,7 @@ Undead::~Undead()
 //-----------------------------------
 void Undead::Update(const Player* player, const Stage* stage)
 {
+
 	HitMapChip hit_stage = {false,nullptr}; //ステージとの当たり判定
 	Location old_location = location; //移動前の座標
 	switch (state)
@@ -156,14 +159,14 @@ void Undead::Update(const Player* player, const Stage* stage)
 			Location chip_location = hit_stage.chip->GetLocation();
 			Area chip_area = hit_stage.chip->GetArea();
 
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
 			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
 			hit_direction = HitDirection(hit_stage.chip);
 
 			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
-				location.y = chip_location.y - 
-					(chip_area.height / 2) - (area.height / 2);
-
 				state = ENEMY_STATE::MOVE;
 				if (left_move)
 				{
@@ -210,6 +213,7 @@ void Undead::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void Undead::DistancePlayer(const Location player_location)
 {
+
 	float distance; //離れている距離
 
 	//プレイヤーとの距離の計算
@@ -242,6 +246,7 @@ void Undead::DistancePlayer(const Location player_location)
 //-----------------------------------
 void Undead::Idol()
 {
+
 	if (!ScreenOut())
 	{
 		state = ENEMY_STATE::MOVE;
@@ -261,13 +266,12 @@ void Undead::Idol()
 //-----------------------------------
 void Undead::Move(const Location player_location)
 {	
+
 	DistancePlayer(player_location);
 
 	location.x += speed;
 
 	MoveAnimation();
-
-	
 }
 
 //-----------------------------------
@@ -275,6 +279,7 @@ void Undead::Move(const Location player_location)
 //-----------------------------------
 void Undead::Fall()
 {
+
 	location.y += speed;
 	if (speed < GRAVITY)
 	{
@@ -287,6 +292,7 @@ void Undead::Fall()
 //-----------------------------------
 void  Undead::Attack(Location player_location)
 {
+
 	attack_time--;
 	if (attack_time < 0)
 	{
@@ -301,6 +307,7 @@ void  Undead::Attack(Location player_location)
 //-----------------------------------
 AttackResource Undead::Hit()
 {
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
 	if (!attack)
@@ -320,6 +327,7 @@ AttackResource Undead::Hit()
 //-----------------------------------
 void Undead::Death()
 {
+
 	can_delete = true;
 }
 
@@ -328,6 +336,7 @@ void Undead::Death()
 //-----------------------------------
 void Undead::HitBullet(const BulletBase* bullet)
 {
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
@@ -362,6 +371,7 @@ void Undead::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Undead::MoveAnimation()
 {
+
 	animation++;
 	if (animation % UNDEAD_MOVE_ANIMATION == 0)
 	{
@@ -374,12 +384,14 @@ void Undead::MoveAnimation()
 //-----------------------------------
 void Undead::Draw() const
 {
+
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0,
-		images[image_argument],TRUE, !left_move);
+		images[image_argument], TRUE, !left_move);
+
 }
 
 //-----------------------------------
@@ -387,5 +399,46 @@ void Undead::Draw() const
 //-----------------------------------
 Location Undead::GetLocation() const
 {
+
 	return location;
 }
+
+#ifdef _DEBUG
+//-----------------------------------
+// 更新(DotByDot)
+//-----------------------------------
+void Undead::Update(const ENEMY_STATE state)
+{
+
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		MoveAnimation();
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------
+//描画(DotByDot)
+//-----------------------------------
+void Undead::DebugDraw()
+{
+
+	DrawRotaGraphF(location.x, location.y, 1.0, 0,
+		images[image_argument], TRUE, !left_move);
+
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
+}
+#endif //_DEBUG

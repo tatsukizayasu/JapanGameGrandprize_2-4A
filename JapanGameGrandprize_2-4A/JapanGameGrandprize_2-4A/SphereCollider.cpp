@@ -10,6 +10,7 @@
 //---------------------
 void SphereCollider::Draw()const
 {
+
 	DrawCircleAA(GetLocation().x - CameraWork::GetCamera().x, 
 		GetLocation().y - CameraWork::GetCamera().y,
 		GetRadius(),10, GetColor(128, 128, 128), TRUE);
@@ -17,6 +18,7 @@ void SphereCollider::Draw()const
 
 bool SphereCollider::HitSphere(const SphereCollider* sphere_collider) const
 {
+
 	bool ret = false;//返り値
 	float distance;	//中心座標の距離
 
@@ -33,6 +35,7 @@ bool SphereCollider::HitSphere(const SphereCollider* sphere_collider) const
 
 bool SphereCollider::HitBox(const BoxCollider* box_collider) const
 {
+
 	bool ret = false; //返り値
 	float rad; //2点の角度
 	float sphere_x; //円の座標(x)

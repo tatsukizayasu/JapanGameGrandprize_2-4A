@@ -15,6 +15,7 @@ BulletManager* BulletManager::instance = nullptr;
 //-----------------------------------
 BulletManager::BulletManager()
 {
+
     enemy_bullets = nullptr;
     enemy_nuts = nullptr;
     enemy_bullet_count = 0;
@@ -28,6 +29,7 @@ BulletManager::BulletManager()
 //-----------------------------------
 BulletManager::~BulletManager()
 {
+
     for (int i = 0; i < enemy_bullet_max; i++)
     {
         delete enemy_bullets[i];
@@ -39,6 +41,8 @@ BulletManager::~BulletManager()
         delete enemy_nuts[i];
     }
     delete[] enemy_nuts;
+
+    instance = nullptr;
 }
 
 //-----------------------------------
@@ -46,6 +50,7 @@ BulletManager::~BulletManager()
 //-----------------------------------
 void BulletManager::Update(const Stage* stage)
 {
+
     for (int i = 0; i < enemy_bullet_count; i++)
     {
         if (enemy_bullets[i] == nullptr)
@@ -92,7 +97,8 @@ void BulletManager::Update(const Stage* stage)
 //-----------------------------------
 void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
 {
-    if (enemy_bullet_count == enemy_bullet_max)
+
+    if (enemy_bullet_max <= enemy_bullet_count)
     {
         if (enemy_bullets == nullptr)
         {
@@ -119,12 +125,18 @@ void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
             enemy_bullets = new EnemyBulletBase * [enemy_bullet_max];
 
             //”ð“ï‚µ‚Ä‚¢‚½’e‚ð–ß‚·
-            enemy_bullets = temporary_bullets;
-
-            for (int i = enemy_bullet_count; i < enemy_bullet_max; i++)
+            for (int i = 0; i < enemy_bullet_max; i++)
             {
-                enemy_bullets[i] = nullptr;
+                if (i < enemy_bullet_count)
+                {
+                    enemy_bullets[i] = temporary_bullets[i];
+                }
+                else
+                {
+                    enemy_bullets[i] = nullptr;
+                }
             }
+            delete[] temporary_bullets;
         }
     }
     //’e‚Ì¶¬
@@ -138,6 +150,7 @@ void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
 //-----------------------------------
 void BulletManager::SortEnemyBullet(const int bullet_num)
 {
+
     //’e‚Ì’†g‚ðƒ\[ƒg‚·‚é
     for (int i = bullet_num + 1; i < enemy_bullet_max; i++)
     {
@@ -156,6 +169,7 @@ void BulletManager::SortEnemyBullet(const int bullet_num)
 //-----------------------------------
 void BulletManager::DeleteEnemyBullet(const EnemyBulletBase* bullet)
 {
+
     for (int i = 0; i < enemy_bullet_max; i++)
     {
         if (enemy_bullets[i] == bullet)
@@ -175,7 +189,8 @@ void BulletManager::DeleteEnemyBullet(const EnemyBulletBase* bullet)
 //-----------------------------------
 void BulletManager::CreateEnemyNuts(class EnemyBulletBase* nuts)
 {
-    if (enemy_nuts_count == enemy_nuts_max)
+
+    if (enemy_nuts_max <= enemy_nuts_count)
     {
         if (enemy_nuts == nullptr)
         {
@@ -201,13 +216,19 @@ void BulletManager::CreateEnemyNuts(class EnemyBulletBase* nuts)
             //’e‚ÌÄ¶¬
             enemy_nuts = new EnemyBulletBase * [enemy_nuts_max];
 
-            //”ð“ï‚µ‚Ä‚¢‚½’e‚ð–ß‚·
-            enemy_nuts = temporary_nuts;
-
-            for (int i = enemy_nuts_count; i < enemy_nuts_max; i++)
+           //”ð“ï‚µ‚Ä‚¢‚½’e‚ð–ß‚·
+            for (int i = 0; i < enemy_nuts_max; i++)
             {
-                enemy_nuts[i] = nullptr;
+                if (i < enemy_nuts_count)
+                {
+                    enemy_bullets[i] = temporary_nuts[i];
+                }
+                else
+                {
+                    enemy_bullets[i] = nullptr;
+                }
             }
+            delete[] temporary_nuts;
         }
     }
     //’e‚Ì¶¬
@@ -221,6 +242,7 @@ void BulletManager::CreateEnemyNuts(class EnemyBulletBase* nuts)
 //-----------------------------------
 void BulletManager::SortEnemyNuts(const int nuts_num)
 {
+
     //’e‚Ì’†g‚ðƒ\[ƒg‚·‚é
     for (int i = nuts_num + 1; i < enemy_nuts_max; i++)
     {
@@ -239,6 +261,7 @@ void BulletManager::SortEnemyNuts(const int nuts_num)
 //-----------------------------------
 void BulletManager::DeleteEnemyNuts(const EnemyBulletBase* nuts)
 {
+
     for (int i = 0; i < enemy_nuts_max; i++)
     {
         if (enemy_nuts[i] == nuts)
@@ -257,6 +280,7 @@ void BulletManager::DeleteEnemyNuts(const EnemyBulletBase* nuts)
 //-----------------------------------
 AttackResource BulletManager::HitEnemyBullet(const int i)
 {
+
     AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
 
     ENEMY_TYPE attack_type[1] = { enemy_bullets[i]->GetType() };
@@ -272,6 +296,7 @@ AttackResource BulletManager::HitEnemyBullet(const int i)
 //-----------------------------------
 AttackResource BulletManager::HitEnemyNuts(const int i)
 {
+
     AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
 
     ENEMY_TYPE attack_type[1] = { enemy_nuts[i]->GetType() };
@@ -287,6 +312,7 @@ AttackResource BulletManager::HitEnemyNuts(const int i)
 //-----------------------------------
 void BulletManager::Draw() const
 {
+
     for (int i = 0; i < enemy_bullet_count; i++)
     {
         if (enemy_bullets[i] == nullptr)
@@ -313,6 +339,7 @@ void BulletManager::Draw() const
 //-----------------------------------
 EnemyBulletBase** BulletManager::GetEnemyBullets() const
 {
+
     return enemy_bullets;
 }
 
@@ -321,6 +348,7 @@ EnemyBulletBase** BulletManager::GetEnemyBullets() const
 //-----------------------------------
 int BulletManager::EnemyGetBulletMax() const
 {
+
     return enemy_bullet_max;
 }
 
@@ -329,6 +357,7 @@ int BulletManager::EnemyGetBulletMax() const
 //-----------------------------------
 EnemyBulletBase** BulletManager::GetEnemyNuts() const
 {
+
     return enemy_nuts;
 }
 
@@ -337,5 +366,6 @@ EnemyBulletBase** BulletManager::GetEnemyNuts() const
 //-----------------------------------
 int BulletManager::EnemyGetNutsMax() const
 {
+
     return enemy_nuts_max;
 }

@@ -8,6 +8,7 @@
 //-----------------------------------
 BulletBase::BulletBase()
 {
+
 	efect_end = false;
 	delete_flg = false;
 	efect_explosion = nullptr;
@@ -18,32 +19,38 @@ BulletBase::BulletBase()
 //-----------------------------------
 BulletBase::BulletBase(float player_x, float player_y)
 {
+
 	delete_flg = false;
 	efect_explosion = nullptr;
 }
 
 bool BulletBase::GetEfectFlg() const
 {
+
 	return efect_end;
 }
 
 float BulletBase::GetDamage() const
 {
+
 	return damage;
 }
 
 float BulletBase::GetDebuffTime() const
 {
+
 	return debuff_time;
 }
 
 ATTRIBUTE BulletBase::GetAttribute() const
 {
+
 	return attribute;
 }
 
 bool BulletBase::HitBlock(const Stage* stage_pointa)
 {
+
 	//マップチップ
 	std::vector<MapChip*>map_chip = stage_pointa->GetMapChip();
 

@@ -9,6 +9,7 @@
 //-----------------------------------
 MapChip::MapChip()
 {
+
 	location = { 30,30 };
 	area = { 60,60 };
 	image_size = { 600,600 };
@@ -21,6 +22,7 @@ MapChip::MapChip()
 //-----------------------------------
 MapChip::MapChip(const int* p_image, Location location, Area area)
 {
+
 	this->location.x = location.x;
 	this->location.y = location.y;
 
@@ -50,6 +52,7 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 //-----------------------------------
 MapChip::~MapChip()
 {
+
 }
 
 //-----------------------------------
@@ -57,6 +60,7 @@ MapChip::~MapChip()
 //-----------------------------------
 void MapChip::Update()
 {
+
 }
 
 //-----------------------------------
@@ -64,6 +68,7 @@ void MapChip::Update()
 //-----------------------------------
 void MapChip::Draw()const
 {
+
 	//‰æ‘œ‚ª‚È‚¢–”‚ÍƒGƒ‰[‚Ìê‡‚Í•`‰æ‚µ‚È‚¢
 	if (image == 0) { return; }
 

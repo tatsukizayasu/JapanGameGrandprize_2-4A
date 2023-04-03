@@ -13,6 +13,7 @@ class EnemySlime :
 	public EnemyBase
 {
 private:
+
 	bool attack; //攻撃が当たったか
 
 	SLIME_ATTACK slime_attack;
@@ -24,6 +25,12 @@ private:
 	int wait_time;
 
 	Location jump_distance;
+private:
+#ifdef _DEBUG
+	ENEMY_STATE old_state; //一つ前の状態
+	int attack_time; //攻撃の時間
+	Location debug_location; //デバック用の座標
+#endif // _DEBUG
 
 public:
 
@@ -32,6 +39,7 @@ public:
 
 	//描画以外の更新を実行
 	virtual void Update(const class Player* player, const class Stage* stage)override;
+
 	//描画
 	virtual void Draw()const override;
 
@@ -57,4 +65,12 @@ public:
 
 	//座標の取得
 	Location GetLocation() const override;
+
+#ifdef _DEBUG
+	//更新(DotByDot)
+	void Update(const ENEMY_STATE state) override;
+
+	//描画(DotByDot)
+	void DebugDraw() override;
+#endif //_DEBUG
 };

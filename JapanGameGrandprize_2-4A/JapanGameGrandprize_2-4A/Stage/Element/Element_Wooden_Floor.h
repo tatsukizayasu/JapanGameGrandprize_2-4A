@@ -5,13 +5,11 @@ class Element_Wooden_Floor : public Stage_Element_Base
 {
 private:
 
-
 	//元の画像
 	int original_image;
 
 	//元の当たり判定範囲
 	Area original_collision;
-
 public:
 
 	//コンストラクタ
@@ -21,6 +19,4 @@ public:
 
 	//更新
 	void Update(Player* player) override;
-
-
 };

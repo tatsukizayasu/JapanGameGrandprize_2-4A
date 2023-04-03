@@ -1,60 +1,25 @@
 //#pragma once
 //
-//#include"EnemyBase.h"
-//#include"CameraWork.h"
-//#include"BoxCollider.h"
+//#include"SlimeBossBody.h"
 //
+//#define BODY_MAX 30
+//#define DATA 100
 //
-//
-//enum class SLIME_ATTACK
-//{
-//	BEFORE_ATTACK,//UŒ‚‚·‚é‘O
-//	AFTER_ATTACK,//UŒ‚‚µ‚½Œã
-//};
-//
-//class EnemySlimeBoss : public EnemyBase
+//class EnemySlimeBoss
 //{
 //private:
-//	bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
+//	
+//	Location location_data[DATA];
+//	ENEMY_STATE state;
+//	SlimeBossBody* slime_boss_body[BODY_MAX];
 //
-//	int color;
-//	SLIME_ATTACK slime_attack;
-//
-//	int slimeboss_image;	
-//
-//	Location jump_distance;
-//
-//	ElementItem drop_item;
 //public:
 //
 //	EnemySlimeBoss();
-//	~EnemySlimeBoss() {};
+//	~EnemySlimeBoss(){};
 //
 //	//•`‰æˆÈŠO‚ÌXV‚ğÀs
-//	virtual void Update(const class Player* player, const class Stage* stage)override;
+//	virtual void Update(const Stage* stage, const Player* player);
 //	//•`‰æ
-//	virtual void Draw()const override;
-//
-//	//ƒAƒCƒhƒ‹ó‘Ô
-//	void Idol() override;
-//
-//	//ˆÚ“®
-//	void Move(const Location player_location) override;
-//
-//	//—‰º
-//	void Fall() override;
-//
-//	//UŒ‚
-//	void  Attack(Location) override;
-//
-//	//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
-//	AttackResource Hit() override;
-//
-//	//€–S
-//	void Death() override;
-//
-//	virtual void HitBullet(const BulletBase* bullet)override;
-//
-//	//À•W‚Ìæ“¾
-//	Location GetLocation() const override;
+//	virtual void Draw()const;
 //};

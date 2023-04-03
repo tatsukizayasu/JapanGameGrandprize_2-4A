@@ -12,6 +12,7 @@
 class LineCollider :public ColliderBase
 {
 private:
+
 	//’†“_‚ð•Ô‚·
 	Location GetMiddlePoint()const
 	{

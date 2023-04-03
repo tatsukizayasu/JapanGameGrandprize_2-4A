@@ -23,12 +23,8 @@
 
 #define PLAYER_SPEED_X 5.0
 
-
-
 #define BULLET_MAX 50
-#define GREEN GetColor(0,255,0)
-#define RED GetColor(255,0,0)
-#define YELLOW GetColor(255,239,0)
+
 
 enum class PLAYER_STATE
 {
@@ -39,9 +35,6 @@ enum class PLAYER_STATE
 	DOWN,
 	DEATH
 };
-
-
-
 
 class Player : public BoxCollider
 {
@@ -66,6 +59,11 @@ private:
 	int flashing_count;				//点滅の間隔
 	int i;                          //スイッチ内でのループ用
 	int damage;                     //敵から受けたダメージの値
+	int damage_by_second;			//敵からの持続ダメ値
+	int damage_second;				//持続ダメの時間カウント用
+	int damage_time;				//持続ダメのマックス時間
+	bool fire_flg;					//火の持続ダメ中のフラグ
+	bool fire_second_bool;			//火の持続ダメを食らっているときのフラグ
 
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
 	bool move_left;					//プレイヤーの向き true:左　false:右
@@ -92,14 +90,13 @@ private:
 	ChemicalFormulaParameter* melt;
 	ChemicalFormulaParameter* pararysis;
 	ChemicalFormulaParameter* heal;
-
-
 public:
 
 	Player();
 	Player(Stage*);
 	~Player();
 	void Draw()const;
+	void ChemicalFormulaDraw(int,int) const;
 	void Update();
 	void ElementUpdate();
 
@@ -117,7 +114,6 @@ public:
 
 	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
-	
 
 	//元素の量の設定
 	void SetElementItem(class Item* item);
@@ -131,4 +127,12 @@ public:
 	void SetHeal(ChemicalFormulaParameter*);
 
 	void MoveAnimation();
+
+#ifdef _DEBUG
+	//更新(DotByDot)
+	void Update(const PLAYER_STATE state);
+
+	//描画(DotByDot)
+	void DebugDraw();
+#endif //_DEBUG
 };

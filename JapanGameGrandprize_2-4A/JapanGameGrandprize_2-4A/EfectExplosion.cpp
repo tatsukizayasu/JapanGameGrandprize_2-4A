@@ -7,6 +7,7 @@
 //-----------------------------------
 EfectExplosion::EfectExplosion()
 {
+
 	location.x = 0.0;
 	location.y = 0.0;
 	trance = 0;
@@ -22,6 +23,7 @@ EfectExplosion::EfectExplosion()
 //-----------------------------------
 EfectExplosion::EfectExplosion(float b_x, float b_y)
 {
+
 	location.x = b_x;
 	location.y = b_y;
 	trance = 255;
@@ -40,6 +42,7 @@ EfectExplosion::EfectExplosion(float b_x, float b_y)
 //-----------------------------------
 void EfectExplosion::Draw() const
 {
+
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, trance);
 	DrawRotaGraph(location.x, location.y, magni, 0, explosion_image, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
@@ -50,6 +53,7 @@ void EfectExplosion::Draw() const
 //-----------------------------------
 void EfectExplosion::Update()
 {
+
 	if (trance > 0)
 	{
 		trance -= 20;

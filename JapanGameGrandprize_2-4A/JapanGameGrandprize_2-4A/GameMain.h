@@ -18,7 +18,11 @@ private:
     Stage* stage;
     CameraWork* camera_work;
     EnemyBase** enemy; //敵
+#ifdef _DEBUG
+
+#else
     Pause* pause;
+#endif
 
     //操作間隔時間
     int input_margin;

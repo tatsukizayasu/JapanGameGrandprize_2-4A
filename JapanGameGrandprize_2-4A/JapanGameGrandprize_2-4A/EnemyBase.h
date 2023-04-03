@@ -37,7 +37,6 @@ struct HitMapChip
 	MapChip* chip; //マップチップ
 };
 
-
 //ステージブロックと当たった面
 enum class STAGE_DIRECTION
 {
@@ -88,8 +87,19 @@ public:
 	//デストラクタ
 	~EnemyBase() {}
 
-	//描画以外の更新を実行
+	//更新
 	virtual void Update(const class Player* player, const class Stage* stage) = 0;
+
+#ifdef _DEBUG
+	//更新(DotByDot)
+	virtual void Update(const ENEMY_STATE state) = 0;
+
+	//描画(DotByDot)
+	virtual void DebugDraw() = 0;
+#endif // _DEBUG
+
+
+	
 
 	//描画
 	virtual void Draw() const = 0;
