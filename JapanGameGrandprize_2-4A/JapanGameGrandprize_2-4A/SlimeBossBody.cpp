@@ -8,9 +8,9 @@
 //#define SLIME_BOSS_SPEED 5
 //#define SLIME_BOSS_ATTACK_DAMAGE 10
 //
-//SlimeBossBody::SlimeBossBody(int x, int y, int speed, int hp, int slime_min_drop, int slime_drop, BODY_TYPE body_type)
+//SlimeBossBody::SlimeBossBody(int x, int y, int hp, int slime_min_drop, int slime_drop, BODY_TYPE body_type)
 //{
-//	left_move = true;
+//	left_move = false;
 //	kind = ENEMY_KIND::SLIME;
 //
 //	location.x = x;
@@ -20,7 +20,8 @@
 //	area.width = 50;
 //
 //	this->hp = hp;
-//	this->speed = SLIME_BOSS_SPEED;
+//	speed = SLIME_BOSS_SPEED;
+//	speed_y = 0;
 //
 //	this->body_type = body_type;
 //
@@ -44,6 +45,7 @@
 //	}
 //
 //	state = ENEMY_STATE::MOVE;
+//	move_state = MOVE_STATE::MOVE_SIDE;
 //}
 //
 //SlimeBossBody::~SlimeBossBody()
@@ -79,33 +81,53 @@
 //
 //	case ENEMY_STATE::MOVE:
 //
+//		Move(player->GetLocation());
+//
 //		hit_stage = HitStage(stage);
 //
-//		//if (hit_stage.hit) //ステージとの当たり判定
-//		//{
-//		//	STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-//		//	hit_direction = HitDirection(hit_stage.chip);
+//		if (hit_stage.hit) //ステージとの当たり判定
+//		{
+//			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+//			hit_direction = HitDirection(hit_stage.chip);
 //
-//		//	if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
-//		//	{
-//		//		location = old_location;
-//		//		left_move = !left_move;
-//		//		speed = -speed;
-//		//	}
-//		//}
-//		//else
-//		//{
-//		//	state = ENEMY_STATE::FALL;
-//		//	speed = 0;
-//		//}
+//			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
+//			{
+//				if (move_state == MOVE_STATE::MOVE_SIDE)
+//				{
+//					location.x = old_location.x;
+//					speed = 0;
+//					speed_y = -SLIME_BOSS_SPEED;
+//					move_state = MOVE_STATE::WALK_WALL;
+//				}
+//			}
+//			else
+//			{
+//				if (move_state == MOVE_STATE::WALK_WALL)
+//				{
+//					location.y = old_location.y;
+//					left_move = !left_move;
+//					if (left_move)speed = -SLIME_BOSS_SPEED;
+//					else speed = SLIME_BOSS_SPEED;
+//					speed_y = 0;
+//				}
+//			}
+//		}
+//		else
+//		{
+//			if (move_state == MOVE_STATE::MOVE_SIDE)
+//			{
+//				state = ENEMY_STATE::FALL;
+//				speed = 0;
+//			}
+//		}
 //
-//		//if (ScreenOut())
-//		//{
-//		//	state = ENEMY_STATE::IDOL;
-//		//	speed = 0;
-//		//}
+//		/*if (ScreenOut())
+//		{
+//			state = ENEMY_STATE::IDOL;
+//			speed = 0;
+//		}*/
 //
-//		location.x += speed;
+//		
 //
 //		break;
 //
@@ -138,11 +160,11 @@
 //			}
 //		}
 //
-//		if (ScreenOut())
+//		/*if (ScreenOut())
 //		{
 //			state = ENEMY_STATE::IDOL;
 //			speed = 0;
-//		}
+//		}*/
 //		break;
 //
 //	case ENEMY_STATE::ATTACK:
@@ -184,7 +206,27 @@
 ////-----------------------------------
 //void SlimeBossBody::Move(const Location player_location)
 //{
+//	switch (move_state)
+//	{
+//	case MOVE_STATE::MOVE_SIDE:
 //
+//		location.x += speed;
+//
+//		break;
+//
+//	case MOVE_STATE::WALK_WALL:
+//
+//		location.y += speed_y;
+//		location.x += speed;
+//
+//		break;
+//	}
+//
+//	/*if ((location.x >= 1280) || (location.x <= 0))
+//	{
+//		speed = -speed;
+//		left_move = !left_move;
+//	}*/
 //}
 //
 ////-----------------------------------
@@ -276,3 +318,33 @@
 //	this->location.x = location.x;
 //	this->location.y = location.y;
 //}
+//
+//
+//
+//#ifdef _DEBUG
+////-----------------------------------
+//// 更新(DotByDot)
+////-----------------------------------
+//void SlimeBossBody::Update(const ENEMY_STATE state)
+//{
+//	if ((old_state != state))
+//	{
+//		location = debug_location;
+//	}
+//
+//	
+//	old_state = state;
+//}
+//
+////-----------------------------------
+////描画(DotByDot)
+////-----------------------------------
+//void SlimeBossBody::DebugDraw()
+//{
+//	Location draw_location = location;
+//	Location camera = CameraWork::GetCamera();
+//	draw_location = draw_location - camera;
+//
+//	DrawCircle(draw_location.x, draw_location.y, 15, 0xff0000, true, true);
+//}
+//#endif //_DEBUG

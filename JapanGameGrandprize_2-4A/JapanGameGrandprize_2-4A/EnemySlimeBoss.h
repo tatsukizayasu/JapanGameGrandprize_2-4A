@@ -2,7 +2,7 @@
 //
 //#include"SlimeBossBody.h"
 //
-//#define BODY_MAX 10
+//#define BODY_MAX 30
 //#define DATA 100
 //
 //class EnemySlimeBoss
