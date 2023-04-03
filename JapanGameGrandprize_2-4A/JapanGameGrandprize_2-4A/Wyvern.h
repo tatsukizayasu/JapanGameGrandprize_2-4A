@@ -14,7 +14,7 @@ class Wyvern :
     public EnemyBase
 {
 private:
-
+    bool attack_end; //攻撃が終わった
     bool attack; //攻撃が当たったか
     int damage; //ダメージ
     int bless_interval;         //次のブレス攻撃までの時間

@@ -22,6 +22,7 @@ Wyvern::Wyvern(Location spawn_location)
 	/*初期化*/
 	can_delete = false;
 	left_move = true;
+	attack_end = false;
 	attack = false;
 
 	hp = 100;
@@ -200,6 +201,29 @@ void Wyvern::Attack(const Location)
 		break;
 	default:
 		break;
+	}
+
+	if(attack_end)
+	{
+		state = ENEMY_STATE::MOVE;
+		switch (attack_state) //インターバルの設定
+		{
+		case WYVERN_ATTACK::BLESS:
+			bless_interval = BLESS_INTERVAL;
+			break;
+		case WYVERN_ATTACK::TRIPLE_BRACE:
+			triple_bless_interval = TRIPLE_BLESS_INTERVAL;
+			break;
+		case WYVERN_ATTACK::ASSAULT:
+			assault_interval = ASSAULT_INTERVAL;
+			break;
+		case WYVERN_ATTACK::NONE:
+			break;
+		default:
+			break;
+		}
+		attack_state = WYVERN_ATTACK::NONE;
+		attack_end = false;
 	}
 }
 

@@ -168,6 +168,9 @@
     <ClCompile Include="Wyvern.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="WyvernBless.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -346,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="Wyvern.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="WyvernBless.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

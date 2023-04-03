@@ -298,7 +298,6 @@ void GameMain::Draw()const
 	item_controller->Draw();
 
 	player->Draw();
-
 	int spawn_volume; //ƒXƒ|[ƒ“”
 	spawn_volume = stage->GetEnemy_SpawnLocation().size();
 

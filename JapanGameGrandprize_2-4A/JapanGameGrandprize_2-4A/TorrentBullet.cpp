@@ -10,8 +10,8 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-TorrentBullet::TorrentBullet(ENEMY_TYPE type,
-	Location spawn_location, Location player_location)
+TorrentBullet::TorrentBullet(const ENEMY_TYPE type,
+	const Location spawn_location, const Location player_location)
 {
 
 	location = spawn_location;

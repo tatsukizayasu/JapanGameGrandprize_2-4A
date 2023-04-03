@@ -13,7 +13,7 @@ private:
 public:
 
     //コンストラクタ
-    GhostBullet(Location, Location);
+    GhostBullet(const Location, const Location);
 
     //デストラクタ
     ~GhostBullet();

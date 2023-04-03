@@ -10,7 +10,7 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-HarpyBullet::HarpyBullet(Location spawn_location, Location player_location)
+HarpyBullet::HarpyBullet(const Location spawn_location, const Location player_location)
 {
 
 	type = ENEMY_TYPE::WIND;
