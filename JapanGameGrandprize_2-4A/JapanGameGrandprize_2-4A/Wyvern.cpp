@@ -32,6 +32,8 @@ Wyvern::Wyvern(Location spawn_location)
 	assault_interval = ASSAULT_INTERVAL;
 
 	shot_rate = 0;
+	assault_speed[0] = 0;
+	assault_speed[1] = 0;
 	image_argument = 0;
 	speed = 0;
 	kind = ENEMY_KIND::WYVERN;
@@ -88,6 +90,27 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
+
+		if (bless_interval < 0) //ブレスに移行
+		{
+			state = ENEMY_STATE::ATTACK;
+			attack_state = WYVERN_ATTACK::BLESS;
+			break;
+		}
+
+		if (triple_bless_interval < 0) //トリプルブレスに移行
+		{
+			state = ENEMY_STATE::ATTACK;
+			attack_state = WYVERN_ATTACK::TRIPLE_BRACE;
+			break;
+		}
+
+		if (assault_interval < 0) //アサルトに移行
+		{
+			state = ENEMY_STATE::ATTACK;
+			attack_state = WYVERN_ATTACK::ASSAULT;
+			break;
+		}
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -104,6 +127,10 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 	Poison();
 	Paralysis();
 
+	if ((state != ENEMY_STATE::DEATH) && (state != ENEMY_STATE::IDOL))
+	{
+
+	}
 	if (CheckHp() && (state != ENEMY_STATE::DEATH))
 	{
 		state = ENEMY_STATE::DEATH;
