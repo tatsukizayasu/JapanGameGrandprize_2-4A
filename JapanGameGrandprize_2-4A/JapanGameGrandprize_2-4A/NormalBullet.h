@@ -12,6 +12,9 @@ private:
 
 	float speed_x, speed_y[PIXEL_MAX];
 	float dot_location_x[PIXEL_MAX], dot_location_y[PIXEL_MAX];
+	Bullet_Effect Explosion[4];
+	Bullet_Effect Melt[2];
+	Bullet_Effect Poison[2];
 public:
 
 	NormalBullet();
@@ -20,6 +23,10 @@ public:
 
 	void Draw() const override;
 	void Update(const Stage*) override;
+
+	//void Explosion(float, float) const;
+	//void Melt(float x, float y);
+	//void Paralysis(float x, float y);
 
 	bool NormalBulletEfect();
 };

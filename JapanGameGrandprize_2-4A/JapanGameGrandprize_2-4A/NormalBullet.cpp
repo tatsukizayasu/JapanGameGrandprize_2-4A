@@ -90,6 +90,7 @@ void NormalBullet::Draw() const
 		}
 		else
 		{
+			/*Explosion(location.x - scrool_x, location.y - scrool_y);*/
 			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, GLAY, TRUE);
 		}
 		break;
@@ -171,11 +172,13 @@ void NormalBullet::Update(const Stage* stage_pointa)
 	float scrool_x = CameraWork::GetCamera().x;
 	if (!player_direction)
 	{
-		if (!HitBlock(stage_pointa) && location.x - scrool_x < 1280 && !delete_flg)
+		if (!HitBlock(stage_pointa) && location.x - scrool_x < 1280 && !delete_flg)//弾の座標更新(右
 		{
+
 			location.x += BULLET_SPEED;
+
 		}
-		else
+		else                   //着弾時のエフェクトの座標更新(右
 		{
 			if (!delete_flg)
 			{
@@ -191,11 +194,13 @@ void NormalBullet::Update(const Stage* stage_pointa)
 
 	if (player_direction)
 	{
-		if (!HitBlock(stage_pointa) && location.x - scrool_x > 0 && !delete_flg)
+		if (!HitBlock(stage_pointa) && location.x - scrool_x > 0 && !delete_flg)//弾の座標更新(左
 		{
+
 			location.x -= BULLET_SPEED;
+		
 		}
-		else
+		else                   //着弾時のエフェクトの座標更新(左
 		{
 			if (!delete_flg)
 			{
@@ -215,7 +220,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 	}
 }
 
-bool NormalBullet::NormalBulletEfect()
+bool NormalBullet::NormalBulletEfect()		//着弾エフェクト
 {
 
 	if (!efect_end)
@@ -256,3 +261,13 @@ bool NormalBullet::NormalBulletEfect()
 	}
 	return false;
 }
+
+//void NormalBullet::Explosion(float x, float y) const {
+//
+//}
+//void NormalBullet::Melt(float x, float y) {
+//
+//}
+//void NormalBullet::Paralysis(float x, float y) {
+//
+//}
