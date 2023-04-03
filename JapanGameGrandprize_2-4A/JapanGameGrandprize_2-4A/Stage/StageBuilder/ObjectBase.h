@@ -5,18 +5,21 @@
 class ObjectBase
 {
 private:
-	class ColliderBase* collider;
+	ColliderBase* collider;
 	int image;
 	SphereCollider* pivot;
 	Location vector;
 	bool is_reverse;
 
+	void ColliderCast(ColliderBase* p_collider);
 public:
 	ObjectBase();
-	ObjectBase(Location pivot);
+	ObjectBase(Location pivot, ColliderBase* p_collider );
 	~ObjectBase();
 
 	void Draw()const;
+
+	void UpdateColliderPos();
 
 	bool HitSphere(SphereCollider* sphere)
 	{

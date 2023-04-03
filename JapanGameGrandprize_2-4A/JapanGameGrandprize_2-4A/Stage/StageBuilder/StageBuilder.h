@@ -14,6 +14,7 @@
 
 //sphereColliderは約3600個程度ならフレームレートを落とさず更新できる
 
+#ifdef _STAGE_BUILDER
 
 //モードの数とその種類------
 #define MENU_NUM 4
@@ -114,10 +115,10 @@ public:
 	//オブジェクトの削除
 	void DeleteObject();
 	//折れ線の変形
-	void TransformPolyLine();
+	bool TransformPolyLine();
 	//矩形の変形
-	void TransformBox();
-	void TransformBox(BoxCollider* box);
+	bool TransformBox();
+	bool TransformBox(BoxCollider* box);
 
 	//マップチップを作成する
 	void MakeMapChip(); //クリックしたとき用
@@ -156,3 +157,6 @@ public:
 	//折れ線の読み込み
 	void LoadPolyLine(istringstream* i_stringstream);
 };
+
+
+#endif

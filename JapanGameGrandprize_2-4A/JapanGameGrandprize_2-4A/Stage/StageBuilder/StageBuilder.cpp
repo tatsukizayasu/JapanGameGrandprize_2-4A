@@ -6,6 +6,8 @@
 
 #define _DEV
 
+#ifdef _STAGE_BUILDER
+
 //------------------------------------
 // コンストラクタ
 //------------------------------------
@@ -47,7 +49,7 @@ StageBuilder::StageBuilder()
 	
 	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
 
-	objects.push_back(new ObjectBase({ 640,360 }));
+	//objects.push_back(new ObjectBase({ 640,460 }));
 
 
 #endif // _DEV
@@ -190,10 +192,6 @@ void StageBuilder::Draw()const
 		}
 	}
 
-	if (mouse->HitCheck(objects[0]->GetColllider()))
-	{
-		DrawString(640, 300, "hit", 0);
-	}
 	
 	for (int i = 0; i < boxes.size(); i++)
 	{
@@ -313,26 +311,42 @@ void StageBuilder::UpdateModulation()
 {
 	DeleteObject();
 
-	TransformPolyLine();
-	for (int i = 0; i < objects.size(); i++)
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 	{
-		if (mouse->HitSphere(objects[i]->GetPivot()))
+		if (TransformPolyLine())
 		{
-			if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+			;
+		}
+		else if (TransformBox())
+		{
+			;
+		}
+		else
+		{
+			for (int i = 0; i < objects.size(); i++)
 			{
-				select_collider = objects[i]->GetPivot();
-				return;
-			}
-			else
-			{
-				select_collider = nullptr;
+				BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
+				if (TransformBox(box))
+				{
+					;
+				}
+				else
+				{
+					if (mouse->HitSphere(objects[i]->GetPivot()))
+					{
+						select_collider = objects[i]->GetPivot();
+					}
+					else
+					{
+						select_collider = nullptr;
+					}
+
+				}
 			}
 		}
 
-		BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
-		TransformBox(box);
+
 	}
-	TransformBox();
 
 	if (select_collider != nullptr)
 	{
@@ -350,6 +364,7 @@ void StageBuilder::UpdateModulation()
 		{
 			boxes[i]->UpdatePos();
 		}
+
 		for (int i = 0; i < objects.size(); i++)
 		{
 			BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
@@ -668,87 +683,38 @@ void StageBuilder::DeleteObject()
 }
 
 //---------------------------------------------
-// 折れ線の変形
+// 折れ線の変形 戻り値：選択されたか
 //---------------------------------------------
-void StageBuilder::TransformPolyLine()
+bool StageBuilder::TransformPolyLine()
 {
-	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+	for (int i = 0; i < poly_lines.size(); i++)
 	{
-		for (int i = 0; i < poly_lines.size(); i++)
+		vector<SphereCollider*> points = poly_lines[i]->GetPoints();
+
+		for (int j = 0; j < points.size(); j++)
 		{
-			vector<SphereCollider*> points = poly_lines[i]->GetPoints();
-
-			for (int j = 0; j < points.size(); j++)
+			if (mouse->HitSphere(points[j]))
 			{
-				if (mouse->HitSphere(points[j]))
-				{
-					select_collider = points[j];
-					points.clear();
-					return;
-				}
-				else
-				{
-					select_collider = nullptr;
-				}
+				select_collider = points[j];
+				points.clear();
+				return true;
 			}
-
-			points.clear();
 		}
 
+		points.clear();
 	}
 
+	return false;
 }
 
 //---------------------------------------------
-// 矩形の変形
+// 矩形の変形　戻り値：選択されたか
 //---------------------------------------------
-void StageBuilder::TransformBox()
+bool StageBuilder::TransformBox()
 {
-	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+	for (int i = 0; i < boxes.size(); i++)
 	{
-		for (int i = 0; i < boxes.size(); i++)
-		{
-			SphereCollider** points = boxes[i]->GetSpheres();
-			
-
-			for (int j = 0; j < 4; j++)
-			{
-				if (mouse->HitSphere(points[j]))
-				{
-					select_collider = points[j];
-					return;
-				}
-				else
-				{
-					select_collider = nullptr;
-				}
-			}
-
-			if (mouse->HitSphere(boxes[i]->GetPivot()))
-			{
-				select_collider = boxes[i]->GetPivot();
-				return;
-			}
-			else
-			{
-				select_collider = nullptr;
-			}
-
-		}
-
-	}
-
-}
-
-
-//---------------------------------------------
-// 矩形の変形
-//---------------------------------------------
-void StageBuilder::TransformBox(BoxCollider* box)
-{
-	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
-	{
-		SphereCollider** points = box->GetSpheres();
+		SphereCollider** points = boxes[i]->GetSpheres();
 
 
 		for (int j = 0; j < 4; j++)
@@ -756,26 +722,44 @@ void StageBuilder::TransformBox(BoxCollider* box)
 			if (mouse->HitSphere(points[j]))
 			{
 				select_collider = points[j];
-				return;
-			}
-			else
-			{
-				select_collider = nullptr;
+				return true;
 			}
 		}
 
-		if (mouse->HitSphere(box->GetPivot()))
+		if (mouse->HitSphere(boxes[i]->GetPivot()))
 		{
-			select_collider = box->GetPivot();
-			return;
+			select_collider = boxes[i]->GetPivot();
+			return true;
 		}
-		else
-		{
-			select_collider = nullptr;
-		}
-
 	}
 
+	return false;
+}
+
+
+//---------------------------------------------
+// 矩形の変形　戻り値：選択されたか
+//---------------------------------------------
+bool StageBuilder::TransformBox(BoxCollider* box)
+{
+	SphereCollider** points = box->GetSpheres();
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (mouse->HitSphere(points[i]))
+		{
+			select_collider = points[i];
+			return true;
+		}
+	}
+
+	if (mouse->HitSphere(box->GetPivot()))
+	{
+		select_collider = box->GetPivot();
+		return true;
+	}
+
+	return false;
 }
 
 //------------------------------------
@@ -1086,3 +1070,5 @@ void StageBuilder::LoadPolyLine(istringstream* i_stringstream)
 
 	poly_lines.push_back(new PolyLine(&location[0], location.size()));
 }
+
+#endif
