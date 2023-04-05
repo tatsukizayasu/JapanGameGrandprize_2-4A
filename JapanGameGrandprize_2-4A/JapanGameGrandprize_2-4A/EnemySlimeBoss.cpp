@@ -120,6 +120,10 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 				speed = 0;
 			}*/
 		}
+		else
+		{
+			state = ENEMY_STATE::FALL;
+		}
 
 		break;
 
