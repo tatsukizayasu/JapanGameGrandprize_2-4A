@@ -40,7 +40,7 @@ EnemySlime::EnemySlime(Location spawn_location)
 	image_type = 0;
 	image_change_time = 0;
 	image_addition = 1;
-	hp = 15;
+	hp = 10;
 	speed = SLIME_SPEED;
 
 	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
