@@ -8,7 +8,7 @@
 #define HARPY_SIZE_Y 80
 
 //プレイヤー発見距離
-#define DETECTION_DISTANCE 600
+#define DETECTION_DISTANCE 300
 #define DETECTION_DISTANCE_Y 250
 
 //攻撃範囲
@@ -22,6 +22,9 @@
 
 //ハーピィの攻撃力
 #define HARPY_ATTACK_DAMAGE 4
+
+//復帰
+#define Standby 2
 
 //移動スピード
 #define SPEED 2.5
@@ -45,13 +48,18 @@ Harpy::Harpy(Location spawn_location)
 	can_delete = false;
 	left_move = true;
 	attack = false;
+	go_back = false;
 
 	hp = HARPY_HP;
 	time = 0;
+	old_x = 0;
+	old_y = 0;
+	standby_num = 0;
 	physical_time = 0;
 	magic_num = 0;
 	magic_time = 1;
 	location = spawn_location;
+
 	standby_attack = 0;
 	travel = 0;
 	travel_y = 0;
@@ -68,7 +76,6 @@ Harpy::Harpy(Location spawn_location)
 	standby_time = 0;
 	physical_attack = false;
 	magic_attack = false;
-	inversion = false;
 	kind = ENEMY_KIND::HARPY;
 
 	//harpy_image = LoadGraph("Images/Enemy/???????.png"); //画像読込み
@@ -129,6 +136,27 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
+
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
+
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if (hit_direction == STAGE_DIRECTION::TOP)
+			{
+				state = ENEMY_STATE::MOVE;
+
+			}
+		}
+
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
@@ -206,67 +234,114 @@ void Harpy::Idol()
 //移動
 void Harpy::Move(const Location player_location)
 {
-
-	//プレイヤーとの距離計算
-	range = player_location.x - location.x;
-	range_y = player_location.y - location.y;
-
-
-	//プレイヤーが発見距離内にいたら
-	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
-		range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
+	if (go_back == true)
 	{
-		//接近攻撃
-		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE || magic_num > 4)
+		Comeback();
+	}
+	else
+	{
+		//プレイヤーとの距離計算
+		range = player_location.x - location.x;
+		range_y = player_location.y - location.y;
+
+
+		//プレイヤーが発見距離内にいたら
+		if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE &&
+			range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
 		{
-
-			state = ENEMY_STATE::ATTACK;
-			attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
-			standby_time = PHYSICAL_STANDBY;
-			physical_attack = true;
-
-		}
-		//遠距離攻撃
-		else
-		{
-
-			state = ENEMY_STATE::ATTACK;
-			attack_state = HARPY_ATTACK::MAGIC_ATTACK;
-			standby_time = MAGIC_STANDBY;
-			magic_attack = true;
-
-			//発射間隔
-			if (magic_time++ % 2 == 0)
+			//接近攻撃
+			if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE)
 			{
-				//弾の生成
-				magic_num++;
-				BulletManager::GetInstance()->CreateEnemyBullet
-				(new HarpyBullet(location, player_location));
+
+				state = ENEMY_STATE::ATTACK;
+				attack_state = HARPY_ATTACK::PHYSICAL_ATTACK;
+				standby_time = PHYSICAL_STANDBY;
+				physical_attack = true;
+
+			}
+			//遠距離攻撃
+			else
+			{
+
+				state = ENEMY_STATE::ATTACK;
+				attack_state = HARPY_ATTACK::MAGIC_ATTACK;
+				standby_time = MAGIC_STANDBY;
+				magic_attack = true;
+
+				//発射間隔
+				if (magic_time++ % 2 == 0)
+				{
+					//弾の生成
+					magic_num++;
+					BulletManager::GetInstance()->CreateEnemyBullet
+					(new HarpyBullet(location, player_location));
+				}
 			}
 		}
+		else //発見距離にプレイヤーがいなかったら。通常移動
+		{
+			if (left_move == true)
+			{
+				action_type = HARPY_STATE::NORMAL; //左
+			}
+			else
+			{
+				action_type = HARPY_STATE::NORMAL_RIGHT; //右
+			}
+			switch (action_type)
+			{
+			case HARPY_STATE::NORMAL:  //通常移動
+				location.x -= speed;
+				break;
+			case HARPY_STATE::NORMAL_RIGHT://右
+				location.x += speed;
+				break;
+			case HARPY_STATE::NONE:
+				break;
+			default:
+				break;
+			}
+		}
+
+		if (magic_num > 3)
+		{
+			state = ENEMY_STATE::FALL;
+			magic_num = 0;
+			old_x = location.x;
+			old_y = location.y;
+			standby_time = 200; //地上におりて硬直する時間
+			go_back = true;
+		}
 	}
-	else //発見距離にプレイヤーがいなかったら。通常移動
+}
+
+
+//-----------------------------------
+//落下する前の座標に戻る
+//-----------------------------------
+void Harpy::Comeback()
+{
+	standby_time--;
+	if (standby_time < 0)
 	{
-		if (left_move == true)
+		range = old_x - location.x;
+		range_y = old_y - location.y;
+
+		vector = sqrt(range * range + range_y * range_y);
+
+		travel = range / vector;
+		travel_y = range_y / vector;
+		location.x += travel * 2;
+		location.y += travel_y * 2;
+
+
+		if (old_x+10 > location.x && old_x-10 <location.x  && old_y+10>location.y && old_y-10 < location.y)
 		{
-			action_type = HARPY_STATE::NORMAL; //左
-		}
-		else
-		{
-			action_type = HARPY_STATE::NORMAL_RIGHT; //右
-		}
-		switch (action_type)
-		{
-		case HARPY_STATE::NORMAL:  //通常移動
-			location.x -= speed;
-			break;
-		case HARPY_STATE::NORMAL_RIGHT://右
-			location.x += speed;
-			break;
-		case HARPY_STATE::NONE:
-			break;
-		default:
-			break;
+			go_back = false;
+			speed = SPEED;
+			standby_num = 0;
+			standby_time = 0;
+			state = ENEMY_STATE::MOVE;
 		}
 	}
 }
@@ -357,6 +432,12 @@ void Harpy::Draw()const
 void Harpy::Fall()
 {
 
+	location.y += speed;
+
+	if (speed < 3)
+	{
+		speed += ENEMY_FALL_SPEED;
+	}
 }
 
 //-----------------------------------

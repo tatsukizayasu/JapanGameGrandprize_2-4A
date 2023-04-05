@@ -59,7 +59,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case BARRICADE:
-		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
+		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, area));
 		break;
 
 	default:

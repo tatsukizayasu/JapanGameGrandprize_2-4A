@@ -1,5 +1,6 @@
 #include "Element_Barricade.h"
 #include "../Player.h"
+#include "../CameraWork.h"
 
 Element_Barricade::Element_Barricade(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
 {
@@ -46,6 +47,7 @@ Element_Barricade::Element_Barricade(short type, std::vector<std::shared_ptr<Sta
 			}
 		}
 	}
+
 }
 
 Element_Barricade::~Element_Barricade()
@@ -56,4 +58,18 @@ Element_Barricade::~Element_Barricade()
 void Element_Barricade::Update(Player* player)
 {
 
+}
+
+void Element_Barricade::Draw()const
+{
+
+	//‰æ‘œ‚ª‚È‚¢–”‚ÍƒGƒ‰[‚Ìê‡‚Í•`‰æ‚µ‚È‚¢
+	if (image == 0) { return; }
+
+	//printfDx("camera_x:%f\tcamera_y:%f\n", CameraWork::GetCamera().x, CameraWork::GetCamera().y);
+	float x = location.x - CameraWork::GetCamera().x;
+	float y = location.y - CameraWork::GetCamera().y;
+
+	//DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
+	//DrawFormatStringF(x, y, 0xFFFFFF, "%d", direction);
 }
