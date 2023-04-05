@@ -20,8 +20,8 @@ GameMain::GameMain()
 {
 #undef DOT_BY_DOT
 	//îwåiâÊëúì«Ç›çûÇ›
-	background_image[0] = LoadGraph("Images/Scene/Stage/1/0.png");
-	background_image[1] = LoadGraph("Images/Scene/Stage/1/1.png");
+	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
 #ifdef _DEBUG
 
 #else
@@ -292,13 +292,12 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
-	SetBackgroundColor(255, 255, 255);
 	////îwåi	ï`âÊ
 	// DrawGraph(0, 0, background_image, FALSE);
 	Location camera_work = CameraWork::GetCamera();
 	
-	DrawGraphF(-fmodf(camera_work.x*0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-	DrawGraphF(-fmodf(camera_work.x*0.8, SCREEN_WIDTH)+SCREEN_WIDTH, 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
 	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
 	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
