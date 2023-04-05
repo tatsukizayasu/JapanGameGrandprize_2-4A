@@ -426,7 +426,11 @@ void Undead::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawHPBar(UNDEAD_HP);
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(UNDEAD_HP);
+	}
+	
 	DrawDamageLog();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0,

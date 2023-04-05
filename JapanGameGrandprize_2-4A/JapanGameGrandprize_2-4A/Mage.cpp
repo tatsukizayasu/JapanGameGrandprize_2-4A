@@ -436,7 +436,10 @@ void Mage::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawHPBar(MAGE_HP);
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(MAGE_HP);
+	}
 	DrawDamageLog();
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,

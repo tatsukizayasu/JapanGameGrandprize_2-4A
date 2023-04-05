@@ -326,7 +326,10 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawHPBar(GHOST_HP);
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(GHOST_HP);
+	}
 	DrawDamageLog();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,

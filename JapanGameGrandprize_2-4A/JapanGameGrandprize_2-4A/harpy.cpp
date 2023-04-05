@@ -340,7 +340,10 @@ void Harpy::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawHPBar(HARPY_HP);
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(HARPY_HP);
+	}
 	DrawDamageLog();
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
