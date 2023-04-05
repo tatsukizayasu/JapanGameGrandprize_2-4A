@@ -9,6 +9,7 @@
 #include "Pouch.h"
 #include "DxLib.h"
 #include "EnumEnemyType.h"
+#include "GameOver.h"
 #include <vector>
 
 #define JUMP_INERTIA 0.2
@@ -80,6 +81,8 @@ private:
 	Stage* stage;					 //ステージへのポインタ
 	EfectBeam* beam;
 	Pouch* pouch;					 //ポーチへのポインタ
+
+	GameOver gameover;
 
 	ElementItem** element;	//元素
 

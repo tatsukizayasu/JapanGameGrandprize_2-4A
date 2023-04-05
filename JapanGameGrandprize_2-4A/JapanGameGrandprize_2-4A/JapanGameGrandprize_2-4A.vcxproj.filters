@@ -169,6 +169,9 @@
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="DragonBullet.cpp" />
+    <ClCompile Include="GameOver.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -349,6 +352,9 @@
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="DragonBullet.h" />
+    <ClInclude Include="GameOver.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

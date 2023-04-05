@@ -470,6 +470,11 @@ void Player::Update()
 		}
 	}
 
+	if (hp <= 0)
+	{
+		gameover.Update();
+	}
+
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
 		pouch_open = true;
