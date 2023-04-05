@@ -3,11 +3,10 @@
 #include "../../Define.h"
 #include "../../CameraWork.h"
 #include "Directory.h"
-#include <string>
-#include <fstream>
-#include <sstream>
 
 #define _DEV
+
+#ifdef _STAGE_BUILDER
 
 //------------------------------------
 // コンストラクタ
@@ -26,7 +25,8 @@ StageBuilder::StageBuilder()
 		throw "Images/Stage/map_chips_.png";
 	}
 
-	mode = BRUSH_MODE;
+	//TODO: BRUSH_MODEに戻す
+	mode = MODULATION_MODE;
 
 	for (int i = 1; i < ARROW_NUM; i++)
 	{
@@ -36,16 +36,22 @@ StageBuilder::StageBuilder()
 	current_brush = MAP_CHIP;
 
 #ifdef _DEV
-	line_collider = new LineCollider_t({ 500,600 }, { 300,300 });
-	mouse_line = new LineCollider_t({ 300,300 }, { 500,500 });
 
-	Location points[3] =
+	for (int i = 0; i < 1; i++)
 	{
-		{200,200},
-		{640,500},
-		{940,350}
-	};
-	line = new PolyLine(points,3);
+		Location test[3] =
+		{
+			{i * 10,i * 10},
+			{i * 15,i * 10},
+			{i * 20,i * 15}
+		};
+		poly_lines.push_back(new PolyLine(test, 3));
+	}
+	
+	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
+
+	//objects.push_back(new ObjectBase({ 640,460 }));
+
 
 #endif // _DEV
 }
@@ -70,10 +76,24 @@ StageBuilder::~StageBuilder()
 	}
 	pending_sphere.clear();
 
-	delete line;
+	for (int i = 0; i < poly_lines.size(); i++)
+	{
+		delete poly_lines[i];
+	}
+	poly_lines.clear();
 
-	delete line_collider;
-	delete mouse_line;
+	for (int i = 0; i < boxes.size(); i++)
+	{
+		delete boxes[i];
+	}
+	boxes.clear();
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		delete objects[i];
+	}
+	objects.clear();
+
 }
 
 //------------------------------------
@@ -96,11 +116,11 @@ void StageBuilder::Update()
 	case MENU_MODE:
 		UpdateMenu();
 		break;
-	
+
 	case BRUSH_MODE:
 		UpdateBrush();
 		break;
-	
+
 	case MODULATION_MODE:
 		UpdateModulation();
 		break;
@@ -109,7 +129,7 @@ void StageBuilder::Update()
 		Directory::Open("\\Stage\\StageBuilder\\dat");
 		UpdateSave();
 		break;
-		
+
 	case LOAD_MODE:
 		Directory::Open("\\Stage\\StageBuilder\\dat");
 		UpdateLoad();
@@ -118,36 +138,8 @@ void StageBuilder::Update()
 
 #ifdef _DEV
 
-	if (line != nullptr)
-	{
-		vector<SphereCollider*> points = line->GetPoint();
-		for (int i = 0; i < points.size(); i++)
-		{
-			if (KeyManager::OnMouseClicked(MOUSE_INPUT_RIGHT))
-			{
-				if (mouse->HitSphere(points[i]))
-				{
-					select_collider = points[i];
-				}
-			}
+	
 
-			if (KeyManager::OnMouseReleased(MOUSE_INPUT_RIGHT))
-			{
-				select_collider = nullptr;
-			}
-
-		}
-	}
-
-	if (select_collider != nullptr)
-	{
-		float set_x = (int)(mouse->GetLocation().x) / 10 * 10;
-		float set_y = (int)(mouse->GetLocation().y) / 10 * 10;
-		select_collider->SetLocation({ set_x,set_y });
-		line->Update();
-	}
-
-	mouse_line->ColliderBase::SetLocation(mouse->GetLocation());
 
 #endif // _DEV
 }
@@ -161,6 +153,11 @@ void StageBuilder::Draw()const
 	for (int i = 0; i < map_chips.size(); i++)
 	{
 		map_chips[i]->Draw();
+	}
+
+	for (int i = 0; i < poly_lines.size(); i++)
+	{
+		poly_lines[i]->Draw();
 	}
 
 	DrawFrame();
@@ -181,35 +178,43 @@ void StageBuilder::Draw()const
 
 #ifdef _DEV
 
-	if (line != nullptr)
-	{
-		//line->Draw();
-	}
 
-	if (2 <= pending_sphere.size())
+	for (int i = 0; i < poly_lines.size(); i++)
 	{
-		for (int i = 0; i + 1 < pending_sphere.size(); i++)
+		if(poly_lines[i]->HitSphere(mouse))
 		{
-			DrawLine(pending_sphere[i]->GetLocation() - CameraWork::GetCamera()
-				, pending_sphere[i + 1]->GetLocation() - CameraWork::GetCamera());
+			DrawString(640, 300, "hit", 0);
 		}
 	}
-	DrawSphere();
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		if(objects[i]->HitSphere(mouse))
+		{
+			DrawString(640, 300, "hit", 0);
+		}
+	}
+
+	
+	for (int i = 0; i < boxes.size(); i++)
+	{
+		boxes[i]->Draw();
+	}
+	
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Draw();
+	}
+
 
 #endif // _DEV
 
 	DrawWhichMode();
 
 	DrawMouse();
-
-	mouse_line->Draw();
-
-	line_collider->Draw();
-	if (line_collider->HitLine(mouse_line))
-	{
-		DrawString(600, 300, "hit", 0);
-	}
+	
 	mouse->Draw();
+
 }
 
 //--------------------------------------
@@ -227,6 +232,15 @@ void StageBuilder::DrawWhichMode()const
 	
 	case BRUSH_MODE:
 		DrawClassName();
+		if (2 <= pending_sphere.size())
+		{
+			for (int i = 0; i + 1 < pending_sphere.size(); i++)
+			{
+				DrawLine(pending_sphere[i]->GetLocation() - CameraWork::GetCamera()
+					, pending_sphere[i + 1]->GetLocation() - CameraWork::GetCamera());
+			}
+		}
+		DrawSphere();
 		break;
 	
 	case MODULATION_MODE:
@@ -300,17 +314,66 @@ void StageBuilder::UpdateBrush()
 //------------------------------------
 void StageBuilder::UpdateModulation()
 {
+	DeleteObject();
 
 	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 	{
-		for (int i = 0; i < map_chips.size(); i++)
+		if (TransformPolyLine())
 		{
-			if (mouse->HitBox(map_chips[i]))
+			;
+		}
+		else if (TransformBox())
+		{
+			;
+		}
+		else
+		{
+			for (int i = 0; i < objects.size(); i++)
 			{
-				delete map_chips[i];
-				map_chips.erase(map_chips.begin() + i);
-				break;
+				BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
+				if (TransformBox(box))
+				{
+					;
+				}
+				else
+				{
+					if (mouse->HitSphere(objects[i]->GetPivot()))
+					{
+						select_collider = objects[i]->GetPivot();
+					}
+					else
+					{
+						select_collider = nullptr;
+					}
+
+				}
 			}
+		}
+
+
+	}
+
+	if (select_collider != nullptr)
+	{
+		MovementByMouse();
+		MovementByKey();
+
+
+		for (int i = 0; i < poly_lines.size(); i++)
+		{
+			poly_lines[i]->Update();
+		}
+
+		
+		for (int i = 0; i < boxes.size(); i++)
+		{
+			boxes[i]->UpdatePos();
+		}
+
+		for (int i = 0; i < objects.size(); i++)
+		{
+			BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
+			box->UpdatePos();
 		}
 	}
 }
@@ -575,6 +638,144 @@ void StageBuilder::DrawLine(Location start, Location end)const
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
+//---------------------------------------------
+// マウス入力によるオブジェクトの移動
+//---------------------------------------------
+void StageBuilder::MovementByMouse()
+{
+	if (KeyManager::OnMousePressed(MOUSE_INPUT_LEFT))
+	{
+		float set_x = (int)(mouse->GetLocation().x) / 10 * 10;
+		float set_y = (int)(mouse->GetLocation().y) / 10 * 10;
+		select_collider->SetLocation({ set_x,set_y });
+	}
+}
+
+//---------------------------------------------
+// キーボード入力によるオブジェクトの移動
+//---------------------------------------------
+void StageBuilder::MovementByKey()
+{
+	select_collider->MoveLocation();
+}
+
+//---------------------------------------------
+// オブジェクトの削除
+//---------------------------------------------
+void StageBuilder::DeleteObject()
+{
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_RIGHT))
+	{
+		for (int i = 0; i < map_chips.size(); i++)
+		{
+			if (mouse->HitBox(map_chips[i]))
+			{
+				delete map_chips[i];
+				map_chips.erase(map_chips.begin() + i);
+				break;
+			}
+		}
+
+		for (int i = 0; i < poly_lines.size(); i++)
+		{
+			vector<SphereCollider*> points = poly_lines[i]->GetPoints();
+
+			for (int j = 0; j < points.size(); j++)
+			{
+				if (mouse->HitSphere(points[j]))
+				{
+					poly_lines[i]->DeleteBendPoint(j);
+					if (poly_lines[i]->GetPoints().size() < 2)
+					{
+						delete poly_lines[i];
+						poly_lines.erase(poly_lines.begin() + i);
+					}
+				}
+			}
+		}
+	}
+}
+
+//---------------------------------------------
+// 折れ線の変形 戻り値：選択されたか
+//---------------------------------------------
+bool StageBuilder::TransformPolyLine()
+{
+	for (int i = 0; i < poly_lines.size(); i++)
+	{
+		vector<SphereCollider*> points = poly_lines[i]->GetPoints();
+
+		for (int j = 0; j < points.size(); j++)
+		{
+			if (mouse->HitSphere(points[j]))
+			{
+				select_collider = points[j];
+				points.clear();
+				return true;
+			}
+		}
+
+		points.clear();
+	}
+
+	return false;
+}
+
+//---------------------------------------------
+// 矩形の変形　戻り値：選択されたか
+//---------------------------------------------
+bool StageBuilder::TransformBox()
+{
+	for (int i = 0; i < boxes.size(); i++)
+	{
+		SphereCollider** points = boxes[i]->GetSpheres();
+
+
+		for (int j = 0; j < 4; j++)
+		{
+			if (mouse->HitSphere(points[j]))
+			{
+				select_collider = points[j];
+				return true;
+			}
+		}
+
+		if (mouse->HitSphere(boxes[i]->GetPivot()))
+		{
+			select_collider = boxes[i]->GetPivot();
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+//---------------------------------------------
+// 矩形の変形　戻り値：選択されたか
+//---------------------------------------------
+bool StageBuilder::TransformBox(BoxCollider* box)
+{
+	SphereCollider** points = box->GetSpheres();
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (mouse->HitSphere(points[i]))
+		{
+			select_collider = points[i];
+			return true;
+		}
+	}
+
+	if (mouse->HitSphere(box->GetPivot()))
+	{
+		select_collider = box->GetPivot();
+		return true;
+	}
+
+	return false;
+}
+
 //------------------------------------
 // マップチップの作成
 //------------------------------------
@@ -616,7 +817,7 @@ void StageBuilder::MakePolyLine()
 	{
 		if (2 <= pending_sphere.size())
 		{
-			line = new PolyLine(pending_sphere);
+			poly_lines.push_back(new PolyLine(pending_sphere));
 			Trash();
 		}
 	}
@@ -719,7 +920,6 @@ const int* StageBuilder::GetImage(int image_index)const
 //------------------------------------
 void StageBuilder::SaveStage(int stage_num)
 {
-
 	FILE* fp = NULL;
 	char stage_name[16];
 	sprintf_s(stage_name, 16, "stage%d.csv", stage_num);
@@ -727,16 +927,9 @@ void StageBuilder::SaveStage(int stage_num)
 	//ファイルオープン
 	fopen_s(&fp, stage_name, "w");
 	
-	//クラス名, x, y, image_handle
-	for (int i = 0; i < map_chips.size(); i++)
-	{
+	SaveMapChips(fp);
 
-		fprintf_s(fp, "%s,%lf,%lf,%d\n",
-			map_chips[i]->GetName(),
-			map_chips[i]->GetLocation().x,
-			map_chips[i]->GetLocation().y,
-			0);
-	}
+	SavePolyLine(fp);
 
 	if (fp)
 	{
@@ -755,19 +948,9 @@ void StageBuilder::SaveStage(char* stage_name)
 	//ファイルオープン
 	fopen_s(&fp, stage_name, "w");
 
-	if (fp != NULL)
-	{
-		//クラス名, x, y, image_handle
-		for (int i = 0; i < map_chips.size(); i++)
-		{
+	SaveMapChips(fp);
 
-			fprintf_s(fp, "%s,%lf,%lf,%d\n",
-				map_chips[i]->GetName(),
-				map_chips[i]->GetLocation().x,
-				map_chips[i]->GetLocation().y,
-				0);
-		}
-	}
+	SavePolyLine(fp);
 
 	if (fp)
 	{
@@ -782,11 +965,6 @@ void StageBuilder::LoadStage(char* stage_name)
 {
 
 	string class_name;
-	float x;
-	float y;
-	float width = MAP_CHIP_SIZE;
-	float height = MAP_CHIP_SIZE;
-	float image;
 
 	string str_conma_buf;
 	string line;
@@ -805,20 +983,115 @@ void StageBuilder::LoadStage(char* stage_name)
 		getline(i_stringstream, str_conma_buf, ',');
 		class_name = str_conma_buf;
 
+		if (class_name == "default")
+		{
+			LoadMapChip(&i_stringstream);
+			continue;
+		}
 
-		getline(i_stringstream, str_conma_buf, ',');
-		x = atof(str_conma_buf.c_str());
-
-
-		getline(i_stringstream, str_conma_buf, ',');
-		y = atof(str_conma_buf.c_str());
-
-
-		getline(i_stringstream, str_conma_buf, ',');
-		image = atof(str_conma_buf.c_str());
-
-		MakeMapChip(x, y, width, height);
+		if (class_name == "PolyLine")
+		{
+			LoadPolyLine(&i_stringstream);
+			continue;
+		}
 	}
 
 	ifstream.close();
 }
+
+//------------------------------------
+// マップチップの保存
+//------------------------------------
+void StageBuilder::SaveMapChips(FILE* fp)
+{
+	if (fp)
+	{
+		//クラス名, x, y, image_handle
+		for (int i = 0; i < map_chips.size(); i++)
+		{
+			fprintf_s(fp, "%s,%lf,%lf,%d\n",
+				map_chips[i]->GetName(),
+				map_chips[i]->GetLocation().x,
+				map_chips[i]->GetLocation().y,
+				0);
+		}
+	}
+}
+
+//------------------------------------
+// 折れ線の保存
+//------------------------------------
+void StageBuilder::SavePolyLine(FILE* fp)
+{
+	if (fp)
+	{
+		for (int i = 0; i < poly_lines.size(); i++)
+		{
+			fprintf_s(fp, "PolyLine");
+			vector<SphereCollider*> points = poly_lines[i]->GetPoints();
+			fprintf_s(fp, ",%d",int(points.size()));
+
+			for (int j = 0; j < points.size(); j++)
+			{
+				fprintf_s(fp, ",%.1lf,%.1lf",
+					points[j]->GetLocation().x,
+					points[j]->GetLocation().y
+				);
+			}
+			fprintf_s(fp, "\n");
+
+			points.clear();
+		}
+	}
+}
+
+//------------------------------------
+// マップチップの読み込み
+//------------------------------------
+void StageBuilder::LoadMapChip(istringstream* i_stringstream)
+{
+	string str_conma_buf;
+	string line;
+
+	float x;
+	float y;
+	float width = MAP_CHIP_SIZE;
+	float height = MAP_CHIP_SIZE;
+
+	getline(*i_stringstream, str_conma_buf, ',');
+	x = atof(str_conma_buf.c_str());
+
+	getline(*i_stringstream, str_conma_buf, ',');
+	y = atof(str_conma_buf.c_str());
+
+	MakeMapChip(x, y, width, height);
+	
+}
+
+//------------------------------------
+// 折れ線の読み込み
+//------------------------------------
+void StageBuilder::LoadPolyLine(istringstream* i_stringstream)
+{
+	string str_conma_buf;
+	string line;
+	vector<Location> location;
+	int size = 0;
+
+	getline(*i_stringstream, str_conma_buf, ',');
+	size = atoi(str_conma_buf.c_str());
+
+	for (int i = 0; i < size; i++)
+	{
+		location.push_back({ 0,0 });
+		getline(*i_stringstream, str_conma_buf, ',');
+		location[i].x = atof(str_conma_buf.c_str());
+
+		getline(*i_stringstream, str_conma_buf, ',');
+		location[i].y = atof(str_conma_buf.c_str());
+	}
+
+	poly_lines.push_back(new PolyLine(&location[0], location.size()));
+}
+
+#endif

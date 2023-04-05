@@ -169,6 +169,9 @@
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="DragonBullet.cpp" />
+    <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -349,6 +352,9 @@
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="DragonBullet.h" />
+    <ClInclude Include="Stage\StageBuilder\ObjectBase.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

@@ -6,7 +6,15 @@
 #include "../SphereCollider.h"
 #include "../../LineCollider.h"
 #include "PolyLine.h"
+#include "ObjectBase.h"
 #include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
+
+//sphereColliderは約3600個程度ならフレームレートを落とさず更新できる
+
+#ifdef _STAGE_BUILDER
 
 //モードの数とその種類------
 #define MENU_NUM 4
@@ -46,6 +54,8 @@ private:
 	//デフォルトマップチップ
 	int block_images[110];		//ブロック画像
 	vector<MapChip*> map_chips;
+	vector<PolyLine*>poly_lines;
+	vector<ObjectBase*>objects;
 
 	//保留中のスフィア
 	vector<SphereCollider*> pending_sphere;
@@ -54,10 +64,8 @@ private:
 	int mode;
 	int current_brush;
 
-	//todo:テスト 後々vector配列にして運用する
-	class PolyLine* line;
-	LineCollider_t* line_collider;
-	LineCollider_t* mouse_line;
+	//todo:テスト 
+	vector<BoxCollider*> boxes;
 
 public:
 	//コンストラクタ
@@ -100,6 +108,18 @@ public:
 	void DrawSphere()const;
 	//保留中のラインの描画
 	void DrawLine(Location start, Location end)const;
+	//マウス入力によるオブジェクトの移動
+	void MovementByMouse();
+	//キーボード入力によるオブジェクトの移動
+	void MovementByKey();
+
+	//オブジェクトの削除
+	void DeleteObject();
+	//折れ線の変形
+	bool TransformPolyLine();
+	//矩形の変形
+	bool TransformBox();
+	bool TransformBox(BoxCollider* box);
 
 	//マップチップを作成する
 	void MakeMapChip(); //クリックしたとき用
@@ -127,4 +147,17 @@ public:
 	void SaveStage(char* stage_name);
 	//CSVファイルからの読み込み
 	void LoadStage(char* stage_name);
+
+	//マップチップの保存
+	void SaveMapChips(FILE* fp);
+	//折れ線の保存
+	void SavePolyLine(FILE* fp);
+
+	//マップチップの読み込み
+	void LoadMapChip(istringstream* i_stringstream);
+	//折れ線の読み込み
+	void LoadPolyLine(istringstream* i_stringstream);
 };
+
+
+#endif

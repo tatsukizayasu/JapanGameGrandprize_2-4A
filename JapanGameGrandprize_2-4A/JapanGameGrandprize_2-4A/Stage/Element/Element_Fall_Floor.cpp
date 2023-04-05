@@ -2,7 +2,7 @@
 #include "../Player.h"
 #include "../CameraWork.h"
 
-#define TIMER	4.0f
+#define TIMER	1.8f
 
 Element_Fall_Floor::Element_Fall_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element,
 	std::vector<int> images, Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
@@ -59,7 +59,7 @@ void Element_Fall_Floor::Update(Player* player)
 			if (state == STATE::WORKING) { LoopTimer(0.3f, &flash); };
 
 			//落ちる時間の半分の時間が経過したらステートをWORKING!!にセットし、点滅させる
-			if (GetElapsedTime(TIMER) >= TIMER / 2) { state = STATE::WORKING; }
+			if (GetElapsedTime(TIMER) >= 0.01f) { state = STATE::WORKING; }
 
 			std::function<void()> fall = [&]() 
 			{
