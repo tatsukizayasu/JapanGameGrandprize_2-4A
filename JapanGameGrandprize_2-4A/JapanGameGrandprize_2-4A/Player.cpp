@@ -131,7 +131,7 @@ Player::Player(Stage* stage)
 	normal.atribute = ATTRIBUTE::NORMAL;
 	normal.chemical_formula[0] = 'n';
 	normal.chemical_formula_name[0] = 'a';
-	normal.damage = 2;
+	normal.damage = 5;
 	normal.damage_per_second = 0;
 	normal.material.carbon = 0;
 	normal.material.chlorine = 0;
@@ -327,7 +327,10 @@ void Player::Draw() const
 	ChemicalFormulaDraw(display_attribute, 0);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
+}
 
+void Player::PouchDraw() const
+{
 	if (pouch_open)
 	{
 		pouch->Draw();
