@@ -307,7 +307,7 @@ void Harpy::Move(const Location player_location)
 			magic_num = 0;
 			old_x = location.x;
 			old_y = location.y;
-			standby_time = 300;
+			standby_time = 200; //’nã‚É‚¨‚è‚Äd’¼‚·‚éŽžŠÔ
 			go_back = true;
 		}
 	}
@@ -336,6 +336,7 @@ void Harpy::Comeback()
 		if (old_x+10 > location.x && old_x-10 <location.x  && old_y+10>location.y && old_y-10 < location.y)
 		{
 			go_back = false;
+			speed = SPEED;
 			standby_num = 0;
 			standby_time = 0;
 			state = ENEMY_STATE::MOVE;
