@@ -334,7 +334,7 @@ void Player::Draw() const
 	}
 }
 
-void Player::ChemicalFormulaDraw(int i,int plus_y) const
+void Player::ChemicalFormulaDraw(int i, int plus_y) const
 {
 	switch (i)
 	{
@@ -440,9 +440,12 @@ void Player::Update()
 	{
 		if (!damage_flg)
 		{
-			if (!fire_second_bool && ++damage_count % 60 == 0)
+			if (++damage_count % 60 == 0)
 			{
-				fire_second_bool = true;
+				if (!fire_second_bool)
+				{
+					fire_second_bool = true;
+				}
 			}
 
 			if (fire_second_bool)
@@ -450,18 +453,18 @@ void Player::Update()
 				if (damage_second++ < damage_by_second)
 				{
 					hp--;
-
 				}
-				else 
+				else
 				{
 					damage_second = 0;
 					fire_second_bool = false;
 				}
 			}
 
-			if (damage_count >= damage_time)
+			if (damage_count > damage_time)
 			{
 				fire_flg = false;
+				damage_time = 0;
 				damage_count = 0;
 			}
 		}
@@ -549,7 +552,7 @@ void Player::Update()
 	{
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_RIGHT_SHOULDER))
 		{
-			if(display_attribute == 5)
+			if (display_attribute == 5)
 			{
 				if (pouch->GetHeal()->make_bool)
 				{
@@ -566,11 +569,11 @@ void Player::Update()
 					}
 				}
 			}
-			else if(shoot_count++ % 10 == 0)
+			else if (shoot_count++ % 10 == 0)
 			{
 				Shoot_Gun();
 			}
-			else{}
+			else {}
 		}
 	}
 
@@ -846,94 +849,94 @@ void Player::NotJump()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
-		if (bullet[bullet_count] == nullptr)
+	if (bullet[bullet_count] == nullptr)
+	{
+		switch (display_attribute)
 		{
-			switch (display_attribute)
+		case 0:
+			bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, &normal);
+			bullet_count++;
+			break;
+		case 1:
+			if (pouch->GetExplosion()->make_bool)
 			{
-			case 0:
-				bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, &normal);
-				bullet_count++;
-				break;
-			case 1:
-				if (pouch->GetExplosion()->make_bool)
+				if (explosion != nullptr)
 				{
-					if (explosion != nullptr)
+					if (explosion->number_of_bullets > 0)
 					{
-						if (explosion->number_of_bullets > 0)
-						{
-							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, explosion);
-							bullet_count++;
-							pouch->ReduceAmmo(attribute[display_attribute]);
-						}
-						if(explosion->number_of_bullets <= 0)
-						{
-							explosion = nullptr;
-							pouch->InitializeExplosion();
-						}
+						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, explosion);
+						bullet_count++;
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					if (explosion->number_of_bullets <= 0)
+					{
+						explosion = nullptr;
+						pouch->InitializeExplosion();
 					}
 				}
-				break;
-			case 2:
-				if (pouch->GetMelt()->make_bool)
-				{
-					if (melt != nullptr)
-					{
-						if (melt->number_of_bullets > 0)
-						{
-							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, melt);
-							bullet_count++;
-							pouch->ReduceAmmo(attribute[display_attribute]);
-						}
-						if(melt->number_of_bullets <= 0)
-						{
-							melt = nullptr;
-							pouch->InitializeMelt();
-						}
-					}
-				}
-				break;
-			case 3:
-				if (pouch->GetPoison()->make_bool)
-				{
-					if (poison != nullptr)
-					{
-						if (poison->number_of_bullets > 0)
-						{
-							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, poison);
-							bullet_count++;
-							pouch->ReduceAmmo(attribute[display_attribute]);
-						}
-						if(poison->number_of_bullets <= 0)
-						{
-							poison = nullptr;
-							pouch->InitializePoison();
-						}
-					}
-				}
-				break;
-			case 4:
-				if (pouch->GetPararysis()->make_bool)
-				{
-					if (pararysis != nullptr)
-					{
-						if (pararysis->number_of_bullets > 0)
-						{
-							bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, pararysis);
-							bullet_count++;
-							pouch->ReduceAmmo(attribute[display_attribute]);
-						}
-						if(pararysis->number_of_bullets <= 0)
-						{
-							pararysis = nullptr;
-							pouch->InitializePararysis();
-						}
-					}
-				}
-				break;
-			default:
-				break;
 			}
+			break;
+		case 2:
+			if (pouch->GetMelt()->make_bool)
+			{
+				if (melt != nullptr)
+				{
+					if (melt->number_of_bullets > 0)
+					{
+						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, melt);
+						bullet_count++;
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					if (melt->number_of_bullets <= 0)
+					{
+						melt = nullptr;
+						pouch->InitializeMelt();
+					}
+				}
+			}
+			break;
+		case 3:
+			if (pouch->GetPoison()->make_bool)
+			{
+				if (poison != nullptr)
+				{
+					if (poison->number_of_bullets > 0)
+					{
+						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, poison);
+						bullet_count++;
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					if (poison->number_of_bullets <= 0)
+					{
+						poison = nullptr;
+						pouch->InitializePoison();
+					}
+				}
+			}
+			break;
+		case 4:
+			if (pouch->GetPararysis()->make_bool)
+			{
+				if (pararysis != nullptr)
+				{
+					if (pararysis->number_of_bullets > 0)
+					{
+						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, pararysis);
+						bullet_count++;
+						pouch->ReduceAmmo(attribute[display_attribute]);
+					}
+					if (pararysis->number_of_bullets <= 0)
+					{
+						pararysis = nullptr;
+						pouch->InitializePararysis();
+					}
+				}
+			}
+			break;
+		default:
+			break;
 		}
+	}
 }
 
 //-----------------------------------

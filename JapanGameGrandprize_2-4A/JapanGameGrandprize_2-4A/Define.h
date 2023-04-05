@@ -79,6 +79,26 @@ struct Location
 		return ret;
 	}
 
+	Location operator /(Location location)
+	{
+		Location ret;
+
+		ret.x = this->x / location.x;
+		ret.y = this->y / location.y;
+
+		return ret;
+	}
+
+	Location operator /(int num)
+	{
+		Location ret;
+
+		ret.x = this->x / num;
+		ret.y = this->y / num;
+
+		return ret;
+	}
+
 	bool operator <(Location location)
 	{
 		bool ret;
@@ -119,7 +139,7 @@ struct Location
 	{
 		bool ret;
 
-		ret = (this->x != location.x) && (this->y != location.y);
+		ret = (this->x != location.x) || (this->y != location.y);
 
 		return ret;
 	}
