@@ -25,10 +25,6 @@
 //	virtual void Draw()const;
 //};
 
-
-
-
-
 #pragma once
 
 #define BODY_MAX 30
@@ -54,7 +50,7 @@ private:
 
 public:
 
-	EnemySlimeBoss();
+	EnemySlimeBoss(Location spawn_location);
 	~EnemySlimeBoss();
 
 	//描画以外の更新を実行
