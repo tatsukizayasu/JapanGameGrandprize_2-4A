@@ -184,6 +184,7 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 
 		}
 	}
+	UpdateDamageLog();
 
 }
 
@@ -339,7 +340,8 @@ void Harpy::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	HPBar(HARPY_HP);
+	DrawHPBar(HARPY_HP);
+	DrawDamageLog();
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
@@ -359,17 +361,42 @@ void Harpy::Fall()
 //-----------------------------------
 void Harpy::HitBullet(const BulletBase* bullet)
 {
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
 
 	switch (bullet->GetAttribute()) //Žó‚¯‚½‰»‡•¨‚Ì‘®«
 	{
 	case ATTRIBUTE::NORMAL: //’Êí’e 
-		hp -= bullet->GetDamage();// * RESISTANCE_DAMAGE; //Œø‚«‚É‚­‚¢
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::EXPLOSION: //”š”­ 
-		hp -= bullet->GetDamage(); //’Êí
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+
 		break;
 	case ATTRIBUTE::MELT: //—n‚©‚· 
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE; //Œø‚«‚É‚­‚¢
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+
 		break;
 	case ATTRIBUTE::POISON: //“Å@Žã“_
 		if (!poison)
@@ -380,6 +407,8 @@ void Harpy::HitBullet(const BulletBase* bullet)
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS: //–ƒáƒ Žã“_
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		if (!paralysis)
 		{
 			paralysis = true;
@@ -391,6 +420,11 @@ void Harpy::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------

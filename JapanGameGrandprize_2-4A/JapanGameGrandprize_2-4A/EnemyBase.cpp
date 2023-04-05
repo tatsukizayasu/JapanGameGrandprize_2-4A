@@ -3,6 +3,8 @@
 #include "vector"
 #include "CameraWork.h"
 
+int EnemyBase::log_font[4];
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -28,8 +30,25 @@ EnemyBase::EnemyBase()
 	state = ENEMY_STATE::IDOL;
 	type = nullptr;
 	images = nullptr;
+	
+}
+//ログ用のフォントの作成
+void EnemyBase::CreateLogFont()
+{
+	log_font[0] = CreateFontToHandle("Weakness", 24, 1, DX_FONTTYPE_NORMAL);
+	log_font[1] = CreateFontToHandle("Nomal", 20, 1, DX_FONTTYPE_NORMAL);
+	log_font[2] = CreateFontToHandle("Resistance", 20, 1, DX_FONTTYPE_NORMAL);
+	log_font[3] = CreateFontToHandle("Invalid", 16, 1, DX_FONTTYPE_NORMAL);
 }
 
+//ログ用のフォントの削除
+void EnemyBase::DeleteLogFont()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		DeleteFontToHandle(log_font[i]);
+	}
+}
 //-----------------------------------
 // HPが0かどうか判断(0になったらtrue)
 //-----------------------------------
@@ -232,10 +251,41 @@ void EnemyBase::Paralysis()
 	}
 }
 
+//ダメージログの更新
+void EnemyBase::UpdateDamageLog()
+{
+	for (int i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+
+		damage_log[i].time--;
+
+		if (damage_log[i].time < 0)
+		{
+			damage_log[i].log = false;
+			for (int j = i + 1; j < LOG_NUM; j++)
+			{
+				if (!damage_log[j].log)
+				{
+					break;
+				}
+
+				damage_log[j - 1] = damage_log[j];
+				damage_log[j].log = false;
+			}
+			i--;
+		}
+	}
+}
+
+
 //-----------------------------------
 //HPバーの描画
 //-----------------------------------
-void EnemyBase::HPBar(const int max_hp) const
+void EnemyBase::DrawHPBar(const int max_hp) const
 {
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
@@ -247,6 +297,48 @@ void EnemyBase::HPBar(const int max_hp) const
 		draw_location.x - max_hp / 4 + (max_hp / 2 * (static_cast<float>(hp) / max_hp)), draw_location.y - 70, 0x07ff00, TRUE);
 	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
 		draw_location.x + max_hp / 4, draw_location.y - 70, 0x000000, FALSE);
+}
+
+//-----------------------------------
+//ダメージログの描画
+//-----------------------------------
+void EnemyBase::DrawDamageLog()const
+{
+	int color = 0;
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+
+	draw_location = draw_location - camera;
+
+	for (int i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+		switch (damage_log[i].congeniality)
+		{
+		case CONGENIALITY::WEAKNESS:	//弱点
+			color = 0xff0000;
+			break;
+		case CONGENIALITY::NOMAL:
+			color = 0xffffff;
+			break;
+		case CONGENIALITY::RESISTANCE:	//耐性
+			color = 0xc0c0c0;
+			break;
+		case CONGENIALITY::INVALID:		//無効
+			color = 0xa1a3a6;
+			break;
+		default:
+			break;
+		}
+
+		DrawFormatStringToHandle(draw_location.x - 20, draw_location.y - 110 - (LOG_TIME - damage_log[i].time),
+			color, log_font[static_cast<int>(damage_log[i].congeniality)],
+			"%3d", damage_log[i].damage);
+
+	}
 }
 
 //-----------------------------------
@@ -301,4 +393,17 @@ bool EnemyBase::GetCanDelete() const
 {
 
 	return can_delete;
+}
+
+//-----------------------------------
+//ダメージログの初期化
+//-----------------------------------
+void EnemyBase::InitDamageLog()
+{
+	for (int i = 0; i < LOG_NUM; i++)
+	{
+		damage_log[i].log = false;
+		damage_log[i].damage = -1;
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+	}
 }

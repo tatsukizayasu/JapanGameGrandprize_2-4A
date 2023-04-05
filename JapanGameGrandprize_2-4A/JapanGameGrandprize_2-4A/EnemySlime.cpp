@@ -269,6 +269,9 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		state = ENEMY_STATE::DEATH;
 		jump_distance.y = 15;
 	}
+
+	UpdateDamageLog();
+
 }
 
 void EnemySlime::Draw()const
@@ -278,7 +281,8 @@ void EnemySlime::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	HPBar(SLIME_HP);
+	DrawHPBar(SLIME_HP);
+	DrawDamageLog();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 }
@@ -438,22 +442,51 @@ void EnemySlime::Death()
 void EnemySlime::HitBullet(const BulletBase* bullet)
 {
 
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
-		poison_damage = bullet->GetDamage() * 0;
-		poison_time = bullet->GetDebuffTime() * 0;
+		if (!poison)
+		{
+			poison_damage = bullet->GetDamage() * 0;
+			poison_time = bullet->GetDebuffTime() * 0;
+		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		if (!paralysis)
 		{
 			paralysis = true;
@@ -466,6 +499,11 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------

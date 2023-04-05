@@ -30,11 +30,29 @@
 //落下速度
 #define ENEMY_FALL_SPEED 1
 
+//ダメージログの数
+#define LOG_NUM 3
+
+//ログの描画時間
+#define LOG_TIME 60
+
+//ログのY座標
+#define LOG_Y 20
+
 //当たり判定
 struct HitMapChip
 {
 	bool hit; //当たったか
 	MapChip* chip; //マップチップ
+};
+
+//ダメージ相性
+enum class CONGENIALITY
+{
+	WEAKNESS = 0,	//弱点
+	NOMAL,			//通常
+	RESISTANCE,		//耐性
+	INVALID,		//無効
 };
 
 //ステージブロックと当たった面
@@ -76,6 +94,14 @@ enum class ENEMY_STATE
 	DEATH,  //死亡
 };
 
+struct DamageLog
+{
+	bool log; //ログの表示
+	int damage; //ダメージ
+	int time; //描画時間
+	CONGENIALITY congeniality; //相性
+};
+
 class EnemyBase :
 	public BoxCollider
 {
@@ -94,7 +120,13 @@ public:
 	virtual void Draw() const = 0;
 
 	//HPバーの描画
-	virtual void HPBar(const int) const;
+	virtual void DrawHPBar(const int) const;
+
+	//ダメージログの描画
+	virtual void DrawDamageLog() const;
+
+	//ダメージログの更新
+	virtual void UpdateDamageLog();
 
 	//アイドル状態
 	virtual void Idol() = 0;
@@ -144,6 +176,11 @@ public:
 	//座標の取得
 	virtual Location GetLocation() const = 0;
 
+	//ログ用のフォントの作成
+	static void CreateLogFont();
+
+	//ログ用のフォントの削除
+	static void DeleteLogFont();
 #ifdef _DEBUG
 	//更新(DotByDot)
 	virtual void Update(const ENEMY_STATE state) = 0;
@@ -164,7 +201,7 @@ protected:
 	int poison_time; //毒の効果時間
 	float poison_damage; //毒のダメージ
 	int paralysis_time; //麻痺の効果時間
-
+	static int log_font[4]; //相性用のフォント(0:弱点,1:通常,2:耐性,3:弱点,)
 	int drop_volume; //ドロップ量
 	int drop_type_volume; //ドロップする種類の量
 	ElementItem** drop_element; //ドロップ元素
@@ -172,7 +209,11 @@ protected:
 	ENEMY_KIND kind; //エネミーの種類
 	ENEMY_TYPE* type; //エネミーのタイプ
 	ENEMY_STATE state; //エネミーの状態
+	DamageLog damage_log[LOG_NUM]; //ダメージログ
 protected:
+
+	//ダメージログの初期化
+	void InitDamageLog();
 
 	//HPが0かどうか判断(0になったらtrue)
 	bool CheckHp();

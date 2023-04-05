@@ -182,6 +182,8 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+	UpdateDamageLog();
+
 }
 
 //アイドル状態
@@ -324,7 +326,8 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	HPBar(GHOST_HP);
+	DrawHPBar(GHOST_HP);
+	DrawDamageLog();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 		M_PI / 180, images[animation], TRUE);
@@ -365,30 +368,61 @@ void EnemyGhost::Fall()
 void EnemyGhost::HitBullet(const BulletBase* bullet)
 {
 
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * 0; //無効
+		damage = 0; //無効
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
-		hp -= bullet->GetDamage() * 0; //無効
+		damage = 0; //無効
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::POISON:
 		poison_damage = bullet->GetDamage() * 0; //無効
 		poison_time = bullet->GetDebuffTime() * 0; //無効
 		break;
 	case ATTRIBUTE::PARALYSIS:
+		damage = 0;
 		paralysis_time = bullet->GetDebuffTime() * 0; //無効
 		paralysis_time = bullet->GetDamage() * 0; //無効
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::HEAL:
 		break;
 	default:
 		break;
 	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------
