@@ -25,6 +25,8 @@
 
 	 pivot = new SphereCollider(location);
 
+	 spheres = new SphereCollider * [4];
+
 	 spheres[0] = new SphereCollider(
 		 {
 			 location.x - area.width / 2,location.y - area.height / 2

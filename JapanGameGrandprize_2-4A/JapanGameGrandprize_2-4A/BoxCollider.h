@@ -39,7 +39,7 @@ public:
 
 #ifdef _STAGE_BUILDER
 protected:
-	SphereCollider* spheres[4];
+	SphereCollider** spheres;
 	SphereCollider* pivot;
 	Location old_pos[4];
 

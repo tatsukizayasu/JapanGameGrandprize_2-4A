@@ -49,8 +49,12 @@ StageBuilder::StageBuilder()
 	}
 	
 	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
+	BoxCollider box({ 640,360 }, { 100,100 });
 
-	//objects.push_back(new ObjectBase({ 640,460 }));
+
+	objects.push_back(new ObjectBase({ 640,460 },&box));
+
+
 
 
 #endif // _DEV
