@@ -3,6 +3,12 @@
 #include"BoxCollider.h"
 #include"DragonBullet.h"
 
+enum class DRAGON_STATE
+{
+	NORMAL,   //通常移動 
+	NONE //何も行動しない。
+};
+
 enum class DRAGON_ATTACK
 {
 	DITE = 0, //噛みつき
@@ -17,6 +23,8 @@ class Dragon :public EnemyBase
 private:
 	int animation; //画像のアニメーション
 	int animation_time; //	画像切り替え間隔
+
+	bool attack; //攻撃が当たったのか
 
 
 	DRAGON_ATTACK attack_state; //攻撃状態

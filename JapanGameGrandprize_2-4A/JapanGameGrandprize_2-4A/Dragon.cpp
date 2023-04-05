@@ -13,8 +13,15 @@
 //‹ßÚUŒ‚‚µ‚½‚Ìd’¼ŠÔ
 #define PHYSICAL_STANDBY 100
 
-//ƒhƒ‰ƒSƒ“‚ÌUŒ‚—Í
-#define ATTACK_DAMAGE 20F  //floatŒ^
+//ƒhƒ‰ƒSƒ“‚ÌUŒ‚—Í(UŒ‚•Êj
+//K”öUŒ‚
+#define ATTACK_TAIL 20
+
+//Šš‚İ‚Â‚­
+#define ATTACK_DITE 20 
+
+//Ú‹ßUŒ‚‚Ì”ÍˆÍ
+#define MELEE_ATTACK 150
 
 //ƒhƒƒbƒv—Ê(Å¬)
 #define MIN_DROP 40
@@ -152,7 +159,20 @@ void Dragon::Idol()
 //-----------------------------------
 void Dragon::Move(const Location player_location)
 {
+	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£ŒvZ
+	int range = player_location.x - location.x;
 
+
+	//ƒvƒŒƒCƒ„[‚ªÚ‹ßUŒ‚‹——£‚É‚¢‚½‚ç
+	if (range <= MELEE_ATTACK && range >= -MELEE_ATTACK)
+	{
+
+	}
+	//‰“‹——£Œn‚ÌUŒ‚
+	else
+	{
+
+	}
 }
 
 //-----------------------------------
@@ -182,7 +202,7 @@ void Dragon::Attack(const Location player_location)
 }
 
 //-----------------------------------
-//Ú‹ßUŒ‚‚ÌŠš‚İ‚Â‚«
+//Ú‹ßUŒ‚‚ÌŠš‚İ‚Â‚«(”òs‚µ‚È‚ª‚çŠš‚İ‚Â‚­jƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‚¢‚­
 //-----------------------------------
 void Dragon::DiteMove(const Location player_location)
 {
@@ -190,7 +210,7 @@ void Dragon::DiteMove(const Location player_location)
 }
 
 //-----------------------------------
-//Ú‹ßUŒ‚‚ÌŠš‚İ‚Â‚«
+//K”öUŒ‚
 //-----------------------------------
 void Dragon::TailMove(const Location player_location)
 {
@@ -219,7 +239,27 @@ void Dragon::RoarMove(const Location player_location)
 //-----------------------------------
 AttackResource Dragon::Hit()
 {
-	return AttackResource();
+	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
+
+	if (attack_state == DRAGON_ATTACK::DITE && (!attack))
+	{
+		attack = true;
+		ENEMY_TYPE attack_type[1] = { *type };
+		ret.damage = ATTACK_DITE;
+		ret.type = attack_type;
+		ret.type_count = 1;
+	}
+
+	if (attack_state == DRAGON_ATTACK::TAIL_ATTACK && (!attack))
+	{
+		attack = true;
+		ENEMY_TYPE attack_type[1] = { *type };
+		ret.damage = ATTACK_TAIL;
+		ret.type = attack_type;
+		ret.type_count = 2;
+	}
+
+	return ret;
 }
 
 //-----------------------------------
