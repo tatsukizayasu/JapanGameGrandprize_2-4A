@@ -20,7 +20,8 @@ GameMain::GameMain()
 {
 #undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
-	background_image = LoadGraph("Images/Scene/gamemain.png");
+	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
 #ifdef _DEBUG
 
 #else
@@ -291,16 +292,16 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
-
 	////”wŒi	•`‰æ
-	 DrawGraph(0, 0, background_image, FALSE);
-	//Location background = CameraWork::GetCamera();
-	//background.x = fmodf(background.x, SCREEN_WIDTH);
-	//
-	//DrawGraphF(-background.x + SCREEN_WIDTH, 0, background_image, TRUE);
-	//DrawGraphF(-background.x, 0, background_image, TRUE);
-	////DrawTurnGraphF(-background.x, 0, background_image, TRUE);
-	//
+	// DrawGraph(0, 0, background_image, FALSE);
+	Location camera_work = CameraWork::GetCamera();
+	
+	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+
+	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+
 	stage->Draw();
 	item_controller->Draw();
 
