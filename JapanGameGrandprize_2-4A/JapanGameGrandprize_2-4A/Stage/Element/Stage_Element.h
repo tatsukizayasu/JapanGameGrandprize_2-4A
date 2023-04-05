@@ -8,6 +8,7 @@
 #include "Element_Move_Floor.h"
 #include "Element_Fall_Floor.h"
 #include "Element_Trap.h"
+#include "Element_Barricade.h"
 #include <memory>
 #include <set>
 #include <unordered_map>
@@ -42,7 +43,7 @@ private:
 
 	//ステージ要素のID
 	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, TRAP,
-		MOVE_FLOOR,GreenButton, YellowButton };
+		MOVE_FLOOR, BARRICADE, GreenButton, YellowButton };
 public:
 
 	//コンストラクタ
