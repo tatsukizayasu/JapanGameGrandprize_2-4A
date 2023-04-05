@@ -47,6 +47,7 @@ Harpy::Harpy(Location spawn_location)
 	attack = false;
 
 	hp = HARPY_HP;
+	time = 0;
 	physical_time = 0;
 	magic_num = 0;
 	magic_time = 1;
@@ -165,6 +166,25 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+
+	if (poison == true)
+	{
+		if (++time % 60 == 0)
+		{
+			if (--poison_time > 0)
+			{
+				hp -= poison_damage;
+			}
+			else
+			{
+				poison_damage = 0;
+				poison_time = 0;
+				poison = false;
+			}
+
+		}
+	}
+
 }
 
 //ƒAƒCƒhƒ‹ó‘Ô
@@ -343,7 +363,7 @@ void Harpy::HitBullet(const BulletBase* bullet)
 	switch (bullet->GetAttribute()) //ó‚¯‚½‰»‡•¨‚Ì‘®«
 	{
 	case ATTRIBUTE::NORMAL: //’Êí’e 
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE; //Œø‚«‚É‚­‚¢
+		hp -= bullet->GetDamage();// * RESISTANCE_DAMAGE; //Œø‚«‚É‚­‚¢
 		break;
 	case ATTRIBUTE::EXPLOSION: //”š”­ 
 		hp -= bullet->GetDamage(); //’Êí

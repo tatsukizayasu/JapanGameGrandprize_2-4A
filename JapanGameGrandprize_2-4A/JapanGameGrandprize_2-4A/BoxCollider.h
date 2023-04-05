@@ -13,6 +13,12 @@ protected:
 	Area margin_area;	//当たり判定範囲の誤差修正
 public:
 
+	BoxCollider();
+	BoxCollider(Location location, Area area);
+	~BoxCollider();
+
+	virtual void Draw()const;
+
 	//SphereColliderとの当たり判定
 	bool HitSphere(const class SphereCollider* sphere_collider) const override;
 
@@ -20,7 +26,7 @@ public:
 	bool HitBox(const class BoxCollider* box_collider) const override;
 
 	//LineColliderとの当たり判定
-	bool HitLine(const class LineCollider_t* line_collider) const override;
+	bool HitLine(const class LineCollider* line_collider) const override;
 	
 	//中心座標の取得
 	Location GetLocation()const;
@@ -29,20 +35,18 @@ public:
 	Area GetArea()const;
 
 	//中心座標の設定
-	void SetLocation(Location location);
+	virtual void SetLocation(Location location);
 
-#ifdef _SHOW_COLLISION
-	void DrawCollision()const
-	{
-		float x1 = location.x - (area.width / 2);
-		float y1 = location.y - (area.height / 2);
-	
-		float x2 = x1 + area.width;
-		float y2 = y1 + area.height;
+#ifdef _STAGE_BUILDER
+protected:
+	SphereCollider* spheres[4];
+	SphereCollider* pivot;
+	Location old_pos[4];
 
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 64);
-		DrawBoxAA(x1, y1, x2, y2, 0xE9FF00, FALSE, 3);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	}
+public:
+	SphereCollider** GetSpheres() { return spheres; }
+	SphereCollider* GetPivot() { return pivot; }
+	void UpdatePos();
 #endif
+
 };
