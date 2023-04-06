@@ -12,10 +12,9 @@
 #define SLIME_BOSS_ATTACK_DAMAGE 10
 #define SLIME_BOSS_JUMP_DISTANCE 30
 
-EnemySlimeBoss::EnemySlimeBoss()
+EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 {
-	location.x = 16300;
-	location.y = 300;
+	location = spawn_location;
 
 	area.height = 50;
 	area.width = 50;
@@ -44,7 +43,7 @@ EnemySlimeBoss::EnemySlimeBoss()
 
 	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 
-	hp = 100;
+	hp = 30;
 	speed_y = -3;
 
 	type = new ENEMY_TYPE;
@@ -79,6 +78,11 @@ EnemySlimeBoss::~EnemySlimeBoss()
 	delete[] drop_element;
 
 	delete[] type;
+
+	for (int i = 0; i < BODY_MAX; i++)
+	{
+		delete slime_boss_body[i];
+	}
 }
 
 
@@ -115,6 +119,10 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 				state = ENEMY_STATE::IDOL;
 				speed = 0;
 			}*/
+		}
+		else
+		{
+			state = ENEMY_STATE::FALL;
 		}
 
 		break;
@@ -194,9 +202,12 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 void EnemySlimeBoss::Draw()const
 {
-	for (int i = 0; i < BODY_MAX; i++)
+	if (can_delete == false)
 	{
-		slime_boss_body[i]->Draw();
+		for (int i = 0; i < BODY_MAX; i++)
+		{
+			slime_boss_body[i]->Draw();
+		}
 	}
 
 	Location draw_location = location;
@@ -274,6 +285,7 @@ AttackResource EnemySlimeBoss::Hit()
 //-----------------------------------
 void EnemySlimeBoss::Death()
 {
+	can_delete = true;
 }
 
 //-----------------------------------
@@ -281,6 +293,29 @@ void EnemySlimeBoss::Death()
 //-----------------------------------
 void EnemySlimeBoss::HitBullet(const BulletBase* bullet)
 {
+	switch (bullet->GetAttribute())
+	{
+	case ATTRIBUTE::NORMAL:
+		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::MELT:
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		break;
+	case ATTRIBUTE::POISON:
+		//poison_damage = bullet->GetDamage();
+		//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		paralysis_time = bullet->GetDebuffTime() * 0;
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
+	}
 }
 
 //-----------------------------------
