@@ -321,6 +321,8 @@ void GameMain::Draw()const
 		}
 	}
 	bullet_manager->Draw();
+
+	player->PouchDraw();
 #ifdef _DEBUG
 
 #else
