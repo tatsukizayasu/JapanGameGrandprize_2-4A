@@ -70,6 +70,11 @@ public:
 	void SetElementParameter();
 
 	/// <summary>
+	/// 動く床の目標位置設定関数
+	/// </summary>
+	void SetMoveFloorNextLocation();
+
+	/// <summary>
 	/// ステージ要素の更新
 	/// </summary>
 	void Update(Player* player);
@@ -110,4 +115,6 @@ public:
 		}
 		return result;
 	};
+
+
 };
