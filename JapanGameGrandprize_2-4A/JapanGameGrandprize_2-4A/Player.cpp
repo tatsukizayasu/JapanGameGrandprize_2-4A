@@ -426,7 +426,6 @@ void Player::Update()
 			else
 			{
 				hp = 0;
-				player_state = PLAYER_STATE::DEATH;
 			}
 		}
 
@@ -475,6 +474,7 @@ void Player::Update()
 			}
 		}
 	}
+
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
@@ -585,7 +585,7 @@ void Player::Update()
 
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
-			Hovering();
+		Hovering();
 	}
 	else
 	{
@@ -632,6 +632,11 @@ void Player::Update()
 	if (!pouch_open)
 	{
 		ElementUpdate();
+	}
+
+	if (hp <= 0)
+	{
+		player_state = PLAYER_STATE::DEATH;
 	}
 }
 
@@ -820,10 +825,9 @@ void Player::Hovering()
 {
 	if (fly > 0)
 	{
-		fly -= 0.5;
 		if (!HitBlock(stage))
 		{
-
+			fly -= 0.5;
 			location.y -= fly;
 
 
@@ -841,9 +845,9 @@ void Player::Hovering()
 	}
 	else if (fly < 0)
 	{
-		fly += 0.5;
 		if (!HitBlock(stage))
 		{
+			fly += 0.5;
 			location.y -= fly;
 			if (location.y < 40.0)
 			{
@@ -851,16 +855,21 @@ void Player::Hovering()
 				fly = 0;
 			}
 		}
+		if (HitBlock(stage))
+		{
+			fly = 0.0;
+			location.y = old_y;
+		}
 	}
 	else
 	{
 		fly = 0;
 	}
 
-	if (player_state != PLAYER_STATE::FLY && player_state != PLAYER_STATE::DOWN)
-	{
-		fuel -= 0.15;
-	}
+
+
+
+	fuel -= 0.15;
 }
 
 //”ò‚Ô
