@@ -37,104 +37,7 @@ Stage::Stage()
 	//マップデータの読み込み
 	LoadMap();
 
-	//マップチップの描画情報をセット
-	for (float y = 0; y < map_data.size(); y++)
-	{
-		for (float x = 0; x < map_data.at(0).size(); x++)
-		{
-			short i = map_data.at(y).at(x);
-			if (i != 0 && i != -1)
-			{
-				if (i == 5) {
-					int rand = GetRand(4);
-					rand += 5;
-					mapchip.push_back(new MapChip
-					(&stage1_block_images[rand],
-						{
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						}, { CHIP_SIZE,CHIP_SIZE }));
-				}
-
-				if (i == 4) {
-					int rand = GetRand(4);
-					mapchip.push_back(new MapChip
-					(&stage1_block_images[rand],
-						{
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						}, { CHIP_SIZE,CHIP_SIZE }));
-				}
-
-
-
-				//スポーン地点ID
-				const short spawn_point_id = 777;
-				if (i == spawn_point_id) {
-					spawn_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-					};
-					continue;
-				}
-
-				//中間地点ID
-				const short halfway_point_id = 100;
-				if (i == halfway_point_id) {
-					halfway_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-					};
-					continue;
-				}
-
-				//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
-				if (enemy_id.find(i) != enemy_id.end()) {
-					enemy_init_location.push_back({ i,
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						});
-					continue;
-				}
-
-				if (element->GetElementID().find(i) != element->GetElementID().end()) {
-					if (i != MOVE_FLOOR) {
-						element->AddElement(i, {
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-							}, { CHIP_SIZE,CHIP_SIZE });
-					}
-					else {
-						float goal_distance = 0;
-						for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
-							goal_distance++;
-							if (map_data.at(y).at(wx) == MOVE_FLOOR_GOAL) {
-								element->AddElement(i, {
-								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-									}, { CHIP_SIZE,goal_distance * CHIP_SIZE });
-								break;
-							}
-						}
-					}
-
-
-				}
-				else {
-
-					//固定マップチップ
-					if (i < 50 && i != 4 && i != 5) {
-						mapchip.push_back(new MapChip
-						(&block_images[i],
-							{
-								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-							}, { CHIP_SIZE,CHIP_SIZE }));
-					}
-				}
-			}
-
-
-		}
-	}
+	InitStage();
 
 
 	//フラグリセット
@@ -324,6 +227,119 @@ void Stage::LoadMap()
 	}
 
 	FileRead_close(FileHandle);
+}
+
+
+/// <summary>
+/// ステージの初期化
+/// </summary>
+void Stage::InitStage(void)
+{
+
+	//マップチップの描画情報をセット
+	for (float y = 0; y < map_data.size(); y++)
+	{
+		for (float x = 0; x < map_data.at(0).size(); x++)
+		{
+			short i = map_data.at(y).at(x);
+			if (i != 0 && i != -1)
+			{
+				//スポーン地点ID
+				const short spawn_point_id = 777;
+				if (i == spawn_point_id) {
+					spawn_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+					};
+					continue;
+				}
+
+				//中間地点ID
+				const short halfway_point_id = 100;
+				if (i == halfway_point_id) {
+					halfway_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+			};
+					continue;
+		}
+
+				//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
+				if (enemy_id.find(i) != enemy_id.end()) {
+					enemy_init_location.push_back({ i,
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						});
+					continue;
+				}
+
+				if (element->GetElementID().find(i) != element->GetElementID().end()) {
+					if (i != MOVE_FLOOR) {
+						element->AddElement(i, {
+							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+							}, { CHIP_SIZE,CHIP_SIZE });
+					}
+					else {
+						float goal_distance = 0;
+						for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
+							goal_distance++;
+							if (map_data.at(y).at(wx) == MOVE_FLOOR_GOAL) {
+								element->AddElement(i, {
+								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+									}, { CHIP_SIZE,goal_distance * CHIP_SIZE });
+								break;
+							}
+						}
+					}
+
+
+				}
+				else {
+					// 固定ブロックの追加
+					AddFixedMapChip(i, x, y);
+
+				}
+	}
+
+
+		}
+	}
+
+}
+
+void Stage::AddFixedMapChip(short id, float x, float y)
+{
+	if (id == 5) {
+		int rand = GetRand(4);
+		rand += 5;
+		mapchip.push_back(new MapChip
+		(&stage1_block_images[rand],
+			{
+				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+			}, { CHIP_SIZE,CHIP_SIZE }));
+	}
+
+	if (id == 4) {
+		int rand = GetRand(4);
+		mapchip.push_back(new MapChip
+		(&stage1_block_images[rand],
+			{
+				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+			}, { CHIP_SIZE,CHIP_SIZE }));
+	}
+
+	//固定マップチップ
+	if (id < 50 && id != 4 && id != 5) {
+		mapchip.push_back(new MapChip
+		(&block_images[id],
+			{
+				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+			}, { CHIP_SIZE,CHIP_SIZE }));
+	}
+
 }
 
 std::vector<MapChip*> Stage::GetMapChip() const
