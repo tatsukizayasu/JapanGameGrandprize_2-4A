@@ -7,6 +7,9 @@
 #define DRAGON_SIZE_X 40
 #define DRAGON_SIZE_Y 80
 
+//ドラゴンのHP
+#define HIT_POINTS 500
+
 //魔法攻撃した時の硬直時間
 #define MAGIC_STANDBY 60
 
@@ -23,6 +26,9 @@
 //接近攻撃の範囲
 #define MELEE_ATTACK 150
 
+//攻撃切り替え時間
+#define ATTACK_SWITCHOVER 260
+
 //ドロップ量(最小)
 #define MIN_DROP 40
 
@@ -37,13 +43,18 @@ Dragon::Dragon(Location spawn_location)
 	area.height = DRAGON_SIZE_Y;
 	area.width = DRAGON_SIZE_X;
 
+	hp = HIT_POINTS;
+	speed = 0;
+
 	animation = 0;
 	animation_time = 0;
-	hp = 500; 	
-	speed = 0; 
+	switchover_time = 0;
+	effect_time = 0;
 
 	can_delete = false;
 	left_move = true;
+	attack = false;
+	magic = false;
 
 	kind = ENEMY_KIND::DRAGON;
 	type = new ENEMY_TYPE[3];
@@ -124,6 +135,26 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 
 	}
 
+	//毒のダメージ
+	if (poison == true)
+	{
+		if (++effect_time % POISON_DAMAGE_FLAME == 0)
+		{
+			if (--poison_time > 0)
+			{
+				hp -= poison_damage;
+			}
+			else
+			{
+				poison_damage = 0;
+				poison_time = 0;
+				poison = false;
+			}
+
+		}
+	}
+
+
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;
@@ -159,18 +190,26 @@ void Dragon::Idol()
 //-----------------------------------
 void Dragon::Move(const Location player_location)
 {
+	
+
 	//プレイヤーとの距離計算
 	int range = player_location.x - location.x;
-
 
 	//プレイヤーが接近攻撃距離にいたら
 	if (range <= MELEE_ATTACK && range >= -MELEE_ATTACK)
 	{
-
+		
 	}
 	//遠距離系の攻撃
 	else
 	{
+		/*if (hp < HIT_POINTS / 2)
+		{
+			
+		}*/
+		attack_state = DRAGON_ATTACK::DREATH;
+		state = ENEMY_STATE::ATTACK;
+		magic = true;
 
 	}
 }
@@ -202,7 +241,7 @@ void Dragon::Attack(const Location player_location)
 }
 
 //-----------------------------------
-//接近攻撃時の噛みつき(飛行しながら噛みつく）プレイヤーに向かっていく
+//接近攻撃時の噛みつき(飛行しながら噛みつく）体当たりするイメージ
 //-----------------------------------
 void Dragon::DiteMove(const Location player_location)
 {

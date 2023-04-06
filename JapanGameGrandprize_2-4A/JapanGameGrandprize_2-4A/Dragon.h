@@ -24,7 +24,11 @@ private:
 	int animation; //画像のアニメーション
 	int animation_time; //	画像切り替え間隔
 	int magic_num; //遠距離攻撃を使った回数
-	bool attack; //攻撃が当たったのか
+	int switchover_time; //攻撃切り替え時間 
+	int effect_time; //毒のダメージを等間隔で出すための時間測定
+
+	bool attack; //接近攻撃
+	bool magic; //魔法攻撃
 
 
 	DRAGON_ATTACK attack_state; //攻撃状態

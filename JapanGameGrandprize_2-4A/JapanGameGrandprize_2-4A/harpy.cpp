@@ -78,8 +78,7 @@ Harpy::Harpy(Location spawn_location)
 	magic_attack = false;
 	kind = ENEMY_KIND::HARPY;
 
-	//harpy_image = LoadGraph("Images/Enemy/???????.png"); //画像読込み
-	harpy_image = 0; //画像をもらい次第上記の処理に変更
+	images = LoadGraph("Images/Enemy/Harmir21.png"); //画像読込み
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -107,7 +106,6 @@ Harpy::Harpy(Location spawn_location)
 Harpy::~Harpy()
 {
 
-	delete[] images;
 	delete[] type;
 
 	for (int i = 0; i < WIND_DROP; i++)
@@ -409,7 +407,6 @@ void Harpy::Death()
 //-----------------------------------
 void Harpy::Draw()const
 {
-
 	//スクロールに合わせて描画
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
@@ -421,9 +418,8 @@ void Harpy::Draw()const
 	}
 	DrawDamageLog();
 
-	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
-		GetColor(255, 255, 0), TRUE);
+	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		M_PI / 180, images, TRUE);
 }
 
 //-----------------------------------
