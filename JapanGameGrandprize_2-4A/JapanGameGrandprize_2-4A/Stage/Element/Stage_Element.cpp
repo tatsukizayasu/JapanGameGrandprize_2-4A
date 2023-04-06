@@ -58,6 +58,10 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
 		break;
 
+	case MOVE_FLOOR_GOAL:
+		element.push_back(std::make_shared<Element_Move_Floor>(type, location));
+		break;
+
 	case BARRICADE:
 		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, area));
 		break;
@@ -70,20 +74,28 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 
 void Stage_Element::SetElementParameter()
 {
-					//	else {
-					//	float goal_distance = 0;
-					//	for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
-					//		goal_distance++;
-					//		if (map_data.at(y).at(wx) == MOVE_FLOOR_GOAL) {
-					//			element->AddElement(i, {
-					//			x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-					//			y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-					//				}, { CHIP_SIZE,goal_distance * CHIP_SIZE });
-					//			break;
-					//		}
-					//	}
-					//}
+	//ìÆÇ≠è∞ÇÃñ⁄ïWà íuÇÃê›íË
+	SetMoveFloorNextLocation();
+}
 
+void Stage_Element::SetMoveFloorNextLocation()
+{
+	int element_size = element.size();
+	for (int i = 0; i < element_size; i++)
+	{
+		if (element.at(i)->GetType() == Element::MOVE_FLOOR)
+		{
+			for (int j = i + 1; j < element_size; j++)
+			{
+				if (element.at(j)->GetType() == Element::MOVE_FLOOR_GOAL && element.at(i)->GetLocation().x < element.at(j)->GetLocation().x)
+				{
+					element.at(i)->SetLocation(element.at(j)->GetLocation());
+					i = j + 1;
+					break;
+				}
+			}
+		}
+	}
 }
 
 void Stage_Element::Update(Player* player)
@@ -189,6 +201,9 @@ std::vector<int> Stage_Element::GetImage(short type)
 
 	case MOVE_FLOOR:
 		filename = "Move_Floor.png";
+		break;
+	case MOVE_FLOOR_GOAL:
+		filename = "DamageWall.png";
 		break;
 
 	case BARRICADE:

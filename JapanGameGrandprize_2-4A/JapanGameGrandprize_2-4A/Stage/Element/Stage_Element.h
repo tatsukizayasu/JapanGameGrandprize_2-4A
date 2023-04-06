@@ -43,7 +43,7 @@ private:
 
 	//ステージ要素のID
 	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, TRAP,
-		MOVE_FLOOR, BARRICADE, GreenButton, YellowButton };
+		MOVE_FLOOR, MOVE_FLOOR_GOAL, BARRICADE, GreenButton, YellowButton };
 public:
 
 	//コンストラクタ
@@ -67,6 +67,11 @@ public:
 	/// ステージ要素のパラメーター設定
 	/// </summary>
 	void SetElementParameter();
+
+	/// <summary>
+	/// 動く床の目標位置設定関数
+	/// </summary>
+	void SetMoveFloorNextLocation();
 
 	/// <summary>
 	/// ステージ要素の更新
@@ -109,4 +114,6 @@ public:
 		}
 		return result;
 	};
+
+
 };
