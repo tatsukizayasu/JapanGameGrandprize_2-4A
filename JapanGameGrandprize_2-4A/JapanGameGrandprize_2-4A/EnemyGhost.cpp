@@ -241,19 +241,16 @@ void EnemyGhost::Move(const Location player_location)
 	{
 		magic_attack = false;
 		physical_attack = false;
-		switch (action_type)
+
+		if (left_move == true)
 		{
-		case GHOST_STATE::NORMAL:  //í èÌà⁄ìÆ
 			location.x -= speed;
-			break;
-		case GHOST_STATE::NORMAL_RIGHT://âE
+		}
+		else
+		{
 			location.x += speed;
-			break;
-		default:
-			break;
 		}
 	}
-
 }
 
 //-----------------------------------
@@ -341,7 +338,7 @@ void EnemyGhost::Draw()const
 //-----------------------------------
 void EnemyGhost::AttackMove(const Location player_location)
 {
-	
+
 	if (physical_attack == true)
 	{
 		range = player_location.x - location.x;
@@ -354,7 +351,7 @@ void EnemyGhost::AttackMove(const Location player_location)
 		location.x += travel * speed;
 		location.y += travel_y * speed;
 	}
-	
+
 }
 
 //-----------------------------------
@@ -443,7 +440,7 @@ Location EnemyGhost::GetLocation() const
 //-----------------------------------
 void EnemyGhost::Update(const ENEMY_STATE state)
 {
-	
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
