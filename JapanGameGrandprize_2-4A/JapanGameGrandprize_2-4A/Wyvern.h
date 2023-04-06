@@ -21,17 +21,23 @@ private:
     int triple_bless_interval;  //次の3連ブレス攻撃までの時間
     int assault_interval;       //次の強襲攻撃までの時間
     int shot_rate;  //ブレスの発射レート
-    int assault_speed[2];   //強襲攻撃のスピード(0 : X , 1 : Y)
+    int shot_count; //発射した弾の数
+    Location assault_start;     //強襲攻撃のスタート位置
+    Location assault_speed;     //強襲攻撃のスピード
     int image_argument; //画像の引数
 
     WYVERN_ATTACK attack_state; //攻撃
+    HitMapChip hit_stage;
 private:
 
     //移動時のアニメーション
     void MoveAnimation();
 
-    //ブレスの生成
-    void CreateBless(const Location);
+    //ブレス
+    void Bless(const Location);
+
+    //トリプルブレス
+    void TripleBless(const Location);
 
     //強襲攻撃
     void Assault(const Location);

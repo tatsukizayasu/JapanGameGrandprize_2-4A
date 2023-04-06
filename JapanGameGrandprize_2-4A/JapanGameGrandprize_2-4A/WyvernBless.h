@@ -11,7 +11,7 @@ private:
 public:
 
     //コンストラクタ
-    WyvernBless(const ENEMY_TYPE, const Location, const Location);
+    WyvernBless(const Location, const Location);
 
     //デストラクタ
     ~WyvernBless();

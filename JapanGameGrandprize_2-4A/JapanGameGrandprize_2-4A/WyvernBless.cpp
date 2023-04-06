@@ -4,25 +4,24 @@
 #include <math.h>
 #include "CameraWork.h"
 
-#define MAGE_BULLET_SPEED 5
-#define MAGE_BULLET_DAMAGE 2
+#define WYVERN_BULLET_SPEED 5
+#define WYVERN_BULLET_DAMAGE 5
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-WyvernBless::WyvernBless(const ENEMY_TYPE type,
-	const Location spawn_location, const Location player_location)
+WyvernBless::WyvernBless(const Location spawn_location, const Location player_location)
 {
 
 	location = spawn_location;
 	radius = 14;
-	speed = MAGE_BULLET_SPEED;
-	this->type = type;
+	speed = WYVERN_BULLET_SPEED;
+	type = ENEMY_TYPE::FIRE;
 
 	image = 0;
-	damage = MAGE_BULLET_DAMAGE;
+	damage = WYVERN_BULLET_DAMAGE;
 	float radian; //角度
-	radian = atan2f((player_location.y - 10) - location.y, player_location.x - location.x);
+	radian = atan2f((player_location.y - 10) - location.y, (player_location.x - 10)- location.x);
 	x_speed = speed * cosf(radian);
 	y_speed = speed * sinf(radian);
 }
