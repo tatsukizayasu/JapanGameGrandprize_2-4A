@@ -591,7 +591,14 @@ void Player::Update()
 
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
-		Hovering();
+		if (fuel > 0)
+		{
+			Hovering();
+		}
+		else
+		{
+			NotFly();
+		}
 	}
 	else
 	{

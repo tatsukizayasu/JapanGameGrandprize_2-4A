@@ -722,6 +722,9 @@ void Pouch::Draw() const
 //アップデート
 void Pouch::Update()
 {
+
+
+
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
 		cursol = 0;
@@ -781,19 +784,19 @@ void Pouch::Update()
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
-		ExplosionTabUpdate();
+		TabUpdate(EXPLOSION_MAX_NUM);
 		break;
 	case ATTRIBUTE::MELT:
-		MeltTabUpdate();
+		TabUpdate(MELT_MAX_NUM);
 		break;
 	case ATTRIBUTE::POISON:
-		PoisonTabUpdate();
+		TabUpdate(POISON_MAX_NUM);
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		ParalysisTabUpdate();
+		TabUpdate(PARARYSIS_MAX_NUM);
 		break;
 	case ATTRIBUTE::HEAL:
-		HealTabUpdate();
+		TabUpdate(HEAL_MAX_NUM);
 		break;
 	default:
 		break;
@@ -845,7 +848,7 @@ void Pouch::Update()
 	}
 }
 
-void Pouch::ExplosionTabUpdate()
+void Pouch::TabUpdate(int max_num)
 {
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
@@ -867,7 +870,7 @@ void Pouch::ExplosionTabUpdate()
 		}
 		if (cursol < 0)
 		{
-			cursol = EXPLOSION_MAX_NUM - 1;
+			cursol = max_num - 1;
 		}
 		count = 0;
 	}
@@ -884,6 +887,7 @@ void Pouch::ExplosionTabUpdate()
 			if (move_string < 0)
 			{
 				move_string = 0;
+				move_up = false;
 			}
 		}
 		else if(move_string > 30)
@@ -900,7 +904,7 @@ void Pouch::ExplosionTabUpdate()
 			}
 			if (cursol < 0)
 			{
-				cursol = EXPLOSION_MAX_NUM - 1;
+				cursol = max_num - 1;
 			}
 		}
 	}
@@ -924,7 +928,7 @@ void Pouch::ExplosionTabUpdate()
 			cursol++;
 			move_string = 0;
 		}
-		if (cursol > EXPLOSION_MAX_NUM - 1)
+		if (cursol > max_num - 1)
 		{
 			cursol = 0;
 		}
@@ -943,6 +947,7 @@ void Pouch::ExplosionTabUpdate()
 			if (move_string > 0)
 			{
 				move_string = 0;
+				move_down = false;
 			}
 		}
 		else if (move_string < -30)
@@ -957,7 +962,7 @@ void Pouch::ExplosionTabUpdate()
 				cursol++;
 				move_down = false;
 			}
-			if (cursol > EXPLOSION_MAX_NUM - 1)
+			if (cursol > max_num - 1)
 			{
 				cursol = 0;
 			}
@@ -966,449 +971,6 @@ void Pouch::ExplosionTabUpdate()
 	else {}
 
 }
-
-void Pouch::PoisonTabUpdate()
-{
-	if (PAD_INPUT::GetRStick().y > 5000)
-	{
-		move_up = true;
-		if (move_string < STRING_DISTANCE)
-		{
-			move_string += 5;
-		}
-		else
-		{
-			cursol--;
-			move_string = 0;
-		}
-		if (cursol < 0)
-		{
-			cursol = POISON_MAX_NUM - 1;
-		}
-		count = 0;
-	}
-	else if (move_up)
-	{
-		if (move_string <= 30)
-		{
-			move_string -= 5;
-			if (move_string < 0)
-			{
-				move_string = 0;
-			}
-		}
-		else if (move_string > 30)
-		{
-			if (move_string < STRING_DISTANCE)
-			{
-				move_string += 5;
-			}
-			else
-			{
-				move_string = 0;
-				cursol--;
-				move_up = false;
-			}
-			if (cursol < 0)
-			{
-				cursol = POISON_MAX_NUM - 1;
-			}
-		}
-	}
-	else {}
-
-	if (PAD_INPUT::GetRStick().y < -5000)
-	{
-		move_down = true;
-
-		if (move_string > -STRING_DISTANCE)
-		{
-			move_string -= 5;
-		}
-		else
-		{
-			cursol++;
-			move_string = 0;
-		}
-		if (cursol > POISON_MAX_NUM - 1)
-		{
-			cursol = 0;
-		}
-		count = 0;
-	}
-	else if (move_down)
-	{
-		if (move_string >= -30)
-		{
-			move_string += 5;
-			if (move_string > 0)
-			{
-				move_string = 0;
-			}
-		}
-		else if (move_string < -30)
-		{
-			if (move_string > -STRING_DISTANCE)
-			{
-				move_string += 5;
-			}
-			else
-			{
-				move_string = 0;
-				cursol++;
-				move_down = false;
-			}
-			if (cursol > POISON_MAX_NUM - 1)
-			{
-				cursol = 0;
-			}
-		}
-	}
-	else {}
-
-}
-
-void Pouch::HealTabUpdate()
-{
-	if (PAD_INPUT::GetRStick().y > 5000)
-	{
-		move_up = true;
-		if (move_string < STRING_DISTANCE)
-		{
-			move_string += 5;
-		}
-		else
-		{
-			cursol--;
-			move_string = 0;
-		}
-		if (cursol < 0)
-		{
-			cursol = HEAL_MAX_NUM - 1;
-		}
-		count = 0;
-	}
-	else if (move_up)
-	{
-		if (move_string <= 30)
-		{
-			move_string -= 5;
-			if (move_string < 0)
-			{
-				move_string = 0;
-			}
-		}
-		else if (move_string > 30)
-		{
-			if (move_string < STRING_DISTANCE)
-			{
-				move_string += 5;
-			}
-			else
-			{
-				move_string = 0;
-				cursol--;
-				move_up = false;
-			}
-			if (cursol < 0)
-			{
-				cursol = HEAL_MAX_NUM - 1;
-			}
-		}
-	}
-	else {}
-
-	if (PAD_INPUT::GetRStick().y < -5000)
-	{
-		move_down = true;
-
-		if (move_string > -STRING_DISTANCE)
-		{
-			move_string -= 5;
-		}
-		else
-		{
-			cursol++;
-			move_string = 0;
-		}
-		if (cursol > HEAL_MAX_NUM - 1)
-		{
-			cursol = 0;
-		}
-		count = 0;
-	}
-	else if (move_down)
-	{
-		if (move_string >= -30)
-		{
-			move_string += 5;
-			if (move_string > 0)
-			{
-				move_string = 0;
-			}
-		}
-		else if (move_string < -30)
-		{
-			if (move_string > -STRING_DISTANCE)
-			{
-				move_string += 5;
-			}
-			else
-			{
-				move_string = 0;
-				cursol++;
-				move_down = false;
-			}
-			if (cursol > HEAL_MAX_NUM - 1)
-			{
-				cursol = 0;
-			}
-		}
-	}
-	else {}
-
-}
-
-void Pouch::MeltTabUpdate()
-{
-	if (PAD_INPUT::GetRStick().y > 5000)
-	{
-		move_up = true;
-		if (move_string < STRING_DISTANCE)
-		{
-			move_string += 5;
-		}
-		else
-		{
-			cursol--;
-			move_string = 0;
-		}
-		if (cursol < 0)
-		{
-			cursol = MELT_MAX_NUM - 1;
-		}
-		count = 0;
-	}
-	else if (move_up)
-	{
-		if (move_string <= 30)
-		{
-			move_string -= 5;
-			if (move_string < 0)
-			{
-				move_string = 0;
-			}
-		}
-		else if (move_string > 30)
-		{
-			if (move_string < STRING_DISTANCE)
-			{
-				move_string += 5;
-			}
-			else
-			{
-				move_string = 0;
-				cursol--;
-				move_up = false;
-			}
-			if (cursol < 0)
-			{
-				cursol = MELT_MAX_NUM - 1;
-			}
-		}
-	}
-	else {}
-
-	if (PAD_INPUT::GetRStick().y < -5000)
-	{
-		move_down = true;
-
-		if (move_string > -STRING_DISTANCE)
-		{
-			move_string -= 5;
-		}
-		else
-		{
-			cursol++;
-			move_string = 0;
-		}
-		if (cursol > MELT_MAX_NUM - 1)
-		{
-			cursol = 0;
-		}
-		count = 0;
-	}
-	else if (move_down)
-	{
-		if (move_string >= -30)
-		{
-			move_string += 5;
-			if (move_string > 0)
-			{
-				move_string = 0;
-			}
-		}
-		else if (move_string < -30)
-		{
-			if (move_string > -STRING_DISTANCE)
-			{
-				move_string += 5;
-			}
-			else
-			{
-				move_string = 0;
-				cursol++;
-				move_down = false;
-			}
-			if (cursol > MELT_MAX_NUM - 1)
-			{
-				cursol = 0;
-			}
-		}
-	}
-	else {}
-
-}
-
-void Pouch::ParalysisTabUpdate()
-{
-	if (PAD_INPUT::GetRStick().y > 5000)
-	{
-		move_up = true;
-		if (move_string < 0)
-		{
-			move_string = 0;
-		}
-		else
-		{
-			if (move_string < STRING_DISTANCE)
-			{
-				move_string += 5;
-			}
-			else
-			{
-				cursol--;
-				move_string = 0;
-			}
-			if (cursol < 0)
-			{
-				cursol = PARARYSIS_MAX_NUM - 1;
-			}
-			count = 0;
-		}
-	}
-	else if (move_up)
-	{
-		if (move_string < 0)
-		{
-			move_string = 0;
-		}
-		else
-		{
-			if (move_string <= 30)
-			{
-				move_string -= 5;
-				if (move_string < 0)
-				{
-					move_string = 0;
-				}
-			}
-			else if (move_string > 30)
-			{
-				if (move_string < STRING_DISTANCE)
-				{
-					move_string += 5;
-				}
-				else
-				{
-					move_string = 0;
-					cursol--;
-					move_up = false;
-				}
-
-
-				if (cursol < 0)
-				{
-					cursol = PARARYSIS_MAX_NUM - 1;
-				}
-			}
-		}
-	}
-	else {}
-
-	if (PAD_INPUT::GetRStick().y < -5000)
-	{
-		move_down = true;
-
-		if (move_string > 0)
-		{
-			move_string = 0;
-		}
-		else
-		{
-			if (move_string > -STRING_DISTANCE)
-			{
-				move_string -= 5;
-			}
-			else
-			{
-				cursol++;
-				move_string = 0;
-			}
-
-			if (cursol > PARARYSIS_MAX_NUM - 1)
-			{
-				cursol = 0;
-			}
-			count = 0;
-		}
-	}
-	else if (move_down)
-	{
-		if (move_string > 0)
-		{
-			move_string = 0;
-		}
-		else
-		{
-			if (move_string >= -30)
-			{
-				move_string += 5;
-				if (move_string > 0)
-				{
-					move_string = 0;
-				}
-			}
-			else if (move_string < -30)
-			{
-				if (move_string > -STRING_DISTANCE)
-				{
-					move_string += 5;
-				}
-				else
-				{
-					move_string = 0;
-					cursol++;
-					move_down = false;
-				}
-
-				if (move_string > 0)
-				{
-					move_string -= 5;
-				}
-
-				if (cursol > PARARYSIS_MAX_NUM - 1)
-				{
-					cursol = 0;
-				}
-			}
-		}
-	}
-	else {}
-
-}
-
-
 
 void Pouch::SetElement(ElementItem* item, int i)
 {
