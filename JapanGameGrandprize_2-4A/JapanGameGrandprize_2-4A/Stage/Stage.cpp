@@ -39,6 +39,8 @@ Stage::Stage()
 
 	InitStage();
 
+	//ステージ要素のパラメーターを設定
+	element->SetElementParameter();
 
 	//フラグリセット
 	is_halfway_point = false;
@@ -53,7 +55,7 @@ Stage::Stage()
 //-----------------------------------
 Stage::~Stage()
 {
-	
+
 	// マップチップ画像を削除
 	for (int i = 0; i < 50; i++)
 	{
@@ -258,9 +260,9 @@ void Stage::InitStage(void)
 				if (i == halfway_point_id) {
 					halfway_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
 						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-			};
+					};
 					continue;
-		}
+				}
 
 				//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
 				if (enemy_id.find(i) != enemy_id.end()) {
@@ -272,34 +274,18 @@ void Stage::InitStage(void)
 				}
 
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
-					if (i != MOVE_FLOOR) {
-						element->AddElement(i, {
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-							}, { CHIP_SIZE,CHIP_SIZE });
-					}
-					else {
-						float goal_distance = 0;
-						for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
-							goal_distance++;
-							if (map_data.at(y).at(wx) == MOVE_FLOOR_GOAL) {
-								element->AddElement(i, {
-								x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-								y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-									}, { CHIP_SIZE,goal_distance * CHIP_SIZE });
-								break;
-							}
-						}
-					}
 
-
+					element->AddElement(i, {
+						x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+						}, { CHIP_SIZE,CHIP_SIZE });
 				}
 				else {
 					// 固定ブロックの追加
 					AddFixedMapChip(i, x, y);
 
 				}
-	}
+			}
 
 
 		}
@@ -309,7 +295,7 @@ void Stage::InitStage(void)
 
 void Stage::AddFixedMapChip(short id, float x, float y)
 {
-	if (id == 5) {
+	if (stage_id_base.find(id) != stage_id_base.end()) {
 		int rand = GetRand(4);
 		rand += 5;
 		mapchip.push_back(new MapChip
@@ -320,7 +306,7 @@ void Stage::AddFixedMapChip(short id, float x, float y)
 			}, { CHIP_SIZE,CHIP_SIZE }));
 	}
 
-	if (id == 4) {
+	else if (stage_id_underground.find(id) != stage_id_underground.end()) {
 		int rand = GetRand(4);
 		mapchip.push_back(new MapChip
 		(&stage1_block_images[rand],
@@ -331,7 +317,7 @@ void Stage::AddFixedMapChip(short id, float x, float y)
 	}
 
 	//固定マップチップ
-	if (id < 50 && id != 4 && id != 5) {
+	else if (id < 50) {
 		mapchip.push_back(new MapChip
 		(&block_images[id],
 			{

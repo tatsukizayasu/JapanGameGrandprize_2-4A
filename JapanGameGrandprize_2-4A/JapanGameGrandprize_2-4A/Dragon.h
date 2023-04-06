@@ -22,10 +22,13 @@ class Dragon :public EnemyBase
 {
 private:
 	int animation; //画像のアニメーション
-	int animation_time; //	画像切り替え間隔
 	int magic_num; //遠距離攻撃を使った回数
-	int switchover_time; //攻撃切り替え時間 
+	int attack_method; //攻撃方法
+	int switchover_time; //攻撃切り替え時間
+	int breath_time; //ブレス発射間隔。
 	int effect_time; //毒のダメージを等間隔で出すための時間測定
+	int standby_time; //待機時間測定
+	int animation_time; //	画像切り替え間隔
 
 	bool attack; //接近攻撃
 	bool magic; //魔法攻撃

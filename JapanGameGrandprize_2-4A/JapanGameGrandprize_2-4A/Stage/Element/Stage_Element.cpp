@@ -13,9 +13,9 @@ Stage_Element::~Stage_Element()
 {
 
 	// ì«Ç›çûÇÒÇæëSElementÇÃâÊëúÇâï˙
-	for (const auto& entry : image_cache) 
+	for (const auto& entry : image_cache)
 	{
-		for (auto& value : entry.second) 
+		for (auto& value : entry.second)
 		{
 			DeleteGraph(value);
 		}
@@ -31,7 +31,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 {
 
 #ifndef NODEBUG
-	
+
 	std::vector<int> images = GetImage(type);
 	/*int* images = new int[buf.size()];
 	std::copy(buf.begin(), buf.end(), images);*/
@@ -51,14 +51,19 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case TRAP:
-		element.push_back(std::make_shared<Element_Trap>(type, element, images, Location{location.x, location.y - 5.0f}, Area{ 50.0f , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Trap>(type, element, images, Location{ location.x, location.y - 5.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case MOVE_FLOOR:
 		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
 		break;
 
-	case BARRICADE:
+	case MOVE_FLOOR_GOAL:
+		element.push_back(std::make_shared<Element_Move_Floor>(type, location));
+		break;
+
+	
+	case BARRICADE_CENTER:
 		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, area));
 		break;
 
@@ -66,6 +71,103 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 	}
 #endif // !NODEBUG	
+}
+
+void Stage_Element::SetElementParameter()
+{
+
+
+	//for (auto& m : element)
+	//{
+
+	//	for (int i = 1; i < element.size(); i++) {
+
+	//		if (BARRICADE == m->GetType()) {	
+	//			auto y = element.at(i);
+
+	//			std::shared_ptr<Element_Barricade> result = std::dynamic_pointer_cast<Element_Barricade>(y);
+
+
+	//			if (m.get() == y.get()) {
+	//				result->SetDirection(Element_Barricade::DIRECTION::NONE);
+	//				continue;
+
+	//			}
+
+	//			//y = static_cast<Element_Barricade>(y);
+	//			//shared_ptr<Element_Barricade> dynamic_pointer_cast(const std::shared_ptr<Stage_Element_Base> &y) noexcept;
+	//			//std::shared_ptr<Element_Barricade> result = std::dynamic_pointer_cast<Element_Barricade>(y);
+
+
+
+	//			if (abs(y->GetLocation().x - m->GetLocation().x) <= MAP_CHIP_SIZE &&
+	//				abs(y->GetLocation().y - m->GetLocation().y) <= MAP_CHIP_SIZE)
+	//			{
+	//				if (y->GetLocation().x < m->GetLocation().x)
+	//				{
+	//					result->SetDirection(Element_Barricade::DIRECTION::LEFT);
+	//				}
+	//				else if (y->GetLocation().x > m->GetLocation().x)
+	//				{
+	//					result->SetDirection(Element_Barricade::DIRECTION::RIGHT);
+	//				}
+	//				else if (y->GetLocation().y < m->GetLocation().y)
+	//				{
+	//					result->SetDirection(Element_Barricade::DIRECTION::UP);
+	//				}
+	//				else if (y->GetLocation().y > m->GetLocation().y)
+	//				{
+	//					result->SetDirection(Element_Barricade::DIRECTION::DOWN);
+	//				}
+	//				else if (y->GetLocation().x < m->GetLocation().x && y->GetLocation().x > m->GetLocation().x ||
+	//					y->GetLocation().y < m->GetLocation().y && y->GetLocation().y > m->GetLocation().y)
+	//				{
+	//					result->SetDirection(Element_Barricade::DIRECTION::CENTER);
+	//				}
+	//				else
+	//				{
+	//					result->SetDirection(Element_Barricade::DIRECTION::NONE);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
+	//	else {
+	//	float goal_distance = 0;
+	//	for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
+	//		goal_distance++;
+	//		if (map_data.at(y).at(wx) == MOVE_FLOOR_GOAL) {
+	//			element->AddElement(i, {
+	//			x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+	//			y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+	//				}, { CHIP_SIZE,goal_distance * CHIP_SIZE });
+	//			break;
+	//		}
+	//	}
+	//}
+	//ìÆÇ≠è∞ÇÃñ⁄ïWà íuÇÃê›íË
+	SetMoveFloorNextLocation();
+}
+
+void Stage_Element::SetMoveFloorNextLocation()
+{
+	int element_size = element.size();
+	for (int i = 0; i < element_size; i++)
+	{
+		if (element.at(i)->GetType() == Element::MOVE_FLOOR)
+		{
+			for (int j = i + 1; j < element_size; j++)
+			{
+				if (element.at(j)->GetType() == Element::MOVE_FLOOR_GOAL && element.at(i)->GetLocation().x < element.at(j)->GetLocation().x)
+				{
+					element.at(i)->SetLocation(element.at(j)->GetLocation());
+					i = j + 1;
+					break;
+				}
+			}
+		}
+	}
 }
 
 void Stage_Element::Update(Player* player)
@@ -172,8 +274,11 @@ std::vector<int> Stage_Element::GetImage(short type)
 	case MOVE_FLOOR:
 		filename = "Move_Floor.png";
 		break;
+	case MOVE_FLOOR_GOAL:
+		filename = "DamageWall.png";
+		break;
 
-	case BARRICADE:
+	case BARRICADE_CENTER:
 		filename = "Wooden_Floor.png";
 		break;
 
@@ -204,18 +309,18 @@ std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 
 	GetGraphSize(buf, &image_width, &image_height);
 
-	if (image_width == MAP_CHIP_SIZE && image_height == MAP_CHIP_SIZE) 
+	if (image_width == MAP_CHIP_SIZE && image_height == MAP_CHIP_SIZE)
 	{
 		images.push_back(buf);
 	}
-	else 
+	else
 	{
 		DeleteGraph(buf);
 
 		int x_num = image_width / MAP_CHIP_SIZE;
 		int y_num = image_height / MAP_CHIP_SIZE;
 		int total_num = x_num * y_num;
-		
+
 		std::vector<int> buf_images(total_num);
 
 		LoadDivGraph(TEXT(file_dir.c_str()), total_num, x_num, y_num, MAP_CHIP_SIZE, MAP_CHIP_SIZE, &buf_images[0]);
@@ -235,4 +340,4 @@ std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 	return images;
 
 	//return std::vector<int>();
-}
+	}
