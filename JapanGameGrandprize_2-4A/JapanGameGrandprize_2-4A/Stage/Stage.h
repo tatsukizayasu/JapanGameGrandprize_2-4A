@@ -12,6 +12,11 @@ class Player;
 
 class Stage_Element;
 
+namespace Ground {
+	const short STAGE01_BASE = 5;			//Stage1 足場ブロック
+	const short STAGE01_UNDERGROUND = 4;			//Stage1 地中ブロック
+}
+
 struct ENEMY_LOCATION
 {
 	short id;
@@ -53,9 +58,14 @@ private:
 
 	//背景画像
 	int background_images;
-	//ブロック画像
 	int block_images[50];
 	int stage1_block_images[10];
+
+	//ステージ足場ブロックのID
+	std::set<short> stage_id_base{ Ground::STAGE01_BASE };
+
+	//ステージ地中ブロックのID
+	std::set<short> stage_id_underground{ Ground::STAGE01_UNDERGROUND };
 
 
 protected:

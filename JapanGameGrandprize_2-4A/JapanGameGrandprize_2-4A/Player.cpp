@@ -145,6 +145,7 @@ Player::Player(Stage* stage)
 	normal.material.uranium = 0;
 	normal.number_of_bullets = 50;
 	normal.time = 0;
+	normal.make_bool = true;
 
 	bullet = new BulletBase * [BULLET_MAX];
 
@@ -303,30 +304,30 @@ void Player::Draw() const
 	//è„ÇÃëIëéà
 	if (display_attribute - 1 < 0)
 	{
-		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute + 5]);
+		DrawFormatString(1000, 10, 0xffffff, "%s", attribute_c[display_attribute + 5]);
 		ChemicalFormulaDraw(display_attribute + 5, -40);
 	}
 	else
 	{
-		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute - 1]);
+		DrawFormatString(1000, 10, 0xffffff, "%s", attribute_c[display_attribute - 1]);
 		ChemicalFormulaDraw(display_attribute - 1, -40);
 	}
 
 	//â∫ÇÃëIëéà
 	if (display_attribute + 1 > 5)
 	{
-		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute - 5]);
+		DrawFormatString(1000, 90, 0xffffff, "%s", attribute_c[display_attribute - 5]);
 		ChemicalFormulaDraw(display_attribute + 5, 40);
 	}
 	else
 	{
-		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute + 1]);
+		DrawFormatString(1000, 90, 0xffffff, "%s", attribute_c[display_attribute + 1]);
 		ChemicalFormulaDraw(display_attribute + 1, 40);
 	}
 
 	//åªç›ÇÃëIëéà
 	DrawCircle(990, 60, 5, 0x000000, TRUE);
-	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
+	DrawFormatString(1000, 50, 0xffffff, "%s", attribute_c[display_attribute]);
 	ChemicalFormulaDraw(display_attribute, 0);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
@@ -564,13 +565,18 @@ void Player::Update()
 				{
 					if (heal != nullptr)
 					{
-						if (heal->number_of_bullets > 0)
+						if (heal != nullptr)
 						{
-							Hp_Heal(pouch->GetHeal()->damage);
-						}
-						else
-						{
-							heal = nullptr;
+							if (hp < HP_MAX)
+							{
+								Hp_Heal(heal->damage);
+							}
+							if (heal->number_of_bullets <= 0)
+							{
+								display_attribute = 0;
+								heal = nullptr;
+								pouch->InitializeHeal();
+							}
 						}
 					}
 				}
@@ -867,9 +873,14 @@ void Player::Hovering()
 	}
 
 
-
-
-	fuel -= 0.15;
+	if (fuel < 0)
+	{
+		fuel = 0;
+	}
+	else
+	{
+		fuel -= 0.5;
+	}
 }
 
 //îÚÇ‘
@@ -997,6 +1008,7 @@ void Player::Shoot_Gun()
 					}
 					if (explosion->number_of_bullets <= 0)
 					{
+						display_attribute = 0;
 						explosion = nullptr;
 						pouch->InitializeExplosion();
 					}
@@ -1016,6 +1028,7 @@ void Player::Shoot_Gun()
 					}
 					if (melt->number_of_bullets <= 0)
 					{
+						display_attribute = 0;
 						melt = nullptr;
 						pouch->InitializeMelt();
 					}
@@ -1035,6 +1048,7 @@ void Player::Shoot_Gun()
 					}
 					if (poison->number_of_bullets <= 0)
 					{
+						display_attribute = 0;
 						poison = nullptr;
 						pouch->InitializePoison();
 					}
@@ -1054,11 +1068,15 @@ void Player::Shoot_Gun()
 					}
 					if (pararysis->number_of_bullets <= 0)
 					{
+						display_attribute = 0;
 						pararysis = nullptr;
 						pouch->InitializePararysis();
 					}
 				}
 			}
+			break;
+		case 5:
+
 			break;
 		default:
 			break;
@@ -1093,27 +1111,95 @@ void Player::SortBullet(int delete_bullet)
 //-----------------------------------
 void Player::ElementUpdate()
 {
+	bool chemical_formula[6];
+	for (int i = 0; i < 6; i++)
+	{
+		chemical_formula[i] = false;
+	}
+	chemical_formula[0] = normal.make_bool;
+	if (explosion != nullptr)
+	{
+		chemical_formula[1] = explosion->make_bool;
+	}
+	if (melt != nullptr)
+	{
+		chemical_formula[2] = melt->make_bool;
+	}
+	if (poison != nullptr)
+	{
+		chemical_formula[3] = poison->make_bool;
+	}
+	if (pararysis != nullptr)
+	{
+		chemical_formula[4] = pararysis->make_bool;
+	}
+	if (heal != nullptr)
+	{
+		chemical_formula[5] = heal->make_bool;
+	}
 
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
-		if (select_count % 20 == 0)
+		if (select_count % 10 == 0)
 		{
-			display_attribute--;
-			if (display_attribute < 0)
+			int a = display_attribute - 1;
+			if (a < 0)
 			{
-				display_attribute = 5;
+				a = 5;
+			}
+			while (!chemical_formula[a])
+			{
+				display_attribute--;
+				if (display_attribute < 0)
+				{
+					display_attribute = 5;
+				}
+				a--;
+				if (a < 0)
+				{
+					a = 5;
+				}
+			}
+			if (chemical_formula[a])
+			{
+				display_attribute--;
+				if (display_attribute < 0)
+				{
+					display_attribute = 5;
+				}
 			}
 		}
 	}
 
 	if (PAD_INPUT::GetRStick().y < -5000)
 	{
-		if (select_count % 20 == 0)
+		if (select_count % 10 == 0)
 		{
-			display_attribute++;
-			if (display_attribute > 5)
+			int a = display_attribute + 1;
+			if (a > 5)
 			{
-				display_attribute = 0;
+				a = 0;
+			}
+			while (!chemical_formula[a])
+			{
+				display_attribute++;
+				if (display_attribute > 5)
+				{
+					display_attribute = 0;
+				}
+				a++;
+				if (a > 5)
+				{
+					a = 0;
+				}
+			}
+			if (chemical_formula[a])
+			{
+				display_attribute++;
+				if (display_attribute > 5)
+				{
+					display_attribute = 0;
+				}
 			}
 		}
 	}
@@ -1240,7 +1326,6 @@ bool Player::GetMoveDirection()
 
 void Player::SetExplosion(ChemicalFormulaParameter* a)
 {
-
 	explosion = a;
 }
 
@@ -1258,7 +1343,6 @@ void Player::SetMelt(ChemicalFormulaParameter* a)
 
 void Player::SetPararysis(ChemicalFormulaParameter* a)
 {
-
 	pararysis = a;
 }
 
