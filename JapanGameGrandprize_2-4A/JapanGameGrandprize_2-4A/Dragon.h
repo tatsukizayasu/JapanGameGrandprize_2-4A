@@ -23,7 +23,7 @@ class Dragon :public EnemyBase
 private:
 	int animation; //画像のアニメーション
 	int animation_time; //	画像切り替え間隔
-
+	int magic_num; //遠距離攻撃を使った回数
 	bool attack; //攻撃が当たったのか
 
 
