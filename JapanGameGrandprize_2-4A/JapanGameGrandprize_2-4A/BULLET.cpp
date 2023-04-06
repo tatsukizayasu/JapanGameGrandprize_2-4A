@@ -30,13 +30,13 @@ bool BulletBase::GetEfectFlg() const
 	return efect_end;
 }
 
-float BulletBase::GetDamage() const
+int BulletBase::GetDamage() const
 {
 
 	return damage;
 }
 
-float BulletBase::GetDebuffTime() const
+int BulletBase::GetDebuffTime() const
 {
 
 	return debuff_time;

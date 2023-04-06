@@ -850,6 +850,12 @@ void Pouch::ExplosionTabUpdate()
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
 		move_up = true;
+
+		if (move_string < 0)
+		{
+			move_string = 0;
+		}
+
 		if (move_string < STRING_DISTANCE)
 		{
 			move_string += 5;
@@ -867,6 +873,11 @@ void Pouch::ExplosionTabUpdate()
 	}
 	else if (move_up)
 	{
+		if (move_string < 0)
+		{
+			move_string = 0;
+		}
+
 		if (move_string <= 30)
 		{
 			move_string -= 5;
@@ -898,6 +909,11 @@ void Pouch::ExplosionTabUpdate()
 	if (PAD_INPUT::GetRStick().y < -5000)
 	{
 		move_down = true;
+
+		if (move_string > 0)
+		{
+			move_string = 0;
+		}
 		
 		if (move_string > -STRING_DISTANCE)
 		{
@@ -916,6 +932,11 @@ void Pouch::ExplosionTabUpdate()
 	}
 	else if (move_down)
 	{
+		if (move_string > 0)
+		{
+			move_string = 0;
+		}
+
 		if (move_string >= -30)
 		{
 			move_string += 5;
@@ -1254,32 +1275,11 @@ void Pouch::ParalysisTabUpdate()
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
 		move_up = true;
-		if (move_string < STRING_DISTANCE)
+		if (move_string < 0)
 		{
-			move_string += 5;
-		}
-		else
-		{
-			cursol--;
 			move_string = 0;
 		}
-		if (cursol < 0)
-		{
-			cursol = PARARYSIS_MAX_NUM - 1;
-		}
-		count = 0;
-	}
-	else if (move_up)
-	{
-		if (move_string <= 30)
-		{
-			move_string -= 5;
-			if (move_string < 0)
-			{
-				move_string = 0;
-			}
-		}
-		else if (move_string > 30)
+		else
 		{
 			if (move_string < STRING_DISTANCE)
 			{
@@ -1287,13 +1287,50 @@ void Pouch::ParalysisTabUpdate()
 			}
 			else
 			{
-				move_string = 0;
 				cursol--;
-				move_up = false;
+				move_string = 0;
 			}
 			if (cursol < 0)
 			{
 				cursol = PARARYSIS_MAX_NUM - 1;
+			}
+			count = 0;
+		}
+	}
+	else if (move_up)
+	{
+		if (move_string < 0)
+		{
+			move_string = 0;
+		}
+		else
+		{
+			if (move_string <= 30)
+			{
+				move_string -= 5;
+				if (move_string < 0)
+				{
+					move_string = 0;
+				}
+			}
+			else if (move_string > 30)
+			{
+				if (move_string < STRING_DISTANCE)
+				{
+					move_string += 5;
+				}
+				else
+				{
+					move_string = 0;
+					cursol--;
+					move_up = false;
+				}
+
+
+				if (cursol < 0)
+				{
+					cursol = PARARYSIS_MAX_NUM - 1;
+				}
 			}
 		}
 	}
@@ -1303,46 +1340,67 @@ void Pouch::ParalysisTabUpdate()
 	{
 		move_down = true;
 
-		if (move_string > -STRING_DISTANCE)
+		if (move_string > 0)
 		{
-			move_string -= 5;
+			move_string = 0;
 		}
 		else
 		{
-			cursol++;
-			move_string = 0;
-		}
-		if (cursol > PARARYSIS_MAX_NUM - 1)
-		{
-			cursol = 0;
-		}
-		count = 0;
-	}
-	else if (move_down)
-	{
-		if (move_string >= -30)
-		{
-			move_string += 5;
-			if (move_string > 0)
-			{
-				move_string = 0;
-			}
-		}
-		else if (move_string < -30)
-		{
 			if (move_string > -STRING_DISTANCE)
 			{
-				move_string += 5;
+				move_string -= 5;
 			}
 			else
 			{
-				move_string = 0;
 				cursol++;
-				move_down = false;
+				move_string = 0;
 			}
+
 			if (cursol > PARARYSIS_MAX_NUM - 1)
 			{
 				cursol = 0;
+			}
+			count = 0;
+		}
+	}
+	else if (move_down)
+	{
+		if (move_string > 0)
+		{
+			move_string = 0;
+		}
+		else
+		{
+			if (move_string >= -30)
+			{
+				move_string += 5;
+				if (move_string > 0)
+				{
+					move_string = 0;
+				}
+			}
+			else if (move_string < -30)
+			{
+				if (move_string > -STRING_DISTANCE)
+				{
+					move_string += 5;
+				}
+				else
+				{
+					move_string = 0;
+					cursol++;
+					move_down = false;
+				}
+
+				if (move_string > 0)
+				{
+					move_string -= 5;
+				}
+
+				if (cursol > PARARYSIS_MAX_NUM - 1)
+				{
+					cursol = 0;
+				}
 			}
 		}
 	}

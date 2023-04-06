@@ -29,8 +29,8 @@ Player::Player()
 	shoot_count = 0;
 	flashing_count = 0;
 	damage_count = 0;
-	jump = 0.0;
-	jump_power = 0.0;
+	fly = 0.0;
+	fly_power = 0.0;
 	not_jet_count = 0;
 	speed_x = 0.0;
 	fuel = 100.0;
@@ -39,6 +39,7 @@ Player::Player()
 	old_y = 0.0;
 	damage = 0;
 	image_count = 0;
+	jump_power = 0.0f;
 
 	bullet = new BulletBase * [BULLET_MAX];
 
@@ -118,20 +119,22 @@ Player::Player(Stage* stage)
 	select_count = 0;
 	damage = 0;
 	flashing_count = 0;
-	jump = 0.0;
-	jump_power = 0.0;
+	fly = 0.0;
+	fly_power = 0.0;
 	not_jet_count = 0;
 	speed_x = 0.0;
 	old_x = 0.0;
 	old_y = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
+	jump_power = 100.0f;
+	jump_bottun_count = 0;
 	image_count = 0;
 
 	normal.atribute = ATTRIBUTE::NORMAL;
 	normal.chemical_formula[0] = 'n';
 	normal.chemical_formula_name[0] = 'a';
-	normal.damage = 2;
+	normal.damage = 5;
 	normal.damage_per_second = 0;
 	normal.material.carbon = 0;
 	normal.material.chlorine = 0;
@@ -142,6 +145,7 @@ Player::Player(Stage* stage)
 	normal.material.uranium = 0;
 	normal.number_of_bullets = 50;
 	normal.time = 0;
+	normal.make_bool = true;
 
 	bullet = new BulletBase * [BULLET_MAX];
 
@@ -300,34 +304,37 @@ void Player::Draw() const
 	//上の選択肢
 	if (display_attribute - 1 < 0)
 	{
-		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute + 5]);
+		DrawFormatString(1000, 10, 0xffffff, "%s", attribute_c[display_attribute + 5]);
 		ChemicalFormulaDraw(display_attribute + 5, -40);
 	}
 	else
 	{
-		DrawFormatString(1000, 10, 0x778877, "%s", attribute_c[display_attribute - 1]);
+		DrawFormatString(1000, 10, 0xffffff, "%s", attribute_c[display_attribute - 1]);
 		ChemicalFormulaDraw(display_attribute - 1, -40);
 	}
 
 	//下の選択肢
 	if (display_attribute + 1 > 5)
 	{
-		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute - 5]);
+		DrawFormatString(1000, 90, 0xffffff, "%s", attribute_c[display_attribute - 5]);
 		ChemicalFormulaDraw(display_attribute + 5, 40);
 	}
 	else
 	{
-		DrawFormatString(1000, 90, 0x778877, "%s", attribute_c[display_attribute + 1]);
+		DrawFormatString(1000, 90, 0xffffff, "%s", attribute_c[display_attribute + 1]);
 		ChemicalFormulaDraw(display_attribute + 1, 40);
 	}
 
 	//現在の選択肢
 	DrawCircle(990, 60, 5, 0x000000, TRUE);
-	DrawFormatString(1000, 50, 0x778877, "%s", attribute_c[display_attribute]);
+	DrawFormatString(1000, 50, 0xffffff, "%s", attribute_c[display_attribute]);
 	ChemicalFormulaDraw(display_attribute, 0);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
+}
 
+void Player::PouchDraw() const
+{
 	if (pouch_open)
 	{
 		pouch->Draw();
@@ -420,7 +427,6 @@ void Player::Update()
 			else
 			{
 				hp = 0;
-				player_state = PLAYER_STATE::DEATH;
 			}
 		}
 
@@ -469,6 +475,7 @@ void Player::Update()
 			}
 		}
 	}
+
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
@@ -558,13 +565,18 @@ void Player::Update()
 				{
 					if (heal != nullptr)
 					{
-						if (heal->number_of_bullets > 0)
+						if (heal != nullptr)
 						{
-							Hp_Heal(pouch->GetHeal()->damage);
-						}
-						else
-						{
-							heal = nullptr;
+							if (hp < HP_MAX)
+							{
+								Hp_Heal(heal->damage);
+							}
+							if (heal->number_of_bullets <= 0)
+							{
+								display_attribute = 0;
+								heal = nullptr;
+								pouch->InitializeHeal();
+							}
 						}
 					}
 				}
@@ -577,21 +589,31 @@ void Player::Update()
 		}
 	}
 
-	//Bボタン入力
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B) && fuel > 0)
+	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
-		Jump();
+		Hovering();
 	}
-	//Bボタン未入力
 	else
 	{
-		NotJump();
-	}
+		//Bボタン長押し
+		if (PAD_INPUT::GetOldKey(XINPUT_BUTTON_B) & PAD_INPUT::GetNowKey(XINPUT_BUTTON_B)
+			&& fuel > 0)
+		{
+			Fly();
+		}
+		//Bボタン未入力
+		else
+		{
+			jump_bottun_count = 0;
+			NotFly();
+		}
 
-	//Bボタン解放時
-	if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
-	{
-		player_state = PLAYER_STATE::DOWN;
+
+		//Bボタン解放時
+		if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
+		{
+			player_state = PLAYER_STATE::DOWN;
+		}
 	}
 
 	//弾のアップデート呼び出し
@@ -616,6 +638,11 @@ void Player::Update()
 	if (!pouch_open)
 	{
 		ElementUpdate();
+	}
+
+	if (hp <= 0)
+	{
+		player_state = PLAYER_STATE::DEATH;
 	}
 }
 
@@ -766,21 +793,113 @@ void Player::RightMove()
 	}
 }
 
+
 //ジャンプ
 void Player::Jump()
 {
+	float jump;
+	float y = location.y - CameraWork::GetCamera().y;
+	jump = jump_power - GRAVITY;
+	if (jump > 0)
+	{
+		jump_power -= 0.25;
+	}
+	else
+	{
+		jump_power = 20.0f;
+	}
+
+	if (jump < 0)
+	{
+		player_state = PLAYER_STATE::DOWN;
+	}
+
+	if (!HitBlock(stage) || y > 0)
+	{
+		location.y -= jump;
+	}
+
+	if (HitBlock(stage))
+	{
+		jump_power = 0.0;
+		location.y = old_y;
+	}
+}
+
+
+void Player::Hovering()
+{
+	if (fly > 0)
+	{
+		if (!HitBlock(stage))
+		{
+			fly -= 0.5;
+			location.y -= fly;
+
+
+			if (location.y < 40.0)
+			{
+				location.y = 40.0;
+			}
+		}
+
+		if (HitBlock(stage))
+		{
+			fly = 0.0;
+			location.y = old_y;
+		}
+	}
+	else if (fly < 0)
+	{
+		if (!HitBlock(stage))
+		{
+			fly += 0.5;
+			location.y -= fly;
+			if (location.y < 40.0)
+			{
+				location.y = 40.0;
+				fly = 0;
+			}
+		}
+		if (HitBlock(stage))
+		{
+			fly = 0.0;
+			location.y = old_y;
+		}
+	}
+	else
+	{
+		fly = 0;
+	}
+
+
+	if (fuel < 0)
+	{
+		fuel = 0;
+	}
+	else
+	{
+		fuel -= 0.5;
+	}
+}
+
+//飛ぶ
+void Player::Fly()
+{
+
+	float y = location.y - CameraWork::GetCamera().y;
 	image_count = 0;
-	player_state = PLAYER_STATE::JUMP;
+	player_state = PLAYER_STATE::FLY;
 	not_jet_count = 0;
 
 	gravity_down = 0.0;
 
-	jump += 0.25;
+	fly += 0.5;
 	fuel -= 0.25;
 
-	if (jump > 10)
+	if (fly > 10)
 	{
-		jump = 10.0;
+		fly = 10.0;
 	}
 
 	if (fuel < 0)
@@ -791,27 +910,37 @@ void Player::Jump()
 
 	if (!HitBlock(stage))
 	{
-		location.y -= jump;
+
+		location.y -= fly;
+
+
+		if (location.y < 40.0)
+		{
+			location.y = 40.0;
+		}
 	}
 
 	if (HitBlock(stage))
 	{
-		jump = 0.0;
+		fly = 0.0;
 		location.y = old_y;
 	}
 }
 
-//ジャンプしてない
-void Player::NotJump()
+
+
+//飛んでない
+void Player::NotFly()
 {
+	float y = location.y - CameraWork::GetCamera().y;
 
 	player_state = PLAYER_STATE::DOWN;
 
-	jump -= 0.25;
+	fly -= 0.5;
 
-	if (jump < -10)
+	if (fly < -10)
 	{
-		jump = -10;
+		fly = -10;
 	}
 
 	if (not_jet_count++ >= 120)
@@ -833,16 +962,25 @@ void Player::NotJump()
 
 	if (!HitBlock(stage))
 	{
-		location.y -= jump;
+		location.y -= fly;
+		if (location.y < 40.0)
+		{
+			location.y = 40.0;
+			fly = 0;
+		}
 	}
+
+
 
 	if (HitBlock(stage))
 	{
-		jump = 0;
+		fly = 0;
 		location.y = old_y;
 		player_state = PLAYER_STATE::STOP;
 	}
 }
+
+
 
 //-----------------------------------
 // 弾を発射
@@ -870,6 +1008,7 @@ void Player::Shoot_Gun()
 					}
 					if (explosion->number_of_bullets <= 0)
 					{
+						display_attribute = 0;
 						explosion = nullptr;
 						pouch->InitializeExplosion();
 					}
@@ -889,6 +1028,7 @@ void Player::Shoot_Gun()
 					}
 					if (melt->number_of_bullets <= 0)
 					{
+						display_attribute = 0;
 						melt = nullptr;
 						pouch->InitializeMelt();
 					}
@@ -908,6 +1048,7 @@ void Player::Shoot_Gun()
 					}
 					if (poison->number_of_bullets <= 0)
 					{
+						display_attribute = 0;
 						poison = nullptr;
 						pouch->InitializePoison();
 					}
@@ -927,17 +1068,23 @@ void Player::Shoot_Gun()
 					}
 					if (pararysis->number_of_bullets <= 0)
 					{
+						display_attribute = 0;
 						pararysis = nullptr;
 						pouch->InitializePararysis();
 					}
 				}
 			}
 			break;
+		case 5:
+
+			break;
 		default:
 			break;
 		}
 	}
 }
+
+
 
 //-----------------------------------
 // 弾を並べ替え
@@ -957,38 +1104,110 @@ void Player::SortBullet(int delete_bullet)
 	bullet_count--;
 }
 
+
+
 //-----------------------------------
 //属性を変更
 //-----------------------------------
 void Player::ElementUpdate()
 {
+	bool chemical_formula[6];
+	for (int i = 0; i < 6; i++)
+	{
+		chemical_formula[i] = false;
+	}
+	chemical_formula[0] = normal.make_bool;
+	if (explosion != nullptr)
+	{
+		chemical_formula[1] = explosion->make_bool;
+	}
+	if (melt != nullptr)
+	{
+		chemical_formula[2] = melt->make_bool;
+	}
+	if (poison != nullptr)
+	{
+		chemical_formula[3] = poison->make_bool;
+	}
+	if (pararysis != nullptr)
+	{
+		chemical_formula[4] = pararysis->make_bool;
+	}
+	if (heal != nullptr)
+	{
+		chemical_formula[5] = heal->make_bool;
+	}
 
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
-		if (select_count % 20 == 0)
+		if (select_count % 10 == 0)
 		{
-			display_attribute--;
-			if (display_attribute < 0)
+			int a = display_attribute - 1;
+			if (a < 0)
 			{
-				display_attribute = 5;
+				a = 5;
+			}
+			while (!chemical_formula[a])
+			{
+				display_attribute--;
+				if (display_attribute < 0)
+				{
+					display_attribute = 5;
+				}
+				a--;
+				if (a < 0)
+				{
+					a = 5;
+				}
+			}
+			if (chemical_formula[a])
+			{
+				display_attribute--;
+				if (display_attribute < 0)
+				{
+					display_attribute = 5;
+				}
 			}
 		}
 	}
 
 	if (PAD_INPUT::GetRStick().y < -5000)
 	{
-		if (select_count % 20 == 0)
+		if (select_count % 10 == 0)
 		{
-			display_attribute++;
-			if (display_attribute > 5)
+			int a = display_attribute + 1;
+			if (a > 5)
 			{
-				display_attribute = 0;
+				a = 0;
+			}
+			while (!chemical_formula[a])
+			{
+				display_attribute++;
+				if (display_attribute > 5)
+				{
+					display_attribute = 0;
+				}
+				a++;
+				if (a > 5)
+				{
+					a = 0;
+				}
+			}
+			if (chemical_formula[a])
+			{
+				display_attribute++;
+				if (display_attribute > 5)
+				{
+					display_attribute = 0;
+				}
 			}
 		}
 	}
 
 	select_count++;
 }
+
+
 
 //-----------------------------------
 //ダメージを受けた時
@@ -1035,9 +1254,13 @@ void Player::HpDamage(AttackResource attack)
 	}
 }
 
+
+
 ////敵からダメージを受けた時
 //void Player::Being_Attacked(EnemyBase* enemy_base)
 //{}
+
+
 
 //回復
 //-----------------------------------
@@ -1103,7 +1326,6 @@ bool Player::GetMoveDirection()
 
 void Player::SetExplosion(ChemicalFormulaParameter* a)
 {
-
 	explosion = a;
 }
 
@@ -1121,7 +1343,6 @@ void Player::SetMelt(ChemicalFormulaParameter* a)
 
 void Player::SetPararysis(ChemicalFormulaParameter* a)
 {
-
 	pararysis = a;
 }
 

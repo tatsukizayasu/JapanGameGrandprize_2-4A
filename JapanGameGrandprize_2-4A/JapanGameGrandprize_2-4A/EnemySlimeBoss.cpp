@@ -19,7 +19,6 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	area.height = 50;
 	area.width = 50;
 
-
 	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 
 	for (int i = 0; i < BODY_MAX; i++)
@@ -114,11 +113,11 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 				if (left_move)speed = -SLIME_BOSS_SPEED;
 				else speed = SLIME_BOSS_SPEED;
 			}
-			/*if (ScreenOut())
+			if (ScreenOut())
 			{
 				state = ENEMY_STATE::IDOL;
 				speed = 0;
-			}*/
+			}
 		}
 		else
 		{
@@ -154,11 +153,11 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			}
 
 		}
-		/*if (ScreenOut())
+		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
 			speed = 0;
-		}*/
+		}
 		break;
 
 	case ENEMY_STATE::ATTACK:
