@@ -41,10 +41,9 @@ private:
 	std::vector<std::shared_ptr<Stage_Element_Base>> element;
 	Player* player;
 
-
 	//ステージ要素のID
 	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, TRAP,
-		MOVE_FLOOR, BARRICADE_UP, BARRICADE_CENTER, BARRICADE_DOWN, YellowButton };
+		MOVE_FLOOR, MOVE_FLOOR_GOAL, BARRICADE_UP, BARRICADE_CENTER, BARRICADE_DOWN, YellowButton };
 public:
 
 	//コンストラクタ
