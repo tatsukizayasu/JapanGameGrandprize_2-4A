@@ -114,11 +114,11 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 				if (left_move)speed = -SLIME_BOSS_SPEED;
 				else speed = SLIME_BOSS_SPEED;
 			}
-			/*if (ScreenOut())
+			if (ScreenOut())
 			{
 				state = ENEMY_STATE::IDOL;
 				speed = 0;
-			}*/
+			}
 		}
 		else
 		{
@@ -154,11 +154,11 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			}
 
 		}
-		/*if (ScreenOut())
+		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
 			speed = 0;
-		}*/
+		}
 		break;
 
 	case ENEMY_STATE::ATTACK:

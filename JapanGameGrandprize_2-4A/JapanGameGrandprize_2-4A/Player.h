@@ -32,6 +32,7 @@ enum class PLAYER_STATE
 	MOVE_LEFT,
 	MOVE_RIGHT,
 	JUMP,
+	FLY,
 	DOWN,
 	DEATH
 };
@@ -47,14 +48,19 @@ private:
 	int hp;							//体力
 	int bullet_count;				//撃った弾の数
 	int shoot_count;                //処理をカウントする
+
+
+	float jump_power;				//ジャンプのパワー
+	int jump_bottun_count;			//ジャンプボタンを入力している時間を数える	
 	int not_jet_count;              //跳んでない時を数える
 	float gravity_down;				//下降時の値
 	float fuel;						//燃料
-	float jump;                     //ジャンプの値
-	float jump_power;               //ジャンプの力
+	float fly;                     //ホバリングの値
+	float fly_power;               //ホバリングの力
 	float speed_x;
 	float old_x, old_y;				//壁とかに当たった時に元の位置に戻すための変数
 	int select_count;
+
 	int damage_count;				//無敵時間
 	int flashing_count;				//点滅の間隔
 	int i;                          //スイッチ内でのループ用
@@ -62,9 +68,9 @@ private:
 	int damage_by_second;			//敵からの持続ダメ値
 	int damage_second;				//持続ダメの時間カウント用
 	int damage_time;				//持続ダメのマックス時間
+
 	bool fire_flg;					//火の持続ダメ中のフラグ
 	bool fire_second_bool;			//火の持続ダメを食らっているときのフラグ
-
 	bool damage_flg;				//ダメージを受けたかどうかのフラグ
 	bool move_left;					//プレイヤーの向き true:左　false:右
 	bool pouch_open;				//ポーチを開けている
@@ -96,6 +102,7 @@ public:
 	Player(Stage*);
 	~Player();
 	void Draw()const;
+	void PouchDraw()const;
 	void ChemicalFormulaDraw(int,int) const;
 	void Update();
 	void ElementUpdate();
@@ -104,13 +111,14 @@ public:
 	void LeftMove();
 	void NotInputStick();
 	void Jump();
-	void NotJump();
+	void Hovering();
+	void Fly();
+	void NotFly();
 	void Shoot_Gun();
 	void SortBullet(int);
 	void HpDamage(AttackResource);
 	void Hp_Heal(int);
 	bool HitBlock(const Stage*);
-	void OpenPouch();
 
 	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
