@@ -151,6 +151,7 @@ void Pouch::ExplosionTabDraw() const
 		{
 			up_cursol = cursol - 2;
 		}
+
 		if (ComparisonElement(chemical_formula_explosion[up_cursol]))
 		{
 			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s", chemical_formula_explosion[up_cursol].chemical_formula_name);
@@ -333,11 +334,11 @@ void Pouch::ParalysisTabDraw()const
 	{
 		if (can_create[1])
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol + (PARARYSIS_MAX_NUM - 1)].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol + (PARARYSIS_MAX_NUM - 1)].chemical_formula_name);
 		}
 	}
 	else
@@ -356,11 +357,11 @@ void Pouch::ParalysisTabDraw()const
 	{
 		if (can_create[2])
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol - (PARARYSIS_MAX_NUM - 1)].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol - (PARARYSIS_MAX_NUM - 1)].chemical_formula_name);
 		}
 	}
 	else
@@ -397,6 +398,7 @@ void Pouch::ParalysisTabDraw()const
 		{
 			up_cursol = cursol - 2;
 		}
+
 		if (ComparisonElement(chemical_formula_pararysis[up_cursol]))
 		{
 			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s", chemical_formula_pararysis[up_cursol].chemical_formula_name);
@@ -456,11 +458,11 @@ void Pouch::PoisonTabDraw()const
 	{
 		if (can_create[1])
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_poison[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_poison[cursol + (POISON_MAX_NUM - 1)].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_poison[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_poison[cursol + (POISON_MAX_NUM - 1)].chemical_formula_name);
 		}
 	}
 	else
@@ -479,11 +481,11 @@ void Pouch::PoisonTabDraw()const
 	{
 		if (can_create[2])
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_poison[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_poison[cursol - (POISON_MAX_NUM - 1)].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_poison[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_poison[cursol - (POISON_MAX_NUM - 1)].chemical_formula_name);
 		}
 	}
 	else
@@ -578,22 +580,26 @@ void Pouch::HealTabDraw()const
 	{
 		if (can_create[1])
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_heal[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s",
+			chemical_formula_heal[cursol + (HEAL_MAX_NUM - 1)].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_heal[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", 
+			chemical_formula_heal[cursol + (HEAL_MAX_NUM - 1)].chemical_formula_name);
 		}
 	}
 	else
 	{
 		if (can_create[1])
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_heal[cursol - 1].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s",
+				chemical_formula_heal[cursol - 1].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_heal[cursol - 1].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s",
+				chemical_formula_heal[cursol - 1].chemical_formula_name);
 		}
 	}
 
@@ -601,34 +607,41 @@ void Pouch::HealTabDraw()const
 	{
 		if (can_create[2])
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_heal[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s",
+			chemical_formula_heal[cursol - (HEAL_MAX_NUM - 1)].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_heal[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s",
+			chemical_formula_heal[cursol - (HEAL_MAX_NUM - 1)].chemical_formula_name);
 		}
 	}
 	else
 	{
 		if (can_create[2])
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_heal[cursol + 1].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s",
+				chemical_formula_heal[cursol + 1].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xfffffff, "%s", chemical_formula_heal[cursol + 1].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_THREE + move_string, 0xfffffff, "%s",
+				chemical_formula_heal[cursol + 1].chemical_formula_name);
 		}
 	}
 
-	DrawBox(POUCH_START_X, POUCH_START_Y + 200, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + 300, 0xffffff, FALSE);
+	DrawBox(POUCH_START_X, POUCH_START_Y + 200, POUCH_START_X + POUCH_WIDTH,
+		POUCH_START_Y + 300, 0xffffff, FALSE);
 
 	if (can_create[1])
 	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0x000000, "%s", chemical_formula_heal[cursol].chemical_formula_name);
+		DrawFormatString(x, y + OPTION_TWO + move_string, 0x000000, "%s",
+			chemical_formula_heal[cursol].chemical_formula_name);
 	}
 	else
 	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0xffffff, "%s", chemical_formula_heal[cursol].chemical_formula_name);
+		DrawFormatString(x, y + OPTION_TWO + move_string, 0xffffff, "%s",
+			chemical_formula_heal[cursol].chemical_formula_name);
 	}
 
 	if (move_up)
@@ -644,11 +657,13 @@ void Pouch::HealTabDraw()const
 		}
 		if (ComparisonElement(chemical_formula_heal[up_cursol]))
 		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s", chemical_formula_heal[up_cursol].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s",
+				chemical_formula_heal[up_cursol].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0xffffff, "%s", chemical_formula_heal[up_cursol].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ZERO + move_string, 0xffffff, "%s",
+				chemical_formula_heal[up_cursol].chemical_formula_name);
 		}
 	}
 
@@ -665,15 +680,18 @@ void Pouch::HealTabDraw()const
 		}
 		if (ComparisonElement(chemical_formula_heal[down_cursol]))
 		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0x000000, "%s", chemical_formula_heal[down_cursol].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_FOUR + move_string, 0x000000, "%s",
+				chemical_formula_heal[down_cursol].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0xffffff, "%s", chemical_formula_heal[down_cursol].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_FOUR + move_string, 0xffffff, "%s",
+				chemical_formula_heal[down_cursol].chemical_formula_name);
 		}
 	}
 
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
+	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, 
+		POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "HEAL", 0x000000);
 }
 
@@ -722,9 +740,6 @@ void Pouch::Draw() const
 //アップデート
 void Pouch::Update()
 {
-
-
-
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
 		cursol = 0;
