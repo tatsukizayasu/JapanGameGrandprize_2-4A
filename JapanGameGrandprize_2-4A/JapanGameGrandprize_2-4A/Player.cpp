@@ -29,8 +29,8 @@ Player::Player()
 	shoot_count = 0;
 	flashing_count = 0;
 	damage_count = 0;
-	jump = 0.0;
-	jump_power = 0.0;
+	fly = 0.0;
+	fly_power = 0.0;
 	not_jet_count = 0;
 	speed_x = 0.0;
 	fuel = 100.0;
@@ -39,6 +39,7 @@ Player::Player()
 	old_y = 0.0;
 	damage = 0;
 	image_count = 0;
+	jump_power = 0.0f;
 
 	bullet = new BulletBase * [BULLET_MAX];
 
@@ -118,20 +119,22 @@ Player::Player(Stage* stage)
 	select_count = 0;
 	damage = 0;
 	flashing_count = 0;
-	jump = 0.0;
-	jump_power = 0.0;
+	fly = 0.0;
+	fly_power = 0.0;
 	not_jet_count = 0;
 	speed_x = 0.0;
 	old_x = 0.0;
 	old_y = 0.0;
 	fuel = 100.0;
 	gravity_down = 0.0;
+	jump_power = 100.0f;
+	jump_bottun_count = 0;
 	image_count = 0;
 
 	normal.atribute = ATTRIBUTE::NORMAL;
 	normal.chemical_formula[0] = 'n';
 	normal.chemical_formula_name[0] = 'a';
-	normal.damage = 2;
+	normal.damage = 5;
 	normal.damage_per_second = 0;
 	normal.material.carbon = 0;
 	normal.material.chlorine = 0;
@@ -327,7 +330,10 @@ void Player::Draw() const
 	ChemicalFormulaDraw(display_attribute, 0);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
+}
 
+void Player::PouchDraw() const
+{
 	if (pouch_open)
 	{
 		pouch->Draw();
@@ -420,7 +426,6 @@ void Player::Update()
 			else
 			{
 				hp = 0;
-				player_state = PLAYER_STATE::DEATH;
 			}
 		}
 
@@ -469,6 +474,7 @@ void Player::Update()
 			}
 		}
 	}
+
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
@@ -577,21 +583,31 @@ void Player::Update()
 		}
 	}
 
-	//Bボタン入力
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_B) && fuel > 0)
+	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
-		Jump();
+		Hovering();
 	}
-	//Bボタン未入力
 	else
 	{
-		NotJump();
-	}
+		//Bボタン長押し
+		if (PAD_INPUT::GetOldKey(XINPUT_BUTTON_B) & PAD_INPUT::GetNowKey(XINPUT_BUTTON_B)
+			&& fuel > 0)
+		{
+			Fly();
+		}
+		//Bボタン未入力
+		else
+		{
+			jump_bottun_count = 0;
+			NotFly();
+		}
 
-	//Bボタン解放時
-	if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
-	{
-		player_state = PLAYER_STATE::DOWN;
+
+		//Bボタン解放時
+		if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
+		{
+			player_state = PLAYER_STATE::DOWN;
+		}
 	}
 
 	//弾のアップデート呼び出し
@@ -616,6 +632,11 @@ void Player::Update()
 	if (!pouch_open)
 	{
 		ElementUpdate();
+	}
+
+	if (hp <= 0)
+	{
+		player_state = PLAYER_STATE::DEATH;
 	}
 }
 
@@ -766,21 +787,108 @@ void Player::RightMove()
 	}
 }
 
+
 //ジャンプ
 void Player::Jump()
 {
+	float jump;
+	float y = location.y - CameraWork::GetCamera().y;
+	jump = jump_power - GRAVITY;
+	if (jump > 0)
+	{
+		jump_power -= 0.25;
+	}
+	else
+	{
+		jump_power = 20.0f;
+	}
+
+	if (jump < 0)
+	{
+		player_state = PLAYER_STATE::DOWN;
+	}
+
+	if (!HitBlock(stage) || y > 0)
+	{
+		location.y -= jump;
+	}
+
+	if (HitBlock(stage))
+	{
+		jump_power = 0.0;
+		location.y = old_y;
+	}
+}
+
+
+void Player::Hovering()
+{
+	if (fly > 0)
+	{
+		if (!HitBlock(stage))
+		{
+			fly -= 0.5;
+			location.y -= fly;
+
+
+			if (location.y < 40.0)
+			{
+				location.y = 40.0;
+			}
+		}
+
+		if (HitBlock(stage))
+		{
+			fly = 0.0;
+			location.y = old_y;
+		}
+	}
+	else if (fly < 0)
+	{
+		if (!HitBlock(stage))
+		{
+			fly += 0.5;
+			location.y -= fly;
+			if (location.y < 40.0)
+			{
+				location.y = 40.0;
+				fly = 0;
+			}
+		}
+		if (HitBlock(stage))
+		{
+			fly = 0.0;
+			location.y = old_y;
+		}
+	}
+	else
+	{
+		fly = 0;
+	}
+
+
+
+
+	fuel -= 0.15;
+}
+
+//飛ぶ
+void Player::Fly()
+{
+
+	float y = location.y - CameraWork::GetCamera().y;
 	image_count = 0;
-	player_state = PLAYER_STATE::JUMP;
+	player_state = PLAYER_STATE::FLY;
 	not_jet_count = 0;
 
 	gravity_down = 0.0;
 
-	jump += 0.25;
+	fly += 0.5;
 	fuel -= 0.25;
 
-	if (jump > 10)
+	if (fly > 10)
 	{
-		jump = 10.0;
+		fly = 10.0;
 	}
 
 	if (fuel < 0)
@@ -791,27 +899,37 @@ void Player::Jump()
 
 	if (!HitBlock(stage))
 	{
-		location.y -= jump;
+
+		location.y -= fly;
+
+
+		if (location.y < 40.0)
+		{
+			location.y = 40.0;
+		}
 	}
 
 	if (HitBlock(stage))
 	{
-		jump = 0.0;
+		fly = 0.0;
 		location.y = old_y;
 	}
 }
 
-//ジャンプしてない
-void Player::NotJump()
+
+
+//飛んでない
+void Player::NotFly()
 {
+	float y = location.y - CameraWork::GetCamera().y;
 
 	player_state = PLAYER_STATE::DOWN;
 
-	jump -= 0.25;
+	fly -= 0.5;
 
-	if (jump < -10)
+	if (fly < -10)
 	{
-		jump = -10;
+		fly = -10;
 	}
 
 	if (not_jet_count++ >= 120)
@@ -833,16 +951,25 @@ void Player::NotJump()
 
 	if (!HitBlock(stage))
 	{
-		location.y -= jump;
+		location.y -= fly;
+		if (location.y < 40.0)
+		{
+			location.y = 40.0;
+			fly = 0;
+		}
 	}
+
+
 
 	if (HitBlock(stage))
 	{
-		jump = 0;
+		fly = 0;
 		location.y = old_y;
 		player_state = PLAYER_STATE::STOP;
 	}
 }
+
+
 
 //-----------------------------------
 // 弾を発射
@@ -939,6 +1066,8 @@ void Player::Shoot_Gun()
 	}
 }
 
+
+
 //-----------------------------------
 // 弾を並べ替え
 //-----------------------------------
@@ -956,6 +1085,8 @@ void Player::SortBullet(int delete_bullet)
 	}
 	bullet_count--;
 }
+
+
 
 //-----------------------------------
 //属性を変更
@@ -989,6 +1120,8 @@ void Player::ElementUpdate()
 
 	select_count++;
 }
+
+
 
 //-----------------------------------
 //ダメージを受けた時
@@ -1035,9 +1168,13 @@ void Player::HpDamage(AttackResource attack)
 	}
 }
 
+
+
 ////敵からダメージを受けた時
 //void Player::Being_Attacked(EnemyBase* enemy_base)
 //{}
+
+
 
 //回復
 //-----------------------------------

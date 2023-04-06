@@ -167,6 +167,7 @@
     <ClInclude Include="EnemySlimeBoss.h" />
     <ClInclude Include="EnumElementItem.h" />
     <ClInclude Include="EnumEnemyType.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="GhostBullet.h" />
     <ClInclude Include="Harpy.h" />
     <ClInclude Include="HarpyBullet.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="NormalBullet.h" />
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
+    <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h" />
     <ClInclude Include="Stage\StageBuilder\ObjectBase.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="SlimeBossBody.h" />
@@ -229,6 +231,7 @@
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="ElementItem.cpp" />
     <ClCompile Include="EnemySlimeBoss.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GhostBullet.cpp" />
     <ClCompile Include="Harpy.cpp" />
     <ClCompile Include="HarpyBullet.cpp" />
@@ -238,6 +241,7 @@
     <ClCompile Include="MageBullet.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
+    <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp" />
     <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="SlimeBossBody.cpp" />
