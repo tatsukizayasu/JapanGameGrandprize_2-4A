@@ -21,13 +21,16 @@
 #define ATTACK_TAIL 20
 
 //Šš‚İ‚Â‚­
-#define ATTACK_DITE 20 
+#define ATTACK_DITE 30 
 
 //Ú‹ßUŒ‚‚Ì”ÍˆÍ
 #define MELEE_ATTACK 150
 
 //UŒ‚Ø‚è‘Ö‚¦ŠÔ
 #define ATTACK_SWITCHOVER 260
+
+//ƒuƒŒƒX”­ËŠÔŠu
+#define BREATH_INTERVAL 120
 
 //ƒhƒƒbƒv—Ê(Å¬)
 #define MIN_DROP 40
@@ -47,9 +50,12 @@ Dragon::Dragon(Location spawn_location)
 	speed = 0;
 
 	animation = 0;
+	attack_method = 1;
 	animation_time = 0;
 	switchover_time = 0;
 	effect_time = 0;
+	standby_time = 0;
+	breath_time = 0;
 
 	can_delete = false;
 	left_move = true;
@@ -182,7 +188,15 @@ void Dragon::Draw() const
 //-----------------------------------
 void Dragon::Idol()
 {
+	Location scroll; //‰æ–ÊƒXƒNƒ[ƒ‹‚ğl—¶‚µ‚½XÀ•W
+	Location camera = CameraWork::GetCamera(); //ƒJƒƒ‰
+	scroll = location - camera;
 
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 }
 
 //-----------------------------------
@@ -199,18 +213,45 @@ void Dragon::Move(const Location player_location)
 	if (range <= MELEE_ATTACK && range >= -MELEE_ATTACK)
 	{
 		
+
 	}
-	//‰“‹——£Œn‚ÌUŒ‚
-	else
+	
+	//ƒ‰ƒ“ƒ_ƒ€‚ÅUŒ‚•û–@‚ÌŒˆ’è
+	if (++switchover_time % ATTACK_SWITCHOVER == 0)
 	{
-		/*if (hp < HIT_POINTS / 2)
+		//HP‚ª”¼•ªˆÈ‰º‚È‚ç—‹‚ğ—‚Æ‚·UŒ‚‚à’Ç‰Á
+		if (hp < HIT_POINTS / 2)
 		{
-			
-		}*/
+			attack_method = GetRand(3);
+		}
+		else
+		{
+			attack_method = GetRand(2);
+		}
+	}
+
+	switch (attack_method)
+	{
+	case 0:
+		attack_state = DRAGON_ATTACK::DITE;
+		state = ENEMY_STATE::ATTACK;
+		break;
+	case 1:
 		attack_state = DRAGON_ATTACK::DREATH;
 		state = ENEMY_STATE::ATTACK;
 		magic = true;
-
+		break;
+	case 2:
+		attack_state = DRAGON_ATTACK::TAIL_ATTACK;
+		state = ENEMY_STATE::ATTACK;
+		break;
+	case 3:
+		attack_state = DRAGON_ATTACK::ROAR;
+		state = ENEMY_STATE::ATTACK;
+		magic = true;
+		break;
+	default:
+		break;
 	}
 }
 
@@ -219,24 +260,30 @@ void Dragon::Move(const Location player_location)
 //-----------------------------------
 void Dragon::Attack(const Location player_location)
 {
-	switch (attack_state)
+
+	standby_time--;
+	if (standby_time < 0)
 	{
-		
-	case DRAGON_ATTACK::DITE://Šš‚İ‚Â‚«
-		DiteMove(player_location);
-		break;
-	case DRAGON_ATTACK::TAIL_ATTACK: //K”öUŒ‚
-		TailMove(player_location);
-		break;
-	case DRAGON_ATTACK::DREATH: //ƒuƒŒƒXUŒ‚
-		DreathMove(player_location);
-		break;
-	case DRAGON_ATTACK::ROAR: //™ôšK‚µ‚½Œã‚É—‹‚ğ~‚ç‚¹‚é
-		RoarMove(player_location);
-		break;
-	case DRAGON_ATTACK::NONE:
-	default:
-		break;
+		switch (attack_state)
+		{
+
+		case DRAGON_ATTACK::DITE://Šš‚İ‚Â‚«
+			DiteMove(player_location);
+			break;
+		case DRAGON_ATTACK::TAIL_ATTACK: //K”öUŒ‚
+			TailMove(player_location);
+			break;
+		case DRAGON_ATTACK::DREATH: //ƒuƒŒƒXUŒ‚
+			DreathMove(player_location);
+			break;
+		case DRAGON_ATTACK::ROAR: //™ôšK‚µ‚½Œã‚É—‹‚ğ~‚ç‚¹‚é
+			RoarMove(player_location);
+			break;
+		case DRAGON_ATTACK::NONE:
+		default:
+			break;
+		}
+		standby_time = 0;
 	}
 }
 
@@ -261,8 +308,12 @@ void Dragon::TailMove(const Location player_location)
 //-----------------------------------
 void Dragon::DreathMove(const Location player_location)
 {
-	BulletManager::GetInstance()->CreateEnemyBullet
-	(new DragonBullet(location, player_location));
+	if (++breath_time % BREATH_INTERVAL == 0)
+	{
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new DragonBullet(location, player_location));
+		state = ENEMY_STATE::MOVE;
+	}
 }
 
 //-----------------------------------
@@ -322,6 +373,28 @@ void Dragon::Death()
 //-----------------------------------
 void Dragon::HitBullet(const BulletBase* bullet)
 {
+
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
 	switch (bullet->GetAttribute()) //ó‚¯‚½‰»‡•¨‚Ì‘®«
 	{
 	case ATTRIBUTE::NORMAL: //’Êí’e 
@@ -353,6 +426,9 @@ void Dragon::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
 }
 
 //-----------------------------------

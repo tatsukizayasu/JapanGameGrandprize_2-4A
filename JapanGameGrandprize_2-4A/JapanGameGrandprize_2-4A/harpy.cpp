@@ -4,8 +4,8 @@
 #include "DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
-#define HARPY_SIZE_X 90
-#define HARPY_SIZE_Y 150
+#define HARPY_SIZE_X 60
+#define HARPY_SIZE_Y 80
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 300
@@ -418,8 +418,12 @@ void Harpy::Draw()const
 	}
 	DrawDamageLog();
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-		M_PI / 180, images, TRUE);
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
+		GetColor(255, 255, 0), TRUE);
+
+	/*DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		M_PI / 180, images, TRUE);*/
 }
 
 //-----------------------------------
