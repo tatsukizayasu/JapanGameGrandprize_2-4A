@@ -1,6 +1,7 @@
 #include "Wyvern.h"
 #include "Player.h"
 #include "BulletManager.h"
+#include "WyvernBless.h"
 
 //移動スピード
 #define WYVERN_MOVE_SPEED 2
@@ -41,6 +42,7 @@ Wyvern::Wyvern(Location spawn_location)
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::FIRE;
 	state = ENEMY_STATE::IDOL;
+	attack_state = WYVERN_ATTACK::NONE;
 	drop_volume = 0;
 	poison_time = 0;
 	poison_damage = 0;
@@ -130,8 +132,11 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 
 	if ((state != ENEMY_STATE::DEATH) && (state != ENEMY_STATE::IDOL))
 	{
-
+		bless_interval--;
+		triple_bless_interval--;
+		assault_interval--;
 	}
+
 	if (CheckHp() && (state != ENEMY_STATE::DEATH))
 	{
 		state = ENEMY_STATE::DEATH;
@@ -187,11 +192,12 @@ void Wyvern::Fall()
 //-----------------------------------
 //攻撃
 //-----------------------------------
-void Wyvern::Attack(const Location)
+void Wyvern::Attack(const Location player_location)
 {
 	switch (attack_state)
 	{
 	case WYVERN_ATTACK::BLESS:
+		CreateBless(player_location);
 		break;
 	case WYVERN_ATTACK::TRIPLE_BRACE:
 		break;
@@ -232,7 +238,8 @@ void Wyvern::Attack(const Location)
 //-----------------------------------
 void Wyvern::CreateBless(const Location)
 {
-
+	BulletManager::GetInstance()->
+		CreateEnemyBullet(new WyvernBless())
 }
 
 //-----------------------------------
