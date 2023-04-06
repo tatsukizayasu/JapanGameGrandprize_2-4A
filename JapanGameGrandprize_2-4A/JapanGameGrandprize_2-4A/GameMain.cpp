@@ -34,12 +34,9 @@ GameMain::GameMain()
 	Location location;
 	location.x = 200;
 	location.y = 300;
-	/*enemy = new EnemyBase * [5];
-	enemy[0] = new EnemySlime(location);
-	enemy[1] = new Undead(location);
-	enemy[2] = new EnemyGhost(location);
-	enemy[3] = new Mage(location);
-	enemy[4] = new Harpy(location);*/
+
+	EnemyBase::CreateLogFont();
+
 	SpawnEnemy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
@@ -67,6 +64,7 @@ GameMain::~GameMain()
 	delete player;
 	delete stage;
 
+	EnemyBase::DeleteLogFont();
 	for (int i = 0; i < spawn_volume; i++)
 	{
 		delete enemy[i];

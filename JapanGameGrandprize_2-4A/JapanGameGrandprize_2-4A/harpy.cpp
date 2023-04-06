@@ -38,6 +38,7 @@
 //ドロップ量(最大)
 #define HARPY_DROP 6
 
+#define HARPY_HP 50
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -49,7 +50,7 @@ Harpy::Harpy(Location spawn_location)
 	attack = false;
 	go_back = false;
 
-	hp = 50;
+	hp = HARPY_HP;
 	time = 0;
 	old_x = 0;
 	old_y = 0;
@@ -211,6 +212,7 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 
 		}
 	}
+	UpdateDamageLog();
 
 }
 
@@ -413,6 +415,11 @@ void Harpy::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(HARPY_HP);
+	}
+	DrawDamageLog();
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
@@ -438,17 +445,42 @@ void Harpy::Fall()
 //-----------------------------------
 void Harpy::HitBullet(const BulletBase* bullet)
 {
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
 
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL: //通常弾 
-		hp -= bullet->GetDamage();// * RESISTANCE_DAMAGE; //効きにくい
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::EXPLOSION: //爆発 
-		hp -= bullet->GetDamage(); //通常
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+
 		break;
 	case ATTRIBUTE::MELT: //溶かす 
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE; //効きにくい
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+
 		break;
 	case ATTRIBUTE::POISON: //毒　弱点
 		if (!poison)
@@ -459,6 +491,8 @@ void Harpy::HitBullet(const BulletBase* bullet)
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS: //麻痺 弱点
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		if (!paralysis)
 		{
 			paralysis = true;
@@ -470,6 +504,11 @@ void Harpy::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------
