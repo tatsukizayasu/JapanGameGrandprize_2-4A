@@ -39,6 +39,8 @@ Stage::Stage()
 
 	InitStage();
 
+	//ステージ要素のパラメーターを設定
+	element->SetElementParameter();
 
 	//フラグリセット
 	is_halfway_point = false;

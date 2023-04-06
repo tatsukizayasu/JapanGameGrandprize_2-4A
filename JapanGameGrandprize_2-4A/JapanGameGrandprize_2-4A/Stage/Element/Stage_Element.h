@@ -64,6 +64,11 @@ public:
 	void AddElement(short type, Location location, Area area);
 
 	/// <summary>
+	/// ステージ要素のパラメーター設定
+	/// </summary>
+	void SetElementParameter();
+
+	/// <summary>
 	/// ステージ要素の更新
 	/// </summary>
 	void Update(Player* player);
