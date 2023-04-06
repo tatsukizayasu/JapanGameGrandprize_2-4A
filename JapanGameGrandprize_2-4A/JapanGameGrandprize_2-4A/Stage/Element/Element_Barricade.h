@@ -21,4 +21,6 @@ public:
 	~Element_Barricade();
 	//XV
 	void Update(Player* player) override;
+
+	void Draw()const override;
 };

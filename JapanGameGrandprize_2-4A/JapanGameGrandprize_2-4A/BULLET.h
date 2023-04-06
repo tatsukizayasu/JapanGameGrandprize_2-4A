@@ -5,7 +5,7 @@
 #include "Stage/Stage.h"
 #include "Stage/MapChip.h"
 
-#define BULLET_SPEED 15
+#define BULLET_SPEED 10
 #define ORANGE 0xff8f00
 #define PURPLE 0x00ff00
 #define BLUE 0x0000ff
@@ -40,6 +40,7 @@ public:
 
 	virtual void Draw() const = 0;
 	virtual void Update(const Stage*) = 0;
+
 
 	bool HitBlock(const Stage*);
 	bool GetEfectFlg() const;

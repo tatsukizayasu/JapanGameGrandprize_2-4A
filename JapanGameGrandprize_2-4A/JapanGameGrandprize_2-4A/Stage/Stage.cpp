@@ -136,6 +136,10 @@ Stage::Stage()
 		}
 	}
 
+
+	//フラグリセット
+	is_halfway_point = false;
+
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
 #endif
@@ -187,6 +191,12 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
+	// 中間地点との当たり判定
+	if (abs(halfway_point.x - player->GetLocation().x) <= MAP_CHIP_SIZE
+		&& abs(halfway_point.y - player->GetLocation().y) <= MAP_CHIP_SIZE) {
+		is_halfway_point = true;
+	}
+
 
 	//当たり判定演算範囲
 	struct DrawArea

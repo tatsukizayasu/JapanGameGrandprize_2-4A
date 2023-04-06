@@ -70,7 +70,7 @@ void MapChip::Draw()const
 {
 
 	//‰æ‘œ‚ª‚È‚¢–”‚ÍƒGƒ‰[‚Ìê‡‚Í•`‰æ‚µ‚È‚¢
-	if (image == 0) { return; }
+	if (image == 0 or image == NULL) { return; }
 
 	//printfDx("camera_x:%f\tcamera_y:%f\n", CameraWork::GetCamera().x, CameraWork::GetCamera().y);
 	float x = location.x - CameraWork::GetCamera().x;
