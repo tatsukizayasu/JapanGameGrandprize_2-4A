@@ -28,6 +28,8 @@ AbstractScene* GameOver::Update()
 	{
 		return new GameMain();
 	}
+
+	return this;
 }
 
 //-----------------------------------
@@ -35,5 +37,5 @@ AbstractScene* GameOver::Update()
 //-----------------------------------
 void GameOver::Draw() const
 {
-	DrawString(100, 100, "GameOver", 0x000000);
+	DrawString(100, 100, "GameOver", 0xffffff);
 }
