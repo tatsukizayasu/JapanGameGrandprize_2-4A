@@ -172,6 +172,9 @@
     <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
+    <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -354,6 +357,9 @@
     <ClInclude Include="DragonBullet.h" />
     <ClInclude Include="Stage\StageBuilder\ObjectBase.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

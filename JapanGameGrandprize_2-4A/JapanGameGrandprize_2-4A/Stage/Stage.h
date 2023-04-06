@@ -89,6 +89,19 @@ public:
 	void LoadMap();
 
 	/// <summary>
+	/// ステージの初期化
+	/// </summary>
+	void InitStage(void);
+
+	/// <summary>
+	/// 固定ブロックの追加
+	/// </summary>
+	/// <param name = "id">short型：ステージブロックID</param>
+	/// <param name = "x">float型：座標X</param>
+	/// <param name = "y">float型：座標Y</param>
+	void AddFixedMapChip(short id, float x, float y);
+
+	/// <summary>
 	/// スポーン地点		Getter
 	/// </summary>
 	Location GetSpawnPoint() { return spawn_point; }
