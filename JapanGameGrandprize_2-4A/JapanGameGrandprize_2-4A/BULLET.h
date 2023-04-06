@@ -43,7 +43,7 @@ public:
 
 	bool HitBlock(const Stage*);
 	bool GetEfectFlg() const;
-	float GetDebuffTime() const;
-	float GetDamage() const;
+	int GetDebuffTime() const;
+	int GetDamage() const;
 	ATTRIBUTE GetAttribute() const;
 };
