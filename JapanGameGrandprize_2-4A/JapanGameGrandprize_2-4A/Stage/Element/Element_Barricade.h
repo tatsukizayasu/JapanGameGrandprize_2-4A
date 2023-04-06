@@ -5,6 +5,9 @@ class Element_Barricade : public Stage_Element_Base
 {
 private:
 
+
+public:
+
 	enum class DIRECTION {
 		NONE,
 		UP,
@@ -12,8 +15,7 @@ private:
 		LEFT,
 		RIGHT,
 		CENTER
-	} direction;
-public:
+	} direction;		
 
 	//コンストラクタ
 	Element_Barricade(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area);
@@ -23,4 +25,6 @@ public:
 	void Update(Player* player) override;
 
 	void Draw()const override;
+
+	void SetDirection(DIRECTION set) { direction = set; }
 };
