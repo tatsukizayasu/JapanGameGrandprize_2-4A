@@ -19,7 +19,6 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	area.height = 50;
 	area.width = 50;
 
-
 	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 
 	for (int i = 0; i < BODY_MAX; i++)

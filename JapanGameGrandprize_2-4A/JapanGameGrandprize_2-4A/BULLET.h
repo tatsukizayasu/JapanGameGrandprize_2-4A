@@ -5,7 +5,12 @@
 #include "Stage/Stage.h"
 #include "Stage/MapChip.h"
 
-#define BULLET_SPEED 10
+#define BULLET_SPEED 20
+#define EXPLOSION_BULLET_SPEED 10
+#define MELT_BULLET_SPEED 15
+#define PARARYSIS_BULLET_SPEED 10
+#define POISON_BULLET_SPEED 18
+
 #define ORANGE 0xff8f00
 #define PURPLE 0x00ff00
 #define BLUE 0x0000ff

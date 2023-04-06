@@ -53,6 +53,7 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 	switch (attribute)
 	{
 	case ATTRIBUTE::NORMAL:
+
 		break;
 	case ATTRIBUTE::EXPLOSION:
 		Explosion[0].image = LoadGraph("Images/Player/img01.png");
@@ -68,6 +69,7 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 			Explosion[2].OvalY_Array_radius[i] = 7.5f;
 			Explosion[2].OvalY_Array_permit[i] = FALSE;
 		}
+
 		break;
 	case ATTRIBUTE::MELT:
 		break;
@@ -240,7 +242,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				location.x += BULLET_SPEED;
 				break;
 			case ATTRIBUTE::EXPLOSION:
-				location.x += 5;
+				location.x += EXPLOSION_BULLET_SPEED;
 				if (Tick == 1) 
 				{
 					if (Explosion[1].display_permit == FALSE) 
@@ -332,13 +334,13 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				break;
 			case ATTRIBUTE::MELT:
-				location.x += 2;
+				location.x += MELT_BULLET_SPEED;
 				break;
 			case ATTRIBUTE::PARALYSIS:
-				location.x += 2;
+				location.x += PARARYSIS_BULLET_SPEED;
 				break;
 			case ATTRIBUTE::POISON:
-				location.x += 2;
+				location.x += POISON_BULLET_SPEED;
 				break;
 			}
 
@@ -369,7 +371,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				location.x -= BULLET_SPEED;
 				break;
 			case ATTRIBUTE::EXPLOSION:
-				location.x -= 5;
+				location.x -= EXPLOSION_BULLET_SPEED;
 				if (Tick == 1)
 				{
 					if (Explosion[1].display_permit == FALSE)
@@ -460,13 +462,13 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				break;
 			case ATTRIBUTE::MELT:
-				location.x -= 2;
+				location.x -= MELT_BULLET_SPEED;
 				break;
 			case ATTRIBUTE::PARALYSIS:
-				location.x -= 2;
+				location.x -= PARARYSIS_BULLET_SPEED;
 				break;
 			case ATTRIBUTE::POISON:
-				location.x -= 2;
+				location.x -= POISON_BULLET_SPEED;
 				break;
 			}
 
