@@ -36,6 +36,9 @@ private:
 	//中間地点
 	Location halfway_point;
 
+	//中間地点を取ったかのフラグ
+	bool is_halfway_point;
+
 	//マップ配列データ
 	std::vector<std::vector<int>> map_data;
 
@@ -94,6 +97,11 @@ public:
 	/// 中間地点		Getter
 	/// </summary>
 	Location GetHalfwayPoint() { return halfway_point; }
+
+	/// <summary>
+	/// 中間地点を取ったかのフラグ		Getter
+	/// </summary>
+	bool IsHalfwayPoint() { return is_halfway_point; }
 
 	/// <summary>
 	/// StageクラスにPlayerオブジェクトを渡すSetter

@@ -4,8 +4,8 @@
 #include "BulletManager.h"
 
 //ゴーストの画像サイズ
-#define GHOST_SIZE_X 60
-#define GHOST_SIZE_Y 66
+#define GHOST_SIZE_X 80
+#define GHOST_SIZE_Y 85
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 500
@@ -36,6 +36,7 @@
 //ゴーストの攻撃力
 #define ATTACK_DAMAGE 10
 
+#define GHOST_HP 20
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -51,12 +52,12 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	travel_y = 0;
 	range = 0;
 	range_y = 0;
-	animation = 0;
+	animation = 5;
 	animation_time = 0;
 	magic_time = 1;
 	magic_num = 0;
 	physical_time = 0;
-	hp = 10;
+	hp = GHOST_HP;
 	location = spawn_location;
 	//location.y = 250; //テスト
 	standby_attack = 0;
@@ -122,14 +123,14 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 
 
 	//アニメーションゴースト
-	if (animation_time++ % 10 == 0)
+	if (++animation_time % 10 == 0)
 	{
-		animation++;
+		--animation;
 	}
 
-	if (animation > 5)
+	if (animation < 0)
 	{
-		animation = 0;
+		animation = 5;
 	}
 
 	switch (state)
@@ -181,6 +182,8 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+	UpdateDamageLog();
+
 }
 
 //アイドル状態
@@ -323,6 +326,11 @@ void EnemyGhost::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(GHOST_HP);
+	}
+	DrawDamageLog();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 		M_PI / 180, images[animation], TRUE);
@@ -363,30 +371,61 @@ void EnemyGhost::Fall()
 void EnemyGhost::HitBullet(const BulletBase* bullet)
 {
 
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * 0; //無効
+		damage = 0; //無効
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE; //弱点属性
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
-		hp -= bullet->GetDamage() * 0; //無効
+		damage = 0; //無効
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::POISON:
 		poison_damage = bullet->GetDamage() * 0; //無効
 		poison_time = bullet->GetDebuffTime() * 0; //無効
 		break;
 	case ATTRIBUTE::PARALYSIS:
+		damage = 0;
 		paralysis_time = bullet->GetDebuffTime() * 0; //無効
 		paralysis_time = bullet->GetDamage() * 0; //無効
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::HEAL:
 		break;
 	default:
 		break;
 	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------
@@ -411,14 +450,14 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 		break;
 	case ENEMY_STATE::MOVE:
 		//アニメーションゴースト
-		if (animation_time++ % 10 == 0)
+		if (++animation_time % 10 == 0)
 		{
-			animation++;
+			--animation;
 		}
 
-		if (animation > 5)
+		if (animation < 0)
 		{
-			animation = 0;
+			animation = 5;
 		}
 		break;
 	case ENEMY_STATE::FALL:

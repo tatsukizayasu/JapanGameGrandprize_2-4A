@@ -18,6 +18,7 @@
 #define YELLOW GetColor(255,239,0)
 
 #define MAX_STRING 40			//弾の名前の最大文字数
+#define PARTICLE  20			//弾のエフェクト：パーティクル数
 
 enum class ATTRIBUTE
 {
@@ -53,6 +54,28 @@ struct ChemicalFormulaParameter
 	bool make_bool;
 };
 
+struct Bullet_Effect {
+	int Tick;
+	int speed;
+	int image;
+
+	int x;
+	int y;
+	int x_Array[PARTICLE];
+	int y_Array[PARTICLE];
+	float X_radius;
+	float Y_radius;
+
+	int display_permit_Array[PARTICLE];
+	int display_permit;
+
+	int BrendMode_ALPFA_Array[PARTICLE];
+	int BrendMode_ALPFA;
+
+	float OvalY_Array_radius[PARTICLE];
+	int OvalY_Array_permit[PARTICLE];
+};
+
 //中心座標
 struct Location
 {
@@ -75,6 +98,26 @@ struct Location
 
 		ret.x = this->x - location.x;
 		ret.y = this->y - location.y;
+
+		return ret;
+	}
+
+	Location operator /(Location location)
+	{
+		Location ret;
+
+		ret.x = this->x / location.x;
+		ret.y = this->y / location.y;
+
+		return ret;
+	}
+
+	Location operator /(int num)
+	{
+		Location ret;
+
+		ret.x = this->x / num;
+		ret.y = this->y / num;
 
 		return ret;
 	}
@@ -119,7 +162,7 @@ struct Location
 	{
 		bool ret;
 
-		ret = (this->x != location.x) && (this->y != location.y);
+		ret = (this->x != location.x) || (this->y != location.y);
 
 		return ret;
 	}
