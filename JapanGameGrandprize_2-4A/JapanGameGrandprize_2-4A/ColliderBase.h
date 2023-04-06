@@ -72,6 +72,8 @@ public:
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
 	virtual bool HitLine(const class LineCollider* line_collider)const = 0;
 
+	virtual ColliderBase* Copy()const = 0;
+
 	bool HitCheck(ColliderBase* collider)const;
 
 	virtual void Draw()const {}

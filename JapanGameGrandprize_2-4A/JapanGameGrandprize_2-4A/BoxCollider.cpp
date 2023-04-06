@@ -82,7 +82,7 @@
 	 {
 		 if (spheres[i] != nullptr)
 		 {
-			 spheres[i]->Draw();
+			spheres[i]->Draw();
 		 }
 	 }
 	 if (pivot != nullptr)

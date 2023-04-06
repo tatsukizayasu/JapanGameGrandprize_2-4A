@@ -48,13 +48,12 @@ StageBuilder::StageBuilder()
 		poly_lines.push_back(new PolyLine(test, 3));
 	}
 	
-	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
-	BoxCollider box({ 640,360 }, { 100,100 });
+	boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
 
 
-	objects.push_back(new ObjectBase({ 640,460 },&box));
+	objects.push_back(new ObjectBase({ 640,460 },boxes[0]));
 
-
+	objects[0]->UpdateColliderPos();
 
 
 #endif // _DEV

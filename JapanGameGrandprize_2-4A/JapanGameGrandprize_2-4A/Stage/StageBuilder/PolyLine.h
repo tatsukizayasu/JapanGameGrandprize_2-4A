@@ -31,6 +31,8 @@ public:
     //LineCollider‚Æ‚Ì“–‚½‚è”»’è
     virtual bool HitLine(const class LineCollider* line_collider)const;
 
+    ColliderBase* Copy()const override { return new PolyLine(*this); }
+
     //“_‚Ìíœ
     void DeleteBendPoint(int index);
 

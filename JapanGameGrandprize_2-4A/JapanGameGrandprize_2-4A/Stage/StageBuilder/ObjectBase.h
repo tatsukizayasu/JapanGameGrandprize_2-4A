@@ -15,6 +15,7 @@ private:
 public:
 	ObjectBase();
 	ObjectBase(Location pivot, ColliderBase* p_collider );
+	ObjectBase(Location pivot, BoxCollider* p_collider );
 	~ObjectBase();
 
 	void Draw()const;

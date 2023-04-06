@@ -50,6 +50,24 @@ ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider)
 }
 
 //--------------------------------
+// コンストラクタ
+//--------------------------------
+ObjectBase::ObjectBase(Location pivot, BoxCollider* box_collider)
+{
+	this->pivot = new SphereCollider(pivot);
+	image = LoadGraph("images/Stage/yuka_1.png");
+	
+
+	collider = box_collider->Copy();
+	
+
+
+	vector = collider->GetLocation() - pivot;
+	is_reverse = FALSE;
+	
+}
+
+//--------------------------------
 // デストラクタ
 //--------------------------------
 ObjectBase::~ObjectBase()

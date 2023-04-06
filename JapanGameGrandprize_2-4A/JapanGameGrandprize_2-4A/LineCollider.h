@@ -65,6 +65,8 @@ public:
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
 	bool HitLine(const class LineCollider* line_collider)const override;
 
+	ColliderBase* Copy()const override { return new LineCollider(*this); }
+
 	//ü‚Ì’[‚ÌÀ•W‚Ìæ“¾
 	Location GetLocation(int i)const;
 

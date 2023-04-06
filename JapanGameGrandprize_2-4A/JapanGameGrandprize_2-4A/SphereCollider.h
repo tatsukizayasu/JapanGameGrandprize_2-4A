@@ -31,6 +31,8 @@ public:
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
 	bool HitLine(const class LineCollider* line_collider) const override;
 
+	ColliderBase* Copy()const override { return new SphereCollider(*this); }
+
 	//’†SÀ•W‚Ìæ“¾
 	Location GetLocation() const
 	{
