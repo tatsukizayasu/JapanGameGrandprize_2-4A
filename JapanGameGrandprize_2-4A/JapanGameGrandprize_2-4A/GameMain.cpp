@@ -12,6 +12,7 @@
 #include "EnemySlimeBoss.h"
 #include "DotByDot.h"
 #include <math.h>
+#include "GameOver.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -104,6 +105,10 @@ AbstractScene* GameMain::Update()
 
 	EnemyUpdate();
 	item_controller->Update(player);
+	if (player->GetState() == PLAYER_STATE::DEATH)
+	{
+		return new GameOver();
+	}
 
 	return this;
 }
