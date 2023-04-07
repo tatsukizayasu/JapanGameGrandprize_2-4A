@@ -25,9 +25,9 @@ private:
 	int time; //時間測定
 	int standby_time; //硬直時間
 	int magic_num; //魔法攻撃した数
-	int harpy_image; //ハーピィの画像
 	int magic_time; //魔法攻撃の間隔。標
 	int standby_num;
+	int images;
 	float vector; //ベクトル
 	int physical_time; //物理攻撃時間
 	float range; //プレイヤーとの距離	

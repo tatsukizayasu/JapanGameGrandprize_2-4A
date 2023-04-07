@@ -10,43 +10,43 @@ Element_Barricade::Element_Barricade(short type, std::vector<std::shared_ptr<Sta
 	margin_area = { -18.0f,0.0f };
 	this->images = images;
 
-	for (auto& m : element)
-	{
-		if (this == m.get())continue;
+	//for (auto& m : element)
+	//{
+	//	if (this == m.get())continue;
 
-		if (GetType() == m->GetType())
-		{
-			if (abs(GetLocation().x - m->GetLocation().x) <= MAP_CHIP_SIZE &&
-				abs(GetLocation().y - m->GetLocation().y) <= MAP_CHIP_SIZE) 
-			{
-				if (GetLocation().x < m->GetLocation().x) 
-				{
-					direction = DIRECTION::LEFT;
-				}
-				else if (GetLocation().x > m->GetLocation().x) 
-				{
-					direction = DIRECTION::RIGHT;
-				}
-				else if (GetLocation().y < m->GetLocation().y) 
-				{
-					direction = DIRECTION::UP;
-				}
-				else if (GetLocation().y > m->GetLocation().y) 
-				{
-					direction = DIRECTION::DOWN;
-				}
-				else if(GetLocation().x < m->GetLocation().x && GetLocation().x > m->GetLocation().x ||
-					GetLocation().y < m->GetLocation().y && GetLocation().y > m->GetLocation().y)
-				{
-					direction = DIRECTION::CENTER;
-				}
-				else 
-				{
-					direction = DIRECTION::NONE;
-				}
-			}
-		}
-	}
+	//	if (GetType() == m->GetType())
+	//	{
+	//		if (abs(GetLocation().x - m->GetLocation().x) <= MAP_CHIP_SIZE &&
+	//			abs(GetLocation().y - m->GetLocation().y) <= MAP_CHIP_SIZE) 
+	//		{
+	//			if (GetLocation().x < m->GetLocation().x) 
+	//			{
+	//				Element_Barricade::SetDirection(DIRECTION::LEFT);
+	//			}
+	//			else if (GetLocation().x > m->GetLocation().x) 
+	//			{
+	//				Element_Barricade::SetDirection(DIRECTION::RIGHT);
+	//			}
+	//			else if (GetLocation().y < m->GetLocation().y) 
+	//			{
+	//				Element_Barricade::SetDirection(DIRECTION::UP);
+	//			}
+	//			else if (GetLocation().y > m->GetLocation().y) 
+	//			{
+	//				Element_Barricade::SetDirection(DIRECTION::DOWN);
+	//			}
+	//			else if(GetLocation().x < m->GetLocation().x && GetLocation().x > m->GetLocation().x ||
+	//				GetLocation().y < m->GetLocation().y && GetLocation().y > m->GetLocation().y)
+	//			{
+	//				Element_Barricade::SetDirection(DIRECTION::CENTER);
+	//			}
+	//			else 
+	//			{
+	//				Element_Barricade::SetDirection(DIRECTION::NONE);
+	//			}
+	//		}
+	//	}
+	//}
 
 }
 

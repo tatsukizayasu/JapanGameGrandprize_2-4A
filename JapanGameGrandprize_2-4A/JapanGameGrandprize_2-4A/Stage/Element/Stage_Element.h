@@ -22,8 +22,9 @@ namespace Element {
 	const short TRAP = 51;				//トラップ	(爆発物)
 	const short MOVE_FLOOR = 52;		//動く床
 	const short MOVE_FLOOR_GOAL = 53;	//動く床の目的位置
-	const short BARRICADE = 60;			//バリケード
-	const short GreenButton = 61;		//緑のボタン
+	const short BARRICADE_UP = 59;			//バリケード 上
+	const short BARRICADE_CENTER = 60;			//バリケード 中央
+	const short BARRICADE_DOWN = 61;		//バリケード 下
 	const short YellowButton = 62;		//黄色のボタン
 }
 
@@ -43,7 +44,7 @@ private:
 
 	//ステージ要素のID
 	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, TRAP,
-		MOVE_FLOOR, BARRICADE, GreenButton, YellowButton };
+		MOVE_FLOOR, BARRICADE_UP, BARRICADE_CENTER, BARRICADE_DOWN, YellowButton };
 public:
 
 	//コンストラクタ
@@ -62,6 +63,16 @@ public:
 	/// ステージ要素の作成
 	/// </summary>
 	void AddElement(short type, Location location, Area area);
+
+	/// <summary>
+	/// ステージ要素のパラメーター設定
+	/// </summary>
+	void SetElementParameter();
+
+	/// <summary>
+	/// 動く床の目標位置設定関数
+	/// </summary>
+	void SetMoveFloorNextLocation();
 
 	/// <summary>
 	/// ステージ要素の更新
@@ -104,4 +115,6 @@ public:
 		}
 		return result;
 	};
+
+
 };
