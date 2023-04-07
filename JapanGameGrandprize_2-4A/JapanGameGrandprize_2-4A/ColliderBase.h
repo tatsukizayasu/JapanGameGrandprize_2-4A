@@ -5,6 +5,11 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+class BoxCollider;
+class SphereCollider;
+class LineCollider;
+class PolyLine;
+
 class ColliderBase
 {
 public:
@@ -74,7 +79,7 @@ public:
 
 	virtual ColliderBase* Copy()const = 0;
 
-	bool HitCheck(ColliderBase* collider)const;
+	virtual  bool HitCheck(ColliderBase* collider)const = 0;
 
 	virtual void Draw()const {}
 

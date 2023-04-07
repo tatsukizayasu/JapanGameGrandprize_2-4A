@@ -3,6 +3,9 @@
 
 #include"Stage/StageBuilder/Debug.h"
 #include"DxLib.h"
+
+#include "SphereCollider.h"
+#include "LineCollider.h"
 #include "ColliderBase.h"
 
 class BoxCollider : public ColliderBase
@@ -29,6 +32,8 @@ public:
 	bool HitLine(const class LineCollider* line_collider) const override;
 
 	ColliderBase* Copy()const override { return new BoxCollider(*this); }
+
+	bool HitCheck(ColliderBase* collider)const;
 	
 	//’†SÀ•W‚Ìæ“¾
 	Location GetLocation()const;
@@ -41,13 +46,13 @@ public:
 
 #ifdef _STAGE_BUILDER
 protected:
-	SphereCollider** spheres;
-	SphereCollider* pivot;
+	SphereCollider spheres[4];
+	SphereCollider pivot;
 	Location old_pos[4];
 
 public:
-	SphereCollider** GetSpheres() { return spheres; }
-	SphereCollider* GetPivot() { return pivot; }
+	SphereCollider* GetSpheres() { return spheres; }
+	SphereCollider* GetPivot() { return &pivot; }
 	void UpdatePos();
 #endif
 

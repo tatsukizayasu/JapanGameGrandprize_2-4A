@@ -33,6 +33,8 @@ public:
 
 	ColliderBase* Copy()const override { return new SphereCollider(*this); }
 
+	bool HitCheck(ColliderBase* collider)const;
+
 	//’†SÀ•W‚Ìæ“¾
 	Location GetLocation() const
 	{

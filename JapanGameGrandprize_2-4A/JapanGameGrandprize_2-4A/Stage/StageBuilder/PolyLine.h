@@ -2,6 +2,8 @@
 #include "../Define.h"
 #include "../LineCollider.h"
 #include "../SphereCollider.h"
+#include "../BoxCollider.h"
+#include "../../ColliderBase.h"
 #include <vector>
 
 using namespace std;
@@ -32,6 +34,8 @@ public:
     virtual bool HitLine(const class LineCollider* line_collider)const;
 
     ColliderBase* Copy()const override { return new PolyLine(*this); }
+
+    bool HitCheck(ColliderBase* collider)const;
 
     //“_‚Ìíœ
     void DeleteBendPoint(int index);

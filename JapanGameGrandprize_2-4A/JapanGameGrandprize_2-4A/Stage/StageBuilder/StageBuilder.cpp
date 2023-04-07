@@ -17,7 +17,7 @@ StageBuilder::StageBuilder()
 	Directory::Init();
 	mouse = new SphereCollider();
 	select_collider = nullptr;
-	menu_cursor = 0;	
+	menu_cursor = 0;
 	arrow[0] = '>';
 
 	if (LoadDivGraph("Images/Stage/map_chips.png", 50, 10, 5, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
