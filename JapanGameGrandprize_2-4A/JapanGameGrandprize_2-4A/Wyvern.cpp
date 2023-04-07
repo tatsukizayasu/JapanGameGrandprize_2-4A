@@ -4,15 +4,18 @@
 #include "WyvernBless.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-
+#include "CameraWork.h"
 
 //移動スピード
 #define WYVERN_MOVE_SPEED 2
+
 //強襲攻撃スピード
-#define WYVERN_ASSAULT_SPEED 5
+#define WYVERN_ASSAULT_SPEED 10
 
 //強襲攻撃で移動できる量
-#define WYVERN_ASSAULT_DISTANCE 600
+#define WYVERN_ASSAULT_DISTANCE 700
+//強襲攻撃の終了距離
+#define ASSAULT_END_DISTANCE 50
 
 //強襲攻撃のダメージ
 #define WYVERN_ASSAULT_DAMAGE 15
@@ -20,10 +23,19 @@
 #define WYVERN_MIN_DROP 1
 #define WYVERN_DROP 8
 
+//体力
+#define WYVERN_HP 150
 
+//ブレスのレート
 #define WYVERN_SHOT_RATE 40
+
+//ブレスのインターバル
 #define BLESS_INTERVAL 300
+
+//三連ブレスのインターバル
 #define TRIPLE_BLESS_INTERVAL 600
+
+//強襲攻撃
 #define ASSAULT_INTERVAL 480
 
 //-----------------------------------
@@ -37,7 +49,7 @@ Wyvern::Wyvern(Location spawn_location)
 	attack_end = false;
 	attack = false;
 
-	hp = 100;
+	hp = WYVERN_HP;
 	damage = 0;
 
 	bless_interval = BLESS_INTERVAL;
@@ -46,7 +58,6 @@ Wyvern::Wyvern(Location spawn_location)
 
 	shot_rate = 0;
 	shot_count = 0;
-	assault_start = location;
 	assault_speed.x = 0;
 	assault_speed.y = 0;
 
@@ -57,12 +68,14 @@ Wyvern::Wyvern(Location spawn_location)
 	type[0] = ENEMY_TYPE::FIRE;
 	state = ENEMY_STATE::IDOL;
 	attack_state = WYVERN_ATTACK::NONE;
-	assault_state = ASSAULT_STATE::NONE;
+	now_assault = false;
 	drop_volume = 0;
 	poison_time = 0;
 	poison_damage = 0;
 	paralysis_time = 0;
 	location = spawn_location;
+	assault_start = location;
+
 	/*当たり判定の設定*/
 	area.width = 40;
 	area.height = 80;
@@ -131,7 +144,7 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 
 			state = ENEMY_STATE::ATTACK;
 			attack_state = WYVERN_ATTACK::ASSAULT;
-			assault_state = ASSAULT_STATE::NOW;
+			now_assault = true;
 			radian = atan2f((player->GetLocation().y - 10) - location.y,
 				(player->GetLocation().x - 10) - location.x);
 			assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
@@ -259,8 +272,8 @@ void Wyvern::Attack(const Location player_location)
 			bless_interval = BLESS_INTERVAL;
 			break;
 		case WYVERN_ATTACK::TRIPLE_BRACE:
-			shot_count = 0;
 			triple_bless_interval = TRIPLE_BLESS_INTERVAL;
+			shot_count = 0;
 			break;
 		case WYVERN_ATTACK::ASSAULT:
 			assault_interval = ASSAULT_INTERVAL;
@@ -274,6 +287,7 @@ void Wyvern::Attack(const Location player_location)
 		}
 		attack_state = WYVERN_ATTACK::NONE;
 		attack_end = false;
+		attack = false;
 	}
 }
 
@@ -304,7 +318,10 @@ void Wyvern::TripleBless(const Location player_location)
 	{
 		attack_end = true;
 	}
+
+	
 }
+
 //-----------------------------------
 //強襲攻撃
 //-----------------------------------
@@ -323,8 +340,16 @@ void Wyvern::Assault(const Location)
 	{
 		assault_speed.x = -assault_speed.x;
 		assault_speed.y = -assault_speed.y;
+		now_assault = false;
 	}
 
+	if (!now_assault)
+	{
+		if (distance < ASSAULT_END_DISTANCE)
+		{
+			attack_end = true;
+		}
+	}
 }
 
 //-----------------------------------
@@ -349,6 +374,7 @@ AttackResource Wyvern::Hit()
 		ret.damage = WYVERN_ASSAULT_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;
+		now_assault = false;
 		assault_speed.x = -assault_speed.x;
 		assault_speed.y = -assault_speed.y;
 	}
@@ -370,6 +396,66 @@ void Wyvern::Death()
 void Wyvern::HitBullet(const BulletBase* bullet)
 {
 
+	int i;
+	int damage = 0;
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
+	switch (bullet->GetAttribute())
+	{
+	case ATTRIBUTE::NORMAL:
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+		break;
+	case ATTRIBUTE::MELT:
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
+		break;
+	case ATTRIBUTE::POISON:
+		if (!poison)
+		{
+			poison = true;
+			poison_damage = bullet->GetDamage();
+			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+		if (!paralysis)
+		{
+			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		}
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
+	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------
@@ -377,7 +463,18 @@ void Wyvern::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Wyvern::Draw() const
 {
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
 
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(WYVERN_HP);
+	}
+	DrawDamageLog();
+
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xff0000, TRUE);
 }
 
 //-----------------------------------

@@ -10,19 +10,13 @@ enum class WYVERN_ATTACK
     NONE
 };
 
-//‹­PUŒ‚
-enum class ASSAULT_STATE
-{
-    NOW,    //‚µ‚Ä‚¢‚é
-    AFTER,  //I—¹
-    NONE
-};
 class Wyvern :
     public EnemyBase
 {
 private:
     bool attack_end; //UŒ‚‚ªI‚í‚Á‚½
     bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
+    bool now_assault; //‹­PUŒ‚‚©‚Ç‚¤‚©
     int damage; //ƒ_ƒ[ƒW
     int bless_interval;         //Ÿ‚ÌƒuƒŒƒXUŒ‚‚Ü‚Å‚ÌŠÔ
     int triple_bless_interval;  //Ÿ‚Ì3˜AƒuƒŒƒXUŒ‚‚Ü‚Å‚ÌŠÔ
@@ -34,7 +28,6 @@ private:
     int image_argument; //‰æ‘œ‚Ìˆø”
 
     WYVERN_ATTACK attack_state; //UŒ‚
-    ASSAULT_STATE assault_state; //‹­PUŒ‚
     HitMapChip hit_stage;
 private:
 
