@@ -107,7 +107,7 @@ Player::Player(Stage* stage)
 	location.x = stage->GetSpawnPoint().x;
 	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0;
 	image = new int[PLAYER_IMAGES];
-	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 40, 80, image);
+	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
 
 	image_size_x = 40;
 	image_size_y = 80;
@@ -284,19 +284,19 @@ void Player::Draw() const
 		if (flashing_count < 5)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
-			DrawRotaGraphF(x, y, 1, 0, image[image_count], TRUE, move_left);
+			DrawRotaGraphF(x, y, 0.5, 0, image[image_count], TRUE, move_left);
 
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
 		else if (flashing_count < 10)
 		{
-			DrawRotaGraphF(x, y, 1, 0, image[image_count], TRUE, move_left);
+			DrawRotaGraphF(x, y, 0.5, 0, image[image_count], TRUE, move_left);
 		}
 		else {}
 	}
 	else
 	{
-		DrawRotaGraphF(x, y, 1, 0, image[image_count], TRUE, move_left);
+		DrawRotaGraphF(x, y, 0.5, 0, image[image_count], TRUE, move_left);
 	}
 
 	SetFontSize(30);
@@ -591,7 +591,14 @@ void Player::Update()
 
 	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
-		Hovering();
+		if (fuel > 0)
+		{
+			Hovering();
+		}
+		else
+		{
+			NotFly();
+		}
 	}
 	else
 	{
@@ -1363,7 +1370,7 @@ void Player::MoveAnimation()
 
 	if (image_count >= PLAYER_IMAGES)
 	{
-		image_count = 0;
+		image_count = 1;
 	}
 }
 
