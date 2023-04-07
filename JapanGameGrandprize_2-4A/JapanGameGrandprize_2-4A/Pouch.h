@@ -44,10 +44,6 @@ public:
 	void Draw() const;
 
 	void TabUpdate(int);
-	void PoisonTabUpdate();
-	void MeltTabUpdate();
-	void ParalysisTabUpdate();
-	void HealTabUpdate();
 
 	void ExplosionTabDraw() const;
 	void PoisonTabDraw() const;

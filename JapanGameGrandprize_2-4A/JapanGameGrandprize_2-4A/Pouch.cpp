@@ -64,8 +64,8 @@ Pouch::~Pouch()
 //”š”­
 void Pouch::ExplosionTabDraw() const
 {
+	/*
 	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + POUCH_HEIGHT, 0x00aaaa, TRUE);
-
 	bool can_create[3];
 	int roop_body = cursol - 1;
 
@@ -185,6 +185,7 @@ void Pouch::ExplosionTabDraw() const
 
 	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "EXPLOSION", 0x000000);
+	*/
 }
 
 //—n‰ð
