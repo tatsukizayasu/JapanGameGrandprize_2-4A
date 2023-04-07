@@ -43,7 +43,7 @@ public:
 	void Update();
 	void Draw() const;
 
-	void ExplosionTabUpdate();
+	void TabUpdate(int);
 	void PoisonTabUpdate();
 	void MeltTabUpdate();
 	void ParalysisTabUpdate();
