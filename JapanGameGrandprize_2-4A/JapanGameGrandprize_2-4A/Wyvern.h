@@ -10,6 +10,13 @@ enum class WYVERN_ATTACK
     NONE
 };
 
+//‹­PUŒ‚
+enum class ASSAULT_STATE
+{
+    NOW,    //‚µ‚Ä‚¢‚é
+    AFTER,  //I—¹
+    NONE
+};
 class Wyvern :
     public EnemyBase
 {
@@ -27,6 +34,7 @@ private:
     int image_argument; //‰æ‘œ‚Ìˆø”
 
     WYVERN_ATTACK attack_state; //UŒ‚
+    ASSAULT_STATE assault_state; //‹­PUŒ‚
     HitMapChip hit_stage;
 private:
 

@@ -57,6 +57,7 @@ Wyvern::Wyvern(Location spawn_location)
 	type[0] = ENEMY_TYPE::FIRE;
 	state = ENEMY_STATE::IDOL;
 	attack_state = WYVERN_ATTACK::NONE;
+	assault_state = ASSAULT_STATE::NONE;
 	drop_volume = 0;
 	poison_time = 0;
 	poison_damage = 0;
@@ -130,6 +131,7 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 
 			state = ENEMY_STATE::ATTACK;
 			attack_state = WYVERN_ATTACK::ASSAULT;
+			assault_state = ASSAULT_STATE::NOW;
 			radian = atan2f((player->GetLocation().y - 10) - location.y,
 				(player->GetLocation().x - 10) - location.x);
 			assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
