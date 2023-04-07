@@ -4,8 +4,8 @@
 #include "DxLib.h"
 
 //ドラゴンの画像サイズ(未定、画像が出来次第調整）
-#define DRAGON_SIZE_X 40
-#define DRAGON_SIZE_Y 80
+#define DRAGON_SIZE_X 600
+#define DRAGON_SIZE_Y 600
 
 //ドラゴンのHP
 #define HIT_POINTS 500
@@ -84,6 +84,9 @@ Dragon::Dragon(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+
+	image = LoadGraph("Images/Enemy/a.png"); //画像読込み
+
 }
 
 Dragon::~Dragon()
@@ -180,6 +183,9 @@ void Dragon::Draw() const
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
 		GetColor(255, 0, 0), TRUE);
+
+	/*DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		M_PI / 180, image, TRUE);*/
 
 }
 
