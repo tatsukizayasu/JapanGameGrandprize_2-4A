@@ -401,7 +401,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				break;
 			case ATTRIBUTE::MELT:
-				location.x += 2;
+				location.x += MELT_BULLET_SPEED;
 				if (Tick % 5 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
@@ -430,7 +430,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				break;
 			case ATTRIBUTE::POISON:
-				location.x += 2;
+				location.x += POISON_BULLET_SPEED;
 				if (Tick % 5 == 0) 
 				{
 					for (int i = 0; i < PARTICLE; i++) 
@@ -459,7 +459,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				break;
 			case ATTRIBUTE::PARALYSIS:
-				location.x += 2;
+				location.x += PARARYSIS_BULLET_SPEED;
 				if (Tick % 5 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
@@ -486,13 +486,6 @@ void NormalBullet::Update(const Stage* stage_pointa)
 						}
 					}
 				}
-				location.x += MELT_BULLET_SPEED;
-				break;
-			case ATTRIBUTE::PARALYSIS:
-				location.x += PARARYSIS_BULLET_SPEED;
-				break;
-			case ATTRIBUTE::POISON:
-				location.x += POISON_BULLET_SPEED;
 				break;
 			}
 		}
@@ -611,7 +604,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				break;
 			case ATTRIBUTE::MELT:
-				location.x -= 2;
+				location.x -= MELT_BULLET_SPEED;
 				if (Tick % 5 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
@@ -640,7 +633,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				break;
 			case ATTRIBUTE::POISON:
-				location.x -= 2;
+				location.x -= POISON_BULLET_SPEED;
 				if (Tick % 5 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
@@ -669,7 +662,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				break;
 			case ATTRIBUTE::PARALYSIS:
-				location.x -= 2;
+				location.x -= PARARYSIS_BULLET_SPEED;
 				if (Tick % 5 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
@@ -696,13 +689,6 @@ void NormalBullet::Update(const Stage* stage_pointa)
 						}
 					}
 				}
-				location.x -= MELT_BULLET_SPEED;
-				break;
-			case ATTRIBUTE::PARALYSIS:
-				location.x -= PARARYSIS_BULLET_SPEED;
-				break;
-			case ATTRIBUTE::POISON:
-				location.x -= POISON_BULLET_SPEED;
 				break;
 			}
 		}
