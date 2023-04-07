@@ -12,6 +12,11 @@ class Player;
 
 class Stage_Element;
 
+namespace Ground {
+	const short STAGE01_BASE = 5;			//Stage1 足場ブロック
+	const short STAGE01_UNDERGROUND = 4;			//Stage1 地中ブロック
+}
+
 struct ENEMY_LOCATION
 {
 	short id;
@@ -36,6 +41,9 @@ private:
 	//中間地点
 	Location halfway_point;
 
+	//中間地点を取ったかのフラグ
+	bool is_halfway_point;
+
 	//マップ配列データ
 	std::vector<std::vector<int>> map_data;
 
@@ -50,9 +58,14 @@ private:
 
 	//背景画像
 	int background_images;
-	//ブロック画像
 	int block_images[50];
 	int stage1_block_images[10];
+
+	//ステージ足場ブロックのID
+	std::set<short> stage_id_base{ Ground::STAGE01_BASE };
+
+	//ステージ地中ブロックのID
+	std::set<short> stage_id_underground{ Ground::STAGE01_UNDERGROUND };
 
 
 protected:
@@ -86,6 +99,19 @@ public:
 	void LoadMap();
 
 	/// <summary>
+	/// ステージの初期化
+	/// </summary>
+	void InitStage(void);
+
+	/// <summary>
+	/// 固定ブロックの追加
+	/// </summary>
+	/// <param name = "id">short型：ステージブロックID</param>
+	/// <param name = "x">float型：座標X</param>
+	/// <param name = "y">float型：座標Y</param>
+	void AddFixedMapChip(short id, float x, float y);
+
+	/// <summary>
 	/// スポーン地点		Getter
 	/// </summary>
 	Location GetSpawnPoint() { return spawn_point; }
@@ -94,6 +120,11 @@ public:
 	/// 中間地点		Getter
 	/// </summary>
 	Location GetHalfwayPoint() { return halfway_point; }
+
+	/// <summary>
+	/// 中間地点を取ったかのフラグ		Getter
+	/// </summary>
+	bool IsHalfwayPoint() { return is_halfway_point; }
 
 	/// <summary>
 	/// StageクラスにPlayerオブジェクトを渡すSetter

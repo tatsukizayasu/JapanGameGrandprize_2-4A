@@ -7,14 +7,30 @@
 #define DRAGON_SIZE_X 40
 #define DRAGON_SIZE_Y 80
 
+//ƒhƒ‰ƒSƒ“‚ÌHP
+#define HIT_POINTS 500
+
 //–‚–@UŒ‚‚µ‚½‚Ìd’¼ŠÔ
 #define MAGIC_STANDBY 60
 
 //‹ßÚUŒ‚‚µ‚½‚Ìd’¼ŠÔ
 #define PHYSICAL_STANDBY 100
 
-//ƒhƒ‰ƒSƒ“‚ÌUŒ‚—Í
-#define ATTACK_DAMAGE 20F  //floatŒ^
+//ƒhƒ‰ƒSƒ“‚ÌUŒ‚—Í(UŒ‚•Êj
+//K”öUŒ‚
+#define ATTACK_TAIL 20
+
+//Šš‚İ‚Â‚­
+#define ATTACK_DITE 30 
+
+//Ú‹ßUŒ‚‚Ì”ÍˆÍ
+#define MELEE_ATTACK 150
+
+//UŒ‚Ø‚è‘Ö‚¦ŠÔ
+#define ATTACK_SWITCHOVER 260
+
+//ƒuƒŒƒX”­ËŠÔŠu
+#define BREATH_INTERVAL 120
 
 //ƒhƒƒbƒv—Ê(Å¬)
 #define MIN_DROP 40
@@ -30,13 +46,21 @@ Dragon::Dragon(Location spawn_location)
 	area.height = DRAGON_SIZE_Y;
 	area.width = DRAGON_SIZE_X;
 
+	hp = HIT_POINTS;
+	speed = 0;
+
 	animation = 0;
+	attack_method = 1;
 	animation_time = 0;
-	hp = 500; 	
-	speed = 0; 
+	switchover_time = 0;
+	effect_time = 0;
+	standby_time = 0;
+	breath_time = 0;
 
 	can_delete = false;
 	left_move = true;
+	attack = false;
+	magic = false;
 
 	kind = ENEMY_KIND::DRAGON;
 	type = new ENEMY_TYPE[3];
@@ -117,6 +141,26 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 
 	}
 
+	//“Å‚Ìƒ_ƒ[ƒW
+	if (poison == true)
+	{
+		if (++effect_time % POISON_DAMAGE_FLAME == 0)
+		{
+			if (--poison_time > 0)
+			{
+				hp -= poison_damage;
+			}
+			else
+			{
+				poison_damage = 0;
+				poison_time = 0;
+				poison = false;
+			}
+
+		}
+	}
+
+
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;
@@ -144,7 +188,15 @@ void Dragon::Draw() const
 //-----------------------------------
 void Dragon::Idol()
 {
+	Location scroll; //‰æ–ÊƒXƒNƒ[ƒ‹‚ğl—¶‚µ‚½XÀ•W
+	Location camera = CameraWork::GetCamera(); //ƒJƒƒ‰
+	scroll = location - camera;
 
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 }
 
 //-----------------------------------
@@ -152,7 +204,55 @@ void Dragon::Idol()
 //-----------------------------------
 void Dragon::Move(const Location player_location)
 {
+	
 
+	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£ŒvZ
+	int range = player_location.x - location.x;
+
+	//ƒvƒŒƒCƒ„[‚ªÚ‹ßUŒ‚‹——£‚É‚¢‚½‚ç
+	if (range <= MELEE_ATTACK && range >= -MELEE_ATTACK)
+	{
+		
+
+	}
+	
+	//ƒ‰ƒ“ƒ_ƒ€‚ÅUŒ‚•û–@‚ÌŒˆ’è
+	if (++switchover_time % ATTACK_SWITCHOVER == 0)
+	{
+		//HP‚ª”¼•ªˆÈ‰º‚È‚ç—‹‚ğ—‚Æ‚·UŒ‚‚à’Ç‰Á
+		if (hp < HIT_POINTS / 2)
+		{
+			attack_method = GetRand(3);
+		}
+		else
+		{
+			attack_method = GetRand(2);
+		}
+	}
+
+	switch (attack_method)
+	{
+	case 0:
+		attack_state = DRAGON_ATTACK::DITE;
+		state = ENEMY_STATE::ATTACK;
+		break;
+	case 1:
+		attack_state = DRAGON_ATTACK::DREATH;
+		state = ENEMY_STATE::ATTACK;
+		magic = true;
+		break;
+	case 2:
+		attack_state = DRAGON_ATTACK::TAIL_ATTACK;
+		state = ENEMY_STATE::ATTACK;
+		break;
+	case 3:
+		attack_state = DRAGON_ATTACK::ROAR;
+		state = ENEMY_STATE::ATTACK;
+		magic = true;
+		break;
+	default:
+		break;
+	}
 }
 
 //-----------------------------------
@@ -160,29 +260,35 @@ void Dragon::Move(const Location player_location)
 //-----------------------------------
 void Dragon::Attack(const Location player_location)
 {
-	switch (attack_state)
+
+	standby_time--;
+	if (standby_time < 0)
 	{
-		
-	case DRAGON_ATTACK::DITE://Šš‚İ‚Â‚«
-		DiteMove(player_location);
-		break;
-	case DRAGON_ATTACK::TAIL_ATTACK: //K”öUŒ‚
-		TailMove(player_location);
-		break;
-	case DRAGON_ATTACK::DREATH: //ƒuƒŒƒXUŒ‚
-		DreathMove(player_location);
-		break;
-	case DRAGON_ATTACK::ROAR: //™ôšK‚µ‚½Œã‚É—‹‚ğ~‚ç‚¹‚é
-		RoarMove(player_location);
-		break;
-	case DRAGON_ATTACK::NONE:
-	default:
-		break;
+		switch (attack_state)
+		{
+
+		case DRAGON_ATTACK::DITE://Šš‚İ‚Â‚«
+			DiteMove(player_location);
+			break;
+		case DRAGON_ATTACK::TAIL_ATTACK: //K”öUŒ‚
+			TailMove(player_location);
+			break;
+		case DRAGON_ATTACK::DREATH: //ƒuƒŒƒXUŒ‚
+			DreathMove(player_location);
+			break;
+		case DRAGON_ATTACK::ROAR: //™ôšK‚µ‚½Œã‚É—‹‚ğ~‚ç‚¹‚é
+			RoarMove(player_location);
+			break;
+		case DRAGON_ATTACK::NONE:
+		default:
+			break;
+		}
+		standby_time = 0;
 	}
 }
 
 //-----------------------------------
-//Ú‹ßUŒ‚‚ÌŠš‚İ‚Â‚«
+//Ú‹ßUŒ‚‚ÌŠš‚İ‚Â‚«(”òs‚µ‚È‚ª‚çŠš‚İ‚Â‚­j‘Ì“–‚½‚è‚·‚éƒCƒ[ƒW
 //-----------------------------------
 void Dragon::DiteMove(const Location player_location)
 {
@@ -190,7 +296,7 @@ void Dragon::DiteMove(const Location player_location)
 }
 
 //-----------------------------------
-//Ú‹ßUŒ‚‚ÌŠš‚İ‚Â‚«
+//K”öUŒ‚
 //-----------------------------------
 void Dragon::TailMove(const Location player_location)
 {
@@ -202,8 +308,12 @@ void Dragon::TailMove(const Location player_location)
 //-----------------------------------
 void Dragon::DreathMove(const Location player_location)
 {
-	BulletManager::GetInstance()->CreateEnemyBullet
-	(new DragonBullet(location, player_location));
+	if (++breath_time % BREATH_INTERVAL == 0)
+	{
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new DragonBullet(location, player_location));
+		state = ENEMY_STATE::MOVE;
+	}
 }
 
 //-----------------------------------
@@ -219,7 +329,27 @@ void Dragon::RoarMove(const Location player_location)
 //-----------------------------------
 AttackResource Dragon::Hit()
 {
-	return AttackResource();
+	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
+
+	if (attack_state == DRAGON_ATTACK::DITE && (!attack))
+	{
+		attack = true;
+		ENEMY_TYPE attack_type[1] = { *type };
+		ret.damage = ATTACK_DITE;
+		ret.type = attack_type;
+		ret.type_count = 1;
+	}
+
+	if (attack_state == DRAGON_ATTACK::TAIL_ATTACK && (!attack))
+	{
+		attack = true;
+		ENEMY_TYPE attack_type[1] = { *type };
+		ret.damage = ATTACK_TAIL;
+		ret.type = attack_type;
+		ret.type_count = 2;
+	}
+
+	return ret;
 }
 
 //-----------------------------------
@@ -243,6 +373,28 @@ void Dragon::Death()
 //-----------------------------------
 void Dragon::HitBullet(const BulletBase* bullet)
 {
+
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
 	switch (bullet->GetAttribute()) //ó‚¯‚½‰»‡•¨‚Ì‘®«
 	{
 	case ATTRIBUTE::NORMAL: //’Êí’e 
@@ -274,6 +426,9 @@ void Dragon::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
 }
 
 //-----------------------------------

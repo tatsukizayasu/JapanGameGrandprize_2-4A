@@ -9,6 +9,7 @@
 class NormalBullet : public BulletBase
 {
 private:
+
 	int Tick;
 	float speed_x, speed_y[PIXEL_MAX];
 	float dot_location_x[PIXEL_MAX], dot_location_y[PIXEL_MAX];

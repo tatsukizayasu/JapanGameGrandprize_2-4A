@@ -168,7 +168,18 @@
     <ClCompile Include="Dragon.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="DragonBullet.cpp" />
+    <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp">
+      <Filter>ソースファイル\Stage\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="DragonBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -348,7 +359,18 @@
     <ClInclude Include="Dragon.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="DragonBullet.h" />
+    <ClInclude Include="Stage\StageBuilder\ObjectBase.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h">
+      <Filter>ヘッダーファイル\Stage\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="DragonBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

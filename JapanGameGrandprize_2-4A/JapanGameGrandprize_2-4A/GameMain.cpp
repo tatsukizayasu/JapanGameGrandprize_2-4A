@@ -11,6 +11,8 @@
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
 #include "DotByDot.h"
+#include <math.h>
+#include "GameOver.h"
 
 //-----------------------------------
 // ÉRÉìÉXÉgÉâÉNÉ^
@@ -19,7 +21,8 @@ GameMain::GameMain()
 {
 #undef DOT_BY_DOT
 	//îwåiâÊëúì«Ç›çûÇ›
-	background_image = LoadGraph("Images/Scene/gamemain.png");
+	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
 #ifdef _DEBUG
 
 #else
@@ -32,12 +35,9 @@ GameMain::GameMain()
 	Location location;
 	location.x = 200;
 	location.y = 300;
-	/*enemy = new EnemyBase * [5];
-	enemy[0] = new EnemySlime(location);
-	enemy[1] = new Undead(location);
-	enemy[2] = new EnemyGhost(location);
-	enemy[3] = new Mage(location);
-	enemy[4] = new Harpy(location);*/
+
+	EnemyBase::CreateLogFont();
+
 	SpawnEnemy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
@@ -65,6 +65,7 @@ GameMain::~GameMain()
 	delete player;
 	delete stage;
 
+	EnemyBase::DeleteLogFont();
 	for (int i = 0; i < spawn_volume; i++)
 	{
 		delete enemy[i];
@@ -104,6 +105,10 @@ AbstractScene* GameMain::Update()
 
 	EnemyUpdate();
 	item_controller->Update(player);
+	if (player->GetState() == PLAYER_STATE::DEATH)
+	{
+		return new GameOver();
+	}
 
 	return this;
 }
@@ -290,9 +295,15 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
+	////îwåi	ï`âÊ
+	// DrawGraph(0, 0, background_image, FALSE);
+	Location camera_work = CameraWork::GetCamera();
+	
+	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
-	//îwåi	ï`âÊ
-	DrawGraph(0, 0, background_image, FALSE);
+	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 
 	stage->Draw();
 	item_controller->Draw();
@@ -310,6 +321,8 @@ void GameMain::Draw()const
 		}
 	}
 	bullet_manager->Draw();
+
+	player->PouchDraw();
 #ifdef _DEBUG
 
 #else
