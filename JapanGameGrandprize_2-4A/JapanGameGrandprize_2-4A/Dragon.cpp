@@ -10,6 +10,10 @@
 //ドラゴンのHP
 #define HIT_POINTS 500
 
+//ドラゴンの移動速度
+#define ATTACK_SPEED 30
+#define SPEED 15
+
 //魔法攻撃した時の硬直時間
 #define MAGIC_STANDBY 60
 
@@ -47,7 +51,7 @@ Dragon::Dragon(Location spawn_location)
 	area.width = DRAGON_SIZE_X;
 
 	hp = HIT_POINTS;
-	speed = 0;
+	speed = SPEED;
 
 	animation = 0;
 	attack_method = 1;
@@ -241,6 +245,7 @@ void Dragon::Move(const Location player_location)
 	case 0:
 		attack_state = DRAGON_ATTACK::DITE;
 		state = ENEMY_STATE::ATTACK;
+		attack = true;
 		break;
 	case 1:
 		attack_state = DRAGON_ATTACK::DREATH;
@@ -294,23 +299,38 @@ void Dragon::Attack(const Location player_location)
 }
 
 //-----------------------------------
-//接近攻撃時の噛みつき(飛行しながら噛みつく）体当たりするイメージ
+//接近攻撃時の噛みつき(這いつくばりながら攻撃）体当たりするイメージ
 //-----------------------------------
 void Dragon::DiteMove(const Location player_location)
 {
+	//4月7日現在、壁に当たるまで攻撃を続けるのか、
+	//攻撃開始直後の座標を目指して移動するのか、
+
+	speed = ATTACK_SPEED;
+
+	if (left_move == true)
+	{
+		location.x -= speed;
+		speed = SPEED;
+	}
+	else
+	{
+		location.x += speed;
+		speed = SPEED;
+	}
 
 }
 
 //-----------------------------------
-//尻尾攻撃
+//尻尾攻撃（地上に降りていたら）
 //-----------------------------------
 void Dragon::TailMove(const Location player_location)
 {
-
+	
 }
 
 //-----------------------------------
-//遠距離攻撃（ブレス）
+//遠距離攻撃（ブレス）この時飛びながらブレスを行う
 //-----------------------------------
 void Dragon::DreathMove(const Location player_location)
 {
