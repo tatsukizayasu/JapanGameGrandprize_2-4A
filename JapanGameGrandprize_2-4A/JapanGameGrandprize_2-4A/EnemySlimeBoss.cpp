@@ -10,7 +10,7 @@
 
 #define SLIME_BOSS_SPEED 5
 #define SLIME_BOSS_ATTACK_DAMAGE 10
-#define SLIME_BOSS_JUMP_DISTANCE 30
+#define SLIME_BOSS_JUMP_DISTANCE 45
 
 EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 {
@@ -19,11 +19,13 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	area.height = 50;
 	area.width = 50;
 
-	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
+	location.x -= 10;
+
+	slime_boss_jump_distance = 0;
 
 	for (int i = 0; i < BODY_MAX; i++)
 	{
-		slime_boss_body[i] = new SlimeBossBody(16300, 300);
+		slime_boss_body[i] = new SlimeBossBody(16300, 300, area.height, area.width);
 	}
 
 	for (int i = 0; i < DATA; i++)
@@ -34,7 +36,8 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 
 	state = ENEMY_STATE::FALL;
 
-	left_move = false;
+	left_move = true;
+
 	if (left_move)speed = -SLIME_BOSS_SPEED;
 	else speed = SLIME_BOSS_SPEED;
 
@@ -43,7 +46,7 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 
 	hp = 30;
-	speed_y = -3;
+	speed_y = 0;
 
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WATER;
@@ -85,6 +88,7 @@ EnemySlimeBoss::~EnemySlimeBoss()
 }
 
 
+
 void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 {
 	Location old_location = location;	//前の座標
@@ -98,6 +102,25 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 	case ENEMY_STATE::MOVE:
 
+		location.y += speed_y;
+
+		slime_boss_jump_distance--;
+
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
+
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			state = ENEMY_STATE::FALL;
+			speed_y = 0;
+			while (HitStage(stage).hit)location.y++;
+		}
+
 		Move(player->GetLocation());
 
 		hit_stage = HitStage(stage);
@@ -107,26 +130,40 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
 			hit_direction = HitDirection(hit_stage.chip);
 
-			if ((hit_direction == STAGE_DIRECTION::LEFT) || (hit_direction == STAGE_DIRECTION::RIGHT))
-			{
-				left_move = !left_move;
-				if (left_move)speed = -SLIME_BOSS_SPEED;
-				else speed = SLIME_BOSS_SPEED;
-			}
-			if (ScreenOut())
-			{
-				state = ENEMY_STATE::IDOL;
-				speed = 0;
-			}
+			location.x = old_location.x;
+			left_move = !left_move;
+			if (left_move)speed = -SLIME_BOSS_SPEED;
+			else speed = SLIME_BOSS_SPEED;
 		}
-		else
+		else if(slime_boss_jump_distance <= 0)
 		{
 			state = ENEMY_STATE::FALL;
+			speed_y = 0;
 		}
 
+		if (ScreenOut())
+		{
+			state = ENEMY_STATE::IDOL;
+			speed = 0;
+		}
 		break;
 
 	case ENEMY_STATE::FALL:
+
+		location.x += speed;
+		
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			location.x = old_location.x;
+			left_move = !left_move;
+			if (left_move)speed = -SLIME_BOSS_SPEED;
+			else speed = SLIME_BOSS_SPEED;
+		}
 
 		Fall();
 
@@ -140,24 +177,22 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
 			hit_direction = HitDirection(hit_stage.chip);
 
-			if (hit_direction == STAGE_DIRECTION::TOP)
-			{
-				location.y = chip_location.y -
-					(chip_area.height / 2) - (area.height / 2);
+			/*location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);*/
 
-				state = ENEMY_STATE::MOVE;
+			while (HitStage(stage).hit)location.y--;
 
-				if (left_move)speed = -SLIME_BOSS_SPEED;
-				else speed = SLIME_BOSS_SPEED;
+			state = ENEMY_STATE::MOVE;
 
-			}
-
+			slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
+			speed_y = -5;
 		}
 		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
 			speed = 0;
 		}
+
 		break;
 
 	case ENEMY_STATE::ATTACK:
@@ -213,7 +248,7 @@ void EnemySlimeBoss::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawCircle(draw_location.x, draw_location.y, 25, 0xff0000, true, true);
+	DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
 
 	DrawFormatString(0, 0, 0xffffff, "%d", state);
 }

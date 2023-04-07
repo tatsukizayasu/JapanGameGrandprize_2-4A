@@ -17,7 +17,7 @@ private:
 
 public:
 
-	SlimeBossBody(int x, int y);
+	SlimeBossBody(int x, int y, int height, int width);
 	~SlimeBossBody();
 
 	//描画以外の更新を実行
