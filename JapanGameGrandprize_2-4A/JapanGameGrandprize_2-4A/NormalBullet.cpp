@@ -10,7 +10,9 @@ NormalBullet::NormalBullet()
 {
 	Tick = 0;
 	Explosion[0].image = LoadGraph("Images/Player/img01.png");
-	Poison[0].image = LoadGraph("Images/Player/img02.png");
+	Melt[0].image = LoadGraph("Images/Player/img02.png");
+	Poison[0].image = LoadGraph("Images/Player/img03.png");
+	Paralysis[0].image = LoadGraph("Images/Player/img04.png");
 	location.x = 0.0;
 	location.y = 0.0;
 	radius = 4;
@@ -61,8 +63,8 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 		Explosion[1].Y_radius = 5;
 		for (int i = 0; i < PARTICLE; i++) 
 		{
-			Explosion[3].display_permit_Array[i] = 0;
-			Explosion[2].display_permit_Array[i] = 0;
+			Explosion[3].display_permit_Array[i] = FALSE;
+			Explosion[2].display_permit_Array[i] = FALSE;
 			Explosion[3].BrendMode_ALPFA_Array[i] = 255;
 			Explosion[2].BrendMode_ALPFA_Array[i] = 255;
 			Explosion[1].BrendMode_ALPFA = 255;
@@ -71,11 +73,30 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 		}
 		break;
 	case ATTRIBUTE::MELT:
-		break;
-	case ATTRIBUTE::PARALYSIS:
+		Melt[0].image = LoadGraph("Images/Player/img02.png");
+		for (int i = 0; i < PARTICLE; i++)
+		{
+			Melt[1].display_permit_Array[i] = FALSE;
+			Melt[1].BrendMode_ALPFA_Array[i] = 255;
+		}
 		break;
 	case ATTRIBUTE::POISON:
-		Poison[0].image = LoadGraph("Images/Player/img02.png");
+		Poison[0].image = LoadGraph("Images/Player/img03.png");
+		for (int i = 0; i < PARTICLE; i++)
+		{
+			Poison[1].display_permit_Array[i] = FALSE;
+			Poison[1].BrendMode_ALPFA_Array[i] = 255;
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		Paralysis[0].image = LoadGraph("Images/Player/img04.png");
+		for (int i = 0; i < PARTICLE; i++) 
+		{
+			Paralysis[1].display_permit_Array[i] = FALSE;
+			Paralysis[1].BrendMode_ALPFA_Array[i] = 255;
+		}
+		break;
+	default:
 		break;
 	}
 
@@ -168,7 +189,6 @@ void NormalBullet::Draw() const
 				}
 			}
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-			//DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, ORANGE, TRUE);
 		}
 		break;
 	case ATTRIBUTE::MELT:
@@ -184,23 +204,22 @@ void NormalBullet::Draw() const
 		}
 		else
 		{
-			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, BLUE, TRUE);
-		}
-		break;
-	case ATTRIBUTE::PARALYSIS:
-		if (delete_flg)
-		{
-			if (!efect_end)
+			for (int i = 0; i < PARTICLE; i++) 
 			{
-				for (int i = 0; i < PIXEL_MAX; i++)
+				if (Melt[1].display_permit_Array[i] == TRUE) 
 				{
-					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Melt[1].BrendMode_ALPFA_Array[i]);
+					DrawRotaGraph(Melt[1].x_Array[i] - scrool_x, Melt[1].y_Array[i] - scrool_y, 2.0, 1, Melt[0].image, TRUE, FALSE);
 				}
 			}
-		}
-		else
-		{
-			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, YELLOW, TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+			for (int j = 0; j < 2; j++)
+			{
+				DrawRotaGraph(location.x - scrool_x, location.y - scrool_y, 1, 1, Melt[0].image, TRUE, FALSE);
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		break;
 	case ATTRIBUTE::POISON:
@@ -222,16 +241,47 @@ void NormalBullet::Draw() const
 				{
 					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Poison[1].BrendMode_ALPFA_Array[i]);
-					DrawRotaGraph(Poison[1].x_Array[i] - 10 - scrool_x, Poison[1].y_Array[i] - scrool_y, 2.0, 1, Poison[0].image, true, false);
+					DrawRotaGraph(Poison[1].x_Array[i] - scrool_x, Poison[1].y_Array[i] - scrool_y, 2.0, 1, Poison[0].image, TRUE, FALSE);
 				}
 			}
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);	//ノーブレンド
-			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);	//加算
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
 			for (int j = 0; j < 2; j++) 
 			{
 				DrawRotaGraph(location.x - scrool_x, location.y - scrool_y, 1, 1, Poison[0].image, TRUE, FALSE);
 			}
-			//DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, PURPLE, TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		if (delete_flg)
+		{
+			if (!efect_end)
+			{
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < PARTICLE; i++)
+			{
+				if (Paralysis[1].display_permit_Array[i] == TRUE)
+				{
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Paralysis[1].BrendMode_ALPFA_Array[i]);
+					DrawRotaGraph(Paralysis[1].x_Array[i] - scrool_x, Paralysis[1].y_Array[i] - scrool_y, 2.0, 1, Paralysis[0].image, TRUE, FALSE);
+				}
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+			for (int j = 0; j < 2; j++)
+			{
+				DrawRotaGraph(location.x - scrool_x, location.y - scrool_y, 1, 1, Paralysis[0].image, TRUE, FALSE);
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		break;
 	default:
@@ -350,9 +400,32 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				break;
 			case ATTRIBUTE::MELT:
 				location.x += 2;
-				break;
-			case ATTRIBUTE::PARALYSIS:
-				location.x += 2;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Melt[1].display_permit_Array[i] == FALSE)
+						{
+							Melt[1].x_Array[i] = location.x + 5;
+							Melt[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Melt[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Melt[1].display_permit_Array[i] == TRUE)
+					{
+						Melt[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Melt[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Melt[1].display_permit_Array[i] = FALSE;
+							Melt[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
 				break;
 			case ATTRIBUTE::POISON:
 				location.x += 2;
@@ -360,7 +433,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					for (int i = 0; i < PARTICLE; i++) 
 					{
-						if (Poison[0].display_permit_Array[i] == 0) 
+						if (Poison[1].display_permit_Array[i] == FALSE) 
 						{
 							Poison[1].x_Array[i] = location.x + 5;
 							Poison[1].y_Array[i] = location.y + rand() % 8 - 3;
@@ -383,10 +456,36 @@ void NormalBullet::Update(const Stage* stage_pointa)
 					}
 				}
 				break;
+			case ATTRIBUTE::PARALYSIS:
+				location.x += 2;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Paralysis[1].display_permit_Array[i] == FALSE)
+						{
+							Paralysis[1].x_Array[i] = location.x + 5;
+							Paralysis[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Paralysis[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Paralysis[1].display_permit_Array[i] == TRUE)
+					{
+						Paralysis[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Paralysis[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Paralysis[1].display_permit_Array[i] = FALSE;
+							Paralysis[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
 			}
-
-			//location.x += BULLET_SPEED;
-
 		}
 		else
 		{
@@ -504,9 +603,32 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				break;
 			case ATTRIBUTE::MELT:
 				location.x -= 2;
-				break;
-			case ATTRIBUTE::PARALYSIS:
-				location.x -= 2;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Melt[1].display_permit_Array[i] == FALSE)
+						{
+							Melt[1].x_Array[i] = location.x - 5;
+							Melt[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Melt[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Melt[1].display_permit_Array[i] == TRUE)
+					{
+						Melt[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Melt[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Melt[1].display_permit_Array[i] = FALSE;
+							Melt[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
 				break;
 			case ATTRIBUTE::POISON:
 				location.x -= 2;
@@ -514,7 +636,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					for (int i = 0; i < PARTICLE; i++)
 					{
-						if (Poison[0].display_permit_Array[i] == 0)
+						if (Poison[1].display_permit_Array[i] == FALSE)
 						{
 							Poison[1].x_Array[i] = location.x - 5;
 							Poison[1].y_Array[i] = location.y + rand() % 8 - 3;
@@ -537,10 +659,36 @@ void NormalBullet::Update(const Stage* stage_pointa)
 					}
 				}
 				break;
+			case ATTRIBUTE::PARALYSIS:
+				location.x -= 2;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Paralysis[1].display_permit_Array[i] == FALSE)
+						{
+							Paralysis[1].x_Array[i] = location.x - 5;
+							Paralysis[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Paralysis[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Paralysis[1].display_permit_Array[i] == TRUE)
+					{
+						Paralysis[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Paralysis[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Paralysis[1].display_permit_Array[i] = FALSE;
+							Paralysis[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
 			}
-
-			//location.x -= BULLET_SPEED;
-		
 		}
 		else                   //着弾時のエフェクトの座標更新(左
 		{
@@ -573,12 +721,24 @@ void NormalBullet::Update(const Stage* stage_pointa)
 			}
 			break;
 		case ATTRIBUTE::MELT:
+			for (int i = 0; i < PARTICLE; i++)
+			{
+				Melt[1].display_permit_Array[i] = 0;
+				Melt[1].BrendMode_ALPFA_Array[i] = 255;
+			}
 			break;
 		case ATTRIBUTE::POISON:
 			for (int i = 0; i < PARTICLE; i++) 
 			{
 				Poison[1].display_permit_Array[i] = 0;
 				Poison[1].BrendMode_ALPFA_Array[i] = 255;
+			}
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			for (int i = 0; i < PARTICLE; i++) 
+			{
+				Paralysis[1].display_permit_Array[i] = 0;
+				Paralysis[1].BrendMode_ALPFA_Array[i] = 255;
 			}
 			break;
 		default:

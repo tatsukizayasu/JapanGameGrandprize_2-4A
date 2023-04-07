@@ -14,6 +14,7 @@ private:
 	float dot_location_x[PIXEL_MAX], dot_location_y[PIXEL_MAX];
 	Bullet_Effect Explosion[4];	//0:本弾　1:波動(発射時) 2:波動　3:軌跡
 	Bullet_Effect Melt[2];		//0:本弾　1:軌跡
+	Bullet_Effect Paralysis[2];	//0:本弾　1:軌跡
 	Bullet_Effect Poison[2];	//0:本弾　1:軌跡
 public:
 
