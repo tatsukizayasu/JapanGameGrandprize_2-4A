@@ -5,11 +5,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-class BoxCollider;
-class SphereCollider;
-class LineCollider;
-class PolyLine;
-
 class ColliderBase
 {
 public:
@@ -88,6 +83,7 @@ public:
 protected:
 
 	const char* class_name = "default";
+	Location location;	//中心座標
 
 	//2つのベクトルのなす角が鋭角かどうかを求める
 	bool CheckIsAcute(Location vector1, Location vector2)const
@@ -127,5 +123,4 @@ protected:
 		return cross_product;
 	}
 
-	Location location;	//中心座標
 };

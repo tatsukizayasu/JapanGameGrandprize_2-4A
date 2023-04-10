@@ -219,7 +219,7 @@ bool BoxCollider::HitLine(const class LineCollider* line_collider) const
 //-------------------------------
 // 当たり判定チェック
 //------------------------------
-bool ColliderBase::HitCheck(ColliderBase* collider)const
+bool BoxCollider::HitCheck(ColliderBase* collider)const
 {
 	bool is_hit = false;
 

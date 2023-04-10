@@ -32,7 +32,6 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 //-------------------------------------
 PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 {
-
 	for (int i = 0; i < spheres.size(); i++)
 	{
 		bend_points.push_back(new SphereCollider(*spheres[i]));
@@ -47,6 +46,17 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 
 	location = (bend_points[0]->GetLocation() +
 		bend_points[bend_points.size() - 1]->GetLocation()) / 2;
+}
+
+//-------------------------------------
+// コピーコンストラクタ 
+//-------------------------------------
+PolyLine::PolyLine(const PolyLine &poly_line)
+{
+	for (auto it : poly_line.bend_points)
+	{
+		this->bend_points.push_back(it);
+	}
 }
 
 //---------------------------------
@@ -148,7 +158,7 @@ bool PolyLine::HitLine(const class LineCollider* line_collider)const
 //-------------------------------
 // 当たり判定チェック
 //------------------------------
-bool ColliderBase::HitCheck(ColliderBase* collider)const
+bool PolyLine::HitCheck(ColliderBase* collider)const
 {
 	bool is_hit = false;
 

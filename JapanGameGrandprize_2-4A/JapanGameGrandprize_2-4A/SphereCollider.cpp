@@ -130,7 +130,7 @@ bool SphereCollider::HitLine(const LineCollider* line_collider) const
 //-------------------------------
 // 当たり判定チェック
 //------------------------------
-bool ColliderBase::HitCheck(ColliderBase* collider)const
+bool SphereCollider::HitCheck(ColliderBase* collider)const
 {
 	bool is_hit = false;
 

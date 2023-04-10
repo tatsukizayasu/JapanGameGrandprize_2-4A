@@ -9,13 +9,13 @@ private:
 	int image;
 	SphereCollider* pivot;
 	Location vector;
+	Location old_location;
 	bool is_reverse;
 
 	void ColliderCast(ColliderBase* p_collider);
 public:
 	ObjectBase();
 	ObjectBase(Location pivot, ColliderBase* p_collider );
-	ObjectBase(Location pivot, BoxCollider* p_collider );
 	~ObjectBase();
 
 	void Draw()const;

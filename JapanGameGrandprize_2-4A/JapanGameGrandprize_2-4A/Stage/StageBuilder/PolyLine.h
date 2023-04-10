@@ -19,6 +19,7 @@ public:
     PolyLine();
     PolyLine(Location bend_points[], unsigned int size);
     PolyLine(const vector<SphereCollider*>spheres);
+    PolyLine(const PolyLine &poly_line);
     ~PolyLine();
 
     void Update();

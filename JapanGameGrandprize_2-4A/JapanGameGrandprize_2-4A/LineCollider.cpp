@@ -262,7 +262,7 @@ bool LineCollider::HitLine(const LineCollider* line)const
 //-------------------------------
 // 当たり判定チェック
 //------------------------------
-bool ColliderBase::HitCheck(ColliderBase* collider)const
+bool LineCollider::HitCheck(ColliderBase* collider)const
 {
 	bool is_hit = false;
 

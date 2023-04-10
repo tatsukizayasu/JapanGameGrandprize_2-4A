@@ -48,12 +48,11 @@ StageBuilder::StageBuilder()
 		poly_lines.push_back(new PolyLine(test, 3));
 	}
 	
-	boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
+	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
 
+	BoxCollider* box = new BoxCollider({ 640,360 }, { 100,100 });
 
-	objects.push_back(new ObjectBase({ 640,460 },boxes[0]));
-
-	objects[0]->UpdateColliderPos();
+	objects.push_back(new ObjectBase({ 640,460 }, box));
 
 
 #endif // _DEV
@@ -376,7 +375,12 @@ void StageBuilder::UpdateModulation()
 		for (int i = 0; i < objects.size(); i++)
 		{
 			BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
-			box->UpdatePos();
+			if (box != nullptr)
+			{
+				box->UpdatePos();
+			}
+
+			objects[i]->UpdateColliderPos();
 		}
 	}
 }
@@ -731,14 +735,14 @@ bool StageBuilder::TransformBox()
 {
 	for (int i = 0; i < boxes.size(); i++)
 	{
-		SphereCollider** points = boxes[i]->GetSpheres();
+		SphereCollider* points = boxes[i]->GetSpheres();
 
 
 		for (int j = 0; j < 4; j++)
 		{
-			if (mouse->HitSphere(points[j]))
+			if (mouse->HitSphere(&points[j]))
 			{
-				select_collider = points[j];
+				select_collider = &points[j];
 				return true;
 			}
 		}
@@ -759,13 +763,13 @@ bool StageBuilder::TransformBox()
 //---------------------------------------------
 bool StageBuilder::TransformBox(BoxCollider* box)
 {
-	SphereCollider** points = box->GetSpheres();
+	SphereCollider* points = box->GetSpheres();
 
 	for (int i = 0; i < 4; i++)
 	{
-		if (mouse->HitSphere(points[i]))
+		if (mouse->HitSphere(&points[i]))
 		{
-			select_collider = points[i];
+			select_collider = &points[i];
 			return true;
 		}
 	}
