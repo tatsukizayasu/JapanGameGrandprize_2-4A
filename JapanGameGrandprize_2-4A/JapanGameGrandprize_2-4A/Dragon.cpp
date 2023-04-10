@@ -8,7 +8,7 @@
 #define DRAGON_SIZE_Y 250
 
 //ドラゴンのHP
-#define HIT_POINTS 500
+#define HIT_POINTS 10
 
 //ドラゴンの移動速度
 #define ATTACK_SPEED 6
@@ -79,11 +79,11 @@ Dragon::Dragon(Location spawn_location)
 	attack_state = DRAGON_ATTACK::NONE;
 
 	//ドロップアイテムの設定
-	drop_element = new ElementItem * [THUNDER_DROP];
-	drop_type_volume = THUNDER_DROP;
+	drop_element = new ElementItem * [FIRE_DROP];
+	drop_type_volume = FIRE_DROP;
 
 	int volume = 0;
-	for (int i = 0; i < THUNDER_DROP; i++)
+	for (int i = 0; i < FIRE_DROP; i++)
 	{
 		volume = MIN_DROP + GetRand(MAX_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
@@ -99,7 +99,7 @@ Dragon::~Dragon()
 {
 	delete[] type;
 
-	for (int i = 0; i < THUNDER_DROP; i++)
+	for (int i = 0; i < FIRE_DROP; i++)
 	{
 		delete drop_element[i];
 	}
@@ -310,8 +310,8 @@ void Dragon::Attack(const Location player_location)
 //-----------------------------------
 void Dragon::DiteMove(const Location player_location)
 {
-	//4月7日現在、壁に当たるまで攻撃を続けるのか、
-	//攻撃開始直後の座標を目指して移動するのか、
+	//4月7日現在、壁に当たるまで攻撃を続けるのか、←4月10日現在これ（ステージとの兼ね合いがあるため仮決定）
+	//攻撃開始直後のプレイヤーの座標を目指して移動するのか、
 
 	speed = ATTACK_SPEED;
 
@@ -326,20 +326,20 @@ void Dragon::DiteMove(const Location player_location)
 		speed = SPEED;
 	}
 
-	//if (wall_hit == true)
-	//{
-	//	//HPが半分以下なら雷を落とす攻撃も追加
-	//	if (hp < HIT_POINTS / 2)
-	//	{
-	//		attack_method = GetRand(3);
-	//	}
-	//	else
-	//	{
-	//		attack_method = GetRand(2);
-	//	}
+	if (wall_hit == true)
+	{
+		//HPが半分以下なら雷を落とす攻撃も追加
+		if (hp < HIT_POINTS / 2)
+		{
+			attack_method = GetRand(3);
+		}
+		else
+		{
+			attack_method = GetRand(2);
+		}
 
-	//	state = ENEMY_STATE::MOVE;
-	//}
+		state = ENEMY_STATE::MOVE;
+	}
 
 }
 
@@ -379,7 +379,7 @@ AttackResource Dragon::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (attack_state == DRAGON_ATTACK::DITE)  //&& (!attack)
+	if (attack_state == DRAGON_ATTACK::DITE) 
 	{
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };
@@ -388,14 +388,14 @@ AttackResource Dragon::Hit()
 		ret.type_count = 1;
 	}
 
-	/*if (attack_state == DRAGON_ATTACK::TAIL_ATTACK && (!attack))
+	if (attack_state == DRAGON_ATTACK::TAIL_ATTACK && (!attack))
 	{
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };
 		ret.damage = ATTACK_TAIL;
 		ret.type = attack_type;
 		ret.type_count = 2;
-	}*/
+	}
 
 	return ret;
 }
