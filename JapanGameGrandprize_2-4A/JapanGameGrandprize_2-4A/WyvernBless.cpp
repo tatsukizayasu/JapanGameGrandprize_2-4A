@@ -4,7 +4,7 @@
 #include <math.h>
 #include "CameraWork.h"
 
-#define WYVERN_BULLET_SPEED 5
+#define WYVERN_BULLET_SPEED 7
 #define WYVERN_BULLET_DAMAGE 5
 
 //-----------------------------------
@@ -21,7 +21,7 @@ WyvernBless::WyvernBless(const Location spawn_location, const Location player_lo
 	image = 0;
 	damage = WYVERN_BULLET_DAMAGE;
 	float radian; //Šp“x
-	radian = atan2f((player_location.y + 10) - location.y, (player_location.x + 10)- location.x);
+	radian = atan2f((player_location.y + 10) - location.y, (player_location.x + 10) - location.x);
 	x_speed = speed * cosf(radian);
 	y_speed = speed * sinf(radian);
 }

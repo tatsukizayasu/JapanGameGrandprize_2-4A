@@ -18,6 +18,7 @@ private:
     bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
     bool now_assault; //‹­PUŒ‚‚©‚Ç‚¤‚©
     int damage; //ƒ_ƒ[ƒW
+    int attack_interval;        //Ÿ‚ÌUŒ‚‚Ü‚Å‚ÌŠÔ
     int bless_interval;         //Ÿ‚ÌƒuƒŒƒXUŒ‚‚Ü‚Å‚ÌŠÔ
     int triple_bless_interval;  //Ÿ‚Ì3˜AƒuƒŒƒXUŒ‚‚Ü‚Å‚ÌŠÔ
     int assault_interval;       //Ÿ‚Ì‹­PUŒ‚‚Ü‚Å‚ÌŠÔ

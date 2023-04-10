@@ -35,8 +35,11 @@
 //三連ブレスのインターバル
 #define TRIPLE_BLESS_INTERVAL 600
 
-//強襲攻撃
+//強襲攻撃のインターバル
 #define ASSAULT_INTERVAL 480
+
+//攻撃のインターバル
+#define WYVERN_ATTACK_INTERVAL 180
 
 //-----------------------------------
 //コンストラクタ
@@ -52,6 +55,7 @@ Wyvern::Wyvern(Location spawn_location)
 	hp = WYVERN_HP;
 	damage = 0;
 
+	attack_interval = WYVERN_ATTACK_INTERVAL;
 	bless_interval = BLESS_INTERVAL;
 	triple_bless_interval = TRIPLE_BLESS_INTERVAL;
 	assault_interval = ASSAULT_INTERVAL;
@@ -124,33 +128,41 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
 
-		if (bless_interval < 0) //ブレスに移行
-		{
-			state = ENEMY_STATE::ATTACK;
-			attack_state = WYVERN_ATTACK::BLESS;
-			break;
-		}
+		attack_interval--;
+		bless_interval--;
+		triple_bless_interval--;
+		assault_interval--;
 
-		if (triple_bless_interval < 0) //トリプルブレスに移行
+		if (attack_interval < 0)
 		{
-			state = ENEMY_STATE::ATTACK;
-			attack_state = WYVERN_ATTACK::TRIPLE_BRACE;
-			break;
-		}
+			if (bless_interval < 0) //ブレスに移行
+			{
+				state = ENEMY_STATE::ATTACK;
+				attack_state = WYVERN_ATTACK::BLESS;
+				break;
+			}
 
-		if (assault_interval < 0) //アサルトに移行
-		{
-			float radian; //角度
+			if (triple_bless_interval < 0) //トリプルブレスに移行
+			{
+				state = ENEMY_STATE::ATTACK;
+				attack_state = WYVERN_ATTACK::TRIPLE_BRACE;
+				break;
+			}
 
-			state = ENEMY_STATE::ATTACK;
-			attack_state = WYVERN_ATTACK::ASSAULT;
-			now_assault = true;
-			radian = atan2f((player->GetLocation().y - 10) - location.y,
-				(player->GetLocation().x - 10) - location.x);
-			assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
-			assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
-			assault_start = location;
-			break;
+			if (assault_interval < 0) //アサルトに移行
+			{
+				float radian; //角度
+
+				state = ENEMY_STATE::ATTACK;
+				attack_state = WYVERN_ATTACK::ASSAULT;
+				now_assault = true;
+				radian = atan2f((player->GetLocation().y + 10) - location.y,
+					(player->GetLocation().x + 10) - location.x);
+				assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
+				assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
+				assault_start = location;
+				break;
+			}
 		}
 		break;
 	case ENEMY_STATE::FALL:
@@ -165,10 +177,18 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 
 			if (hit_stage.hit)
 			{
+				Location distance_location; //xとyそれぞれの強襲攻撃を始めた位置からの距離
+				float radian; //角度
+
 				location = old_location;
 
-				assault_speed.x = -assault_speed.x;
-				assault_speed.y = -assault_speed.y;
+				distance_location = assault_start - location;
+
+				radian = atan2f(distance_location.y, distance_location.x);
+				assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
+				assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
+
+				now_assault = false;
 			}
 		}
 		break;
@@ -180,13 +200,7 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 	}
 	Poison();
 	Paralysis();
-
-	if ((state != ENEMY_STATE::DEATH) && (state != ENEMY_STATE::IDOL))
-	{
-		bless_interval--;
-		triple_bless_interval--;
-		assault_interval--;
-	}
+	UpdateDamageLog();
 
 	if (CheckHp() && (state != ENEMY_STATE::DEATH))
 	{
@@ -286,6 +300,7 @@ void Wyvern::Attack(const Location player_location)
 			break;
 		}
 		attack_state = WYVERN_ATTACK::NONE;
+		attack_interval = WYVERN_ATTACK_INTERVAL;
 		attack_end = false;
 		attack = false;
 	}
@@ -338,8 +353,12 @@ void Wyvern::Assault(const Location)
 
 	if (WYVERN_ASSAULT_DISTANCE < distance)
 	{
-		assault_speed.x = -assault_speed.x;
-		assault_speed.y = -assault_speed.y;
+		float radian; //角度
+
+		radian = atan2f(distance_location.y,distance_location.x);
+		assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
+		assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
+
 		now_assault = false;
 	}
 
@@ -369,14 +388,20 @@ AttackResource Wyvern::Hit()
 
 	if (!attack)
 	{
+		Location distance_location; //xとyそれぞれの強襲攻撃を始めた位置からの距離
+		float radian; //角度
+
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
 		ret.damage = WYVERN_ASSAULT_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;
+
 		now_assault = false;
-		assault_speed.x = -assault_speed.x;
-		assault_speed.y = -assault_speed.y;
+		distance_location = assault_start - location;
+		radian = atan2f(distance_location.y, distance_location.x);
+		assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
+		assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
 	}
 
 	return ret;
@@ -387,7 +412,7 @@ AttackResource Wyvern::Hit()
 //-----------------------------------
 void Wyvern::Death()
 {
-
+	can_delete = true;
 }
 
 //-----------------------------------
