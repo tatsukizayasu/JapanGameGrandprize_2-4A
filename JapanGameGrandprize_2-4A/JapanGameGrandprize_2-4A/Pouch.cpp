@@ -186,6 +186,7 @@ void Pouch::ExplosionTabDraw() const
 	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "EXPLOSION", 0x000000);
 	*/
+
 }
 
 //—n‰ð
