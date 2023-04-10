@@ -31,6 +31,7 @@ private:
 	int standby_time; //‘Ò‹@ŠÔ‘ª’è
 	int animation_time; //	‰æ‘œØ‚è‘Ö‚¦ŠÔŠu
 	
+	bool wall_hit; //•Ç‚É“–‚½‚Á‚½‚Ì‚©B
 	bool attack; //Ú‹ßUŒ‚
 	bool magic; //–‚–@UŒ‚
 

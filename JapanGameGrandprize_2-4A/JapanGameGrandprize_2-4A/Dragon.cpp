@@ -4,15 +4,15 @@
 #include "DxLib.h"
 
 //ドラゴンの画像サイズ(未定、画像が出来次第調整）
-#define DRAGON_SIZE_X 600
-#define DRAGON_SIZE_Y 600
+#define DRAGON_SIZE_X 250
+#define DRAGON_SIZE_Y 250
 
 //ドラゴンのHP
 #define HIT_POINTS 500
 
 //ドラゴンの移動速度
-#define ATTACK_SPEED 30
-#define SPEED 15
+#define ATTACK_SPEED 6
+#define SPEED 10
 
 //魔法攻撃した時の硬直時間
 #define MAGIC_STANDBY 60
@@ -31,7 +31,7 @@
 #define MELEE_ATTACK 150
 
 //攻撃切り替え時間
-#define ATTACK_SWITCHOVER 260
+#define ATTACK_SWITCHOVER 10
 
 //ブレス発射間隔
 #define BREATH_INTERVAL 120
@@ -54,7 +54,8 @@ Dragon::Dragon(Location spawn_location)
 	speed = SPEED;
 
 	animation = 0;
-	attack_method = 1;
+	attack_method = 0;
+	magic_num = 0;
 	animation_time = 0;
 	switchover_time = 0;
 	effect_time = 0;
@@ -62,6 +63,7 @@ Dragon::Dragon(Location spawn_location)
 	breath_time = 0;
 
 	can_delete = false;
+	wall_hit = false;
 	left_move = true;
 	attack = false;
 	magic = false;
@@ -108,7 +110,29 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 {
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
-	
+
+
+	hit_stage = HitStage(stage);
+	if (hit_stage.hit) //ステージとの当たり判定
+	{
+		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+		hit_direction = HitDirection(hit_stage.chip);
+
+		if (hit_direction == STAGE_DIRECTION::TOP)
+		{
+			location = old_location;
+		}
+		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
+		{
+			location = old_location;
+			left_move = !left_move;
+			wall_hit = true;
+		}
+
+	}
+
+
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -128,24 +152,6 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 		break;
 	default:
 		break;
-	}
-
-	hit_stage = HitStage(stage);
-	if (hit_stage.hit) //ステージとの当たり判定
-	{
-		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-		hit_direction = HitDirection(hit_stage.chip);
-
-		if (hit_direction == STAGE_DIRECTION::TOP)
-		{
-			location = old_location;
-		}
-		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
-		{
-			location = old_location;
-			left_move = !left_move;
-		}
-
 	}
 
 	//毒のダメージ
@@ -172,6 +178,8 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+	
+	wall_hit = false;
 }
 
 //-----------------------------------
@@ -214,7 +222,7 @@ void Dragon::Idol()
 //-----------------------------------
 void Dragon::Move(const Location player_location)
 {
-	
+
 
 	//プレイヤーとの距離計算
 	int range = player_location.x - location.x;
@@ -222,10 +230,10 @@ void Dragon::Move(const Location player_location)
 	//プレイヤーが接近攻撃距離にいたら
 	if (range <= MELEE_ATTACK && range >= -MELEE_ATTACK)
 	{
-		
+
 
 	}
-	
+
 	//ランダムで攻撃方法の決定
 	if (++switchover_time % ATTACK_SWITCHOVER == 0)
 	{
@@ -245,7 +253,6 @@ void Dragon::Move(const Location player_location)
 	case 0:
 		attack_state = DRAGON_ATTACK::DITE;
 		state = ENEMY_STATE::ATTACK;
-		attack = true;
 		break;
 	case 1:
 		attack_state = DRAGON_ATTACK::DREATH;
@@ -319,6 +326,21 @@ void Dragon::DiteMove(const Location player_location)
 		speed = SPEED;
 	}
 
+	//if (wall_hit == true)
+	//{
+	//	//HPが半分以下なら雷を落とす攻撃も追加
+	//	if (hp < HIT_POINTS / 2)
+	//	{
+	//		attack_method = GetRand(3);
+	//	}
+	//	else
+	//	{
+	//		attack_method = GetRand(2);
+	//	}
+
+	//	state = ENEMY_STATE::MOVE;
+	//}
+
 }
 
 //-----------------------------------
@@ -326,7 +348,7 @@ void Dragon::DiteMove(const Location player_location)
 //-----------------------------------
 void Dragon::TailMove(const Location player_location)
 {
-	
+
 }
 
 //-----------------------------------
@@ -347,7 +369,7 @@ void Dragon::DreathMove(const Location player_location)
 //-----------------------------------
 void Dragon::RoarMove(const Location player_location)
 {
-
+	
 }
 
 //-----------------------------------
@@ -357,7 +379,7 @@ AttackResource Dragon::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (attack_state == DRAGON_ATTACK::DITE && (!attack))
+	if (attack_state == DRAGON_ATTACK::DITE)  //&& (!attack)
 	{
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };
@@ -366,14 +388,14 @@ AttackResource Dragon::Hit()
 		ret.type_count = 1;
 	}
 
-	if (attack_state == DRAGON_ATTACK::TAIL_ATTACK && (!attack))
+	/*if (attack_state == DRAGON_ATTACK::TAIL_ATTACK && (!attack))
 	{
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };
 		ret.damage = ATTACK_TAIL;
 		ret.type = attack_type;
 		ret.type_count = 2;
-	}
+	}*/
 
 	return ret;
 }
@@ -494,6 +516,6 @@ void Dragon::Update(const ENEMY_STATE state)
 //-----------------------------------
 void Dragon::DebugDraw()
 {
-	
+
 }
 #endif //_DEBUG
