@@ -292,7 +292,7 @@ void Mage::Fall()
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  Mage::Attack(Location player_location)
+void  Mage::Attack(const Location player_location)
 {
 
 	CreateBullet(player_location);

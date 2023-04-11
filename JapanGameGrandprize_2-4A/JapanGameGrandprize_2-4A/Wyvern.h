@@ -1,59 +1,59 @@
 #pragma once
 #include "EnemyBase.h"
-#include "BoxCollider.h"
-#include "Player.h"
 
-enum class TORRENT_ATTACK
+
+enum class WYVERN_ATTACK
 {
-    TACKLE = 0,     //タックル
-    LEAF_CUTTER,    //葉っぱを飛ばす
-    DROP_NUTS,      //木の実を落とす
+    BLESS,          //ブレス
+    TRIPLE_BRACE,   //3連ブレス
+    ASSAULT,        //強襲攻撃
     NONE
 };
 
-class Torrent :
+class Wyvern :
     public EnemyBase
 {
 private:
-
+    bool attack_end; //攻撃が終わった
     bool attack; //攻撃が当たったか
-    bool tackle_end; //タックルが終わった
-    int tackle_end_point; //タックルの終了地点
-    int shot_rate; //魔法弾の発射レート
-    int attack_time; //攻撃している時間
-    int leaf_cutter_interval; //次の葉っぱを飛ばす攻撃に移る時間
-    int drop_nuts_interval; //次の木の実を落とす攻撃に移る時間
-    int spawn_interval; //木の実の生成する時間
-    int animation; //アニメーション
+    bool now_assault; //強襲攻撃かどうか
+    int damage; //ダメージ
+    int attack_interval;        //次の攻撃までの時間
+    int bless_interval;         //次のブレス攻撃までの時間
+    int triple_bless_interval;  //次の3連ブレス攻撃までの時間
+    int assault_interval;       //次の強襲攻撃までの時間
+    int shot_rate;  //ブレスの発射レート
+    int shot_count; //発射した弾の数
+    Location assault_start;     //強襲攻撃のスタート位置
+    Location assault_speed;     //強襲攻撃のスピード
     int image_argument; //画像の引数
 
-    TORRENT_ATTACK attack_state; //攻撃の状態
+    WYVERN_ATTACK attack_state; //攻撃
+    HitMapChip hit_stage;
 private:
 
-    //葉っぱの生成
-    void CreateLeaf(Location);
+    //移動時のアニメーション
+    void MoveAnimation();
 
-    //木の実の生成
-    void CreateNuts();
+    //ブレス
+    void Bless(const Location);
 
-    //タックル攻撃
-    void Tackle();
+    //トリプルブレス
+    void TripleBless(const Location);
 
-    //葉っぱを飛ばす攻撃
-    void LeafCutter(Location);
-
-    //木の実を落とす攻撃
-    void DropNuts();
+    //強襲攻撃
+    void Assault(const Location);
 
     // 攻撃していない
     void AttackNone();
 public:
 
     //コンストラクタ
-    Torrent(Location);
+    Wyvern(Location);
 
     //デストラクタ
-    ~Torrent();
+    ~Wyvern();
+
     //更新
     void Update(const class Player* player, const class Stage* stage) override;
 
@@ -91,4 +91,6 @@ public:
     //描画(DotByDot)
     void DebugDraw() override;
 #endif //_DEBUG
+
 };
+

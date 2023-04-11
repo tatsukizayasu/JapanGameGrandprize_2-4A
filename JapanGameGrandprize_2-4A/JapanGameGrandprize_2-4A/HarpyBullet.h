@@ -12,7 +12,7 @@ private:
 public:
 
     //コンスタラクタ
-    HarpyBullet(Location, Location);
+    HarpyBullet(const Location, const Location);
 
     //デストラクタ
     ~HarpyBullet();

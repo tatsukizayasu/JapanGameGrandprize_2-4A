@@ -347,7 +347,7 @@ void Harpy::Comeback()
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  Harpy::Attack(Location player_location)
+void  Harpy::Attack(const Location player_location)
 {
 
 	standby_time--;

@@ -217,6 +217,8 @@
     <ClInclude Include="TorrentBullet.h" />
     <ClInclude Include="TorrentNuts.h" />
     <ClInclude Include="Undead.h" />
+    <ClInclude Include="Wyvern.h" />
+    <ClInclude Include="WyvernBless.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
@@ -277,6 +279,8 @@
     <ClCompile Include="TorrentBullet.cpp" />
     <ClCompile Include="TorrentNuts.cpp" />
     <ClCompile Include="Undead.cpp" />
+    <ClCompile Include="Wyvern.cpp" />
+    <ClCompile Include="WyvernBless.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

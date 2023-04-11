@@ -9,7 +9,7 @@ private:
 public:
 
     //コンストラクタ
-    TorrentNuts(ENEMY_TYPE, Location);
+    TorrentNuts(const ENEMY_TYPE, const Location);
 
     //デストラクタ
     ~TorrentNuts();
