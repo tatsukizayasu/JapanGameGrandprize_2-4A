@@ -349,8 +349,8 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				if (Explosion[1].display_permit == TRUE)
 				{
-					Explosion[1].X_radius = Explosion[1].X_radius * 1.09;
-					Explosion[1].Y_radius = Explosion[1].Y_radius * 1.09;
+					Explosion[1].X_radius = Explosion[1].X_radius * 1.11;
+					Explosion[1].Y_radius = Explosion[1].Y_radius * 1.11;
 					Explosion[1].BrendMode_ALPFA -= 10;
 					if (Explosion[1].BrendMode_ALPFA <= 0) 
 					{
@@ -518,10 +518,10 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					if (Explosion[1].display_permit == FALSE)
 					{
-						Explosion[1].x = location.x;
+						Explosion[1].x = location.x - 22;
 						Explosion[1].y = location.y;
-						Explosion[1].X_radius = 5;
-						Explosion[1].Y_radius = 10;
+						Explosion[1].X_radius = 4;
+						Explosion[1].Y_radius = 8;
 						Explosion[1].display_permit = TRUE;
 					}
 				}
@@ -538,7 +538,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 						}
 					}
 				}
-				if (Tick % 5 == 0)
+				if (Tick % 2 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
 					{
@@ -553,9 +553,9 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				if (Explosion[1].display_permit == TRUE)
 				{
-					Explosion[1].X_radius = Explosion[1].X_radius * 1.08;
-					Explosion[1].Y_radius = Explosion[1].Y_radius * 1.08;
-					Explosion[1].BrendMode_ALPFA -= 5;
+					Explosion[1].X_radius = Explosion[1].X_radius * 1.11;
+					Explosion[1].Y_radius = Explosion[1].Y_radius * 1.11;
+					Explosion[1].BrendMode_ALPFA -= 10;
 					if (Explosion[1].BrendMode_ALPFA <= 0)
 					{
 						Explosion[1].display_permit = FALSE;
@@ -593,7 +593,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					if (Explosion[3].display_permit_Array[i] == TRUE)
 					{
-						Explosion[3].BrendMode_ALPFA_Array[i] -= 5;
+						Explosion[3].BrendMode_ALPFA_Array[i] -= 12;
 						if (Explosion[3].BrendMode_ALPFA_Array[i] <= 0)
 						{
 							Explosion[3].display_permit_Array[i] = FALSE;
