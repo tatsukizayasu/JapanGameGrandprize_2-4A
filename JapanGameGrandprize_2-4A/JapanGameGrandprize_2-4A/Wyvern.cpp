@@ -32,6 +32,12 @@
 //ブレスのインターバル
 #define BLESS_INTERVAL 300
 
+//ブレスを打つまでの待機時間
+#define BLESS_WAIT_TIME 60
+
+//攻撃が終わって移動するまでの待機時間
+#define MOVE_WAIT_TIME 60
+
 //三連ブレスのインターバル
 #define TRIPLE_BLESS_INTERVAL 600
 
@@ -59,6 +65,8 @@ Wyvern::Wyvern(Location spawn_location)
 	bless_interval = BLESS_INTERVAL;
 	triple_bless_interval = TRIPLE_BLESS_INTERVAL;
 	assault_interval = ASSAULT_INTERVAL;
+	bless_wait_time = 0;
+	move_wait_time = 0;
 
 	shot_rate = 0;
 	shot_count = 0;
@@ -139,6 +147,7 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 			{
 				state = ENEMY_STATE::ATTACK;
 				attack_state = WYVERN_ATTACK::BLESS;
+				bless_wait_time = BLESS_WAIT_TIME;
 				break;
 			}
 
@@ -146,6 +155,8 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 			{
 				state = ENEMY_STATE::ATTACK;
 				attack_state = WYVERN_ATTACK::TRIPLE_BRACE;
+				bless_wait_time = BLESS_WAIT_TIME;
+
 				break;
 			}
 
@@ -169,28 +180,49 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 		Fall();
 		break;
 	case ENEMY_STATE::ATTACK:
-		Attack(player->GetLocation());
-
-		if (attack_state == WYVERN_ATTACK::ASSAULT)
+		if (!attack_end)
 		{
-			hit_stage = HitStage(stage);
+			Attack(player->GetLocation());
 
-			if (hit_stage.hit)
+			if (attack_state == WYVERN_ATTACK::ASSAULT)
 			{
-				Location distance_location; //xとyそれぞれの強襲攻撃を始めた位置からの距離
-				float radian; //角度
+				hit_stage = HitStage(stage);
 
-				location = old_location;
+				if (hit_stage.hit)
+				{
+					Location distance_location; //xとyそれぞれの強襲攻撃を始めた位置からの距離
+					float radian; //角度
 
-				distance_location = assault_start - location;
+					location = old_location;
 
-				radian = atan2f(distance_location.y, distance_location.x);
-				assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
-				assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
+					distance_location = assault_start - location;
 
-				now_assault = false;
+					radian = atan2f(distance_location.y, distance_location.x);
+					assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
+					assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
+
+					now_assault = false;
+				}
 			}
 		}
+		else
+		{
+			move_wait_time--;
+			if (move_wait_time < 0)
+			{
+				attack_end = false;
+				state = ENEMY_STATE::MOVE;
+				if (left_move)
+				{
+					speed = -WYVERN_MOVE_SPEED;
+				}
+				else
+				{
+					speed = WYVERN_MOVE_SPEED;
+				}
+			}
+		}
+		
 		break;
 	case ENEMY_STATE::DEATH:
 		Death();
@@ -232,6 +264,7 @@ void Wyvern::Idol()
 //-----------------------------------
 void Wyvern::Move(const Location player_location)
 {
+	location.x += speed;
 	if (ScreenOut())
 	{
 		state = ENEMY_STATE::IDOL;
@@ -263,7 +296,6 @@ void Wyvern::Attack(const Location player_location)
 	{
 	case WYVERN_ATTACK::BLESS:
 		Bless(player_location);
-		attack_end = true;
 		break;
 	case WYVERN_ATTACK::TRIPLE_BRACE:
 		TripleBless(player_location);
@@ -279,7 +311,6 @@ void Wyvern::Attack(const Location player_location)
 
 	if(attack_end)
 	{
-		state = ENEMY_STATE::MOVE;
 		switch (attack_state) //インターバルの設定
 		{
 		case WYVERN_ATTACK::BLESS:
@@ -301,8 +332,8 @@ void Wyvern::Attack(const Location player_location)
 		}
 		attack_state = WYVERN_ATTACK::NONE;
 		attack_interval = WYVERN_ATTACK_INTERVAL;
-		attack_end = false;
 		attack = false;
+		move_wait_time = MOVE_WAIT_TIME;
 	}
 }
 
@@ -311,8 +342,14 @@ void Wyvern::Attack(const Location player_location)
 //-----------------------------------
 void Wyvern::Bless(const Location player_location)
 {
-	BulletManager::GetInstance()->
-		CreateEnemyBullet(new WyvernBless(location, player_location));
+	bless_wait_time--;
+
+	if (bless_wait_time < 0) //発射待機時間終了
+	{
+		BulletManager::GetInstance()->
+			CreateEnemyBullet(new WyvernBless(location, player_location));
+		attack_end = true;
+	}
 }
 
 //-----------------------------------
@@ -320,21 +357,24 @@ void Wyvern::Bless(const Location player_location)
 //-----------------------------------
 void Wyvern::TripleBless(const Location player_location)
 {
-	shot_rate++;
+	bless_wait_time--;
 
-	if (shot_rate % WYVERN_SHOT_RATE == 0)
+	if (bless_wait_time < 0) //発射待機時間終了
 	{
-		BulletManager::GetInstance()->
-			CreateEnemyBullet(new WyvernBless(location, player_location));
-		shot_count++;
+		shot_rate++;
+
+		if (shot_rate % WYVERN_SHOT_RATE == 0)
+		{
+			BulletManager::GetInstance()->
+				CreateEnemyBullet(new WyvernBless(location, player_location));
+			shot_count++;
+		}	
 	}
 
 	if (3 <= shot_count)
 	{
 		attack_end = true;
 	}
-
-	
 }
 
 //-----------------------------------

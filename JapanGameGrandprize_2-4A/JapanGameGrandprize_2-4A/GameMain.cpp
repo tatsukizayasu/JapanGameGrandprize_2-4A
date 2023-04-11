@@ -117,10 +117,10 @@ void GameMain::SpawnEnemy()
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
-	enemy_spawn_volume = spawn.size();
+	enemy_spawn_volume = spawn.size() + 1;
 	enemy = new EnemyBase * [enemy_spawn_volume];
 	int i;
-	for (i = 0; i < enemy_spawn_volume; i++)
+	for (i = 0; i < enemy_spawn_volume -1; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -159,6 +159,8 @@ void GameMain::SpawnEnemy()
 			break;
 		}
 	}
+	Location location = {1000,300};
+	enemy[enemy_spawn_volume - 1] = new Wyvern(location);
 }
 
 //-----------------------------------
