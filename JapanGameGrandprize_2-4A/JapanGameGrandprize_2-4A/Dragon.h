@@ -2,6 +2,7 @@
 #include "EnemyBase.h"
 #include"BoxCollider.h"
 #include"DragonBullet.h"
+#include"DragonThunder.h"
 
 enum class DRAGON_STATE
 {

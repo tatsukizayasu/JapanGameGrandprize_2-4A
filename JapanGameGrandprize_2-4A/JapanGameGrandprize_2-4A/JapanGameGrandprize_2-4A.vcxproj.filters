@@ -180,6 +180,7 @@
     <ClCompile Include="DragonBullet.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
+    <ClCompile Include="DragonThunder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -371,6 +372,7 @@
     <ClInclude Include="DragonBullet.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
+    <ClInclude Include="DragonThunder.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

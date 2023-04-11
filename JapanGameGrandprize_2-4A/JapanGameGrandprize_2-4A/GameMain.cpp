@@ -144,7 +144,8 @@ void GameMain::SpawnEnemy()
 			enemy[i] = new Mage(spawn[i].location);
 			break;
 		case ENEMY_KIND::GHOST:		//ゴーストの生成
-			enemy[i] = new EnemyGhost(spawn[i].location);
+			enemy[i] = new Dragon(spawn[i].location);
+			//enemy[i] = new EnemyGhost(spawn[i].location);
 			break;
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
 			break;
@@ -157,6 +158,7 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::GARGOYLE:	//ガーゴイルボスの生成
 			break;
 		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
+			enemy[i] = new Dragon(spawn[i].location);
 			break;
 		case ENEMY_KIND::END_BOSS:	//ラスボスの生成
 			break;

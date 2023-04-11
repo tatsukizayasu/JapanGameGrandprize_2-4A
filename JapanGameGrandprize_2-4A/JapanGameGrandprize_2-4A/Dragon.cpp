@@ -8,7 +8,7 @@
 #define DRAGON_SIZE_Y 250
 
 //ドラゴンのHP
-#define HIT_POINTS 10
+#define HIT_POINTS 500
 
 //ドラゴンの移動速度
 #define ATTACK_SPEED 6
@@ -19,6 +19,12 @@
 
 //近接攻撃した時の硬直時間
 #define PHYSICAL_STANDBY 100
+
+//咆哮後の硬直時間
+#define	ROAR_TIME 130
+
+//雷の数
+#define THUNDER 4
 
 //ドラゴンの攻撃力(攻撃別）
 //尻尾攻撃
@@ -54,7 +60,7 @@ Dragon::Dragon(Location spawn_location)
 	speed = SPEED;
 
 	animation = 0;
-	attack_method = 0;
+	attack_method = 3;
 	magic_num = 0;
 	animation_time = 0;
 	switchover_time = 0;
@@ -69,10 +75,8 @@ Dragon::Dragon(Location spawn_location)
 	magic = false;
 
 	kind = ENEMY_KIND::DRAGON;
-	type = new ENEMY_TYPE[3];
+	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::FIRE;
-	type[1] = ENEMY_TYPE::WIND;
-	type[2] = ENEMY_TYPE::THUNDER;
 
 	state = ENEMY_STATE::IDOL;
 
@@ -178,7 +182,7 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
-	
+
 	wall_hit = false;
 }
 
@@ -227,13 +231,6 @@ void Dragon::Move(const Location player_location)
 	//プレイヤーとの距離計算
 	int range = player_location.x - location.x;
 
-	//プレイヤーが接近攻撃距離にいたら
-	if (range <= MELEE_ATTACK && range >= -MELEE_ATTACK)
-	{
-
-
-	}
-
 	//ランダムで攻撃方法の決定
 	if (++switchover_time % ATTACK_SWITCHOVER == 0)
 	{
@@ -247,6 +244,7 @@ void Dragon::Move(const Location player_location)
 			attack_method = GetRand(2);
 		}
 	}
+
 
 	switch (attack_method)
 	{
@@ -369,7 +367,19 @@ void Dragon::DreathMove(const Location player_location)
 //-----------------------------------
 void Dragon::RoarMove(const Location player_location)
 {
-	
+
+	for (int i = 0; i < THUNDER; i++)
+	{
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new DragonThunder(player_location.x, player_location.y-60)); //ステージとの兼ね合いがあるため、4月11日適当に座標を入れています。
+	}
+
+	attack_method = GetRand(2);
+
+	standby_time = ROAR_TIME;
+
+	state = ENEMY_STATE::MOVE;
+
 }
 
 //-----------------------------------
@@ -379,7 +389,7 @@ AttackResource Dragon::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (attack_state == DRAGON_ATTACK::DITE) 
+	if (attack_state == DRAGON_ATTACK::DITE)
 	{
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };
