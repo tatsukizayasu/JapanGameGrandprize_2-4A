@@ -5,15 +5,15 @@
 #include "Player.h"
 #include "Stage/Stage.h"
 
-SlimeBossBody::SlimeBossBody(int x, int y)
+SlimeBossBody::SlimeBossBody(int x, int y, int height, int width)
 {
 	kind = ENEMY_KIND::SLIME;
 
 	location.x = x;
 	location.y = y;
 
-	area.height = 50;
-	area.width = 50;
+	area.height = height;
+	area.width = width;
 
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WATER;
@@ -42,7 +42,7 @@ void SlimeBossBody::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawCircle(draw_location.x, draw_location.y, 25, 0xff0000, true, true);
+	DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
 }
 
 //-----------------------------------
