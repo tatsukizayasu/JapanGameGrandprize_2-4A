@@ -22,6 +22,8 @@ Pouch::Pouch()
 	x = 1080;
 	y = 100;
 	cursol = 0;
+	count = 0;
+	page = 1;
 	move_string = 0;
 	on_bool = false;
 	move_up = false;
@@ -186,7 +188,12 @@ void Pouch::ExplosionTabDraw() const
 	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "EXPLOSION", 0x000000);
 	*/
-
+DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
+	for (int i = 0; i < 10; i++)
+	{
+		DrawFormatString(x, y + (30 * i), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+	}
+	DrawBox(x, y + move_string, x + POUCH_WIDTH, y + move_string + 30, 0xff00ff, FALSE);
 }
 
 //—n‰ð
@@ -354,7 +361,7 @@ void Pouch::ParalysisTabDraw()const
 			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol - 1].chemical_formula_name);
 		}
 	}
-	
+
 	if (cursol + 1 > PARARYSIS_MAX_NUM - 1)
 	{
 		if (can_create[2])
@@ -583,12 +590,12 @@ void Pouch::HealTabDraw()const
 		if (can_create[1])
 		{
 			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s",
-			chemical_formula_heal[cursol + (HEAL_MAX_NUM - 1)].chemical_formula_name);
+				chemical_formula_heal[cursol + (HEAL_MAX_NUM - 1)].chemical_formula_name);
 		}
 		else
 		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", 
-			chemical_formula_heal[cursol + (HEAL_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s",
+				chemical_formula_heal[cursol + (HEAL_MAX_NUM - 1)].chemical_formula_name);
 		}
 	}
 	else
@@ -610,12 +617,12 @@ void Pouch::HealTabDraw()const
 		if (can_create[2])
 		{
 			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s",
-			chemical_formula_heal[cursol - (HEAL_MAX_NUM - 1)].chemical_formula_name);
+				chemical_formula_heal[cursol - (HEAL_MAX_NUM - 1)].chemical_formula_name);
 		}
 		else
 		{
 			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s",
-			chemical_formula_heal[cursol - (HEAL_MAX_NUM - 1)].chemical_formula_name);
+				chemical_formula_heal[cursol - (HEAL_MAX_NUM - 1)].chemical_formula_name);
 		}
 	}
 	else
@@ -692,7 +699,7 @@ void Pouch::HealTabDraw()const
 		}
 	}
 
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, 
+	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH,
 		POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "HEAL", 0x000000);
 }
@@ -869,124 +876,37 @@ void Pouch::TabUpdate(int max_num)
 {
 	if (PAD_INPUT::GetRStick().y > 5000)
 	{
-		move_up = true;
-
-		if (move_string < 0)
+		if (count++ % 10 == 0)
 		{
-			move_string = 0;
-		}
-
-		if (move_string < STRING_DISTANCE)
-		{
-			move_string += 5;
-		}
-		else
-		{
-			cursol--;
-			move_string = 0;
-		}
-		if (cursol < 0)
-		{
-			cursol = max_num - 1;
-		}
-		count = 0;
-	}
-	else if (move_up)
-	{
-		if (move_string < 0)
-		{
-			move_string = 0;
-		}
-
-		if (move_string <= 30)
-		{
-			move_string -= 5;
-			if (move_string < 0)
+			if (cursol > 0)
 			{
-				move_string = 0;
-				move_up = false;
-			}
-		}
-		else if(move_string > 30)
-		{
-			if (move_string < STRING_DISTANCE)
-			{
-				move_string += 5;
+				move_string -= 30;
+				cursol--;
 			}
 			else
 			{
-				move_string = 0;
-				cursol--;
-				move_up = false;
-			}
-			if (cursol < 0)
-			{
-				cursol = max_num - 1;
+				move_string = 30 * 9;
+				cursol == EXPLOSION_MAX_NUM - 1;
 			}
 		}
 	}
-	else {}
 
 	if (PAD_INPUT::GetRStick().y < -5000)
 	{
-		move_down = true;
-
-		if (move_string > 0)
+		if (count++ % 10 == 0)
 		{
-			move_string = 0;
-		}
-		
-		if (move_string > -STRING_DISTANCE)
-		{
-			move_string -= 5;
-		}
-		else
-		{
-			cursol++;
-			move_string = 0;
-		}
-		if (cursol > max_num - 1)
-		{
-			cursol = 0;
-		}
-		count = 0;
-	}
-	else if (move_down)
-	{
-		if (move_string > 0)
-		{
-			move_string = 0;
-		}
-
-		if (move_string >= -30)
-		{
-			move_string += 5;
-			if (move_string > 0)
+			if (cursol < 9)
 			{
-				move_string = 0;
-				move_down = false;
-			}
-		}
-		else if (move_string < -30)
-		{
-			if (move_string > -STRING_DISTANCE)
-			{
-				move_string += 5;
+				move_string += 30;
+				cursol++;
 			}
 			else
 			{
 				move_string = 0;
-				cursol++;
-				move_down = false;
-			}
-			if (cursol > max_num - 1)
-			{
 				cursol = 0;
 			}
 		}
 	}
-	else {}
-
 }
 
 void Pouch::SetElement(ElementItem* item, int i)
