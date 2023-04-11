@@ -41,5 +41,21 @@ public:
     //点の削除
     void DeleteBendPoint(int index);
 
+    //中心座標の計算、再計算
+    void MakeLocation();
+
     vector<SphereCollider*> GetPoints()const{return bend_points;}
+
+
+    //ゲームプレイ時に当たり判定をとる分には必要のないもの
+    //ツール上でマウスとの当たり判定をとるために使用しています
+#ifdef _STAGE_BUILDER
+private:
+    SphereCollider pivot;
+    Location old_location;
+
+public:
+    SphereCollider* GetPivot() { return &pivot; }
+#endif
+
 };

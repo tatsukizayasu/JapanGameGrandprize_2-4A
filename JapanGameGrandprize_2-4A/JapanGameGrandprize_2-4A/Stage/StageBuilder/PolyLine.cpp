@@ -25,6 +25,13 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 	}
 
 	location = (bend_points[0] + bend_points[size - 1]) / 2;
+
+	MakeLocation();
+
+#ifdef _STAGE_BUILDER
+
+
+#endif
 }
 
 //-------------------------------------
@@ -46,6 +53,13 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 
 	location = (bend_points[0]->GetLocation() +
 		bend_points[bend_points.size() - 1]->GetLocation()) / 2;
+
+	MakeLocation();
+
+#ifdef _STAGE_BUILDER
+
+
+#endif
 }
 
 //-------------------------------------
@@ -55,8 +69,19 @@ PolyLine::PolyLine(const PolyLine &poly_line)
 {
 	for (auto it : poly_line.bend_points)
 	{
-		this->bend_points.push_back(it);
+		this->bend_points.push_back(new SphereCollider(*it));
 	}
+
+	for (auto it : poly_line.lines)
+	{
+		this->lines.push_back(new LineCollider(*it));
+	}
+
+#ifdef _STAGE_BUILDER
+
+	pivot = poly_line.pivot;
+
+#endif
 }
 
 //---------------------------------
@@ -82,12 +107,27 @@ PolyLine::~PolyLine()
 //---------------------------------
 void PolyLine::Update()
 {
+#ifdef _STAGE_BUILDER
+	if (old_location != location)
+	{
+		Location distance = location - old_location;
+		for (auto it : lines)
+		{
+			it->ColliderBase::SetLocation
+			(it->ColliderBase::GetLocation() + distance);
+		}
+	}
+#endif
 
 	for (int i = 0; i < lines.size(); i++)
 	{
 		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
 		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
 	}
+
+	MakeLocation();
+
+
 
 }
 
@@ -100,6 +140,17 @@ void PolyLine::Draw()const
 	{
 		lines[i]->Draw();
 	}
+
+	for (auto it : bend_points)
+	{
+		it->Draw();
+	}
+
+#ifdef _STAGE_BUILDER
+
+	pivot.Draw();
+
+#endif
 }
 
 //---------------------------------
@@ -205,4 +256,23 @@ void PolyLine::DeleteBendPoint(int index)
 				bend_points[i + 1]->GetLocation()));
 		}
 	}
+}
+
+//---------------------------------------
+// 中心座標の計算、再計算
+//---------------------------------------
+void PolyLine::MakeLocation()
+{
+	Location points[2] =
+	{
+		bend_points[0]->GetLocation(),
+		bend_points[bend_points.size() - 1]->GetLocation()
+	};
+	Location middle = (points[0] + points[1]) / 2;
+
+	SetLocation(middle);
+#ifdef _STAGE_BUILDER
+	pivot.SetLocation(middle);
+	old_location = middle;
+#endif
 }

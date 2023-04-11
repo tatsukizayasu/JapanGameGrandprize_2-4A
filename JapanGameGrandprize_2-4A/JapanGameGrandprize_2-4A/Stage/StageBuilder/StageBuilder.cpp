@@ -47,6 +47,8 @@ StageBuilder::StageBuilder()
 		};
 		poly_lines.push_back(new PolyLine(test, 3));
 	}
+	Location testloc[3]{ {300,300},{500,500},{200,700} };
+	poly_lines.push_back(new PolyLine(testloc, 3));
 	
 	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
 

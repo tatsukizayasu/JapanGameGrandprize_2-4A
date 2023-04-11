@@ -44,8 +44,10 @@ public:
 	//中心座標の設定
 	virtual void SetLocation(Location location);
 
+	//ゲームプレイ時に当たり判定をとる分には必要のないもの
+	//ツール上でマウスとの当たり判定をとるために使用しています
 #ifdef _STAGE_BUILDER
-protected:
+private:
 	SphereCollider spheres[4];
 	SphereCollider pivot;
 	Location old_pos[4];
