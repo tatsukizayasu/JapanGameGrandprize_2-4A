@@ -144,8 +144,7 @@ void GameMain::SpawnEnemy()
 			enemy[i] = new Mage(spawn[i].location);
 			break;
 		case ENEMY_KIND::GHOST:		//ゴーストの生成
-			enemy[i] = new Dragon(spawn[i].location);
-			//enemy[i] = new EnemyGhost(spawn[i].location);
+			enemy[i] = new EnemyGhost(spawn[i].location);
 			break;
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
 			break;
