@@ -8,6 +8,7 @@
 #include "Harpy.h"
 #include "BULLET.h"
 #include "Mage.h"
+#include "Wyvern.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
 #include "DotByDot.h"
@@ -28,13 +29,10 @@ GameMain::GameMain()
 #else
 	pause = new Pause();
 #endif
-
+	enemy_spawn_volume = 0;
 	stage = new Stage();
 	player = new Player(stage);
 	stage->SetPlayer(player);
-	Location location;
-	location.x = 200;
-	location.y = 300;
 
 	EnemyBase::CreateLogFont();
 
@@ -53,9 +51,6 @@ GameMain::GameMain()
 GameMain::~GameMain()
 {
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
 	delete camera_work;
 #ifdef _DEBUG
 
@@ -66,7 +61,7 @@ GameMain::~GameMain()
 	delete stage;
 
 	EnemyBase::DeleteLogFont();
-	for (int i = 0; i < spawn_volume; i++)
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		delete enemy[i];
 	}
@@ -122,11 +117,10 @@ void GameMain::SpawnEnemy()
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = spawn.size();
-	enemy = new EnemyBase * [spawn_volume];
-
-	for (int i = 0; i < spawn_volume; i++)
+	enemy_spawn_volume = spawn.size();
+	enemy = new EnemyBase * [enemy_spawn_volume];
+	int i;
+	for (i = 0; i < enemy_spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -146,6 +140,7 @@ void GameMain::SpawnEnemy()
 			enemy[i] = new EnemyGhost(spawn[i].location);
 			break;
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
+			enemy[i] = new Wyvern(spawn[i].location);
 			break;
 		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
 			//enemy[count] = new EnemySlimeBoss();
@@ -175,10 +170,7 @@ void GameMain::EnemyUpdate()
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
-	for (int i = 0; i < spawn_volume; i++)
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
 		{
@@ -310,10 +302,7 @@ void GameMain::Draw()const
 
 	player->Draw();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
-	for (int i = 0; i < spawn_volume; i++)
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
 		{

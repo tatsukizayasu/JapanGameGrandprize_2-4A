@@ -71,7 +71,7 @@ public:
 	void Fall() override;
 
 	//UŒ‚
-	void  Attack(Location) override;
+	void  Attack(const Location) override;
 
 	//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
 	AttackResource Hit() override;

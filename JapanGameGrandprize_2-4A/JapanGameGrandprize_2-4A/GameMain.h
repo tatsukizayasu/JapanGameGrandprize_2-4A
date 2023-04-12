@@ -13,6 +13,7 @@ class GameMain :
 {
 private:
 
+    int enemy_spawn_volume; //エネミーの数
     //各クラスのオブジェクト
     Player* player;
     Stage* stage;

@@ -7,7 +7,7 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-GhostBullet::GhostBullet( Location spawn_location, Location player_location)
+GhostBullet::GhostBullet(const Location spawn_location, const Location player_location)
 {
 
 	type = ENEMY_TYPE::WIND;
