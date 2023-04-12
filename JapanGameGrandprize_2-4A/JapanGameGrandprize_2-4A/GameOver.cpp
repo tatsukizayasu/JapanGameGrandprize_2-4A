@@ -8,7 +8,7 @@
 //-----------------------------------
 GameOver::GameOver()
 {
-
+	title_font = CreateFontToHandle("UD ÉfÉWÉ^Éã ã≥â»èëëÃ N-B", 140, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 }
 
 //-----------------------------------
@@ -37,5 +37,6 @@ AbstractScene* GameOver::Update()
 //-----------------------------------
 void GameOver::Draw() const
 {
-	DrawString(100, 100, "GameOver", 0xffffff);
+	DrawStringToHandle(GetDrawCenterX("GameOver", title_font), 150, "GameOver", 0xffffff, title_font);
+	DrawStringToHandle(GetDrawCenterX("Press A Button", title_font), 500, "Press A Button", 0xffffff, title_font);
 }
