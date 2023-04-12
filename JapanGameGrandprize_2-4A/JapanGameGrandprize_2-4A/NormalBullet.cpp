@@ -4,11 +4,15 @@
 #include "player.h"
 
 //-----------------------------------
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //-----------------------------------
 NormalBullet::NormalBullet()
 {
-
+	Tick = 0;
+	Explosion[0].image = LoadGraph("Images/Player/img01.png");
+	Melt[0].image = LoadGraph("Images/Player/img02.png");
+	Poison[0].image = LoadGraph("Images/Player/img03.png");
+	Paralysis[0].image = LoadGraph("Images/Player/img04.png");
 	location.x = 0.0;
 	location.y = 0.0;
 	radius = 4;
@@ -29,12 +33,12 @@ NormalBullet::NormalBullet()
 }
 
 //-----------------------------------//
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^					 //
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿					 //
 //-----------------------------------//
 NormalBullet::NormalBullet(float player_x, float player_y,
 	                         bool direction,ChemicalFormulaParameter* chemical)
 {
-
+	Tick = 0;
 	delete_flg = false;
 	scrool_x = CameraWork::GetCamera().x;
 	scrool_y = CameraWork::GetCamera().y;
@@ -48,6 +52,55 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 	attribute = chemical->atribute;
 	this->player_state = player_state;
 	player_direction = direction;
+
+	switch (attribute)
+	{
+	case ATTRIBUTE::NORMAL:
+
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		Explosion[0].image = LoadGraph("Images/Player/img01.png");
+		Explosion[1].X_radius = 3;
+		Explosion[1].Y_radius = 5;
+		for (int i = 0; i < PARTICLE; i++) 
+		{
+			Explosion[3].display_permit_Array[i] = FALSE;
+			Explosion[2].display_permit_Array[i] = FALSE;
+			Explosion[3].BrendMode_ALPFA_Array[i] = 255;
+			Explosion[2].BrendMode_ALPFA_Array[i] = 255;
+			Explosion[1].BrendMode_ALPFA = 255;
+			Explosion[2].OvalY_Array_radius[i] = 7.5f;
+			Explosion[2].OvalY_Array_permit[i] = FALSE;
+		}
+
+		break;
+	case ATTRIBUTE::MELT:
+		Melt[0].image = LoadGraph("Images/Player/img02.png");
+		for (int i = 0; i < PARTICLE; i++)
+		{
+			Melt[1].display_permit_Array[i] = FALSE;
+			Melt[1].BrendMode_ALPFA_Array[i] = 255;
+		}
+		break;
+	case ATTRIBUTE::POISON:
+		Poison[0].image = LoadGraph("Images/Player/img03.png");
+		for (int i = 0; i < PARTICLE; i++)
+		{
+			Poison[1].display_permit_Array[i] = FALSE;
+			Poison[1].BrendMode_ALPFA_Array[i] = 255;
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		Paralysis[0].image = LoadGraph("Images/Player/img04.png");
+		for (int i = 0; i < PARTICLE; i++) 
+		{
+			Paralysis[1].display_permit_Array[i] = FALSE;
+			Paralysis[1].BrendMode_ALPFA_Array[i] = 255;
+		}
+		break;
+	default:
+		break;
+	}
 
 	efect_count = 0;
 	delete_flg = false;
@@ -67,7 +120,7 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 }
 
 //-----------------------------------
-// •`‰æ
+// æç”»
 //-----------------------------------
 void NormalBullet::Draw() const
 {
@@ -106,7 +159,38 @@ void NormalBullet::Draw() const
 		}
 		else
 		{
-			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, ORANGE, TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+			for (int i = 0; i < 5; i++) 
+			{
+				DrawRotaGraph(location.x - scrool_x, location.y - scrool_y, 1, 1, Explosion[0].image, TRUE, FALSE);
+			}
+			if (Explosion[1].display_permit == TRUE && Explosion[1].BrendMode_ALPFA > 0) 
+			{
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, Explosion[1].BrendMode_ALPFA);
+				DrawOvalAA(Explosion[1].x - scrool_x, Explosion[1].y - scrool_y, Explosion[1].X_radius - 10, Explosion[1].Y_radius - 10, 20, 0xff0000, FALSE, 10);
+				DrawOvalAA(Explosion[1].x - scrool_x, Explosion[1].y - scrool_y, Explosion[1].X_radius, Explosion[1].Y_radius, 20, 0xff0000, FALSE, 6);
+			}
+			for (int i = 0; i < PARTICLE; i++) 
+			{
+				if (Explosion[2].display_permit_Array[i] == TRUE) 
+				{
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					SetDrawBlendMode(DX_BLENDMODE_ADD, Explosion[2].BrendMode_ALPFA_Array[i]);
+					DrawOvalAA(Explosion[2].x_Array[i] - scrool_x, Explosion[2].y_Array[i] - scrool_y, 8, Explosion[2].OvalY_Array_radius[i], 20, 0xff0000, FALSE, 3.0f);
+				}
+			}
+			for (int i = 0; i < PARTICLE; i++) 
+			{
+				if (Explosion[3].display_permit_Array[i] == TRUE) 
+				{
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Explosion[3].BrendMode_ALPFA_Array[i]);
+					DrawRotaGraph(Explosion[3].x_Array[i] - scrool_x, Explosion[3].y_Array[i] - scrool_y, 1.5, 1, Explosion[0].image, TRUE, FALSE);
+				}
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		break;
 	case ATTRIBUTE::MELT:
@@ -122,23 +206,22 @@ void NormalBullet::Draw() const
 		}
 		else
 		{
-			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, BLUE, TRUE);
-		}
-		break;
-	case ATTRIBUTE::PARALYSIS:
-		if (delete_flg)
-		{
-			if (!efect_end)
+			for (int i = 0; i < PARTICLE; i++) 
 			{
-				for (int i = 0; i < PIXEL_MAX; i++)
+				if (Melt[1].display_permit_Array[i] == TRUE) 
 				{
-					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Melt[1].BrendMode_ALPFA_Array[i]);
+					DrawRotaGraph(Melt[1].x_Array[i] - scrool_x, Melt[1].y_Array[i] - scrool_y, 2.0, 1, Melt[0].image, TRUE, FALSE);
 				}
 			}
-		}
-		else
-		{
-			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, YELLOW, TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+			for (int j = 0; j < 2; j++)
+			{
+				DrawRotaGraph(location.x - scrool_x, location.y - scrool_y, 1, 1, Melt[0].image, TRUE, FALSE);
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		break;
 	case ATTRIBUTE::POISON:
@@ -154,7 +237,53 @@ void NormalBullet::Draw() const
 		}
 		else
 		{
-			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, PURPLE, TRUE);
+			for (int i = 0; i < PARTICLE; i++) 
+			{
+				if (Poison[1].display_permit_Array[i] == TRUE) 
+				{
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Poison[1].BrendMode_ALPFA_Array[i]);
+					DrawRotaGraph(Poison[1].x_Array[i] - scrool_x, Poison[1].y_Array[i] - scrool_y, 2.0, 1, Poison[0].image, TRUE, FALSE);
+				}
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+			for (int j = 0; j < 2; j++) 
+			{
+				DrawRotaGraph(location.x - scrool_x, location.y - scrool_y, 1, 1, Poison[0].image, TRUE, FALSE);
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);		
+		}
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		if (delete_flg)
+		{
+			if (!efect_end)
+			{
+				for (int i = 0; i < PIXEL_MAX; i++)
+				{
+					DrawCircle(dot_location_x[i] - scrool_x, dot_location_y[i] - scrool_y, 2, 0x000000, TRUE);
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < PARTICLE; i++)
+			{
+				if (Paralysis[1].display_permit_Array[i] == TRUE)
+				{
+					SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+					SetDrawBlendMode(DX_BLENDMODE_ALPHA, Paralysis[1].BrendMode_ALPFA_Array[i]);
+					DrawRotaGraph(Paralysis[1].x_Array[i] - scrool_x, Paralysis[1].y_Array[i] - scrool_y, 2.0, 1, Paralysis[0].image, TRUE, FALSE);
+				}
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+			for (int j = 0; j < 2; j++)
+			{
+				DrawRotaGraph(location.x - scrool_x, location.y - scrool_y, 1, 1, Paralysis[0].image, TRUE, FALSE);
+			}
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 		break;
 	default:
@@ -163,17 +292,202 @@ void NormalBullet::Draw() const
 }
 
 //-----------------------------------
-// XV
+// æ›´æ–°
 //-----------------------------------
 void NormalBullet::Update(const Stage* stage_pointa)
 {
-
+	srand((unsigned)time(NULL));
+	Tick++;
 	float scrool_x = CameraWork::GetCamera().x;
 	if (!player_direction)
 	{
 		if (!HitBlock(stage_pointa) && location.x - scrool_x < 1280 && !delete_flg)
 		{
-			location.x += BULLET_SPEED;
+			switch (attribute)
+			{
+			case ATTRIBUTE::NORMAL:
+				location.x += BULLET_SPEED;
+				break;
+			case ATTRIBUTE::EXPLOSION:
+				location.x += EXPLOSION_BULLET_SPEED;
+				if (Tick == 1) 
+				{
+					if (Explosion[1].display_permit == FALSE) 
+					{
+						Explosion[1].x = location.x + 22;
+						Explosion[1].y = location.y;
+						Explosion[1].X_radius = 4.0;
+						Explosion[1].Y_radius = 8.0;
+						Explosion[1].display_permit = TRUE;
+					}
+				}
+				if (Tick % 8 == 0) 
+				{
+					for (int i = 0; i < PARTICLE; i++) 
+					{
+						if (Explosion[2].display_permit_Array[i] == 0) 
+						{
+							Explosion[2].x_Array[i] = location.x + 10;
+							Explosion[2].y_Array[i] = location.y;
+							Explosion[2].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				if (Tick % 2 == 0) 
+				{
+					for (int i = 0; i < PARTICLE; i++) 
+					{
+						if (Explosion[3].display_permit_Array[i] == 0) 
+						{
+							Explosion[3].x_Array[i] = location.x - 10;
+							Explosion[3].y_Array[i] = location.y + rand() % 8 - 3;
+							Explosion[3].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				if (Explosion[1].display_permit == TRUE)
+				{
+					Explosion[1].X_radius = Explosion[1].X_radius * 1.11;
+					Explosion[1].Y_radius = Explosion[1].Y_radius * 1.11;
+					Explosion[1].BrendMode_ALPFA -= 10;
+					if (Explosion[1].BrendMode_ALPFA <= 0) 
+					{
+						Explosion[1].display_permit = FALSE;
+						Explosion[1].BrendMode_ALPFA = 255;
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++) 
+				{
+					if (Explosion[2].display_permit_Array[i] == TRUE) 
+					{
+						Explosion[2].BrendMode_ALPFA_Array[i] -= 6;
+						if (Explosion[2].OvalY_Array_permit[i] == FALSE) 
+						{
+							Explosion[2].OvalY_Array_radius[i] += 1.5 * 2.0;
+						}
+						else 
+						{
+							Explosion[2].OvalY_Array_radius[i] -= 0.5 * 2.0;
+						}
+
+						if (Explosion[2].OvalY_Array_permit[i] == FALSE && Explosion[2].OvalY_Array_radius[i] > 15.0 * 2.0) 
+						{
+							Explosion[2].OvalY_Array_permit[i] = TRUE;
+						}
+						if (Explosion[2].OvalY_Array_permit[i] == TRUE && Explosion[2].OvalY_Array_radius[i] < 0.0) 
+						{
+							Explosion[2].display_permit_Array[i] = FALSE;
+							Explosion[2].BrendMode_ALPFA_Array[i] = 255;
+							Explosion[2].OvalY_Array_radius[i] = 7.5 * 2.0;
+							Explosion[2].OvalY_Array_permit[i] = FALSE;
+							continue;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++) 
+				{
+					if (Explosion[3].display_permit_Array[i] == TRUE) 
+					{
+						Explosion[3].BrendMode_ALPFA_Array[i] -= 12;
+						if (Explosion[3].BrendMode_ALPFA_Array[i] <= 0) 
+						{
+							Explosion[3].display_permit_Array[i] = FALSE;
+							Explosion[3].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
+			case ATTRIBUTE::MELT:
+				location.x += MELT_BULLET_SPEED;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Melt[1].display_permit_Array[i] == FALSE)
+						{
+							Melt[1].x_Array[i] = location.x + 5;
+							Melt[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Melt[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Melt[1].display_permit_Array[i] == TRUE)
+					{
+						Melt[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Melt[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Melt[1].display_permit_Array[i] = FALSE;
+							Melt[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
+			case ATTRIBUTE::POISON:
+				location.x += POISON_BULLET_SPEED;
+				if (Tick % 5 == 0) 
+				{
+					for (int i = 0; i < PARTICLE; i++) 
+					{
+						if (Poison[1].display_permit_Array[i] == FALSE) 
+						{
+							Poison[1].x_Array[i] = location.x + 5;
+							Poison[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Poison[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++) 
+				{
+					if (Poison[1].display_permit_Array[i] == TRUE) 
+					{
+						Poison[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Poison[1].BrendMode_ALPFA_Array[i] <= 0) 
+						{
+							Poison[1].display_permit_Array[i] = FALSE;
+							Poison[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
+			case ATTRIBUTE::PARALYSIS:
+				location.x += PARARYSIS_BULLET_SPEED;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Paralysis[1].display_permit_Array[i] == FALSE)
+						{
+							Paralysis[1].x_Array[i] = location.x + 5;
+							Paralysis[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Paralysis[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Paralysis[1].display_permit_Array[i] == TRUE)
+					{
+						Paralysis[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Paralysis[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Paralysis[1].display_permit_Array[i] = FALSE;
+							Paralysis[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
+			}
 		}
 		else
 		{
@@ -193,9 +507,192 @@ void NormalBullet::Update(const Stage* stage_pointa)
 	{
 		if (!HitBlock(stage_pointa) && location.x - scrool_x > 0 && !delete_flg)
 		{
-			location.x -= BULLET_SPEED;
+			switch (attribute)
+			{
+			case ATTRIBUTE::NORMAL:
+				location.x -= BULLET_SPEED;
+				break;
+			case ATTRIBUTE::EXPLOSION:
+				location.x -= EXPLOSION_BULLET_SPEED;
+				if (Tick == 1)
+				{
+					if (Explosion[1].display_permit == FALSE)
+					{
+						Explosion[1].x = location.x - 22;
+						Explosion[1].y = location.y;
+						Explosion[1].X_radius = 4;
+						Explosion[1].Y_radius = 8;
+						Explosion[1].display_permit = TRUE;
+					}
+				}
+				if (Tick % 8 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Explosion[2].display_permit_Array[i] == 0)
+						{
+							Explosion[2].x_Array[i] = location.x - 15;
+							Explosion[2].y_Array[i] = location.y;
+							Explosion[2].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				if (Tick % 2 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Explosion[3].display_permit_Array[i] == 0)
+						{
+							Explosion[3].x_Array[i] = location.x + 15;
+							Explosion[3].y_Array[i] = location.y + rand() % 8 - 3;
+							Explosion[3].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				if (Explosion[1].display_permit == TRUE)
+				{
+					Explosion[1].X_radius = Explosion[1].X_radius * 1.11;
+					Explosion[1].Y_radius = Explosion[1].Y_radius * 1.11;
+					Explosion[1].BrendMode_ALPFA -= 10;
+					if (Explosion[1].BrendMode_ALPFA <= 0)
+					{
+						Explosion[1].display_permit = FALSE;
+						Explosion[1].BrendMode_ALPFA = 255;
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Explosion[2].display_permit_Array[i] == TRUE)
+					{
+						Explosion[2].BrendMode_ALPFA_Array[i] -= 6;
+						if (Explosion[2].OvalY_Array_permit[i] == FALSE)
+						{
+							Explosion[2].OvalY_Array_radius[i] += 1.5 * 2.0;
+						}
+						else
+						{
+							Explosion[2].OvalY_Array_radius[i] -= 0.5 * 2.0;
+						}
+						if (Explosion[2].OvalY_Array_permit[i] == FALSE && Explosion[2].OvalY_Array_radius[i] > 15.0 * 2.0)
+						{
+							Explosion[2].OvalY_Array_permit[i] = TRUE;
+						}
+						if (Explosion[2].OvalY_Array_permit[i] == TRUE && Explosion[2].OvalY_Array_radius[i] < 0.0)
+						{
+							Explosion[2].display_permit_Array[i] = FALSE;
+							Explosion[2].BrendMode_ALPFA_Array[i] = 255;
+							Explosion[2].OvalY_Array_radius[i] = 7.5 * 2.0;
+							Explosion[2].OvalY_Array_permit[i] = FALSE;
+							continue;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Explosion[3].display_permit_Array[i] == TRUE)
+					{
+						Explosion[3].BrendMode_ALPFA_Array[i] -= 12;
+						if (Explosion[3].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Explosion[3].display_permit_Array[i] = FALSE;
+							Explosion[3].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
+			case ATTRIBUTE::MELT:
+				location.x -= MELT_BULLET_SPEED;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Melt[1].display_permit_Array[i] == FALSE)
+						{
+							Melt[1].x_Array[i] = location.x - 5;
+							Melt[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Melt[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Melt[1].display_permit_Array[i] == TRUE)
+					{
+						Melt[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Melt[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Melt[1].display_permit_Array[i] = FALSE;
+							Melt[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
+			case ATTRIBUTE::POISON:
+				location.x -= POISON_BULLET_SPEED;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Poison[1].display_permit_Array[i] == FALSE)
+						{
+							Poison[1].x_Array[i] = location.x - 5;
+							Poison[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Poison[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Poison[1].display_permit_Array[i] == TRUE)
+					{
+						Poison[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Poison[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Poison[1].display_permit_Array[i] = FALSE;
+							Poison[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
+			case ATTRIBUTE::PARALYSIS:
+				location.x -= PARARYSIS_BULLET_SPEED;
+				if (Tick % 5 == 0)
+				{
+					for (int i = 0; i < PARTICLE; i++)
+					{
+						if (Paralysis[1].display_permit_Array[i] == FALSE)
+						{
+							Paralysis[1].x_Array[i] = location.x - 5;
+							Paralysis[1].y_Array[i] = location.y + rand() % 8 - 3;
+							Paralysis[1].display_permit_Array[i] = TRUE;
+							break;
+						}
+					}
+				}
+				for (int i = 0; i < PARTICLE; i++)
+				{
+					if (Paralysis[1].display_permit_Array[i] == TRUE)
+					{
+						Paralysis[1].BrendMode_ALPFA_Array[i] -= 5;
+						if (Paralysis[1].BrendMode_ALPFA_Array[i] <= 0)
+						{
+							Paralysis[1].display_permit_Array[i] = FALSE;
+							Paralysis[1].BrendMode_ALPFA_Array[i] = 255;
+							continue;
+						}
+					}
+				}
+				break;
+			}
 		}
-		else
+		else                   //ç€å¼¾æ™‚ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®åº§æ¨™æ›´æ–°(å·¦
 		{
 			if (!delete_flg)
 			{
@@ -211,11 +708,49 @@ void NormalBullet::Update(const Stage* stage_pointa)
 
 	if (delete_flg)
 	{
+		switch (attribute)
+		{
+		case ATTRIBUTE::EXPLOSION:
+			for (int i = 0; i < PARTICLE; i++)
+			{
+				Explosion[3].display_permit_Array[i] = FALSE;
+				Explosion[2].display_permit_Array[i] = 0;
+				Explosion[3].BrendMode_ALPFA_Array[i] = 255;
+				Explosion[2].BrendMode_ALPFA_Array[i] = 255;
+				Explosion[1].BrendMode_ALPFA = 255;
+				Explosion[2].OvalY_Array_radius[i] = 7.5f;
+				Explosion[2].OvalY_Array_permit[i] = FALSE;
+			}
+			break;
+		case ATTRIBUTE::MELT:
+			for (int i = 0; i < PARTICLE; i++)
+			{
+				Melt[1].display_permit_Array[i] = 0;
+				Melt[1].BrendMode_ALPFA_Array[i] = 255;
+			}
+			break;
+		case ATTRIBUTE::POISON:
+			for (int i = 0; i < PARTICLE; i++) 
+			{
+				Poison[1].display_permit_Array[i] = 0;
+				Poison[1].BrendMode_ALPFA_Array[i] = 255;
+			}
+			break;
+		case ATTRIBUTE::PARALYSIS:
+			for (int i = 0; i < PARTICLE; i++) 
+			{
+				Paralysis[1].display_permit_Array[i] = 0;
+				Paralysis[1].BrendMode_ALPFA_Array[i] = 255;
+			}
+			break;
+		default:
+			break;
+		}
 		NormalBulletEfect();
 	}
 }
 
-bool NormalBullet::NormalBulletEfect()
+bool NormalBullet::NormalBulletEfect()		//ç€å¼¾ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 {
 
 	if (!efect_end)

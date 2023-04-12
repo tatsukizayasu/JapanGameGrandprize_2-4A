@@ -25,18 +25,22 @@ private:
 	int time; //時間測定
 	int standby_time; //硬直時間
 	int magic_num; //魔法攻撃した数
-	int harpy_image; //ハーピィの画像
 	int magic_time; //魔法攻撃の間隔。標
+	int standby_num;
+	int images;
 	float vector; //ベクトル
 	int physical_time; //物理攻撃時間
 	float range; //プレイヤーとの距離	
 	float range_y; //プレイヤーとの距離Y座
 	float travel; //X座標に動く量
 	float travel_y; //ｙ座標に動く量
+	float old_x; //復帰する座標
+	float old_y; //復帰する座標
 	bool magic_attack; //魔法攻撃
 	bool attack; //攻撃が当たったか
 	bool physical_attack; //物理攻撃に入る（true)なら
-	bool inversion; //反転（壁にあったった)
+	bool go_back; //落下する前の座標に戻る。
+
 	HARPY_STATE action_type; //行動パターン
 	HARPY_ATTACK attack_state; //攻撃状態
 public:
@@ -59,6 +63,9 @@ public:
 	//移動
 	void Move(const Location player_location) override;
 
+	//元の座標に戻る
+	void Comeback();
+
 	//接近攻撃（物理攻撃）時の動き
 	void PhysicalMove(const Location player_location);
 
@@ -66,7 +73,7 @@ public:
 	void Fall() override;
 
 	//攻撃
-	void  Attack(Location) override;
+	void  Attack(const Location) override;
 
 	//攻撃が当たっているか
 	AttackResource Hit() override;

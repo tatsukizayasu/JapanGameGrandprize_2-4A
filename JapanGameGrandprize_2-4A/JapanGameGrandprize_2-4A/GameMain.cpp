@@ -8,9 +8,12 @@
 #include "Harpy.h"
 #include "BULLET.h"
 #include "Mage.h"
+#include "Wyvern.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
 #include "DotByDot.h"
+#include <math.h>
+#include "GameOver.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -19,25 +22,20 @@ GameMain::GameMain()
 {
 #undef DOT_BY_DOT
 	//背景画像読み込み
-	background_image = LoadGraph("Images/Scene/gamemain.png");
+	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
 #ifdef _DEBUG
 
 #else
 	pause = new Pause();
 #endif
-
+	enemy_spawn_volume = 0;
 	stage = new Stage();
 	player = new Player(stage);
 	stage->SetPlayer(player);
-	Location location;
-	location.x = 200;
-	location.y = 300;
-	/*enemy = new EnemyBase * [5];
-	enemy[0] = new EnemySlime(location);
-	enemy[1] = new Undead(location);
-	enemy[2] = new EnemyGhost(location);
-	enemy[3] = new Mage(location);
-	enemy[4] = new Harpy(location);*/
+
+	EnemyBase::CreateLogFont();
+
 	SpawnEnemy();
 	camera_work = new CameraWork(0, 800, player, stage);
 	item_controller = new ItemController();
@@ -53,9 +51,6 @@ GameMain::GameMain()
 GameMain::~GameMain()
 {
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
 	delete camera_work;
 #ifdef _DEBUG
 
@@ -65,7 +60,8 @@ GameMain::~GameMain()
 	delete player;
 	delete stage;
 
-	for (int i = 0; i < spawn_volume; i++)
+	EnemyBase::DeleteLogFont();
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		delete enemy[i];
 	}
@@ -104,6 +100,10 @@ AbstractScene* GameMain::Update()
 
 	EnemyUpdate();
 	item_controller->Update(player);
+	if (player->GetState() == PLAYER_STATE::DEATH)
+	{
+		return new GameOver();
+	}
 
 	return this;
 }
@@ -117,11 +117,10 @@ void GameMain::SpawnEnemy()
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = spawn.size();
-	enemy = new EnemyBase * [spawn_volume];
-
-	for (int i = 0; i < spawn_volume; i++)
+	enemy_spawn_volume = spawn.size();
+	enemy = new EnemyBase * [enemy_spawn_volume];
+	int i;
+	for (i = 0; i < enemy_spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -141,6 +140,7 @@ void GameMain::SpawnEnemy()
 			enemy[i] = new EnemyGhost(spawn[i].location);
 			break;
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
+			enemy[i] = new Wyvern(spawn[i].location);
 			break;
 		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
 			//enemy[count] = new EnemySlimeBoss();
@@ -170,10 +170,7 @@ void GameMain::EnemyUpdate()
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
-	for (int i = 0; i < spawn_volume; i++)
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
 		{
@@ -290,19 +287,22 @@ void GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
+	////背景	描画
+	// DrawGraph(0, 0, background_image, FALSE);
+	Location camera_work = CameraWork::GetCamera();
+	
+	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
-	//背景	描画
-	DrawGraph(0, 0, background_image, FALSE);
+	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 
 	stage->Draw();
 	item_controller->Draw();
 
 	player->Draw();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
-	for (int i = 0; i < spawn_volume; i++)
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
 		{
@@ -310,6 +310,8 @@ void GameMain::Draw()const
 		}
 	}
 	bullet_manager->Draw();
+
+	player->PouchDraw();
 #ifdef _DEBUG
 
 #else

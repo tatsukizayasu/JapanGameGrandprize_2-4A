@@ -167,6 +167,7 @@
     <ClInclude Include="EnemySlimeBoss.h" />
     <ClInclude Include="EnumElementItem.h" />
     <ClInclude Include="EnumEnemyType.h" />
+    <ClInclude Include="GameOver.h" />
     <ClInclude Include="GhostBullet.h" />
     <ClInclude Include="Harpy.h" />
     <ClInclude Include="HarpyBullet.h" />
@@ -177,6 +178,7 @@
     <ClInclude Include="NormalBullet.h" />
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
+    <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h" />
     <ClInclude Include="Stage\StageBuilder\ObjectBase.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="SlimeBossBody.h" />
@@ -214,6 +216,8 @@
     <ClInclude Include="TorrentBullet.h" />
     <ClInclude Include="TorrentNuts.h" />
     <ClInclude Include="Undead.h" />
+    <ClInclude Include="Wyvern.h" />
+    <ClInclude Include="WyvernBless.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
@@ -229,6 +233,7 @@
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="ElementItem.cpp" />
     <ClCompile Include="EnemySlimeBoss.cpp" />
+    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GhostBullet.cpp" />
     <ClCompile Include="Harpy.cpp" />
     <ClCompile Include="HarpyBullet.cpp" />
@@ -238,6 +243,7 @@
     <ClCompile Include="MageBullet.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
+    <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp" />
     <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="SlimeBossBody.cpp" />
@@ -271,6 +277,8 @@
     <ClCompile Include="TorrentBullet.cpp" />
     <ClCompile Include="TorrentNuts.cpp" />
     <ClCompile Include="Undead.cpp" />
+    <ClCompile Include="Wyvern.cpp" />
+    <ClCompile Include="WyvernBless.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

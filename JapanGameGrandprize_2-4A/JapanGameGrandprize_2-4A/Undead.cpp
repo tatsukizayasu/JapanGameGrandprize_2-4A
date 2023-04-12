@@ -83,6 +83,8 @@ Undead::Undead(Location spawn_location)
 
 	images = new int[UNDEAD_MOVE_IMAGES];
 	LoadDivGraph("Images/Enemy/undead.png", 5, 5, 1, 40, 80, images);
+
+	InitDamageLog();
 }
 
 //-----------------------------------
@@ -106,6 +108,7 @@ Undead::~Undead()
 	}
 
 	delete[] images;
+
 }
 
 //-----------------------------------
@@ -206,6 +209,7 @@ void Undead::Update(const Player* player, const Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+	UpdateDamageLog();
 }
 
 //-----------------------------------
@@ -290,7 +294,7 @@ void Undead::Fall()
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  Undead::Attack(Location player_location)
+void  Undead::Attack(const Location player_location)
 {
 
 	attack_time--;
@@ -337,19 +341,42 @@ void Undead::Death()
 void Undead::HitBullet(const BulletBase* bullet)
 {
 
+	int i;
+	int damage = 0;
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage();
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		hp -= bullet->GetDamage();
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::MELT:
-		hp -= bullet->GetDamage();
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::POISON:
-		if (poison)
+		if (!poison)
 		{
 			poison = true;
 			poison_damage = bullet->GetDamage();
@@ -357,13 +384,23 @@ void Undead::HitBullet(const BulletBase* bullet)
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		paralysis_time = bullet->GetDebuffTime() * 0;
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		if (!paralysis)
+		{
+			paralysis_time = bullet->GetDebuffTime() * 0;
+		}
 		break;
 	case ATTRIBUTE::HEAL:
 		break;
 	default:
 		break;
 	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------
@@ -388,6 +425,13 @@ void Undead::Draw() const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(UNDEAD_HP);
+	}
+	
+	DrawDamageLog();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0,
 		images[image_argument], TRUE, !left_move);

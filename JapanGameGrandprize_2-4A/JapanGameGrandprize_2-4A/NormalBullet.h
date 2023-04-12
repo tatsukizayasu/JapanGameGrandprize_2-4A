@@ -10,8 +10,13 @@ class NormalBullet : public BulletBase
 {
 private:
 
+	int Tick;
 	float speed_x, speed_y[PIXEL_MAX];
 	float dot_location_x[PIXEL_MAX], dot_location_y[PIXEL_MAX];
+	Bullet_Effect Explosion[4];	//0:–{’e@1:”g“®(”­Ë) 2:”g“®@3:‹OÕ
+	Bullet_Effect Melt[2];		//0:–{’e@1:‹OÕ
+	Bullet_Effect Paralysis[2];	//0:–{’e@1:‹OÕ
+	Bullet_Effect Poison[2];	//0:–{’e@1:‹OÕ
 public:
 
 	NormalBullet();

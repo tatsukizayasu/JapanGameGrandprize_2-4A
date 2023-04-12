@@ -2,15 +2,15 @@
 #include "CameraWork.h"
 
 //ハーピィの遠距離攻撃の移動速度
-#define HARPY_BULLET_SPEED 10
+#define HARPY_BULLET_SPEED 8
 
 //ハーピィの遠距離ダメージ
-#define HARPY_BULLET_DAMAGE 10
+#define HARPY_BULLET_DAMAGE 5
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-HarpyBullet::HarpyBullet(Location spawn_location, Location player_location)
+HarpyBullet::HarpyBullet(const Location spawn_location, const Location player_location)
 {
 
 	type = ENEMY_TYPE::WIND;

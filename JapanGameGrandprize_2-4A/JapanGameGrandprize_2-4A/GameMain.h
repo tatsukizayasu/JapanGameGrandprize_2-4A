@@ -13,6 +13,7 @@ class GameMain :
 {
 private:
 
+    int enemy_spawn_volume; //エネミーの数
     //各クラスのオブジェクト
     Player* player;
     Stage* stage;
@@ -26,6 +27,7 @@ private:
 
     //操作間隔時間
     int input_margin;
+    int background_image[2];
 
     ItemController* item_controller; //アイテム管理
     BulletManager* bullet_manager; //弾の管理

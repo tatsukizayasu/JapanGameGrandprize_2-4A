@@ -193,6 +193,8 @@ void Mage::Update(const Player* player, const Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+	UpdateDamageLog();
+
 }
 
 //-----------------------------------
@@ -290,7 +292,7 @@ void Mage::Fall()
 //-----------------------------------
 //çUåÇ
 //-----------------------------------
-void  Mage::Attack(Location player_location)
+void  Mage::Attack(const Location player_location)
 {
 
 	CreateBullet(player_location);
@@ -357,16 +359,42 @@ void Mage::CreateBullet(Location player_location)
 void Mage::HitBullet(const BulletBase* bullet)
 {
 
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+
 		break;
 	case ATTRIBUTE::MELT:
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+
 		break;
 	case ATTRIBUTE::POISON:
 		if (!poison)
@@ -377,6 +405,9 @@ void Mage::HitBullet(const BulletBase* bullet)
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+
 		if (!paralysis)
 		{
 			paralysis = true;
@@ -388,6 +419,11 @@ void Mage::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------
@@ -399,6 +435,12 @@ void Mage::Draw() const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(MAGE_HP);
+	}
+	DrawDamageLog();
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2, image, TRUE);
