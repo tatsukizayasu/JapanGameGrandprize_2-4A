@@ -32,6 +32,13 @@ private:
 	int standby_time; //待機時間測定
 	int animation_time; //	画像切り替え間隔
 	
+	float old_x; //目標地点
+	float old_y; //目的地点
+	float player_x; //古い座標
+	float player_y; //古い座標
+
+	bool attack_tail; //尻尾攻撃中
+	bool set_coordinate; //尻尾攻撃（プレイヤーの場所に行く）
 	bool wall_hit; //壁に当たったのか。
 	bool attack; //接近攻撃
 	bool magic; //魔法攻撃

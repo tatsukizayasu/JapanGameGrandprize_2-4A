@@ -60,8 +60,12 @@ Dragon::Dragon(Location spawn_location)
 	speed = SPEED;
 
 	animation = 0;
-	attack_method = 3;
+	attack_method = 2;
 	magic_num = 0;
+	old_x = 0;
+	old_y = 0;
+	player_x = 0;
+	player_y = 0;
 	animation_time = 0;
 	switchover_time = 0;
 	effect_time = 0;
@@ -69,6 +73,7 @@ Dragon::Dragon(Location spawn_location)
 	breath_time = 0;
 
 	can_delete = false;
+	attack_tail = false;
 	wall_hit = false;
 	left_move = true;
 	attack = false;
@@ -115,28 +120,6 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
-
-	hit_stage = HitStage(stage);
-	if (hit_stage.hit) //ステージとの当たり判定
-	{
-		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-		hit_direction = HitDirection(hit_stage.chip);
-
-		if (hit_direction == STAGE_DIRECTION::TOP)
-		{
-			location = old_location;
-		}
-		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
-		{
-			location = old_location;
-			left_move = !left_move;
-			wall_hit = true;
-		}
-
-	}
-
-
-
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -163,6 +146,7 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
 				state = ENEMY_STATE::ATTACK;
+				speed = SPEED;
 
 			}
 		}
@@ -176,6 +160,40 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	default:
 		break;
 	}
+
+	hit_stage = HitStage(stage);
+	if (hit_stage.hit) //ステージとの当たり判定
+	{
+		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+		hit_direction = HitDirection(hit_stage.chip);
+
+		if (hit_direction == STAGE_DIRECTION::TOP)
+		{
+			location = old_location;
+		}
+		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
+		{
+			location = old_location;
+			left_move = !left_move;
+			wall_hit = true;
+
+			if (attack_tail==true)
+			{
+				state = ENEMY_STATE::MOVE;
+				if (hp < HIT_POINTS / 2)
+				{
+					attack_method = GetRand(3);
+				}
+				else
+				{
+					attack_method = GetRand(2);
+				}
+
+			}
+		}
+
+	}
+
 
 	//毒のダメージ
 	if (poison == true)
@@ -279,6 +297,7 @@ void Dragon::Move(const Location player_location)
 	case 2:
 		attack_state = DRAGON_ATTACK::TAIL_ATTACK;
 		state = ENEMY_STATE::FALL;
+		attack_tail = true;
 		break;
 	case 3:
 		attack_state = DRAGON_ATTACK::ROAR;
@@ -365,7 +384,36 @@ void Dragon::DiteMove(const Location player_location)
 //-----------------------------------
 void Dragon::TailMove(const Location player_location)
 {
-	//4月11日尻尾の攻撃から書いてちょ
+	float old_x;
+	float old_y;
+	float vector;
+	float travel;
+	float travel_y;
+
+	if (set_coordinate == false)
+	{
+		player_x = player_location.x;
+		player_y = player_location.y;
+		set_coordinate = true;
+	}
+
+	old_x = player_x - location.x;
+	old_y = player_y - location.y;
+
+	vector = sqrt(old_x * old_x + old_y * old_y);
+
+	travel = old_x / vector;
+	travel_y = old_y / vector;
+	location.x += travel * 3;
+	location.y += travel_y * 3;
+
+	if (player_x + 10 > location.x && player_x - 10 < location.x && player_y + 10 > location.y && player_y - 10 < location.y)
+	{
+		state = ENEMY_STATE::MOVE;
+		attack_method = GetRand(2);
+
+	}
+
 }
 
 //-----------------------------------
@@ -396,7 +444,7 @@ void Dragon::RoarMove(const Location player_location)
 	//	(new DragonThunder(player_location.x, player_location.y-60)); 
 	//}
 
-	
+
 
 	attack_method = GetRand(2);
 
@@ -445,6 +493,7 @@ void Dragon::Fall()
 	{
 		speed += ENEMY_FALL_SPEED;
 	}
+
 }
 
 //-----------------------------------
