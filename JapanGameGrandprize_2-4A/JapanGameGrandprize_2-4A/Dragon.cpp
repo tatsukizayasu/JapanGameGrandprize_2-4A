@@ -147,6 +147,25 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
+
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if (hit_direction == STAGE_DIRECTION::TOP)
+			{
+				state = ENEMY_STATE::ATTACK;
+
+			}
+		}
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
@@ -259,7 +278,7 @@ void Dragon::Move(const Location player_location)
 		break;
 	case 2:
 		attack_state = DRAGON_ATTACK::TAIL_ATTACK;
-		state = ENEMY_STATE::ATTACK;
+		state = ENEMY_STATE::FALL;
 		break;
 	case 3:
 		attack_state = DRAGON_ATTACK::ROAR;
@@ -346,7 +365,7 @@ void Dragon::DiteMove(const Location player_location)
 //-----------------------------------
 void Dragon::TailMove(const Location player_location)
 {
-
+	//4月11日尻尾の攻撃から書いてちょ
 }
 
 //-----------------------------------
@@ -368,11 +387,16 @@ void Dragon::DreathMove(const Location player_location)
 void Dragon::RoarMove(const Location player_location)
 {
 
-	for (int i = 0; i < THUNDER; i++)
-	{
-		BulletManager::GetInstance()->CreateEnemyBullet
-		(new DragonThunder(player_location.x, player_location.y-60)); //ステージとの兼ね合いがあるため、4月11日適当に座標を入れています。
-	}
+	//for (int i = 0; i < THUNDER; i++)
+	//{
+	//  GetRand(???)を使って、ランダムな座標に雷を落とす処理
+	// 	//ステージとの兼ね合いがあるため、現在はコメントアウト
+	// 
+	//	BulletManager::GetInstance()->CreateEnemyBullet
+	//	(new DragonThunder(player_location.x, player_location.y-60)); 
+	//}
+
+	
 
 	attack_method = GetRand(2);
 
@@ -415,7 +439,12 @@ AttackResource Dragon::Hit()
 //-----------------------------------
 void Dragon::Fall()
 {
+	location.y += speed;
 
+	if (speed < 3)
+	{
+		speed += ENEMY_FALL_SPEED;
+	}
 }
 
 //-----------------------------------
