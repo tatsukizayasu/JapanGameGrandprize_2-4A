@@ -9,7 +9,7 @@
 //-----------------------------------
  BoxCollider::BoxCollider()
 {
-
+	 class_name = BOX_COLLIDER_NAME;
 }
 
 //-----------------------------------
@@ -17,6 +17,7 @@
 //-----------------------------------
  BoxCollider::BoxCollider(Location location, Area area):ColliderBase(location)
  {
+	 class_name = BOX_COLLIDER_NAME;
 	 this->area = area;
 
 #ifdef _STAGE_BUILDER

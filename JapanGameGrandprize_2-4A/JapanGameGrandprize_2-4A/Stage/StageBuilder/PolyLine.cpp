@@ -6,7 +6,7 @@
 //-------------------------------------
 PolyLine::PolyLine()
 {
-
+	class_name = POLY_LINE_NAME;
 }
 
 //-------------------------------------
@@ -14,7 +14,7 @@ PolyLine::PolyLine()
 //-------------------------------------
 PolyLine::PolyLine(Location bend_points[], unsigned int size)
 {
-
+	class_name = POLY_LINE_NAME;
 	for (int i = 0; i < size; i++)
 	{
 		this->bend_points.push_back(new SphereCollider(bend_points[i]));
@@ -39,6 +39,7 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 //-------------------------------------
 PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 {
+	class_name = POLY_LINE_NAME;
 	for (int i = 0; i < spheres.size(); i++)
 	{
 		bend_points.push_back(new SphereCollider(*spheres[i]));
@@ -67,6 +68,7 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 //-------------------------------------
 PolyLine::PolyLine(const PolyLine &poly_line)
 {
+	class_name = POLY_LINE_NAME;
 	for (auto it : poly_line.bend_points)
 	{
 		this->bend_points.push_back(new SphereCollider(*it));
@@ -108,14 +110,21 @@ PolyLine::~PolyLine()
 void PolyLine::Update()
 {
 #ifdef _STAGE_BUILDER
-	if (old_location != location)
+	if (old_location != pivot.GetLocation())
 	{
-		Location distance = location - old_location;
-		for (auto it : lines)
+		Location distance = pivot.GetLocation() - old_location;
+		for (int i = 0; i < lines.size(); i++)
 		{
-			it->ColliderBase::SetLocation
-			(it->ColliderBase::GetLocation() + distance);
+			lines[i]->ColliderBase::SetLocation
+			(lines[i]->ColliderBase::GetLocation() + distance);
+
+			bend_points[i]->SetLocation(lines[i]->GetLocation(LINE_START));
 		}
+		bend_points[bend_points.size() - 1]
+			->SetLocation(lines[lines.size() - 1]->GetLocation(LINE_END));
+
+		location = pivot.GetLocation();
+		old_location = location;
 	}
 #endif
 
@@ -125,8 +134,11 @@ void PolyLine::Update()
 		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
 	}
 
-	MakeLocation();
-
+	if (old_location != pivot.GetLocation())
+	{
+	}
+		MakeLocation();
+	
 
 
 }
@@ -270,7 +282,8 @@ void PolyLine::MakeLocation()
 	};
 	Location middle = (points[0] + points[1]) / 2;
 
-	SetLocation(middle);
+	location = middle;
+
 #ifdef _STAGE_BUILDER
 	pivot.SetLocation(middle);
 	old_location = middle;

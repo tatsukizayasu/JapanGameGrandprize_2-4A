@@ -8,6 +8,8 @@
 #include "LineCollider.h"
 #include "ColliderBase.h"
 
+#define BOX_COLLIDER_NAME "BoxCollider"
+
 class BoxCollider : public ColliderBase
 {
 protected:

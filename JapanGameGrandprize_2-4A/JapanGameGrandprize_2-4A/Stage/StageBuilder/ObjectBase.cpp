@@ -15,30 +15,31 @@ ObjectBase::ObjectBase()
 //--------------------------------
 ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider)
 {
+	ColliderBase* base;
 	this->pivot = new SphereCollider(pivot);
 	image = LoadGraph("images/Stage/yuka_1.png");
 	
 
-	p_collider = dynamic_cast<BoxCollider*>(p_collider);
-	if (p_collider)
+	base = dynamic_cast<BoxCollider*>(p_collider);
+	if (base)
 	{
 		collider = new BoxCollider(*dynamic_cast<BoxCollider*>(p_collider));
 	}
 
-	p_collider = dynamic_cast<SphereCollider*>(p_collider);
-	if (p_collider)
+	base = dynamic_cast<SphereCollider*>(p_collider);
+	if (base)
 	{
 		collider = new SphereCollider(*dynamic_cast<SphereCollider*>(p_collider));
 	}
 
-	p_collider = dynamic_cast<LineCollider*>(p_collider);
-	if (p_collider)
+	base = dynamic_cast<LineCollider*>(p_collider);
+	if (base)
 	{
 		collider = new LineCollider(*dynamic_cast<LineCollider*>(p_collider));
 	}
 
-	p_collider = dynamic_cast<PolyLine*>(p_collider);
-	if (p_collider)
+	base = dynamic_cast<PolyLine*>(p_collider);
+	if (base)
 	{
 		collider = new PolyLine(*dynamic_cast<PolyLine*>(p_collider));
 	}

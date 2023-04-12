@@ -117,6 +117,7 @@ public:
 	void DeleteObject();
 	//Ü‚êü‚Ì•ÏŒ`
 	bool TransformPolyLine();
+	bool TransformPolyLine(PolyLine* poly_line);
 	//‹éŒ`‚Ì•ÏŒ`
 	bool TransformBox();
 	bool TransformBox(BoxCollider* box);

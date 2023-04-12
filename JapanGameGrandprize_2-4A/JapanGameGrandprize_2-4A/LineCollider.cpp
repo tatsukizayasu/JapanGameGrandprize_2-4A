@@ -6,7 +6,7 @@
 //------------------------------------
 LineCollider::LineCollider()
 {
-
+	class_name = LINE_COLLIDER_NAME;
 	//ê‚ëŒç¿ïW
 	vector[LINE_START] = { 0,0 };
 	vector[LINE_END] = { SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -20,6 +20,7 @@ LineCollider::LineCollider()
 //------------------------------------
 LineCollider::LineCollider(Location point1, Location point2)
 {
+	class_name = LINE_COLLIDER_NAME;
 
 	//ì_Ç∂Ç·Ç»Ç¢Ç±Ç∆Çï€èÿÇ∑ÇÈ
 	if (point1 == point2)

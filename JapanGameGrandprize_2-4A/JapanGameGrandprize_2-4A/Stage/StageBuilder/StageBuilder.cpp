@@ -47,14 +47,14 @@ StageBuilder::StageBuilder()
 		};
 		poly_lines.push_back(new PolyLine(test, 3));
 	}
-	Location testloc[3]{ {300,300},{500,500},{200,700} };
-	poly_lines.push_back(new PolyLine(testloc, 3));
+	Location testloc[4]{ {300,300},{500,500},{200,700} , {900,400} };
+	PolyLine testline(testloc, 4);
 	
 	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
 
-	BoxCollider* box = new BoxCollider({ 640,360 }, { 100,100 });
+	BoxCollider box = BoxCollider({ 640,360 }, { 100,100 });
 
-	objects.push_back(new ObjectBase({ 640,460 }, box));
+	objects.push_back(new ObjectBase({ 640,460 }, &box));
 
 
 #endif // _DEV
@@ -334,6 +334,8 @@ void StageBuilder::UpdateModulation()
 		{
 			for (int i = 0; i < objects.size(); i++)
 			{
+				const char* name = objects[i]->GetColllider()->GetName();
+				//todo:名前から判断してstatic_castを使い、それぞれのクラス型に沿った処理をする
 				BoxCollider* box = dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
 				if (TransformBox(box))
 				{
@@ -341,15 +343,24 @@ void StageBuilder::UpdateModulation()
 				}
 				else
 				{
-					if (mouse->HitSphere(objects[i]->GetPivot()))
+
+					PolyLine* poly_line = dynamic_cast<PolyLine*>(objects[i]->GetColllider());
+					if (TransformPolyLine(poly_line))
 					{
-						select_collider = objects[i]->GetPivot();
+						;
 					}
 					else
 					{
-						select_collider = nullptr;
-					}
+						if (mouse->HitSphere(objects[i]->GetPivot()))
+						{
+							select_collider = objects[i]->GetPivot();
+						}
+						else
+						{
+							select_collider = nullptr;
 
+						}
+					}
 				}
 			}
 		}
@@ -724,8 +735,43 @@ bool StageBuilder::TransformPolyLine()
 			}
 		}
 
+		if (mouse->HitSphere(poly_lines[i]->GetPivot()))
+		{
+			select_collider = poly_lines[i]->GetPivot();
+			return true;
+		}
+
 		points.clear();
 	}
+
+	return false;
+}
+
+//---------------------------------------------
+// 折れ線の変形 戻り値：選択されたか
+//---------------------------------------------
+bool StageBuilder::TransformPolyLine(PolyLine* poly_line)
+{
+		vector<SphereCollider*> points = poly_line->GetPoints();
+
+		for (int i = 0; i < points.size(); i++)
+		{
+			if (mouse->HitSphere(points[i]))
+			{
+				select_collider = points[i];
+				points.clear();
+				return true;
+			}
+		}
+
+		if (mouse->HitSphere(poly_line->GetPivot()))
+		{
+			select_collider = poly_line->GetPivot();
+			return true;
+		}
+
+		points.clear();
+	
 
 	return false;
 }

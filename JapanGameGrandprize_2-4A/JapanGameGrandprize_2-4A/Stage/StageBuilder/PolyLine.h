@@ -6,8 +6,9 @@
 #include "../../ColliderBase.h"
 #include <vector>
 
-using namespace std;
+#define POLY_LINE_NAME "PolyLine"
 
+using namespace std;
 class PolyLine 
     :public ColliderBase
 {
