@@ -319,12 +319,12 @@ void Torrent::LeafCutter(const Location player_location)
 				if (left_move) //ç∂Ç…å¸Ç¢ÇƒÇ¢ÇÈ
 				{
 					speed = -TORRENT_SPEED;
-					tackle_end_point = 0 + area.width / 2;
+					tackle_end_point = static_cast<int>(area.width / 2);
 				}
 				else
 				{
 					speed = TORRENT_SPEED;
-					tackle_end_point = SCREEN_WIDTH - area.width / 2;
+					tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
 				}
 				break;
 			case TORRENT_ATTACK::DROP_NUTS:
@@ -345,12 +345,12 @@ void Torrent::LeafCutter(const Location player_location)
 			if (left_move) //ç∂Ç…å¸Ç¢ÇƒÇ¢ÇÈ
 			{
 				speed = -TORRENT_SPEED;
-				tackle_end_point = 0 + area.width / 2;
+				tackle_end_point = static_cast<int>(area.width / 2);
 			}
 			else
 			{
 				speed = TORRENT_SPEED;
-				tackle_end_point = SCREEN_WIDTH - area.width / 2;
+				tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
 			}
 		}
 	}
@@ -399,12 +399,12 @@ void Torrent::DropNuts()
 				if (left_move) //ç∂Ç…å¸Ç¢ÇƒÇ¢ÇÈ
 				{
 					speed = -TORRENT_SPEED;
-					tackle_end_point = 0 + area.width / 2;
+					tackle_end_point = static_cast<int>(area.width / 2);
 				}
 				else
 				{
 					speed = TORRENT_SPEED;
-					tackle_end_point = SCREEN_WIDTH - area.width / 2;
+					tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
 				}
 				break;
 			case TORRENT_ATTACK::LEAF_CUTTER:
@@ -425,7 +425,7 @@ void Torrent::DropNuts()
 			if (left_move) //ç∂Ç…å¸Ç¢ÇƒÇ¢ÇÈ
 			{
 				speed = -TORRENT_SPEED;
-				tackle_end_point = 0 + area.width / 2;
+				tackle_end_point = area.width / 2;
 			}
 			else
 			{
