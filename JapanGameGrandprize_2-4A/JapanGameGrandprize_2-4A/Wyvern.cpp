@@ -9,6 +9,9 @@
 //移動スピード
 #define WYVERN_MOVE_SPEED 2
 
+//y座標の移動量
+#define WYVERN_MOVEMENT_Y 5
+
 //強襲攻撃スピード
 #define WYVERN_ASSAULT_SPEED 10
 
@@ -60,7 +63,7 @@ Wyvern::Wyvern(Location spawn_location)
 
 	hp = WYVERN_HP;
 	damage = 0;
-
+	movement = 0;
 	attack_interval = WYVERN_ATTACK_INTERVAL;
 	bless_interval = BLESS_INTERVAL;
 	triple_bless_interval = TRIPLE_BLESS_INTERVAL;
@@ -264,7 +267,18 @@ void Wyvern::Idol()
 //-----------------------------------
 void Wyvern::Move(const Location player_location)
 {
+	movement = (movement + WYVERN_MOVEMENT_Y) % DIAMETER;
+
+
 	location.x += speed;
+
+	if ((location.x < area.width / 2) || 
+		(SCREEN_WIDTH - area.width / 2 < location.x))
+	{
+		left_move = !left_move;
+		speed = -speed;
+	}
+
 	if (ScreenOut())
 	{
 		state = ENEMY_STATE::IDOL;

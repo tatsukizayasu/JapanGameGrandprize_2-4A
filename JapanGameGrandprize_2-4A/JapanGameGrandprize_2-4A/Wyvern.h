@@ -18,6 +18,7 @@ private:
     bool attack; //攻撃が当たったか
     bool now_assault; //強襲攻撃かどうか
     int damage; //ダメージ
+    int movement; //y座標の移動量
     int attack_interval;        //次の攻撃までの時間
     int bless_wait_time;        //ブレスを打つまでの待機時間
     int bless_interval;         //次のブレス攻撃までの時間
@@ -95,4 +96,3 @@ public:
 #endif //_DEBUG
 
 };
-
