@@ -62,7 +62,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		element.push_back(std::make_shared<Element_Move_Floor>(type, location));
 		break;
 
-	
+
 	case BARRICADE_CENTER:
 		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, area));
 		break;
@@ -75,6 +75,56 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 
 void Stage_Element::SetElementParameter()
 {
+
+	for (auto& m : element)
+	{
+
+		for (int i = 1; i < element.size(); i++) {
+
+			if (Element::BARRICADE_CENTER == m->GetType()) {
+				auto y = element.at(i);
+				
+
+				std::shared_ptr<Element_Barricade> result = std::dynamic_pointer_cast<Element_Barricade>(y);
+
+
+				if (m.get() == y.get()) {
+					result->SetDirection(Element_Barricade::DIRECTION::NONE);
+					continue;
+
+				}
+				
+
+				//y = static_cast<Element_Barricade>(y);
+				//shared_ptr<Element_Barricade> dynamic_pointer_cast(const std::shared_ptr<Stage_Element_Base> &y) noexcept;
+				//std::shared_ptr<Element_Barricade> result = std::dynamic_pointer_cast<Element_Barricade>(y);
+
+
+
+				if (abs(y->GetLocation().x - m->GetLocation().x) <= MAP_CHIP_SIZE &&
+					abs(y->GetLocation().y - m->GetLocation().y) <= MAP_CHIP_SIZE)
+				{
+					if (y->GetLocation().y < m->GetLocation().y)
+					{
+						result->SetDirection(Element_Barricade::DIRECTION::UP);
+					}
+					else if (y->GetLocation().y > m->GetLocation().y)
+					{
+						result->SetDirection(Element_Barricade::DIRECTION::DOWN);
+					}
+					else if (y->GetLocation().x < m->GetLocation().x && y->GetLocation().x > m->GetLocation().x ||
+						y->GetLocation().y < m->GetLocation().y && y->GetLocation().y > m->GetLocation().y)
+					{
+						result->SetDirection(Element_Barricade::DIRECTION::CENTER);
+					}
+					else
+					{
+						result->SetDirection(Element_Barricade::DIRECTION::NONE);
+					}
+				}
+			}
+		}
+	}
 
 
 	//for (auto& m : element)
@@ -322,10 +372,10 @@ std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 	//ì«Ç›çûÇ›ÉçÉO
 	for (int i = 0; i < images.size(); i++) {
 		printfDx("[%d]ID:%d\t%s\n", i, images.at(i), TEXT(filename.c_str()));
-}
+	}
 #endif // 0
 
 	return images;
 
 	//return std::vector<int>();
-	}
+}
