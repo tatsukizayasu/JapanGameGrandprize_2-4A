@@ -297,7 +297,7 @@ void Torrent::Tackle()
 //-----------------------------------
 //—t‚Á‚Ï‚ğ”ò‚Î‚·UŒ‚
 //-----------------------------------
-void Torrent::LeafCutter(Location player_location)
+void Torrent::LeafCutter(const Location player_location)
 {
 
 	attack_time--;

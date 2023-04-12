@@ -8,6 +8,7 @@
 #include "Element_Move_Floor.h"
 #include "Element_Fall_Floor.h"
 #include "Element_Trap.h"
+#include "Element_Item_Drop_Object.h"
 #include "Element_Barricade.h"
 #include <memory>
 #include <set>
@@ -19,6 +20,7 @@ namespace Element {
 	const short DAMAGE_WALL = 40;		//ダメージ床
 	const short WOODEN_FLOOR = 41;		//すり抜ける床
 	const short FALL_FLOOR = 42;		//落ちる床
+	const short ITEM_DROP_OBJECT = 50;		//アイテムドロップオブジェクト
 	const short TRAP = 51;				//トラップ	(爆発物)
 	const short MOVE_FLOOR = 52;		//動く床
 	const short MOVE_FLOOR_GOAL = 53;	//動く床の目的位置
@@ -42,7 +44,7 @@ private:
 	Player* player;
 
 	//ステージ要素のID
-	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, TRAP,
+	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, ITEM_DROP_OBJECT, TRAP,
 		MOVE_FLOOR, MOVE_FLOOR_GOAL, BARRICADE_UP, BARRICADE_CENTER, BARRICADE_DOWN, YellowButton };
 public:
 

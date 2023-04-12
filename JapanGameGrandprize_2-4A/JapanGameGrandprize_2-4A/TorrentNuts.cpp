@@ -10,7 +10,7 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-TorrentNuts::TorrentNuts(ENEMY_TYPE type,Location spawn_location)
+TorrentNuts::TorrentNuts(const ENEMY_TYPE type, const Location spawn_location)
 {
 
 	location = spawn_location;
