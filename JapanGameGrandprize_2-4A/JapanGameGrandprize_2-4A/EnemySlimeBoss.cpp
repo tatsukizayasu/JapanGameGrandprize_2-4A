@@ -45,7 +45,7 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 
 	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 
-	hp = 50;
+	hp = 500;
 	speed_y = 0;
 
 	type = new ENEMY_TYPE;
