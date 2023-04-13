@@ -416,10 +416,7 @@ void Player::Update()
 	old_x = location.x;
 	old_y = location.y;
 
-	if (location.y - CameraWork::GetCamera().y < 0)
-	{
-		player_state = PLAYER_STATE::DEATH;
-	}
+	
 
 	if (damage_flg == true)
 	{
@@ -654,6 +651,13 @@ void Player::Update()
 	}
 
 	if (hp <= 0)
+	{
+		player_state = PLAYER_STATE::DEATH;
+	}
+
+	int y = location.y - CameraWork::GetCamera().y;
+
+	if (y > 740)
 	{
 		player_state = PLAYER_STATE::DEATH;
 	}
