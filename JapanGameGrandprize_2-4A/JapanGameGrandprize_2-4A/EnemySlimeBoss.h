@@ -1,31 +1,10 @@
-//#pragma once
-//
-//#include"SlimeBossBody.h"
-//#include"EnemyBase.h"
-//
-//#define BODY_MAX 30
-//#define DATA 100
-//
-//class EnemySlimeBoss : public EnemyBase
-//{
-//private:
-//
-//	Location location_data[DATA];
-//	ENEMY_STATE state;
-//	SlimeBossBody* slime_boss_body[BODY_MAX];
-//
-//public:
-//
-//	EnemySlimeBoss();
-//	~EnemySlimeBoss(){};
-//
-//	//描画以外の更新を実行
-//	virtual void Update(const Stage* stage, const Player* player);
-//	//描画
-//	virtual void Draw()const;
-//};
-
 #pragma once
+
+enum class MOVE_STATE
+{
+	MOVE,
+	WALL_MOVE
+};
 
 #define BODY_MAX 30
 #define DATA 100
@@ -39,6 +18,7 @@ private:
 
 	Location location_data[DATA];
 	ENEMY_STATE state;
+	MOVE_STATE move_state;
 	SlimeBossBody* slime_boss_body[BODY_MAX];
 	int slime_boss_jump_distance;
 	int speed_y;
@@ -76,6 +56,8 @@ public:
 	void Death() override;
 
 	virtual void HitBullet(const BulletBase* bullet)override;
+
+	bool HitSphere(const class SphereCollider* sphere_collider) const override;
 
 	//座標の取得
 	Location GetLocation() const override;
