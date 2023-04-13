@@ -12,7 +12,7 @@ private:
 public:
 
     //コンストラクタ
-    MageBullet(ENEMY_TYPE ,Location , Location);
+    MageBullet(const ENEMY_TYPE , const Location , const Location);
 
     //デストラクタ
     ~MageBullet();

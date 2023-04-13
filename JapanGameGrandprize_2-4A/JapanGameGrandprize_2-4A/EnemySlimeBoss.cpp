@@ -41,7 +41,7 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	if (left_move)speed = -SLIME_BOSS_SPEED;
 	else speed = SLIME_BOSS_SPEED;
 
-	kind = ENEMY_KIND::SLIME;
+	kind = ENEMY_KIND::SLIME_BOSS;
 
 	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 

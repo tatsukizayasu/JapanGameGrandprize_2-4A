@@ -16,6 +16,7 @@ private:
 	float x, y;
 	int cursol;
 	int count;
+	int page;
 	int move_string;	//選択肢の移動量
 	bool on_bool;
 	bool move_up;		//選択肢を上に動かす時のフラグ
@@ -74,4 +75,6 @@ public:
 	void InitializeMelt();
 	void InitializeHeal();
 	void InitializePararysis();
+
+	void InitializeDisplayChemicalFormula();
 };
