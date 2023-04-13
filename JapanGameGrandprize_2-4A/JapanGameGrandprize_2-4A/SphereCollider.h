@@ -2,7 +2,6 @@
 #include "define.h"
 #include "ColliderBase.h"
 
-#define SPHERE_COLLIDER_NAME "SphereCollider"
 
 class SphereCollider :public ColliderBase
 {
@@ -13,13 +12,13 @@ public:
 
 	SphereCollider():ColliderBase()
 	{
-		class_name = SPHERE_COLLIDER_NAME;
+		collider_type = (int)COLLIDER::SPHERE;;
 		radius = 5;
 	}
 
 	SphereCollider(Location location) :ColliderBase(location)
 	{
-		class_name = SPHERE_COLLIDER_NAME;
+		collider_type = (int)COLLIDER::SPHERE;
 		radius = 5;
 	}
 

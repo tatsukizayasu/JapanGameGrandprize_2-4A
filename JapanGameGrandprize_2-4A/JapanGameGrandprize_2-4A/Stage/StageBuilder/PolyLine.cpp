@@ -6,7 +6,7 @@
 //-------------------------------------
 PolyLine::PolyLine()
 {
-	class_name = POLY_LINE_NAME;
+	collider_type = (int)COLLIDER::POLY_LINE;
 }
 
 //-------------------------------------
@@ -14,7 +14,7 @@ PolyLine::PolyLine()
 //-------------------------------------
 PolyLine::PolyLine(Location bend_points[], unsigned int size)
 {
-	class_name = POLY_LINE_NAME;
+	collider_type = (int)COLLIDER::POLY_LINE;
 	for (int i = 0; i < size; i++)
 	{
 		this->bend_points.push_back(new SphereCollider(bend_points[i]));
@@ -39,7 +39,7 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 //-------------------------------------
 PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 {
-	class_name = POLY_LINE_NAME;
+	collider_type = (int)COLLIDER::POLY_LINE;
 	for (int i = 0; i < spheres.size(); i++)
 	{
 		bend_points.push_back(new SphereCollider(*spheres[i]));
@@ -68,7 +68,7 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 //-------------------------------------
 PolyLine::PolyLine(const PolyLine &poly_line)
 {
-	class_name = POLY_LINE_NAME;
+	collider_type = (int)COLLIDER::POLY_LINE;
 	for (auto it : poly_line.bend_points)
 	{
 		this->bend_points.push_back(new SphereCollider(*it));

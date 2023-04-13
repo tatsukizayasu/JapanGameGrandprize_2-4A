@@ -78,11 +78,11 @@ public:
 
 	virtual void Draw()const {}
 
-	const char* GetName() { return class_name; }
+	int GetName() { return collider_type; }
 
 protected:
 
-	const char* class_name = "default";
+	int collider_type = (int)COLLIDER::DEFAULT;
 	Location location;	//中心座標
 
 	//2つのベクトルのなす角が鋭角かどうかを求める

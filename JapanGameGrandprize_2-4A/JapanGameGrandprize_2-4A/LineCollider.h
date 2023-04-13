@@ -8,7 +8,6 @@
 
 #define LINE_START 0
 #define LINE_END 1
-#define LINE_COLLIDER_NAME "LineCollider"
 
 class LineCollider :public ColliderBase
 {
