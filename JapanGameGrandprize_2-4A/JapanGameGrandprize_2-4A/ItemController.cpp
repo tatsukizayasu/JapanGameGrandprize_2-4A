@@ -93,6 +93,43 @@ void ItemController::SpawnItem(const EnemyBase* enemy)
 	}
 }
 
+
+void ItemController::Stage_SpawnItem(int drop_volume, int dorp_type_volume, Location location, std::vector<ElementItem> element_item)
+{
+
+	int old_item_max = item_max;//生成可能なエネミー数
+
+	this->item_volume = drop_volume;
+
+	if (item_max < item_volume)
+	{
+		item_max = item_volume;
+		ArrangementItem(old_item_max);
+	}
+
+	int volume = 0; //生成数
+	int j = 0;
+
+	//アイテムの生成
+	for (int i = 0; i < dorp_type_volume; i++)
+	{
+		volume = element_item.at(i).GetVolume();
+
+		for (int j = 0; j < volume; j++)
+		{
+			for (int n = 0; n < item_max; n++)
+			{
+				if (item[n] == nullptr)
+				{
+					item[n] = new Item(element_item.at(i).GetType(),
+						location);
+					break;
+				}
+			}
+		}
+	}
+}
+
 //-----------------------------------
 //アイテムの並び替え
 //-----------------------------------

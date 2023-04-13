@@ -167,6 +167,7 @@
     <ClInclude Include="EnemySlimeBoss.h" />
     <ClInclude Include="EnumElementItem.h" />
     <ClInclude Include="EnumEnemyType.h" />
+    <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GhostBullet.h" />
     <ClInclude Include="Harpy.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="WyvernBless.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractScene.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletManager.cpp" />
@@ -233,6 +235,7 @@
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="ElementItem.cpp" />
     <ClCompile Include="EnemySlimeBoss.cpp" />
+    <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GhostBullet.cpp" />
     <ClCompile Include="Harpy.cpp" />
