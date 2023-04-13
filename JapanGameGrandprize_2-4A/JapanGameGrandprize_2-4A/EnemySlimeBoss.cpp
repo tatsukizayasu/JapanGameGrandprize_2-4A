@@ -290,13 +290,23 @@ void EnemySlimeBoss::Draw()const
 		}
 	}
 
+	
+
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(50);
+	}
+	DrawDamageLog();
+
 	DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
 
 	//DrawFormatString(0, 0, 0xffffff, "%f", location.x);
+
 }
 
 //-----------------------------------
