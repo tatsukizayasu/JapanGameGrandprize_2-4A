@@ -294,7 +294,7 @@ void Undead::Fall()
 //-----------------------------------
 //UŒ‚
 //-----------------------------------
-void  Undead::Attack(Location player_location)
+void  Undead::Attack(const Location player_location)
 {
 
 	attack_time--;
@@ -385,10 +385,10 @@ void Undead::HitBullet(const BulletBase* bullet)
 		break;
 	case ATTRIBUTE::PARALYSIS:
 		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		if (!paralysis)
 		{
 			paralysis_time = bullet->GetDebuffTime() * 0;
-			damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		}
 		break;
 	case ATTRIBUTE::HEAL:

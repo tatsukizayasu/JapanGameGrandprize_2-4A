@@ -8,11 +8,13 @@
 #include "Harpy.h"
 #include "BULLET.h"
 #include "Mage.h"
+#include "Wyvern.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"
+#include "GameClear.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -28,13 +30,10 @@ GameMain::GameMain()
 #else
 	pause = new Pause();
 #endif
-
+	enemy_spawn_volume = 0;
 	stage = new Stage();
 	player = new Player(stage);
 	stage->SetPlayer(player);
-	Location location;
-	location.x = 200;
-	location.y = 300;
 
 	EnemyBase::CreateLogFont();
 
@@ -53,9 +52,6 @@ GameMain::GameMain()
 GameMain::~GameMain()
 {
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
 	delete camera_work;
 #ifdef _DEBUG
 
@@ -66,7 +62,7 @@ GameMain::~GameMain()
 	delete stage;
 
 	EnemyBase::DeleteLogFont();
-	for (int i = 0; i < spawn_volume; i++)
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		delete enemy[i];
 	}
@@ -103,7 +99,10 @@ AbstractScene* GameMain::Update()
 	player->Update();
 	stage->Update(player);
 
-	EnemyUpdate();
+	if (EnemyUpdate() == true)
+	{
+		return new GameClear();
+	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
@@ -122,11 +121,10 @@ void GameMain::SpawnEnemy()
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = spawn.size();
-	enemy = new EnemyBase * [spawn_volume];
-
-	for (int i = 0; i < spawn_volume; i++)
+	enemy_spawn_volume = spawn.size();
+	enemy = new EnemyBase * [enemy_spawn_volume];
+	int i;
+	for (i = 0; i < enemy_spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -146,9 +144,10 @@ void GameMain::SpawnEnemy()
 			enemy[i] = new EnemyGhost(spawn[i].location);
 			break;
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
+			enemy[i] = new Wyvern(spawn[i].location);
 			break;
 		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
-			//enemy[count] = new EnemySlimeBoss();
+			enemy[i] = new EnemySlimeBoss(spawn[i].location);
 			break;
 		case ENEMY_KIND::TORRENT:	//トレントボスの生成
 			enemy[i] = new Torrent(spawn[i].location);
@@ -169,16 +168,15 @@ void GameMain::SpawnEnemy()
 //-----------------------------------
 // エネミーの更新処理
 //-----------------------------------
-void GameMain::EnemyUpdate()
+bool GameMain::EnemyUpdate()
 {
+	//クリア判定用フラグ
+	bool is_clear = false;
 
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
-	for (int i = 0; i < spawn_volume; i++)
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
 		{
@@ -213,6 +211,11 @@ void GameMain::EnemyUpdate()
 
 			if (enemy[i]->GetCanDelete()) //エネミーの削除
 			{
+				if (ENEMY_KIND::SLIME_BOSS == enemy[i]->GetEnemyKind())
+				{
+					is_clear = true;
+				}
+
 				item_controller->SpawnItem(enemy[i]);
 				delete enemy[i];
 				enemy[i] = nullptr;
@@ -288,6 +291,8 @@ void GameMain::EnemyUpdate()
 			}
 		}
 	}
+
+	return is_clear;
 }
 
 //-----------------------------------
@@ -310,10 +315,7 @@ void GameMain::Draw()const
 
 	player->Draw();
 
-	int spawn_volume; //スポーン数
-	spawn_volume = stage->GetEnemy_SpawnLocation().size();
-
-	for (int i = 0; i < spawn_volume; i++)
+	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
 		{

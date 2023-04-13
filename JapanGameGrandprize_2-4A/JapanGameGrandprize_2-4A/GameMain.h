@@ -13,6 +13,7 @@ class GameMain :
 {
 private:
 
+    int enemy_spawn_volume; //エネミーの数
     //各クラスのオブジェクト
     Player* player;
     Stage* stage;
@@ -45,7 +46,7 @@ public:
     void SpawnEnemy();
 
     //エネミーの更新処理
-    void EnemyUpdate();
+    bool EnemyUpdate();
 
     //描画
     void Draw() const override;

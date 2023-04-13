@@ -20,7 +20,7 @@ Player::Player()
 	location.x = 100;
 	location.y = 80;
 	image = new int[PLAYER_IMAGES];
-	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 40, 80, image);
+	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
 	image_size_x = 40;
 	image_size_y = 80;
 	area.width = image_size_x;
@@ -1410,7 +1410,7 @@ void Player::Update(const PLAYER_STATE state)
 //-----------------------------------
 void Player::DebugDraw()
 {
-	DrawRotaGraphF(location.x, location.y, 1, 0, image[image_count], TRUE);
+	DrawRotaGraphF(location.x, location.y, 0.5, 0, image[image_count], TRUE,TRUE);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

@@ -1,7 +1,6 @@
 #pragma once
 #include "EnemyBulletBase.h"
-
-class TorrentBullet :
+class WyvernBless :
     public EnemyBulletBase
 {
 private:
@@ -12,14 +11,16 @@ private:
 public:
 
     //コンストラクタ
-    TorrentBullet(const ENEMY_TYPE, const Location, const Location);
+    WyvernBless(const Location, const Location);
 
     //デストラクタ
-    ~TorrentBullet();
+    ~WyvernBless();
 
     //更新
     void Update() override;
 
     //描画
     void Draw() const override;
+
 };
+
