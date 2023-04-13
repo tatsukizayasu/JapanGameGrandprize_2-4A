@@ -39,6 +39,8 @@ public:
 	//UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
 	AttackResource Hit() override;
 
+	
+
 	//€–S
 	void Death() override;
 
