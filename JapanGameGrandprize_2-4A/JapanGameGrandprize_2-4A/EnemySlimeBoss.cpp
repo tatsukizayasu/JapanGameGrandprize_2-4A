@@ -296,7 +296,7 @@ void EnemySlimeBoss::Draw()const
 
 	DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
 
-	DrawFormatString(0, 0, 0xffffff, "%f", location.x);
+	//DrawFormatString(0, 0, 0xffffff, "%f", location.x);
 }
 
 //-----------------------------------
