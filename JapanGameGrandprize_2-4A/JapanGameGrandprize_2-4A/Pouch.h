@@ -14,6 +14,8 @@ class Pouch
 private:
 
 	float x, y;
+	int second_tab_image;
+	int elemental_count;
 	int cursol;
 	int count;
 	int page;
@@ -43,6 +45,7 @@ public:
 
 	void Update();
 	void Draw() const;
+	void ElementDraw(ChemicalFormulaParameter) const;
 
 	void TabUpdate(int);
 

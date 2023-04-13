@@ -29,6 +29,8 @@ Pouch::Pouch()
 	move_up = false;
 	move_down = false;
 	tab = ATTRIBUTE::EXPLOSION;
+	second_tab_image = LoadGraph("Images/ItemTab/setumei.png");
+	elemental_count = LoadGraph("Images/ItemTab/P_kazu.png");
 
 	//元素の初期化
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
@@ -188,8 +190,13 @@ void Pouch::ExplosionTabDraw() const
 	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "EXPLOSION", 0x000000);
 	*/
-	DrawBox(x - 100, y, x, y + 100, 0xff0000, TRUE);
-	//DrawFormatString(x - 100, y, 0x000000, "");
+	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
+	DrawFormatString(x - 200, y - 30, 0x000000, "%s", chemical_formula_explosion[cursol].chemical_formula_name);
+	DrawFormatString(x - 200, y, 0x000000, "%s", chemical_formula_explosion[cursol].chemical_formula);
+	DrawFormatString(x - 70, y + 30, 0x000000, "%d", chemical_formula_explosion[cursol].number_of_bullets);
+	DrawFormatString(x - 70, y + 60, 0x000000, "%d", chemical_formula_explosion[cursol].damage);
+
+	
 
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
 	if (page == 0)
@@ -207,7 +214,7 @@ void Pouch::ExplosionTabDraw() const
 		}
 	}
 
-
+	ElementDraw(chemical_formula_explosion[cursol]);
 
 	DrawBox(x, y + move_string, x + POUCH_WIDTH, y + move_string + 30, 0xff00ff, FALSE);
 }
@@ -760,6 +767,16 @@ void Pouch::Draw() const
 		DrawFormatString(POUCH_START_X + (50 * i) + 25, POUCH_START_Y + 450, 0xffffff, "%d", element[i + 4]->GetVolume());
 		DrawFormatString(POUCH_START_X + (50 * i) + 25, POUCH_START_Y + 480, 0xffffff, "%c", element_char[i + 4]);
 	}
+
+	DrawGraph(x - 254, y + 200, elemental_count, TRUE);
+}
+
+void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
+{
+	int i = 0;
+	int a = element[i]->GetVolume() - bring.material.carbon;
+	DrawFormatString(x - 180, y + 220, 0xffffff, "%d    %d",
+		element[i]->GetVolume(), a);
 }
 
 //アップデート
@@ -910,7 +927,7 @@ void Pouch::TabUpdate(int max_num)
 				}
 				break;
 			case 1:
-				if (cursol > 7)
+				if (cursol > 9)
 				{
 					move_string -= 30;
 					cursol--;
