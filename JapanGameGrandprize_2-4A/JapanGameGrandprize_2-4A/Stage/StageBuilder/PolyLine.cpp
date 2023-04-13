@@ -134,10 +134,7 @@ void PolyLine::Update()
 		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
 	}
 
-	if (old_location != pivot.GetLocation())
-	{
-	}
-		MakeLocation();
+	MakeLocation();
 	
 
 
