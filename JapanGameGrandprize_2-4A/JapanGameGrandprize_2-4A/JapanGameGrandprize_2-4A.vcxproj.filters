@@ -186,6 +186,9 @@
     <ClCompile Include="WyvernBless.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
+    <ClCompile Include="DragonThunder.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
     <ClCompile Include="GameClear.cpp">
       <Filter>ソースファイル\Scene</Filter>
     </ClCompile>
@@ -391,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="GameClear.h">
       <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="DragonThunder.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

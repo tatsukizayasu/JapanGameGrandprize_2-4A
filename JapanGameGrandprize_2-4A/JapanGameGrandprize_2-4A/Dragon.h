@@ -2,6 +2,7 @@
 #include "EnemyBase.h"
 #include"BoxCollider.h"
 #include"DragonBullet.h"
+#include"DragonThunder.h"
 
 enum class DRAGON_STATE
 {
@@ -21,6 +22,7 @@ enum class DRAGON_ATTACK
 class Dragon :public EnemyBase
 {
 private:
+	int image;
 	int animation; //画像のアニメーション
 	int magic_num; //遠距離攻撃を使った回数
 	int attack_method; //攻撃方法
@@ -29,7 +31,15 @@ private:
 	int effect_time; //毒のダメージを等間隔で出すための時間測定
 	int standby_time; //待機時間測定
 	int animation_time; //	画像切り替え間隔
+	
+	float old_x; //目標地点
+	float old_y; //目的地点
+	float player_x; //古い座標
+	float player_y; //古い座標
 
+	bool attack_tail; //尻尾攻撃中
+	bool set_coordinate; //尻尾攻撃（プレイヤーの場所に行く）
+	bool wall_hit; //壁に当たったのか。
 	bool attack; //接近攻撃
 	bool magic; //魔法攻撃
 

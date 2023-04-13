@@ -32,6 +32,7 @@ private:
 	int physical_time; //物理攻撃時間
 	int magic_num; //魔法攻撃した数
 	int magic_time; //魔法攻撃時間
+	int attack_image[7]; //攻撃画像
 	float speed; //ゴーストの移動速度
 	float travel; //X座標に動く量
 	float travel_y; //ｙ座標に動く量

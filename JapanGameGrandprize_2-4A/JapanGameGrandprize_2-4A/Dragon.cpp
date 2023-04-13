@@ -4,17 +4,27 @@
 #include "DxLib.h"
 
 //ドラゴンの画像サイズ(未定、画像が出来次第調整）
-#define DRAGON_SIZE_X 40
-#define DRAGON_SIZE_Y 80
+#define DRAGON_SIZE_X 250
+#define DRAGON_SIZE_Y 250
 
 //ドラゴンのHP
 #define HIT_POINTS 500
+
+//ドラゴンの移動速度
+#define ATTACK_SPEED 6
+#define SPEED 10
 
 //魔法攻撃した時の硬直時間
 #define MAGIC_STANDBY 60
 
 //近接攻撃した時の硬直時間
 #define PHYSICAL_STANDBY 100
+
+//咆哮後の硬直時間
+#define	ROAR_TIME 130
+
+//雷の数
+#define THUNDER 4
 
 //ドラゴンの攻撃力(攻撃別）
 //尻尾攻撃
@@ -27,7 +37,7 @@
 #define MELEE_ATTACK 150
 
 //攻撃切り替え時間
-#define ATTACK_SWITCHOVER 260
+#define ATTACK_SWITCHOVER 10
 
 //ブレス発射間隔
 #define BREATH_INTERVAL 120
@@ -47,10 +57,15 @@ Dragon::Dragon(Location spawn_location)
 	area.width = DRAGON_SIZE_X;
 
 	hp = HIT_POINTS;
-	speed = 0;
+	speed = SPEED;
 
 	animation = 0;
-	attack_method = 1;
+	attack_method = 2;
+	magic_num = 0;
+	old_x = 0;
+	old_y = 0;
+	player_x = 0;
+	player_y = 0;
 	animation_time = 0;
 	switchover_time = 0;
 	effect_time = 0;
@@ -58,39 +73,42 @@ Dragon::Dragon(Location spawn_location)
 	breath_time = 0;
 
 	can_delete = false;
+	attack_tail = false;
+	wall_hit = false;
 	left_move = true;
 	attack = false;
 	magic = false;
 
 	kind = ENEMY_KIND::DRAGON;
-	type = new ENEMY_TYPE[3];
+	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::FIRE;
-	type[1] = ENEMY_TYPE::WIND;
-	type[2] = ENEMY_TYPE::THUNDER;
 
 	state = ENEMY_STATE::IDOL;
 
 	attack_state = DRAGON_ATTACK::NONE;
 
 	//ドロップアイテムの設定
-	drop_element = new ElementItem * [THUNDER_DROP];
-	drop_type_volume = THUNDER_DROP;
+	drop_element = new ElementItem * [FIRE_DROP];
+	drop_type_volume = FIRE_DROP;
 
 	int volume = 0;
-	for (int i = 0; i < THUNDER_DROP; i++)
+	for (int i = 0; i < FIRE_DROP; i++)
 	{
 		volume = MIN_DROP + GetRand(MAX_DROP);
 		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+
+	image = LoadGraph("Images/Enemy/a.png"); //画像読込み
+
 }
 
 Dragon::~Dragon()
 {
 	delete[] type;
 
-	for (int i = 0; i < THUNDER_DROP; i++)
+	for (int i = 0; i < FIRE_DROP; i++)
 	{
 		delete drop_element[i];
 	}
@@ -101,7 +119,7 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 {
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
-	
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -112,6 +130,26 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
+
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if (hit_direction == STAGE_DIRECTION::TOP)
+			{
+				state = ENEMY_STATE::ATTACK;
+				speed = SPEED;
+
+			}
+		}
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
@@ -137,9 +175,25 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 		{
 			location = old_location;
 			left_move = !left_move;
+			wall_hit = true;
+
+			if (attack_tail==true)
+			{
+				state = ENEMY_STATE::MOVE;
+				if (hp < HIT_POINTS / 2)
+				{
+					attack_method = GetRand(3);
+				}
+				else
+				{
+					attack_method = GetRand(2);
+				}
+
+			}
 		}
 
 	}
+
 
 	//毒のダメージ
 	if (poison == true)
@@ -165,6 +219,8 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+
+	wall_hit = false;
 }
 
 //-----------------------------------
@@ -180,6 +236,9 @@ void Dragon::Draw() const
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
 		GetColor(255, 0, 0), TRUE);
+
+	/*DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		M_PI / 180, image, TRUE);*/
 
 }
 
@@ -204,18 +263,11 @@ void Dragon::Idol()
 //-----------------------------------
 void Dragon::Move(const Location player_location)
 {
-	
+
 
 	//プレイヤーとの距離計算
 	int range = player_location.x - location.x;
 
-	//プレイヤーが接近攻撃距離にいたら
-	if (range <= MELEE_ATTACK && range >= -MELEE_ATTACK)
-	{
-		
-
-	}
-	
 	//ランダムで攻撃方法の決定
 	if (++switchover_time % ATTACK_SWITCHOVER == 0)
 	{
@@ -230,6 +282,7 @@ void Dragon::Move(const Location player_location)
 		}
 	}
 
+
 	switch (attack_method)
 	{
 	case 0:
@@ -243,7 +296,8 @@ void Dragon::Move(const Location player_location)
 		break;
 	case 2:
 		attack_state = DRAGON_ATTACK::TAIL_ATTACK;
-		state = ENEMY_STATE::ATTACK;
+		state = ENEMY_STATE::FALL;
+		attack_tail = true;
 		break;
 	case 3:
 		attack_state = DRAGON_ATTACK::ROAR;
@@ -288,23 +342,82 @@ void Dragon::Attack(const Location player_location)
 }
 
 //-----------------------------------
-//接近攻撃時の噛みつき(飛行しながら噛みつく）体当たりするイメージ
+//接近攻撃時の噛みつき(這いつくばりながら攻撃）体当たりするイメージ
 //-----------------------------------
 void Dragon::DiteMove(const Location player_location)
 {
+	//4月7日現在、壁に当たるまで攻撃を続けるのか、←4月10日現在これ（ステージとの兼ね合いがあるため仮決定）
+	//攻撃開始直後のプレイヤーの座標を目指して移動するのか、
+
+	speed = ATTACK_SPEED;
+
+	if (left_move == true)
+	{
+		location.x -= speed;
+		speed = SPEED;
+	}
+	else
+	{
+		location.x += speed;
+		speed = SPEED;
+	}
+
+	if (wall_hit == true)
+	{
+		//HPが半分以下なら雷を落とす攻撃も追加
+		if (hp < HIT_POINTS / 2)
+		{
+			attack_method = GetRand(3);
+		}
+		else
+		{
+			attack_method = GetRand(2);
+		}
+
+		state = ENEMY_STATE::MOVE;
+	}
 
 }
 
 //-----------------------------------
-//尻尾攻撃
+//尻尾攻撃（地上に降りていたら）
 //-----------------------------------
 void Dragon::TailMove(const Location player_location)
 {
+	float old_x;
+	float old_y;
+	float vector;
+	float travel;
+	float travel_y;
+
+	if (set_coordinate == false)
+	{
+		player_x = player_location.x;
+		player_y = player_location.y;
+		set_coordinate = true;
+	}
+
+	old_x = player_x - location.x;
+	old_y = player_y - location.y;
+
+	vector = sqrt(old_x * old_x + old_y * old_y);
+
+	travel = old_x / vector;
+	travel_y = old_y / vector;
+	location.x += travel * 3;
+	location.y += travel_y * 3;
+
+	if (player_x + 10 > location.x && player_x - 10 < location.x && player_y + 10 > location.y && player_y - 10 < location.y)
+	{
+		state = ENEMY_STATE::MOVE;
+		attack_method = GetRand(2);
+
+	}
 
 }
 
 //-----------------------------------
-//遠距離攻撃（ブレス）
+//遠距離攻撃（ブレス）この時飛びながらブレスを行う
 //-----------------------------------
 void Dragon::DreathMove(const Location player_location)
 {
@@ -322,6 +435,23 @@ void Dragon::DreathMove(const Location player_location)
 void Dragon::RoarMove(const Location player_location)
 {
 
+	//for (int i = 0; i < THUNDER; i++)
+	//{
+	//  GetRand(???)を使って、ランダムな座標に雷を落とす処理
+	// 	//ステージとの兼ね合いがあるため、現在はコメントアウト
+	// 
+	//	BulletManager::GetInstance()->CreateEnemyBullet
+	//	(new DragonThunder(player_location.x, player_location.y-60)); 
+	//}
+
+
+
+	attack_method = GetRand(2);
+
+	standby_time = ROAR_TIME;
+
+	state = ENEMY_STATE::MOVE;
+
 }
 
 //-----------------------------------
@@ -331,7 +461,7 @@ AttackResource Dragon::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	if (attack_state == DRAGON_ATTACK::DITE && (!attack))
+	if (attack_state == DRAGON_ATTACK::DITE)
 	{
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };
@@ -357,6 +487,12 @@ AttackResource Dragon::Hit()
 //-----------------------------------
 void Dragon::Fall()
 {
+	location.y += speed;
+
+	if (speed < 3)
+	{
+		speed += ENEMY_FALL_SPEED;
+	}
 
 }
 
@@ -468,6 +604,6 @@ void Dragon::Update(const ENEMY_STATE state)
 //-----------------------------------
 void Dragon::DebugDraw()
 {
-	
+
 }
 #endif //_DEBUG
