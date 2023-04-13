@@ -162,6 +162,7 @@
     <ClInclude Include="DotByDot.h" />
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="DragonBullet.h" />
+    <ClInclude Include="DragonThunder.h" />
     <ClInclude Include="ElementItem.h" />
     <ClInclude Include="EnemyBulletBase.h" />
     <ClInclude Include="EnemySlimeBoss.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="DotByDot.cpp" />
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="DragonBullet.cpp" />
+    <ClCompile Include="DragonThunder.cpp" />
     <ClCompile Include="EnemyBulletBase.cpp" />
     <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />

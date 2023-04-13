@@ -46,6 +46,7 @@ private:
 
 
 public:
+
 	LineCollider();
 	LineCollider(Location point1, Location point2);
 	~LineCollider();
@@ -64,6 +65,10 @@ public:
 
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
 	bool HitLine(const class LineCollider* line_collider)const override;
+
+	ColliderBase* Copy()const override { return new LineCollider(*this); }
+
+	bool HitCheck(ColliderBase* collider)const;
 
 	//ü‚Ì’[‚ÌÀ•W‚Ìæ“¾
 	Location GetLocation(int i)const;

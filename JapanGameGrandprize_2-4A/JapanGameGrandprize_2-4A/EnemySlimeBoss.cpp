@@ -8,9 +8,14 @@
 #define SLIME_MIN_DROP 0u
 #define SLIME_MAX_DROP 3u
 
-#define SLIME_BOSS_SPEED 5
-#define SLIME_BOSS_ATTACK_DAMAGE 10
-#define SLIME_BOSS_JUMP_DISTANCE 45
+#define SLIME_BOSS_SPEED 4
+//#define SLIME_BOSS_ATTACK_DAMAGE 10
+//#define SLIME_BOSS_JUMP_DISTANCE 45
+
+#define SLIME_BOSS_ATTACK_DAMAGE 5
+#define SLIME_BOSS_JUMP_DISTANCE 10
+
+#define BOSS_SLIME_HP 500
 
 EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 {
@@ -45,7 +50,7 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 
 	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 
-	hp = 30;
+	hp = 500;
 	speed_y = 0;
 
 	type = new ENEMY_TYPE;
@@ -68,6 +73,8 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+
+	move_state = MOVE_STATE::MOVE;
 }
 
 EnemySlimeBoss::~EnemySlimeBoss()
@@ -91,6 +98,10 @@ EnemySlimeBoss::~EnemySlimeBoss()
 
 void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 {
+	if(location.x <= 15500)left_move = !left_move;
+	if (left_move)speed = -SLIME_BOSS_SPEED;
+	else speed = SLIME_BOSS_SPEED;
+
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -102,9 +113,19 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 	case ENEMY_STATE::MOVE:
 
-		location.y += speed_y;
+		switch (move_state)
+		{
+		case MOVE_STATE::MOVE:
+			speed_y = -5;
+			slime_boss_jump_distance--;
+			break;
 
-		slime_boss_jump_distance--;
+		case MOVE_STATE::WALL_MOVE:
+
+			break;
+		}
+
+		location.y += speed_y;
 
 		hit_stage = HitStage(stage);
 
@@ -135,10 +156,15 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			if (left_move)speed = -SLIME_BOSS_SPEED;
 			else speed = SLIME_BOSS_SPEED;
 		}
-		else if(slime_boss_jump_distance <= 0)
+		else
 		{
-			state = ENEMY_STATE::FALL;
-			speed_y = 0;
+			if ((move_state == MOVE_STATE::MOVE) &&(slime_boss_jump_distance <= 0))
+			{
+				state = ENEMY_STATE::FALL;
+				speed_y = 0;
+			}
+
+			
 		}
 
 		if (ScreenOut())
@@ -163,6 +189,19 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			left_move = !left_move;
 			if (left_move)speed = -SLIME_BOSS_SPEED;
 			else speed = SLIME_BOSS_SPEED;
+
+			switch (move_state)
+			{
+			case MOVE_STATE::MOVE:
+				
+				break;
+
+			case MOVE_STATE::WALL_MOVE:
+
+				
+
+				break;
+			}
 		}
 
 		Fall();
@@ -184,8 +223,20 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 			state = ENEMY_STATE::MOVE;
 
-			slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
-			speed_y = -5;
+			switch (move_state)
+			{
+			case MOVE_STATE::MOVE:
+				slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
+				//speed_y = -5;
+				break;
+
+			case MOVE_STATE::WALL_MOVE:
+
+				if (left_move)speed = -SLIME_BOSS_SPEED;
+				else speed = SLIME_BOSS_SPEED;
+
+				break;
+			}
 		}
 		if (ScreenOut())
 		{
@@ -244,13 +295,23 @@ void EnemySlimeBoss::Draw()const
 		}
 	}
 
+	
+
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(BOSS_SLIME_HP);
+	}
+	DrawDamageLog();
+
 	DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
 
-	DrawFormatString(0, 0, 0xffffff, "%d", state);
+	//DrawFormatString(0, 0, 0xffffff, "%f", location.x);
+
 }
 
 //-----------------------------------
@@ -314,6 +375,7 @@ AttackResource EnemySlimeBoss::Hit()
 	return ret;
 }
 
+
 //-----------------------------------
 //死亡
 //-----------------------------------
@@ -321,6 +383,17 @@ void EnemySlimeBoss::Death()
 {
 	can_delete = true;
 }
+
+
+bool EnemySlimeBoss::HitSphere(const class SphereCollider* sphere_collider)const
+{
+	for (int i = 0; i < BODY_MAX; i++)
+	{
+		if (slime_boss_body[i]->HitSphere(sphere_collider))return TRUE;
+	}
+	return FALSE;
+}
+
 
 //-----------------------------------
 // プレイヤーの弾との当たり判定

@@ -11,6 +11,7 @@
 #include "Wyvern.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
+#include"Dragon.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"
@@ -39,6 +40,7 @@ GameMain::GameMain()
 
 	SpawnEnemy();
 	camera_work = new CameraWork(0, 800, player, stage);
+	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
 	
 	bullet_manager = BulletManager::GetInstance();
@@ -99,6 +101,8 @@ AbstractScene* GameMain::Update()
 	player->Update();
 	stage->Update(player);
 
+
+
 	if (EnemyUpdate() == true)
 	{
 		return new GameClear();
@@ -155,6 +159,7 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::GARGOYLE:	//ガーゴイルボスの生成
 			break;
 		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
+			enemy[i] = new Dragon(spawn[i].location);
 			break;
 		case ENEMY_KIND::END_BOSS:	//ラスボスの生成
 			break;
@@ -199,7 +204,7 @@ bool GameMain::EnemyUpdate()
 					break;
 				}
 
-				if (player_bullet[j]->HitBox(enemy[i]))
+				if(enemy[i]->HitSphere(player_bullet[j]))
 				{
 					enemy[i]->HitBullet(player_bullet[j]);
 					delete player_bullet[j];
