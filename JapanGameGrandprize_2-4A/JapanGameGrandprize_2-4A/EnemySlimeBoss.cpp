@@ -12,6 +12,8 @@
 #define SLIME_BOSS_ATTACK_DAMAGE 10
 #define SLIME_BOSS_JUMP_DISTANCE 45
 
+#define BOSS_SLIME_HP 500
+
 EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 {
 	location = spawn_location;
@@ -299,7 +301,7 @@ void EnemySlimeBoss::Draw()const
 
 	if (state != ENEMY_STATE::DEATH)
 	{
-		DrawHPBar(50);
+		DrawHPBar(BOSS_SLIME_HP);
 	}
 	DrawDamageLog();
 
