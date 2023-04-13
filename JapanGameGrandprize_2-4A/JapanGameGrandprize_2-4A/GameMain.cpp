@@ -40,6 +40,7 @@ GameMain::GameMain()
 
 	SpawnEnemy();
 	camera_work = new CameraWork(0, 800, player, stage);
+	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
 	
 	bullet_manager = BulletManager::GetInstance();
@@ -99,6 +100,8 @@ AbstractScene* GameMain::Update()
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
+
+
 
 	if (EnemyUpdate() == true)
 	{

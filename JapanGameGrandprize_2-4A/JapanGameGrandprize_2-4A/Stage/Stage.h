@@ -6,9 +6,12 @@
 #include "Element/Stage_Element_Base.h"
 #include <set>
 
+
 #define CHIP_SIZE	40
 
 class Player;
+
+class CameraWork;
 
 class Stage_Element;
 
@@ -30,6 +33,7 @@ private:
 	//オブジェクト変数
 	Player* player;
 	Stage_Element* element;
+	CameraWork* camera_work;
 
 #ifdef _STAGE_BUILDER
 	StageBuilder* stage_builder;
@@ -131,6 +135,12 @@ public:
 	/// </summary>
 	/// <param name = "*player">Playerオブジェクトポインタ</param>
 	void SetPlayer(Player *player) { this->player = player; }
+
+	/// <summary>
+	/// StageクラスにCameraWorkオブジェクトを渡すSetter
+	/// </summary>
+	/// <param name = "*camera">CameraWorkオブジェクトポインタ</param>
+	void SetCameraWork(CameraWork* camera) { this->camera_work = camera; }
 
 	/// <summary>
 	/// マップサイズのGeter

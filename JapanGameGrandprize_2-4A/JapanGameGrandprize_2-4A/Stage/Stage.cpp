@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include "../Player.h"
+#include "../CameraWork.h"
 #include "Element/Stage_Element.h"
 
 #define STAGE_NAME	"debugStage";
@@ -20,6 +21,7 @@ Stage::Stage()
 {
 
 	element = new Stage_Element();
+	this->camera_work = camera_work;
 
 	//スポーン地点に初期値をセット
 	spawn_point = { MAP_CHIP_SIZE / 2, SCREEN_HEIGHT / 2 };
@@ -132,6 +134,25 @@ void Stage::Update(Player* player)
 			y + h < camera.y || camera.y + draw.height < y) continue;
 
 		m->Update();
+	}
+
+
+
+
+	// カメラワークが固定されたらボス部屋を閉める
+	if (camera_work != nullptr) {
+		if (camera_work->GetCameraState() == CameraWork::STATE::FIXED &&
+			player->GetLocation().x > SCREEN_WIDTH
+			) {
+			if (false == camera_work->GetCameraLock()) {
+				camera_work->SetCameraLock(true);
+				
+				for (int i = 0; i < 17; i++) {
+					AddFixedMapChip(25, 386, i);
+				}
+			}
+			
+		}
 	}
 
 #ifdef _STAGE_BUILDER
