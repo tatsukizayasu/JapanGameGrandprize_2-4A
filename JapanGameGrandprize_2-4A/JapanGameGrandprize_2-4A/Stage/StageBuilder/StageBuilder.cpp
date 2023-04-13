@@ -49,13 +49,13 @@ StageBuilder::StageBuilder()
 	}
 	Location testloc[4]{ {300,300},{500,500},{200,700} , {900,400} };
 	PolyLine testline(testloc, 4);
-	poly_lines.push_back(new PolyLine (testloc, 4));
+	//poly_lines.push_back(new PolyLine(testloc, 4));
 
 	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
 
 	BoxCollider box = BoxCollider({ 640,360 }, { 100,100 });
 
-	objects.push_back(new ObjectBase({ 640,460 }, &box));
+	objects.push_back(new ObjectBase({ 640,460 }, &testline));
 
 
 #endif // _DEV
@@ -348,14 +348,25 @@ void StageBuilder::UpdateModulation()
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			BoxCollider* box
-				= dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
-			if (box != nullptr)
+			int collider_type = objects[i]->GetColllider()->GetName();
+			if (collider_type == (int)COLLIDER::BOX)
 			{
+				BoxCollider* box
+					= static_cast<BoxCollider*>(objects[i]->GetColllider());
+
 				box->UpdatePos();
+				objects[i]->UpdateColliderPos();
 			}
 
-			objects[i]->UpdateColliderPos();
+			if (collider_type == (int)COLLIDER::POLY_LINE)
+			{
+				PolyLine* poly_line
+					= static_cast<PolyLine*>(objects[i]->GetColllider());
+
+				poly_line->Update();
+				objects[i]->UpdateColliderPos();
+			}
+
 		}
 	}
 }

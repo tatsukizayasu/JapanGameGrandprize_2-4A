@@ -52,7 +52,7 @@ public:
 #ifdef _STAGE_BUILDER
 private:
     SphereCollider pivot;
-    Location old_location;
+    vector<Location> vector_to_line;
 
 public:
     SphereCollider* GetPivot() { return &pivot; }
