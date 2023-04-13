@@ -23,7 +23,7 @@ Pouch::Pouch()
 	y = 100;
 	cursol = 0;
 	count = 0;
-	page = 1;
+	page = 0;
 	move_string = 0;
 	on_bool = false;
 	move_up = false;
@@ -188,11 +188,22 @@ void Pouch::ExplosionTabDraw() const
 	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "EXPLOSION", 0x000000);
 	*/
-DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
-	for (int i = 0; i < 10; i++)
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
+	if (page == 0)
 	{
-		DrawFormatString(x, y + (30 * i), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+		for (int i = 0; i < 9; i++)
+		{
+			DrawFormatString(x, y + (30 * i), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+		}
 	}
+	if (page == 1)
+	{
+		for (int i = 9 , j = 0; i < EXPLOSION_MAX_NUM; i++,j++)
+		{
+			DrawFormatString(x, y + (30 * j), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+		}
+	}
+	
 	DrawBox(x, y + move_string, x + POUCH_WIDTH, y + move_string + 30, 0xff00ff, FALSE);
 }
 
@@ -878,15 +889,36 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-			if (cursol > 0)
+
+			switch (page)
 			{
-				move_string -= 30;
-				cursol--;
-			}
-			else
-			{
-				move_string = 30 * 9;
-				cursol == EXPLOSION_MAX_NUM - 1;
+			case 0:
+				if (cursol > 0)
+				{
+					move_string -= 30;
+					cursol--;
+				}
+				else
+				{
+					move_string = 30 * 7;
+					cursol = 7;
+				}
+				break;
+			case 1:
+				if (cursol > 7)
+				{
+					move_string -= 30;
+					cursol--;
+				}
+				else
+				{
+					move_string = 30 * 8;
+					cursol = 7;
+					page = 0;
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -895,15 +927,35 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-			if (cursol < 9)
+			switch (page)
 			{
-				move_string += 30;
-				cursol++;
-			}
-			else
-			{
-				move_string = 0;
-				cursol = 0;
+			case 0:
+				if (cursol < 8)
+				{
+					move_string += 30;
+					cursol++;
+				}
+				else
+				{
+					move_string = 0;
+					cursol = 9;
+					page = 1;
+				}
+				break;
+			case 1:
+				if (cursol < max_num - 1)
+				{
+					move_string += 30;
+					cursol++;
+				}
+				else
+				{
+					move_string = 0;
+					cursol = 9;
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
