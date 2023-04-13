@@ -415,6 +415,12 @@ void Player::Update()
 {
 	old_x = location.x;
 	old_y = location.y;
+
+	if (location.y - CameraWork::GetCamera().y < 0)
+	{
+		player_state = PLAYER_STATE::DEATH;
+	}
+
 	if (damage_flg == true)
 	{
 		damage_count++;

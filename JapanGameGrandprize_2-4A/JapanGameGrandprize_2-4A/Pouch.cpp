@@ -188,6 +188,9 @@ void Pouch::ExplosionTabDraw() const
 	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "EXPLOSION", 0x000000);
 	*/
+	DrawBox(x - 100, y, x, y + 100, 0xff0000, TRUE);
+	//DrawFormatString(x - 100, y, 0x000000, "");
+
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
 	if (page == 0)
 	{
@@ -198,12 +201,14 @@ void Pouch::ExplosionTabDraw() const
 	}
 	if (page == 1)
 	{
-		for (int i = 9 , j = 0; i < EXPLOSION_MAX_NUM; i++,j++)
+		for (int i = 9, j = 0; i < EXPLOSION_MAX_NUM; i++, j++)
 		{
 			DrawFormatString(x, y + (30 * j), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
 		}
 	}
-	
+
+
+
 	DrawBox(x, y + move_string, x + POUCH_WIDTH, y + move_string + 30, 0xff00ff, FALSE);
 }
 
