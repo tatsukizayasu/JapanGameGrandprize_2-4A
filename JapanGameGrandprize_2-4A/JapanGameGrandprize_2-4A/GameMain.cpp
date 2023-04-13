@@ -201,7 +201,7 @@ bool GameMain::EnemyUpdate()
 					break;
 				}
 
-				if (player_bullet[j]->HitBox(enemy[i]))
+				if(enemy[i]->HitSphere(player_bullet[j]))
 				{
 					enemy[i]->HitBullet(player_bullet[j]);
 					delete player_bullet[j];
