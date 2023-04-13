@@ -76,7 +76,7 @@ void Element_Move_Floor::Update(Player* player)
 				}
 			}
 			//プレイヤーが乗っているとき、プレイヤー座標に床のスピードを加算する
-			if (hit_direction == HIT_DIRECTION::UP && player->GetState() != PLAYER_STATE::JUMP)
+			if (hit_direction == HIT_DIRECTION::UP && player->GetState() != PLAYER_STATE::JUMP && player->GetState() != PLAYER_STATE::FLY)
 			{
 				player->SetLocation({ p_location.x + speed.x,p_location.y + speed.y });
 			}

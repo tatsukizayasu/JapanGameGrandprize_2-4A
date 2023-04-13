@@ -46,7 +46,7 @@ public:
     void SpawnEnemy();
 
     //エネミーの更新処理
-    void EnemyUpdate();
+    bool EnemyUpdate();
 
     //描画
     void Draw() const override;

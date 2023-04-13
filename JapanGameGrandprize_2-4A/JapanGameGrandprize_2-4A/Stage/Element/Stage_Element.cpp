@@ -50,6 +50,9 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		element.push_back(std::make_shared<Element_Fall_Floor>(type, element, images, location, Area{ 10.0f , MAP_CHIP_SIZE }));
 		break;
 
+	case ITEM_DROP_OBJECT:
+		element.push_back(std::make_shared<Element_Item_Drop_Object>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
+
 	case TRAP:
 		element.push_back(std::make_shared<Element_Trap>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
 		break;
@@ -133,19 +136,7 @@ void Stage_Element::SetElementParameter()
 	//	}
 	//}
 
-	//	else {
-	//	float goal_distance = 0;
-	//	for (int wx = x + 1; wx < map_data.at(0).size(); wx++) {
-	//		goal_distance++;
-	//		if (map_data.at(y).at(wx) == MOVE_FLOOR_GOAL) {
-	//			element->AddElement(i, {
-	//			x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-	//			y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-	//				}, { CHIP_SIZE,goal_distance * CHIP_SIZE });
-	//			break;
-	//		}
-	//	}
-	//}
+
 	//ìÆÇ≠è∞ÇÃñ⁄ïWà íuÇÃê›íË
 	SetMoveFloorNextLocation();
 }
@@ -265,6 +256,10 @@ std::vector<int> Stage_Element::GetImage(short type)
 
 	case FALL_FLOOR:
 		filename = "Fall_Floor.png";
+		break;
+
+	case ITEM_DROP_OBJECT:
+		filename = "Move_Floor.png";
 		break;
 
 	case TRAP:
