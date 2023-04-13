@@ -4,7 +4,7 @@
 #include "DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
-#define HARPY_SIZE_X 60
+#define HARPY_SIZE_X 40
 #define HARPY_SIZE_Y 80
 
 //プレイヤー発見距離
@@ -38,7 +38,7 @@
 //ドロップ量(最大)
 #define HARPY_DROP 6
 
-#define HARPY_HP 50
+#define HARPY_HP 40
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------

@@ -11,6 +11,7 @@
 #include "Wyvern.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
+#include"Dragon.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"
@@ -155,6 +156,7 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::GARGOYLE:	//ガーゴイルボスの生成
 			break;
 		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
+			enemy[i] = new Dragon(spawn[i].location);
 			break;
 		case ENEMY_KIND::END_BOSS:	//ラスボスの生成
 			break;
