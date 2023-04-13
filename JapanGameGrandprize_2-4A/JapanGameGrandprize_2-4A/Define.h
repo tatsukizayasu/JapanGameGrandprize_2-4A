@@ -30,6 +30,15 @@ enum class ATTRIBUTE
 	HEAL
 };
 
+enum class COLLIDER
+{
+	DEFAULT = 0
+	,SPHERE
+	,BOX
+	,LINE
+	,POLY_LINE
+};
+
 struct ChemicalFormulaMaterial
 {
 	int carbon;		//’Y‘f
