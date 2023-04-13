@@ -45,7 +45,7 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 
 	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 
-	hp = 30;
+	hp = 50;
 	speed_y = 0;
 
 	type = new ENEMY_TYPE;
@@ -93,6 +93,10 @@ EnemySlimeBoss::~EnemySlimeBoss()
 
 void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 {
+	if(location.x <= 15500)left_move = !left_move;
+	if (left_move)speed = -SLIME_BOSS_SPEED;
+	else speed = SLIME_BOSS_SPEED;
+
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -292,7 +296,7 @@ void EnemySlimeBoss::Draw()const
 
 	DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
 
-	DrawFormatString(0, 0, 0xffffff, "%d", state);
+	//DrawFormatString(0, 0, 0xffffff, "%f", location.x);
 }
 
 //-----------------------------------
