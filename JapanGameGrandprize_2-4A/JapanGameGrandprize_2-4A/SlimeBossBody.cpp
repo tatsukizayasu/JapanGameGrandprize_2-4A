@@ -143,8 +143,6 @@ void SlimeBossBody::SetLocation(Location location)
 	this->location.y = location.y;
 }
 
-
-
 #ifdef _DEBUG
 //-----------------------------------
 // çXêV(DotByDot)

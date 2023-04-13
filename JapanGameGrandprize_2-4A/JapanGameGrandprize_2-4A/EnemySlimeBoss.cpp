@@ -8,7 +8,7 @@
 #define SLIME_MIN_DROP 0u
 #define SLIME_MAX_DROP 3u
 
-#define SLIME_BOSS_SPEED 5
+#define SLIME_BOSS_SPEED 4
 #define SLIME_BOSS_ATTACK_DAMAGE 10
 #define SLIME_BOSS_JUMP_DISTANCE 45
 
@@ -68,6 +68,8 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+
+	move_state = MOVE_STATE::MOVE;
 }
 
 EnemySlimeBoss::~EnemySlimeBoss()
@@ -102,9 +104,19 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 	case ENEMY_STATE::MOVE:
 
-		location.y += speed_y;
+		switch (move_state)
+		{
+		case MOVE_STATE::MOVE:
+			speed_y = -5;
+			slime_boss_jump_distance--;
+			break;
 
-		slime_boss_jump_distance--;
+		case MOVE_STATE::WALL_MOVE:
+
+			break;
+		}
+
+		location.y += speed_y;
 
 		hit_stage = HitStage(stage);
 
@@ -135,10 +147,15 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			if (left_move)speed = -SLIME_BOSS_SPEED;
 			else speed = SLIME_BOSS_SPEED;
 		}
-		else if(slime_boss_jump_distance <= 0)
+		else
 		{
-			state = ENEMY_STATE::FALL;
-			speed_y = 0;
+			if ((move_state == MOVE_STATE::MOVE) &&(slime_boss_jump_distance <= 0))
+			{
+				state = ENEMY_STATE::FALL;
+				speed_y = 0;
+			}
+
+			
 		}
 
 		if (ScreenOut())
@@ -163,6 +180,19 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			left_move = !left_move;
 			if (left_move)speed = -SLIME_BOSS_SPEED;
 			else speed = SLIME_BOSS_SPEED;
+
+			switch (move_state)
+			{
+			case MOVE_STATE::MOVE:
+				
+				break;
+
+			case MOVE_STATE::WALL_MOVE:
+
+				
+
+				break;
+			}
 		}
 
 		Fall();
@@ -184,8 +214,20 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 			state = ENEMY_STATE::MOVE;
 
-			slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
-			speed_y = -5;
+			switch (move_state)
+			{
+			case MOVE_STATE::MOVE:
+				slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
+				//speed_y = -5;
+				break;
+
+			case MOVE_STATE::WALL_MOVE:
+
+				if (left_move)speed = -SLIME_BOSS_SPEED;
+				else speed = SLIME_BOSS_SPEED;
+
+				break;
+			}
 		}
 		if (ScreenOut())
 		{
@@ -314,6 +356,7 @@ AttackResource EnemySlimeBoss::Hit()
 	return ret;
 }
 
+
 //-----------------------------------
 //éÄñS
 //-----------------------------------
@@ -321,6 +364,17 @@ void EnemySlimeBoss::Death()
 {
 	can_delete = true;
 }
+
+
+bool EnemySlimeBoss::HitSphere(const class SphereCollider* sphere_collider)const
+{
+	for (int i = 0; i < BODY_MAX; i++)
+	{
+		if (slime_boss_body[i]->HitSphere(sphere_collider))return TRUE;
+	}
+	return FALSE;
+}
+
 
 //-----------------------------------
 // ÉvÉåÉCÉÑÅ[ÇÃíeÇ∆ÇÃìñÇΩÇËîªíË
