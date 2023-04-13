@@ -9,8 +9,11 @@
 #define SLIME_MAX_DROP 3u
 
 #define SLIME_BOSS_SPEED 4
-#define SLIME_BOSS_ATTACK_DAMAGE 10
-#define SLIME_BOSS_JUMP_DISTANCE 45
+//#define SLIME_BOSS_ATTACK_DAMAGE 10
+//#define SLIME_BOSS_JUMP_DISTANCE 45
+
+#define SLIME_BOSS_ATTACK_DAMAGE 5
+#define SLIME_BOSS_JUMP_DISTANCE 10
 
 EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 {
