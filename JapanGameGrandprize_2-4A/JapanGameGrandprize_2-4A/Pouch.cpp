@@ -375,36 +375,51 @@ void Pouch::Update()
 		case ATTRIBUTE::EXPLOSION:
 			if (!select_explosion.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_explosion[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::MELT:
 			if (!select_melt.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_melt[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::POISON:
 			if (!select_poison.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_poison[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::PARALYSIS:
 			if (!select_pararysis.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_pararysis[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::HEAL:
 			if (!select_heal.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_heal[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		default:
@@ -524,7 +539,6 @@ void Pouch::TabUpdate(int max_num)
 
 void Pouch::SetElement(ElementItem* item, int i)
 {
-
 	element[i] = item;
 }
 
@@ -789,34 +803,19 @@ void Pouch::SetChemicalFormulaParameter()
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
-		if (ComparisonElement(chemical_formula_explosion[cursol]))
-		{
 			select_explosion = chemical_formula_explosion[cursol];
-		}
 		break;
 	case ATTRIBUTE::MELT:
-		if (ComparisonElement(chemical_formula_melt[cursol]))
-		{
 			select_melt = chemical_formula_melt[cursol];
-		}
 		break;
 	case ATTRIBUTE::POISON:
-		if (ComparisonElement(chemical_formula_poison[cursol]))
-		{
 			select_poison = chemical_formula_poison[cursol];
-		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		if (ComparisonElement(chemical_formula_pararysis[cursol]))
-		{
 			select_pararysis = chemical_formula_pararysis[cursol];
-		}
 		break;
 	case ATTRIBUTE::HEAL:
-		if (ComparisonElement(chemical_formula_heal[cursol]))
-		{
 			select_heal = chemical_formula_heal[cursol];
-		}
 		break;
 	default:
 		break;
