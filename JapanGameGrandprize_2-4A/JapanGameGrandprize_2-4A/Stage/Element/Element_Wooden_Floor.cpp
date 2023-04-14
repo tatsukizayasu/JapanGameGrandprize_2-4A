@@ -13,7 +13,7 @@ Element_Wooden_Floor::Element_Wooden_Floor(short type,
 	this->location = location;
 	this->area = area;
 
-	margin_area = { -35.0f,0.0f };
+	margin_area = { -38.0f,0.0f };
 
 	original_collision = area;
 
