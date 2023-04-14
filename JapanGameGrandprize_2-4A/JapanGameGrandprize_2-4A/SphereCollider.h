@@ -2,6 +2,7 @@
 #include "define.h"
 #include "ColliderBase.h"
 
+
 class SphereCollider :public ColliderBase
 {
 protected:
@@ -11,11 +12,13 @@ public:
 
 	SphereCollider():ColliderBase()
 	{
+		collider_type = (int)COLLIDER::SPHERE;;
 		radius = 5;
 	}
 
 	SphereCollider(Location location) :ColliderBase(location)
 	{
+		collider_type = (int)COLLIDER::SPHERE;
 		radius = 5;
 	}
 
@@ -30,6 +33,10 @@ public:
 
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
 	bool HitLine(const class LineCollider* line_collider) const override;
+
+	ColliderBase* Copy()const override { return new SphereCollider(*this); }
+
+	bool HitCheck(ColliderBase* collider)const override;
 
 	//’†SÀ•W‚Ìæ“¾
 	Location GetLocation() const

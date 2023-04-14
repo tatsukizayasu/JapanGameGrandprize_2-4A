@@ -154,7 +154,6 @@ void SlimeBossBody::Update(const ENEMY_STATE state)
 		location = debug_location;
 	}
 
-	
 	old_state = state;
 }
 
