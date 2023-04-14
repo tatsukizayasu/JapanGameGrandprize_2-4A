@@ -52,6 +52,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 
 	case ITEM_DROP_OBJECT:
 		element.push_back(std::make_shared<Element_Item_Drop_Object>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
+		break;
 
 	case TRAP:
 		element.push_back(std::make_shared<Element_Trap>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
@@ -309,7 +310,7 @@ std::vector<int> Stage_Element::GetImage(short type)
 		break;
 
 	case ITEM_DROP_OBJECT:
-		filename = "Move_Floor.png";
+		filename = "TRAP.png";
 		break;
 
 	case TRAP:
