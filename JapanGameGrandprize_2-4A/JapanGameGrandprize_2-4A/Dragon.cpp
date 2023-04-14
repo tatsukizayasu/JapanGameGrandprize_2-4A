@@ -14,6 +14,10 @@
 #define ATTACK_SPEED 3
 #define SPEED 10
 
+//ƒhƒ‰ƒSƒ“K”öUŒ‚
+#define ATTACK_SCOPE 100
+#define ATTACK_SCOPE_Y 10
+
 //–‚–@UŒ‚‚µ‚½‚Ìd’¼ŠÔ
 #define MAGIC_STANDBY 60
 
@@ -267,6 +271,14 @@ void Dragon::Move(const Location player_location)
 
 	//ƒvƒŒƒCƒ„[‚Æ‚Ì‹——£ŒvZ
 	int range = player_location.x - location.x;
+	int range_y = player_location.y - location.y;
+
+	if (range <= ATTACK_SCOPE && range >= -ATTACK_SCOPE &&
+		range_y <= ATTACK_SCOPE_Y && range_y >= -ATTACK_SCOPE_Y)
+	{
+		attack_state = DRAGON_ATTACK::TAIL_ATTACK;
+		state = ENEMY_STATE::ATTACK;
+	}
 
 	standby_time--;
 	if (standby_time < 0)
@@ -308,6 +320,8 @@ void Dragon::Attack(const Location player_location)
 		DiteMove(player_location);
 		break;
 	case DRAGON_ATTACK::TAIL_ATTACK: //K”öUŒ‚
+		attack = false;
+		state = ENEMY_STATE::MOVE;
 		break;
 	case DRAGON_ATTACK::DREATH: //ƒuƒŒƒXUŒ‚
 		DreathMove(player_location);
