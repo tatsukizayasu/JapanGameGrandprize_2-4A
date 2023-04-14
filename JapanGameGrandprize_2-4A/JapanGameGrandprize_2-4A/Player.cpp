@@ -447,8 +447,6 @@ void Player::Update()
 
 	if (fire_flg)
 	{
-		if (!damage_flg)
-		{
 			if (++damage_count % 60 == 0)
 			{
 				if (!fire_second_bool)
@@ -476,7 +474,7 @@ void Player::Update()
 				damage_time = 0;
 				damage_count = 0;
 			}
-		}
+		
 	}
 
 
