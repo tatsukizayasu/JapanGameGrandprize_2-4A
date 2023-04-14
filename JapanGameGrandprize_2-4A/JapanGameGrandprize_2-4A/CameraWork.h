@@ -13,6 +13,13 @@ public:
 		float x;
 		float y;
 	};
+
+	enum class STATE
+	{
+		MOVE,	//移動
+		FIXED	//固定
+	};
+
 protected:
 
 	//カメラ座標
@@ -41,13 +48,17 @@ protected:
 
 	//入力間隔時間		デバック
 	int input_margin;
+
+private:
+
+	//カメラの状態
+	STATE state;
+	bool is_lock;
+
+
 public:
 
-	enum class STATE 
-	{
-		MOVE,	//移動
-		FIXED	//固定
-	};
+	
 
 	CameraWork();
 	CameraWork(float camera_x, float camera_y, Player* player, Stage* stage);
@@ -55,8 +66,7 @@ public:
 	~CameraWork();
 	void Update();
 	static Location GetCamera() { return camera; }
-private:
-
-	//カメラの状態
-	STATE state;
+	STATE GetCameraState() { return state; }
+	bool GetCameraLock(){ return is_lock; }
+	void SetCameraLock(bool is_lock) { this->is_lock = is_lock; }
 };

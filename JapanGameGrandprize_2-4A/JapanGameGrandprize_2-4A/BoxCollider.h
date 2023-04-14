@@ -3,7 +3,11 @@
 
 #include"Stage/StageBuilder/Debug.h"
 #include"DxLib.h"
+
+#include "SphereCollider.h"
+#include "LineCollider.h"
 #include "ColliderBase.h"
+
 
 class BoxCollider : public ColliderBase
 {
@@ -27,6 +31,10 @@ public:
 
 	//LineColliderとの当たり判定
 	bool HitLine(const class LineCollider* line_collider) const override;
+
+	ColliderBase* Copy()const override { return new BoxCollider(*this); }
+
+	bool HitCheck(ColliderBase* collider)const;
 	
 	//中心座標の取得
 	Location GetLocation()const;
@@ -37,15 +45,17 @@ public:
 	//中心座標の設定
 	virtual void SetLocation(Location location);
 
+	//ゲームプレイ時に当たり判定をとる分には必要のないもの
+	//ツール上でマウスとの当たり判定をとるために使用しています
 #ifdef _STAGE_BUILDER
-protected:
-	SphereCollider* spheres[4];
-	SphereCollider* pivot;
+private:
+	SphereCollider spheres[4];
+	SphereCollider pivot;
 	Location old_pos[4];
 
 public:
-	SphereCollider** GetSpheres() { return spheres; }
-	SphereCollider* GetPivot() { return pivot; }
+	SphereCollider* GetSpheres() { return spheres; }
+	SphereCollider* GetPivot() { return &pivot; }
 	void UpdatePos();
 #endif
 

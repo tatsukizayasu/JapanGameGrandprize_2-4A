@@ -1,6 +1,4 @@
 #include "SphereCollider.h"
-#include "BoxCollider.h"
-#include "LineCollider.h"
 #include "CameraWork.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -124,6 +122,34 @@ bool SphereCollider::HitLine(const LineCollider* line_collider) const
 	if (distance_tips_sphere <= GetRadius())
 	{
 		is_hit = true;
+	}
+
+	return is_hit;
+}
+
+//-------------------------------
+// 当たり判定チェック
+//------------------------------
+bool SphereCollider::HitCheck(ColliderBase* collider)const
+{
+	bool is_hit = false;
+
+	collider = dynamic_cast<BoxCollider*>(collider);
+	if (collider)
+	{
+		return HitBox(dynamic_cast<BoxCollider*>(collider));
+	}
+
+	collider = dynamic_cast<SphereCollider*>(collider);
+	if (collider)
+	{
+		return HitSphere(dynamic_cast<SphereCollider*>(collider));
+	}
+
+	collider = dynamic_cast<LineCollider*>(collider);
+	if (collider)
+	{
+		return HitLine(dynamic_cast<LineCollider*>(collider));
 	}
 
 	return is_hit;

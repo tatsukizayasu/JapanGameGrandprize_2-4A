@@ -2,10 +2,12 @@
 #include "../Define.h"
 #include "../LineCollider.h"
 #include "../SphereCollider.h"
+#include "../BoxCollider.h"
+#include "../../ColliderBase.h"
 #include <vector>
 
-using namespace std;
 
+using namespace std;
 class PolyLine 
     :public ColliderBase
 {
@@ -17,6 +19,7 @@ public:
     PolyLine();
     PolyLine(Location bend_points[], unsigned int size);
     PolyLine(const vector<SphereCollider*>spheres);
+    PolyLine(const PolyLine &poly_line);
     ~PolyLine();
 
     void Update();
@@ -31,8 +34,28 @@ public:
     //LineColliderとの当たり判定
     virtual bool HitLine(const class LineCollider* line_collider)const;
 
+    ColliderBase* Copy()const override { return new PolyLine(*this); }
+
+    bool HitCheck(ColliderBase* collider)const;
+
     //点の削除
     void DeleteBendPoint(int index);
 
+    //中心座標の計算、再計算
+    void MakeLocation();
+
     vector<SphereCollider*> GetPoints()const{return bend_points;}
+
+
+    //ゲームプレイ時に当たり判定をとる分には必要のないもの
+    //ツール上でマウスとの当たり判定をとるために使用しています
+#ifdef _STAGE_BUILDER
+private:
+    SphereCollider pivot;
+    Location old_location;
+
+public:
+    SphereCollider* GetPivot() { return &pivot; }
+#endif
+
 };

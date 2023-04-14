@@ -27,8 +27,8 @@
 
 //ブラシの数とその種類---------
 #define CLASS_NUM 2	
-#define MAP_CHIP 0
-#define POLY_LINE 1
+#define BRUSH_MAP_CHIP 0
+#define BRUSH_POLY_LINE 1
 //-----------------------------
 
 #define ARROW_NUM 16
@@ -68,6 +68,7 @@ private:
 	vector<BoxCollider*> boxes;
 
 public:
+	/*******************更新描画系統*******************/
 	//コンストラクタ
 	StageBuilder();
 	//デストラクタ
@@ -108,6 +109,8 @@ public:
 	void DrawSphere()const;
 	//保留中のラインの描画
 	void DrawLine(Location start, Location end)const;
+
+	/**********************機能系**************************/
 	//マウス入力によるオブジェクトの移動
 	void MovementByMouse();
 	//キーボード入力によるオブジェクトの移動
@@ -115,8 +118,13 @@ public:
 
 	//オブジェクトの削除
 	void DeleteObject();
+
+	//オブジェクトの選択
+	void IsSelectedObject();
+
 	//折れ線の変形
 	bool TransformPolyLine();
+	bool TransformPolyLine(PolyLine* poly_line);
 	//矩形の変形
 	bool TransformBox();
 	bool TransformBox(BoxCollider* box);
@@ -133,20 +141,22 @@ public:
 	//保留中のオブジェクトをリセットする
 	void Trash();
 
-	//ファイルカウント
-	int FileCount(const char* path)const;
-
 	//メニュー選択
 	void Select(int menu_max);
 
 	const int* GetImage(int image_index)const;
 
+
+	/******************ファイルへの書き込み読み込み系*********************/
 	//CSVファイルへの書き出し(新規追加)
 	void SaveStage(int stage_num);
 	//上書き保存
 	void SaveStage(char* stage_name);
 	//CSVファイルからの読み込み
 	void LoadStage(char* stage_name);
+	//ファイルカウント
+	int FileCount(const char* path)const;
+
 
 	//マップチップの保存
 	void SaveMapChips(FILE* fp);
