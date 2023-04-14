@@ -28,12 +28,18 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 
 
 #ifdef _STAGE_BUILDER
-	Location distance;
+	Location vector;
 	
 	for (auto line : lines)
 	{
-		distance = line->ColliderBase::GetLocation() - location;
-		vector_to_line.push_back(distance);
+		vector = line->ColliderBase::GetLocation() - location;
+		vector_to_line.push_back(vector);
+	}
+
+	for (auto bend_point : this->bend_points)
+	{
+		vector = bend_point->GetLocation() - location;
+		vector_to_bend_point.push_back(vector);
 	}
 
 	pivot.SetLocation(location);
@@ -64,13 +70,20 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 	MakeLocation();
 
 #ifdef _STAGE_BUILDER
-	Location distance;
+	Location vector;
 
 	for (auto line : lines)
 	{
-		distance = line->ColliderBase::GetLocation() - location;
-		vector_to_line.push_back(distance);
+		vector = line->ColliderBase::GetLocation() - location;
+		vector_to_line.push_back(vector);
 	}
+
+	for (auto bend_point : this->bend_points)
+	{
+		vector = bend_point->GetLocation() - location;
+		vector_to_bend_point.push_back(vector);
+	}
+
 
 	pivot.SetLocation(location);
 #endif
@@ -99,6 +112,10 @@ PolyLine::PolyLine(const PolyLine &poly_line)
 	{
 		vector_to_line.push_back(vector);
 	}
+	for (auto vector : poly_line.vector_to_bend_point)
+	{
+		vector_to_line.push_back(vector);
+	}
 
 #endif
 }
@@ -121,6 +138,7 @@ PolyLine::~PolyLine()
 	lines.clear();
 
 	vector_to_line.clear();
+	vector_to_bend_point.clear();
 }
 
 //---------------------------------
@@ -128,33 +146,44 @@ PolyLine::~PolyLine()
 //---------------------------------
 void PolyLine::Update()
 {
-#ifdef _STAGE_BUILDER
-	if (location != pivot.GetLocation())
-	{
-		location = pivot.GetLocation();
+//#ifdef _STAGE_BUILDER
+//	if (location != pivot.GetLocation())
+//	{
+//		location = pivot.GetLocation();
+//
+//		for (int i = 0; i < lines.size(); i++)
+//		{
+//			lines[i]->ColliderBase::SetLocation
+//			(this->location + vector_to_line[i]);
+//
+//			bend_points[i]->SetLocation(lines[i]->GetLocation(LINE_START));
+//		}
+//		bend_points[bend_points.size() - 1]
+//			->SetLocation(lines[lines.size() - 1]->GetLocation(LINE_END));
+//
+//	}
+//
+//#endif
+//	
+//	MakeLocation();
+//	for (int i = 0; i < lines.size(); i++)
+//	{
+//		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
+//		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
+//	}
 
-		for (int i = 0; i < lines.size(); i++)
+	for (int i = 0; i < bend_points.size(); i++)
+	{
+		Location now_vector
+			= bend_points[i]->GetLocation() - location;
+		if (now_vector != vector_to_bend_point[i])
 		{
-			lines[i]->ColliderBase::SetLocation
-			(this->location + vector_to_line[i]);
-
-			bend_points[i]->SetLocation(lines[i]->GetLocation(LINE_START));
+			if (i < bend_points.size() - 1)
+			{
+				
+			}
 		}
-		bend_points[bend_points.size() - 1]
-			->SetLocation(lines[lines.size() - 1]->GetLocation(LINE_END));
-
 	}
-
-#endif
-
-	for (int i = 0; i < lines.size(); i++)
-	{
-		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
-		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
-	}
-
-	MakeLocation();
-	
 
 
 }

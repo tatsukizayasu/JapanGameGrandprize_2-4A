@@ -137,6 +137,17 @@ public:
 		return vector_max;
 	}
 
+	Location GetVector(int index)const 
+	{
+		if (LINE_START <= index && index <= LINE_END)
+		{
+			return vector[index];
+		}
+		else
+		{
+			return {};
+		}
+	}
 protected:
 
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)

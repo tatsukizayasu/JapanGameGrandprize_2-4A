@@ -54,6 +54,9 @@ private:
     SphereCollider pivot;
     vector<Location> vector_to_line;
 
+
+    vector<Location> vector_to_bend_point;
+
 public:
     SphereCollider* GetPivot() { return &pivot; }
 #endif
