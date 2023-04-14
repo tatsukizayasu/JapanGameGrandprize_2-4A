@@ -52,7 +52,7 @@ EnemySlime::EnemySlime(Location spawn_location)
 
 	state = ENEMY_STATE::IDOL;
 	images = new int[7];
-	 LoadDivGraph("Images/Enemy/mov_slime1.png", 7, 7, 1, 450,269, images);
+	 LoadDivGraph("Images/Enemy/mov_slime.png", 7, 7, 1, 102,61, images);
 	slime_angle = 0;
 
 	//ドロップアイテムの設定
@@ -287,7 +287,7 @@ void EnemySlime::Draw()const
 	}
 	DrawDamageLog();
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, 0.23, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
+	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0f, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 }
 
 //-----------------------------------
