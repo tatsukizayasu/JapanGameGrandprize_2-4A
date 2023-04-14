@@ -9,6 +9,7 @@ private:
 	int image;
 	SphereCollider* pivot;
 	Location vector;
+	Location old_location;
 	bool is_reverse;
 
 	void ColliderCast(ColliderBase* p_collider);

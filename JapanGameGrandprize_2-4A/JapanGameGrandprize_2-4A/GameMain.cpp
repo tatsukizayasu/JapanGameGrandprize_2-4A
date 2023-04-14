@@ -40,6 +40,7 @@ GameMain::GameMain()
 
 	SpawnEnemy();
 	camera_work = new CameraWork(0, 800, player, stage);
+	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
 	
 	bullet_manager = BulletManager::GetInstance();
@@ -99,6 +100,8 @@ AbstractScene* GameMain::Update()
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
+
+
 
 	if (EnemyUpdate() == true)
 	{
@@ -201,7 +204,7 @@ bool GameMain::EnemyUpdate()
 					break;
 				}
 
-				if (player_bullet[j]->HitBox(enemy[i]))
+				if(enemy[i]->HitSphere(player_bullet[j]))
 				{
 					enemy[i]->HitBullet(player_bullet[j]);
 					delete player_bullet[j];

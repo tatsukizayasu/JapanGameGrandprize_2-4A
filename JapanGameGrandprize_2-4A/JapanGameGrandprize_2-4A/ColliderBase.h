@@ -72,15 +72,18 @@ public:
 	//LineColliderとの当たり判定
 	virtual bool HitLine(const class LineCollider* line_collider)const = 0;
 
-	bool HitCheck(ColliderBase* collider)const;
+	virtual ColliderBase* Copy()const = 0;
+
+	virtual  bool HitCheck(ColliderBase* collider)const = 0;
 
 	virtual void Draw()const {}
 
-	const char* GetName() { return class_name; }
+	int GetName() { return collider_type; }
 
 protected:
 
-	const char* class_name = "default";
+	int collider_type = (int)COLLIDER::DEFAULT;
+	Location location;	//中心座標
 
 	//2つのベクトルのなす角が鋭角かどうかを求める
 	bool CheckIsAcute(Location vector1, Location vector2)const
@@ -120,5 +123,4 @@ protected:
 		return cross_product;
 	}
 
-	Location location;	//中心座標
 };
