@@ -175,6 +175,7 @@
     <ClInclude Include="HarpyBullet.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemController.h" />
+    <ClInclude Include="Kraken.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="MageBullet.h" />
     <ClInclude Include="NormalBullet.h" />
@@ -244,6 +245,7 @@
     <ClCompile Include="HarpyBullet.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemController.cpp" />
+    <ClCompile Include="Kraken.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="MageBullet.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
