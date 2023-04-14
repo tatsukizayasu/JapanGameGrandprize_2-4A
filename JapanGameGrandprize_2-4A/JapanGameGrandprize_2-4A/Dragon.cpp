@@ -191,11 +191,6 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 			wall_hit = true;
 
 			state = ENEMY_STATE::MOVE;
-
-			if (attack_tail == true)
-			{
-				attack_method = GetRand(2);
-			}
 		}
 
 	}
@@ -469,6 +464,21 @@ void Dragon::Fly()
 			state = ENEMY_STATE::FALL;
 			attack_method = GetRand(2);
 			standby_time = 200;
+		}
+	}
+	if (fly_num < 4)
+	{
+		speed = ATTACK_SPEED;
+
+		if (left_move == true)
+		{
+			location.x -= speed;
+			speed = SPEED;
+		}
+		else
+		{
+			location.x += speed;
+			speed = SPEED;
 		}
 	}
 }
