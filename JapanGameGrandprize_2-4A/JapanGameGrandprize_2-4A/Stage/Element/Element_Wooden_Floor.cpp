@@ -13,7 +13,7 @@ Element_Wooden_Floor::Element_Wooden_Floor(short type,
 	this->location = location;
 	this->area = area;
 
-	margin_area = { -18.0f,0.0f };
+	margin_area = { -35.0f,0.0f };
 
 	original_collision = area;
 
@@ -35,7 +35,7 @@ void Element_Wooden_Floor::Update(Player* player)
 	// プレイヤーが下にいる&ステートがジャンプの場合
 	if (is_hit && is_hit_dir == HIT_DIRECTION::DOWN)
 	{
-		if (player->GetState() == PLAYER_STATE::JUMP)
+		if (player->GetState() == PLAYER_STATE::FLY)
 		{
 			SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
 		}
@@ -52,7 +52,7 @@ void Element_Wooden_Floor::Update(Player* player)
 		SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
 	}
 	// プレイヤーが接触していない状態で、一定距離離れると衝突エリアをリセット
-	else if (abs(location.y - player->GetLocation().y) >= MAP_CHIP_SIZE - margin_area.height + 8.0f) 
+	else if (abs(location.y - player->GetLocation().y) >= MAP_CHIP_SIZE - margin_area.height + 15.0f) 
 	{
 		SetArea(original_collision);
 	}
