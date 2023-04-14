@@ -97,7 +97,7 @@ void Pouch::ExplosionTabDraw() const
 	DrawString(x, y, "EXPLOSION", 0xaa5500);
 
 
-	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string +110, 0xff00ff, FALSE);
+	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 }
 
 //—n‰ð
@@ -209,20 +209,12 @@ void Pouch::HealTabDraw()const
 
 
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
-	if (page == 0)
-	{
-		for (int i = 0; i < 9; i++)
+
+		for (int i = 0; i < HEAL_MAX_NUM; i++)
 		{
 			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_heal[i].chemical_formula_name);
 		}
-	}
-	if (page == 1)
-	{
-		for (int i = 9, j = 0; i < HEAL_MAX_NUM; i++, j++)
-		{
-			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_heal[i].chemical_formula_name);
-		}
-	}
+
 
 
 	ElementDraw(chemical_formula_heal[cursol]);
@@ -383,36 +375,51 @@ void Pouch::Update()
 		case ATTRIBUTE::EXPLOSION:
 			if (!select_explosion.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_explosion[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::MELT:
 			if (!select_melt.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_melt[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::POISON:
 			if (!select_poison.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_poison[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::PARALYSIS:
 			if (!select_pararysis.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_pararysis[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::HEAL:
 			if (!select_heal.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_heal[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		default:
@@ -427,10 +434,8 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-
-			switch (page)
+			if (tab == ATTRIBUTE::HEAL)
 			{
-			case 0:
 				if (cursol > 0)
 				{
 					move_string -= 30;
@@ -438,28 +443,42 @@ void Pouch::TabUpdate(int max_num)
 				}
 				else
 				{
-					move_string = 30 * 7;
-					cursol = 7;
+					move_string = 30 * 6;
+					cursol = HEAL_MAX_NUM - 1;
 				}
-				break;
-			case 1:
-				if (cursol > 9)
+			}
+			else
+			{
+				switch (page)
 				{
-					move_string -= 30;
-					cursol--;
-				}
-				else
-				{
-					move_string = 30 * 8;
-					cursol = 7;
-					if (tab != ATTRIBUTE::HEAL)
+				case 0:
+					if (cursol > 0)
 					{
+						move_string -= 30;
+						cursol--;
+					}
+					else
+					{
+						move_string = 30 * 7;
+						cursol = 7;
+					}
+					break;
+				case 1:
+					if (cursol > 9)
+					{
+						move_string -= 30;
+						cursol--;
+					}
+					else
+					{
+						move_string = 30 * 8;
+						cursol = 8;
 						page = 0;
 					}
+					break;
+				default:
+					break;
 				}
-				break;
-			default:
-				break;
 			}
 		}
 	}
@@ -468,25 +487,8 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-			switch (page)
+			if (tab == ATTRIBUTE::HEAL)
 			{
-			case 0:
-				if (cursol < 8)
-				{
-					move_string += 30;
-					cursol++;
-				}
-				else
-				{
-					move_string = 0;
-					cursol = 9;
-					if (tab != ATTRIBUTE::HEAL)
-					{
-						page = 1;
-					}
-				}
-				break;
-			case 1:
 				if (cursol < max_num - 1)
 				{
 					move_string += 30;
@@ -495,11 +497,41 @@ void Pouch::TabUpdate(int max_num)
 				else
 				{
 					move_string = 0;
-					cursol = 9;
+					cursol = 0;
 				}
-				break;
-			default:
-				break;
+			}
+			else
+			{
+				switch (page)
+				{
+				case 0:
+					if (cursol < 8)
+					{
+						move_string += 30;
+						cursol++;
+					}
+					else
+					{
+						move_string = 0;
+						cursol = 9;
+						page = 1;
+					}
+					break;
+				case 1:
+					if (cursol < max_num - 1)
+					{
+						move_string += 30;
+						cursol++;
+					}
+					else
+					{
+						move_string = 0;
+						cursol = 9;
+					}
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}
@@ -507,7 +539,6 @@ void Pouch::TabUpdate(int max_num)
 
 void Pouch::SetElement(ElementItem* item, int i)
 {
-
 	element[i] = item;
 }
 
@@ -772,34 +803,19 @@ void Pouch::SetChemicalFormulaParameter()
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
-		if (ComparisonElement(chemical_formula_explosion[cursol]))
-		{
 			select_explosion = chemical_formula_explosion[cursol];
-		}
 		break;
 	case ATTRIBUTE::MELT:
-		if (ComparisonElement(chemical_formula_melt[cursol]))
-		{
 			select_melt = chemical_formula_melt[cursol];
-		}
 		break;
 	case ATTRIBUTE::POISON:
-		if (ComparisonElement(chemical_formula_poison[cursol]))
-		{
 			select_poison = chemical_formula_poison[cursol];
-		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		if (ComparisonElement(chemical_formula_pararysis[cursol]))
-		{
 			select_pararysis = chemical_formula_pararysis[cursol];
-		}
 		break;
 	case ATTRIBUTE::HEAL:
-		if (ComparisonElement(chemical_formula_heal[cursol]))
-		{
 			select_heal = chemical_formula_heal[cursol];
-		}
 		break;
 	default:
 		break;
