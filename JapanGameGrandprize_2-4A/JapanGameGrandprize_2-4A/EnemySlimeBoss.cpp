@@ -5,6 +5,8 @@
 #include"Player.h"
 #include"Stage/Stage.h"
 
+#include"BulletManager.h"
+
 #define SLIME_MIN_DROP 0u
 #define SLIME_MAX_DROP 3u
 
@@ -16,6 +18,8 @@
 #define BOSS_SLIME_HP 500
 
 #define SLIME_BOSS_WAIT_TIME 60
+
+#define SLIME_BOSS_BREATH_TIME 120
 
 EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 {
@@ -62,6 +66,7 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 
 	move_state = MOVE_STATE::MOVE;
 	wait_time = 0;
+	breath_time = 0;
 }
 
 EnemySlimeBoss::~EnemySlimeBoss()
@@ -77,6 +82,15 @@ EnemySlimeBoss::~EnemySlimeBoss()
 
 }
 
+void EnemySlimeBoss::MagicBullet(const Location player_location)
+{
+	if (++breath_time >= SLIME_BOSS_BREATH_TIME)
+	{
+		breath_time = 0;
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new SlimeBossBullet(location, player_location));
+	}
+}
 
 
 void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
@@ -150,6 +164,11 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 				speed = 0;
 			}
 		}
+		else
+		{
+			MagicBullet(player->GetLocation());
+		}
+
 		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
@@ -254,7 +273,7 @@ void EnemySlimeBoss::Draw()const
 
 	DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
 
-	DrawFormatString(0, 0, 0xffffff, "%d", slime_boss_jump_distance);
+	//DrawFormatString(0, 0, 0xffffff, "%d", slime_boss_jump_distance);
 
 }
 

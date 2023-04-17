@@ -2,6 +2,7 @@
 
 #include"EnemyBase.h"
 #include"CameraWork.h"
+#include"SlimeBossBullet.h"
 
 enum class MOVE_STATE
 {
@@ -18,6 +19,7 @@ private:
 	int slime_boss_jump_distance;
 	int speed_y;
 	int wait_time;
+	int breath_time;
 
 #ifdef _DEBUG
 	ENEMY_STATE old_state; //一つ前の状態
@@ -55,6 +57,8 @@ public:
 
 	//座標の取得
 	Location GetLocation() const override;
+
+	void MagicBullet(const Location player_location);
 
 #ifdef _DEBUG
 	//更新(DotByDot)
