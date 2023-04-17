@@ -84,7 +84,8 @@ void  LastBoss::Attack(const Location)
 //-----------------------------------
 AttackResource LastBoss::Hit()
 {
-
+	AttackResource ret = { 0,nullptr,0 };
+	;	return ret;
 }
 
 //-----------------------------------

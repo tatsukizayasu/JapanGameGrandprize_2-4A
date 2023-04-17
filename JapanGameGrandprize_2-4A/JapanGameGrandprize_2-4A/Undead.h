@@ -16,6 +16,7 @@ private:
     int image_argument; //画像の引数
     int attack_time; //攻撃している時間(デバッグ用)
     float old_distance; //直前のプレイヤーとの距離
+    Area size;          //画像サイズ
 private:
 
     //プレイヤーとの距離
@@ -23,6 +24,9 @@ private:
 
     //移動時のアニメーション
     void MoveAnimation();
+
+    //攻撃時のアニメーション
+    void AttackAnimation();
 public:
 
     //コンストラクタ
