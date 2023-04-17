@@ -156,7 +156,7 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::TORRENT:	//トレントボスの生成
 			enemy[i] = new Torrent(spawn[i].location);
 			break;
-		case ENEMY_KIND::GARGOYLE:	//ガーゴイルボスの生成
+		case ENEMY_KIND::KRAKEN:	//クラーケンボスの生成
 			break;
 		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
 			enemy[i] = new Dragon(spawn[i].location);
