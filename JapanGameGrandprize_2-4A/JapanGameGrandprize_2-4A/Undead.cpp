@@ -38,6 +38,10 @@
 
 #define UNDEAD_ANIMATION 10
 
+#define UNDEAD_WIDTH 46
+#define UNDEAD_HEIGHT 110
+
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -68,8 +72,8 @@ Undead::Undead(Location spawn_location)
 	paralysis_time = 0;
 	location = spawn_location;
 	/*当たり判定の設定*/
-	area.width = 46;
-	area.height = 110;
+	area.width = UNDEAD_WIDTH;
+	area.height = UNDEAD_HEIGHT;
 
 	location.x -= MAP_CHIP_SIZE / 2;
 	location.y -= area.height / 2;
@@ -234,6 +238,7 @@ void Undead::DistancePlayer(const Location player_location)
 	if ((distance < UNDEAD_ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
 		state = ENEMY_STATE::ATTACK;
+		area.width += UNDEAD_WIDTH / 3;
 		image_argument = UNDEAD_MOVE_IMAGES;
 		animation = 0;
 	}
@@ -312,6 +317,7 @@ void  Undead::Attack(const Location player_location)
 		attack = false;
 		state = ENEMY_STATE::MOVE;
 		attack_interval = UNDEAD_ATTACK_INTERVAL;
+		area.width = UNDEAD_WIDTH;
 	}
 }
 
@@ -433,7 +439,7 @@ void Undead::AttackAnimation()
 {
 	animation++;
 
-	if (animation % UNDEAD_ANIMATION == 0)
+	if (animation % (UNDEAD_ANIMATION / 2) == 0)
 	{
 		image_argument = ++image_argument;
 	}
@@ -490,8 +496,19 @@ Location Undead::GetLocation() const
 //-----------------------------------
 void Undead::Update(const ENEMY_STATE state)
 {
-
-	switch (state)
+	if (this->state != state)
+	{
+		if (state != ENEMY_STATE::ATTACK)
+		{
+			area.width = UNDEAD_WIDTH;
+		}
+		else
+		{
+			area.width += UNDEAD_WIDTH / 3;
+		}
+	}
+	this->state = state;
+	switch (this->state)
 	{
 	case ENEMY_STATE::IDOL:
 		break;
@@ -502,6 +519,7 @@ void Undead::Update(const ENEMY_STATE state)
 		break;
 	case ENEMY_STATE::ATTACK:
 		AttackAnimation();
+
 		if (UNDEAD_IMAGES - 1 <= image_argument)
 		{
 			image_argument = UNDEAD_MOVE_IMAGES;
