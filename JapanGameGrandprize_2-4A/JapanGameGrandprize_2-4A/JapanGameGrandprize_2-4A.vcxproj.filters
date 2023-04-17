@@ -198,6 +198,9 @@
     <ClCompile Include="Kraken.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="KrakenBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -403,6 +406,9 @@
     </ClInclude>
     <ClInclude Include="Kraken.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="KrakenBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

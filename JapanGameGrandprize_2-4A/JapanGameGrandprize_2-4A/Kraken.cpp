@@ -6,13 +6,14 @@
 #include "Define.h"
 #include "CameraWork.h"
 
+//クラーケンの画像  (画像なし、適当な数字を入れます）
+#define KRAKEN_X 100
+#define KRAKEN_Y 100
+
 //攻撃をする範囲
 
 
 //次の攻撃までの時間
-
-
-//追いかける範囲
 
 
 //歩くスピード
@@ -27,7 +28,7 @@
 //攻撃力
 
 //体力
-
+#define KRAKEN_HP 400
 
 
 
@@ -55,8 +56,8 @@ Kraken::Kraken(Location spawn_location)
 	paralysis_time = 0;
 	location = spawn_location;
 	/*当たり判定の設定*/
-	area.width = 40;
-	area.height = 80;
+	area.width = KRAKEN_X;
+	area.height = KRAKEN_Y;
 
 	location.x -= MAP_CHIP_SIZE / 2;
 	location.y -= MAP_CHIP_SIZE / 2;
@@ -221,7 +222,18 @@ void Kraken::Fall()
 void  Kraken::Attack(const Location player_location)
 {
 
-	
+	switch (attack_state)
+	{
+	case KRAKEN_ATTACK::TENTACLE_ATTACK: //触手攻撃
+		break;
+	case KRAKEN_ATTACK::BREATH: //ブレス攻撃
+		break;
+	case KRAKEN_ATTACK::HARD_ATTACK: //水の塊を落とす
+		break;
+	case KRAKEN_ATTACK::NONE: //ノーマル
+	default:
+		break;
+	}
 }
 
 //-----------------------------------
@@ -232,7 +244,7 @@ AttackResource Kraken::Hit()
 
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	/*if (attack_state == DRAGON_ATTACK::DITE)
+	/*if (attack_state == KRAKEN_ATTACK::TENTACLE_ATTACK)
 	{
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };

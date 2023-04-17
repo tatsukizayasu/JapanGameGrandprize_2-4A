@@ -22,6 +22,8 @@ class Kraken :
 {
 private:
 
+	KRAKEN_ATTACK attack_state;
+
 public:
 
 	//コンストラクタ
@@ -44,6 +46,9 @@ public:
 
 	//接近攻撃（物理攻撃）時の動き
 	void PhysicalMove(const Location player_location);
+
+	//遠距離攻撃（水の塊を落とす）
+	void AttackWater(const Location player_location);
 
 	//落下
 	void Fall() override;
