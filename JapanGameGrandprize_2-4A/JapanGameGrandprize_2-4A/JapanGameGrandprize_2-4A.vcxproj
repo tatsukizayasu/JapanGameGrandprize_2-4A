@@ -177,11 +177,13 @@
     <ClInclude Include="ItemController.h" />
     <ClInclude Include="LastBoss.h" />
      <ClInclude Include="Kraken.h" />
+         <ClInclude Include="KrakenBullet.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="MageBullet.h" />
     <ClInclude Include="NormalBullet.h" />
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
+    <ClInclude Include="SlimeBossBullet.h" />
     <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h" />
     <ClInclude Include="Stage\StageBuilder\ObjectBase.h" />
     <ClInclude Include="Pause.h" />
@@ -248,10 +250,12 @@
     <ClCompile Include="ItemController.cpp" />
     <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="Kraken.cpp" />
+    <ClCompile Include="KrakenBullet.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="MageBullet.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
+    <ClCompile Include="SlimeBossBullet.cpp" />
     <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp" />
     <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp" />
     <ClCompile Include="Pause.cpp" />
