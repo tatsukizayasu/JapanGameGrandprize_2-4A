@@ -201,6 +201,9 @@
     <ClCompile Include="SlimeBossBullet.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
+    <ClCompile Include="KrakenBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -408,6 +411,9 @@
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="SlimeBossBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="KrakenBullet.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
   </ItemGroup>

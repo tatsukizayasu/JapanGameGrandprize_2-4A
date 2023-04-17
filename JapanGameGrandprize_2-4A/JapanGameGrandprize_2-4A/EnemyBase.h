@@ -78,7 +78,7 @@ enum class ENEMY_KIND
 	/*ボス*/
 	SLIME_BOSS, //スライムキング
 	TORRENT,	//トレント
-	GARGOYLE,	//ガーゴイル
+	KRAKEN,	    //クラーケン
 	DRAGON,		//ドラゴン
 	END_BOSS,	//ラスボス
 	NONE
