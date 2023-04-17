@@ -3,8 +3,8 @@
 #include "DxLib.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "Define.h"
 #include "CameraWork.h"
+#include "BulletManager.h"
 
 //クラーケンの画像  (画像なし、適当な数字を入れます）
 #define KRAKEN_X 100
@@ -55,6 +55,10 @@ Kraken::Kraken(Location spawn_location)
 	poison_damage = 0;
 	paralysis_time = 0;
 	location = spawn_location;
+
+	standby_attack = 0;
+	standby_move = 0;
+
 	/*当たり判定の設定*/
 	area.width = KRAKEN_X;
 	area.height = KRAKEN_Y;
@@ -196,7 +200,11 @@ void  Kraken::Idol()
 //-----------------------------------
 void Kraken::Move(const Location player_location)
 {
-	
+	--standby_move;
+	if (standby_move < 0)
+	{
+		
+	}
 }
 
 //-----------------------------------
@@ -217,20 +225,37 @@ void Kraken::Fall()
 //-----------------------------------
 void  Kraken::Attack(const Location player_location)
 {
-
-	switch (attack_state)
+	--standby_attack;
+	if (standby_attack < 0)
 	{
-	case KRAKEN_ATTACK::TENTACLE_ATTACK: //触手攻撃
-		break;
-	case KRAKEN_ATTACK::BREATH: //ブレス攻撃
-		break;
-	case KRAKEN_ATTACK::HARD_ATTACK: //水の塊を落とす
-		break;
-	case KRAKEN_ATTACK::NONE: //ノーマル
-	default:
-		break;
+		switch (attack_state)
+		{
+		case KRAKEN_ATTACK::TENTACLE_ATTACK: //触手攻撃
+
+			break;
+		case KRAKEN_ATTACK::BREATH: //ブレス攻撃
+			break;
+		case KRAKEN_ATTACK::HARD_ATTACK: //水の塊を落とす
+			AttackWater(player_location);
+			state = ENEMY_STATE::MOVE;
+			standby_move = 100;
+			break;
+		case KRAKEN_ATTACK::NONE: //ノーマル
+		default:
+			break;
+		}
 	}
 }
+
+//-----------------------------------
+//攻撃(水の塊を落とす）
+//-----------------------------------
+void Kraken::AttackWater(Location player_location)
+{
+	BulletManager::GetInstance()->CreateEnemyBullet
+	(new KrakenBullet(location, player_location));
+}
+
 
 //-----------------------------------
 //攻撃が当たっているか
