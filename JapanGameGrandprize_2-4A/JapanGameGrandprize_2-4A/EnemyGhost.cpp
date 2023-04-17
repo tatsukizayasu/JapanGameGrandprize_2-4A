@@ -185,6 +185,15 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	}
 	UpdateDamageLog();
 
+	if (range > 5)
+	{
+		left_move = false;
+	}
+	else
+	{
+		left_move = true;
+	}
+
 }
 
 //ÉAÉCÉhÉãèÛë‘
@@ -333,12 +342,12 @@ void EnemyGhost::Draw()const
 	if (attack == false)
 	{
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, images[animation], TRUE);
+			M_PI / 180, images[animation], TRUE, !left_move);
 	}
 	else
 	{
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, attack_image[animation], TRUE);
+			M_PI / 180, attack_image[animation], TRUE, !left_move);
 	}
 }
 
@@ -347,6 +356,7 @@ void EnemyGhost::Draw()const
 //-----------------------------------
 void EnemyGhost::AttackMove(const Location player_location)
 {
+
 
 	if (physical_attack == true)
 	{

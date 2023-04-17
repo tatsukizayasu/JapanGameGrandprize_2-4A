@@ -11,8 +11,12 @@
 #define HIT_POINTS 500
 
 //ÉhÉâÉSÉìÇÃà⁄ìÆë¨ìx
-#define ATTACK_SPEED 6
+#define ATTACK_SPEED 3
 #define SPEED 10
+
+//ÉhÉâÉSÉìêKîˆçUåÇ
+#define ATTACK_SCOPE 100
+#define ATTACK_SCOPE_Y 10
 
 //ñÇñ@çUåÇÇµÇΩéûÇÃçdíºéûä‘
 #define MAGIC_STANDBY 60
@@ -51,6 +55,7 @@
 Dragon::Dragon(Location spawn_location)
 {
 	location = spawn_location;
+	location.y = 500;
 	location.x -= MAP_CHIP_SIZE / 2;
 	location.y -= MAP_CHIP_SIZE / 2;
 	area.height = DRAGON_SIZE_Y;
@@ -60,7 +65,7 @@ Dragon::Dragon(Location spawn_location)
 	speed = SPEED;
 
 	animation = 0;
-	attack_method = 2;
+	attack_method = 0;
 	magic_num = 0;
 	old_x = 0;
 	old_y = 0;
@@ -71,6 +76,9 @@ Dragon::Dragon(Location spawn_location)
 	effect_time = 0;
 	standby_time = 0;
 	breath_time = 0;
+	ascent_time = 0;
+	fly_tim = 0;
+	fly_num = 0;
 
 	can_delete = false;
 	attack_tail = false;
@@ -145,14 +153,19 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 
 			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
-				state = ENEMY_STATE::ATTACK;
+				state = ENEMY_STATE::MOVE;
 				speed = SPEED;
+				fall_speed = 0;
+				fly_num = 0;
+				fly_tim = 0;
+				ascent_time = 0;
 
 			}
 		}
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
+		wall_hit = false;
 		break;
 	case ENEMY_STATE::DEATH:
 		Death();
@@ -177,19 +190,7 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 			left_move = !left_move;
 			wall_hit = true;
 
-			if (attack_tail==true)
-			{
-				state = ENEMY_STATE::MOVE;
-				if (hp < HIT_POINTS / 2)
-				{
-					attack_method = GetRand(3);
-				}
-				else
-				{
-					attack_method = GetRand(2);
-				}
-
-			}
+			state = ENEMY_STATE::MOVE;
 		}
 
 	}
@@ -219,8 +220,6 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
-
-	wall_hit = false;
 }
 
 //-----------------------------------
@@ -254,7 +253,7 @@ void Dragon::Idol()
 	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
 		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
 	{
-		state = ENEMY_STATE::MOVE;
+		state = ENEMY_STATE::FALL;
 	}
 }
 
@@ -267,45 +266,38 @@ void Dragon::Move(const Location player_location)
 
 	//ÉvÉåÉCÉÑÅ[Ç∆ÇÃãóó£åvéZ
 	int range = player_location.x - location.x;
+	int range_y = player_location.y - location.y;
 
-	//ÉâÉìÉ_ÉÄÇ≈çUåÇï˚ñ@ÇÃåàíË
-	if (++switchover_time % ATTACK_SWITCHOVER == 0)
+	if (range <= ATTACK_SCOPE && range >= -ATTACK_SCOPE &&
+		range_y <= ATTACK_SCOPE_Y && range_y >= -ATTACK_SCOPE_Y)
 	{
-		//HPÇ™îºï™à»â∫Ç»ÇÁóãÇóéÇ∆Ç∑çUåÇÇ‡í«â¡
-		if (hp < HIT_POINTS / 2)
-		{
-			attack_method = GetRand(3);
-		}
-		else
-		{
-			attack_method = GetRand(2);
-		}
+		attack_state = DRAGON_ATTACK::TAIL_ATTACK;
+		state = ENEMY_STATE::ATTACK;
 	}
 
-
-	switch (attack_method)
+	standby_time--;
+	if (standby_time < 0)
 	{
-	case 0:
-		attack_state = DRAGON_ATTACK::DITE;
-		state = ENEMY_STATE::ATTACK;
-		break;
-	case 1:
-		attack_state = DRAGON_ATTACK::DREATH;
-		state = ENEMY_STATE::ATTACK;
-		magic = true;
-		break;
-	case 2:
-		attack_state = DRAGON_ATTACK::TAIL_ATTACK;
-		state = ENEMY_STATE::FALL;
-		attack_tail = true;
-		break;
-	case 3:
-		attack_state = DRAGON_ATTACK::ROAR;
-		state = ENEMY_STATE::ATTACK;
-		magic = true;
-		break;
-	default:
-		break;
+
+		switch (attack_method)
+		{
+		case 0:
+			attack_state = DRAGON_ATTACK::DITE;
+			state = ENEMY_STATE::ATTACK;
+			break;
+		case 1:
+			attack_state = DRAGON_ATTACK::DREATH;
+			state = ENEMY_STATE::ATTACK;
+			magic = true;
+			break;
+		case 2:
+			attack_state = DRAGON_ATTACK::ROAR;
+			state = ENEMY_STATE::ATTACK;
+			magic = true;
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -315,30 +307,29 @@ void Dragon::Move(const Location player_location)
 void Dragon::Attack(const Location player_location)
 {
 
-	standby_time--;
-	if (standby_time < 0)
-	{
-		switch (attack_state)
-		{
 
-		case DRAGON_ATTACK::DITE://äöÇ›Ç¬Ç´
-			DiteMove(player_location);
-			break;
-		case DRAGON_ATTACK::TAIL_ATTACK: //êKîˆçUåÇ
-			TailMove(player_location);
-			break;
-		case DRAGON_ATTACK::DREATH: //ÉuÉåÉXçUåÇ
-			DreathMove(player_location);
-			break;
-		case DRAGON_ATTACK::ROAR: //ôÙöKÇµÇΩå„Ç…óãÇç~ÇÁÇπÇÈ
-			RoarMove(player_location);
-			break;
-		case DRAGON_ATTACK::NONE:
-		default:
-			break;
-		}
-		standby_time = 0;
+	switch (attack_state)
+	{
+
+	case DRAGON_ATTACK::DITE://äöÇ›Ç¬Ç´
+		DiteMove(player_location);
+		break;
+	case DRAGON_ATTACK::TAIL_ATTACK: //êKîˆçUåÇ
+		attack = false;
+		state = ENEMY_STATE::MOVE;
+		break;
+	case DRAGON_ATTACK::DREATH: //ÉuÉåÉXçUåÇ
+		DreathMove(player_location);
+		break;
+	case DRAGON_ATTACK::ROAR: //ôÙöKÇµÇΩå„Ç…óãÇç~ÇÁÇπÇÈ
+		RoarMove(player_location);
+		break;
+	case DRAGON_ATTACK::NONE:
+	default:
+		break;
 	}
+	
+
 }
 
 //-----------------------------------
@@ -364,68 +355,24 @@ void Dragon::DiteMove(const Location player_location)
 
 	if (wall_hit == true)
 	{
-		//HPÇ™îºï™à»â∫Ç»ÇÁóãÇóéÇ∆Ç∑çUåÇÇ‡í«â¡
-		if (hp < HIT_POINTS / 2)
-		{
-			attack_method = GetRand(3);
-		}
-		else
-		{
-			attack_method = GetRand(2);
-		}
-
-		state = ENEMY_STATE::MOVE;
-	}
-
-}
-
-//-----------------------------------
-//êKîˆçUåÇÅiínè„Ç…ç~ÇËÇƒÇ¢ÇΩÇÁÅj
-//-----------------------------------
-void Dragon::TailMove(const Location player_location)
-{
-	float old_x;
-	float old_y;
-	float vector;
-	float travel;
-	float travel_y;
-
-	if (set_coordinate == false)
-	{
-		player_x = player_location.x;
-		player_y = player_location.y;
-		set_coordinate = true;
-	}
-
-	old_x = player_x - location.x;
-	old_y = player_y - location.y;
-
-	vector = sqrt(old_x * old_x + old_y * old_y);
-
-	travel = old_x / vector;
-	travel_y = old_y / vector;
-	location.x += travel * 3;
-	location.y += travel_y * 3;
-
-	if (player_x + 10 > location.x && player_x - 10 < location.x && player_y + 10 > location.y && player_y - 10 < location.y)
-	{
-		state = ENEMY_STATE::MOVE;
 		attack_method = GetRand(2);
 
+		state = ENEMY_STATE::MOVE;
 	}
 
 }
+
 
 //-----------------------------------
 //âìãóó£çUåÇÅiÉuÉåÉXÅjÇ±ÇÃéûîÚÇ—Ç»Ç™ÇÁÉuÉåÉXÇçsÇ§
 //-----------------------------------
 void Dragon::DreathMove(const Location player_location)
 {
+	Fly();
 	if (++breath_time % BREATH_INTERVAL == 0)
 	{
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new DragonBullet(location, player_location));
-		state = ENEMY_STATE::MOVE;
 	}
 }
 
@@ -446,11 +393,15 @@ void Dragon::RoarMove(const Location player_location)
 
 
 
+
 	attack_method = GetRand(2);
+
 
 	standby_time = ROAR_TIME;
 
 	state = ENEMY_STATE::MOVE;
+
+	standby_time = 200;
 
 }
 
@@ -487,13 +438,49 @@ AttackResource Dragon::Hit()
 //-----------------------------------
 void Dragon::Fall()
 {
-	location.y += speed;
+	location.y += fall_speed;
 
-	if (speed < 3)
+	if (fall_speed < 4)
 	{
-		speed += ENEMY_FALL_SPEED;
+		fall_speed += ENEMY_FALL_SPEED;
 	}
 
+}
+
+//-----------------------------------
+//îÚÇ‘
+//-----------------------------------
+void Dragon::Fly()
+{
+	if (++ascent_time < 120)
+	{
+		location.y -= 4;
+	}
+
+	if (++fly_tim % 120 == 0)
+	{
+		if (++fly_num > 4)
+		{
+			state = ENEMY_STATE::FALL;
+			attack_method = GetRand(2);
+			standby_time = 200;
+		}
+	}
+	if (fly_num < 4)
+	{
+		speed = ATTACK_SPEED;
+
+		if (left_move == true)
+		{
+			location.x -= speed;
+			speed = SPEED;
+		}
+		else
+		{
+			location.x += speed;
+			speed = SPEED;
+		}
+	}
 }
 
 //-----------------------------------

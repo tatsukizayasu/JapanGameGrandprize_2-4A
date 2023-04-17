@@ -19,7 +19,7 @@ Element_Item_Drop_Object::Element_Item_Drop_Object(short type,
 	//Œ³‘f‚ğƒ‰ƒ“ƒ_ƒ€‚Éİ’è
 	for (int i = 0; i < 5; i++)
 	{
-		element_item.push_back(ElementItem(static_cast<ELEMENT_ITEM>(GetRand(7))));
+		element_item.push_back(ElementItem(static_cast<ELEMENT_ITEM>(GetRand(6))));
 	}
 }
 
