@@ -1,25 +1,20 @@
 #pragma once
 
+#include"EnemyBase.h"
+#include"CameraWork.h"
+
 enum class MOVE_STATE
 {
 	MOVE,
 	WALL_MOVE
 };
 
-#define BODY_MAX 30
-#define DATA 100
-
-#include"EnemyBase.h"
-#include"SlimeBossBody.h"
-
 class EnemySlimeBoss : public EnemyBase
 {
 private:
 
-	Location location_data[DATA];
 	ENEMY_STATE state;
 	MOVE_STATE move_state;
-	SlimeBossBody* slime_boss_body[BODY_MAX];
 	int slime_boss_jump_distance;
 	int speed_y;
 
@@ -56,8 +51,6 @@ public:
 	void Death() override;
 
 	virtual void HitBullet(const BulletBase* bullet)override;
-
-	bool HitSphere(const class SphereCollider* sphere_collider) const override;
 
 	//ç¿ïWÇÃéÊìæ
 	Location GetLocation() const override;
