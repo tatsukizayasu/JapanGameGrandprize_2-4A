@@ -37,7 +37,7 @@ StageBuilder::StageBuilder()
 
 #ifdef _DEV
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 0; i++)
 	{
 		Location test[3] =
 		{
@@ -363,8 +363,8 @@ void StageBuilder::UpdateModulation()
 				PolyLine* poly_line
 					= static_cast<PolyLine*>(objects[i]->GetColllider());
 
-				poly_line->Update();
 				objects[i]->UpdateColliderPos();
+				poly_line->Update();
 			}
 
 		}
