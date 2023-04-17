@@ -125,18 +125,7 @@ void Kraken::Update(const Player* player, const Stage* stage)
 				left_move = !left_move;
 			}
 		}
-		else
-		{
-			state = ENEMY_STATE::FALL;
-			speed = 0;
-		}
 
-		if (ScreenOut())
-		{
-			state = ENEMY_STATE::IDOL;
-			speed = 0;
-		}
-		break;
 	case ENEMY_STATE::FALL:
 		Fall();
 
@@ -190,7 +179,15 @@ void Kraken::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void  Kraken::Idol()
 {
+	Location scroll; //画面スクロールを考慮したX座標
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
 
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 	
 }
 
@@ -199,7 +196,6 @@ void  Kraken::Idol()
 //-----------------------------------
 void Kraken::Move(const Location player_location)
 {
-
 	
 }
 
