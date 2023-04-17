@@ -17,6 +17,7 @@ private:
 	MOVE_STATE move_state;
 	int slime_boss_jump_distance;
 	int speed_y;
+	int wait_time;
 
 #ifdef _DEBUG
 	ENEMY_STATE old_state; //ˆê‚Â‘O‚Ìó‘Ô
