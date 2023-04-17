@@ -85,6 +85,7 @@ void ObjectBase::UpdateColliderPos()
 	if (old_location != collider->GetLocation())
 	{
 		vector = collider->GetLocation() - pivot->GetLocation();
+		collider->SetLocation(pivot->GetLocation() + vector);
 		old_location = collider->GetLocation();
 	}
 	else

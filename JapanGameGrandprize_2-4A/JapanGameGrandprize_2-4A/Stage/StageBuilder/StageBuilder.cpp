@@ -363,8 +363,8 @@ void StageBuilder::UpdateModulation()
 				PolyLine* poly_line
 					= static_cast<PolyLine*>(objects[i]->GetColllider());
 
-				objects[i]->UpdateColliderPos();
 				poly_line->Update();
+				objects[i]->UpdateColliderPos();
 			}
 
 		}

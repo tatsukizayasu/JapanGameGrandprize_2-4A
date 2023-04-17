@@ -177,9 +177,12 @@ void PolyLine::Update()
 	
 	for (int i = 0; i < bend_points.size(); i++)
 	{
-		vector_to_bend_point[i] = bend_points[i]->GetLocation() - location;
-		bend_points[i]
-			->SetLocation(pivot.GetLocation() + vector_to_bend_point[i]);
+		if (location != pivot.GetLocation())
+		{
+			vector_to_bend_point[i] = bend_points[i]->GetLocation() - location;
+			bend_points[i]
+				->SetLocation(pivot.GetLocation() + vector_to_bend_point[i]);
+		}
 	}
 
 	location = pivot.GetLocation();
