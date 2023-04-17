@@ -437,6 +437,7 @@ void Undead::MoveAnimation()
 //-----------------------------------
 void Undead::AttackAnimation()
 {
+
 	animation++;
 
 	if (animation % (UNDEAD_ANIMATION / 2) == 0)
@@ -496,6 +497,7 @@ Location Undead::GetLocation() const
 //-----------------------------------
 void Undead::Update(const ENEMY_STATE state)
 {
+
 	if (this->state != state)
 	{
 		if (state != ENEMY_STATE::ATTACK)
