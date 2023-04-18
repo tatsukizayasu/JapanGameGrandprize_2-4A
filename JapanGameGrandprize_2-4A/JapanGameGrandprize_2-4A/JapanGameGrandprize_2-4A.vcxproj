@@ -175,9 +175,10 @@
     <ClInclude Include="HarpyBullet.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemController.h" />
+    <ClInclude Include="KrakenBreath.h" />
     <ClInclude Include="LastBoss.h" />
-     <ClInclude Include="Kraken.h" />
-         <ClInclude Include="KrakenBullet.h" />
+    <ClInclude Include="Kraken.h" />
+    <ClInclude Include="KrakenBullet.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="MageBullet.h" />
     <ClInclude Include="NormalBullet.h" />
@@ -248,6 +249,7 @@
     <ClCompile Include="HarpyBullet.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemController.cpp" />
+    <ClCompile Include="KrakenBreath.cpp" />
     <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="Kraken.cpp" />
     <ClCompile Include="KrakenBullet.cpp" />

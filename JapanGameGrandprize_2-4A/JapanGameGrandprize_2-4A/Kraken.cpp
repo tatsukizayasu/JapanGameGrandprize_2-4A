@@ -30,6 +30,7 @@
 
 //UŒ‚—Í
 
+
 //‘Ì—Í
 #define KRAKEN_HP 400
 
@@ -206,7 +207,9 @@ void  Kraken::Idol()
 //-----------------------------------
 void Kraken::Move(const Location player_location)
 {
-	--standby_move;
+	
+
+	--standby_move; //Ÿ‚ÌUŒ‚€”õi‘Ò‹@ŠÔ)
 	if (standby_move < 0)
 	{
 		
