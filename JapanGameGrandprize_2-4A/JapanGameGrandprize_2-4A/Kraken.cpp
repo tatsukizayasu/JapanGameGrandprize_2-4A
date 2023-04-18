@@ -321,12 +321,12 @@ void Kraken::HitBullet(const BulletBase* bullet)
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE; //Œø‚«‚É‚­‚¢;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage = bullet->GetDamage()* WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
 		damage = bullet->GetDamage();
@@ -336,16 +336,16 @@ void Kraken::HitBullet(const BulletBase* bullet)
 		if (!poison)
 		{
 			poison = true;
-			poison_damage = bullet->GetDamage();
-			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			poison_damage = bullet->GetDamage() * 0;
+			poison_time = bullet->GetDebuffTime() * 0;
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		if (!paralysis)
 		{
-			paralysis_time = bullet->GetDebuffTime() * 0;
+			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
 		}
 		break;
 	case ATTRIBUTE::HEAL:
