@@ -87,6 +87,7 @@ void EnemySlimeBoss::MagicBullet(const Location player_location)
 	if (++breath_time >= SLIME_BOSS_BREATH_TIME)
 	{
 		breath_time = 0;
+
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new SlimeBossBullet(location, player_location));
 	}
@@ -334,6 +335,11 @@ void  EnemySlimeBoss::Attack(Location player_location)
 AttackResource EnemySlimeBoss::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
+
+	ENEMY_TYPE attack_type[1] = { *type };
+	ret.damage = 10;
+	ret.type = attack_type;
+	ret.type_count = 1;
 
 	return ret;
 }
