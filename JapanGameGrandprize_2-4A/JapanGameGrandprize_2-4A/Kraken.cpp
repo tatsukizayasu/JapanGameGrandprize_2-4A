@@ -10,6 +10,9 @@
 #define KRAKEN_X 100
 #define KRAKEN_Y 100
 
+//クラーケン
+#define KRAKEN_HP 500 //（HP調節）
+
 //攻撃をする範囲
 
 
@@ -42,7 +45,7 @@ Kraken::Kraken(Location spawn_location)
 	can_delete = false;
 	left_move = true;
 
-	hp = 100;
+	hp = KRAKEN_HP;
 	damage = 0;
 
 	
@@ -50,6 +53,8 @@ Kraken::Kraken(Location spawn_location)
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::WATER;
 	state = ENEMY_STATE::IDOL;
+	attack_state = KRAKEN_ATTACK::NONE;
+
 	drop_volume = 0;
 	poison_time = 0;
 	poison_damage = 0;
@@ -174,6 +179,7 @@ void Kraken::Update(const Player* player, const Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+
 	UpdateDamageLog();
 }
 
@@ -367,7 +373,7 @@ void Kraken::Draw() const
 
 	if (state != ENEMY_STATE::DEATH)
 	{
-		//DrawHPBar();
+		DrawHPBar(KRAKEN_HP);
 	}
 
 	DrawDamageLog();
