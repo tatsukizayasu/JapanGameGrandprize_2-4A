@@ -1,10 +1,6 @@
 #pragma once
 #include "EnemyBase.h"
-#include "BoxCollider.h"
-#include "LineCollider.h"
-#include "Player.h"
-
-class Undead :
+class LastBoss :
     public EnemyBase
 {
 private:
@@ -15,25 +11,17 @@ private:
     int animation; //アニメーション
     int image_argument; //画像の引数
     int attack_time; //攻撃している時間(デバッグ用)
-    float old_distance; //直前のプレイヤーとの距離
-    Area size;          //画像サイズ
 private:
-
-    //プレイヤーとの距離
-    void DistancePlayer(const Location player_location);
 
     //移動時のアニメーション
     void MoveAnimation();
-
-    //攻撃時のアニメーション
-    void AttackAnimation();
 public:
 
     //コンストラクタ
-    Undead(Location);
+    LastBoss(Location);
 
     //デストラクタ
-    ~Undead();
+    ~LastBoss();
 
     //更新
     void Update(const class Player* player, const class Stage* stage) override;
@@ -41,17 +29,17 @@ public:
     //アイドル状態
     void Idol() override;
 
-   //移動
-   void Move(const Location player_location) override;
+    //移動
+    void Move(const Location player_location) override;
 
-   //落下
-   void Fall() override;
+    //落下
+    void Fall() override;
 
-   //攻撃
-   void  Attack(const Location) override;
+    //攻撃
+    void  Attack(const Location) override;
 
     //攻撃が当たっているか
-   AttackResource Hit() override;
+    AttackResource Hit() override;
 
     //死亡
     void Death() override;
@@ -73,3 +61,4 @@ public:
     void DebugDraw() override;
 #endif //_DEBUG
 };
+
