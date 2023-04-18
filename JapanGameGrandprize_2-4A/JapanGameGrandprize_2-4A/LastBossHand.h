@@ -1,37 +1,31 @@
 #pragma once
 #include "EnemyBase.h"
 
-enum class LAST_BOSS_ATTACK
-{
-    MAGIC = 0,  //魔法攻撃
-    PUNCH,      //パンチ
-    SWORD,      //剣での攻撃
-    DEATHBLOW   //必殺技
-};
 
-
-class LastBoss :
+class LastBossHand :
     public EnemyBase
 {
 private:
 
+    bool punch;  //パンチしている
     bool attack; //攻撃が当たったか
-    int damage; //ダメージ
     int attack_interval; //次の攻撃までの時間
     int animation; //アニメーション
     int image_argument; //画像の引数
-    int attack_time; //攻撃している時間(デバッグ用)
 private:
+
+    //パンチ
+    void Punch();
 
     //移動時のアニメーション
     void MoveAnimation();
 public:
 
     //コンストラクタ
-    LastBoss(Location);
+    LastBossHand(const Location, const bool);
 
     //デストラクタ
-    ~LastBoss();
+    ~LastBossHand();
 
     //更新
     void Update(const class Player* player, const class Stage* stage) override;
@@ -70,5 +64,6 @@ public:
     //描画(DotByDot)
     void DebugDraw() override;
 #endif //_DEBUG
+
 };
 
