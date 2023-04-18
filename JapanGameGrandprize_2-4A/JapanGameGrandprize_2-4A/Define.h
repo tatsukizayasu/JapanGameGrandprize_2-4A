@@ -67,6 +67,7 @@ struct ChemicalFormulaParameter
 	ATTRIBUTE atribute;
 	ChemicalFormulaMaterial material;
 	bool make_bool;
+	int name_image;
 };
 
 struct Bullet_Effect {

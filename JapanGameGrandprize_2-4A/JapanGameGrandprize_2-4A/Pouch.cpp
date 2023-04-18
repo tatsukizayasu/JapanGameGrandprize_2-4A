@@ -43,6 +43,12 @@ Pouch::Pouch()
 	tab = ATTRIBUTE::EXPLOSION;
 	second_tab_image = LoadGraph("Images/ItemTab/setumei.png");
 	elemental_count = LoadGraph("Images/ItemTab/P_kazu.png");
+	int images_init[POISON_MAX_NUM];
+	LoadDivGraph("Images/ItemTab/Secret_FILE/explosion.png", 13, 1, 13, 350, 23, images_init);
+	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
+	{
+		chemical_formula_explosion[i].name_image = images_init[i];
+	}
 
 	//Œ³‘f‚Ì‰Šú‰»
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
@@ -172,7 +178,7 @@ void Pouch::ParalysisTabDraw()const
 	}
 
 
-	ElementDraw(chemical_formula_melt[cursol]);
+	ElementDraw(chemical_formula_pararysis[cursol]);
 
 	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "PARARYSIS", 0x000000);
@@ -283,17 +289,17 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 {
 	int i = 0;
 	DrawFormatString(x - 180, y + 220, 0xffffff, "%d    %d",
-		element[0]->GetVolume(), element[0]->GetVolume() - bring.material.carbon);
+		element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume() - bring.material.carbon);
 	DrawFormatString(x - 180, y + 250 + (30 * i), 0xffffff, "%d    %d",
-		element[1]->GetVolume(), element[1]->GetVolume() - bring.material.hydrogen);
+		element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume() - bring.material.hydrogen);
 	DrawFormatString(x - 180, y + 280 + (30 * i), 0xffffff, "%d    %d",
-		element[2]->GetVolume(), element[2]->GetVolume() - bring.material.nitrogen);
+		element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume() - bring.material.nitrogen);
 	DrawFormatString(x - 180, y + 310 + (30 * i), 0xffffff, "%d    %d",
-		element[3]->GetVolume(), element[3]->GetVolume() - bring.material.oxygen);
+		element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume() - bring.material.oxygen);
 	DrawFormatString(x - 180, y + 340 + (30 * i), 0xffffff, "%d    %d",
-		element[4]->GetVolume(), element[4]->GetVolume() - bring.material.sulfur);
+		element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume() - bring.material.sulfur);
 	DrawFormatString(x - 180, y + 370 + (30 * i), 0xffffff, "%d    %d",
-		element[5]->GetVolume(), element[5]->GetVolume() - bring.material.chlorine);
+		element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume() - bring.material.chlorine);
 
 }
 
