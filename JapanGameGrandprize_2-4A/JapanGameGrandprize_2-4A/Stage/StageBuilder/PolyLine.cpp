@@ -29,7 +29,7 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 
 #ifdef _STAGE_BUILDER
 	Location vector;
-	
+
 	for (auto line : lines)
 	{
 		vector = line->ColliderBase::GetLocation() - location;
@@ -92,7 +92,7 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 //-------------------------------------
 // コピーコンストラクタ 
 //-------------------------------------
-PolyLine::PolyLine(const PolyLine &poly_line)
+PolyLine::PolyLine(const PolyLine& poly_line)
 {
 	collider_type = (int)COLLIDER::POLY_LINE;
 	for (auto it : poly_line.bend_points)
@@ -148,53 +148,61 @@ PolyLine::~PolyLine()
 //---------------------------------
 void PolyLine::Update()
 {
-//#ifdef _STAGE_BUILDER
-//	if (location != pivot.GetLocation())
-//	{
-//		location = pivot.GetLocation();
-//
-//		for (int i = 0; i < lines.size(); i++)
-//		{
-//			lines[i]->ColliderBase::SetLocation
-//			(this->location + vector_to_line[i]);
-//
-//			bend_points[i]->SetLocation(lines[i]->GetLocation(LINE_START));
-//		}
-//		bend_points[bend_points.size() - 1]
-//			->SetLocation(lines[lines.size() - 1]->GetLocation(LINE_END));
-//
-//	}
-//
-//#endif
-//	
-//	MakeLocation();
-//	for (int i = 0; i < lines.size(); i++)
-//	{
-//		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
-//		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
-//	}
-	
-	
-	for (int i = 0; i < bend_points.size(); i++)
+	//#ifdef _STAGE_BUILDER
+	//	if (location != pivot.GetLocation())
+	//	{
+	//		location = pivot.GetLocation();
+	//
+	//		for (int i = 0; i < lines.size(); i++)
+	//		{
+	//			lines[i]->ColliderBase::SetLocation
+	//			(this->location + vector_to_line[i]);
+	//
+	//			bend_points[i]->SetLocation(lines[i]->GetLocation(LINE_START));
+	//		}
+	//		bend_points[bend_points.size() - 1]
+	//			->SetLocation(lines[lines.size() - 1]->GetLocation(LINE_END));
+	//
+	//	}
+	//
+	//#endif
+	//	
+	//	MakeLocation();
+	//	for (int i = 0; i < lines.size(); i++)
+	//	{
+	//		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
+	//		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
+	//	}
+
+	bool did_bend_points_move = false;
+
+	if (location != pivot.GetLocation())
 	{
-		if (location != pivot.GetLocation())
+		for (int i = 0; i < bend_points.size(); i++)
 		{
-			vector_to_bend_point[i] = bend_points[i]->GetLocation() - location;
-			bend_points[i]
-				->SetLocation(pivot.GetLocation() + vector_to_bend_point[i]);
+			bend_points[i]->SetLocation(location + vector_to_bend_point[i]);
+		}
+		location = pivot.GetLocation();
+	}
+	else
+	{
+		MakeLocation();
+		for (int i = 0; i < bend_points.size(); i++)
+		{
+			if (location + vector_to_bend_point[i] != bend_points[i]->GetLocation())
+			{
+
+			}
+			vector_to_bend_point[i]
+				= bend_points[i]->GetLocation() - pivot.GetLocation();
 		}
 	}
 
-	location = pivot.GetLocation();
-
 	for (int i = 0; i < lines.size(); i++)
 	{
-		lines[i]->SetLocation(location + vector_to_bend_point[i], LINE_START);
-		lines[i]->SetLocation(location + vector_to_bend_point[i + 1], LINE_END);
+		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
+		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
 	}
-
-
-	MakeLocation();
 
 }
 
@@ -319,7 +327,7 @@ void PolyLine::DeleteBendPoint(int index)
 	{
 		for (int i = 0; i < bend_points.size() - 1; i++)
 		{
-			lines.push_back(new LineCollider(bend_points[i]->GetLocation(), 
+			lines.push_back(new LineCollider(bend_points[i]->GetLocation(),
 				bend_points[i + 1]->GetLocation()));
 		}
 	}
@@ -340,6 +348,10 @@ void PolyLine::MakeLocation()
 	location = middle;
 
 #ifdef _STAGE_BUILDER
+	/*for (int i = 0; i < bend_points.size(); i++)
+	{
+		vector_to_bend_point[i] = bend_points[i]->GetLocation() - location;
+	}*/
 	pivot.SetLocation(middle);
 #endif
 }
