@@ -16,7 +16,10 @@ private:
 	float x, y;
 	int second_tab_image;
 	int elemental_count;
+	int page_jump_count;
 	int cursol;
+	int each_cursor[5];
+	int each_page[5];
 	int count;
 	int page;
 	int move_string;	//‘I‘ğˆ‚ÌˆÚ“®—Ê

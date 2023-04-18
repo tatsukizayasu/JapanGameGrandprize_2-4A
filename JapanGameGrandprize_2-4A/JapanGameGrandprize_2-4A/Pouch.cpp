@@ -8,6 +8,12 @@
 
 #define STRING_DISTANCE 100
 
+#define EXPLOSION_NUM 0
+#define MELT_NUM 1
+#define POISON_NUM 2
+#define PARARYSIS_NUM 3
+#define HEAL_NUM 4
+
 #define OPTION_ZERO OPTION_ONE - STRING_DISTANCE
 #define OPTION_ONE 140
 #define OPTION_TWO OPTION_ONE + STRING_DISTANCE
@@ -22,9 +28,15 @@ Pouch::Pouch()
 	x = 1080;
 	y = 100;
 	cursol = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		each_cursor[i] = 0;
+		each_page[i] = 0;
+	}
 	count = 0;
 	page = 0;
 	move_string = 0;
+	page_jump_count = 0;
 	on_bool = false;
 	move_up = false;
 	move_down = false;
@@ -290,59 +302,109 @@ void Pouch::Update()
 {
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		cursol = 0;
-		page = 0;
 		move_down = false;
 		move_up = false;
-		move_string = 0;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
+			each_cursor[EXPLOSION_NUM] = cursol;
+			cursol = each_cursor[MELT_NUM];
+			each_page[EXPLOSION_NUM] = page;
+			page = each_page[MELT_NUM];
 			tab = ATTRIBUTE::MELT;
 			break;
 		case ATTRIBUTE::MELT:
+			each_cursor[MELT_NUM] = cursol;
+			cursol = each_cursor[POISON_NUM];
+			each_page[MELT_NUM] = page;
+			page = each_page[POISON_NUM];
 			tab = ATTRIBUTE::POISON;
 			break;
 		case ATTRIBUTE::POISON:
+			each_cursor[POISON_NUM] = cursol;
+			cursol = each_cursor[PARARYSIS_NUM];
+			each_page[POISON_NUM] = page;
+			page = each_page[PARARYSIS_NUM];
 			tab = ATTRIBUTE::PARALYSIS;
 			break;
 		case ATTRIBUTE::PARALYSIS:
+			each_cursor[PARARYSIS_NUM] = cursol;
+			cursol = each_cursor[HEAL_NUM];
+			each_page[PARARYSIS_NUM] = page;
+			page = 0;
 			tab = ATTRIBUTE::HEAL;
 			break;
 		case ATTRIBUTE::HEAL:
+			each_cursor[HEAL_NUM] = cursol;
+			cursol = each_cursor[EXPLOSION_NUM];
+			each_page[HEAL_NUM] = page;
+			page = each_page[EXPLOSION_NUM];
 			tab = ATTRIBUTE::EXPLOSION;
 			break;
 		default:
 			break;
 		}
+		if (page == 0)
+		{
+			move_string = 30 * cursol;
+		}
+		else
+		{
+			move_string = 30 * (cursol - 9);
+		}
 	}
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
-		cursol = 0;
-		page = 0;
 		move_down = false;
 		move_up = false;
-		move_string = 0;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
+			each_cursor[EXPLOSION_NUM] = cursol;
+			cursol = each_cursor[HEAL_NUM];
+			each_page[EXPLOSION_NUM] = page;
+			page = each_page[HEAL_NUM];
 			tab = ATTRIBUTE::HEAL;
 			break;
 		case ATTRIBUTE::MELT:
+			each_cursor[MELT_NUM] = cursol;
+			cursol = each_cursor[EXPLOSION_NUM];
+			each_page[MELT_NUM] = page;
+			page = each_page[EXPLOSION_NUM];
 			tab = ATTRIBUTE::EXPLOSION;
 			break;
 		case ATTRIBUTE::POISON:
+			each_cursor[POISON_NUM] = cursol;
+			cursol = each_cursor[MELT_NUM];
+			each_page[POISON_NUM] = page;
+			page = each_page[MELT_NUM];
 			tab = ATTRIBUTE::MELT;
 			break;
 		case ATTRIBUTE::PARALYSIS:
+			each_cursor[PARARYSIS_NUM] = cursol;
+			cursol = each_cursor[POISON_NUM];
+			each_page[PARARYSIS_NUM] = page;
+			page = each_page[POISON_NUM];
 			tab = ATTRIBUTE::POISON;
 			break;
 		case ATTRIBUTE::HEAL:
+			each_cursor[HEAL_NUM] = cursol;
+			cursol = each_cursor[PARARYSIS_NUM];
+			each_page[HEAL_NUM] = page;
+			page = each_page[PARARYSIS_NUM];
 			tab = ATTRIBUTE::PARALYSIS;
 			break;
 		default:
 			break;
+		}
+		if (page == 0)
+		{
+			move_string = 30 * cursol;
+		}
+		else
+		{
+			move_string = 30 * (cursol - 9);
 		}
 	}
 
@@ -459,8 +521,8 @@ void Pouch::TabUpdate(int max_num)
 					}
 					else
 					{
-						move_string = 30 * 7;
-						cursol = 7;
+						move_string = 30 * 8;
+						cursol = 8;
 					}
 					break;
 				case 1:
@@ -531,6 +593,47 @@ void Pouch::TabUpdate(int max_num)
 					break;
 				default:
 					break;
+				}
+			}
+		}
+	}
+
+	if (tab != ATTRIBUTE::HEAL)
+	{
+		if (PAD_INPUT::GetRStick().x > 5000)
+		{
+			if (page_jump_count++ % 15 == 0)
+			{
+				if (page == 0)
+				{
+					page = 1;
+					move_string = 0;
+					cursol = 9;
+				}
+				else if (page == 1)
+				{
+					move_string = 0;
+					page = 0;
+					cursol = 0;
+				}
+			}
+		}
+
+		if (PAD_INPUT::GetRStick().x < -5000)
+		{
+			if (page_jump_count++ % 15 == 0)
+			{
+				if (page == 0)
+				{
+					page = 1;
+					move_string = 0;
+					cursol = 9;
+				}
+				else if (page == 1)
+				{
+					move_string = 0;
+					page = 0;
+					cursol = 0;
 				}
 			}
 		}
