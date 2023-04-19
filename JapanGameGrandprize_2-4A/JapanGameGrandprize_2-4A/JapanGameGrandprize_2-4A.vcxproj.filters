@@ -195,6 +195,9 @@
     <ClCompile Include="AbstractScene.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="LastBoss.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
     <ClCompile Include="Kraken.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
@@ -202,6 +205,9 @@
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
     <ClCompile Include="KrakenBullet.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
+    <ClCompile Include="KrakenBreath.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
   </ItemGroup>
@@ -407,6 +413,9 @@
     <ClInclude Include="DragonThunder.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
+    <ClInclude Include="LastBoss.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
     <ClInclude Include="Kraken.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
@@ -414,6 +423,9 @@
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
     <ClInclude Include="KrakenBullet.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="KrakenBreath.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
   </ItemGroup>

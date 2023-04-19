@@ -1,6 +1,6 @@
 #pragma once
 #include "EnemyBulletBase.h"
-class KrakenBullet :
+class KrakenBreath :
     public EnemyBulletBase
 {
     int image; //画像
@@ -16,10 +16,10 @@ class KrakenBullet :
 public:
 
     //コンスタラクタ
-    KrakenBullet(Location, Location);
+    KrakenBreath(Location, Location);
 
     //デストラクタ
-    ~KrakenBullet();
+    ~KrakenBreath();
 
     //更新
     void Update() override;

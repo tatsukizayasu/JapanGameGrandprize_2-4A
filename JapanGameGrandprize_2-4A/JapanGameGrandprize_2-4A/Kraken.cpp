@@ -3,12 +3,15 @@
 #include "DxLib.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "Define.h"
 #include "CameraWork.h"
+#include "BulletManager.h"
 
 //クラーケンの画像  (画像なし、適当な数字を入れます）
 #define KRAKEN_X 100
 #define KRAKEN_Y 100
+
+//クラーケン
+#define KRAKEN_HP 500 //（HP調節）
 
 //攻撃をする範囲
 
@@ -27,6 +30,7 @@
 
 //攻撃力
 
+
 //体力
 #define KRAKEN_HP 400
 
@@ -42,7 +46,7 @@ Kraken::Kraken(Location spawn_location)
 	can_delete = false;
 	left_move = true;
 
-	hp = 100;
+	hp = KRAKEN_HP;
 	damage = 0;
 
 	
@@ -50,11 +54,17 @@ Kraken::Kraken(Location spawn_location)
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::WATER;
 	state = ENEMY_STATE::IDOL;
+	attack_state = KRAKEN_ATTACK::NONE;
+
 	drop_volume = 0;
 	poison_time = 0;
 	poison_damage = 0;
 	paralysis_time = 0;
 	location = spawn_location;
+
+	standby_attack = 0;
+	standby_move = 0;
+
 	/*当たり判定の設定*/
 	area.width = KRAKEN_X;
 	area.height = KRAKEN_Y;
@@ -125,18 +135,7 @@ void Kraken::Update(const Player* player, const Stage* stage)
 				left_move = !left_move;
 			}
 		}
-		else
-		{
-			state = ENEMY_STATE::FALL;
-			speed = 0;
-		}
 
-		if (ScreenOut())
-		{
-			state = ENEMY_STATE::IDOL;
-			speed = 0;
-		}
-		break;
 	case ENEMY_STATE::FALL:
 		Fall();
 
@@ -181,6 +180,7 @@ void Kraken::Update(const Player* player, const Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+
 	UpdateDamageLog();
 }
 
@@ -190,7 +190,15 @@ void Kraken::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void  Kraken::Idol()
 {
+	Location scroll; //画面スクロールを考慮したX座標
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
 
+	if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
+		(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+	{
+		state = ENEMY_STATE::MOVE;
+	}
 	
 }
 
@@ -199,8 +207,13 @@ void  Kraken::Idol()
 //-----------------------------------
 void Kraken::Move(const Location player_location)
 {
-
 	
+
+	--standby_move; //次の攻撃準備（待機時間)
+	if (standby_move < 0)
+	{
+		
+	}
 }
 
 //-----------------------------------
@@ -221,20 +234,37 @@ void Kraken::Fall()
 //-----------------------------------
 void  Kraken::Attack(const Location player_location)
 {
-
-	switch (attack_state)
+	--standby_attack;
+	if (standby_attack < 0)
 	{
-	case KRAKEN_ATTACK::TENTACLE_ATTACK: //触手攻撃
-		break;
-	case KRAKEN_ATTACK::BREATH: //ブレス攻撃
-		break;
-	case KRAKEN_ATTACK::HARD_ATTACK: //水の塊を落とす
-		break;
-	case KRAKEN_ATTACK::NONE: //ノーマル
-	default:
-		break;
+		switch (attack_state)
+		{
+		case KRAKEN_ATTACK::TENTACLE_ATTACK: //触手攻撃
+
+			break;
+		case KRAKEN_ATTACK::BREATH: //ブレス攻撃
+			break;
+		case KRAKEN_ATTACK::HARD_ATTACK: //水の塊を落とす
+			AttackWater(player_location);
+			state = ENEMY_STATE::MOVE;
+			standby_move = 100;
+			break;
+		case KRAKEN_ATTACK::NONE: //ノーマル
+		default:
+			break;
+		}
 	}
 }
+
+//-----------------------------------
+//攻撃(水の塊を落とす）
+//-----------------------------------
+void Kraken::AttackWater(Location player_location)
+{
+	BulletManager::GetInstance()->CreateEnemyBullet
+	(new KrakenBullet(location, player_location));
+}
+
 
 //-----------------------------------
 //攻撃が当たっているか
@@ -294,12 +324,12 @@ void Kraken::HitBullet(const BulletBase* bullet)
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE; //効きにくい;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage = bullet->GetDamage()* WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
 		damage = bullet->GetDamage();
@@ -309,16 +339,16 @@ void Kraken::HitBullet(const BulletBase* bullet)
 		if (!poison)
 		{
 			poison = true;
-			poison_damage = bullet->GetDamage();
-			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			poison_damage = bullet->GetDamage() * 0;
+			poison_time = bullet->GetDebuffTime() * 0;
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		if (!paralysis)
 		{
-			paralysis_time = bullet->GetDebuffTime() * 0;
+			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
 		}
 		break;
 	case ATTRIBUTE::HEAL:
@@ -346,7 +376,7 @@ void Kraken::Draw() const
 
 	if (state != ENEMY_STATE::DEATH)
 	{
-		//DrawHPBar();
+		DrawHPBar(KRAKEN_HP);
 	}
 
 	DrawDamageLog();
