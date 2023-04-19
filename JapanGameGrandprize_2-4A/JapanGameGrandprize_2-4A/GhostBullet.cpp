@@ -18,8 +18,8 @@ GhostBullet::GhostBullet(const Location spawn_location, const Location player_lo
 	damage = GHOST_BULLET_DAMAGE;
 	float radian; //Šp“x
 	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
-	x_speed = speed * cosf(radian);
-	y_speed = speed * sinf(radian);
+	x_speed = static_cast<int>(speed * cosf(radian));
+	y_speed = static_cast<int>(speed * sinf(radian));
 }
 
 //-----------------------------------

@@ -9,7 +9,7 @@
 #define ANIMATION_MOVE 10
 #define CHEMICAL_FORMURA_DRAW_X 50
 #define CHEMICAL_FORMURA_DRAW_Y 150
-#define PLAYER_SIZE 0.3
+#define PLAYER_SIZE 0.32
 
 //-----------------------------------
 // コンストラクタ
@@ -1419,7 +1419,7 @@ void Player::Update(const PLAYER_STATE state)
 //-----------------------------------
 void Player::DebugDraw()
 {
-	DrawRotaGraphF(location.x, location.y, 0.5, 0, image[image_count], TRUE,TRUE);
+	DrawRotaGraphF(location.x, location.y, PLAYER_SIZE, 0, image[image_count], TRUE,TRUE);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

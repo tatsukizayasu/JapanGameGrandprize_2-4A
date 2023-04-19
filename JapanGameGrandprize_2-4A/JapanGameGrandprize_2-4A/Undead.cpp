@@ -30,7 +30,17 @@
 //移動画像
 #define UNDEAD_MOVE_IMAGES 5
 
-#define UNDEAD_MOVE_ANIMATION 10
+//攻撃画像
+#define UNDEAD_ATTACK_IMAGES 3
+
+//画像
+#define UNDEAD_IMAGES UNDEAD_MOVE_IMAGES + UNDEAD_ATTACK_IMAGES
+
+#define UNDEAD_ANIMATION 10
+
+#define UNDEAD_WIDTH 46
+#define UNDEAD_HEIGHT 110
+
 
 //-----------------------------------
 // コンストラクタ
@@ -62,11 +72,11 @@ Undead::Undead(Location spawn_location)
 	paralysis_time = 0;
 	location = spawn_location;
 	/*当たり判定の設定*/
-	area.width = 40;
-	area.height = 80;
+	area.width = UNDEAD_WIDTH;
+	area.height = UNDEAD_HEIGHT;
 
 	location.x -= MAP_CHIP_SIZE / 2;
-	location.y -= MAP_CHIP_SIZE / 2;
+	location.y -= area.height / 2;
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [SOIL_DROP];
 	drop_type_volume = SOIL_DROP;
@@ -81,8 +91,9 @@ Undead::Undead(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	images = new int[UNDEAD_MOVE_IMAGES];
-	LoadDivGraph("Images/Enemy/undead.png", 5, 5, 1, 40, 80, images);
+	images = new int[UNDEAD_IMAGES];
+	LoadDivGraph("Images/Enemy/undead.png", 8, 8, 1, 150, 150, images);
+	GetGraphSizeF(images[0], &size.width, &size.height);
 
 	InitDamageLog();
 }
@@ -227,7 +238,9 @@ void Undead::DistancePlayer(const Location player_location)
 	if ((distance < UNDEAD_ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
 		state = ENEMY_STATE::ATTACK;
-		attack_time = 120;
+		area.width += UNDEAD_WIDTH / 3;
+		image_argument = UNDEAD_MOVE_IMAGES;
+		animation = 0;
 	}
 	else if(distance < UNDEAD_TRACKING_DISTANCE && (UNDEAD_TRACKING_DISTANCE < old_distance)) //一定範囲内だとプレイヤーを追いかける
 	{
@@ -297,12 +310,14 @@ void Undead::Fall()
 void  Undead::Attack(const Location player_location)
 {
 
-	attack_time--;
-	if (attack_time < 0)
+	AttackAnimation();
+
+	if (UNDEAD_IMAGES - 1 <= image_argument)
 	{
 		attack = false;
 		state = ENEMY_STATE::MOVE;
 		attack_interval = UNDEAD_ATTACK_INTERVAL;
+		area.width = UNDEAD_WIDTH;
 	}
 }
 
@@ -410,10 +425,26 @@ void Undead::MoveAnimation()
 {
 
 	animation++;
-	if (animation % UNDEAD_MOVE_ANIMATION == 0)
+
+	if (animation % UNDEAD_ANIMATION == 0)
 	{
 		image_argument = ++image_argument % UNDEAD_MOVE_IMAGES;
 	}
+}
+
+//-----------------------------------
+//攻撃時のアニメーション
+//-----------------------------------
+void Undead::AttackAnimation()
+{
+
+	animation++;
+
+	if (animation % (UNDEAD_ANIMATION / 2) == 0)
+	{
+		image_argument = ++image_argument;
+	}
+
 }
 
 //-----------------------------------
@@ -426,6 +457,19 @@ void Undead::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	Area center;
+
+	if (left_move)
+	{
+		center.width = (size.width / 4) * 3;
+	}
+	else
+	{
+		center.width = (size.width / 4);
+	}
+	center.height = size.height / 2;
+
+
 	if (state != ENEMY_STATE::DEATH)
 	{
 		DrawHPBar(UNDEAD_HP);
@@ -433,8 +477,8 @@ void Undead::Draw() const
 	
 	DrawDamageLog();
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0,
-		images[image_argument], TRUE, !left_move);
+	DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
+		0.8, 0,images[image_argument], TRUE, !left_move);
 
 }
 
@@ -454,7 +498,19 @@ Location Undead::GetLocation() const
 void Undead::Update(const ENEMY_STATE state)
 {
 
-	switch (state)
+	if (this->state != state)
+	{
+		if (state != ENEMY_STATE::ATTACK)
+		{
+			area.width = UNDEAD_WIDTH;
+		}
+		else
+		{
+			area.width += UNDEAD_WIDTH / 3;
+		}
+	}
+	this->state = state;
+	switch (this->state)
 	{
 	case ENEMY_STATE::IDOL:
 		break;
@@ -464,6 +520,12 @@ void Undead::Update(const ENEMY_STATE state)
 	case ENEMY_STATE::FALL:
 		break;
 	case ENEMY_STATE::ATTACK:
+		AttackAnimation();
+
+		if (UNDEAD_IMAGES - 1 <= image_argument)
+		{
+			image_argument = UNDEAD_MOVE_IMAGES;
+		}
 		break;
 	case ENEMY_STATE::DEATH:
 		break;
@@ -478,8 +540,12 @@ void Undead::Update(const ENEMY_STATE state)
 void Undead::DebugDraw()
 {
 
-	DrawRotaGraphF(location.x, location.y, 1.0, 0,
-		images[image_argument], TRUE, !left_move);
+	Area center;
+	center.width = (size.width / 4) * 3;
+	center.height = size.height / 2;
+
+	DrawRotaGraph2F(location.x, location.y, center.width, center.height,
+		0.8, 0,images[image_argument], TRUE, !left_move);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,
