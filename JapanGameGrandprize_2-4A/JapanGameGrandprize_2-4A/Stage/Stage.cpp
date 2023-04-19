@@ -13,6 +13,7 @@
 #define STAGE_NAME	"sample_stage2";
 #define STAGE_NAME	"Stage01";
 //#define STAGE_NAME  "Stage01_test";
+//#define STAGE_NAME "Stage02";
 
 //-----------------------------------
 // コンストラクタ
@@ -160,6 +161,7 @@ void Stage::Update(Player* player)
 #endif
 
 	element->Update(player);
+
 }
 
 //-----------------------------------

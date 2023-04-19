@@ -14,7 +14,8 @@ Element_Trap::Element_Trap(short type,
 	this->area = area;
 	this->type = type;
 	
-	margin_area = { 100.0f,100.0f };
+	//ƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è‚ğ–³Œø‰»
+	margin_area = { 1000.0f,1000.0f };
 
 	this->images = images;
 

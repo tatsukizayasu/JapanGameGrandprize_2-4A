@@ -10,10 +10,12 @@ private:
 	enum class STATE {
 		NONE,		//Ç»Çµ
 		DESTROY,	//îjâÛ
+		EXTINGUISHMENT	//è¡ñ≈
 	}state;
 
 	ItemController* item_con;
 	std::vector<ElementItem> element_item;
+	int drop_volume;
 
 public:
 
