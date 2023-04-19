@@ -86,19 +86,19 @@ Pouch::~Pouch()
 //”š”­
 void Pouch::ExplosionTabDraw() const
 {
-	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
-	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_explosion[cursol].chemical_formula);
-	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_explosion[cursol].number_of_bullets);
-	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_explosion[cursol].damage);
+	DrawGraph(x, y + 300, second_tab_image, TRUE);
+	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_explosion[cursol].chemical_formula);
+	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_explosion[cursol].number_of_bullets);
+	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_explosion[cursol].damage);
 
 
 
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
 	if (page == 0)
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+			//DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_explosion[i].name_image,true);
 		}
 	}
 	if (page == 1)
@@ -264,22 +264,6 @@ void Pouch::Draw() const
 		break;
 	default:
 		break;
-	}
-
-	DrawBox(POUCH_START_X, POUCH_START_Y + 400, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + POUCH_HEIGHT, 0xaaaaaa, TRUE);
-
-	for (int i = 0; i < 4; i++)
-	{
-		DrawBox(POUCH_START_X + (50 * i), POUCH_START_Y + 400, (POUCH_START_X + (50 * i)) + 50, POUCH_START_Y + 450, 0xffffff, FALSE);
-		DrawFormatString(POUCH_START_X + (50 * i), POUCH_START_Y + 400, 0x000000, "%d", element[i]->GetVolume());
-		DrawFormatString(POUCH_START_X + (50 * i), POUCH_START_Y + 430, 0x000000, "%c", element_char[i]);
-	}
-
-	for (int i = 0; i < 3; i++)
-	{
-		DrawBox(POUCH_START_X + (50 * i) + 25, POUCH_START_Y + 450, (POUCH_START_X + (50 * i) + 50) + 25, POUCH_START_Y + POUCH_HEIGHT, 0xffffff, FALSE);
-		DrawFormatString(POUCH_START_X + (50 * i) + 25, POUCH_START_Y + 450, 0xffffff, "%d", element[i + 4]->GetVolume());
-		DrawFormatString(POUCH_START_X + (50 * i) + 25, POUCH_START_Y + 480, 0xffffff, "%c", element_char[i + 4]);
 	}
 
 	DrawGraph(x - 254, y + 200, elemental_count, TRUE);
