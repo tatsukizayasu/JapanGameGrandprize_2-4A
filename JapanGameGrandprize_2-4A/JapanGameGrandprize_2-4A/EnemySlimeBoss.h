@@ -4,17 +4,11 @@
 #include"CameraWork.h"
 #include"SlimeBossBullet.h"
 
-enum class MOVE_STATE
-{
-	MOVE,
-	WALL_MOVE
-};
 
 class EnemySlimeBoss : public EnemyBase
 {
 private:
 
-	MOVE_STATE move_state;
 	int slime_boss_jump_distance;
 	int speed_y;
 	int wait_time;

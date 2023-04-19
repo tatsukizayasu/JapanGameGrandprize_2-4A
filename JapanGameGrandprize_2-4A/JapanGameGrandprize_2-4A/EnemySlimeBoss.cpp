@@ -26,8 +26,8 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	location = spawn_location;
 	location.y -= 100;
 
-	area.height = 150;
-	area.width = 150;
+	area.height = 180;
+	area.width = 180;
 
 	state = ENEMY_STATE::FALL;
 
@@ -64,7 +64,6 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	move_state = MOVE_STATE::MOVE;
 	wait_time = 0;
 	breath_time = 0;
 }
@@ -113,23 +112,12 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 		if (--wait_time <= 0)
 		{
 
-			switch (move_state)
+			speed_y = -(slime_boss_jump_distance / 3);
+			if (--slime_boss_jump_distance <= 0)
 			{
-			case MOVE_STATE::MOVE:
-
-				speed_y = -(slime_boss_jump_distance / 3);
-				if (--slime_boss_jump_distance <= 0)
-				{
-					state = ENEMY_STATE::FALL;
-					speed_y = 0;
-					slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
-				}
-
-				break;
-
-			case MOVE_STATE::WALL_MOVE:
-
-				break;
+				state = ENEMY_STATE::FALL;
+				speed_y = 0;
+				slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 			}
 
 			location.y += speed_y;
@@ -192,16 +180,6 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			location.x = old_location.x;
 			left_move = !left_move;
 			
-			switch (move_state)
-			{
-			case MOVE_STATE::MOVE:
-				
-				break;
-
-			case MOVE_STATE::WALL_MOVE:
-
-				break;
-			}
 		}
 
 		Fall();
@@ -222,21 +200,12 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 			wait_time = SLIME_BOSS_WAIT_TIME;
 
-			switch (move_state)
-			{
-			case MOVE_STATE::MOVE:
-				
-				break;
-
-			case MOVE_STATE::WALL_MOVE:
-
-				break;
-			}
 		}
 		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
 			speed = 0;
+			slime_boss_jump_distance = 0;
 		}
 
 		break;
@@ -343,7 +312,6 @@ AttackResource EnemySlimeBoss::Hit()
 
 	return ret;
 }
-
 
 //-----------------------------------
 //Ž€–S
