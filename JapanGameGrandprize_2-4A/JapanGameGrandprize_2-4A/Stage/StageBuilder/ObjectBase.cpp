@@ -19,6 +19,15 @@ ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider)
 	this->pivot = new SphereCollider(pivot);
 	image = LoadGraph("images/Stage/yuka_1.png");
 	
+	int class_type = p_collider->GetName();
+	switch (class_type)
+	{
+	case (int)COLLIDER::DEFAULT:
+		collider = new BoxCollider(*static_cast<BoxCollider*>(p_collider));
+		break;
+	}
+
+	//TODO:‚±‚±‚©‚ç dynamic_cast‚ðstatic_cast‚É’¼‚·
 
 	base = dynamic_cast<BoxCollider*>(p_collider);
 	if (base)

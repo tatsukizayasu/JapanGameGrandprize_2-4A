@@ -43,6 +43,7 @@ PolyLine::PolyLine(Location bend_points[], unsigned int size)
 	}
 
 	pivot.SetLocation(location);
+	old_location = location;
 #endif
 }
 
@@ -86,6 +87,7 @@ PolyLine::PolyLine(const vector<SphereCollider*> spheres)
 
 
 	pivot.SetLocation(location);
+	old_location = location;
 #endif
 }
 
@@ -119,6 +121,7 @@ PolyLine::PolyLine(const PolyLine& poly_line)
 		vector_to_bend_point.push_back(vector);
 	}
 
+	old_location = location;
 #endif
 }
 
@@ -148,54 +151,31 @@ PolyLine::~PolyLine()
 //---------------------------------
 void PolyLine::Update()
 {
-	//#ifdef _STAGE_BUILDER
-	//	if (location != pivot.GetLocation())
-	//	{
-	//		location = pivot.GetLocation();
-	//
-	//		for (int i = 0; i < lines.size(); i++)
-	//		{
-	//			lines[i]->ColliderBase::SetLocation
-	//			(this->location + vector_to_line[i]);
-	//
-	//			bend_points[i]->SetLocation(lines[i]->GetLocation(LINE_START));
-	//		}
-	//		bend_points[bend_points.size() - 1]
-	//			->SetLocation(lines[lines.size() - 1]->GetLocation(LINE_END));
-	//
-	//	}
-	//
-	//#endif
-	//	
-	//	MakeLocation();
-	//	for (int i = 0; i < lines.size(); i++)
-	//	{
-	//		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
-	//		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
-	//	}
-
+#ifdef _STAGE_BUILDER
 	bool did_bend_points_move = false;
 
-	if (location != pivot.GetLocation())
+	if (location != old_location)
 	{
 		for (int i = 0; i < bend_points.size(); i++)
 		{
 			bend_points[i]->SetLocation(location + vector_to_bend_point[i]);
 		}
-		location = pivot.GetLocation();
 	}
-	else
+
+	if (pivot.GetLocation() != old_location)
 	{
-		MakeLocation();
 		for (int i = 0; i < bend_points.size(); i++)
 		{
-			if (location + vector_to_bend_point[i] != bend_points[i]->GetLocation())
-			{
-
-			}
-			vector_to_bend_point[i]
-				= bend_points[i]->GetLocation() - pivot.GetLocation();
+			bend_points[i]->SetLocation(pivot.GetLocation() + vector_to_bend_point[i]);
 		}
+	}
+
+	MakeLocation();
+	
+	for (int i = 0; i < bend_points.size(); i++)
+	{
+		vector_to_bend_point[i]
+			= bend_points[i]->GetLocation() - pivot.GetLocation();
 	}
 
 	for (int i = 0; i < lines.size(); i++)
@@ -203,7 +183,10 @@ void PolyLine::Update()
 		lines[i]->SetLocation(bend_points[i]->GetLocation(), LINE_START);
 		lines[i]->SetLocation(bend_points[i + 1]->GetLocation(), LINE_END);
 	}
+	
+	old_location = location;
 
+#endif
 }
 
 //-------------------------------------
