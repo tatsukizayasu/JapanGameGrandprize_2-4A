@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyBase.h"
+#include"KrakenBullet.h"
 
 
 enum class KRAKEN_STATE
@@ -21,7 +22,8 @@ class Kraken :
     public EnemyBase
 {
 private:
-
+	int standby_attack; //UŒ‚‘Ò‹@ŠÔ
+	int standby_move; //ˆÚ“®‘Ò‹@ŠÔ
 	KRAKEN_ATTACK attack_state;
 
 public:

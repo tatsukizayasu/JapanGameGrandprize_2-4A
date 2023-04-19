@@ -2,7 +2,7 @@
 #include "CameraWork.h"
 
 //クラーケンの遠距離攻撃の移動速度
-#define BULLET_SPEED 1
+#define BULLET_SPEED 3
 
 //クラーケンの遠距離ダメージ
 #define BULLET_DAMAGE 45
@@ -15,14 +15,25 @@ KrakenBullet::KrakenBullet(Location spawn_location, Location player_location)
 
 	type = ENEMY_TYPE::WATER;
 	location = spawn_location;
-	radius = 10;
+	radius = 100;
 	speed = BULLET_SPEED;
 	image = 0;
 	damage = BULLET_DAMAGE;
-	float radian; //角度
-	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
-	x_speed = speed * cosf(radian);
-	y_speed = speed * sinf(radian);
+
+	float distance = player_location.x - location.x;
+	float distance_y = player_location.y - location.y;
+	float vector = sqrt(distance * distance + distance_y * distance_y);
+	float radian= distance / vector;
+	float radian_y = distance_y / vector;
+
+	x_speed = radian;
+	y_speed = radian_y;
+	game_tiem = 0;
+	start_time = 0; 
+
+	start_attack = false;
+
+
 }
 
 //-----------------------------------
@@ -38,9 +49,21 @@ KrakenBullet::~KrakenBullet()
 //-----------------------------------
 void KrakenBullet::Update()
 {
-
-	location.x += x_speed;
-	location.y += y_speed;
+	if (start_attack == false)
+	{
+		if (++game_tiem % 60 == 0)
+		{
+			if (++start_time > 1)
+			{
+				start_attack = true;
+			}
+		}
+	}
+	else
+	{
+		location.x += x_speed * speed;
+		location.y += y_speed * speed;
+	}
 }
 
 //-----------------------------------
@@ -53,6 +76,6 @@ void KrakenBullet::Draw() const
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
 
-	DrawCircle(x, y, radius, 0xffffff, TRUE);
+	DrawCircle(x, y, radius, GetColor(0,0,255), TRUE);
 }
 
