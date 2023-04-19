@@ -8,8 +8,8 @@
 #define GHOST_SIZE_Y 85
 
 //プレイヤー発見距離
-#define DETECTION_DISTANCE 500
-#define DETECTION_DISTANCE_Y 300
+#define DETECTION_DISTANCE 300
+#define DETECTION_DISTANCE_Y 200
 
 //物理攻撃範囲
 #define ATTACK_RANGE 100
@@ -59,7 +59,6 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	physical_time = 0;
 	hp = GHOST_HP;
 	location = spawn_location;
-	//location.y = 250; //テスト
 	standby_attack = 0;
 	speed = 1.5;
 	area.width = GHOST_SIZE_X;
@@ -74,8 +73,8 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	kind = ENEMY_KIND::GHOST;
 
 	images = new int[7];
-	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, images);
-	LoadDivGraph("Images/Enemy/ghostattack.png", 6, 6, 1, 60, 66, attack_image);
+	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, images); //通常
+	LoadDivGraph("Images/Enemy/ghostattack.png", 6, 6, 1, 60, 66, attack_image); //攻撃
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
 	drop_type_volume = WIND_DROP;
@@ -217,50 +216,13 @@ void EnemyGhost::Move(const Location player_location)
 
 	vector = sqrt(range * range + range_y * range_y);
 
-
-	//プレイヤーが発見距離内にいたら
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE
 		&& range <= DETECTION_DISTANCE_Y && range >= -DETECTION_DISTANCE_Y)
 	{
-
-		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE
-			&& range <= ATTACK_RANGE && range >= -ATTACK_RANGE)
-		{
-			state = ENEMY_STATE::ATTACK;
-			attack_state = GHOST_ATTACK::PHYSICAL_ATTACK;
-			standby_time = PHYSICAL_STANDBY;
-			physical_attack = true;
-
-		}
-		else
-		{
-			state = ENEMY_STATE::ATTACK;
-			attack_state = GHOST_ATTACK::MAGIC_ATTACK;
-			standby_time = MAGIC_STANDBY;
-			magic_attack = true;
-			if (magic_time++ % 2 == 0)
-			{
-				//弾の生成
-				BulletManager::GetInstance()->CreateEnemyBullet
-				(new GhostBullet(location, player_location));
-			}
-		}
+		
 	}
 
-	else //通常移動
-	{
-		magic_attack = false;
-		physical_attack = false;
-
-		if (left_move == true)
-		{
-			location.x -= speed;
-		}
-		else
-		{
-			location.x += speed;
-		}
-	}
+	
 }
 
 //-----------------------------------
