@@ -3,6 +3,20 @@
 #include "CameraWork.h"
 #include "Stage/Stage.h"
 
+//コンストラクタ
+EnemyBulletBase::EnemyBulletBase()
+{
+	damage = 0;
+	speed = 0;
+	type = ENEMY_TYPE::NORMAL;
+}
+
+//デストラクタ
+EnemyBulletBase::~EnemyBulletBase()
+{
+
+}
+
 //-----------------------------------
 //画面外に出たかどうか
 //-----------------------------------

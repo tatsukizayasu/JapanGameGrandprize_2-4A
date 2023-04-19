@@ -199,7 +199,7 @@ protected:
 	int hp;	//体力
 	int speed; //移動速度
 	int poison_time; //毒の効果時間
-	float poison_damage; //毒のダメージ
+	int poison_damage; //毒のダメージ
 	int paralysis_time; //麻痺の効果時間
 	static int log_font[4]; //相性用のフォント(0:弱点,1:通常,2:耐性,3:弱点,)
 	int drop_volume; //ドロップ量

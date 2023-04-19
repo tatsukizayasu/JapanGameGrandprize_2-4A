@@ -8,10 +8,16 @@ class LastBossHand :
 private:
 
     bool punch;  //パンチしている
+    bool left_hand; //true:左手,false:右手
     bool attack; //攻撃が当たったか
     int attack_interval; //次の攻撃までの時間
+    int punch_standby_time; //パンチするまでの時間
     int animation; //アニメーション
     int image_argument; //画像の引数
+
+    Location punch_start; //パンチを始めたの座標
+
+    HitMapChip hit_block; //ブロックとの当たり判定
 private:
 
     //パンチ

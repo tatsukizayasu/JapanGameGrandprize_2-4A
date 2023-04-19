@@ -1,6 +1,8 @@
 #include "LastBossHand.h"
 #include "Player.h"
 #include "Stage/Stage.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 #define HAND_IMAGES
 
@@ -9,21 +11,34 @@
 
 //次のパンチまでの時間
 #define PUNCH_INTERVAL 300
+
+//パンチするまでの時間
+#define PUNCH_STANDBY_TIME 60 
+
+//パンチのスピード
+#define PUNCH_SPEED 8
+
+//パンチのダメージ
+#define PUNCH_DAMAGE 15
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
 LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 {
 	location = spawn_location;
+	punch_start = location;
 
 	punch = false;
 	attack = false;
-	attack_interval = 0; 
+	attack_interval = 0;
+	punch_standby_time = 0;
 	animation = 0; 
 	image_argument = 0;
 
 	can_delete = false;
-	left_move = left_hand;
+	this->left_hand = left_hand;
+	left_move = false;
 	poison = false;
 	paralysis = false;
 
@@ -41,6 +56,9 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 	kind = ENEMY_KIND::END_BOSS;
 	type = new ENEMY_TYPE[1];
 	state = ENEMY_STATE::IDOL;
+
+	hit_block.chip = nullptr;
+	hit_block.hit = false;
 }
 
 //-----------------------------------
@@ -90,6 +108,10 @@ void LastBossHand::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
+
+	hit_block = HitStage(stage);
+
+	attack_interval--;
 }
 
 //-----------------------------------
@@ -121,34 +143,66 @@ void LastBossHand::Fall()
 //-----------------------------------
 void LastBossHand::Attack(const Location player_location)
 {
-	if (((location.x - area.width / 2) < player_location.x) &&
-		(player_location.x < (location.x + area.width / 2)))
-	{
-		punch = true;
-	}
+	float distance_x; //X座標の距離
+	bool old_punch = punch;
 
+	if (punch) //パンチしている
+	{
+		Punch();
+	}
 	else
 	{
-		if (location.x < player_location.x)
+
+		//X座標の距離の計算
+		distance_x = fabsf(location.x - player_location.x);
+
+		//パンチの範囲に入っていて攻撃のインターバルが終わっている
+		if ((distance_x < area.width / 2) && (attack_interval < 0))
 		{
-			speed = HAND_MOVE_SPEED;
+			punch = true;
+			punch_standby_time = PUNCH_STANDBY_TIME;
+			punch_start = location;
+			speed = PUNCH_SPEED;
 		}
 		else
 		{
-			speed = -HAND_MOVE_SPEED;
-		}
+			if (location.x < player_location.x)
+			{
+				speed = HAND_MOVE_SPEED;
+			}
+			else
+			{
+				speed = -HAND_MOVE_SPEED;
+			}
 
-		location.x += speed;
+			location.x += speed;
+		}
 	}
 
+	if (old_punch && (old_punch != punch)) //パンチ終了
+	{
+		state = ENEMY_STATE::MOVE;
+		attack_interval = PUNCH_INTERVAL;
+	}
 }
 
 //-----------------------------------
 //パンチ
 //-----------------------------------
-void Punch()
+void LastBossHand::Punch()
 {
-
+	if (punch_standby_time < 0)
+	{
+		location.y += speed;
+		if (hit_block.hit)
+		{
+			speed = -PUNCH_SPEED;
+		}
+	}
+	else
+	{
+		punch_standby_time--;
+	}
 }
 
 //-----------------------------------
@@ -156,7 +210,16 @@ void Punch()
 //-----------------------------------
 AttackResource LastBossHand::Hit()
 {
+	AttackResource ret = { 0,nullptr,0 };
+	ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
 
+	if (punch && attack)
+	{
+		ret.damage = PUNCH_DAMAGE;
+		ret.type = attack_type;
+		ret.type_count = 1;
+	}
+	return ret;
 }
 
 //-----------------------------------
@@ -196,7 +259,7 @@ void LastBossHand::Draw() const
 //-----------------------------------
 Location LastBossHand::GetLocation() const
 {
-
+	return location;
 }
 
 #ifdef _DEBUG
