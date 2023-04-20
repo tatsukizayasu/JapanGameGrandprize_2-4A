@@ -20,6 +20,9 @@ private:
     HitMapChip hit_block; //ブロックとの当たり判定
 private:
 
+    //テレポート
+    void Teleport(const class Stage* stage);
+
     //パンチ
     void Punch();
 
@@ -59,6 +62,8 @@ public:
 
     //描画
     void Draw() const override;
+
+    void DrawHPBar(const int)const override;
 
     //座標の取得
     Location GetLocation() const override;

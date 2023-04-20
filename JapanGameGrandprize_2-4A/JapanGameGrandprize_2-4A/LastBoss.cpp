@@ -1,12 +1,29 @@
 #include "LastBoss.h"
+#include "LastBossHand.h"
 
+//手の数
+#define HAND_NUM 2
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-LastBoss::LastBoss(Location)
+LastBoss::LastBoss(Location spawn_location)
 {
+	Location spawn_hand;
+	location = spawn_location;
 
+	spawn_hand = location;
+	spawn_hand.x -= 200;
+
+	spawn_hand.y += 100;
+
+	hand = new EnemyBase * [HAND_NUM];
+
+	for (int i = 0; i < HAND_NUM; i++)
+	{
+		spawn_hand.x += (400 * i);
+		hand[i] = new LastBossHand(spawn_hand, static_cast<bool>(i));
+	}
 }
 
 //-----------------------------------
@@ -14,6 +31,11 @@ LastBoss::LastBoss(Location)
 //-----------------------------------
 LastBoss::~LastBoss()
 {
+	for (int i = 0; i < HAND_NUM; i++)
+	{
+		delete hand[i];
+	}
+	delete[] hand;
 
 }
 
@@ -36,6 +58,11 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 		break;
 	default:
 		break;
+	}
+
+	for (int i = 0; i < HAND_NUM; i++)
+	{
+		hand[i]->Update(player,stage);
 	}
 }
 
@@ -109,7 +136,10 @@ void LastBoss::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void LastBoss::Draw() const
 {
-
+	for (int i = 0; i < HAND_NUM; i++)
+	{
+		hand[i]->Draw();
+	}
 }
 
 //-----------------------------------

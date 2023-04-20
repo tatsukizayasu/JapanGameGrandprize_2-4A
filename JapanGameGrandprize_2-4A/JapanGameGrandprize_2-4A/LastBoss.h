@@ -21,6 +21,7 @@ private:
     int animation; //アニメーション
     int image_argument; //画像の引数
     int attack_time; //攻撃している時間(デバッグ用)
+    EnemyBase** hand; //手
 private:
 
     //移動時のアニメーション

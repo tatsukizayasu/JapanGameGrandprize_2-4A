@@ -143,7 +143,6 @@ void LastBossHand::Fall()
 //-----------------------------------
 void LastBossHand::Attack(const Location player_location)
 {
-	float distance_x; //X座標の距離
 	bool old_punch = punch;
 
 	if (punch) //パンチしている
@@ -152,37 +151,16 @@ void LastBossHand::Attack(const Location player_location)
 	}
 	else
 	{
-
-		//X座標の距離の計算
-		distance_x = fabsf(location.x - player_location.x);
-
-		//パンチの範囲に入っていて攻撃のインターバルが終わっている
-		if ((distance_x < area.width / 2) && (attack_interval < 0))
-		{
-			punch = true;
-			punch_standby_time = PUNCH_STANDBY_TIME;
-			punch_start = location;
-			speed = PUNCH_SPEED;
-		}
-		else
-		{
-			if (location.x < player_location.x)
-			{
-				speed = HAND_MOVE_SPEED;
-			}
-			else
-			{
-				speed = -HAND_MOVE_SPEED;
-			}
-
-			location.x += speed;
-		}
+		location.x = player_location.x;
+		punch = true;
 	}
 
 	if (old_punch && (old_punch != punch)) //パンチ終了
 	{
 		state = ENEMY_STATE::MOVE;
 		attack_interval = PUNCH_INTERVAL;
+		attack = false;
+
 	}
 }
 
@@ -197,6 +175,12 @@ void LastBossHand::Punch()
 		if (hit_block.hit)
 		{
 			speed = -PUNCH_SPEED;
+			attack = false;
+		}
+
+		if (punch_start.y <= location.y)
+		{
+			punch = false;
 		}
 	}
 	else
@@ -250,6 +234,14 @@ void LastBossHand::MoveAnimation()
 //描画
 //-----------------------------------
 void LastBossHand::Draw() const
+{
+
+}
+
+//-----------------------------------
+//HPバーの表示
+//-----------------------------------
+void LastBossHand::DrawHPBar(const int)const
 {
 
 }
