@@ -47,7 +47,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case FALL_FLOOR:
-		element.push_back(std::make_shared<Element_Fall_Floor>(type, element, images, location, Area{ 10.0f , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Fall_Floor>(type, element, images, location, Area{ 8.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case ITEM_DROP_OBJECT:

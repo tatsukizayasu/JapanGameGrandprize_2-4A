@@ -10,7 +10,7 @@ Element_Fall_Floor::Element_Fall_Floor(short type, std::vector<std::shared_ptr<S
 
 	this->area = area;
 	this->type = type;
-	margin_area = { -12.0f,0.0f };
+	margin_area = { -16.0f,0.0f };
 	this->images = images;
 
 	is_flash = false;
