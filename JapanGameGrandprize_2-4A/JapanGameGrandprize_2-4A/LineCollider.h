@@ -66,6 +66,9 @@ public:
 	//LineColliderとの当たり判定
 	bool HitLine(const class LineCollider* line_collider)const override;
 
+	//PolyLineとの当たり判定
+	virtual bool HitPolyLine(const class PolyLine* poly_line)const override;
+
 	ColliderBase* Copy()const override { return new LineCollider(*this); }
 
 	bool HitCheck(ColliderBase* collider)const;
@@ -137,6 +140,17 @@ public:
 		return vector_max;
 	}
 
+	Location GetVector(int index)const 
+	{
+		if (LINE_START <= index && index <= LINE_END)
+		{
+			return vector[index];
+		}
+		else
+		{
+			return {};
+		}
+	}
 protected:
 
 	Location vector[2];	//中心から線の端の座標までのベクター(0:始点,1:終点)

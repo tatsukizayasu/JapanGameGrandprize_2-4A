@@ -31,7 +31,7 @@ Stage_Element_Base::~Stage_Element_Base()
 	images.shrink_to_fit();
 }
 
-void Stage_Element_Base::LoopImages(std::vector<int>& images, float time, int total_images, std::function<void()>* callback)
+void Stage_Element_Base::LoopImages(std::vector<int>& images, float time, int total_images, std::function<void()>* callback, int start_image)
 {
 
 	auto end_time = std::chrono::steady_clock::now();
@@ -40,6 +40,7 @@ void Stage_Element_Base::LoopImages(std::vector<int>& images, float time, int to
 
 	if (elapsed.count() >= time * 1000.0f) {
 		start_time = end_time;
+		current_image += start_image;
 		current_image = (current_image + 1) % total_images;
 		this->image = images[current_image];
 

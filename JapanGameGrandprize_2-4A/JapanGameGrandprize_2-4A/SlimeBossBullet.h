@@ -8,6 +8,8 @@ class SlimeBossBullet :
 
     int x_speed; //Xのスピード
     int y_speed; //Yのスピード
+
+    int color;
 public:
 
     //コンスタラクタ
