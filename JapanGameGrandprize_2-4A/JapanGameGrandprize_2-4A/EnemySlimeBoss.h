@@ -15,6 +15,8 @@ private:
 	int wait_time;
 	int breath_time;
 
+	ENEMY_STATE now_state;
+
 #ifdef _DEBUG
 	ENEMY_STATE old_state; //一つ前の状態
 	Location debug_location; //デバック用の座標

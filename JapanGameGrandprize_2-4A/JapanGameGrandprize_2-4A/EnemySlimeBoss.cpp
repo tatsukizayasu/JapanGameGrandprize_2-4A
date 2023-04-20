@@ -33,6 +33,7 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	area.width = SLIME_BOSS_HEIGHT;
 
 	state = ENEMY_STATE::FALL;
+	now_state = state;
 
 	left_move = true;
 
@@ -98,6 +99,8 @@ void EnemySlimeBoss::MagicBullet(const Location player_location)
 
 void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 {
+	state = now_state;
+
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -231,6 +234,8 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 		state = ENEMY_STATE::DEATH;
 	}
 
+	now_state = state;
+	state = ENEMY_STATE::ATTACK;
 }
 
 void EnemySlimeBoss::Draw()const
