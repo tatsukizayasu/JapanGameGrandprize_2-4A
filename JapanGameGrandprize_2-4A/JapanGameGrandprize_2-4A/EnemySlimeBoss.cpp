@@ -21,13 +21,16 @@
 
 #define SLIME_BOSS_BREATH_TIME 120
 
+#define SLIME_BOSS_WIDTH 180
+#define SLIME_BOSS_HEIGHT 200
+
 EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 {
 	location = spawn_location;
 	location.y -= 100;
 
-	area.height = 180;
-	area.width = 180;
+	area.height = SLIME_BOSS_WIDTH;
+	area.width = SLIME_BOSS_HEIGHT;
 
 	state = ENEMY_STATE::FALL;
 
@@ -66,6 +69,8 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 
 	wait_time = 0;
 	breath_time = 0;
+
+	slime_boss_image = LoadGraph("Images/Enemy/SlimeBoss3.png");
 }
 
 EnemySlimeBoss::~EnemySlimeBoss()
@@ -147,10 +152,6 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 				location.x = old_location.x;
 				left_move = !left_move;
 
-				state = ENEMY_STATE::FALL;
-				speed_y = 0;
-				slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
-				speed = 0;
 			}
 		}
 		else
@@ -241,7 +242,8 @@ void EnemySlimeBoss::Draw()const
 	}
 	DrawDamageLog();
 
-	DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
+	//DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
+	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, slime_boss_image, true, !left_move);
 
 	//DrawFormatString(0, 0, 0xffffff, "%d", slime_boss_jump_distance);
 
@@ -358,7 +360,6 @@ Location EnemySlimeBoss::GetLocation() const
 {
 	return location;
 }
-
 
 #ifdef _DEBUG
 //-----------------------------------

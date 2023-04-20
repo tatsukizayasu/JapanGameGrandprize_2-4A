@@ -9,6 +9,7 @@ class EnemySlimeBoss : public EnemyBase
 {
 private:
 
+	int slime_boss_image;
 	int slime_boss_jump_distance;
 	int speed_y;
 	int wait_time;
@@ -52,6 +53,7 @@ public:
 	Location GetLocation() const override;
 
 	void MagicBullet(const Location player_location);
+
 
 #ifdef _DEBUG
 	//çXêV(DotByDot)
