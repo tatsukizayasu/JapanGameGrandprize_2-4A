@@ -294,7 +294,7 @@ bool PolyLine::HitCheck(ColliderBase* collider)const
 {
 	bool is_hit = false;
 
-	int class_type = collider->GetName();
+	int class_type = collider->GetColliderType();
 	switch (class_type)
 	{
 	case (int)COLLIDER::DEFAULT:

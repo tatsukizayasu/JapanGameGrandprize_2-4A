@@ -19,7 +19,7 @@ ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider)
 	this->pivot = new SphereCollider(pivot);
 	image = LoadGraph("images/Stage/yuka_1.png");
 	
-	int class_type = p_collider->GetName();
+	int class_type = p_collider->GetColliderType();
 	switch (class_type)
 	{
 	case (int)COLLIDER::DEFAULT:

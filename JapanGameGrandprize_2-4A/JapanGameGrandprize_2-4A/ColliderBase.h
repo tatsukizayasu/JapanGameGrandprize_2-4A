@@ -81,7 +81,7 @@ public:
 
 	virtual void Draw()const {}
 
-	int GetName() { return collider_type; }
+	int GetColliderType() { return collider_type; }
 
 protected:
 

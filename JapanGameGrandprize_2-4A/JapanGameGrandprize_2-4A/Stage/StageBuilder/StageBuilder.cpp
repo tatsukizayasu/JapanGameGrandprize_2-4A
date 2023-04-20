@@ -341,7 +341,7 @@ void StageBuilder::UpdateModulation()
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			int collider_type = objects[i]->GetColllider()->GetName();
+			int collider_type = objects[i]->GetColllider()->GetColliderType();
 			if (collider_type == (int)COLLIDER::BOX)
 			{
 				BoxCollider* box
@@ -700,7 +700,7 @@ void StageBuilder::IsSelectedObject()
 
 	for (int i = 0; i < objects.size(); i++)
 	{
-		int collider_type = objects[i]->GetColllider()->GetName();
+		int collider_type = objects[i]->GetColllider()->GetColliderType();
 		//todo:名前から判断してstatic_castを使い、それぞれのクラス型に沿った処理をする
 
 		switch (collider_type)
@@ -1021,7 +1021,7 @@ void StageBuilder::SaveStage(char* stage_name)
 void StageBuilder::LoadStage(char* stage_name)
 {
 
-	string class_name;
+	int collider_type;
 
 	string str_conma_buf;
 	string line;
@@ -1038,15 +1038,15 @@ void StageBuilder::LoadStage(char* stage_name)
 		istringstream i_stringstream(line);
 
 		getline(i_stringstream, str_conma_buf, ',');
-		class_name = str_conma_buf;
+		collider_type = atoi(str_conma_buf.c_str());
 
-		if (class_name == "default")
+		if (collider_type == (int)COLLIDER::DEFAULT)
 		{
 			LoadMapChip(&i_stringstream);
 			continue;
 		}
 
-		if (class_name == "PolyLine")
+		if (collider_type == (int)COLLIDER::POLY_LINE)
 		{
 			LoadPolyLine(&i_stringstream);
 			continue;
@@ -1092,8 +1092,8 @@ void StageBuilder::SaveMapChips(FILE* fp)
 		//クラス名, x, y, image_handle
 		for (int i = 0; i < map_chips.size(); i++)
 		{
-			fprintf_s(fp, "%s,%lf,%lf,%d\n",
-				map_chips[i]->GetName(),
+			fprintf_s(fp, "%d,%lf,%lf,%d\n",
+				map_chips[i]->GetColliderType(),
 				map_chips[i]->GetLocation().x,
 				map_chips[i]->GetLocation().y,
 				0);
@@ -1110,7 +1110,7 @@ void StageBuilder::SavePolyLine(FILE* fp)
 	{
 		for (int i = 0; i < poly_lines.size(); i++)
 		{
-			fprintf_s(fp, "PolyLine");
+			fprintf_s(fp,"%d", (int)COLLIDER::POLY_LINE);
 			vector<SphereCollider*> points = poly_lines[i]->GetPoints();
 			fprintf_s(fp, ",%d", int(points.size()));
 
