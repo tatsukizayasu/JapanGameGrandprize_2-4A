@@ -270,6 +270,18 @@ void EnemyGhost::Move(const Location player_location)
 		}
 
 	}
+	else
+	{
+		if (left_move == true)
+		{
+			location.x -= speed;
+		}
+		else
+		{
+			location.x += speed;
+		}
+
+	}
 
 	if (magic_num > 5)
 	{
