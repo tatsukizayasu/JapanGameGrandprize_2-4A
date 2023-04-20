@@ -244,6 +244,15 @@ void Stage_Element::Update(Player* player)
 			y + h < camera.y || camera.y + draw.height < y) continue;
 
 		e->Update(player);
+
+		//TNTまたはアイテムドロップオブジェクトが壊れた際、nullptrを格納
+		if (e->GetType() == Element::TRAP || e->GetType() == Element::ITEM_DROP_OBJECT)
+		{
+			if (e->GetArea().height < 0 && e->GetArea().width < 0)
+			{
+				e = nullptr;
+			}
+		}
 	}
 }
 
