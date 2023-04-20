@@ -4,8 +4,8 @@
 #include "DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
-#define HARPY_SIZE_X 255
-#define HARPY_SIZE_Y 255
+#define HARPY_SIZE_X 150
+#define HARPY_SIZE_Y 150
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 300

@@ -5,14 +5,14 @@
 
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 80
-#define GHOST_SIZE_Y 85
+#define GHOST_SIZE_Y 88
 
 //プレイヤー発見距離
-#define DETECTION_DISTANCE 300
+#define DETECTION_DISTANCE 400
 #define DETECTION_DISTANCE_Y 200
 
 //物理攻撃範囲
-#define ATTACK_RANGE 100
+#define ATTACK_RANGE 200
 #define ATTACK_RANGE_Y 100
 
 //魔法攻撃した時の硬直時間
@@ -22,10 +22,10 @@
 #define PHYSICAL_STANDBY 100
 
 //移動スピード
-#define SPEED 1.5
+#define SPEED 1
 
 //攻撃スピード
-#define ATTACK_SPEED 4.5
+#define ATTACK_SPEED 2
 
 //ドロップ量(最小)
 #define GHOST_MIN_DROP 1
@@ -54,7 +54,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	range_y = 0;
 	animation = 5;
 	animation_time = 0;
-	magic_time = 1;
+	magic_time = 0;
 	magic_num = 0;
 	physical_time = 0;
 	hp = GHOST_HP;
@@ -70,11 +70,14 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	standby_time = 0;
 	physical_attack = false;
 	magic_attack = false;
+	close_attack = false;
+
 	kind = ENEMY_KIND::GHOST;
 
 	images = new int[7];
 	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, images); //通常
 	LoadDivGraph("Images/Enemy/ghostattack.png", 6, 6, 1, 60, 66, attack_image); //攻撃
+
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
 	drop_type_volume = WIND_DROP;
@@ -153,6 +156,26 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
 		AttackMove(player->GetLocation());
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
+
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if (hit_direction == STAGE_DIRECTION::BOTTOM || hit_direction == STAGE_DIRECTION::TOP)
+			{
+				location = old_location;
+				close_attack = false;
+				magic_num = 0;
+			}
+		}
 		break;
 	case ENEMY_STATE::DEATH:
 		Death();
@@ -167,14 +190,13 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
 		hit_direction = HitDirection(hit_stage.chip);
 
-		if (hit_direction == STAGE_DIRECTION::TOP)
+		if (hit_direction == STAGE_DIRECTION::TOP || hit_direction == STAGE_DIRECTION::BOTTOM)
 		{
 			location = old_location;
 		}
 		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 		{
 			location = old_location;
-			left_move = !left_move;
 		}
 	}
 
@@ -184,14 +206,16 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	}
 	UpdateDamageLog();
 
-	if (range > 5)
-	{
-		left_move = false;
-	}
-	else
+	//ゴーストの画像の向きを決める
+	if (location.x < old_location.x)
 	{
 		left_move = true;
 	}
+	else if (location.x > old_location.x)
+	{
+		left_move = false;
+	}
+
 
 }
 
@@ -217,12 +241,41 @@ void EnemyGhost::Move(const Location player_location)
 	vector = sqrt(range * range + range_y * range_y);
 
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE
-		&& range <= DETECTION_DISTANCE_Y && range >= -DETECTION_DISTANCE_Y)
+		&& range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
 	{
-		
+
+		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE
+			&& range_y <= ATTACK_RANGE_Y && range_y >= -ATTACK_RANGE_Y
+			|| close_attack == true)
+
+		{
+			state = ENEMY_STATE::ATTACK;
+			attack_state = GHOST_ATTACK::PHYSICAL_ATTACK;
+			standby_time = PHYSICAL_STANDBY;
+			physical_attack = true;
+		}
+		else
+		{
+			state = ENEMY_STATE::ATTACK;
+			attack_state = GHOST_ATTACK::MAGIC_ATTACK;
+			standby_time = MAGIC_STANDBY;
+			magic_attack = true;
+			if (++magic_time % 2 == 0)
+			{
+				++magic_num;
+				//弾の生成
+				BulletManager::GetInstance()->CreateEnemyBullet
+				(new GhostBullet(location, player_location));
+			}
+		}
+
 	}
 
-	
+	if (magic_num > 5)
+	{
+		close_attack = true;
+	}
+
 }
 
 //-----------------------------------
@@ -265,11 +318,11 @@ AttackResource EnemyGhost::Hit()
 
 	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK && (!attack))
 	{
-		attack = true;
-		ENEMY_TYPE attack_type[1] = { *type };
-		ret.damage = ATTACK_DAMAGE;
-		ret.type = attack_type;
-		ret.type_count = 1;
+		/*	attack = true;
+			ENEMY_TYPE attack_type[1] = { *type };
+			ret.damage = ATTACK_DAMAGE;
+			ret.type = attack_type;
+			ret.type_count = 1;*/
 	}
 
 	return ret;
@@ -329,8 +382,8 @@ void EnemyGhost::AttackMove(const Location player_location)
 
 		travel = range / vector;
 		travel_y = range_y / vector;
-		location.x += travel * speed;
-		location.y += travel_y * speed;
+		location.x += travel * ATTACK_SPEED;
+		location.y += travel_y * ATTACK_SPEED;
 	}
 
 }
