@@ -142,8 +142,10 @@ PolyLine::~PolyLine()
 	}
 	lines.clear();
 
+#ifdef _STAGE_BUILDER
 	vector_to_line.clear();
 	vector_to_bend_point.clear();
+#endif
 }
 
 //---------------------------------
