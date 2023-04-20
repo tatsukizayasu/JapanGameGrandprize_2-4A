@@ -3,6 +3,14 @@
 
 #define MAP_CHIP_SIZE 40.f
 
+namespace DIRECTION_ANGLE
+{
+	const double UP = 0.0;
+	const double RIGHT = 90.0;
+	const double DOWN = 180.0;
+	const double LEFT = 270.0;
+}
+
 class MapChip :
 	public BoxCollider
 {
@@ -41,4 +49,6 @@ protected:
 	int image;
 	Area image_size;
 	float ex_rate;
+	// Šp“x
+	double angle;
 };

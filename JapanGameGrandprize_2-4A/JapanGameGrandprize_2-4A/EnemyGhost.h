@@ -42,6 +42,7 @@ private:
 	bool magic_attack; //魔法攻撃
 	bool attack; //攻撃が当たったか
 	bool physical_attack; //物理攻撃に入る（true)なら
+	bool close_attack; //接近攻撃の続行
 	bool hit_ground; //地面との当たり判定
 	GHOST_STATE action_type; //行動パターン
 	GHOST_ATTACK attack_state; //攻撃状態

@@ -37,7 +37,7 @@ StageBuilder::StageBuilder()
 
 #ifdef _DEV
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 0; i++)
 	{
 		Location test[3] =
 		{
@@ -49,13 +49,16 @@ StageBuilder::StageBuilder()
 	}
 	Location testloc[4]{ {300,300},{500,500},{200,700} , {900,400} };
 	PolyLine testline(testloc, 4);
-	poly_lines.push_back(new PolyLine (testloc, 4));
+	//poly_lines.push_back(new PolyLine(testloc, 4));
 
 	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
 
 	BoxCollider box = BoxCollider({ 640,360 }, { 100,100 });
 
-	objects.push_back(new ObjectBase({ 640,460 }, &box));
+	objects.push_back(new ObjectBase({ 640,460 }, &testline));
+
+
+	Location mouse_line_loc[4]{ {0,0},{100,0},{150,100} , {200,100} };
 
 
 #endif // _DEV
@@ -144,8 +147,6 @@ void StageBuilder::Update()
 #ifdef _DEV
 
 
-
-
 #endif // _DEV
 }
 
@@ -184,19 +185,11 @@ void StageBuilder::Draw()const
 #ifdef _DEV
 
 
-	for (int i = 0; i < poly_lines.size(); i++)
-	{
-		if (poly_lines[i]->HitSphere(mouse))
-		{
-			DrawString(640, 300, "hit", 0);
-		}
-	}
-
 	for (int i = 0; i < objects.size(); i++)
 	{
-		if (objects[i]->HitSphere(mouse))
+		if (mouse->HitCheck(objects[i]->GetColllider()))
 		{
-			DrawString(640, 300, "hit", 0);
+			DrawString(640, 300, "hit", 0xFFFFFF);
 		}
 	}
 
@@ -348,14 +341,25 @@ void StageBuilder::UpdateModulation()
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			BoxCollider* box
-				= dynamic_cast<BoxCollider*>(objects[i]->GetColllider());
-			if (box != nullptr)
+			int collider_type = objects[i]->GetColllider()->GetColliderType();
+			if (collider_type == (int)COLLIDER::BOX)
 			{
+				BoxCollider* box
+					= static_cast<BoxCollider*>(objects[i]->GetColllider());
+
 				box->UpdatePos();
+				objects[i]->UpdateColliderPos();
 			}
 
-			objects[i]->UpdateColliderPos();
+			if (collider_type == (int)COLLIDER::POLY_LINE)
+			{
+				PolyLine* poly_line
+					= static_cast<PolyLine*>(objects[i]->GetColllider());
+
+				objects[i]->UpdateColliderPos();
+				poly_line->Update();
+			}
+
 		}
 	}
 }
@@ -696,7 +700,7 @@ void StageBuilder::IsSelectedObject()
 
 	for (int i = 0; i < objects.size(); i++)
 	{
-		int collider_type = objects[i]->GetColllider()->GetName();
+		int collider_type = objects[i]->GetColllider()->GetColliderType();
 		//todo:名前から判断してstatic_castを使い、それぞれのクラス型に沿った処理をする
 
 		switch (collider_type)
@@ -1017,7 +1021,7 @@ void StageBuilder::SaveStage(char* stage_name)
 void StageBuilder::LoadStage(char* stage_name)
 {
 
-	string class_name;
+	int collider_type;
 
 	string str_conma_buf;
 	string line;
@@ -1034,15 +1038,15 @@ void StageBuilder::LoadStage(char* stage_name)
 		istringstream i_stringstream(line);
 
 		getline(i_stringstream, str_conma_buf, ',');
-		class_name = str_conma_buf;
+		collider_type = atoi(str_conma_buf.c_str());
 
-		if (class_name == "default")
+		if (collider_type == (int)COLLIDER::DEFAULT)
 		{
 			LoadMapChip(&i_stringstream);
 			continue;
 		}
 
-		if (class_name == "PolyLine")
+		if (collider_type == (int)COLLIDER::POLY_LINE)
 		{
 			LoadPolyLine(&i_stringstream);
 			continue;
@@ -1088,8 +1092,8 @@ void StageBuilder::SaveMapChips(FILE* fp)
 		//クラス名, x, y, image_handle
 		for (int i = 0; i < map_chips.size(); i++)
 		{
-			fprintf_s(fp, "%s,%lf,%lf,%d\n",
-				map_chips[i]->GetName(),
+			fprintf_s(fp, "%d,%lf,%lf,%d\n",
+				map_chips[i]->GetColliderType(),
 				map_chips[i]->GetLocation().x,
 				map_chips[i]->GetLocation().y,
 				0);
@@ -1106,7 +1110,7 @@ void StageBuilder::SavePolyLine(FILE* fp)
 	{
 		for (int i = 0; i < poly_lines.size(); i++)
 		{
-			fprintf_s(fp, "PolyLine");
+			fprintf_s(fp,"%d", (int)COLLIDER::POLY_LINE);
 			vector<SphereCollider*> points = poly_lines[i]->GetPoints();
 			fprintf_s(fp, ",%d", int(points.size()));
 

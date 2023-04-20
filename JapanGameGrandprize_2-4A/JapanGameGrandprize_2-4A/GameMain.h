@@ -19,6 +19,9 @@ private:
     Stage* stage;
     CameraWork* camera_work;
     EnemyBase** enemy; //敵
+
+    //ボスがスポーンしたかのフラグ
+    bool is_spawn_boss;
 #ifdef _DEBUG
 
 #else

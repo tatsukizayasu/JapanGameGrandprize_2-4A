@@ -4,21 +4,18 @@
 #include"CameraWork.h"
 #include"SlimeBossBullet.h"
 
-enum class MOVE_STATE
-{
-	MOVE,
-	WALL_MOVE
-};
 
 class EnemySlimeBoss : public EnemyBase
 {
 private:
 
-	MOVE_STATE move_state;
+	int slime_boss_image;
 	int slime_boss_jump_distance;
 	int speed_y;
 	int wait_time;
 	int breath_time;
+
+	ENEMY_STATE now_state;
 
 #ifdef _DEBUG
 	ENEMY_STATE old_state; //àÍÇ¬ëOÇÃèÛë‘
@@ -58,6 +55,7 @@ public:
 	Location GetLocation() const override;
 
 	void MagicBullet(const Location player_location);
+
 
 #ifdef _DEBUG
 	//çXêV(DotByDot)
