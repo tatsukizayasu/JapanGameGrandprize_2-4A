@@ -24,11 +24,11 @@ Element_Trap::Element_Trap(short type,
 
 Element_Trap::~Element_Trap()
 {
-
-	for (int& image : images) 
+	image = 0;
+	/*for (int& image : images) 
 	{
 		DeleteGraph(image);
-	}
+	}*/
 }
 
 void Element_Trap::Update(Player* player)

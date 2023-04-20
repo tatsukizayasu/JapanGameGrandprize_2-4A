@@ -34,10 +34,11 @@ Element_Item_Drop_Object::~Element_Item_Drop_Object()
 	element_item.clear();
 	element_item.shrink_to_fit();
 
-	for (int& image : images)
+	image = 0;
+	/*for (int& image : images)
 	{
 		DeleteGraph(image);
-	}
+	}*/
 }
 
 void Element_Item_Drop_Object::Update(Player* player)
@@ -95,7 +96,7 @@ void Element_Item_Drop_Object::Update(Player* player)
 void Element_Item_Drop_Object::Draw()const
 {
 	//‰æ‘œ‚ª‚È‚¢–”‚ÍƒGƒ‰[‚Ìê‡‚Í•`‰æ‚µ‚È‚¢
-	//if (image == 0) { return; }
+	if (image == 0) { return; }
 
 	if (state == STATE::NONE)
 	{
