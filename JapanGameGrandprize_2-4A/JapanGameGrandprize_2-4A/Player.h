@@ -14,8 +14,8 @@
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100.f
-#define HP_BAR_WIDTH 500
-#define HP_BAR_HEIGHT 50
+#define HP_BAR_WIDTH 530
+#define HP_BAR_HEIGHT 31
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
 
@@ -44,6 +44,7 @@ private:
 	int animation;					//画像アニメーション用
 	int image_count;				//画像の要素数用
 	int* image;						//画像用変数
+	int hp_image;
 	int image_size_x, image_size_y; //画像のサイズ
 	int hp;							//体力
 	int bullet_count;				//撃った弾の数
