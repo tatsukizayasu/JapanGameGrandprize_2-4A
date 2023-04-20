@@ -23,8 +23,8 @@ MageBullet::MageBullet(const ENEMY_TYPE type,
 	damage = MAGE_BULLET_DAMAGE;
 	float radian; //Šp“x
 	radian = atan2f((player_location.y - 10) - location.y, player_location.x - location.x);
-	x_speed = speed * cosf(radian);
-	y_speed = speed * sinf(radian);
+	x_speed = static_cast<int>(speed * cosf(radian));
+	y_speed = static_cast<int>(speed * sinf(radian));
 }
 
 //-----------------------------------

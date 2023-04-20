@@ -52,6 +52,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 
 	case ITEM_DROP_OBJECT:
 		element.push_back(std::make_shared<Element_Item_Drop_Object>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
+		break;
 
 	case TRAP:
 		element.push_back(std::make_shared<Element_Trap>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
@@ -243,6 +244,15 @@ void Stage_Element::Update(Player* player)
 			y + h < camera.y || camera.y + draw.height < y) continue;
 
 		e->Update(player);
+
+		//TNTまたはアイテムドロップオブジェクトが壊れた際、nullptrを格納
+		if (e->GetType() == Element::TRAP || e->GetType() == Element::ITEM_DROP_OBJECT)
+		{
+			if (e->GetArea().height < 0 && e->GetArea().width < 0)
+			{
+				e = nullptr;
+			}
+		}
 	}
 }
 
@@ -309,7 +319,7 @@ std::vector<int> Stage_Element::GetImage(short type)
 		break;
 
 	case ITEM_DROP_OBJECT:
-		filename = "Move_Floor.png";
+		filename = "TRAP.png";
 		break;
 
 	case TRAP:

@@ -14,6 +14,8 @@ Element_Trap::Element_Trap(short type,
 	this->area = area;
 	this->type = type;
 	
+	//ƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è‚ð–³Œø‰»
+	margin_area = { 1000.0f,1000.0f };
 
 	this->images = images;
 
@@ -22,11 +24,11 @@ Element_Trap::Element_Trap(short type,
 
 Element_Trap::~Element_Trap()
 {
-
-	for (int& image : images) 
+	image = 0;
+	/*for (int& image : images) 
 	{
 		DeleteGraph(image);
-	}
+	}*/
 }
 
 void Element_Trap::Update(Player* player)

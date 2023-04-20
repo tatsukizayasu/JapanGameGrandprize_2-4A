@@ -31,6 +31,10 @@ private:
 	int effect_time; //毒のダメージを等間隔で出すための時間測定
 	int standby_time; //待機時間測定
 	int animation_time; //	画像切り替え間隔
+	int fall_speed; //落下速度
+	int ascent_time; //上昇時間
+	int fly_tim; //ゲーム内のカウント
+	int fly_num; //飛び続ける時間
 	
 	float old_x; //目標地点
 	float old_y; //目的地点
@@ -69,9 +73,6 @@ public:
 	//接近攻撃（噛みつき）時の動き
 	void DiteMove(const Location player_location);
 
-	//接近攻撃（尻尾攻撃）時の動き
-	void TailMove(const Location player_location);
-
 	//遠距離攻撃（ブレス）時の動き
 	void DreathMove(const Location player_location);
 
@@ -80,6 +81,9 @@ public:
 
 	//落下
 	void Fall() override;
+
+	//飛ぶ
+	void Fly();
 
 	//攻撃
 	void  Attack(const Location player_location) override;

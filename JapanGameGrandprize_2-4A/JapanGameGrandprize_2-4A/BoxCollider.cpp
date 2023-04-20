@@ -10,6 +10,8 @@
  BoxCollider::BoxCollider()
 {
 	 collider_type = (int)COLLIDER::BOX;
+	 area = { 0.0f,0.0f };
+	 margin_area = { 0.0f,0.0f };
 }
 
 //-----------------------------------
@@ -19,6 +21,7 @@
  {
 	 collider_type = (int)COLLIDER::BOX;
 	 this->area = area;
+	 margin_area = { 0.0f,0.0f };
 
 #ifdef _STAGE_BUILDER
 	 pivot.SetLocation(location);
@@ -118,7 +121,8 @@ bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 
 	bool ret = false; //•Ô‚è’l
 
-	
+	//“–‚½‚è”»’è”ÍˆÍ‚ÌŒë·C³
+	Area margin_area = { box_collider->margin_area.height, box_collider->margin_area.width };
 
 	//Ž©•ª‚Ì“–‚½‚è”»’è‚Ì”ÍˆÍ
 	float my_x[2];
@@ -140,8 +144,8 @@ bool BoxCollider::HitBox(const BoxCollider* box_collider) const
 	sub_x[1] = sub_x[0] + box_collider->GetArea().width;
 	sub_y[1] = sub_y[0] + box_collider->GetArea().height;
 
-	if ((my_x[0] <= sub_x[1]) && (sub_x[0] <= my_x[1])
-		    && (my_y[0] <= sub_y[1]) && (sub_y[0] <= my_y[1])) //“–‚½‚è”»’è
+	if ((my_x[0] <= sub_x[1] + margin_area.width) && (sub_x[0] + margin_area.width <= my_x[1])
+		&& (my_y[0] <= sub_y[1] + margin_area.height) && (sub_y[0] + margin_area.height <= my_y[1])) //“–‚½‚è”»’è
 	{
 		ret = true;
 	}

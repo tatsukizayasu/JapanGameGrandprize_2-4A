@@ -1,27 +1,19 @@
 #pragma once
 
-enum class MOVE_STATE
-{
-	MOVE,
-	WALL_MOVE
-};
-
-#define BODY_MAX 30
-#define DATA 100
-
 #include"EnemyBase.h"
-#include"SlimeBossBody.h"
+#include"CameraWork.h"
+#include"SlimeBossBullet.h"
+
 
 class EnemySlimeBoss : public EnemyBase
 {
 private:
 
-	Location location_data[DATA];
-	ENEMY_STATE state;
-	MOVE_STATE move_state;
-	SlimeBossBody* slime_boss_body[BODY_MAX];
+	int slime_boss_image;
 	int slime_boss_jump_distance;
 	int speed_y;
+	int wait_time;
+	int breath_time;
 
 #ifdef _DEBUG
 	ENEMY_STATE old_state; //一つ前の状態
@@ -57,10 +49,11 @@ public:
 
 	virtual void HitBullet(const BulletBase* bullet)override;
 
-	bool HitSphere(const class SphereCollider* sphere_collider) const override;
-
 	//座標の取得
 	Location GetLocation() const override;
+
+	void MagicBullet(const Location player_location);
+
 
 #ifdef _DEBUG
 	//更新(DotByDot)

@@ -9,6 +9,7 @@
 #define ANIMATION_MOVE 10
 #define CHEMICAL_FORMURA_DRAW_X 50
 #define CHEMICAL_FORMURA_DRAW_Y 150
+#define PLAYER_SIZE 0.32
 
 //-----------------------------------
 // コンストラクタ
@@ -257,18 +258,24 @@ void Player::Draw() const
 	//HPバーの表示ここから
 	if (hp >= 50)
 	{
-		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, GREEN, TRUE);
+		DrawBoxAA(80, 600, now_hp - 1, 600 + HP_BAR_HEIGHT, GREEN, TRUE);
 	}
 	else if (hp >= 20)
 	{
-		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, YELLOW, TRUE);
+		DrawBoxAA(80, 600, now_hp - 1, 600 + HP_BAR_HEIGHT, YELLOW, TRUE);
 	}
 	else
 	{
-		DrawBoxAA(10, 50, now_hp - 1, 50 + HP_BAR_HEIGHT, RED, TRUE);
+		DrawBoxAA(80, 600, now_hp - 1, 600 + HP_BAR_HEIGHT, RED, TRUE);
 	}
-	DrawBox(10, 50, HP_BAR_WIDTH - 1, 50 + HP_BAR_HEIGHT, 0x000000, FALSE);
+	DrawBox(80, 600, HP_BAR_WIDTH - 1, 600 + HP_BAR_HEIGHT, 0x000000, FALSE);
 	//ここまで
+
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		DrawFormatString(80 + (40 * i), 670, 0xffffff, "%d", element[i]->GetVolume());
+	}
+
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -284,19 +291,19 @@ void Player::Draw() const
 		if (flashing_count < 5)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
-			DrawRotaGraphF(x, y, 0.5, 0, image[image_count], TRUE, move_left);
+			DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
 
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
 		else if (flashing_count < 10)
 		{
-			DrawRotaGraphF(x, y, 0.5, 0, image[image_count], TRUE, move_left);
+			DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
 		}
 		else {}
 	}
 	else
 	{
-		DrawRotaGraphF(x, y, 0.5, 0, image[image_count], TRUE, move_left);
+		DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
 	}
 
 	SetFontSize(30);
@@ -447,8 +454,6 @@ void Player::Update()
 
 	if (fire_flg)
 	{
-		if (!damage_flg)
-		{
 			if (++damage_count % 60 == 0)
 			{
 				if (!fire_second_bool)
@@ -476,7 +481,7 @@ void Player::Update()
 				damage_time = 0;
 				damage_count = 0;
 			}
-		}
+		
 	}
 
 
@@ -1414,7 +1419,7 @@ void Player::Update(const PLAYER_STATE state)
 //-----------------------------------
 void Player::DebugDraw()
 {
-	DrawRotaGraphF(location.x, location.y, 0.5, 0, image[image_count], TRUE,TRUE);
+	DrawRotaGraphF(location.x, location.y, PLAYER_SIZE, 0, image[image_count], TRUE,TRUE);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

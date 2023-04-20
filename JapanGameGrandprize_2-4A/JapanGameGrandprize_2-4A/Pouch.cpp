@@ -8,6 +8,12 @@
 
 #define STRING_DISTANCE 100
 
+#define EXPLOSION_NUM 0
+#define MELT_NUM 1
+#define POISON_NUM 2
+#define PARARYSIS_NUM 3
+#define HEAL_NUM 4
+
 #define OPTION_ZERO OPTION_ONE - STRING_DISTANCE
 #define OPTION_ONE 140
 #define OPTION_TWO OPTION_ONE + STRING_DISTANCE
@@ -22,15 +28,27 @@ Pouch::Pouch()
 	x = 1080;
 	y = 100;
 	cursol = 0;
+	for (int i = 0; i < 5; i++)
+	{
+		each_cursor[i] = 0;
+		each_page[i] = 0;
+	}
 	count = 0;
 	page = 0;
 	move_string = 0;
+	page_jump_count = 0;
 	on_bool = false;
 	move_up = false;
 	move_down = false;
 	tab = ATTRIBUTE::EXPLOSION;
 	second_tab_image = LoadGraph("Images/ItemTab/setumei.png");
 	elemental_count = LoadGraph("Images/ItemTab/P_kazu.png");
+	int images_init[POISON_MAX_NUM];
+	LoadDivGraph("Images/ItemTab/Secret_FILE/explosion.png", 13, 1, 13, 350, 23, images_init);
+	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
+	{
+		chemical_formula_explosion[i].name_image = images_init[i];
+	}
 
 	//元素の初期化
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
@@ -68,662 +86,158 @@ Pouch::~Pouch()
 //爆発
 void Pouch::ExplosionTabDraw() const
 {
-	/*
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + POUCH_HEIGHT, 0x00aaaa, TRUE);
-	bool can_create[3];
-	int roop_body = cursol - 1;
-
-	for (int i = 0; i < 3; i++)
-	{
-		if (ComparisonElement(chemical_formula_explosion[roop_body++]))
-		{
-			can_create[i] = true;
-		}
-		else
-		{
-			can_create[i] = false;
-		}
-	}
-
-
-
-	if (cursol - 1 < 0)
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_explosion[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_explosion[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_explosion[cursol - 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_explosion[cursol - 1].chemical_formula_name);
-		}
-	}
-
-	if (cursol + 1 > EXPLOSION_MAX_NUM - 1)
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_explosion[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_explosion[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_explosion[cursol + 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xfffffff, "%s", chemical_formula_explosion[cursol + 1].chemical_formula_name);
-		}
-	}
-
-	DrawBox(POUCH_START_X, POUCH_START_Y + 200, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + 300, 0xffffff, FALSE);
-
-	if (can_create[1])
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0x000000, "%s", chemical_formula_explosion[cursol].chemical_formula_name);
-	}
-	else
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0xffffff, "%s", chemical_formula_explosion[cursol].chemical_formula_name);
-	}
-
-	if (move_up)
-	{
-		int up_cursol;
-		if (cursol - 2 < 0)
-		{
-			up_cursol = (cursol - 2) + (EXPLOSION_MAX_NUM);
-		}
-		else
-		{
-			up_cursol = cursol - 2;
-		}
-
-		if (ComparisonElement(chemical_formula_explosion[up_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s", chemical_formula_explosion[up_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0xffffff, "%s", chemical_formula_explosion[up_cursol].chemical_formula_name);
-		}
-	}
-
-	if (move_down)
-	{
-		int down_cursol;
-		if (cursol + 2 > EXPLOSION_MAX_NUM - 1)
-		{
-			down_cursol = (cursol + 2) - (EXPLOSION_MAX_NUM);
-		}
-		else
-		{
-			down_cursol = cursol + 2;
-		}
-		if (ComparisonElement(chemical_formula_explosion[down_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0x000000, "%s", chemical_formula_explosion[down_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0xffffff, "%s", chemical_formula_explosion[down_cursol].chemical_formula_name);
-		}
-	}
-
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
-	DrawString(POUCH_START_X, POUCH_START_Y + 50, "EXPLOSION", 0x000000);
-	*/
 	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
-	DrawFormatString(x - 200, y - 30, 0x000000, "%s", chemical_formula_explosion[cursol].chemical_formula_name);
-	DrawFormatString(x - 200, y, 0x000000, "%s", chemical_formula_explosion[cursol].chemical_formula);
-	DrawFormatString(x - 70, y + 30, 0x000000, "%d", chemical_formula_explosion[cursol].number_of_bullets);
-	DrawFormatString(x - 70, y + 60, 0x000000, "%d", chemical_formula_explosion[cursol].damage);
+	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_explosion[cursol].chemical_formula);
+	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_explosion[cursol].number_of_bullets);
+	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_explosion[cursol].damage);
 
-	
+
 
 	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
 	if (page == 0)
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			DrawFormatString(x, y + (30 * i), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
 		}
 	}
 	if (page == 1)
 	{
 		for (int i = 9, j = 0; i < EXPLOSION_MAX_NUM; i++, j++)
 		{
-			DrawFormatString(x, y + (30 * j), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
 		}
 	}
 
+
 	ElementDraw(chemical_formula_explosion[cursol]);
 
-	DrawBox(x, y + move_string, x + POUCH_WIDTH, y + move_string + 30, 0xff00ff, FALSE);
+	DrawString(x, y, "EXPLOSION", 0xaa5500);
+
+
+	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 }
 
 //溶解
 void Pouch::MeltTabDraw() const
 {
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + POUCH_HEIGHT, 0x00aaaa, TRUE);
+	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
+	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_melt[cursol].chemical_formula);
+	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_melt[cursol].number_of_bullets);
+	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_melt[cursol].damage);
 
-	bool can_create[3];
-	int roop_body = cursol - 1;
 
-	for (int i = 0; i < 3; i++)
+
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
+	if (page == 0)
 	{
-		if (ComparisonElement(chemical_formula_melt[roop_body++]))
+		for (int i = 0; i < 9; i++)
 		{
-			can_create[i] = true;
+			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_melt[i].chemical_formula_name);
 		}
-		else
+	}
+	if (page == 1)
+	{
+		for (int i = 9, j = 0; i < MELT_MAX_NUM; i++, j++)
 		{
-			can_create[i] = false;
+			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_melt[i].chemical_formula_name);
 		}
 	}
 
-	if (cursol - 1 < 0)
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_melt[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_melt[cursol + (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_melt[cursol - 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_melt[cursol - 1].chemical_formula_name);
-		}
-	}
 
-	if (cursol + 1 > MELT_MAX_NUM - 1)
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_melt[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_melt[cursol - (EXPLOSION_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_melt[cursol + 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xfffffff, "%s", chemical_formula_melt[cursol + 1].chemical_formula_name);
-		}
-	}
+	ElementDraw(chemical_formula_melt[cursol]);
 
-	DrawBox(POUCH_START_X, POUCH_START_Y + 200, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + 300, 0xffffff, FALSE);
-
-	if (can_create[1])
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0x000000, "%s", chemical_formula_melt[cursol].chemical_formula_name);
-	}
-	else
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0xffffff, "%s", chemical_formula_melt[cursol].chemical_formula_name);
-	}
-
-	if (move_up)
-	{
-		int up_cursol;
-		if (cursol - 2 < 0)
-		{
-			up_cursol = (cursol - 2) + (MELT_MAX_NUM);
-		}
-		else
-		{
-			up_cursol = cursol - 2;
-		}
-		if (ComparisonElement(chemical_formula_melt[up_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s", chemical_formula_melt[up_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0xffffff, "%s", chemical_formula_melt[up_cursol].chemical_formula_name);
-		}
-	}
-
-	if (move_down)
-	{
-		int down_cursol;
-		if (cursol + 2 > MELT_MAX_NUM - 1)
-		{
-			down_cursol = (cursol + 2) - (MELT_MAX_NUM);
-		}
-		else
-		{
-			down_cursol = cursol + 2;
-		}
-		if (ComparisonElement(chemical_formula_melt[down_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0x000000, "%s", chemical_formula_melt[down_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0xffffff, "%s", chemical_formula_melt[down_cursol].chemical_formula_name);
-		}
-	}
-
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
+	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "MELT", 0x000000);
 }
 
 //麻痺
 void Pouch::ParalysisTabDraw()const
 {
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + POUCH_HEIGHT, 0x00aaaa, TRUE);
+	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
+	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_pararysis[cursol].chemical_formula);
+	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_pararysis[cursol].number_of_bullets);
+	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_pararysis[cursol].damage);
 
-	bool can_create[3];
-	int roop_body = cursol - 1;
 
-	for (int i = 0; i < 3; i++)
+
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
+	if (page == 0)
 	{
-		if (ComparisonElement(chemical_formula_pararysis[roop_body++]))
+		for (int i = 0; i < 9; i++)
 		{
-			can_create[i] = true;
+			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_pararysis[i].chemical_formula_name);
 		}
-		else
+	}
+	if (page == 1)
+	{
+		for (int i = 9, j = 0; i < PARARYSIS_MAX_NUM; i++, j++)
 		{
-			can_create[i] = false;
+			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_pararysis[i].chemical_formula_name);
 		}
 	}
 
-	if (cursol - 1 < 0)
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol + (PARARYSIS_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol + (PARARYSIS_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol - 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol - 1].chemical_formula_name);
-		}
-	}
 
-	if (cursol + 1 > PARARYSIS_MAX_NUM - 1)
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol - (PARARYSIS_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol - (PARARYSIS_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol + 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xfffffff, "%s", chemical_formula_pararysis[cursol + 1].chemical_formula_name);
-		}
-	}
+	ElementDraw(chemical_formula_pararysis[cursol]);
 
-	DrawBox(POUCH_START_X, POUCH_START_Y + 200, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + 300, 0xffffff, FALSE);
-
-	if (can_create[1])
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0x000000, "%s", chemical_formula_pararysis[cursol].chemical_formula_name);
-	}
-	else
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0xffffff, "%s", chemical_formula_pararysis[cursol].chemical_formula_name);
-	}
-
-	if (move_up)
-	{
-		int up_cursol;
-		if (cursol - 2 < 0)
-		{
-			up_cursol = (cursol - 2) + (PARARYSIS_MAX_NUM);
-		}
-		else
-		{
-			up_cursol = cursol - 2;
-		}
-
-		if (ComparisonElement(chemical_formula_pararysis[up_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s", chemical_formula_pararysis[up_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0xffffff, "%s", chemical_formula_pararysis[up_cursol].chemical_formula_name);
-		}
-	}
-
-	if (move_down)
-	{
-		int down_cursol;
-		if (cursol + 2 > PARARYSIS_MAX_NUM - 1)
-		{
-			down_cursol = (cursol + 2) - (PARARYSIS_MAX_NUM);
-		}
-		else
-		{
-			down_cursol = cursol + 2;
-		}
-		if (ComparisonElement(chemical_formula_pararysis[down_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0x000000, "%s", chemical_formula_pararysis[down_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0xffffff, "%s", chemical_formula_pararysis[down_cursol].chemical_formula_name);
-		}
-	}
-
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
+	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "PARARYSIS", 0x000000);
 }
 
 //毒
 void Pouch::PoisonTabDraw()const
 {
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + POUCH_HEIGHT, 0x00aaaa, TRUE);
+	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
+	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_poison[cursol].chemical_formula);
+	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_poison[cursol].number_of_bullets);
+	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_poison[cursol].damage);
 
-	bool can_create[3];
-	int roop_body = cursol - 1;
 
-	for (int i = 0; i < 3; i++)
+
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
+	if (page == 0)
 	{
-		if (ComparisonElement(chemical_formula_poison[roop_body++]))
+		for (int i = 0; i < 9; i++)
 		{
-			can_create[i] = true;
+			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_poison[i].chemical_formula_name);
 		}
-		else
+	}
+	if (page == 1)
+	{
+		for (int i = 9, j = 0; i < POISON_MAX_NUM; i++, j++)
 		{
-			can_create[i] = false;
+			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_poison[i].chemical_formula_name);
 		}
 	}
 
-	if (cursol - 1 < 0)
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_poison[cursol + (POISON_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_poison[cursol + (POISON_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s", chemical_formula_poison[cursol - 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s", chemical_formula_poison[cursol - 1].chemical_formula_name);
-		}
-	}
 
-	if (cursol + 1 > POISON_MAX_NUM - 1)
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_poison[cursol - (POISON_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s", chemical_formula_poison[cursol - (POISON_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s", chemical_formula_poison[cursol + 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xfffffff, "%s", chemical_formula_poison[cursol + 1].chemical_formula_name);
-		}
-	}
+	ElementDraw(chemical_formula_poison[cursol]);
 
-	DrawBox(POUCH_START_X, POUCH_START_Y + 200, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + 300, 0xffffff, FALSE);
-
-	if (can_create[1])
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0x000000, "%s", chemical_formula_poison[cursol].chemical_formula_name);
-	}
-	else
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0xffffff, "%s", chemical_formula_poison[cursol].chemical_formula_name);
-	}
-
-	if (move_up)
-	{
-		int up_cursol;
-		if (cursol - 2 < 0)
-		{
-			up_cursol = (cursol - 2) + (POISON_MAX_NUM);
-		}
-		else
-		{
-			up_cursol = cursol - 2;
-		}
-		if (ComparisonElement(chemical_formula_poison[up_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s", chemical_formula_poison[up_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0xffffff, "%s", chemical_formula_poison[up_cursol].chemical_formula_name);
-		}
-	}
-
-	if (move_down)
-	{
-		int down_cursol;
-		if (cursol + 2 > POISON_MAX_NUM - 1)
-		{
-			down_cursol = (cursol + 2) - (POISON_MAX_NUM);
-		}
-		else
-		{
-			down_cursol = cursol + 2;
-		}
-		if (ComparisonElement(chemical_formula_poison[down_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0x000000, "%s", chemical_formula_poison[down_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0xffffff, "%s", chemical_formula_poison[down_cursol].chemical_formula_name);
-		}
-	}
-
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
+	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "POISON", 0x000000);
 }
 //回復
 void Pouch::HealTabDraw()const
 {
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + POUCH_HEIGHT, 0x00aaaa, TRUE);
+	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
+	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_heal[cursol].chemical_formula);
+	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_heal[cursol].number_of_bullets);
+	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_heal[cursol].damage);
 
-	bool can_create[3];
-	int roop_body = cursol - 1;
 
-	for (int i = 0; i < 3; i++)
-	{
-		if (ComparisonElement(chemical_formula_heal[roop_body++]))
-		{
-			can_create[i] = true;
-		}
-		else
-		{
-			can_create[i] = false;
-		}
-	}
 
-	if (cursol - 1 < 0)
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s",
-				chemical_formula_heal[cursol + (HEAL_MAX_NUM - 1)].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s",
-				chemical_formula_heal[cursol + (HEAL_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[1])
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0x000000, "%s",
-				chemical_formula_heal[cursol - 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ONE + move_string, 0xffffff, "%s",
-				chemical_formula_heal[cursol - 1].chemical_formula_name);
-		}
-	}
+	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
 
-	if (cursol + 1 > HEAL_MAX_NUM - 1)
-	{
-		if (can_create[2])
+		for (int i = 0; i < HEAL_MAX_NUM; i++)
 		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s",
-				chemical_formula_heal[cursol - (HEAL_MAX_NUM - 1)].chemical_formula_name);
+			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_heal[i].chemical_formula_name);
 		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xffffff, "%s",
-				chemical_formula_heal[cursol - (HEAL_MAX_NUM - 1)].chemical_formula_name);
-		}
-	}
-	else
-	{
-		if (can_create[2])
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0x000000, "%s",
-				chemical_formula_heal[cursol + 1].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_THREE + move_string, 0xfffffff, "%s",
-				chemical_formula_heal[cursol + 1].chemical_formula_name);
-		}
-	}
 
-	DrawBox(POUCH_START_X, POUCH_START_Y + 200, POUCH_START_X + POUCH_WIDTH,
-		POUCH_START_Y + 300, 0xffffff, FALSE);
 
-	if (can_create[1])
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0x000000, "%s",
-			chemical_formula_heal[cursol].chemical_formula_name);
-	}
-	else
-	{
-		DrawFormatString(x, y + OPTION_TWO + move_string, 0xffffff, "%s",
-			chemical_formula_heal[cursol].chemical_formula_name);
-	}
 
-	if (move_up)
-	{
-		int up_cursol;
-		if (cursol - 2 < 0)
-		{
-			up_cursol = (cursol - 2) + (HEAL_MAX_NUM);
-		}
-		else
-		{
-			up_cursol = cursol - 2;
-		}
-		if (ComparisonElement(chemical_formula_heal[up_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0x000000, "%s",
-				chemical_formula_heal[up_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_ZERO + move_string, 0xffffff, "%s",
-				chemical_formula_heal[up_cursol].chemical_formula_name);
-		}
-	}
+	ElementDraw(chemical_formula_heal[cursol]);
 
-	if (move_down)
-	{
-		int down_cursol;
-		if (cursol + 2 > HEAL_MAX_NUM - 1)
-		{
-			down_cursol = (cursol + 2) - (HEAL_MAX_NUM);
-		}
-		else
-		{
-			down_cursol = cursol + 2;
-		}
-		if (ComparisonElement(chemical_formula_heal[down_cursol]))
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0x000000, "%s",
-				chemical_formula_heal[down_cursol].chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(x, y + OPTION_FOUR + move_string, 0xffffff, "%s",
-				chemical_formula_heal[down_cursol].chemical_formula_name);
-		}
-	}
-
-	DrawBox(POUCH_START_X, POUCH_START_Y, POUCH_START_X + POUCH_WIDTH,
-		POUCH_START_Y + STRING_DISTANCE, 0xaaaaaa, TRUE);
+	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "HEAL", 0x000000);
 }
 
@@ -774,9 +288,19 @@ void Pouch::Draw() const
 void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 {
 	int i = 0;
-	int a = element[i]->GetVolume() - bring.material.carbon;
 	DrawFormatString(x - 180, y + 220, 0xffffff, "%d    %d",
-		element[i]->GetVolume(), a);
+		element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume() - bring.material.carbon);
+	DrawFormatString(x - 180, y + 250 + (30 * i), 0xffffff, "%d    %d",
+		element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume() - bring.material.hydrogen);
+	DrawFormatString(x - 180, y + 280 + (30 * i), 0xffffff, "%d    %d",
+		element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume() - bring.material.nitrogen);
+	DrawFormatString(x - 180, y + 310 + (30 * i), 0xffffff, "%d    %d",
+		element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume() - bring.material.oxygen);
+	DrawFormatString(x - 180, y + 340 + (30 * i), 0xffffff, "%d    %d",
+		element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume() - bring.material.sulfur);
+	DrawFormatString(x - 180, y + 370 + (30 * i), 0xffffff, "%d    %d",
+		element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume() - bring.material.chlorine);
+
 }
 
 //アップデート
@@ -784,57 +308,109 @@ void Pouch::Update()
 {
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		cursol = 0;
 		move_down = false;
 		move_up = false;
-		move_string = 0;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
+			each_cursor[EXPLOSION_NUM] = cursol;
+			cursol = each_cursor[MELT_NUM];
+			each_page[EXPLOSION_NUM] = page;
+			page = each_page[MELT_NUM];
 			tab = ATTRIBUTE::MELT;
 			break;
 		case ATTRIBUTE::MELT:
+			each_cursor[MELT_NUM] = cursol;
+			cursol = each_cursor[POISON_NUM];
+			each_page[MELT_NUM] = page;
+			page = each_page[POISON_NUM];
 			tab = ATTRIBUTE::POISON;
 			break;
 		case ATTRIBUTE::POISON:
+			each_cursor[POISON_NUM] = cursol;
+			cursol = each_cursor[PARARYSIS_NUM];
+			each_page[POISON_NUM] = page;
+			page = each_page[PARARYSIS_NUM];
 			tab = ATTRIBUTE::PARALYSIS;
 			break;
 		case ATTRIBUTE::PARALYSIS:
+			each_cursor[PARARYSIS_NUM] = cursol;
+			cursol = each_cursor[HEAL_NUM];
+			each_page[PARARYSIS_NUM] = page;
+			page = 0;
 			tab = ATTRIBUTE::HEAL;
 			break;
 		case ATTRIBUTE::HEAL:
+			each_cursor[HEAL_NUM] = cursol;
+			cursol = each_cursor[EXPLOSION_NUM];
+			each_page[HEAL_NUM] = page;
+			page = each_page[EXPLOSION_NUM];
 			tab = ATTRIBUTE::EXPLOSION;
 			break;
 		default:
 			break;
 		}
+		if (page == 0)
+		{
+			move_string = 30 * cursol;
+		}
+		else
+		{
+			move_string = 30 * (cursol - 9);
+		}
 	}
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_LEFT_SHOULDER))
 	{
-		cursol = 0;
 		move_down = false;
 		move_up = false;
-		move_string = 0;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
+			each_cursor[EXPLOSION_NUM] = cursol;
+			cursol = each_cursor[HEAL_NUM];
+			each_page[EXPLOSION_NUM] = page;
+			page = each_page[HEAL_NUM];
 			tab = ATTRIBUTE::HEAL;
 			break;
 		case ATTRIBUTE::MELT:
+			each_cursor[MELT_NUM] = cursol;
+			cursol = each_cursor[EXPLOSION_NUM];
+			each_page[MELT_NUM] = page;
+			page = each_page[EXPLOSION_NUM];
 			tab = ATTRIBUTE::EXPLOSION;
 			break;
 		case ATTRIBUTE::POISON:
+			each_cursor[POISON_NUM] = cursol;
+			cursol = each_cursor[MELT_NUM];
+			each_page[POISON_NUM] = page;
+			page = each_page[MELT_NUM];
 			tab = ATTRIBUTE::MELT;
 			break;
 		case ATTRIBUTE::PARALYSIS:
+			each_cursor[PARARYSIS_NUM] = cursol;
+			cursol = each_cursor[POISON_NUM];
+			each_page[PARARYSIS_NUM] = page;
+			page = each_page[POISON_NUM];
 			tab = ATTRIBUTE::POISON;
 			break;
 		case ATTRIBUTE::HEAL:
+			each_cursor[HEAL_NUM] = cursol;
+			cursol = each_cursor[PARARYSIS_NUM];
+			each_page[HEAL_NUM] = page;
+			page = each_page[PARARYSIS_NUM];
 			tab = ATTRIBUTE::PARALYSIS;
 			break;
 		default:
 			break;
+		}
+		if (page == 0)
+		{
+			move_string = 30 * cursol;
+		}
+		else
+		{
+			move_string = 30 * (cursol - 9);
 		}
 	}
 
@@ -867,36 +443,51 @@ void Pouch::Update()
 		case ATTRIBUTE::EXPLOSION:
 			if (!select_explosion.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_explosion[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::MELT:
 			if (!select_melt.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_melt[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::POISON:
 			if (!select_poison.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_poison[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::PARALYSIS:
 			if (!select_pararysis.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_pararysis[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		case ATTRIBUTE::HEAL:
 			if (!select_heal.make_bool)
 			{
-				SetChemicalFormulaParameter();
-				ConsumptionMaterial();
+				if (ComparisonElement(chemical_formula_heal[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
 			}
 			break;
 		default:
@@ -911,10 +502,8 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-
-			switch (page)
+			if (tab == ATTRIBUTE::HEAL)
 			{
-			case 0:
 				if (cursol > 0)
 				{
 					move_string -= 30;
@@ -922,25 +511,42 @@ void Pouch::TabUpdate(int max_num)
 				}
 				else
 				{
-					move_string = 30 * 7;
-					cursol = 7;
+					move_string = 30 * 6;
+					cursol = HEAL_MAX_NUM - 1;
 				}
-				break;
-			case 1:
-				if (cursol > 9)
+			}
+			else
+			{
+				switch (page)
 				{
-					move_string -= 30;
-					cursol--;
+				case 0:
+					if (cursol > 0)
+					{
+						move_string -= 30;
+						cursol--;
+					}
+					else
+					{
+						move_string = 30 * 8;
+						cursol = 8;
+					}
+					break;
+				case 1:
+					if (cursol > 9)
+					{
+						move_string -= 30;
+						cursol--;
+					}
+					else
+					{
+						move_string = 30 * 8;
+						cursol = 8;
+						page = 0;
+					}
+					break;
+				default:
+					break;
 				}
-				else
-				{
-					move_string = 30 * 8;
-					cursol = 7;
-					page = 0;
-				}
-				break;
-			default:
-				break;
 			}
 		}
 	}
@@ -949,22 +555,8 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-			switch (page)
+			if (tab == ATTRIBUTE::HEAL)
 			{
-			case 0:
-				if (cursol < 8)
-				{
-					move_string += 30;
-					cursol++;
-				}
-				else
-				{
-					move_string = 0;
-					cursol = 9;
-					page = 1;
-				}
-				break;
-			case 1:
 				if (cursol < max_num - 1)
 				{
 					move_string += 30;
@@ -973,11 +565,82 @@ void Pouch::TabUpdate(int max_num)
 				else
 				{
 					move_string = 0;
+					cursol = 0;
+				}
+			}
+			else
+			{
+				switch (page)
+				{
+				case 0:
+					if (cursol < 8)
+					{
+						move_string += 30;
+						cursol++;
+					}
+					else
+					{
+						move_string = 0;
+						cursol = 9;
+						page = 1;
+					}
+					break;
+				case 1:
+					if (cursol < max_num - 1)
+					{
+						move_string += 30;
+						cursol++;
+					}
+					else
+					{
+						move_string = 0;
+						cursol = 9;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+
+	if (tab != ATTRIBUTE::HEAL)
+	{
+		if (PAD_INPUT::GetRStick().x > 5000)
+		{
+			if (page_jump_count++ % 15 == 0)
+			{
+				if (page == 0)
+				{
+					page = 1;
+					move_string = 0;
 					cursol = 9;
 				}
-				break;
-			default:
-				break;
+				else if (page == 1)
+				{
+					move_string = 0;
+					page = 0;
+					cursol = 0;
+				}
+			}
+		}
+
+		if (PAD_INPUT::GetRStick().x < -5000)
+		{
+			if (page_jump_count++ % 15 == 0)
+			{
+				if (page == 0)
+				{
+					page = 1;
+					move_string = 0;
+					cursol = 9;
+				}
+				else if (page == 1)
+				{
+					move_string = 0;
+					page = 0;
+					cursol = 0;
+				}
 			}
 		}
 	}
@@ -985,7 +648,6 @@ void Pouch::TabUpdate(int max_num)
 
 void Pouch::SetElement(ElementItem* item, int i)
 {
-
 	element[i] = item;
 }
 
@@ -1250,34 +912,19 @@ void Pouch::SetChemicalFormulaParameter()
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
-		if (ComparisonElement(chemical_formula_explosion[cursol]))
-		{
 			select_explosion = chemical_formula_explosion[cursol];
-		}
 		break;
 	case ATTRIBUTE::MELT:
-		if (ComparisonElement(chemical_formula_melt[cursol]))
-		{
 			select_melt = chemical_formula_melt[cursol];
-		}
 		break;
 	case ATTRIBUTE::POISON:
-		if (ComparisonElement(chemical_formula_poison[cursol]))
-		{
 			select_poison = chemical_formula_poison[cursol];
-		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		if (ComparisonElement(chemical_formula_pararysis[cursol]))
-		{
 			select_pararysis = chemical_formula_pararysis[cursol];
-		}
 		break;
 	case ATTRIBUTE::HEAL:
-		if (ComparisonElement(chemical_formula_heal[cursol]))
-		{
 			select_heal = chemical_formula_heal[cursol];
-		}
 		break;
 	default:
 		break;
