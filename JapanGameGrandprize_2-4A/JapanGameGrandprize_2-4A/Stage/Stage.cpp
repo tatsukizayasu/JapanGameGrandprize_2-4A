@@ -89,6 +89,8 @@ Stage::~Stage()
 	enemy_init_location.clear();
 	enemy_init_location.shrink_to_fit();
 
+	delete element;
+
 #ifdef _STAGE_BUILDER
 	delete stage_builder;
 #endif
