@@ -9,12 +9,13 @@
 //-----------------------------------
 MapChip::MapChip()
 {
-
+	collider_type =(int) COLLIDER::DEFAULT;
 	location = { 30,30 };
 	area = { 60,60 };
 	image_size = { 600,600 };
 	ex_rate = area.height / image_size.height;
 	image = 0;
+	angle = 0.0;
 }
 
 //-----------------------------------
@@ -23,6 +24,7 @@ MapChip::MapChip()
 MapChip::MapChip(const int* p_image, Location location, Area area)
 {
 
+	collider_type =(int) COLLIDER::DEFAULT;
 	this->location.x = location.x;
 	this->location.y = location.y;
 
@@ -45,6 +47,8 @@ MapChip::MapChip(const int* p_image, Location location, Area area)
 		image_size.width = (float)x;
 		image_size.height = (float)y;
 	}
+
+	angle= 0.0;
 }
 
 //-----------------------------------
@@ -76,7 +80,8 @@ void MapChip::Draw()const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
+	
+	DrawRotaGraphF(x, y, 1.0f, angle * (M_PI / 180), image, TRUE);
 #ifdef COLLLISION_DEBUG
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);

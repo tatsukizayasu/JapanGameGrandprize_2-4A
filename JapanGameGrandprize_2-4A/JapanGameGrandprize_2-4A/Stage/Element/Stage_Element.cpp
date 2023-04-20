@@ -66,9 +66,16 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		element.push_back(std::make_shared<Element_Move_Floor>(type, location));
 		break;
 
+	case BARRICADE_UP:
+		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ -18.0f, 0.0f }, Element_Barricade::DIRECTION::UP));
+		break;
 
 	case BARRICADE_CENTER:
-		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, area));
+		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, Area{ -MAP_CHIP_SIZE, MAP_CHIP_SIZE * 1 / 10}, Area{ 0.0f, 0.0f }, Element_Barricade::DIRECTION::CENTER));
+		break;
+
+	case BARRICADE_DOWN:
+		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ + 18.0f, 0.0f }, Element_Barricade::DIRECTION::DOWN));
 		break;
 
 	default:
@@ -79,114 +86,6 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 
 void Stage_Element::SetElementParameter()
 {
-
-	for (auto& m : element)
-	{
-
-		for (int i = 1; i < element.size(); i++) {
-
-			if (Element::BARRICADE_CENTER == m->GetType()) {
-				auto y = element.at(i);
-				
-
-				std::shared_ptr<Element_Barricade> result = std::dynamic_pointer_cast<Element_Barricade>(y);
-
-
-				if (m.get() == y.get()) {
-					result->SetDirection(Element_Barricade::DIRECTION::NONE);
-					continue;
-
-				}
-				
-
-				//y = static_cast<Element_Barricade>(y);
-				//shared_ptr<Element_Barricade> dynamic_pointer_cast(const std::shared_ptr<Stage_Element_Base> &y) noexcept;
-				//std::shared_ptr<Element_Barricade> result = std::dynamic_pointer_cast<Element_Barricade>(y);
-
-
-
-				if (abs(y->GetLocation().x - m->GetLocation().x) <= MAP_CHIP_SIZE &&
-					abs(y->GetLocation().y - m->GetLocation().y) <= MAP_CHIP_SIZE)
-				{
-					if (y->GetLocation().y < m->GetLocation().y)
-					{
-						result->SetDirection(Element_Barricade::DIRECTION::UP);
-					}
-					else if (y->GetLocation().y > m->GetLocation().y)
-					{
-						result->SetDirection(Element_Barricade::DIRECTION::DOWN);
-					}
-					else if (y->GetLocation().x < m->GetLocation().x && y->GetLocation().x > m->GetLocation().x ||
-						y->GetLocation().y < m->GetLocation().y && y->GetLocation().y > m->GetLocation().y)
-					{
-						result->SetDirection(Element_Barricade::DIRECTION::CENTER);
-					}
-					else
-					{
-						result->SetDirection(Element_Barricade::DIRECTION::NONE);
-					}
-				}
-			}
-		}
-	}
-
-
-	//for (auto& m : element)
-	//{
-
-	//	for (int i = 1; i < element.size(); i++) {
-
-	//		if (BARRICADE == m->GetType()) {	
-	//			auto y = element.at(i);
-
-	//			std::shared_ptr<Element_Barricade> result = std::dynamic_pointer_cast<Element_Barricade>(y);
-
-
-	//			if (m.get() == y.get()) {
-	//				result->SetDirection(Element_Barricade::DIRECTION::NONE);
-	//				continue;
-
-	//			}
-
-	//			//y = static_cast<Element_Barricade>(y);
-	//			//shared_ptr<Element_Barricade> dynamic_pointer_cast(const std::shared_ptr<Stage_Element_Base> &y) noexcept;
-	//			//std::shared_ptr<Element_Barricade> result = std::dynamic_pointer_cast<Element_Barricade>(y);
-
-
-
-	//			if (abs(y->GetLocation().x - m->GetLocation().x) <= MAP_CHIP_SIZE &&
-	//				abs(y->GetLocation().y - m->GetLocation().y) <= MAP_CHIP_SIZE)
-	//			{
-	//				if (y->GetLocation().x < m->GetLocation().x)
-	//				{
-	//					result->SetDirection(Element_Barricade::DIRECTION::LEFT);
-	//				}
-	//				else if (y->GetLocation().x > m->GetLocation().x)
-	//				{
-	//					result->SetDirection(Element_Barricade::DIRECTION::RIGHT);
-	//				}
-	//				else if (y->GetLocation().y < m->GetLocation().y)
-	//				{
-	//					result->SetDirection(Element_Barricade::DIRECTION::UP);
-	//				}
-	//				else if (y->GetLocation().y > m->GetLocation().y)
-	//				{
-	//					result->SetDirection(Element_Barricade::DIRECTION::DOWN);
-	//				}
-	//				else if (y->GetLocation().x < m->GetLocation().x && y->GetLocation().x > m->GetLocation().x ||
-	//					y->GetLocation().y < m->GetLocation().y && y->GetLocation().y > m->GetLocation().y)
-	//				{
-	//					result->SetDirection(Element_Barricade::DIRECTION::CENTER);
-	//				}
-	//				else
-	//				{
-	//					result->SetDirection(Element_Barricade::DIRECTION::NONE);
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-
 
 	//ìÆÇ≠è∞ÇÃñ⁄ïWà íuÇÃê›íË
 	SetMoveFloorNextLocation();
@@ -333,8 +232,10 @@ std::vector<int> Stage_Element::GetImage(short type)
 		filename = "DamageWall.png";
 		break;
 
+	case BARRICADE_UP:
 	case BARRICADE_CENTER:
-		filename = "Wooden_Floor.png";
+	case BARRICADE_DOWN:
+		filename = "Barricade.png";
 		break;
 
 	default:
