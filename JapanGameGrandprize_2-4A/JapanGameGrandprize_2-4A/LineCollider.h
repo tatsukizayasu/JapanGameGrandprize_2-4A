@@ -66,6 +66,9 @@ public:
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
 	bool HitLine(const class LineCollider* line_collider)const override;
 
+	//PolyLine‚Æ‚Ì“–‚½‚è”»’è
+	virtual bool HitPolyLine(const class PolyLine* poly_line)const override;
+
 	ColliderBase* Copy()const override { return new LineCollider(*this); }
 
 	bool HitCheck(ColliderBase* collider)const;

@@ -58,6 +58,9 @@ StageBuilder::StageBuilder()
 	objects.push_back(new ObjectBase({ 640,460 }, &testline));
 
 
+	Location mouse_line_loc[4]{ {0,0},{100,0},{150,100} , {200,100} };
+
+
 #endif // _DEV
 }
 
@@ -144,8 +147,6 @@ void StageBuilder::Update()
 #ifdef _DEV
 
 
-
-
 #endif // _DEV
 }
 
@@ -184,19 +185,11 @@ void StageBuilder::Draw()const
 #ifdef _DEV
 
 
-	for (int i = 0; i < poly_lines.size(); i++)
-	{
-		if (poly_lines[i]->HitSphere(mouse))
-		{
-			DrawString(640, 300, "hit", 0);
-		}
-	}
-
 	for (int i = 0; i < objects.size(); i++)
 	{
-		if (objects[i]->HitSphere(mouse))
+		if (mouse->HitCheck(objects[i]->GetColllider()))
 		{
-			DrawString(640, 300, "hit", 0);
+			DrawString(640, 300, "hit", 0xFFFFFF);
 		}
 	}
 

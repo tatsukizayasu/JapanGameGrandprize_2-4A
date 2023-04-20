@@ -34,6 +34,9 @@ public:
     //LineColliderとの当たり判定
     virtual bool HitLine(const class LineCollider* line_collider)const;
 
+    //PolyLineとの当たり判定
+    virtual bool HitPolyLine(const class PolyLine* poly_line)const;
+
     ColliderBase* Copy()const override { return new PolyLine(*this); }
 
     bool HitCheck(ColliderBase* collider)const;
@@ -45,7 +48,7 @@ public:
     void MakeLocation();
 
     vector<SphereCollider*> GetPoints()const{return bend_points;}
-
+    const vector<LineCollider*>*GetLines()const { return &lines; }
 
     //ゲームプレイ時に当たり判定をとる分には必要のないもの
     //ツール上でマウスとの当たり判定をとるために使用しています

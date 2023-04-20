@@ -25,34 +25,22 @@ ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider)
 	case (int)COLLIDER::DEFAULT:
 		collider = new BoxCollider(*static_cast<BoxCollider*>(p_collider));
 		break;
+	case (int)COLLIDER::SPHERE:
+		collider = new SphereCollider(*static_cast<SphereCollider*>(p_collider));
+		break;
+	case (int)COLLIDER::BOX:
+		collider = new BoxCollider(*static_cast<BoxCollider*>(p_collider));
+		break;
+	case (int)COLLIDER::LINE:
+		collider = new LineCollider(*static_cast<LineCollider*>(p_collider));
+		break;
+	case (int)COLLIDER::POLY_LINE:
+		collider = new PolyLine(*static_cast<PolyLine*>(p_collider));
+		break;
+
+	default:
+		break;
 	}
-
-	//TODO:‚±‚±‚©‚ç dynamic_cast‚ðstatic_cast‚É’¼‚·
-
-	base = dynamic_cast<BoxCollider*>(p_collider);
-	if (base)
-	{
-		collider = new BoxCollider(*dynamic_cast<BoxCollider*>(p_collider));
-	}
-
-	base = dynamic_cast<SphereCollider*>(p_collider);
-	if (base)
-	{
-		collider = new SphereCollider(*dynamic_cast<SphereCollider*>(p_collider));
-	}
-
-	base = dynamic_cast<LineCollider*>(p_collider);
-	if (base)
-	{
-		collider = new LineCollider(*dynamic_cast<LineCollider*>(p_collider));
-	}
-
-	base = dynamic_cast<PolyLine*>(p_collider);
-	if (base)
-	{
-		collider = new PolyLine(*dynamic_cast<PolyLine*>(p_collider));
-	}
-
 
 	vector = collider->GetLocation() - pivot;
 	old_location = collider->GetLocation();

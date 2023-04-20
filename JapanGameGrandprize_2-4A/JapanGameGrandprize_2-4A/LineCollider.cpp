@@ -259,6 +259,25 @@ bool LineCollider::HitLine(const LineCollider* line)const
 	return is_hit;
 }
 
+//---------------------------------
+// PolyLineとの当たり判定
+//---------------------------------
+bool LineCollider::HitPolyLine(const class PolyLine* poly_line)const
+{
+	bool is_hit = false;
+	const std::vector<LineCollider*>* lines = poly_line->GetLines();
+
+	for (auto line : *lines)
+	{
+		if (HitLine(line))
+		{
+			is_hit = true;
+			break;
+		}
+	}
+
+	return is_hit;
+}
 
 //-------------------------------
 // 当たり判定チェック
@@ -267,22 +286,32 @@ bool LineCollider::HitCheck(ColliderBase* collider)const
 {
 	bool is_hit = false;
 
-	collider = dynamic_cast<BoxCollider*>(collider);
-	if (collider)
+	int class_type = collider->GetName();
+	switch (class_type)
 	{
-		return HitBox(dynamic_cast<BoxCollider*>(collider));
-	}
+	case (int)COLLIDER::DEFAULT:
+		is_hit = HitBox(static_cast<BoxCollider*>(collider));
+		break;
 
-	collider = dynamic_cast<SphereCollider*>(collider);
-	if (collider)
-	{
-		return HitSphere(dynamic_cast<SphereCollider*>(collider));
-	}
+	case (int)COLLIDER::SPHERE:
+		is_hit = HitSphere(static_cast<SphereCollider*>(collider));
+		break;
 
-	collider = dynamic_cast<LineCollider*>(collider);
-	if (collider)
-	{
-		return HitLine(dynamic_cast<LineCollider*>(collider));
+	case (int)COLLIDER::BOX:
+		is_hit = HitBox(static_cast<BoxCollider*>(collider));
+		break;
+
+	case (int)COLLIDER::LINE:
+		is_hit = HitLine(static_cast<LineCollider*>(collider));
+		break;
+
+	case (int)COLLIDER::POLY_LINE:
+		collider = static_cast<PolyLine*>(collider);
+		is_hit = HitPolyLine(static_cast<PolyLine*>(collider));
+		break;
+
+	default:
+		break;
 	}
 
 	return is_hit;
