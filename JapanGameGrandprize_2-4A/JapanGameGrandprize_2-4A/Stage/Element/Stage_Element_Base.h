@@ -73,10 +73,11 @@ public:
 	/// </summary>
 	/// <param name = "*images">画像列ポインタ</param>
 	/// <param name = "time">秒数</param>
-	/// <param name = "total_images">画像総数</param>
+	/// <param name = "total_images">画像総数または終了画像番号</param>
 	/// <param name = "std::function* callback">timeで指定した秒数毎に呼ぶ関数
+	/// <param name = "int start_image">開始画像番号
 	/// <para>　　　　　　　　　呼び出したい関数がない場合はnullptr</para></param>
-	void LoopImages(std::vector<int>& images, float time, int total_images, std::function<void()>* callback);
+	void LoopImages(std::vector<int>& images, float time, int total_images, std::function<void()>* callback, int start_image = 0);
 
 	/// <summary>
 	/// プレイヤーとブロックが当たっているかのGetter
