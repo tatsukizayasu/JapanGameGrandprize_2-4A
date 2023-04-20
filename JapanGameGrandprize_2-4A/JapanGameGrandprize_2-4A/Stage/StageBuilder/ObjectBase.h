@@ -5,6 +5,7 @@
 class ObjectBase
 {
 private:
+	const char* class_name = "object";
 	ColliderBase* collider;
 	int image;
 	SphereCollider* pivot;
@@ -15,7 +16,7 @@ private:
 	void ColliderCast(ColliderBase* p_collider);
 public:
 	ObjectBase();
-	ObjectBase(Location pivot, ColliderBase* p_collider );
+	ObjectBase(Location pivot, ColliderBase* p_collider);
 	~ObjectBase();
 
 	void Draw()const;
@@ -26,12 +27,12 @@ public:
 	{
 		return collider->HitSphere(sphere);
 	}
-	
+
 	bool HitBox(BoxCollider* box)
 	{
 		return collider->HitBox(box);
 	}
-	
+
 	bool HitLine(LineCollider* line)
 	{
 		return collider->HitLine(line);
@@ -39,6 +40,6 @@ public:
 
 	ColliderBase* GetColllider()const { return collider; }
 	SphereCollider* GetPivot()const { return pivot; }
+	const char* GetName() { return class_name; }
+
 };
-
-

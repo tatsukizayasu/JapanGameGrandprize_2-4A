@@ -9,7 +9,7 @@
 //-----------------------------------
 MapChip::MapChip()
 {
-	collider_type =(int) COLLIDER::DEFAULT;
+	collider_type =(int) COLLIDER::MAP_CHIP;
 	location = { 30,30 };
 	area = { 60,60 };
 	image_size = { 600,600 };
@@ -23,7 +23,7 @@ MapChip::MapChip()
 MapChip::MapChip(const int* p_image, Location location, Area area)
 {
 
-	collider_type =(int) COLLIDER::DEFAULT;
+	collider_type =(int) COLLIDER::MAP_CHIP;
 	this->location.x = location.x;
 	this->location.y = location.y;
 

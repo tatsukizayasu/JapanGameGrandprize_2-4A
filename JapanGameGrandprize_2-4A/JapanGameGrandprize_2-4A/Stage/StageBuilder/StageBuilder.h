@@ -162,6 +162,8 @@ public:
 	void SaveMapChips(FILE* fp);
 	//折れ線の保存
 	void SavePolyLine(FILE* fp);
+	//オブジェクトの保存
+	void SaveObject(FILE* fp);
 
 	//マップチップの読み込み
 	void LoadMapChip(istringstream* i_stringstream);

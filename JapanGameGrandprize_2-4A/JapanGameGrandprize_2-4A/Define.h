@@ -38,7 +38,7 @@ enum class ATTRIBUTE
 
 enum class COLLIDER
 {
-	DEFAULT = 0
+	MAP_CHIP = 0
 	,SPHERE
 	,BOX
 	,LINE

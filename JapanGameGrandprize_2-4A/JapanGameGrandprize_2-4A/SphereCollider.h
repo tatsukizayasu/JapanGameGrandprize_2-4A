@@ -21,6 +21,12 @@ public:
 		collider_type = (int)COLLIDER::SPHERE;
 		radius = 5;
 	}
+	
+	SphereCollider(Location location,float radius) :ColliderBase(location)
+	{
+		collider_type = (int)COLLIDER::SPHERE;
+		this->radius = radius;
+	}
 
 	//•`‰æ
 	virtual void Draw()const;

@@ -157,7 +157,7 @@ bool SphereCollider::HitCheck(ColliderBase* collider)const
 	int class_type = collider->GetColliderType();
 	switch (class_type)
 	{
-	case (int)COLLIDER::DEFAULT:
+	case (int)COLLIDER::MAP_CHIP:
 		is_hit = HitBox(static_cast<BoxCollider*>(collider));
 		break;
 

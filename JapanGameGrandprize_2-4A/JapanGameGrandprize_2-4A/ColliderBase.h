@@ -85,7 +85,7 @@ public:
 
 protected:
 
-	int collider_type = (int)COLLIDER::DEFAULT;
+	int collider_type = (int)COLLIDER::MAP_CHIP;
 	Location location;	//中心座標
 
 	//2つのベクトルのなす角が鋭角かどうかを求める

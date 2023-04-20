@@ -37,7 +37,7 @@ StageBuilder::StageBuilder()
 
 #ifdef _DEV
 
-	for (int i = 0; i < 0; i++)
+	for (int i = 0; i <0; i++)
 	{
 		Location test[3] =
 		{
@@ -984,6 +984,8 @@ void StageBuilder::SaveStage(int stage_num)
 	//ファイルオープン
 	fopen_s(&fp, stage_name, "w");
 
+	SaveObject(fp);
+
 	SaveMapChips(fp);
 
 	SavePolyLine(fp);
@@ -1004,6 +1006,8 @@ void StageBuilder::SaveStage(char* stage_name)
 
 	//ファイルオープン
 	fopen_s(&fp, stage_name, "w");
+
+	SaveObject(fp);
 
 	SaveMapChips(fp);
 
@@ -1040,7 +1044,7 @@ void StageBuilder::LoadStage(char* stage_name)
 		getline(i_stringstream, str_conma_buf, ',');
 		collider_type = atoi(str_conma_buf.c_str());
 
-		if (collider_type == (int)COLLIDER::DEFAULT)
+		if (collider_type == (int)COLLIDER::MAP_CHIP)
 		{
 			LoadMapChip(&i_stringstream);
 			continue;
@@ -1124,6 +1128,94 @@ void StageBuilder::SavePolyLine(FILE* fp)
 			fprintf_s(fp, "\n");
 
 			points.clear();
+		}
+	}
+}
+
+//------------------------------------
+// オブジェクトの保存
+//------------------------------------
+void StageBuilder::SaveObject(FILE* fp)
+{
+	if (fp)
+	{
+		for (int i = 0; i < objects.size(); i++)
+		{
+			fprintf_s(fp, "%s,", objects[i]->GetName());
+
+			int collider_type = objects[i]->GetColllider()->GetColliderType();
+
+			switch (collider_type)
+			{
+			case (int)COLLIDER::MAP_CHIP:
+			{
+				MapChip* saved
+					= static_cast<MapChip*>(objects[i]->GetColllider());
+				fprintf_s(fp, "%d,%lf,%lf,%d\n",
+					saved->GetColliderType(),
+					saved->GetLocation().x,
+					saved->GetLocation().y,
+					0);
+				break;
+			}
+			case (int)COLLIDER::SPHERE:
+			{
+				SphereCollider* saved
+					= static_cast<SphereCollider*>(objects[i]->GetColllider());
+				fprintf_s(fp, "%d,%lf,%lf,%d\n",
+					saved->GetColliderType(),
+					saved->GetLocation().x,
+					saved->GetLocation().y,
+					saved->GetRadius()
+				);
+			}
+			case (int)COLLIDER::BOX:
+			{
+				BoxCollider* saved
+					= static_cast<BoxCollider*>(objects[i]->GetColllider());
+				fprintf_s(fp, "%d,%lf,%lf,%lf,%lf",
+					saved->GetColliderType(),
+					saved->GetLocation().x,
+					saved->GetLocation().y,
+					saved->GetArea().width,
+					saved->GetArea().height
+				);
+			}
+			case(int)COLLIDER::LINE:
+			{
+				LineCollider* saved
+					= static_cast<LineCollider*>(objects[i]->GetColllider());
+				fprintf_s(fp, "%d,%lf,%lf,%lf,%lf,%lf,%lf",
+					saved->GetColliderType(),
+					saved->ColliderBase::GetLocation().x,
+					saved->ColliderBase::GetLocation().y,
+					saved->GetLocation(LINE_START).x,
+					saved->GetLocation(LINE_START).y,
+					saved->GetLocation(LINE_END).x,
+					saved->GetLocation(LINE_END).y
+				);
+			}
+			case(int)COLLIDER::POLY_LINE:
+			{
+				PolyLine* saved
+					= static_cast<PolyLine*>(objects[i]->GetColllider()); 
+				fprintf_s(fp, "%d", (int)COLLIDER::POLY_LINE);
+				vector<SphereCollider*> points = saved->GetPoints();
+				fprintf_s(fp, ",%d", int(points.size()));
+
+				for (int j = 0; j < points.size(); j++)
+				{
+					fprintf_s(fp, ",%.1lf,%.1lf",
+						points[j]->GetLocation().x,
+						points[j]->GetLocation().y
+					);
+				}
+				points.clear();
+			}
+
+
+			}
+			fprintf_s(fp, "\n");
 		}
 	}
 }

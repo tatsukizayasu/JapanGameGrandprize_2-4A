@@ -22,7 +22,7 @@ ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider)
 	int class_type = p_collider->GetColliderType();
 	switch (class_type)
 	{
-	case (int)COLLIDER::DEFAULT:
+	case (int)COLLIDER::MAP_CHIP:
 		collider = new BoxCollider(*static_cast<BoxCollider*>(p_collider));
 		break;
 	case (int)COLLIDER::SPHERE:
