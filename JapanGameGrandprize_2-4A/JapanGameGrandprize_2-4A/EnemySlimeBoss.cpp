@@ -34,17 +34,15 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 
 	state = ENEMY_STATE::FALL;
 
-	left_move = false;
-
-	if (left_move)speed = -SLIME_BOSS_SPEED;
-	else speed = SLIME_BOSS_SPEED;
+	left_move = true;
 
 	kind = ENEMY_KIND::SLIME_BOSS;
 
-	slime_boss_jump_distance = 0;
+	slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
 
 	hp = 500;
 	speed_y = 0;
+	speed = 0;
 
 	type = new ENEMY_TYPE;
 	*type = ENEMY_TYPE::WATER;
@@ -100,9 +98,6 @@ void EnemySlimeBoss::MagicBullet(const Location player_location)
 
 void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 {
-	if (left_move)speed = -SLIME_BOSS_SPEED;
-	else speed = SLIME_BOSS_SPEED;
-
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -113,6 +108,9 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 		break;
 
 	case ENEMY_STATE::MOVE:
+
+		if (left_move)speed = -SLIME_BOSS_SPEED;
+		else speed = SLIME_BOSS_SPEED;
 
 		if (--wait_time <= 0)
 		{
@@ -169,6 +167,12 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 	case ENEMY_STATE::FALL:
 
+		if (speed != 0)
+		{
+			if (left_move)speed = -SLIME_BOSS_SPEED;
+			else speed = SLIME_BOSS_SPEED;
+		}
+
 		location.x += speed;
 		
 		hit_stage = HitStage(stage);
@@ -179,8 +183,7 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			hit_direction = HitDirection(hit_stage.chip);
 
 			location.x = old_location.x;
-			left_move = !left_move;
-			
+			left_move = !left_move;	
 		}
 
 		Fall();
