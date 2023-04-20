@@ -14,7 +14,6 @@ class EnemySlimeBoss : public EnemyBase
 {
 private:
 
-	ENEMY_STATE state;
 	MOVE_STATE move_state;
 	int slime_boss_jump_distance;
 	int speed_y;

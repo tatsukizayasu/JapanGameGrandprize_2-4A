@@ -13,6 +13,7 @@
 #define STAGE_NAME	"sample_stage2";
 #define STAGE_NAME	"Stage01";
 //#define STAGE_NAME  "Stage01_test";
+//#define STAGE_NAME "Stage02";
 
 //-----------------------------------
 // コンストラクタ
@@ -88,6 +89,8 @@ Stage::~Stage()
 	enemy_init_location.clear();
 	enemy_init_location.shrink_to_fit();
 
+	delete element;
+
 #ifdef _STAGE_BUILDER
 	delete stage_builder;
 #endif
@@ -160,6 +163,7 @@ void Stage::Update(Player* player)
 #endif
 
 	element->Update(player);
+
 }
 
 //-----------------------------------
