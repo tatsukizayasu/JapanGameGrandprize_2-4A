@@ -402,7 +402,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				break;
 			case ATTRIBUTE::MELT:
 				location.x += MELT_BULLET_SPEED;
-				if (Tick % 5 == 0)
+				if (Tick % 2 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
 					{
@@ -419,7 +419,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					if (Melt[1].display_permit_Array[i] == TRUE)
 					{
-						Melt[1].BrendMode_ALPFA_Array[i] -= 5;
+						Melt[1].BrendMode_ALPFA_Array[i] -= 12;
 						if (Melt[1].BrendMode_ALPFA_Array[i] <= 0)
 						{
 							Melt[1].display_permit_Array[i] = FALSE;
@@ -431,7 +431,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				break;
 			case ATTRIBUTE::POISON:
 				location.x += POISON_BULLET_SPEED;
-				if (Tick % 5 == 0) 
+				if (Tick % 2 == 0) 
 				{
 					for (int i = 0; i < PARTICLE; i++) 
 					{
@@ -448,7 +448,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					if (Poison[1].display_permit_Array[i] == TRUE) 
 					{
-						Poison[1].BrendMode_ALPFA_Array[i] -= 5;
+						Poison[1].BrendMode_ALPFA_Array[i] -= 12;
 						if (Poison[1].BrendMode_ALPFA_Array[i] <= 0) 
 						{
 							Poison[1].display_permit_Array[i] = FALSE;
@@ -460,7 +460,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				break;
 			case ATTRIBUTE::PARALYSIS:
 				location.x += PARARYSIS_BULLET_SPEED;
-				if (Tick % 5 == 0)
+				if (Tick % 2 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
 					{
@@ -477,7 +477,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					if (Paralysis[1].display_permit_Array[i] == TRUE)
 					{
-						Paralysis[1].BrendMode_ALPFA_Array[i] -= 5;
+						Paralysis[1].BrendMode_ALPFA_Array[i] -= 12;
 						if (Paralysis[1].BrendMode_ALPFA_Array[i] <= 0)
 						{
 							Paralysis[1].display_permit_Array[i] = FALSE;
@@ -493,6 +493,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 		{
 			if (!delete_flg)
 			{
+
 				for (int i = 0; i < PIXEL_MAX; i++)
 				{
 					dot_location_x[i] = location.x;
@@ -605,7 +606,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				break;
 			case ATTRIBUTE::MELT:
 				location.x -= MELT_BULLET_SPEED;
-				if (Tick % 5 == 0)
+				if (Tick % 2 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
 					{
@@ -622,7 +623,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					if (Melt[1].display_permit_Array[i] == TRUE)
 					{
-						Melt[1].BrendMode_ALPFA_Array[i] -= 5;
+						Melt[1].BrendMode_ALPFA_Array[i] -= 12;
 						if (Melt[1].BrendMode_ALPFA_Array[i] <= 0)
 						{
 							Melt[1].display_permit_Array[i] = FALSE;
@@ -634,7 +635,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				break;
 			case ATTRIBUTE::POISON:
 				location.x -= POISON_BULLET_SPEED;
-				if (Tick % 5 == 0)
+				if (Tick % 2 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
 					{
@@ -651,7 +652,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					if (Poison[1].display_permit_Array[i] == TRUE)
 					{
-						Poison[1].BrendMode_ALPFA_Array[i] -= 5;
+						Poison[1].BrendMode_ALPFA_Array[i] -= 12;
 						if (Poison[1].BrendMode_ALPFA_Array[i] <= 0)
 						{
 							Poison[1].display_permit_Array[i] = FALSE;
@@ -663,7 +664,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				break;
 			case ATTRIBUTE::PARALYSIS:
 				location.x -= PARARYSIS_BULLET_SPEED;
-				if (Tick % 5 == 0)
+				if (Tick % 2 == 0)
 				{
 					for (int i = 0; i < PARTICLE; i++)
 					{
@@ -680,7 +681,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				{
 					if (Paralysis[1].display_permit_Array[i] == TRUE)
 					{
-						Paralysis[1].BrendMode_ALPFA_Array[i] -= 5;
+						Paralysis[1].BrendMode_ALPFA_Array[i] -= 12;
 						if (Paralysis[1].BrendMode_ALPFA_Array[i] <= 0)
 						{
 							Paralysis[1].display_permit_Array[i] = FALSE;
@@ -706,9 +707,9 @@ void NormalBullet::Update(const Stage* stage_pointa)
 		}
 	}
 
-	if (delete_flg)
+	if (delete_flg)		//値の初期化
 	{
-		switch (attribute)
+		/*switch (attribute)
 		{
 		case ATTRIBUTE::EXPLOSION:
 			for (int i = 0; i < PARTICLE; i++)
@@ -745,7 +746,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 			break;
 		default:
 			break;
-		}
+		}*/
 		NormalBulletEfect();
 	}
 }
