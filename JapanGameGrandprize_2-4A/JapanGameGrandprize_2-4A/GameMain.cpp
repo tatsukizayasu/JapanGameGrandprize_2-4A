@@ -11,7 +11,8 @@
 #include "Wyvern.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
-#include"Dragon.h"
+#include "Dragon.h"
+#include "LastBoss.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"
@@ -126,10 +127,10 @@ void GameMain::SpawnEnemy()
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
-	enemy_spawn_volume = spawn.size();
+	enemy_spawn_volume = spawn.size() + 1;
 	enemy = new EnemyBase * [enemy_spawn_volume];
 	int i;
-	for (i = 0; i < enemy_spawn_volume; i++)
+	for (i = 0; i < enemy_spawn_volume - 1 ; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -162,7 +163,7 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
 			enemy[i] = new Dragon(spawn[i].location);
 			break;
-		case ENEMY_KIND::END_BOSS:	//ラスボスの生成
+		case ENEMY_KIND::LAST_BOSS:	//ラスボスの生成
 			break;
 		case ENEMY_KIND::NONE:
 		default:
@@ -170,6 +171,9 @@ void GameMain::SpawnEnemy()
 			break;
 		}
 	}
+
+	Location spawn_location = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
+	enemy[i] = new LastBoss(spawn_location);
 }
 
 //-----------------------------------
@@ -228,13 +232,29 @@ bool GameMain::EnemyUpdate()
 					break;
 				}
 
-				if(enemy[i]->HitSphere(player_bullet[j]))
+				if (enemy[i]->GetEnemyKind() == ENEMY_KIND::LAST_BOSS)
 				{
-					enemy[i]->HitBullet(player_bullet[j]);
-					delete player_bullet[j];
-					player_bullet[j] = nullptr;
-					player->SortBullet(j);
-					j--;
+					LastBoss* last_boss;
+					last_boss = dynamic_cast<LastBoss*>(enemy[i]);
+
+					if (last_boss->CheckHitBulelt(player_bullet[j]))
+					{
+						delete player_bullet[j];
+						player_bullet[j] = nullptr;
+						player->SortBullet(j);
+						j--;
+					}
+				}
+				else
+				{
+					if (enemy[i]->HitSphere(player_bullet[j]))
+					{
+						enemy[i]->HitBullet(player_bullet[j]);
+						delete player_bullet[j];
+						player_bullet[j] = nullptr;
+						player->SortBullet(j);
+						j--;
+					}
 				}
 			}
 

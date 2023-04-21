@@ -14,6 +14,7 @@ private:
     int punch_standby_time; //パンチするまでの時間
     int animation; //アニメーション
     int image_argument; //画像の引数
+    int death_time; //死んでいる時間
 
     Location punch_start; //パンチを始めたの座標
 
@@ -63,6 +64,7 @@ public:
     //描画
     void Draw() const override;
 
+    //HPバーの表示
     void DrawHPBar(const int)const override;
 
     //座標の取得

@@ -80,7 +80,7 @@ enum class ENEMY_KIND
 	TORRENT,	//トレント
 	KRAKEN,	    //クラーケン
 	DRAGON,		//ドラゴン
-	END_BOSS,	//ラスボス
+	LAST_BOSS,	//ラスボス
 	NONE
 };
 

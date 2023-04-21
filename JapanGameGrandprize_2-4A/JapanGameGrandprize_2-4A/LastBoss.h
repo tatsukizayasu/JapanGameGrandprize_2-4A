@@ -6,9 +6,8 @@ enum class LAST_BOSS_ATTACK
     MAGIC = 0,  //魔法攻撃
     PUNCH,      //パンチ
     SWORD,      //剣での攻撃
-    DEATHBLOW   //必殺技
+    DEATHBLOW   //必殺
 };
-
 
 class LastBoss :
     public EnemyBase
@@ -57,6 +56,9 @@ public:
 
     //プレイヤーの弾との当たり判定
     void HitBullet(const BulletBase* bullet) override;
+
+    //プレイヤーの弾との当たり判定
+    bool CheckHitBulelt(const BulletBase* bullet);
 
     //描画
     void Draw() const override;

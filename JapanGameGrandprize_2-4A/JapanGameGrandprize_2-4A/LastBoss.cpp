@@ -1,5 +1,7 @@
 #include "LastBoss.h"
 #include "LastBossHand.h"
+#include "DxLib.h"
+#include "CameraWork.h"
 
 //手の数
 #define HAND_NUM 2
@@ -19,11 +21,16 @@ LastBoss::LastBoss(Location spawn_location)
 
 	hand = new EnemyBase * [HAND_NUM];
 
+	area.height = 200;
+	area.width = 200;
+
 	for (int i = 0; i < HAND_NUM; i++)
 	{
 		spawn_hand.x += (400 * i);
 		hand[i] = new LastBossHand(spawn_hand, static_cast<bool>(i));
 	}
+
+	kind = ENEMY_KIND::LAST_BOSS;
 }
 
 //-----------------------------------
@@ -132,10 +139,46 @@ void LastBoss::HitBullet(const BulletBase* bullet)
 }
 
 //-----------------------------------
+//プレイヤーの弾との当たり判定
+//-----------------------------------
+bool LastBoss::CheckHitBulelt(const BulletBase* bullet)
+{
+	bool ret = false; //戻り値
+
+	if (HitSphere(bullet))
+	{
+		ret = true;
+		HitBullet(bullet);
+	}
+
+	if (!ret)
+	{
+		for (int i = 0; i < HAND_NUM; i++)
+		{
+			if (hand[i]->HitSphere(bullet))
+			{
+				ret = true;
+				hand[i]->HitBullet(bullet);
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+//-----------------------------------
 //描画
 //-----------------------------------
 void LastBoss::Draw() const
 {
+
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
+
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffffff, TRUE);
+
 	for (int i = 0; i < HAND_NUM; i++)
 	{
 		hand[i]->Draw();
