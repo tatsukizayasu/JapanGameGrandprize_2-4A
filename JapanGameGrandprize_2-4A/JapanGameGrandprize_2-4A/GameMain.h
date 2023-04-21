@@ -37,7 +37,7 @@ private:
 public:
 
     //コンストラクタ
-    GameMain();
+    GameMain(short stage_num);
 
     //デストラクタ
     ~GameMain();

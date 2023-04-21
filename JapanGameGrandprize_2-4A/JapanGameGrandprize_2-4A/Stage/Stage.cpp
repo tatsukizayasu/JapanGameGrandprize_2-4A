@@ -18,7 +18,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Stage::Stage()
+Stage::Stage(short stage_num)
 {
 
 	element = new Stage_Element();
@@ -38,7 +38,7 @@ Stage::Stage()
 	}
 
 	//マップデータの読み込み
-	LoadMap();
+	LoadMap(stage_num);
 
 	InitStage();
 
@@ -214,13 +214,13 @@ void Stage::Draw()
 //-----------------------------------
 // マップ読込み
 //-----------------------------------
-void Stage::LoadMap()
+void Stage::LoadMap(short stage_num)
 {
 
-	const char* stage_name = STAGE_NAME;
+	//const char* stage_name = STAGE_NAME;
 
 	char buf[37];
-	sprintf_s(buf, sizeof(buf), "Data/Map_Data/%s.csv", stage_name);
+	sprintf_s(buf, sizeof(buf), "Data/Map_Data/Stage0%d.csv", stage_num);
 
 	int FileHandle;
 

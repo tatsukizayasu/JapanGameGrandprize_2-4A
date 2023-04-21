@@ -20,7 +20,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-GameMain::GameMain()
+GameMain::GameMain(short stage_num)
 {
 #undef DOT_BY_DOT
 	//背景画像読み込み
@@ -32,7 +32,7 @@ GameMain::GameMain()
 	pause = new Pause();
 #endif
 	enemy_spawn_volume = 0;
-	stage = new Stage();
+	stage = new Stage(stage_num);
 	player = new Player(stage);
 	stage->SetPlayer(player);
 

@@ -26,7 +26,7 @@ AbstractScene* GameOver::Update()
 {
 	if(PAD_INPUT::OnButton(XINPUT_BUTTON_A))
 	{
-		return new GameMain();
+		return new GameMain(1);
 	}
 
 	return this;
