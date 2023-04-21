@@ -109,6 +109,7 @@ Player::Player(Stage* stage)
 	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0;
 	image = new int[PLAYER_IMAGES];
 	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
+	hp_image = LoadGraph("Images/Player/HP_Bar.png");
 
 	image_size_x = 40;
 	image_size_y = 80;
@@ -256,24 +257,28 @@ void Player::Draw() const
 	//‚±‚±‚Ü‚Å
 
 	//HPƒo[‚Ì•\Ž¦‚±‚±‚©‚ç
+	float hp_start = 140;
+	DrawGraph(10, 380, hp_image, true);
 	if (hp >= 50)
 	{
-		DrawBoxAA(80, 600, now_hp - 1, 600 + HP_BAR_HEIGHT, GREEN, TRUE);
+		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, GREEN, TRUE);
 	}
 	else if (hp >= 20)
 	{
-		DrawBoxAA(80, 600, now_hp - 1, 600 + HP_BAR_HEIGHT, YELLOW, TRUE);
+		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, YELLOW, TRUE);
 	}
 	else
 	{
-		DrawBoxAA(80, 600, now_hp - 1, 600 + HP_BAR_HEIGHT, RED, TRUE);
+		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, RED, TRUE);
 	}
-	DrawBox(80, 600, HP_BAR_WIDTH - 1, 600 + HP_BAR_HEIGHT, 0x000000, FALSE);
+	DrawBox(hp_start, 605, HP_BAR_WIDTH - 1, 605 + HP_BAR_HEIGHT, 0x000000, FALSE);
+
+
 	//‚±‚±‚Ü‚Å
 
-	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
 	{
-		DrawFormatString(80 + (40 * i), 670, 0xffffff, "%d", element[i]->GetVolume());
+		DrawFormatString(160 + (70 * i), 670, 0xffffff, "%d", element[i]->GetVolume());
 	}
 
 

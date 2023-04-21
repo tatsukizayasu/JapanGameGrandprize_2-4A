@@ -38,8 +38,8 @@
 
 #define UNDEAD_ANIMATION 10
 
-#define UNDEAD_WIDTH 46
-#define UNDEAD_HEIGHT 110
+#define UNDEAD_WIDTH 40
+#define UNDEAD_HEIGHT 90
 
 
 //-----------------------------------
@@ -478,7 +478,7 @@ void Undead::Draw() const
 	DrawDamageLog();
 
 	DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
-		0.8, 0,images[image_argument], TRUE, !left_move);
+		0.6, 0,images[image_argument], TRUE, !left_move);
 
 }
 
@@ -545,7 +545,7 @@ void Undead::DebugDraw()
 	center.height = size.height / 2;
 
 	DrawRotaGraph2F(location.x, location.y, center.width, center.height,
-		0.8, 0,images[image_argument], TRUE, !left_move);
+		0.6, 0,images[image_argument], TRUE, !left_move);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

@@ -32,8 +32,8 @@ EnemySlime::EnemySlime(Location spawn_location)
 	location = spawn_location;
 
 	jump_distance = location;
-	area.height = 61;
-	area.width = 60;
+	area.height = 56;
+	area.width = 52;
 
 	location.x -= MAP_CHIP_SIZE / 2;
 	location.y -= MAP_CHIP_SIZE / 2;
@@ -287,7 +287,7 @@ void EnemySlime::Draw()const
 	}
 	DrawDamageLog();
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
+	DrawRotaGraphF(draw_location.x, draw_location.y, 0.85, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 }
 
 //-----------------------------------
@@ -587,7 +587,7 @@ void EnemySlime::Update(const ENEMY_STATE state)
 //-----------------------------------
 void EnemySlime::DebugDraw()
 {
-	DrawRotaGraphF(location.x, location.y, 1.0,
+	DrawRotaGraphF(location.x, location.y, 0.85,
 		M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,

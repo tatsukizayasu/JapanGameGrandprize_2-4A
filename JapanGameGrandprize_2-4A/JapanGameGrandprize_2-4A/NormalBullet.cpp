@@ -143,7 +143,7 @@ void NormalBullet::Draw() const
 		}
 		else
 		{
-			DrawBox(location.x - scrool_x, location.y - scrool_y, (location.x - scrool_x) + 20, (location.y - scrool_y) + 10, GLAY, TRUE);
+			DrawCircle(location.x - scrool_x, location.y - scrool_y, radius, GLAY, TRUE);
 		}
 		break;
 	case ATTRIBUTE::EXPLOSION:

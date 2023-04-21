@@ -14,7 +14,7 @@ class Pouch
 private:
 
 	float x, y;
-	int second_tab_image;
+	int second_tab_image[4];
 	int elemental_count;
 	int page_jump_count;
 	int cursol;

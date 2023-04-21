@@ -196,6 +196,7 @@ bool GameMain::EnemyUpdate()
 				{
 					enemy[i] = new EnemySlimeBoss(spawn[i].location);
 					is_spawn_boss = true;
+					break;
 				}
 			}
 		}
@@ -208,7 +209,7 @@ bool GameMain::EnemyUpdate()
 	{
 		if (enemy[i] != nullptr)
 		{
-			enemy[i]->Update(player, stage);
+				enemy[i]->Update(player, stage);
 
 			//エネミーの攻撃
 			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
