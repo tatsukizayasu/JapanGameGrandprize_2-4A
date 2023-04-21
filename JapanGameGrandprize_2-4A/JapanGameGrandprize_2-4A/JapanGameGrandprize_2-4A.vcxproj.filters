@@ -210,6 +210,9 @@
     <ClCompile Include="KrakenBreath.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
+    <ClCompile Include="TextureContainer.cpp">
+      <Filter>ソースファイル\Stage\StageBuilder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractScene.h">
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="KrakenBreath.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureContainer.h">
+      <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

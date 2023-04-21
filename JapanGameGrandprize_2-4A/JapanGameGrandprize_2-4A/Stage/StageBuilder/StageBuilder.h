@@ -1,6 +1,7 @@
 #pragma once
 #include "Debug.h"
 #include "../Define.h"
+#include "../../TextureContainer.h"
 #include "KeyManager.h"
 #include "../MapChip.h"
 #include "../SphereCollider.h"
@@ -11,8 +12,9 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <string_view>
 
-//sphereColliderは約3600個程度ならフレームレートを落とさず更新できる
+//sphereColliderは約3000個程度ならフレームレートを落とさず更新できる
 
 #ifdef _STAGE_BUILDER
 
@@ -66,6 +68,7 @@ private:
 
 	//todo:テスト 
 	vector<BoxCollider*> boxes;
+	const int* image;
 
 public:
 	/*******************更新描画系統*******************/
@@ -131,7 +134,7 @@ public:
 
 	//マップチップを作成する
 	void MakeMapChip(); //クリックしたとき用
-	void MakeMapChip(float x, float y, float width, float height); //CSVファイルからの読み込み用
+	MapChip* MakeMapChip(float x, float y, float width, float height); //CSVファイルからの読み込み用
 
 	//コリジョンクラスを作成する
 	//折れ線
@@ -166,9 +169,10 @@ public:
 	void SaveObject(FILE* fp);
 
 	//マップチップの読み込み
-	void LoadMapChip(istringstream* i_stringstream);
+	MapChip* LoadMapChip(istringstream* i_stringstream);
 	//折れ線の読み込み
-	void LoadPolyLine(istringstream* i_stringstream);
+	PolyLine* LoadPolyLine(istringstream* i_stringstream);
+
 };
 
 

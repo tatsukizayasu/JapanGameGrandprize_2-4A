@@ -1,13 +1,20 @@
 #pragma once
 #include "../../Define.h"
 #include "../../ColliderBase.h"
+#include "../../TextureContainer.h"
+
+ //ï€ë∂ ì«Ç›çûÇ›Ç…égÇ§ÉLÅ[--------------------------------------
+#define OBJECT_NAME_DEFAULT "object"
+//--------------------------------------------------------------
+
 
 class ObjectBase
 {
 private:
-	const char* class_name = "object";
-	ColliderBase* collider;
+	const char* class_name = OBJECT_NAME_DEFAULT;
+	const char* texture_name = "yuka_1";
 	int image;
+	ColliderBase* collider;
 	SphereCollider* pivot;
 	Location vector;
 	Location old_location;
@@ -16,7 +23,7 @@ private:
 	void ColliderCast(ColliderBase* p_collider);
 public:
 	ObjectBase();
-	ObjectBase(Location pivot, ColliderBase* p_collider);
+	ObjectBase(Location pivot, ColliderBase* p_collider ,const char* texture_name);
 	~ObjectBase();
 
 	void Draw()const;
@@ -40,6 +47,7 @@ public:
 
 	ColliderBase* GetColllider()const { return collider; }
 	SphereCollider* GetPivot()const { return pivot; }
-	const char* GetName() { return class_name; }
+	const char* GetObjectName() { return class_name; }
+	const char* GetTextureName() { return texture_name; }
 
 };

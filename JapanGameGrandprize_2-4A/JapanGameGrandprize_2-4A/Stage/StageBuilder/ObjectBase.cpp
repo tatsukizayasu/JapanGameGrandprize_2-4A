@@ -13,11 +13,13 @@ ObjectBase::ObjectBase()
 //--------------------------------
 // コンストラクタ
 //--------------------------------
-ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider)
+ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider, const char* texture_name)
 {
-	ColliderBase* base;
+	this->texture_name = texture_name;
+	TextureContainer* instance_texture = TextureContainer::GetInstance();
+	image = instance_texture->GetTexture(texture_name);
+
 	this->pivot = new SphereCollider(pivot);
-	image = LoadGraph("images/Stage/yuka_1.png");
 	
 	int class_type = p_collider->GetColliderType();
 	switch (class_type)

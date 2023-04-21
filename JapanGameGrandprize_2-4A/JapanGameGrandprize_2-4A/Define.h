@@ -45,6 +45,11 @@ enum class COLLIDER
 	,POLY_LINE
 };
 
+enum class OBJECT
+{
+	DEFAULT = 0 //ObjectƒNƒ‰ƒX‚Ì‚Ü‚Ü
+};
+
 struct ChemicalFormulaMaterial
 {
 	int carbon;		//’Y‘f

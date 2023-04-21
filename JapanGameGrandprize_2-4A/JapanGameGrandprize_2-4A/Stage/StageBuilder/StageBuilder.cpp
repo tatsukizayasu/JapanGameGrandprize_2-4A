@@ -55,7 +55,8 @@ StageBuilder::StageBuilder()
 
 	BoxCollider box = BoxCollider({ 640,360 }, { 100,100 });
 
-	objects.push_back(new ObjectBase({ 640,460 }, &testline));
+	
+	objects.push_back(new ObjectBase({ 640,460 }, &testline, "yuka_1"));
 
 
 	Location mouse_line_loc[4]{ {0,0},{100,0},{150,100} , {200,100} };
@@ -210,8 +211,6 @@ void StageBuilder::Draw()const
 	DrawWhichMode();
 
 	DrawMouse();
-
-	mouse->Draw();
 
 }
 
@@ -877,10 +876,9 @@ void StageBuilder::MakeMapChip()
 //------------------------------------
 // マップチップの作成
 //------------------------------------
-void StageBuilder::MakeMapChip(float x, float y, float width, float height)
+MapChip* StageBuilder::MakeMapChip(float x, float y, float width, float height)
 {
-
-	map_chips.push_back(new MapChip(&block_images[1],
+	return (new MapChip(&block_images[1],
 		{ x ,y }, { MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
 
@@ -1026,6 +1024,8 @@ void StageBuilder::LoadStage(char* stage_name)
 {
 
 	int collider_type;
+	string object_name;
+	string texture_name;
 
 	string str_conma_buf;
 	string line;
@@ -1042,17 +1042,44 @@ void StageBuilder::LoadStage(char* stage_name)
 		istringstream i_stringstream(line);
 
 		getline(i_stringstream, str_conma_buf, ',');
+		object_name = str_conma_buf;
+
+		if (strcmp(OBJECT_NAME_DEFAULT,const char* test= object_name.c_str()))
+		{
+
+			getline(i_stringstream, str_conma_buf, ',');
+			collider_type = atoi(str_conma_buf.c_str());
+
+			getline(i_stringstream, str_conma_buf, ',');
+			texture_name = str_conma_buf.c_str();
+
+			Location arg_location;
+			getline(i_stringstream, str_conma_buf, ',');
+			arg_location.x = atof(str_conma_buf.c_str());
+
+			getline(i_stringstream, str_conma_buf, ',');
+			arg_location.y = atof(str_conma_buf.c_str());
+
+			if (collider_type == (int)COLLIDER::POLY_LINE)
+			{
+				PolyLine* loaded = LoadPolyLine(&i_stringstream);
+				objects.push_back
+				(new ObjectBase(arg_location,loaded,texture_name.c_str()));
+				continue;
+			}
+		}
+
 		collider_type = atoi(str_conma_buf.c_str());
 
 		if (collider_type == (int)COLLIDER::MAP_CHIP)
 		{
-			LoadMapChip(&i_stringstream);
+			map_chips.push_back(LoadMapChip(&i_stringstream));
 			continue;
 		}
 
 		if (collider_type == (int)COLLIDER::POLY_LINE)
 		{
-			LoadPolyLine(&i_stringstream);
+			poly_lines.push_back(LoadPolyLine(&i_stringstream));
 			continue;
 		}
 	}
@@ -1141,7 +1168,13 @@ void StageBuilder::SaveObject(FILE* fp)
 	{
 		for (int i = 0; i < objects.size(); i++)
 		{
-			fprintf_s(fp, "%s,", objects[i]->GetName());
+			fprintf_s(fp, "%s,%s,%lf,%lf,", 
+				objects[i]->GetObjectName(),
+				objects[i]->GetTextureName(),
+				objects[i]->GetPivot()->GetLocation().x,
+				objects[i]->GetPivot()->GetLocation().y
+			);
+
 
 			int collider_type = objects[i]->GetColllider()->GetColliderType();
 
@@ -1223,7 +1256,7 @@ void StageBuilder::SaveObject(FILE* fp)
 //------------------------------------
 // マップチップの読み込み
 //------------------------------------
-void StageBuilder::LoadMapChip(istringstream* i_stringstream)
+MapChip* StageBuilder::LoadMapChip(istringstream* i_stringstream)
 {
 	string str_conma_buf;
 	string line;
@@ -1239,14 +1272,14 @@ void StageBuilder::LoadMapChip(istringstream* i_stringstream)
 	getline(*i_stringstream, str_conma_buf, ',');
 	y = atof(str_conma_buf.c_str());
 
-	MakeMapChip(x, y, width, height);
+	return MakeMapChip(x, y, width, height);
 
 }
 
 //------------------------------------
 // 折れ線の読み込み
 //------------------------------------
-void StageBuilder::LoadPolyLine(istringstream* i_stringstream)
+PolyLine* StageBuilder::LoadPolyLine(istringstream* i_stringstream)
 {
 	string str_conma_buf;
 	string line;
@@ -1266,7 +1299,7 @@ void StageBuilder::LoadPolyLine(istringstream* i_stringstream)
 		location[i].y = atof(str_conma_buf.c_str());
 	}
 
-	poly_lines.push_back(new PolyLine(&location[0], location.size()));
+	return (new PolyLine(&location[0], location.size()));
 }
 
 #endif
