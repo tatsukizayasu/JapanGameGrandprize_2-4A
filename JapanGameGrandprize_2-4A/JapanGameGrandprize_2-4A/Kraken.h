@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
 #include"KrakenBullet.h"
+#include"KrakenBreath.h"
 
 
 enum class KRAKEN_STATE
@@ -22,9 +23,13 @@ class Kraken :
     public EnemyBase
 {
 private:
-	int standby_attack; //攻撃待機時間
-	int standby_move; //移動待機時間
-	KRAKEN_ATTACK attack_state;
+	
+	int attack_num; //攻撃の種類
+	int standby_attack; //攻撃待機
+	int launch_time; //ブレスの射撃時間
+
+	KRAKEN_ATTACK attack_state; //攻撃
+	KRAKEN_STATE move_state; //動き
 
 public:
 
@@ -51,6 +56,9 @@ public:
 
 	//遠距離攻撃（水の塊を落とす）
 	void AttackWater(const Location player_location);
+
+	//ブレス攻撃
+	void AttackBreath(const Location player_location);
 
 	//落下
 	void Fall() override;
