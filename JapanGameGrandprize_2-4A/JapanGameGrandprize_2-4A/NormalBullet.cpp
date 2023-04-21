@@ -62,6 +62,9 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 		Explosion[0].image = LoadGraph("Images/Player/img01.png");
 		Explosion[1].X_radius = 3;
 		Explosion[1].Y_radius = 5;
+		LoadDivGraph("Images/Player/着弾エフェクト_exp_2.png", 8, 8, 1, 120, 120, exp.Delete_image_array, TRUE, FALSE, FALSE);
+		exp.Delete_display_permit = FALSE;
+		exp.Delete_frame = 0;
 		for (int i = 0; i < PARTICLE; i++) 
 		{
 			Explosion[3].display_permit_Array[i] = FALSE;

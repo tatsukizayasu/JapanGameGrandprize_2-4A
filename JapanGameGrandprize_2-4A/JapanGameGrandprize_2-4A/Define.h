@@ -92,6 +92,14 @@ struct Bullet_Effect {
 	int OvalY_Array_permit[PARTICLE];
 };
 
+struct Delete_Effect {
+	int Delete_x;
+	int Delete_y;
+	int Delete_display_permit;
+	int Delete_image_array[10];
+	int Delete_frame;
+};
+
 //’†SÀ•W
 struct Location
 {
