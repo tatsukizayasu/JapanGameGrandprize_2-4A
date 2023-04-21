@@ -330,11 +330,11 @@ AttackResource EnemyGhost::Hit()
 
 	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK && (!attack))
 	{
-		/*	attack = true;
+			attack = true;
 			ENEMY_TYPE attack_type[1] = { *type };
 			ret.damage = ATTACK_DAMAGE;
 			ret.type = attack_type;
-			ret.type_count = 1;*/
+			ret.type_count = 1;
 	}
 
 	return ret;
