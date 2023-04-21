@@ -25,7 +25,7 @@
 Pouch::Pouch()
 {
 
-	x = 1080;
+	x = 1040;
 	y = 100;
 	cursol = 0;
 	for (int i = 0; i < 5; i++)
@@ -41,15 +41,45 @@ Pouch::Pouch()
 	move_up = false;
 	move_down = false;
 	tab = ATTRIBUTE::EXPLOSION;
-	second_tab_image = LoadGraph("Images/ItemTab/setumei.png");
+	second_tab_image[0] = LoadGraph("Images/ItemTab/explosion/melt_explosion.png");
+	second_tab_image[1] = LoadGraph("Images/ItemTab/explosion/poison.png");
+	second_tab_image[2] = LoadGraph("Images/ItemTab/explosion/paralysis.png");
+	second_tab_image[3] = LoadGraph("Images/ItemTab/explosion/heal.png");
 	elemental_count = LoadGraph("Images/ItemTab/P_kazu.png");
-	int images_init[POISON_MAX_NUM];
-	LoadDivGraph("Images/ItemTab/Secret_FILE/explosion.png", 13, 1, 13, 350, 23, images_init);
+	int images_init_explosion[EXPLOSION_MAX_NUM];
+	int images_init_melt[MELT_MAX_NUM];
+	int images_init_pararysis[PARARYSIS_MAX_NUM];
+	int images_init_poison[POISON_MAX_NUM];
+	int images_init_heal[HEAL_MAX_NUM];
+	LoadDivGraph("Images/ItemTab/Secret_FILE/explosion.png", EXPLOSION_MAX_NUM, 1, EXPLOSION_MAX_NUM, 350, 23, images_init_explosion);
 	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
 	{
-		chemical_formula_explosion[i].name_image = images_init[i];
+		chemical_formula_explosion[i].name_image = images_init_explosion[i];
 	}
 
+	LoadDivGraph("Images/ItemTab/Secret_FILE/melt.png", MELT_MAX_NUM, 1, MELT_MAX_NUM, 350, 23, images_init_melt);
+	for (int i = 0; i < MELT_MAX_NUM; i++)
+	{
+		chemical_formula_melt[i].name_image = images_init_melt[i];
+	}
+
+	LoadDivGraph("Images/ItemTab/Secret_FILE/paralysis.png", PARARYSIS_MAX_NUM, 1, PARARYSIS_MAX_NUM, 350, 23, images_init_pararysis);
+	for (int i = 0; i < PARARYSIS_MAX_NUM; i++)
+	{
+		chemical_formula_pararysis[i].name_image = images_init_pararysis[i];
+	}
+
+	LoadDivGraph("Images/ItemTab/Secret_FILE/poison.png", POISON_MAX_NUM, 1, POISON_MAX_NUM, 350, 23, images_init_poison);
+	for (int i = 0; i < POISON_MAX_NUM; i++)
+	{
+		chemical_formula_poison[i].name_image = images_init_poison[i];
+	}
+
+	LoadDivGraph("Images/ItemTab/Secret_FILE/heal.png", HEAL_MAX_NUM, 1, HEAL_MAX_NUM, 350, 23, images_init_heal);
+	for (int i = 0; i < HEAL_MAX_NUM; i++)
+	{
+		chemical_formula_heal[i].name_image = images_init_heal[i];
+	}
 	//Œ³‘f‚Ì‰Šú‰»
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
@@ -86,26 +116,25 @@ Pouch::~Pouch()
 //”š”­
 void Pouch::ExplosionTabDraw() const
 {
-	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
-	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_explosion[cursol].chemical_formula);
-	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_explosion[cursol].number_of_bullets);
-	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_explosion[cursol].damage);
+	DrawGraph(x, y + 300, second_tab_image[0], TRUE);
+	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_explosion[cursol].chemical_formula);
+	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_explosion[cursol].number_of_bullets);
+	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_explosion[cursol].damage);
 
 
 
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
 	if (page == 0)
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_explosion[i].name_image,true);
 		}
 	}
 	if (page == 1)
 	{
 		for (int i = 9, j = 0; i < EXPLOSION_MAX_NUM; i++, j++)
 		{
-			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_explosion[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * j), chemical_formula_explosion[i].name_image, true);
 		}
 	}
 
@@ -121,31 +150,32 @@ void Pouch::ExplosionTabDraw() const
 //—n‰ð
 void Pouch::MeltTabDraw() const
 {
-	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
-	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_melt[cursol].chemical_formula);
-	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_melt[cursol].number_of_bullets);
-	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_melt[cursol].damage);
+	DrawGraph(x, y + 300, second_tab_image[0], TRUE);
+	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_melt[cursol].chemical_formula);
+	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_melt[cursol].number_of_bullets);
+	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_melt[cursol].damage);
+	
 
 
 
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
 	if (page == 0)
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_melt[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_melt[i].name_image, true);
 		}
 	}
 	if (page == 1)
 	{
 		for (int i = 9, j = 0; i < MELT_MAX_NUM; i++, j++)
 		{
-			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_melt[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * j), chemical_formula_melt[i].name_image, true);
 		}
 	}
 
 
 	ElementDraw(chemical_formula_melt[cursol]);
+
 
 	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "MELT", 0x000000);
@@ -154,31 +184,34 @@ void Pouch::MeltTabDraw() const
 //–ƒáƒ
 void Pouch::ParalysisTabDraw()const
 {
-	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
-	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_pararysis[cursol].chemical_formula);
-	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_pararysis[cursol].number_of_bullets);
-	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_pararysis[cursol].damage);
+	DrawGraph(x, y + 300, second_tab_image[2], TRUE);
+	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_pararysis[cursol].chemical_formula);
+	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_pararysis[cursol].number_of_bullets);
+	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_pararysis[cursol].damage);
+	DrawFormatString(x + 165, y + 440, 0xffffff, "%d", chemical_formula_pararysis[cursol].time / 60);
+	DrawString(x + 190, y + 440, "•b", 0xffffff);
 
 
 
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
+
 	if (page == 0)
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_pararysis[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_pararysis[i].name_image, true);
 		}
 	}
 	if (page == 1)
 	{
 		for (int i = 9, j = 0; i < PARARYSIS_MAX_NUM; i++, j++)
 		{
-			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_pararysis[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * j), chemical_formula_pararysis[i].name_image, true);
 		}
 	}
 
 
 	ElementDraw(chemical_formula_pararysis[cursol]);
+
 
 	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "PARARYSIS", 0x000000);
@@ -187,31 +220,34 @@ void Pouch::ParalysisTabDraw()const
 //“Å
 void Pouch::PoisonTabDraw()const
 {
-	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
-	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_poison[cursol].chemical_formula);
-	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_poison[cursol].number_of_bullets);
-	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_poison[cursol].damage);
+	DrawGraph(x, y + 300, second_tab_image[1], TRUE);
+	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_poison[cursol].chemical_formula);
+	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_poison[cursol].number_of_bullets);
+	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_poison[cursol].damage);
+	DrawFormatString(x + 165, y + 440, 0xffffff, "%d", chemical_formula_poison[cursol].damage_per_second);
+	DrawFormatString(x + 165, y + 470, 0xffffff, "%d", chemical_formula_poison[cursol].time / 60);
+	DrawString(x + 190, y + 470, "•b", 0xffffff);
 
 
 
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
 	if (page == 0)
 	{
 		for (int i = 0; i < 9; i++)
 		{
-			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_poison[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_poison[i].name_image, true);
 		}
 	}
 	if (page == 1)
 	{
 		for (int i = 9, j = 0; i < POISON_MAX_NUM; i++, j++)
 		{
-			DrawFormatString(x, y + 80 + (30 * j), 0xffff00, chemical_formula_poison[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * j), chemical_formula_poison[i].name_image, true);
 		}
 	}
 
 
 	ElementDraw(chemical_formula_poison[cursol]);
+
 
 	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "POISON", 0x000000);
@@ -219,23 +255,24 @@ void Pouch::PoisonTabDraw()const
 //‰ñ•œ
 void Pouch::HealTabDraw()const
 {
-	DrawGraph(x - 254, y - 50, second_tab_image, TRUE);
-	DrawFormatString(x - 200, y, 0xffffff, "%s", chemical_formula_heal[cursol].chemical_formula);
-	DrawFormatString(x - 70, y + 30, 0xffffff, "%d", chemical_formula_heal[cursol].number_of_bullets);
-	DrawFormatString(x - 70, y + 60, 0xffffff, "%d", chemical_formula_heal[cursol].damage);
+	DrawGraph(x, y + 300, second_tab_image[3], TRUE);
+	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_heal[cursol].chemical_formula);
+	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_heal[cursol].number_of_bullets);
+	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_heal[cursol].damage);
 
 
 
-	DrawBox(x, y, x + POUCH_WIDTH, y + POUCH_HEIGHT, 0x00ffff, TRUE);
-
+	if (page == 0)
+	{
 		for (int i = 0; i < HEAL_MAX_NUM; i++)
 		{
-			DrawFormatString(x, y + 80 + (30 * i), 0xffff00, chemical_formula_heal[i].chemical_formula_name);
+			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_heal[i].name_image, true);
 		}
-
+	}
 
 
 	ElementDraw(chemical_formula_heal[cursol]);
+
 
 	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawString(POUCH_START_X, POUCH_START_Y + 50, "HEAL", 0x000000);
@@ -266,39 +303,25 @@ void Pouch::Draw() const
 		break;
 	}
 
-	DrawBox(POUCH_START_X, POUCH_START_Y + 400, POUCH_START_X + POUCH_WIDTH, POUCH_START_Y + POUCH_HEIGHT, 0xaaaaaa, TRUE);
-
-	for (int i = 0; i < 4; i++)
-	{
-		DrawBox(POUCH_START_X + (50 * i), POUCH_START_Y + 400, (POUCH_START_X + (50 * i)) + 50, POUCH_START_Y + 450, 0xffffff, FALSE);
-		DrawFormatString(POUCH_START_X + (50 * i), POUCH_START_Y + 400, 0x000000, "%d", element[i]->GetVolume());
-		DrawFormatString(POUCH_START_X + (50 * i), POUCH_START_Y + 430, 0x000000, "%c", element_char[i]);
-	}
-
-	for (int i = 0; i < 3; i++)
-	{
-		DrawBox(POUCH_START_X + (50 * i) + 25, POUCH_START_Y + 450, (POUCH_START_X + (50 * i) + 50) + 25, POUCH_START_Y + POUCH_HEIGHT, 0xffffff, FALSE);
-		DrawFormatString(POUCH_START_X + (50 * i) + 25, POUCH_START_Y + 450, 0xffffff, "%d", element[i + 4]->GetVolume());
-		DrawFormatString(POUCH_START_X + (50 * i) + 25, POUCH_START_Y + 480, 0xffffff, "%c", element_char[i + 4]);
-	}
-
-	DrawGraph(x - 254, y + 200, elemental_count, TRUE);
+	DrawGraph(x - 170, y + 360, elemental_count, TRUE);
 }
 
 void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 {
 	int i = 0;
-	DrawFormatString(x - 180, y + 220, 0xffffff, "%d    %d",
+	int tab_x = x - 100;
+	
+	DrawFormatString(tab_x, y + 385, 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume() - bring.material.carbon);
-	DrawFormatString(x - 180, y + 250 + (30 * i), 0xffffff, "%d    %d",
+	DrawFormatString(tab_x, y + 415 + (30 * i), 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume() - bring.material.hydrogen);
-	DrawFormatString(x - 180, y + 280 + (30 * i), 0xffffff, "%d    %d",
+	DrawFormatString(tab_x, y + 445 + (30 * i), 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume() - bring.material.nitrogen);
-	DrawFormatString(x - 180, y + 310 + (30 * i), 0xffffff, "%d    %d",
+	DrawFormatString(tab_x, y + 475 + (30 * i), 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume() - bring.material.oxygen);
-	DrawFormatString(x - 180, y + 340 + (30 * i), 0xffffff, "%d    %d",
+	DrawFormatString(tab_x, y + 505 + (30 * i), 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume() - bring.material.sulfur);
-	DrawFormatString(x - 180, y + 370 + (30 * i), 0xffffff, "%d    %d",
+	DrawFormatString(tab_x, y + 535 + (30 * i), 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume() - bring.material.chlorine);
 
 }

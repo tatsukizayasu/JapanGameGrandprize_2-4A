@@ -46,6 +46,7 @@ GameMain::GameMain()
 	bullet_manager = BulletManager::GetInstance();
 
 	input_margin = 0;
+	is_spawn_boss = false;
 }
 
 //-----------------------------------
@@ -151,7 +152,7 @@ void GameMain::SpawnEnemy()
 			enemy[i] = new Wyvern(spawn[i].location);
 			break;
 		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
-			enemy[i] = new EnemySlimeBoss(spawn[i].location);
+			enemy[i] = nullptr;
 			break;
 		case ENEMY_KIND::TORRENT:	//トレントボスの生成
 			enemy[i] = new Torrent(spawn[i].location);
@@ -165,6 +166,7 @@ void GameMain::SpawnEnemy()
 			break;
 		case ENEMY_KIND::NONE:
 		default:
+			enemy[i] = nullptr;
 			break;
 		}
 	}
@@ -178,6 +180,28 @@ bool GameMain::EnemyUpdate()
 	//クリア判定用フラグ
 	bool is_clear = false;
 
+	//プレイヤーがボスエリアに入った際、ボスを出現させる
+	if (camera_work->GetCameraLock() == true && is_spawn_boss == false)
+	{
+		vector<ENEMY_LOCATION> spawn;
+		spawn = stage->GetEnemy_SpawnLocation();
+
+		enemy_spawn_volume = spawn.size();
+		int boss_index;
+		for (int i = 0; i < enemy_spawn_volume; i++)
+		{
+			if (static_cast<short>(ENEMY_KIND::SLIME_BOSS) <= spawn[i].id)
+			{
+				if (enemy[i] == nullptr)
+				{
+					enemy[i] = new EnemySlimeBoss(spawn[i].location);
+					is_spawn_boss = true;
+					break;
+				}
+			}
+		}
+	}
+
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
@@ -185,7 +209,7 @@ bool GameMain::EnemyUpdate()
 	{
 		if (enemy[i] != nullptr)
 		{
-			enemy[i]->Update(player, stage);
+				enemy[i]->Update(player, stage);
 
 			//エネミーの攻撃
 			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)

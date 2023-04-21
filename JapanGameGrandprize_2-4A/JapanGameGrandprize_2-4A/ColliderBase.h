@@ -72,13 +72,16 @@ public:
 	//LineCollider‚Æ‚Ì“–‚½‚è”»’è
 	virtual bool HitLine(const class LineCollider* line_collider)const = 0;
 
+	//PolyLine‚Æ‚Ì“–‚½‚è”»’è
+	virtual bool HitPolyLine(const class PolyLine* poly_line)const = 0;
+
 	virtual ColliderBase* Copy()const = 0;
 
 	virtual  bool HitCheck(ColliderBase* collider)const = 0;
 
 	virtual void Draw()const {}
 
-	int GetName() { return collider_type; }
+	int GetColliderType() { return collider_type; }
 
 protected:
 
