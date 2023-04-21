@@ -12,15 +12,18 @@
 //クラーケン
 #define KRAKEN_HP 500 //（HP調節）
 
-//攻撃をする範囲
-
+//接近攻撃をする範囲
+#define ATTACK_SCOPE 100
+#define ATTACK_SCOPE_Y 100
 
 //次の攻撃までの時間
 
 
 //移動スピード
-#define MOVE_SPEED 10;
+#define MOVE_SPEED 10
 
+//移動時間
+#define MOVE_TIME 120
 
 //ドロップ量(最小)
 #define MIN_DROP 40
@@ -63,6 +66,7 @@ Kraken::Kraken(Location spawn_location)
 	poison_damage = 0;
 	paralysis_time = 0;
 	launch_time = 0;
+	move_time = 0;
 	location = spawn_location;
 
 	standby_attack = 0;
@@ -209,23 +213,59 @@ void  Kraken::Idol()
 //-----------------------------------
 void Kraken::Move(const Location player_location)
 {
-	//移動するのかしないのか
-	switch (move_state)
+
+	int range = player_location.x - location.x;
+	int range_y = player_location.y - location.y;
+
+	//接近攻撃
+	if (range <= ATTACK_SCOPE && range >= -ATTACK_SCOPE &&
+		range_y <= ATTACK_SCOPE_Y && range_y >= -ATTACK_SCOPE_Y)
 	{
-	case KRAKEN_STATE::NORMAL: //クラーケンの通常移動
-		if (left_move == true)
-		{
-			location.x -= MOVE_SPEED;
-		}
-		else
-		{
-			location.x += MOVE_SPEED;
-		}
-		break;
-	case KRAKEN_STATE::NONE: //移動しない
-	default:
-		break;
+		state = ENEMY_STATE::ATTACK;
+		attack_state = KRAKEN_ATTACK::TENTACLE_ATTACK;
 	}
+
+
+
+	--move_time;
+	if (move_time>0)
+	{
+		switch (move_state)
+		{
+		case KRAKEN_STATE::NORMAL: //クラーケンの通常移動
+			if (left_move == true)
+			{
+				location.x -= MOVE_SPEED;
+			}
+			else
+			{
+				location.x += MOVE_SPEED;
+			}
+			break;
+		case KRAKEN_STATE::NONE: //移動しない
+		default:
+			break;
+		}
+	}
+	if (move_time < 0)
+	{
+		switch (attack_num)
+		{
+		case 0:
+			attack_state = KRAKEN_ATTACK::BREATH;
+			state = ENEMY_STATE::ATTACK;
+			standby_attack = 100;
+			break;
+		case 1:
+			attack_state = KRAKEN_ATTACK::HARD_ATTACK;
+			state = ENEMY_STATE::ATTACK;
+			standby_attack = 100;
+			break;
+		default:
+			break;
+		}
+	}
+
 }
 
 //-----------------------------------
@@ -246,23 +286,27 @@ void Kraken::Fall()
 //-----------------------------------
 void  Kraken::Attack(const Location player_location)
 {
-
-	switch (attack_state)
+	--standby_attack;
+	if (standby_attack < 0)
 	{
-	case KRAKEN_ATTACK::TENTACLE_ATTACK: //触手攻撃
+		switch (attack_state)
+		{
+		case KRAKEN_ATTACK::TENTACLE_ATTACK: //触手攻撃
 
-		break;
-	case KRAKEN_ATTACK::BREATH: //ブレス攻撃
-		break;
-	case KRAKEN_ATTACK::HARD_ATTACK: //水の塊を落とす
-		AttackWater(player_location);
-		state = ENEMY_STATE::MOVE;
-		break;
-	case KRAKEN_ATTACK::NONE: //ノーマル
-	default:
-		break;
+			break;
+		case KRAKEN_ATTACK::BREATH: //ブレス攻撃
+			AttackBreath(player_location);
+			break;
+		case KRAKEN_ATTACK::HARD_ATTACK: //水の塊を落とす
+			AttackWater(player_location);
+			attack_num = GetRand(1);
+			state = ENEMY_STATE::MOVE;
+			break;
+		case KRAKEN_ATTACK::NONE: //ノーマル
+		default:
+			break;
+		}
 	}
-
 }
 
 //-----------------------------------
@@ -281,10 +325,18 @@ void Kraken::AttackWater(Location player_location)
 //-----------------------------------
 void Kraken::AttackBreath(const Location player_location)
 {
-	for (int i = 0; i < 40; i++)
+	if (++launch_time < 200)
 	{
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new KrakenBreath(location, player_location));
+		
+	}
+	else
+	{
+		launch_time = 0;
+		attack_num = GetRand(1);
+		move_time = MOVE_TIME;
+		state = ENEMY_STATE::MOVE;
 	}
 }
 

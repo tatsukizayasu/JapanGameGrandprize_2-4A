@@ -26,7 +26,8 @@ private:
 	
 	int attack_num; //攻撃の種類
 	int standby_attack; //攻撃待機
-	int launch_time; //ブレスの射撃時間
+	int move_time; //移動開始を測る
+	int launch_time; //ブレスの発射間隔
 
 	KRAKEN_ATTACK attack_state; //攻撃
 	KRAKEN_STATE move_state; //動き
