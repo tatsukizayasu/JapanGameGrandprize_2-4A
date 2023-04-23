@@ -1,5 +1,7 @@
 #pragma once
 #include "Debug.h"
+
+#ifdef _STAGE_BUILDER
 #include "../Define.h"
 #include "../../TextureContainer.h"
 #include "KeyManager.h"
@@ -16,7 +18,6 @@
 
 //sphereColliderは約3000個程度ならフレームレートを落とさず更新できる
 
-#ifdef _STAGE_BUILDER
 
 //モードの数とその種類------
 #define MENU_NUM 4
@@ -32,6 +33,13 @@
 #define BRUSH_MAP_CHIP 0
 #define BRUSH_POLY_LINE 1
 //-----------------------------
+
+//ブラシモードのメニュー制御-------------
+#define CLOSE 0
+#define SELECT_CLASS 1
+#define SELECT_IMAGE 2
+#define SELECT_COLLIDER 3
+//---------------------------------------
 
 #define ARROW_NUM 16
 
@@ -65,10 +73,10 @@ private:
 	//ツール用
 	int mode;
 	int current_brush;
+	int brush_mode_state;
 
 	//todo:テスト 
 	vector<BoxCollider*> boxes;
-	const int* image;
 
 public:
 	/*******************更新描画系統*******************/
@@ -100,6 +108,9 @@ public:
 	void DrawMenu()const;
 	//セーブモードの描画
 	void DrawFileInfo()const;
+	//ブラシモードの描画
+	void DrawBrushMode()const;
+
 	//格子の描画
 	void DrawFrame()const;
 	//マウスの描画

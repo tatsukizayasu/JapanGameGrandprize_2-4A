@@ -34,10 +34,11 @@ StageBuilder::StageBuilder()
 	}
 
 	current_brush = BRUSH_MAP_CHIP;
+	brush_mode_state = CLOSE;
 
 #ifdef _DEV
 
-	for (int i = 0; i <0; i++)
+	for (int i = 0; i < 0; i++)
 	{
 		Location test[3] =
 		{
@@ -170,7 +171,7 @@ void StageBuilder::Draw()const
 	DrawFrame();
 
 #ifdef _DEBUG
-	SetFontSize(16);
+	SetFontSize(20);
 	for (int i = 0; i < map_chips.size(); i++)
 	{
 		int frame_x = (int)(map_chips[i]->GetLocation().x / MAP_CHIP_SIZE);
@@ -228,16 +229,7 @@ void StageBuilder::DrawWhichMode()const
 		break;
 
 	case BRUSH_MODE:
-		DrawClassName();
-		if (2 <= pending_sphere.size())
-		{
-			for (int i = 0; i + 1 < pending_sphere.size(); i++)
-			{
-				DrawLine(pending_sphere[i]->GetLocation() - CameraWork::GetCamera()
-					, pending_sphere[i + 1]->GetLocation() - CameraWork::GetCamera());
-			}
-		}
-		DrawSphere();
+		DrawBrushMode();
 		break;
 
 	case MODULATION_MODE:
@@ -283,10 +275,30 @@ void StageBuilder::UpdateBrush()
 
 	if (KeyManager::OnKeyClicked(KEY_INPUT_TAB))
 	{
-		current_brush++;
-		if (CLASS_NUM <= current_brush)
+		brush_mode_state = SELECT_CLASS;
+	}
+	if(brush_mode_state == SELECT_CLASS)
+	{
+		Select(CLASS_NUM);
+
+		if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
 		{
-			current_brush -= CLASS_NUM;
+			char tmp = arrow[menu_cursor];
+			arrow[menu_cursor] = ' ';
+
+			if (menu_cursor != CLASS_NUM - 1)
+			{
+				brush_mode_state = CLOSE;
+				current_brush = menu_cursor;
+			}
+			else
+			{
+
+				current_brush = menu_cursor;
+			}
+
+			menu_cursor = 0;
+			arrow[menu_cursor] = tmp;
 		}
 	}
 
@@ -317,9 +329,6 @@ void StageBuilder::UpdateModulation()
 	{
 		IsSelectedObject();
 	}
-
-
-
 
 	if (select_collider != nullptr)
 	{
@@ -487,13 +496,12 @@ void StageBuilder::DrawFileInfo()const
 
 	string file_name(Directory::GetCurrent());
 	int scale = 0;
-	int current = 0;
 	file_name += "\\*.csv";
 
 	const float draw_pos_x = 560.f;
 	const float draw_pos_y = 240.f;
 
-	int l_font_size = 16;
+	int l_font_size = 20;
 	scale = FileCount(file_name.c_str());
 	if (mode == SAVE_MODE)scale++;//V‹K’Ç‰Á•ª
 
@@ -517,6 +525,54 @@ void StageBuilder::DrawFileInfo()const
 			draw_pos_y + l_font_size * (scale - 1),
 			GetColor(255, 255, 255), "%c %s", arrow[scale - 1], "V‹K’Ç‰Á");
 	}
+}
+
+//------------------------------------
+// ƒuƒ‰ƒVƒ‚[ƒh‚Ì•`‰æ
+//------------------------------------
+void StageBuilder::DrawBrushMode()const
+{
+	int scale = CLASS_NUM;
+	int current = 0;
+
+	const int l_font_size = 20;
+	const int len = 15;
+	const float draw_pos_x = 640.0f - (l_font_size * len / 2);
+	const float draw_pos_y = 240.f;
+
+	DrawClassName();
+	if (2 <= pending_sphere.size())
+	{
+		for (int i = 0; i + 1 < pending_sphere.size(); i++)
+		{
+			DrawLine(pending_sphere[i]->GetLocation() - CameraWork::GetCamera()
+				, pending_sphere[i + 1]->GetLocation() - CameraWork::GetCamera());
+		}
+	}
+	DrawSphere();
+
+	if (brush_mode_state == SELECT_CLASS)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+
+		DrawBoxAA(draw_pos_x, draw_pos_y,
+			draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
+			0x000000, TRUE);
+
+		DrawBoxAA(draw_pos_x, draw_pos_y,
+			draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
+			0xFFFFFF, FALSE, 3);
+
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		for (int i = 0; i < scale; i++)
+		{
+			DrawFormatString(draw_pos_x + l_font_size, draw_pos_y + l_font_size * i,
+				GetColor(255, 255, 255), "%c %s", arrow[i], class_name[i]);
+
+		}
+	}
+	
 }
 
 //------------------------------------
