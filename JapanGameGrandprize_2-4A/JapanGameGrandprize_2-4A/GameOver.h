@@ -7,7 +7,7 @@ private:
 
 public:
     //コンストラクタ
-    GameOver();
+    GameOver(short stage_num);
 
     //デストラクタ
     ~GameOver();

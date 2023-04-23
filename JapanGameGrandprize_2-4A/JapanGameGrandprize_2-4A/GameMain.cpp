@@ -32,6 +32,7 @@ GameMain::GameMain(short stage_num)
 	pause = new Pause();
 #endif
 	enemy_spawn_volume = 0;
+	this->stage_num = stage_num;
 	stage = new Stage(stage_num);
 	player = new Player(stage);
 	stage->SetPlayer(player);
@@ -106,12 +107,12 @@ AbstractScene* GameMain::Update()
 
 	if (EnemyUpdate() == true)
 	{
-		return new GameClear();
+		return new GameClear(stage_num);
 	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		return new GameOver();
+		return new GameOver(stage_num);
 	}
 
 	return this;
