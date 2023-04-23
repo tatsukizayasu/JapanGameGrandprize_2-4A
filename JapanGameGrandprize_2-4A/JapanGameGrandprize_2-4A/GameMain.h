@@ -22,6 +22,10 @@ private:
 
     //ボスがスポーンしたかのフラグ
     bool is_spawn_boss;
+
+    //背景画像座標
+    Location background_location;
+
 #ifdef _DEBUG
 
 #else
@@ -37,7 +41,7 @@ private:
 public:
 
     //コンストラクタ
-    GameMain();
+    GameMain(short stage_num);
 
     //デストラクタ
     ~GameMain();

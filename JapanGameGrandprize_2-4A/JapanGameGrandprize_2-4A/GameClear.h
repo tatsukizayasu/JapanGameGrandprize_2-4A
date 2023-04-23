@@ -7,7 +7,7 @@ private:
 
 public:
     //コンストラクタ
-    GameClear();
+    GameClear(short stage_num);
 
     //デストラクタ
     ~GameClear();
