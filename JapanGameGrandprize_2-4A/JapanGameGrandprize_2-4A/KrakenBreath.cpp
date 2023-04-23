@@ -5,7 +5,7 @@
 #define KRAKEN_SPEED 10;
 
 //ƒuƒŒƒXUŒ‚‚ÌUŒ‚—Í
-#define BULLET_DAMAGE 45
+#define BULLET_DAMAGE 35
 
 
 KrakenBreath::KrakenBreath(Location spawn_location, Location player_location)

@@ -27,7 +27,6 @@ private:
 	int attack_num; //攻撃の種類
 	int standby_attack; //攻撃待機
 	int move_time; //移動開始を測る
-	int launch_time; //ブレスの発射間隔
 
 	KRAKEN_ATTACK attack_state; //攻撃
 	KRAKEN_STATE move_state; //動き
@@ -51,9 +50,6 @@ public:
 
 	//移動
 	void Move(const Location player_location) override;
-
-	//接近攻撃（物理攻撃）時の動き
-	void PhysicalMove(const Location player_location);
 
 	//遠距離攻撃（水の塊を落とす）
 	void AttackWater(const Location player_location);
