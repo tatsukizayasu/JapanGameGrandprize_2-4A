@@ -1024,12 +1024,15 @@ void StageBuilder::LoadStage(char* stage_name)
 {
 
 	int collider_type;
-	string object_name;
+	const char* object_name;
 	string texture_name;
+
 
 	string str_conma_buf;
 	string line;
 	ifstream ifstream(stage_name);
+
+	Directory::OpenMain();
 
 	if (!ifstream)
 	{
@@ -1042,14 +1045,10 @@ void StageBuilder::LoadStage(char* stage_name)
 		istringstream i_stringstream(line);
 
 		getline(i_stringstream, str_conma_buf, ',');
-		object_name = str_conma_buf;
+		object_name = str_conma_buf.c_str();
 
-		if (strcmp(OBJECT_NAME_DEFAULT,const char* test= object_name.c_str()))
+		if (strcmp(OBJECT_NAME_DEFAULT, object_name) == 0)
 		{
-
-			getline(i_stringstream, str_conma_buf, ',');
-			collider_type = atoi(str_conma_buf.c_str());
-
 			getline(i_stringstream, str_conma_buf, ',');
 			texture_name = str_conma_buf.c_str();
 
@@ -1059,6 +1058,11 @@ void StageBuilder::LoadStage(char* stage_name)
 
 			getline(i_stringstream, str_conma_buf, ',');
 			arg_location.y = atof(str_conma_buf.c_str());
+
+			getline(i_stringstream, str_conma_buf, ',');
+			collider_type = atoi(str_conma_buf.c_str());
+
+
 
 			if (collider_type == (int)COLLIDER::POLY_LINE)
 			{
