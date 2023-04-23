@@ -40,7 +40,7 @@ GameMain::GameMain(short stage_num)
 	EnemyBase::CreateLogFont();
 
 	SpawnEnemy();
-	camera_work = new CameraWork(0, 800, player, stage);
+	camera_work = new CameraWork(0, 0, player, stage);
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
 	
@@ -210,6 +210,13 @@ bool GameMain::EnemyUpdate()
 	{
 		if (enemy[i] != nullptr)
 		{
+			//Stage03の場合、画面内に収まるまで敵を強制移動
+			if (stage_num == 3 &&
+				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
+			{
+				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 1,enemy[i]->GetLocation().y });
+			}
+
 				enemy[i]->Update(player, stage);
 
 			//エネミーの攻撃
@@ -220,7 +227,7 @@ bool GameMain::EnemyUpdate()
 					player->HpDamage(enemy[i]->Hit());
 				}
 			}
-
+			
 			//プレイヤーの弾との当たり判定
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
