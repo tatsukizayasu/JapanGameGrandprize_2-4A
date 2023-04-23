@@ -101,9 +101,11 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
+	Location player_location = player->GetLocation();
+
 	// 中間地点との当たり判定
-	if (abs(halfway_point.x - player->GetLocation().x) <= MAP_CHIP_SIZE
-		&& abs(halfway_point.y - player->GetLocation().y) <= MAP_CHIP_SIZE) {
+	if (abs(halfway_point.x - player_location.x) <= MAP_CHIP_SIZE
+		&& abs(halfway_point.y - player_location.y) <= MAP_CHIP_SIZE) {
 		is_halfway_point = true;
 	}
 
@@ -145,13 +147,23 @@ void Stage::Update(Player* player)
 	// カメラワークが固定されたらボス部屋を閉める
 	if (camera_work != nullptr) {
 		if (camera_work->GetCameraState() == CameraWork::STATE::FIXED &&
-			player->GetLocation().x > SCREEN_WIDTH
+			player_location.x > SCREEN_WIDTH
 			) {
 			if (false == camera_work->GetCameraLock()) {
 				camera_work->SetCameraLock(true);
 				
-				for (int i = 0; i < 17; i++) {
-					AddFixedMapChip(25, 386, i);
+				
+				
+				float p_x = fmodf(player_location.x / MAP_CHIP_SIZE, SCREEN_WIDTH / CHIP_SIZE);
+				float wall_location = player_location.x / CHIP_SIZE - p_x + 2;
+
+				int map_height = map_data.size();
+				for (int i = 0; i < map_height; i++) {
+					if (map_data.at(i).at(static_cast<int>(wall_location)) < 1)
+					{
+						//画面端にブロックを設置
+						AddFixedMapChip(25, wall_location, static_cast<float>(i));
+					}
 				}
 			}
 			

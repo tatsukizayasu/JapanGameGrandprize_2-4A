@@ -119,6 +119,7 @@ void CameraWork::Update()
 		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) 
 			                                                        < ceilf(player->GetLocation().x))
 		{
+			camera.x = stage->GetMapSize().x * CHIP_SIZE - SCREEN_WIDTH;
 			state = STATE::FIXED;
 			return;
 		}
