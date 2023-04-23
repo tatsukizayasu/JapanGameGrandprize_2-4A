@@ -55,13 +55,12 @@ private:
 	STATE state;
 	bool is_lock;
 
-
 public:
 
 	
 
 	CameraWork();
-	CameraWork(float camera_x, float camera_y, Player* player, Stage* stage);
+	CameraWork(float camera_x, float camera_y, Player* player, Stage* stage, short stage_num);
 
 	~CameraWork();
 	void Update();
