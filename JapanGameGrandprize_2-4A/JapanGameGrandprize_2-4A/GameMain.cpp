@@ -48,6 +48,8 @@ GameMain::GameMain(short stage_num)
 
 	input_margin = 0;
 	is_spawn_boss = false;
+
+	background_location = { 0.0f,0.0f };
 }
 
 //-----------------------------------
@@ -103,7 +105,15 @@ AbstractScene* GameMain::Update()
 	player->Update();
 	stage->Update(player);
 
-
+	//”wŒi‰æ‘œ‚ÌXV
+	if (stage_num != 3)
+	{
+		background_location = CameraWork::GetCamera();
+	}//Stage03‚Ìê‡A”wŒi‚ð“Æ—§‚É“®‚©‚·
+	else
+	{
+		background_location.x += 1.0f;
+	}
 
 	if (EnemyUpdate() == true)
 	{
@@ -214,7 +224,7 @@ bool GameMain::EnemyUpdate()
 			if (stage_num == 3 &&
 				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
 			{
-				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 1,enemy[i]->GetLocation().y });
+				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 1.0f,enemy[i]->GetLocation().y });
 			}
 
 				enemy[i]->Update(player, stage);
@@ -339,13 +349,12 @@ void GameMain::Draw()const
 {
 	////”wŒi	•`‰æ
 	// DrawGraph(0, 0, background_image, FALSE);
-	Location camera_work = CameraWork::GetCamera();
 	
-	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf( background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf( background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
-	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
-	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf( background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf( background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 
 	stage->Draw();
 	item_controller->Draw();
