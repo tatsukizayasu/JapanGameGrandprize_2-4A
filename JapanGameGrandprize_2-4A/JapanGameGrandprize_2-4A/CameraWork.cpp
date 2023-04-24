@@ -27,6 +27,7 @@ CameraWork::CameraWork()
 
 	//カメラの状態を固定に変更
 	state = STATE::FIXED;
+	is_lock = false;
 
 	moveing_line = 400.0f;
 
@@ -37,7 +38,7 @@ CameraWork::CameraWork()
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* stage)
+CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* stage, short stage_num)
 {
 
 	this->camera.x = camera_x;
@@ -61,7 +62,17 @@ CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* st
 
 	player_dir = true;
 	player_dir_y = false;
-	is_lock = false;
+
+	//ステージ３の場合カメラを固定
+	if (stage_num!=3)
+	{
+		is_lock = false;
+	}
+	else
+	{
+		is_lock = true;
+	}
+
 }
 
 //-----------------------------------
@@ -108,6 +119,7 @@ void CameraWork::Update()
 		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) 
 			                                                        < ceilf(player->GetLocation().x))
 		{
+			camera.x = stage->GetMapSize().x * CHIP_SIZE - SCREEN_WIDTH;
 			state = STATE::FIXED;
 			return;
 		}
