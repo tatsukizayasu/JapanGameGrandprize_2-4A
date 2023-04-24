@@ -80,7 +80,7 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Stage();
+	Stage(short stage_num);
 
 	/// <summary>
 	/// デストラクタ
@@ -100,7 +100,7 @@ public:
 	/// <summary>
 	/// ステージの読み込み
 	/// </summary>
-	void LoadMap();
+	void LoadMap(short stage_num);
 
 	/// <summary>
 	/// ステージの初期化

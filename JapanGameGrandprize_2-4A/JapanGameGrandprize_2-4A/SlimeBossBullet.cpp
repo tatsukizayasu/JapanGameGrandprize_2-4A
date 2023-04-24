@@ -1,11 +1,12 @@
 #include "SlimeBossBullet.h"
 #include "CameraWork.h"
 
-//ドラゴンの遠距離攻撃の移動速度
+//スライムボスの遠距離攻撃の移動速度
 #define BULLET_SPEED 10
 
-//ドラゴンの遠距離ダメージ
-#define BULLET_DAMAGE 30
+//スライムボスの遠距離ダメージ
+#define BULLET_DAMAGE 20
+#define BULLET_RADIUS 12
 
 //-----------------------------------
 //コンストラクタ
@@ -13,9 +14,10 @@
 SlimeBossBullet::SlimeBossBullet(Location spawn_location, Location player_location)
 {
 
-	type = ENEMY_TYPE::NORMAL;
+	type = ENEMY_TYPE::WATER;
 	location = spawn_location;
-	radius = 10;
+	location.y += 18;
+	radius = BULLET_RADIUS;
 	speed = BULLET_SPEED;
 	image = 0;
 	damage = BULLET_DAMAGE;
@@ -23,6 +25,7 @@ SlimeBossBullet::SlimeBossBullet(Location spawn_location, Location player_locati
 	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
 	x_speed = speed * cosf(radian);
 	y_speed = speed * sinf(radian);
+	color = GetColor(24, 168, 203);
 }
 
 //-----------------------------------
@@ -53,6 +56,6 @@ void SlimeBossBullet::Draw() const
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
 
-	DrawCircle(x, y, radius, 0xffffff, TRUE);
+	DrawCircle(x, y, radius, color, TRUE);
 }
 

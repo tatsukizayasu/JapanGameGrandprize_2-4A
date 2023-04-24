@@ -2,7 +2,9 @@
 
 #include"EnemyBase.h"
 #include"CameraWork.h"
+
 #include"SlimeBossBullet.h"
+#include"SlimeBossThunder.h"
 
 
 class EnemySlimeBoss : public EnemyBase
@@ -14,6 +16,8 @@ private:
 	int speed_y;
 	int wait_time;
 	int breath_time;
+
+	ENEMY_STATE now_state;
 
 #ifdef _DEBUG
 	ENEMY_STATE old_state; //àÍÇ¬ëOÇÃèÛë‘
@@ -53,6 +57,7 @@ public:
 	Location GetLocation() const override;
 
 	void MagicBullet(const Location player_location);
+	void Thunder(const Location player_location);
 
 
 #ifdef _DEBUG

@@ -185,6 +185,7 @@
     <ClInclude Include="ColliderBase.h" />
     <ClInclude Include="LineCollider.h" />
     <ClInclude Include="SlimeBossBullet.h" />
+    <ClInclude Include="SlimeBossThunder.h" />
     <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h" />
     <ClInclude Include="Stage\StageBuilder\ObjectBase.h" />
     <ClInclude Include="Pause.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="NormalBullet.cpp" />
     <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="SlimeBossBullet.cpp" />
+    <ClCompile Include="SlimeBossThunder.cpp" />
     <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp" />
     <ClCompile Include="Stage\StageBuilder\ObjectBase.cpp" />
     <ClCompile Include="Pause.cpp" />
