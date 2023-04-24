@@ -11,6 +11,9 @@
 //触手移動速度
 #define ATTACK_SPEED 3
 
+//触手攻撃
+#define ATTACK_DAMAGE 30
+
 //ドロップ
 #define MIN_DROP 10
 #define MAX_DROP 20
@@ -32,7 +35,9 @@ KrakenTentacle::KrakenTentacle(Location spawn_location)
 
 	image = 0;
 	time = 0;
+	old_x = 0;
 	go_back = false;
+	attack = false;
 	attack_state = false;
 	speed = ATTACK_SPEED;
 
@@ -102,7 +107,26 @@ void KrakenTentacle::Update(const Player* player, const Stage* stage)
 
 		break;
 	case ENEMY_STATE::ATTACK:
+		Attack(player->GetLocation());
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
 
+			location.y = chip_location.y -
+				(chip_area.height / 2) - (area.height / 2);
+
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
+
+			if (hit_direction == STAGE_DIRECTION::TOP)
+			{
+				state = ENEMY_STATE::MOVE;
+				go_back = true;
+				attack = false;
+				attack_state = false;
+			}
+		}
 		break;
 	case ENEMY_STATE::DEATH:
 		Death();
@@ -174,27 +198,78 @@ void KrakenTentacle::Idol()
 void KrakenTentacle::Move(const Location player_location)
 {
 
-	location.y = player_location.y; //Y座標合わせる
-
-	if (++time % ATTACK_TIME == 0 && attack_state == false)
+	if (go_back == true)
 	{
-		
-		attack_state = true;
-		
-		state = ENEMY_STATE::ATTACK;
+		if (old_x < location.x)
+		{
+			location.x += speed;
+		}
+		else
+		{
+			go_back = false;
+		}
+
 	}
+	else
+	{
+
+
+		if (++time % ATTACK_TIME == 0 && attack_state == false)
+		{
+			old_x = location.x;
+			attack_state = true;
+
+			state = ENEMY_STATE::ATTACK;
+		}
+
+	}
+}
+
+void KrakenTentacle::Fall()
+{
 
 }
 
 void KrakenTentacle::Attack(const Location player_location)
 {
-	location.x += speed;
-	location.y -= speed;
+
+
+	if (location.y > 100)
+	{
+		location.y -= speed;
+	}
+
+	if (old_x - 400 > location.x)
+	{
+		location.x -= speed;
+	}
+
+	if (location.y < 100 && old_x - 400 < location.x)
+	{
+		attack = true;
+	}
+
+
+	if (attack == true)
+	{
+		location.y + speed;
+	}
 }
 
 AttackResource KrakenTentacle::Hit()
 {
-	return AttackResource();
+	AttackResource ret = { 0,nullptr,0 }; //戻り値
+
+	if (attack_move == KRAKEN_TENTACLE::TENTACLE_ATTACK)
+	{
+		ENEMY_TYPE attack_type[1] = { *type };
+		ret.damage = ATTACK_DAMAGE;
+		ret.type = attack_type;
+		ret.type_count = 1;
+	}
+
+	return ret;
+
 }
 
 void KrakenTentacle::Death()
@@ -269,4 +344,30 @@ void KrakenTentacle::HitBullet(const BulletBase* bullet)
 Location KrakenTentacle::GetLocation() const
 {
 	return Location();
+}
+
+void KrakenTentacle::Update(const ENEMY_STATE state)
+{
+	switch (state)
+	{
+	case ENEMY_STATE::IDOL:
+		break;
+	case ENEMY_STATE::MOVE:
+		break;
+	case ENEMY_STATE::FALL:
+		break;
+	case ENEMY_STATE::ATTACK:
+		break;
+	case ENEMY_STATE::DEATH:
+		break;
+	default:
+		break;
+	}
+}
+
+void KrakenTentacle::DebugDraw()
+{
+	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
+		location.x + area.width / 2, location.y + area.height / 2,
+		0xff0000, FALSE);
 }

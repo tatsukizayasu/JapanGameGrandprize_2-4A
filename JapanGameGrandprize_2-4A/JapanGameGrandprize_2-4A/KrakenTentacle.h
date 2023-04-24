@@ -1,7 +1,7 @@
 #pragma once
 #include"EnemyBase.h"
 
-enum class KRAKEN_ATTACK
+enum class KRAKEN_TENTACLE
 {
 	NONE = 0,  //攻撃をしていない。
 	TENTACLE_ATTACK, //触手攻撃
@@ -15,9 +15,12 @@ private:
 	int time; //攻撃開始を測る
 
 
+	float old_x;
 	bool go_back; //古い座標に戻る
 	bool attack_state; //攻撃開始
+	bool attack;
 
+	KRAKEN_TENTACLE attack_move;
 
 public:
 	//コンストラクタ
@@ -38,6 +41,11 @@ public:
 	//移動
 	void Move(const Location player_location) override;
 
+
+	//落下
+	void Fall() override;
+
+
 	//攻撃
 	void  Attack(const Location) override;
 
@@ -52,5 +60,13 @@ public:
 
 	//座標の取得
 	Location GetLocation() const override;
+
+#ifdef _DEBUG
+	//更新(DotByDot)
+	void Update(const ENEMY_STATE state) override;
+
+	//描画(DotByDot)
+	void DebugDraw() override;
+#endif //_DEBUG
 };
 

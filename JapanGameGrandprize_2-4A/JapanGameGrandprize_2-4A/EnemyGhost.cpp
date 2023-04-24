@@ -51,6 +51,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	attack = false;
 
 	vector = 0;
+	attack_anime = 0;
 	travel = 0;
 	travel_y = 0;
 	range = 0;
@@ -81,7 +82,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 
 	images = new int[7];
 	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, images); //通常
-	LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 250, 250, attack_image); //攻撃
+	LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 60, 60, attack_image); //攻撃
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -134,11 +135,16 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	if (++animation_time % 10 == 0)
 	{
 		--animation;
+		++attack_anime;
 	}
 
 	if (animation < 0)
 	{
 		animation = 5;
+	}
+	if (attack_anime > 1)
+	{
+		attack_anime = 0;
 	}
 
 	switch (state)
@@ -426,7 +432,7 @@ void EnemyGhost::Draw()const
 	else
 	{
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, attack_image[animation], TRUE, !left_move);
+			M_PI / 180, attack_image[attack_anime], TRUE, !left_move);
 	}
 }
 
