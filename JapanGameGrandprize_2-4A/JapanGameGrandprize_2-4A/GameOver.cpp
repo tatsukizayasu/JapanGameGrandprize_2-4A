@@ -6,9 +6,11 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-GameOver::GameOver()
+GameOver::GameOver(short stage_num)
 {
 	title_font = CreateFontToHandle("UD デジタル 教科書体 N-B", 140, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
+
+	this->stage_num = stage_num;
 }
 
 //-----------------------------------
@@ -26,7 +28,8 @@ AbstractScene* GameOver::Update()
 {
 	if(PAD_INPUT::OnButton(XINPUT_BUTTON_A))
 	{
-		return new GameMain();
+		//リトライ
+		return new GameMain(stage_num);
 	}
 
 	return this;

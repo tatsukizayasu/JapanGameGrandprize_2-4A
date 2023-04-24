@@ -22,6 +22,10 @@ private:
 
     //ボスがスポーンしたかのフラグ
     bool is_spawn_boss;
+
+    //背景画像座標
+    Location background_location;
+
 #ifdef _DEBUG
 
 #else
@@ -36,8 +40,10 @@ private:
     BulletManager* bullet_manager; //弾の管理
 public:
 
+
+    GameMain() = default;
     //コンストラクタ
-    GameMain();
+    GameMain(short stage_num);
 
     //デストラクタ
     ~GameMain();

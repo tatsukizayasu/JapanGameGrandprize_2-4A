@@ -12,6 +12,9 @@ protected:
 
 	int title_font;
 
+	//ステージ番号
+	short stage_num = 0;
+
 public:
 
 	//デストラクタ
