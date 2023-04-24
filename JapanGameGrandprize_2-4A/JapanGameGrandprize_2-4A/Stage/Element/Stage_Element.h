@@ -14,6 +14,7 @@
 #include <set>
 #include <unordered_map>
 #include <vector>
+#include "../EnemyBase.h"
 
 namespace Element {
 	//const short DEBUG_GRASS = 1;			//デバック用草ブロック
@@ -41,7 +42,9 @@ private:
 
 	//オブジェクト変数
 	std::vector<std::shared_ptr<Stage_Element_Base>> element;
+	Stage* stage;
 	Player* player;
+	EnemyBase** enemy;
 
 	//ステージ要素のID
 	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, ITEM_DROP_OBJECT, TRAP,
@@ -49,7 +52,7 @@ private:
 public:
 
 	//コンストラクタ
-	Stage_Element();
+	Stage_Element(Stage* stage);
 
 	//デストラクタ
 	~Stage_Element();
@@ -59,6 +62,12 @@ public:
 	/// </summary>
 	/// <param name = "*player">Playerオブジェクトポインタ</param>
 	void SetPlayer(Player* player) { this->player = player; }
+
+	/// <summary>
+	/// StageクラスにEnemyオブジェクトを渡すSetter
+	/// </summary>
+	/// <param name = "*player">Playerオブジェクトポインタ</param>
+	void SetEnemy(EnemyBase** enemy) { this->enemy = enemy; }
 
 	/// <summary>
 	/// ステージ要素の作成

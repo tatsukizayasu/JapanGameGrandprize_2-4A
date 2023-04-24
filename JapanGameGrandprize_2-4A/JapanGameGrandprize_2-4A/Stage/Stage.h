@@ -11,6 +11,8 @@
 
 class Player;
 
+class EnemyBase;
+
 class CameraWork;
 
 class Stage_Element;
@@ -33,6 +35,7 @@ private:
 	//オブジェクト変数
 	Player* player;
 	Stage_Element* element;
+	EnemyBase** enemy;
 	CameraWork* camera_work;
 
 #ifdef _STAGE_BUILDER
@@ -135,6 +138,12 @@ public:
 	/// </summary>
 	/// <param name = "*player">Playerオブジェクトポインタ</param>
 	void SetPlayer(Player *player) { this->player = player; }
+
+	/// <summary>
+	/// StageクラスにEnemyオブジェクトを渡すSetter
+	/// </summary>
+	/// <param name = "*player">Playerオブジェクトポインタ</param>
+	void SetEnemy(EnemyBase** enemy) { this->enemy = enemy; }
 
 	/// <summary>
 	/// StageクラスにCameraWorkオブジェクトを渡すSetter

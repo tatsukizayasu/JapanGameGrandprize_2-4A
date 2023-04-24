@@ -6,9 +6,9 @@
 
 #define ATTACK_RANGE 300.0f
 
-Element_Trap::Element_Trap(short type, 
-	std::vector<std::shared_ptr<Stage_Element_Base>> element, 
-	std::vector<int> images, Location location, Area area) 
+Element_Trap::Element_Trap(short type,
+	std::vector<std::shared_ptr<Stage_Element_Base>> element, Stage* stage,
+	EnemyBase** enemy, std::vector<int> images, Location location, Area area)
 	: Stage_Element_Base(element, &images.at(0), location, area)
 {
 	this->area = area;
@@ -18,6 +18,9 @@ Element_Trap::Element_Trap(short type,
 	margin_area = { 1000.0f,1000.0f };
 
 	this->images = images;
+
+	this->stage = stage;
+	this->enemy = enemy;
 
 	state = STATE::NONE;
 }
@@ -55,6 +58,7 @@ void Element_Trap::Update(Player* player)
 				player->HpDamage(AttackResource{ 10, &fireType, 5 });
 			}
 
+
 			state = STATE::EXPLOSION;
 
 			delete player_bullet[j];
@@ -62,6 +66,26 @@ void Element_Trap::Update(Player* player)
 			player->SortBullet(j);
 			j--;
 		}
+
+		vector<ENEMY_LOCATION> spawn;
+		spawn = stage->GetEnemy_SpawnLocation();
+
+		for (int i = 0; i < spawn.size(); i++)
+		{
+			//if (enemy[i] != nullptr)
+			//{
+
+
+			//	//範囲内にプレイヤーがいたらダメージを与える
+			//	if (abs(location.x - enemy[i]->GetLocation().x) <= ATTACK_RANGE
+			//		&& abs(location.y - enemy[i]->GetLocation().y) <= ATTACK_RANGE)
+			//	{
+			//		printfDx("hit\n");
+
+			//	}
+			//}
+		}
+
 	}
 
 	if (state == STATE::EXPLOSION) 

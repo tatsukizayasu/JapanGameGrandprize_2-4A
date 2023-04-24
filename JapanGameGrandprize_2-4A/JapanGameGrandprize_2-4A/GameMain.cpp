@@ -39,6 +39,8 @@ GameMain::GameMain()
 	EnemyBase::CreateLogFont();
 
 	SpawnEnemy();
+
+	stage->SetEnemy(enemy);
 	camera_work = new CameraWork(0, 800, player, stage);
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
@@ -127,7 +129,13 @@ void GameMain::SpawnEnemy()
 	spawn = stage->GetEnemy_SpawnLocation();
 
 	enemy_spawn_volume = spawn.size();
+
 	enemy = new EnemyBase * [enemy_spawn_volume];
+	for (int i = 0; i < enemy_spawn_volume; i++)
+	{
+		enemy[i] = nullptr;
+	}
+
 	int i;
 	for (i = 0; i < enemy_spawn_volume; i++)
 	{

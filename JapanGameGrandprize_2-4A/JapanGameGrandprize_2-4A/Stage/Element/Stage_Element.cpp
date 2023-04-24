@@ -1,12 +1,14 @@
 #include "Stage_Element.h"
 #include "../CameraWork.h"
+#
 
 //#define NODEBUG
 
-Stage_Element::Stage_Element()
+Stage_Element::Stage_Element(Stage* stage)
 {
 
 	player = nullptr;
+	this->stage = stage;
 }
 
 Stage_Element::~Stage_Element()
@@ -55,7 +57,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case TRAP:
-		element.push_back(std::make_shared<Element_Trap>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Trap>(type, element, stage, enemy, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case MOVE_FLOOR:

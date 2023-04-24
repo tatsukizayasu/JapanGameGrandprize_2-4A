@@ -1,9 +1,14 @@
 #pragma once
 #include "Stage_Element_Base.h"
+#include "../EnemyBase.h"
+#include "../Stage.h"
 
 class Element_Trap : public Stage_Element_Base
 {
 private:
+
+	Stage* stage;
+	EnemyBase** enemy;
 
 	enum class STATE {
 		NONE,		//なし
@@ -13,7 +18,7 @@ private:
 public:
 
 	//コンストラクタ
-	Element_Trap(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area);
+	Element_Trap(short type,std::vector<std::shared_ptr<Stage_Element_Base>> element, Stage* stage,EnemyBase** enemy, std::vector<int> images, Location location, Area area);
 	//デストラクタ
 	~Element_Trap();
 	//更新

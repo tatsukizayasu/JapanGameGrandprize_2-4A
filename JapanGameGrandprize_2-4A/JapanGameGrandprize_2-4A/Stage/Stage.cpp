@@ -8,6 +8,7 @@
 #include "../Player.h"
 #include "../CameraWork.h"
 #include "Element/Stage_Element.h"
+#include "../EnemyBase.h"
 
 #define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage2";
@@ -21,7 +22,7 @@
 Stage::Stage()
 {
 
-	element = new Stage_Element();
+	element = new Stage_Element(this);
 	this->camera_work = camera_work;
 
 	//スポーン地点に初期値をセット
@@ -101,6 +102,9 @@ Stage::~Stage()
 //-----------------------------------
 void Stage::Update(Player* player)
 {
+	//ElementにEnemyオブジェクトポインタ配列をセット
+	if (enemy != nullptr) { element->SetEnemy(enemy); }
+
 	// 中間地点との当たり判定
 	if (abs(halfway_point.x - player->GetLocation().x) <= MAP_CHIP_SIZE
 		&& abs(halfway_point.y - player->GetLocation().y) <= MAP_CHIP_SIZE) {
