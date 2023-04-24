@@ -81,7 +81,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 
 	images = new int[7];
 	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, images); //通常
-	LoadDivGraph("Images/Enemy/ghostattack.png", 6, 6, 1, 60, 66, attack_image); //攻撃
+	LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 250, 250, attack_image); //攻撃
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];

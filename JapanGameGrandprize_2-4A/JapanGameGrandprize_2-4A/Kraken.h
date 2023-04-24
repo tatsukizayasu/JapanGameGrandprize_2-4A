@@ -26,7 +26,6 @@ private:
 	
 	int attack_num; //UŒ‚‚Ìí—Ş
 	int standby_attack; //UŒ‚‘Ò‹@
-	int move_time; //ˆÚ“®ŠJn‚ğ‘ª‚é
 
 	KRAKEN_ATTACK attack_state; //UŒ‚
 	KRAKEN_STATE move_state; //“®‚«

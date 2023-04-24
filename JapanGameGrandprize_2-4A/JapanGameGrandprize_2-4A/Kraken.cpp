@@ -6,8 +6,8 @@
 #include "BulletManager.h"
 
 //クラーケンの画像  (画像なし、適当な数字を入れます）
-#define KRAKEN_X 100
-#define KRAKEN_Y 100
+#define KRAKEN_X 250
+#define KRAKEN_Y 250
 
 //クラーケン
 #define KRAKEN_HP 500 //（HP調節）
@@ -65,7 +65,6 @@ Kraken::Kraken(Location spawn_location)
 	poison_time = 0;
 	poison_damage = 0;
 	paralysis_time = 0;
-	move_time = 0;
 	location = spawn_location;
 
 	standby_attack = 0;
@@ -139,10 +138,6 @@ void Kraken::Update(const Player* player, const Stage* stage)
 				location = old_location;
 				left_move = !left_move;
 			}
-		}
-		else
-		{
-			state = ENEMY_STATE::FALL;
 		}
 
 		break;
@@ -224,30 +219,6 @@ void Kraken::Move(const Location player_location)
 		attack_state = KRAKEN_ATTACK::TENTACLE_ATTACK;
 	}
 
-
-
-	--move_time;
-	//if (move_time>0)
-	//{
-	//	switch (move_state)
-	//	{
-	//	case KRAKEN_STATE::NORMAL: //クラーケンの通常移動
-	//		if (left_move == true)
-	//		{
-	//			location.x -= MOVE_SPEED;
-	//		}
-	//		else
-	//		{
-	//			location.x += MOVE_SPEED;
-	//		}
-	//		break;
-	//	case KRAKEN_STATE::NONE: //移動しない
-	//	default:
-	//		break;
-	//	}
-	//}
-	if (move_time < 0)
-	{
 		switch (attack_num)
 		{
 		case 0:
@@ -263,7 +234,6 @@ void Kraken::Move(const Location player_location)
 		default:
 			break;
 		}
-	}
 
 }
 
@@ -330,7 +300,6 @@ void Kraken::AttackBreath(const Location player_location)
 		(new KrakenBreath(location, player_location));
 		
 		attack_num = GetRand(1);
-		move_time = MOVE_TIME;
 		state = ENEMY_STATE::MOVE;
 		move_state = KRAKEN_STATE::NORMAL;
 	
