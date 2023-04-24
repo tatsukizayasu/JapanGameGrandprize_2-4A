@@ -29,10 +29,22 @@
 //--------------------------
 
 //ブラシの数とその種類---------
-#define CLASS_NUM 2	
-#define BRUSH_MAP_CHIP 0
-#define BRUSH_POLY_LINE 1
+#define CLASS_NUM 4	
+#define BRUSH_OBJECT 0
+#define BRUSH_MAP_CHIP 1
+#define BRUSH_BOX 2
+#define BRUSH_POLY_LINE 3
 //-----------------------------
+
+
+//画像の数とその種類-----------------------------
+#define IMAGE_NUM 5
+#define YUKA_1 0
+#define YUKA_2 1
+#define KABE_1 2
+#define KABE_2 3
+#define KAIDANN_1 4
+//-----------------------------------------------
 
 //ブラシモードのメニュー制御-------------
 #define CLOSE 0
@@ -40,6 +52,7 @@
 #define SELECT_IMAGE 2
 #define SELECT_COLLIDER 3
 //---------------------------------------
+
 
 #define ARROW_NUM 16
 
@@ -51,8 +64,19 @@ private:
 
 	const char* class_name[CLASS_NUM] =
 	{
+		"object",
 		"default_map_chip",
+		"box",
 		"poly_line"
+	};
+
+	const char* image_name[IMAGE_NUM] =
+	{
+		"yuka_1"
+		,"yuka_2"
+		,"kabe_1"
+		,"kabe_2"
+		,"kaidann_1"
 	};
 
 	//インタフェース
@@ -64,6 +88,7 @@ private:
 	//デフォルトマップチップ
 	int block_images[110];		//ブロック画像
 	vector<MapChip*> map_chips;
+	vector<BoxCollider*> box_collider;
 	vector<PolyLine*>poly_lines;
 	vector<ObjectBase*>objects;
 
@@ -73,10 +98,11 @@ private:
 	//ツール用
 	int mode;
 	int current_brush;
+	int current_object_image;
+	int current_object_collider;
 	int brush_mode_state;
 
 	//todo:テスト 
-	vector<BoxCollider*> boxes;
 
 public:
 	/*******************更新描画系統*******************/
@@ -111,14 +137,25 @@ public:
 	//ブラシモードの描画
 	void DrawBrushMode()const;
 
+	//当たり判定の描画 + objectのpivot --- collider間のベクトル
+	void DrawCollider()const;
+
 	//格子の描画
 	void DrawFrame()const;
 	//マウスの描画
 	void DrawMouse()const;
 	//ファイルの描画
 	void DrawFile(float x, float y, const char* path, int font_size)const;
+	
 	//現在のブラシになっているクラスを描画
 	void DrawClassName()const;
+	//クラス選択の描画
+	void DrawSelectClass()const;
+	//画像選択の描画
+	void DrawSelectImage()const;
+	//当たり判定選択の描画
+	void DrawSelectCollider()const;
+
 	//保留中のスフィアの描画
 	void DrawSphere()const;
 	//保留中のラインの描画
@@ -150,6 +187,8 @@ public:
 	//コリジョンクラスを作成する
 	//折れ線
 	void MakePolyLine();
+	//BoxColliderを作成する
+	void MakeBoxCollider();
 	//円
 	void MakeSphere();
 	//保留中のオブジェクトをリセットする
@@ -158,7 +197,12 @@ public:
 	//メニュー選択
 	void Select(int menu_max);
 
-	const int* GetImage(int image_index)const;
+	//クラス選択
+	void SelectClass();
+	//画像選択
+	void SelectImage();
+	//当たり判定選択
+	void SelectCollider();
 
 
 	/******************ファイルへの書き込み読み込み系*********************/

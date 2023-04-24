@@ -19,21 +19,22 @@ StageBuilder::StageBuilder()
 	select_collider = nullptr;
 	menu_cursor = 0;
 	arrow[0] = '>';
+	for (int i = 1; i < ARROW_NUM; i++)
+	{
+		arrow[i] = ' ';
+	}
 
 	if (LoadDivGraph("Images/Stage/map_chips.png", 50, 10, 5, CHIP_SIZE, CHIP_SIZE, block_images + 1) == -1)
 	{
 		throw "Images/Stage/map_chips_.png";
 	}
 
-	//TODO: BRUSH_MODEに戻す
-	mode = MODULATION_MODE;
+	mode = BRUSH_MODE;
 
-	for (int i = 1; i < ARROW_NUM; i++)
-	{
-		arrow[i] = ' ';
-	}
 
 	current_brush = BRUSH_MAP_CHIP;
+	current_object_image = 0;
+	current_object_collider = BRUSH_BOX;
 	brush_mode_state = CLOSE;
 
 #ifdef _DEV
@@ -92,11 +93,11 @@ StageBuilder::~StageBuilder()
 	}
 	poly_lines.clear();
 
-	for (int i = 0; i < boxes.size(); i++)
+	for (int i = 0; i < box_collider.size(); i++)
 	{
-		delete boxes[i];
+		delete box_collider[i];
 	}
-	boxes.clear();
+	box_collider.clear();
 
 	for (int i = 0; i < objects.size(); i++)
 	{
@@ -163,10 +164,7 @@ void StageBuilder::Draw()const
 		map_chips[i]->Draw();
 	}
 
-	for (int i = 0; i < poly_lines.size(); i++)
-	{
-		poly_lines[i]->Draw();
-	}
+	DrawCollider();
 
 	DrawFrame();
 
@@ -195,16 +193,6 @@ void StageBuilder::Draw()const
 		}
 	}
 
-
-	for (int i = 0; i < boxes.size(); i++)
-	{
-		boxes[i]->Draw();
-	}
-
-	for (int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Draw();
-	}
 
 
 #endif // _DEV
@@ -277,38 +265,40 @@ void StageBuilder::UpdateBrush()
 	{
 		brush_mode_state = SELECT_CLASS;
 	}
-	if(brush_mode_state == SELECT_CLASS)
+
+	switch (brush_mode_state)
 	{
-		Select(CLASS_NUM);
+	case SELECT_CLASS:
+		SelectClass();
+		break;
+		
+	case SELECT_IMAGE:
+		SelectImage();
+		break;
+		
+	case SELECT_COLLIDER:
+		SelectCollider();
+		break;
 
-		if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
-		{
-			char tmp = arrow[menu_cursor];
-			arrow[menu_cursor] = ' ';
-
-			if (menu_cursor != CLASS_NUM - 1)
-			{
-				brush_mode_state = CLOSE;
-				current_brush = menu_cursor;
-			}
-			else
-			{
-
-				current_brush = menu_cursor;
-			}
-
-			menu_cursor = 0;
-			arrow[menu_cursor] = tmp;
-		}
 	}
+
 
 	switch (current_brush)
 	{
+	case BRUSH_OBJECT:
+		break;
 
 	case BRUSH_MAP_CHIP:
 		if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 		{
 			MakeMapChip();
+		}
+		break;
+
+	case BRUSH_BOX:
+		if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+		{
+			MakeBoxCollider();
 		}
 		break;
 
@@ -342,9 +332,9 @@ void StageBuilder::UpdateModulation()
 		}
 
 
-		for (int i = 0; i < boxes.size(); i++)
+		for (int i = 0; i < box_collider.size(); i++)
 		{
-			boxes[i]->UpdatePos();
+			box_collider[i]->UpdatePos();
 		}
 
 		for (int i = 0; i < objects.size(); i++)
@@ -532,13 +522,6 @@ void StageBuilder::DrawFileInfo()const
 //------------------------------------
 void StageBuilder::DrawBrushMode()const
 {
-	int scale = CLASS_NUM;
-	int current = 0;
-
-	const int l_font_size = 20;
-	const int len = 15;
-	const float draw_pos_x = 640.0f - (l_font_size * len / 2);
-	const float draw_pos_y = 240.f;
 
 	DrawClassName();
 	if (2 <= pending_sphere.size())
@@ -551,28 +534,46 @@ void StageBuilder::DrawBrushMode()const
 	}
 	DrawSphere();
 
-	if (brush_mode_state == SELECT_CLASS)
+
+	switch (brush_mode_state)
 	{
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+	case SELECT_CLASS:
+		DrawSelectClass();
+		break;
+		
+	case SELECT_IMAGE:
+		DrawSelectImage();
+		break;
+		
+	case SELECT_COLLIDER:
+		DrawSelectCollider();
+		break;
 
-		DrawBoxAA(draw_pos_x, draw_pos_y,
-			draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
-			0x000000, TRUE);
-
-		DrawBoxAA(draw_pos_x, draw_pos_y,
-			draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
-			0xFFFFFF, FALSE, 3);
-
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-		for (int i = 0; i < scale; i++)
-		{
-			DrawFormatString(draw_pos_x + l_font_size, draw_pos_y + l_font_size * i,
-				GetColor(255, 255, 255), "%c %s", arrow[i], class_name[i]);
-
-		}
 	}
 	
+}
+
+//------------------------------------
+// 当たり判定の描画
+//------------------------------------
+void StageBuilder::DrawCollider()const
+{
+
+	for (int i = 0; i < poly_lines.size(); i++)
+	{
+		poly_lines[i]->Draw();
+	}
+
+	for (int i = 0; i < box_collider.size(); i++)
+	{
+		box_collider[i]->Draw();
+	}
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Draw();
+	}
+
 }
 
 //------------------------------------
@@ -647,13 +648,133 @@ void StageBuilder::DrawClassName()const
 
 	int font_size = 20;
 	SetFontSize(font_size);
-	draw_width = GetDrawStringWidth(class_name[current_brush], -1);
+
+	if (current_brush != BRUSH_OBJECT)
+	{
+		draw_width = GetDrawStringWidth(class_name[current_brush], -1);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+		DrawBox(0, 0, draw_width + 8, font_size + 4, 0x000000, TRUE);
+		DrawBoxAA(0, 0, (float)draw_width + 8, (float)font_size + 4, 0xFFFFFF, FALSE, 3);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		DrawFormatString(4, 4, 0xffffff, "%s", class_name[current_brush]);
+	}
+	else
+	{
+		string draw_text = string(class_name[current_brush]);
+		draw_text += " image: ";
+		draw_text += image_name[current_object_image];
+		draw_text += " collider: ";
+		draw_text += class_name[current_object_collider];
+
+		draw_width = GetDrawStringWidth(draw_text.c_str(), -1);
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+		DrawBox(0, 0, draw_width + 8, font_size + 4, 0x000000, TRUE);
+		DrawBoxAA(0, 0, (float)draw_width + 8, (float)font_size + 4, 0xFFFFFF, FALSE, 3);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		DrawFormatString(4, 4, 0xffffff, "%s", draw_text.c_str());
+	}
+}
+
+//--------------------------------------------
+// クラス選択の描画
+//--------------------------------------------
+void StageBuilder::DrawSelectClass()const
+{
+	int scale = CLASS_NUM;
+	int current = 0;
+
+	const int l_font_size = 20;
+	const int len = 15;
+	const float draw_pos_x = 640.0f - (l_font_size * len / 2);
+	const float draw_pos_y = 360.f - (l_font_size * scale / 2);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
-	DrawBox(0, 0, draw_width + 8, font_size + 4, 0x000000, TRUE);
-	DrawBoxAA(0, 0, (float)draw_width + 8, (float)font_size + 4, 0xFFFFFF, FALSE, 3);
+
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
+		0x000000, TRUE);
+
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
+		0xFFFFFF, FALSE, 3);
+
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	DrawFormatString(4, 4, 0xffffff, "%s", class_name[current_brush]);
+
+	for (int i = 0; i < scale; i++)
+	{
+		DrawFormatString(draw_pos_x + l_font_size, draw_pos_y + l_font_size * i,
+			GetColor(255, 255, 255), "%c %s", arrow[i], class_name[i]);
+
+	}
+}
+
+//--------------------------------------------
+// 画像選択の描画
+//--------------------------------------------
+void StageBuilder::DrawSelectImage()const
+{
+	int scale = IMAGE_NUM;
+	int current = 0;
+
+	const int l_font_size = 20;
+	const int len = 15;
+	const float draw_pos_x = 640.0f - (l_font_size * len / 2);
+	const float draw_pos_y = 360.f - (l_font_size * scale / 2);
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
+		0x000000, TRUE);
+
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
+		0xFFFFFF, FALSE, 3);
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	for (int i = 0; i < scale; i++)
+	{
+		DrawFormatString(draw_pos_x + l_font_size, draw_pos_y + l_font_size * i,
+			GetColor(255, 255, 255), "%c %s", arrow[i], image_name[i]);
+
+	}
+
+}
+
+//--------------------------------------------
+// 当たり判定選択の描画
+//--------------------------------------------
+void StageBuilder::DrawSelectCollider()const
+{
+	int scale = CLASS_NUM - BRUSH_BOX;
+	int current = 0;
+
+	const int l_font_size = 20;
+	const int len = 15;
+	const float draw_pos_x = 640.0f - (l_font_size * len / 2);
+	const float draw_pos_y = 360.f - (l_font_size * scale / 2);
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
+		0x000000, TRUE);
+
+	DrawBoxAA(draw_pos_x, draw_pos_y,
+		draw_pos_x + l_font_size * len, draw_pos_y + l_font_size * scale,
+		0xFFFFFF, FALSE, 3);
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	for (int i = 0; i < scale; i++)
+	{
+		DrawFormatString(draw_pos_x + l_font_size, draw_pos_y + l_font_size * i,
+			GetColor(255, 255, 255), "%c %s", arrow[i], class_name[i + 2]);
+
+	}
+
 }
 
 //---------------------------------------------
@@ -756,7 +877,6 @@ void StageBuilder::IsSelectedObject()
 	for (int i = 0; i < objects.size(); i++)
 	{
 		int collider_type = objects[i]->GetColllider()->GetColliderType();
-		//todo:名前から判断してstatic_castを使い、それぞれのクラス型に沿った処理をする
 
 		switch (collider_type)
 		{
@@ -864,9 +984,9 @@ bool StageBuilder::TransformPolyLine(PolyLine* poly_line)
 //---------------------------------------------
 bool StageBuilder::TransformBox()
 {
-	for (int i = 0; i < boxes.size(); i++)
+	for (int i = 0; i < box_collider.size(); i++)
 	{
-		SphereCollider* points = boxes[i]->GetSpheres();
+		SphereCollider* points = box_collider[i]->GetSpheres();
 
 
 		for (int j = 0; j < 4; j++)
@@ -878,9 +998,9 @@ bool StageBuilder::TransformBox()
 			}
 		}
 
-		if (mouse->HitSphere(boxes[i]->GetPivot()))
+		if (mouse->HitSphere(box_collider[i]->GetPivot()))
 		{
-			select_collider = boxes[i]->GetPivot();
+			select_collider = box_collider[i]->GetPivot();
 			return true;
 		}
 	}
@@ -936,6 +1056,14 @@ MapChip* StageBuilder::MakeMapChip(float x, float y, float width, float height)
 {
 	return (new MapChip(&block_images[1],
 		{ x ,y }, { MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
+}
+
+//------------------------------------
+// BoxColliderの作成
+//------------------------------------
+void StageBuilder::MakeBoxCollider()
+{
+	box_collider.push_back(new BoxCollider(mouse->GetLocation(), { 100,100 }));
 }
 
 //------------------------------------
@@ -1017,13 +1145,104 @@ void StageBuilder::Select(int menu_max)
 	}
 }
 
-//------------------------------------
-// 画像の取得
-//------------------------------------
-const int* StageBuilder::GetImage(int image_index)const
+//-------------------------------------
+// クラス選択
+//-------------------------------------
+void StageBuilder::SelectClass()
+{
+	Select(CLASS_NUM);
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+
+		if (menu_cursor != BRUSH_OBJECT)
+		{
+			brush_mode_state = CLOSE;
+			current_brush = menu_cursor;
+		}
+		else
+		{
+			brush_mode_state = SELECT_IMAGE;
+			current_brush = menu_cursor;
+		}
+
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+	}
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_BACK))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+
+		brush_mode_state -= 1;
+	}
+}
+
+//-------------------------------------
+// 画像選択
+//-------------------------------------
+void StageBuilder::SelectImage()
+{
+	Select(IMAGE_NUM);
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+
+		current_object_image = menu_cursor;
+		brush_mode_state = SELECT_COLLIDER;
+
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+	}
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_BACK))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+
+		brush_mode_state -= 1;
+	}
+
+}
+
+//-------------------------------------
+// 当たり判定選択
+//-------------------------------------
+void StageBuilder::SelectCollider()
 {
 
-	return &block_images[image_index];
+	Select(CLASS_NUM - BRUSH_BOX);
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_RETURN))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+
+		current_object_collider = menu_cursor + BRUSH_BOX;
+		brush_mode_state = CLOSE;
+
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+	}
+
+	if (KeyManager::OnKeyClicked(KEY_INPUT_BACK))
+	{
+		char tmp = arrow[menu_cursor];
+		arrow[menu_cursor] = ' ';
+		menu_cursor = 0;
+		arrow[menu_cursor] = tmp;
+
+		brush_mode_state -= 1;
+	}
 }
 
 //------------------------------------
