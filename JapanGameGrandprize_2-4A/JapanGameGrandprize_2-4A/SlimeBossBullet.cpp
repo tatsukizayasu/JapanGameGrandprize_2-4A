@@ -1,12 +1,11 @@
 #include "SlimeBossBullet.h"
 #include "CameraWork.h"
 
-//ドラゴンの遠距離攻撃の移動速度
+//スライムボスの遠距離攻撃の移動速度
 #define BULLET_SPEED 10
 
-//ドラゴンの遠距離ダメージ
-#define BULLET_DAMAGE 30
-
+//スライムボスの遠距離ダメージ
+#define BULLET_DAMAGE 20
 #define BULLET_RADIUS 12
 
 //-----------------------------------
