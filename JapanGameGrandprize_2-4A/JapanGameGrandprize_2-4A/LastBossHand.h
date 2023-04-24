@@ -2,6 +2,13 @@
 #include "EnemyBase.h"
 
 
+enum class HAND_MOVE
+{
+    UP_DOWN = 0, //上下移動
+    CIRCULAR_MOTION, //円状移動
+    NONE
+};
+
 class LastBossHand :
     public EnemyBase
 {
@@ -10,13 +17,19 @@ private:
     bool punch;  //パンチしている
     bool left_hand; //true:左手,false:右手
     bool attack; //攻撃が当たったか
+    int move_volume; //移動量
+    int angle; //角度
+    int radius; //半径
     int attack_interval; //次の攻撃までの時間
     int punch_standby_time; //パンチするまでの時間
     int animation; //アニメーション
     int image_argument; //画像の引数
     int death_time; //死んでいる時間
 
+    Location spawn_location; //生成地点
     Location punch_start; //パンチを始めたの座標
+
+    HAND_MOVE move; //移動方法
 
     HitMapChip hit_block; //ブロックとの当たり判定
 private:

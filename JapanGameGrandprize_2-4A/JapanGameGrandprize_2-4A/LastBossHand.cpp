@@ -8,7 +8,7 @@
 #define HAND_IMAGES
 
 //移動速度
-#define HAND_MOVE_SPEED 4
+#define HAND_MOVE_SPEED 2
 
 //次のパンチまでの時間
 #define PUNCH_INTERVAL 300
@@ -23,16 +23,28 @@
 #define PUNCH_DAMAGE 15
 
 //HP
-#define HAND_HP 1000
+#define HAND_HP 100
 
 //死亡している時間
 #define DEATH_TIME 600
 
+//移動量
+#define MOVE_VOLUME 100
+
+//角度の上昇量
+#define ADD_ANGLE 2
+
+//半径の上昇量
+#define ADD_RADIUS 1
+
+//移動半径
+#define MOVE_RADIUS 50
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
 LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 {
+	this->spawn_location = spawn_location;
 	location = spawn_location;
 	punch_start = location;
 
@@ -41,6 +53,10 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 
 	punch = false;
 	attack = false;
+
+	move_volume = 0;
+	angle = 0;
+	radius = 0;
 	attack_interval = 0;
 	punch_standby_time = 0;
 	animation = 0; 
@@ -55,7 +71,8 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 	damage = 0;
 	images = nullptr;
 	hp = HAND_HP;
-	speed = 0;
+	speed = -HAND_MOVE_SPEED;
+	death_time = 0;
 	poison_time = 0;
 	poison_damage = 0;
 	paralysis_time = 0;
@@ -65,7 +82,9 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 
 	kind = ENEMY_KIND::LAST_BOSS;
 	type = new ENEMY_TYPE[1];
-	state = ENEMY_STATE::IDOL;
+	state = ENEMY_STATE::MOVE;
+
+	move = HAND_MOVE::UP_DOWN;
 
 	hit_block.chip = nullptr;
 	hit_block.hit = false;
@@ -149,6 +168,54 @@ void LastBossHand::Idol()
 void LastBossHand::Move(const Location player_location)
 {
 
+	switch (move)
+	{
+	case HAND_MOVE::UP_DOWN:
+	{
+		location.y += speed;
+		move_volume += speed;
+
+		if ((move_volume < -MOVE_VOLUME) || ((MOVE_VOLUME /4) < move_volume))
+		{
+			speed = -speed;
+		}
+	}
+		break;
+	case HAND_MOVE::CIRCULAR_MOTION:
+	{
+		Location circular_speed; //スピード
+		float radian = 0; //角度
+
+		if (left_hand)		//角度の設定
+		{
+			angle += ADD_ANGLE;
+		}
+		else
+		{
+			angle += -ADD_ANGLE;
+		}
+
+		if (radius < MOVE_RADIUS) //半径
+		{
+			radius += ADD_RADIUS;
+		}
+
+		//角度の計算
+		radian = angle * (M_PI / 180);
+
+		//スピードの計算
+		circular_speed.x = cosf(radian);
+		circular_speed.y = sinf(radian);
+
+		location.x = spawn_location.x + (circular_speed.x * radius);
+		location.y = spawn_location.y + (circular_speed.y * radius);
+	}
+		break;
+	case HAND_MOVE::NONE:
+	default:
+		break;
+	}
+	
 }
 
 //-----------------------------------
@@ -237,7 +304,10 @@ void LastBossHand::Death()
 	if (death_time < 0)
 	{
 		state = ENEMY_STATE::MOVE;
+		location = spawn_location;
+		hp = HAND_HP;
 
+		move = static_cast<HAND_MOVE>(GetRand(2));
 	}
 }
 
