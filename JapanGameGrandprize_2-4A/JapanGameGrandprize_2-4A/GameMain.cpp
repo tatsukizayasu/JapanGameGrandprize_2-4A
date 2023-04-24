@@ -11,6 +11,7 @@
 #include "Wyvern.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
+#include "Kraken.h"
 #include"Dragon.h"
 #include "DotByDot.h"
 #include <math.h>
@@ -115,7 +116,7 @@ AbstractScene* GameMain::Update()
 	}//Stage03の場合、背景を独立に動かす
 	else
 	{
-		background_location.x += 1.0f;
+		background_location.x += 10.0f;
 	}
 
 	if (EnemyUpdate() == true)
@@ -178,6 +179,7 @@ void GameMain::SpawnEnemy()
 			enemy[i] = new Torrent(spawn[i].location);
 			break;
 		case ENEMY_KIND::KRAKEN:	//クラーケンボスの生成
+			enemy[i] = new Kraken(spawn[i].location);
 			break;
 		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
 			enemy[i] = new Dragon(spawn[i].location);
@@ -233,7 +235,7 @@ bool GameMain::EnemyUpdate()
 			if (stage_num == 3 &&
 				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
 			{
-				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 1.0f,enemy[i]->GetLocation().y });
+				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 2.0f,enemy[i]->GetLocation().y });
 			}
 
 				enemy[i]->Update(player, stage);

@@ -70,21 +70,21 @@ void Element_Trap::Update(Player* player)
 		vector<ENEMY_LOCATION> spawn;
 		spawn = stage->GetEnemy_SpawnLocation();
 
-		for (int i = 0; i < spawn.size(); i++)
-		{
-			//if (enemy[i] != nullptr)
-			//{
+		//for (int i = 0; i < spawn.size(); i++)
+		//{
+		//	if (enemy[i] != nullptr)
+		//	{
 
 
-			//	//範囲内にプレイヤーがいたらダメージを与える
-			//	if (abs(location.x - enemy[i]->GetLocation().x) <= ATTACK_RANGE
-			//		&& abs(location.y - enemy[i]->GetLocation().y) <= ATTACK_RANGE)
-			//	{
-			//		printfDx("hit\n");
+		//		//範囲内にプレイヤーがいたらダメージを与える
+		//		if (abs(location.x - enemy[i]->GetLocation().x) <= ATTACK_RANGE
+		//			&& abs(location.y - enemy[i]->GetLocation().y) <= ATTACK_RANGE)
+		//		{
+		//			printfDx("hit\n");
 
-			//	}
-			//}
-		}
+		//		}
+		//	}
+		//}
 
 	}
 
