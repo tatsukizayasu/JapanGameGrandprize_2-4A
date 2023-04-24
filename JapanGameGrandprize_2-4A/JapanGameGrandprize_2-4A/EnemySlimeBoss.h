@@ -2,7 +2,9 @@
 
 #include"EnemyBase.h"
 #include"CameraWork.h"
+
 #include"SlimeBossBullet.h"
+#include"SlimeBossThunder.h"
 
 
 class EnemySlimeBoss : public EnemyBase
@@ -55,6 +57,7 @@ public:
 	Location GetLocation() const override;
 
 	void MagicBullet(const Location player_location);
+	void Thunder(const Location player_location);
 
 
 #ifdef _DEBUG
