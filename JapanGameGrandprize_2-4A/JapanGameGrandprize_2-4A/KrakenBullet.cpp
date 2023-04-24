@@ -15,7 +15,8 @@ KrakenBullet::KrakenBullet(Location spawn_location, Location player_location)
 
 	type = ENEMY_TYPE::WATER;
 	location = spawn_location;
-	radius = 100;
+	location.y = location.y -150;
+	radius = 50;
 	speed = BULLET_SPEED;
 	image = 0;
 	damage = BULLET_DAMAGE;

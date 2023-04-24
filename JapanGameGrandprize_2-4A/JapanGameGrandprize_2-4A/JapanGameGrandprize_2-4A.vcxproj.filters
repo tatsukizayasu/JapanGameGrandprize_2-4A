@@ -213,6 +213,9 @@
     <ClCompile Include="SlimeBossThunder.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
+    <ClCompile Include="KrakenTentacle.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
     <ClCompile Include="LastBossHand.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
@@ -436,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="SlimeBossThunder.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="KrakenTentacle.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="LastBossHand.h">
       <Filter>ヘッダーファイル\Enemy</Filter>

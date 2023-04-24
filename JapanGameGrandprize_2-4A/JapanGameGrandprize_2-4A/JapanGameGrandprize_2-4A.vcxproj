@@ -176,6 +176,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="ItemController.h" />
     <ClInclude Include="KrakenBreath.h" />
+    <ClInclude Include="KrakenTentacle.h" />
     <ClInclude Include="LastBoss.h" />
     <ClInclude Include="Kraken.h" />
     <ClInclude Include="KrakenBullet.h" />
@@ -252,6 +253,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemController.cpp" />
     <ClCompile Include="KrakenBreath.cpp" />
+    <ClCompile Include="KrakenTentacle.cpp" />
     <ClCompile Include="LastBoss.cpp" />
     <ClCompile Include="Kraken.cpp" />
     <ClCompile Include="KrakenBullet.cpp" />
