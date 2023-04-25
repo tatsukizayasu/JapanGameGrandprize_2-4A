@@ -38,12 +38,13 @@
 
 
 //画像の数とその種類-----------------------------
-#define IMAGE_NUM 5
+#define IMAGE_NUM 6
 #define YUKA_1 0
 #define YUKA_2 1
 #define KABE_1 2
 #define KABE_2 3
 #define KAIDANN_1 4
+#define KAIDANN_2 5
 //-----------------------------------------------
 
 //ブラシモードのメニュー制御-------------
@@ -77,6 +78,7 @@ private:
 		,"kabe_1"
 		,"kabe_2"
 		,"kaidann_1"
+		,"kaidann_2"
 	};
 
 	//インタフェース
@@ -222,6 +224,8 @@ public:
 	void SaveMapChips(FILE* fp);
 	//折れ線の保存
 	void SavePolyLine(FILE* fp);
+	//BoxColliderの保存
+	void SaveBoxCollider(FILE* fp);
 	//オブジェクトの保存
 	void SaveObject(FILE* fp);
 
@@ -229,6 +233,8 @@ public:
 	MapChip* LoadMapChip(istringstream* i_stringstream);
 	//折れ線の読み込み
 	PolyLine* LoadPolyLine(istringstream* i_stringstream);
+	//BoxColliderの読み込み
+	BoxCollider* LoadBoxCollider(istringstream* i_stringstream);
 
 };
 

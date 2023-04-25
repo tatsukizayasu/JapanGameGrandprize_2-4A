@@ -164,6 +164,11 @@ void StageBuilder::Draw()const
 		map_chips[i]->Draw();
 	}
 
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Draw();
+	}
+
 	DrawCollider();
 
 	DrawFrame();
@@ -572,7 +577,7 @@ void StageBuilder::DrawCollider()const
 
 	for (int i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Draw();
+		objects[i]->DrawCollider();
 	}
 
 }
@@ -1324,6 +1329,8 @@ void StageBuilder::SaveStage(int stage_num)
 
 	SaveObject(fp);
 
+	SaveBoxCollider(fp);
+
 	SaveMapChips(fp);
 
 	SavePolyLine(fp);
@@ -1346,6 +1353,8 @@ void StageBuilder::SaveStage(char* stage_name)
 	fopen_s(&fp, stage_name, "w");
 
 	SaveObject(fp);
+
+	SaveBoxCollider(fp);
 
 	SaveMapChips(fp);
 
@@ -1403,6 +1412,13 @@ void StageBuilder::LoadStage(char* stage_name)
 			collider_type = atoi(str_conma_buf.c_str());
 
 
+			if (collider_type == (int)COLLIDER::BOX)
+			{
+				BoxCollider* loaded = LoadBoxCollider(&i_stringstream);
+				objects.push_back
+				(new ObjectBase(arg_location, loaded, texture_name.c_str()));
+				continue;
+			}
 
 			if (collider_type == (int)COLLIDER::POLY_LINE)
 			{
@@ -1424,6 +1440,12 @@ void StageBuilder::LoadStage(char* stage_name)
 		if (collider_type == (int)COLLIDER::POLY_LINE)
 		{
 			poly_lines.push_back(LoadPolyLine(&i_stringstream));
+			continue;
+		}
+
+		if (collider_type == (int)COLLIDER::BOX)
+		{
+			box_collider.push_back(LoadBoxCollider(&i_stringstream));
 			continue;
 		}
 	}
@@ -1504,6 +1526,30 @@ void StageBuilder::SavePolyLine(FILE* fp)
 }
 
 //------------------------------------
+// BoxColliderの保存
+//------------------------------------
+void StageBuilder::SaveBoxCollider(FILE* fp)
+{
+	if (fp)
+	{
+		for (int i = 0; i < box_collider.size(); i++)
+		{
+			fprintf_s(fp, "%d", (int)COLLIDER::BOX);
+			
+				fprintf_s(fp, ",%.1lf,%.1lf,%.1lf,%.1lf",
+					box_collider[i]->GetLocation().x,
+					box_collider[i]->GetLocation().y,
+					box_collider[i]->GetArea().width,
+					box_collider[i]->GetArea().height
+				);
+			
+			fprintf_s(fp, "\n");
+
+		}
+	}
+}
+
+//------------------------------------
 // オブジェクトの保存
 //------------------------------------
 void StageBuilder::SaveObject(FILE* fp)
@@ -1545,6 +1591,7 @@ void StageBuilder::SaveObject(FILE* fp)
 					saved->GetLocation().y,
 					saved->GetRadius()
 				);
+				break;
 			}
 			case (int)COLLIDER::BOX:
 			{
@@ -1557,6 +1604,7 @@ void StageBuilder::SaveObject(FILE* fp)
 					saved->GetArea().width,
 					saved->GetArea().height
 				);
+				break;
 			}
 			case(int)COLLIDER::LINE:
 			{
@@ -1571,6 +1619,7 @@ void StageBuilder::SaveObject(FILE* fp)
 					saved->GetLocation(LINE_END).x,
 					saved->GetLocation(LINE_END).y
 				);
+				break;
 			}
 			case(int)COLLIDER::POLY_LINE:
 			{
@@ -1589,7 +1638,7 @@ void StageBuilder::SaveObject(FILE* fp)
 				}
 				points.clear();
 			}
-
+			break;
 
 			}
 			fprintf_s(fp, "\n");
@@ -1644,6 +1693,32 @@ PolyLine* StageBuilder::LoadPolyLine(istringstream* i_stringstream)
 	}
 
 	return (new PolyLine(&location[0], location.size()));
+}
+
+//----------------------------------------
+// BoxColliderのよみこみ
+//----------------------------------------
+BoxCollider* StageBuilder::LoadBoxCollider(istringstream* i_stringstream)
+{
+	string str_conma_buf;
+	string line;
+	Location location;
+	Area area;
+
+	getline(*i_stringstream, str_conma_buf, ',');
+	location.x = atof(str_conma_buf.c_str());
+	
+	getline(*i_stringstream, str_conma_buf, ',');
+	location.y = atof(str_conma_buf.c_str());
+	
+	getline(*i_stringstream, str_conma_buf, ',');
+	area.width = atof(str_conma_buf.c_str());
+	
+	getline(*i_stringstream, str_conma_buf, ',');
+	area.height = atof(str_conma_buf.c_str());
+
+
+	return (new BoxCollider(location, area));
 }
 
 #endif

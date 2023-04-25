@@ -28,6 +28,8 @@ public:
 
 	void Draw()const;
 
+	void DrawCollider()const;
+
 	void UpdateColliderPos();
 
 	bool HitSphere(SphereCollider* sphere)

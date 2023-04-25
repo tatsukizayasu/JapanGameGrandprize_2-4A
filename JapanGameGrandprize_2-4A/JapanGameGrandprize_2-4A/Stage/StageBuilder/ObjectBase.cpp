@@ -67,6 +67,14 @@ void ObjectBase::Draw()const
 
 	DrawRotaGraphF(draw_pos.x,draw_pos.y,1.0, 0, image, TRUE, is_reverse);
 
+}
+
+//-----------------------------------
+// “–‚½‚è”»’è‚Ì•`‰æ
+//-----------------------------------
+void ObjectBase::DrawCollider()const
+{
+
 	DrawLineAA(pivot->GetLocation().x - CameraWork::GetCamera().x, pivot->GetLocation().y - CameraWork::GetCamera().y,
 		collider->GetLocation().x - CameraWork::GetCamera().x, collider->GetLocation().y - CameraWork::GetCamera().y, 0xFFFF00, 3);
 
