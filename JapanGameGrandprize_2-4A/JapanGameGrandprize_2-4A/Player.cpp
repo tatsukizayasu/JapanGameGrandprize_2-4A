@@ -258,29 +258,26 @@ void Player::Draw() const
 
 	//HPƒo[‚Ì•\Ž¦‚±‚±‚©‚ç
 	float hp_start = 140;
-	DrawGraph(10, 380, hp_image, true);
+	DrawRotaGraphF(230, 580,0.75,0, hp_image, true);
 	if (hp >= 50)
 	{
-		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, GREEN, TRUE);
+		DrawBoxAA(hp_start, 605, hp_start + (now_hp - 1), 605 + HP_BAR_HEIGHT, GREEN, TRUE);
 	}
 	else if (hp >= 20)
 	{
-		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, YELLOW, TRUE);
+		DrawBoxAA(hp_start, 605, hp_start + (now_hp - 1), 605 + HP_BAR_HEIGHT, YELLOW, TRUE);
 	}
 	else
 	{
-		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, RED, TRUE);
+		DrawBoxAA(hp_start, 605, hp_start + (now_hp - 1), 605 + HP_BAR_HEIGHT, RED, TRUE);
 	}
-	DrawBox(hp_start, 605, HP_BAR_WIDTH - 1, 605 + HP_BAR_HEIGHT, 0x000000, FALSE);
-
-
+    DrawBox(hp_start, 605, hp_start + HP_BAR_WIDTH - 1, 605 + HP_BAR_HEIGHT, 0x000000, FALSE);
 	//‚±‚±‚Ü‚Å
 
 	for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
 	{
 		DrawFormatString(160 + (70 * i), 670, 0xffffff, "%d", element[i]->GetVolume());
 	}
-
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -442,6 +439,7 @@ void Player::Update()
 			else
 			{
 				hp = 0;
+				player_state = PLAYER_STATE::DEATH;
 			}
 		}
 
@@ -488,6 +486,8 @@ void Player::Update()
 			}
 		
 	}
+
+	
 
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
@@ -660,14 +660,14 @@ void Player::Update()
 		ElementUpdate();
 	}
 
-	if (hp <= 0)
+	int y = location.y - CameraWork::GetCamera().y;
+
+	if (y > 740)
 	{
 		player_state = PLAYER_STATE::DEATH;
 	}
 
-	int y = location.y - CameraWork::GetCamera().y;
-
-	if (y > 740)
+	if (hp <= 0)
 	{
 		player_state = PLAYER_STATE::DEATH;
 	}
