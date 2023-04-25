@@ -57,7 +57,7 @@ StageBuilder::StageBuilder()
 
 	BoxCollider box = BoxCollider({ 640,360 }, { 100,100 });
 
-	
+
 	objects.push_back(new ObjectBase({ 640,460 }, &testline, "yuka_1"));
 
 
@@ -271,11 +271,11 @@ void StageBuilder::UpdateBrush()
 	case SELECT_CLASS:
 		SelectClass();
 		break;
-		
+
 	case SELECT_IMAGE:
 		SelectImage();
 		break;
-		
+
 	case SELECT_COLLIDER:
 		SelectCollider();
 		break;
@@ -286,6 +286,7 @@ void StageBuilder::UpdateBrush()
 	switch (current_brush)
 	{
 	case BRUSH_OBJECT:
+		MakeObject();
 		break;
 
 	case BRUSH_MAP_CHIP:
@@ -540,17 +541,17 @@ void StageBuilder::DrawBrushMode()const
 	case SELECT_CLASS:
 		DrawSelectClass();
 		break;
-		
+
 	case SELECT_IMAGE:
 		DrawSelectImage();
 		break;
-		
+
 	case SELECT_COLLIDER:
 		DrawSelectCollider();
 		break;
 
 	}
-	
+
 }
 
 //------------------------------------
@@ -826,7 +827,8 @@ void StageBuilder::MovementByKey()
 //---------------------------------------------
 void StageBuilder::DeleteObject()
 {
-	if (KeyManager::OnMouseClicked(MOUSE_INPUT_RIGHT))
+	if (KeyManager::OnMouseClicked(MOUSE_INPUT_RIGHT)
+		&& !(KeyManager::OnMousePressed(MOUSE_INPUT_LEFT)))
 	{
 		for (int i = 0; i < map_chips.size(); i++)
 		{
@@ -851,8 +853,29 @@ void StageBuilder::DeleteObject()
 					{
 						delete poly_lines[i];
 						poly_lines.erase(poly_lines.begin() + i);
+						break;
 					}
 				}
+			}
+		}
+
+		for (int i = 0; i < box_collider.size(); i++)
+		{
+			if (mouse->HitBox(box_collider[i]))
+			{
+				delete box_collider[i];
+				box_collider.erase(box_collider.begin() + i);
+				break;
+			}
+		}
+
+		for (int i = 0; i < objects.size(); i++)
+		{
+			if (objects[i]->HitSphere(mouse))
+			{
+				delete objects[i];
+				objects.erase(objects.begin() + i);
+				break;
 			}
 		}
 	}
@@ -1058,18 +1081,49 @@ MapChip* StageBuilder::MakeMapChip(float x, float y, float width, float height)
 		{ x ,y }, { MAP_CHIP_SIZE,MAP_CHIP_SIZE }));
 }
 
-//------------------------------------
-// BoxCollider‚Ìì¬
-//------------------------------------
-void StageBuilder::MakeBoxCollider()
+//-------------------------------------
+// objectƒNƒ‰ƒX‚ðì¬‚·‚é
+//-------------------------------------
+void StageBuilder::MakeObject()
 {
-	box_collider.push_back(new BoxCollider(mouse->GetLocation(), { 100,100 }));
+	switch (current_object_collider)
+	{
+	case BRUSH_BOX :
+		if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
+		{
+			Location shift = { 0,50 };
+			BoxCollider box = 
+				BoxCollider(mouse->GetLocation() + shift, { 100,100 });
+			objects.push_back(new ObjectBase(
+				mouse->GetLocation()
+				, &box
+				, image_name[current_object_image]));
+		}
+		break;
+
+	case BRUSH_POLY_LINE:
+		if (MakePolyLine())
+		{
+			Location shift = { 0,50 };
+			int index = poly_lines.size() - 1;
+			objects.push_back(new ObjectBase(
+				poly_lines[index]->GetLocation() + shift
+				, poly_lines[index]
+				, image_name[current_object_image]
+			));
+
+			delete poly_lines[index];
+			poly_lines.erase(poly_lines.end() - 1);
+		}
+
+		break;
+	}
 }
 
 //------------------------------------
-// PolyLine class‚Ì¶¬
+// PolyLine class‚Ì¶¬ ì‚Á‚½‚çtrue•Ô‚·‚æ
 //------------------------------------
-void StageBuilder::MakePolyLine()
+bool StageBuilder::MakePolyLine()
 {
 
 	if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
@@ -1084,8 +1138,19 @@ void StageBuilder::MakePolyLine()
 		{
 			poly_lines.push_back(new PolyLine(pending_sphere));
 			Trash();
+			return true;
 		}
 	}
+
+	return false;
+}
+
+//------------------------------------
+// BoxCollider‚Ìì¬
+//------------------------------------
+void StageBuilder::MakeBoxCollider()
+{
+	box_collider.push_back(new BoxCollider(mouse->GetLocation(), { 100,100 }));
 }
 
 //------------------------------------
@@ -1343,7 +1408,7 @@ void StageBuilder::LoadStage(char* stage_name)
 			{
 				PolyLine* loaded = LoadPolyLine(&i_stringstream);
 				objects.push_back
-				(new ObjectBase(arg_location,loaded,texture_name.c_str()));
+				(new ObjectBase(arg_location, loaded, texture_name.c_str()));
 				continue;
 			}
 		}
@@ -1420,7 +1485,7 @@ void StageBuilder::SavePolyLine(FILE* fp)
 	{
 		for (int i = 0; i < poly_lines.size(); i++)
 		{
-			fprintf_s(fp,"%d", (int)COLLIDER::POLY_LINE);
+			fprintf_s(fp, "%d", (int)COLLIDER::POLY_LINE);
 			vector<SphereCollider*> points = poly_lines[i]->GetPoints();
 			fprintf_s(fp, ",%d", int(points.size()));
 
@@ -1447,7 +1512,7 @@ void StageBuilder::SaveObject(FILE* fp)
 	{
 		for (int i = 0; i < objects.size(); i++)
 		{
-			fprintf_s(fp, "%s,%s,%lf,%lf,", 
+			fprintf_s(fp, "%s,%s,%lf,%lf,",
 				objects[i]->GetObjectName(),
 				objects[i]->GetTextureName(),
 				objects[i]->GetPivot()->GetLocation().x,
@@ -1510,7 +1575,7 @@ void StageBuilder::SaveObject(FILE* fp)
 			case(int)COLLIDER::POLY_LINE:
 			{
 				PolyLine* saved
-					= static_cast<PolyLine*>(objects[i]->GetColllider()); 
+					= static_cast<PolyLine*>(objects[i]->GetColllider());
 				fprintf_s(fp, "%d", (int)COLLIDER::POLY_LINE);
 				vector<SphereCollider*> points = saved->GetPoints();
 				fprintf_s(fp, ",%d", int(points.size()));

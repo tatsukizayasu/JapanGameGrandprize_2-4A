@@ -102,7 +102,6 @@ private:
 	int current_object_collider;
 	int brush_mode_state;
 
-	//todo:テスト 
 
 public:
 	/*******************更新描画系統*******************/
@@ -184,9 +183,12 @@ public:
 	void MakeMapChip(); //クリックしたとき用
 	MapChip* MakeMapChip(float x, float y, float width, float height); //CSVファイルからの読み込み用
 
+	//objectクラスを作成する
+	void MakeObject();
+
 	//コリジョンクラスを作成する
 	//折れ線
-	void MakePolyLine();
+	bool MakePolyLine();
 	//BoxColliderを作成する
 	void MakeBoxCollider();
 	//円
