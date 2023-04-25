@@ -92,7 +92,7 @@ Undead::Undead(Location spawn_location)
 	}
 
 	images = new int[UNDEAD_IMAGES];
-	LoadDivGraph("Images/Enemy/undead.png", 9, 9, 1, 250, 250, images);
+	LoadDivGraph("Images/Enemy/undead.png", UNDEAD_IMAGES, UNDEAD_IMAGES, 1, 250, 250, images);
 	GetGraphSizeF(images[0], &size.width, &size.height);
 
 	InitDamageLog();
@@ -241,11 +241,11 @@ void Undead::DistancePlayer(const Location player_location)
 		area.width += UNDEAD_WIDTH / 2;
 		image_argument = UNDEAD_MOVE_IMAGES;
 		animation = 0;
+
 		if (player_location.x <= location.x)
 		{
 			left_move = true;
 			speed = -UNDEAD_SPEED;
-
 		}
 		else
 		{
