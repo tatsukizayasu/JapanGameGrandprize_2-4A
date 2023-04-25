@@ -78,8 +78,8 @@ bool EnemyBase::ScreenOut()
 	Location camera = CameraWork::GetCamera(); //ƒJƒƒ‰
 	scroll = location - camera;
 
-	if ((scroll.x < -(area.width / 2)) || (SCREEN_WIDTH + (area.width / 2) < scroll.x) ||
-		(scroll.y < -(area.height / 2)) || (SCREEN_HEIGHT + (area.height / 2) < scroll.y))
+	if ((scroll.x < -area.width) || ((SCREEN_WIDTH + area.width) < scroll.x) ||
+		(scroll.y < -area.height) || ((SCREEN_HEIGHT + area.height) < scroll.y))
 	{
 		ret = true;
 	}
