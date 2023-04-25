@@ -67,7 +67,7 @@ AbstractScene* DotByDot::Update()
 {
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_LEFT))
 	{
-		return new GameMain();
+		return new GameMain(1);
 	}
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A))

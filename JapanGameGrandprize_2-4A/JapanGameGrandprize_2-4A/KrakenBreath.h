@@ -8,10 +8,6 @@ class KrakenBreath :
     float x_speed; //Xのスピード
     float y_speed; //Yのスピード
 
-    int game_tiem; //時間測定 
-    int start_time;//攻撃開始を測る時間 
-
-    bool start_attack; //攻撃開始（弾が動き始める）
 
 public:
 

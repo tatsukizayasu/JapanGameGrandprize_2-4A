@@ -1,7 +1,9 @@
 #pragma once
 #include"EnemyBulletBase.h"
 
-class SlimeBossBullet :
+#define LOCATION_DATA 60
+
+class SlimeBossThunder :
     public EnemyBulletBase
 {
     int image; //画像
@@ -11,14 +13,21 @@ class SlimeBossBullet :
 
     int color;
 
+    bool left_move;
+    int orientation_time;
+    int data_switch;
+
+
+    int old_radius[LOCATION_DATA];
+    Location old_location[LOCATION_DATA];
 
 public:
 
     //コンスタラクタ
-    SlimeBossBullet(Location, Location);
+    SlimeBossThunder(Location, Location);
 
     //デストラクタ
-    ~SlimeBossBullet();
+    ~SlimeBossThunder();
 
     //更新
     void Update() override;

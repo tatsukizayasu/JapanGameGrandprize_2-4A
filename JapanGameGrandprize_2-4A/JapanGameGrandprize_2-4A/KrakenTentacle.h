@@ -1,42 +1,33 @@
 #pragma once
-#include "EnemyBase.h"
-#include"KrakenBullet.h"
-#include"KrakenBreath.h"
+#include"EnemyBase.h"
 
-
-enum class KRAKEN_STATE
-{
-	NORMAL,   //通常移動 
-	NONE //何も行動しない。
-};
-
-enum class KRAKEN_ATTACK
+enum class KRAKEN_TENTACLE
 {
 	NONE = 0,  //攻撃をしていない。
 	TENTACLE_ATTACK, //触手攻撃
-	BREATH, //ブレス攻撃(水属性）
-	HARD_ATTACK, //水の塊を落とす
-	
 };
 
-class Kraken :
-    public EnemyBase
+class KrakenTentacle :public EnemyBase
 {
 private:
-	
-	int attack_num; //攻撃の種類
-	int standby_attack; //攻撃待機
 
-	KRAKEN_ATTACK attack_state; //攻撃
-	KRAKEN_STATE move_state; //動き
+	int image;
+	int time; //攻撃開始を測る
+
+
+	float old_x;
+	bool go_back; //古い座標に戻る
+	bool attack_state; //攻撃開始
+	bool attack;
+
+	KRAKEN_TENTACLE attack_move;
 
 public:
-
 	//コンストラクタ
-	Kraken(Location);
+	KrakenTentacle(Location);
 
 	//デストラクタ
-	~Kraken();
+	~KrakenTentacle();
 
 	//描画以外の更新を実行
 	void Update(const class Player* player, const class Stage* stage)override;
@@ -50,14 +41,10 @@ public:
 	//移動
 	void Move(const Location player_location) override;
 
-	//遠距離攻撃（水の塊を落とす）
-	void AttackWater(const Location player_location);
-
-	//ブレス攻撃
-	void AttackBreath(const Location player_location);
 
 	//落下
 	void Fall() override;
+
 
 	//攻撃
 	void  Attack(const Location) override;

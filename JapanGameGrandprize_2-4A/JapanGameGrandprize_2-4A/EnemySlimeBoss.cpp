@@ -12,7 +12,7 @@
 
 #define SLIME_BOSS_SPEED 3
 #define SLIME_BOSS_JUMP_SPEED 5
-#define SLIME_BOSS_ATTACK_DAMAGE 5
+#define SLIME_BOSS_ATTACK_DAMAGE 20
 #define SLIME_BOSS_JUMP_DISTANCE 40
 
 #define BOSS_SLIME_HP 500
@@ -87,12 +87,20 @@ EnemySlimeBoss::~EnemySlimeBoss()
 
 void EnemySlimeBoss::MagicBullet(const Location player_location)
 {
-	if (++breath_time >= SLIME_BOSS_BREATH_TIME)
+	if (breath_time == SLIME_BOSS_BREATH_TIME / 2)
 	{
-		breath_time = 0;
-
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new SlimeBossBullet(location, player_location));
+	}
+}
+
+
+void EnemySlimeBoss::Thunder(const Location player_location)
+{
+	if (breath_time == SLIME_BOSS_BREATH_TIME)
+	{
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new SlimeBossThunder(location, player_location));
 	}
 }
 
@@ -157,7 +165,11 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 		}
 		else
 		{
+			if (breath_time >= SLIME_BOSS_BREATH_TIME)breath_time = 0;
+			++breath_time;
+			
 			MagicBullet(player->GetLocation());
+			Thunder(player->GetLocation());
 		}
 
 		if (ScreenOut())
@@ -250,7 +262,7 @@ void EnemySlimeBoss::Draw()const
 	}
 	DrawDamageLog();
 
-	//DrawCircle(draw_location.x, draw_location.y, (area.height / 2), 0xff0000, true, true);
+	DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
 	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, slime_boss_image, true, !left_move);
 
 	//DrawFormatString(0, 0, 0xffffff, "%d", slime_boss_jump_distance);
@@ -316,7 +328,7 @@ AttackResource EnemySlimeBoss::Hit()
 	AttackResource ret = { 0,nullptr,0 }; //–ß‚è’l
 
 	ENEMY_TYPE attack_type[1] = { *type };
-	ret.damage = 10;
+	ret.damage = SLIME_BOSS_ATTACK_DAMAGE;
 	ret.type = attack_type;
 	ret.type_count = 1;
 

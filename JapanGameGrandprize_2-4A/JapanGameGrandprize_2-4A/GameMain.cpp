@@ -12,6 +12,7 @@
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
 #include"Dragon.h"
+#include"Kraken.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"
@@ -20,7 +21,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-GameMain::GameMain()
+GameMain::GameMain(short stage_num)
 {
 #undef DOT_BY_DOT
 	//背景画像読み込み
@@ -32,14 +33,15 @@ GameMain::GameMain()
 	pause = new Pause();
 #endif
 	enemy_spawn_volume = 0;
-	stage = new Stage();
+	this->stage_num = stage_num;
+	stage = new Stage(stage_num);
 	player = new Player(stage);
 	stage->SetPlayer(player);
 
 	EnemyBase::CreateLogFont();
 
 	SpawnEnemy();
-	camera_work = new CameraWork(0, 800, player, stage);
+	camera_work = new CameraWork(0, 0, player, stage, stage_num);
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
 	
@@ -47,6 +49,8 @@ GameMain::GameMain()
 
 	input_margin = 0;
 	is_spawn_boss = false;
+
+	background_location = { 0.0f,0.0f };
 }
 
 //-----------------------------------
@@ -102,16 +106,24 @@ AbstractScene* GameMain::Update()
 	player->Update();
 	stage->Update(player);
 
-
+	//背景画像の更新
+	if (stage_num != 3)
+	{
+		background_location = CameraWork::GetCamera();
+	}//Stage03の場合、背景を独立に動かす
+	else
+	{
+		background_location.x += 1.0f;
+	}
 
 	if (EnemyUpdate() == true)
 	{
-		return new GameClear();
+		return new GameClear(stage_num);
 	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		return new GameOver();
+		return new GameOver(stage_num);
 	}
 
 	return this;
@@ -158,6 +170,7 @@ void GameMain::SpawnEnemy()
 			enemy[i] = new Torrent(spawn[i].location);
 			break;
 		case ENEMY_KIND::KRAKEN:	//クラーケンボスの生成
+			enemy[i] = new Kraken(spawn[i].location);
 			break;
 		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
 			enemy[i] = new Dragon(spawn[i].location);
@@ -209,6 +222,13 @@ bool GameMain::EnemyUpdate()
 	{
 		if (enemy[i] != nullptr)
 		{
+			//Stage03の場合、画面内に収まるまで敵を強制移動
+			if (stage_num == 3 &&
+				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
+			{
+				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 1.0f,enemy[i]->GetLocation().y });
+			}
+
 				enemy[i]->Update(player, stage);
 
 			//エネミーの攻撃
@@ -219,7 +239,7 @@ bool GameMain::EnemyUpdate()
 					player->HpDamage(enemy[i]->Hit());
 				}
 			}
-
+			
 			//プレイヤーの弾との当たり判定
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
@@ -331,13 +351,12 @@ void GameMain::Draw()const
 {
 	////背景	描画
 	// DrawGraph(0, 0, background_image, FALSE);
-	Location camera_work = CameraWork::GetCamera();
 	
-	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-	DrawGraphF(-fmodf(camera_work.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf( background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf( background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
-	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
-	DrawGraphF(-fmodf(camera_work.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf( background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf( background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 
 	stage->Draw();
 	item_controller->Draw();
