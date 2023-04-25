@@ -9,11 +9,14 @@
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 400
-#define DETECTION_DISTANCE_Y 200
+#define DETECTION_DISTANCE_Y 300
 
 //物理攻撃範囲
-#define ATTACK_RANGE 200
+#define ATTACK_RANGE 160
 #define ATTACK_RANGE_Y 100
+
+#define ATTACK_MAGIC 300
+#define ATTACK_MAGIC_Y 200
 
 //魔法攻撃した時の硬直時間
 #define MAGIC_STANDBY 60
@@ -48,6 +51,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	attack = false;
 
 	vector = 0;
+	attack_anime = 0;
 	travel = 0;
 	travel_y = 0;
 	range = 0;
@@ -68,15 +72,17 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	location.y -= MAP_CHIP_SIZE / 2;
 
 	standby_time = 0;
+	halt_time = 0;
 	physical_attack = false;
 	magic_attack = false;
 	close_attack = false;
+	attack_halt = false;
 
 	kind = ENEMY_KIND::GHOST;
 
 	images = new int[7];
 	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, images); //通常
-	LoadDivGraph("Images/Enemy/ghostattack.png", 6, 6, 1, 60, 66, attack_image); //攻撃
+	LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 60, 60, attack_image); //攻撃
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -129,11 +135,16 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	if (++animation_time % 10 == 0)
 	{
 		--animation;
+		++attack_anime;
 	}
 
 	if (animation < 0)
 	{
 		animation = 5;
+	}
+	if (attack_anime > 1)
+	{
+		attack_anime = 0;
 	}
 
 	switch (state)
@@ -143,12 +154,6 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
-
-		if (ScreenOut())
-		{
-			state = ENEMY_STATE::IDOL;
-			speed = 0;
-		}
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -158,24 +163,48 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		AttackMove(player->GetLocation());
 		hit_stage = HitStage(stage);
 
-		if (hit_stage.hit) //ステージとの当たり判定
+		if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK) //接近攻撃時のステージとの当たり判定
 		{
-			Location chip_location = hit_stage.chip->GetLocation();
-			Area chip_area = hit_stage.chip->GetArea();
-
-			location.y = chip_location.y -
-				(chip_area.height / 2) - (area.height / 2);
-
-			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-			hit_direction = HitDirection(hit_stage.chip);
-
-			if (hit_direction == STAGE_DIRECTION::BOTTOM || hit_direction == STAGE_DIRECTION::TOP)
+			if (hit_stage.hit) //ステージとの当たり判定
 			{
-				location = old_location;
-				close_attack = false;
-				magic_num = 0;
+				Location chip_location = hit_stage.chip->GetLocation();
+				Area chip_area = hit_stage.chip->GetArea();
+
+				location.y = chip_location.y -
+					(chip_area.height / 2) - (area.height / 2);
+
+				STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+				hit_direction = HitDirection(hit_stage.chip);
+
+				if (hit_direction == STAGE_DIRECTION::BOTTOM || hit_direction == STAGE_DIRECTION::TOP)
+				{
+					location = old_location;
+					close_attack = false;
+					magic_num = 0;
+				}
 			}
 		}
+
+		if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK) //遠距離攻撃時のステージとの当たり判定
+		{
+			if (hit_stage.hit) //ステージとの当たり判定
+			{
+				Location chip_location = hit_stage.chip->GetLocation();
+				Area chip_area = hit_stage.chip->GetArea();
+
+				location.y = chip_location.y -
+					(chip_area.height / 2) - (area.height / 2);
+
+				STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+				hit_direction = HitDirection(hit_stage.chip);
+
+				if (hit_direction == STAGE_DIRECTION::BOTTOM || hit_direction == STAGE_DIRECTION::TOP)
+				{
+					attack_halt = true;
+				}
+			}
+		}
+
 		break;
 	case ENEMY_STATE::DEATH:
 		Death();
@@ -241,7 +270,7 @@ void EnemyGhost::Move(const Location player_location)
 	vector = sqrt(range * range + range_y * range_y);
 
 	if (range <= DETECTION_DISTANCE && range >= -DETECTION_DISTANCE
-		&& range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y)
+		&& range_y <= DETECTION_DISTANCE_Y && range_y >= -DETECTION_DISTANCE_Y && attack_halt == false)
 	{
 
 		if (range <= ATTACK_RANGE && range >= -ATTACK_RANGE
@@ -254,7 +283,8 @@ void EnemyGhost::Move(const Location player_location)
 			standby_time = PHYSICAL_STANDBY;
 			physical_attack = true;
 		}
-		else
+		else if(range <= ATTACK_MAGIC && range >= -ATTACK_MAGIC
+			&& range_y <= ATTACK_MAGIC_Y && range_y >= -ATTACK_MAGIC_Y)
 		{
 			state = ENEMY_STATE::ATTACK;
 			attack_state = GHOST_ATTACK::MAGIC_ATTACK;
@@ -267,6 +297,19 @@ void EnemyGhost::Move(const Location player_location)
 				BulletManager::GetInstance()->CreateEnemyBullet
 				(new GhostBullet(location, player_location));
 			}
+		}
+
+		else
+		{
+			if (left_move == true)
+			{
+				location.x -= speed;
+			}
+			else
+			{
+				location.x += speed;
+			}
+
 		}
 
 	}
@@ -286,6 +329,21 @@ void EnemyGhost::Move(const Location player_location)
 	if (magic_num > 5)
 	{
 		close_attack = true;
+
+		if (++physical_time % 10 == 0)
+		{
+			magic_num = 0;
+			physical_time = 0;
+		}
+	}
+
+	if (attack_halt == true)
+	{
+		if (++halt_time % 10 == 0)
+		{
+			halt_time = 0;
+			attack_halt = false;
+		}
 	}
 
 }
@@ -330,11 +388,11 @@ AttackResource EnemyGhost::Hit()
 
 	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK && (!attack))
 	{
-		/*	attack = true;
+			attack = true;
 			ENEMY_TYPE attack_type[1] = { *type };
 			ret.damage = ATTACK_DAMAGE;
 			ret.type = attack_type;
-			ret.type_count = 1;*/
+			ret.type_count = 1;
 	}
 
 	return ret;
@@ -374,7 +432,7 @@ void EnemyGhost::Draw()const
 	else
 	{
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, attack_image[animation], TRUE, !left_move);
+			M_PI / 180, attack_image[attack_anime], TRUE, !left_move);
 	}
 }
 

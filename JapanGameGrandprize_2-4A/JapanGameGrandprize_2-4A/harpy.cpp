@@ -4,8 +4,8 @@
 #include "DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
-#define HARPY_SIZE_X 150
-#define HARPY_SIZE_Y 150
+#define HARPY_SIZE_X 80
+#define HARPY_SIZE_Y 80
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 300
@@ -58,6 +58,8 @@ Harpy::Harpy(Location spawn_location)
 	physical_time = 0;
 	magic_num = 0;
 	magic_time = 1;
+	animation = 0;
+	animation_time = 0;
 	location = spawn_location;
 
 	standby_attack = 0;
@@ -78,7 +80,7 @@ Harpy::Harpy(Location spawn_location)
 	magic_attack = false;
 	kind = ENEMY_KIND::HARPY;
 
-	images = LoadGraph("Images/Enemy/HarpieImage.png"); //画像読込み
+	LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 80, 80, images); //通常
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -120,6 +122,17 @@ Harpy::~Harpy()
 //-----------------------------------
 void Harpy::Update(const class Player* player, const class Stage* stage)
 {
+
+	//アニメーション
+	if (++animation_time % 10 == 0)
+	{
+		--animation;
+	}
+
+	if (animation < 0)
+	{
+		animation = 5;
+	}
 
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
@@ -183,7 +196,11 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 		{
 			location = old_location;
-			left_move = !left_move;
+
+			if (state != ENEMY_STATE::ATTACK)
+			{
+				left_move = !left_move;
+			}
 		}
 
 	}
@@ -418,12 +435,8 @@ void Harpy::Draw()const
 	}
 	DrawDamageLog();
 
-	/*DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
-		GetColor(255, 255, 0), TRUE);*/
-
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-		M_PI / 180, images, TRUE);
+		M_PI / 180, images[animation], TRUE, !left_move);
 }
 
 //-----------------------------------

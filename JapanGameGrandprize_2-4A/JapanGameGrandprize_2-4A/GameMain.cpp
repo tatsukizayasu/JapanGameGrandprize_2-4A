@@ -13,6 +13,7 @@
 #include "EnemySlimeBoss.h"
 #include "Kraken.h"
 #include"Dragon.h"
+#include"Kraken.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"

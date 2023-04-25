@@ -14,7 +14,7 @@
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100.f
-#define HP_BAR_WIDTH 530
+#define HP_BAR_WIDTH 300
 #define HP_BAR_HEIGHT 31
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
