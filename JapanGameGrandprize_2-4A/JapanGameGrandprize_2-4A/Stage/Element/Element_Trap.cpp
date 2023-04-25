@@ -5,7 +5,7 @@
 
 #define TIMER	4.0f
 
-#define ATTACK_RANGE 300.0f
+#define ATTACK_RANGE 200.0f
 
 Element_Trap::Element_Trap(short type,
 	std::vector<std::shared_ptr<Stage_Element_Base>> element, Stage* stage,
