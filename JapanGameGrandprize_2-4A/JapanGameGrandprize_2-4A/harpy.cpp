@@ -4,8 +4,8 @@
 #include "DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
-#define HARPY_SIZE_X 150
-#define HARPY_SIZE_Y 150
+#define HARPY_SIZE_X 100
+#define HARPY_SIZE_Y 100
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 300
@@ -80,7 +80,7 @@ Harpy::Harpy(Location spawn_location)
 	magic_attack = false;
 	kind = ENEMY_KIND::HARPY;
 
-	LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 150, 150, images); //通常
+	LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 80, 80, images); //通常
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
