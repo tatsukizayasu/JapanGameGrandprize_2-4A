@@ -175,20 +175,20 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
 			enemy[i] = new Wyvern(spawn[i].location);
 			break;
-		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
-			enemy[i] = nullptr;
-			break;
-		case ENEMY_KIND::TORRENT:	//トレントボスの生成
-			enemy[i] = new Torrent(spawn[i].location);
-			break;
+		//case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
+		//	enemy[i] = nullptr;
+		//	break;
+		//case ENEMY_KIND::TORRENT:	//トレントボスの生成
+		//	enemy[i] = new Torrent(spawn[i].location);
+		//	break;
 		case ENEMY_KIND::KRAKEN:	//クラーケンボスの生成
 			enemy[i] = new Kraken(spawn[i].location);
 			break;
-		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
-			enemy[i] = new Dragon(spawn[i].location);
-			break;
-		case ENEMY_KIND::END_BOSS:	//ラスボスの生成
-			break;
+		//case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
+		//	enemy[i] = new Dragon(spawn[i].location);
+		//	break;
+		//case ENEMY_KIND::END_BOSS:	//ラスボスの生成
+		//	break;
 		case ENEMY_KIND::NONE:
 		default:
 			enemy[i] = nullptr;
@@ -219,9 +219,27 @@ bool GameMain::EnemyUpdate()
 			{
 				if (enemy[i] == nullptr)
 				{
-					enemy[i] = new EnemySlimeBoss(spawn[i].location);
-					is_spawn_boss = true;
-					break;
+					switch (static_cast<ENEMY_KIND>(spawn[i].id))
+					{
+					case ENEMY_KIND::SLIME_BOSS:
+						enemy[i] = new EnemySlimeBoss(spawn[i].location);
+						is_spawn_boss = true;
+						break;
+					case ENEMY_KIND::TORRENT:
+						enemy[i] = new Torrent(spawn[i].location);
+						break;
+
+					case ENEMY_KIND::DRAGON:
+						enemy[i] = new Dragon(spawn[i].location);
+						break;
+
+					case ENEMY_KIND::END_BOSS:
+						break;
+
+					default:
+						break;
+					}
+					
 				}
 			}
 		}
