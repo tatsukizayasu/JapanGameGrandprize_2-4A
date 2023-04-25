@@ -1722,4 +1722,13 @@ BoxCollider* StageBuilder::LoadBoxCollider(istringstream* i_stringstream)
 	return (new BoxCollider(location, area));
 }
 
+//------------------------------------------
+// ステージの出力
+//------------------------------------------
+vector<ObjectBase*> StageBuilder::OutPutObjects()
+{
+	char stage[16] = "stage4.csv";
+	LoadStage(stage);
+}
+
 #endif

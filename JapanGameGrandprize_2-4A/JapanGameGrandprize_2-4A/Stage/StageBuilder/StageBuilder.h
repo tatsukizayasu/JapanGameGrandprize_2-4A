@@ -126,6 +126,7 @@ public:
 	void UpdateSave();
 	//ロードモードの更新
 	void UpdateLoad();
+
 	//マウスの更新
 	void UpdateMouse();
 
@@ -236,6 +237,9 @@ public:
 	//BoxColliderの読み込み
 	BoxCollider* LoadBoxCollider(istringstream* i_stringstream);
 
+
+	/*****************************ステージ出力用******************************/
+	vector<ObjectBase*> OutPutObjects();
 };
 
 
