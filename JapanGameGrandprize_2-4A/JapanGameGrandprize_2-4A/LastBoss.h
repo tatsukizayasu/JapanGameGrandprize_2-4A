@@ -74,4 +74,3 @@ public:
     void DebugDraw() override;
 #endif //_DEBUG
 };
-

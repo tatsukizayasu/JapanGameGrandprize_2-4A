@@ -26,7 +26,7 @@
 #define HAND_HP 100
 
 //éÄñSÇµÇƒÇ¢ÇÈéûä‘
-#define DEATH_TIME 600
+#define DEATH_TIME 1200
 
 //à⁄ìÆó 
 #define MOVE_VOLUME 100
@@ -82,7 +82,7 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 
 	kind = ENEMY_KIND::LAST_BOSS;
 	type = new ENEMY_TYPE[1];
-	state = ENEMY_STATE::MOVE;
+	state = ENEMY_STATE::ATTACK;
 
 	move = HAND_MOVE::UP_DOWN;
 
@@ -241,14 +241,17 @@ void LastBossHand::Attack(const Location player_location)
 	{
 		location.x = player_location.x;
 		punch = true;
+		speed = PUNCH_SPEED;
 	}
 
 	if (old_punch && (old_punch != punch)) //ÉpÉìÉ`èIóπ
 	{
+		location = spawn_location;
 		state = ENEMY_STATE::MOVE;
+		move = static_cast<HAND_MOVE>(GetRand(2));
+		speed = HAND_MOVE_SPEED;
 		attack_interval = PUNCH_INTERVAL;
 		attack = false;
-
 	}
 }
 
@@ -266,7 +269,7 @@ void LastBossHand::Punch()
 			attack = false;
 		}
 
-		if (punch_start.y <= location.y)
+		if (location.y <= punch_start.y )
 		{
 			punch = false;
 		}
