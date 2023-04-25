@@ -143,7 +143,7 @@ public:
 	/// StageクラスにEnemyオブジェクトを渡すSetter
 	/// </summary>
 	/// <param name = "*player">Playerオブジェクトポインタ</param>
-	void SetEnemy(EnemyBase** enemy) { this->enemy = enemy; }
+	void SetEnemy(EnemyBase** enemy);
 
 	/// <summary>
 	/// StageクラスにCameraWorkオブジェクトを渡すSetter

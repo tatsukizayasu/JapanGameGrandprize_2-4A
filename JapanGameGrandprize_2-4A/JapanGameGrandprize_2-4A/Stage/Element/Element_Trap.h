@@ -1,6 +1,7 @@
 #pragma once
 #include "Stage_Element_Base.h"
 #include "../EnemyBase.h"
+#include "../BULLET.h"
 #include "../Stage.h"
 
 class Element_Trap : public Stage_Element_Base
@@ -9,6 +10,8 @@ private:
 
 	Stage* stage;
 	EnemyBase** enemy;
+	BulletBase* bullet;
+	ChemicalFormulaParameter explosion{};
 
 	enum class STATE {
 		NONE,		//‚È‚µ

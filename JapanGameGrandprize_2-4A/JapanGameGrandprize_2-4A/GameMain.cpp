@@ -41,9 +41,11 @@ GameMain::GameMain(short stage_num)
 	EnemyBase::CreateLogFont();
 
 	SpawnEnemy();
-	camera_work = new CameraWork(0, 0, player, stage, stage_num);
 
 	stage->SetEnemy(enemy);
+	stage->InitStage();
+
+	camera_work = new CameraWork(0, 0, player, stage, stage_num);
 
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();

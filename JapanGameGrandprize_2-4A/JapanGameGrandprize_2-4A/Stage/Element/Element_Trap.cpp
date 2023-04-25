@@ -1,6 +1,7 @@
 #include "Element_Trap.h"
 #include "../Player.h"
 #include "../CameraWork.h"
+#include "../NormalBullet.h"
 
 #define TIMER	4.0f
 
@@ -21,6 +22,11 @@ Element_Trap::Element_Trap(short type,
 
 	this->stage = stage;
 	this->enemy = enemy;
+
+	explosion.atribute = ATTRIBUTE::EXPLOSION;
+	explosion.damage = 40;
+
+	this->bullet = new NormalBullet(location.x, location.y, false, &explosion);
 
 	state = STATE::NONE;
 }
@@ -67,29 +73,28 @@ void Element_Trap::Update(Player* player)
 			j--;
 		}
 
-		vector<ENEMY_LOCATION> spawn;
-		spawn = stage->GetEnemy_SpawnLocation();
-
-		//for (int i = 0; i < spawn.size(); i++)
-		//{
-		//	if (enemy[i] != nullptr)
-		//	{
-
-
-		//		//範囲内にプレイヤーがいたらダメージを与える
-		//		if (abs(location.x - enemy[i]->GetLocation().x) <= ATTACK_RANGE
-		//			&& abs(location.y - enemy[i]->GetLocation().y) <= ATTACK_RANGE)
-		//		{
-		//			printfDx("hit\n");
-
-		//		}
-		//	}
-		//}
-
+		
 	}
 
 	if (state == STATE::EXPLOSION) 
 	{
+
+		vector<ENEMY_LOCATION> spawn;
+		spawn = stage->GetEnemy_SpawnLocation();
+
+		for (int i = 0; i < spawn.size(); i++)
+		{
+			if (enemy[i] != nullptr)
+			{
+				//範囲内にプレイヤーがいたらダメージを与える
+				if (abs(location.x - enemy[i]->GetLocation().x) <= ATTACK_RANGE
+					&& abs(location.y - enemy[i]->GetLocation().y) <= ATTACK_RANGE)
+				{
+					enemy[i]->HitBullet(bullet);
+				}
+			}
+		}
+
 		if (GetElapsedTime(1.0f) > 0.3f)
 		{
 			SetImage(0);

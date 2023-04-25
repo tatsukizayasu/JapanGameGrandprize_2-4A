@@ -6,7 +6,6 @@
 
 Stage_Element::Stage_Element(Stage* stage)
 {
-
 	player = nullptr;
 	this->stage = stage;
 }
