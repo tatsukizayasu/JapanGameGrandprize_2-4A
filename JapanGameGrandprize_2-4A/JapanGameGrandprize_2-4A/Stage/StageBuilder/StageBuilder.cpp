@@ -1409,6 +1409,7 @@ void StageBuilder::LoadStage(char* stage_name)
 			arg_location.y = atof(str_conma_buf.c_str());
 
 			getline(i_stringstream, str_conma_buf, ',');
+
 			collider_type = atoi(str_conma_buf.c_str());
 
 

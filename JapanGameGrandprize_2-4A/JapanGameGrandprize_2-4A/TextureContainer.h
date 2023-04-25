@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <string>
 #include "DxLib.h"
 
 class TextureContainer
@@ -8,7 +9,7 @@ private:
 	TextureContainer();
 	static TextureContainer* instance;
 
-	std::map<const char*, int>texture;
+	std::map<std::string, int>texture;
 
 public:
 	~TextureContainer();

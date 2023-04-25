@@ -1,5 +1,6 @@
 #include "TextureContainer.h"
 #include <string.h>
+#include <stdexcept>
 
 TextureContainer* TextureContainer::instance = nullptr;
 
@@ -34,8 +35,9 @@ void TextureContainer::Delete()
  int TextureContainer::GetTexture(const char* texture_name)
 {
 	int image_handle = 0;
-	decltype (texture)::iterator it = texture.find(texture_name);
-	if (it == texture.end())
+	std::string _texture_name(texture_name);
+	/*decltype (texture)::iterator it = texture.find(texture_name);
+	if (it == texture.end()&&)
 	{
 		char path[100] = "images/Stage/";
 		strcat_s(path, texture_name);
@@ -50,9 +52,29 @@ void TextureContainer::Delete()
 			texture.insert(std::make_pair(texture_name, image_handle));
 		}
 	}
-	
-	image_handle = texture.at(texture_name);
-	
+	*/
+	try
+	{
+		image_handle = texture.at(_texture_name);
+	}
+	catch(const std::out_of_range & error)
+	{
+		_texture_name = "images/Stage/" + _texture_name;
+		_texture_name += ".png";
+
+		if ((image_handle = LoadGraph(_texture_name.c_str())) == -1)
+		{
+			throw _texture_name.c_str();
+			return 0;
+		}
+		else
+		{
+			texture.insert(std::make_pair(
+				std::string (texture_name)
+				, image_handle));
+		}
+	}
+
 	return image_handle;
 }
 
