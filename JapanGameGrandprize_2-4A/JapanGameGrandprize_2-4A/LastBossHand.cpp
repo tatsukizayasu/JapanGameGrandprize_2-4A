@@ -32,13 +32,13 @@
 #define MOVE_VOLUME 100
 
 //角度の上昇量
-#define ADD_ANGLE 2
+#define ADD_ANGLE 0.5f
 
 //半径の上昇量
 #define ADD_RADIUS 1
 
 //移動半径
-#define MOVE_RADIUS 50
+#define MOVE_RADIUS 150
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -204,11 +204,10 @@ void LastBossHand::Move(const Location player_location)
 		radian = angle * (M_PI / 180);
 
 		//スピードの計算
-		circular_speed.x = cosf(radian);
-		circular_speed.y = sinf(radian);
+		circular_speed.x = cosf(radian) * radius;
+		circular_speed.y = sinf(radian) * radius;
 
-		location.x = spawn_location.x + (circular_speed.x * radius);
-		location.y = spawn_location.y + (circular_speed.y * radius);
+		location = spawn_location + circular_speed;
 	}
 		break;
 	case HAND_MOVE::NONE:

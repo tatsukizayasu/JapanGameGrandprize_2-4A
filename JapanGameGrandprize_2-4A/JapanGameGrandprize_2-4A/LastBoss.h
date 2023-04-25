@@ -13,18 +13,23 @@ class LastBoss :
     public EnemyBase
 {
 private:
-
+    bool down; //ダウン
     bool attack; //攻撃が当たったか
-    int damage; //ダメージ
+    int down_time; //ダウンしている時間
     int attack_interval; //次の攻撃までの時間
     int animation; //アニメーション
     int image_argument; //画像の引数
     int attack_time; //攻撃している時間(デバッグ用)
     EnemyBase** hand; //手
+
+    HitMapChip hit_stage; //ステージとの当たり判定
 private:
 
     //移動時のアニメーション
     void MoveAnimation();
+
+    //ダウンからの復帰
+    bool Revival();
 public:
 
     //コンストラクタ

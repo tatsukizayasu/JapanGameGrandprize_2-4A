@@ -18,7 +18,7 @@ private:
     bool left_hand; //true:¶è,false:‰Eè
     bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
     int move_volume; //ˆÚ“®—Ê
-    int angle; //Šp“x
+    float angle; //Šp“x
     int radius; //”¼Œa
     int attack_interval; //Ÿ‚ÌUŒ‚‚Ü‚Å‚ÌŠÔ
     int punch_standby_time; //ƒpƒ“ƒ`‚·‚é‚Ü‚Å‚ÌŠÔ
