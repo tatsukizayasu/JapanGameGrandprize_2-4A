@@ -336,33 +336,39 @@ void Player::Draw() const
 
 	SetFontSize(30);
 
-	//上の選択肢
-	if (display_attribute - 1 < 0)
-	{
-		DrawFormatString(1000, 10, 0xffffff, "%s", attribute_c[display_attribute + 5]);
-		ChemicalFormulaDraw(display_attribute + 5, -40);
-	}
-	else
-	{
-		DrawFormatString(1000, 10, 0xffffff, "%s", attribute_c[display_attribute - 1]);
-		ChemicalFormulaDraw(display_attribute - 1, -40);
-	}
-
-	//下の選択肢
-	if (display_attribute + 1 > 5)
-	{
-		DrawFormatString(1000, 90, 0xffffff, "%s", attribute_c[display_attribute - 5]);
-		ChemicalFormulaDraw(display_attribute + 5, 40);
-	}
-	else
-	{
-		DrawFormatString(1000, 90, 0xffffff, "%s", attribute_c[display_attribute + 1]);
-		ChemicalFormulaDraw(display_attribute + 1, 40);
-	}
-
 	//現在の選択肢
-	DrawCircle(990, 60, 5, 0x000000, TRUE);
-	DrawFormatString(1000, 50, 0xffffff, "%s", attribute_c[display_attribute]);
+	float chemical_formula_y = hp_y - 25;
+	float bullet_remain_y = chemical_formula_y - 35;
+	float bullet_remain_x = hp_start - 70;
+	switch (display_attribute)
+	{
+	case 0:
+		DrawStringF(hp_start, chemical_formula_y, "--", 0x00ff00);
+		DrawStringF(bullet_remain_x, bullet_remain_y, "--", 0x00ff00);
+		break;
+	case 1:
+		DrawGraph(hp_start, chemical_formula_y, explosion->name_image,TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", explosion->number_of_bullets);
+		break;
+	case 2:
+		DrawGraph(hp_start, chemical_formula_y, melt->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", melt->number_of_bullets);
+		break;
+	case 3:
+		DrawGraph(hp_start, chemical_formula_y, poison->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", poison->number_of_bullets);
+		break;
+	case 4:
+		DrawGraph(hp_start, chemical_formula_y, pararysis->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", pararysis->number_of_bullets);
+		break;
+	case 5:
+		DrawGraph(hp_start, chemical_formula_y, heal->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", heal->number_of_bullets);
+		break;
+	default:
+		break;
+	}
 	ChemicalFormulaDraw(display_attribute, 0);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
@@ -634,11 +640,11 @@ void Player::Update()
 	if (PAD_INPUT::GetOldKey(XINPUT_BUTTON_B) & PAD_INPUT::GetNowKey(XINPUT_BUTTON_B)
 		&& fuel > 0)
 	{
-		Fly();
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
 			if (fuel > 0)
 			{
+				player_state = PLAYER_STATE::FLY;
 				Hovering();
 			}
 			else
@@ -646,22 +652,30 @@ void Player::Update()
 				NotFly();
 			}
 		}
+		else
+		{
+			Fly();
+		}
 	}
 	//Bボタン未入力
 	else
 	{
 		jump_bottun_count = 0;
-		NotFly();
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
 			if (fuel > 0)
 			{
+				player_state = PLAYER_STATE::FLY;
 				Hovering();
 			}
 			else
 			{
 				NotFly();
 			}
+		}
+		else
+		{
+			NotFly();
 		}
 	}
 
@@ -893,7 +907,6 @@ void Player::Jump()
 void Player::Hovering()
 {
 	MoveAnimation();
-
 	if (fly > 0)
 	{
 		if (!HitBlock(stage))
