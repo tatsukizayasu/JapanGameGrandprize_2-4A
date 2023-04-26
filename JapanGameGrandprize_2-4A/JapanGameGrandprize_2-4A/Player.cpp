@@ -109,6 +109,10 @@ Player::Player(Stage* stage)
 	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0;
 	image = new int[PLAYER_IMAGES];
 	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
+	jump_image = new int[3];
+	LoadDivGraph("Images/Player/Fly_ON.png", 3, 3, 1, 250, 250, jump_image);
+	attribute_images = new int[ATTRIBUTE_IMAGES];
+	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
 	hp_image = LoadGraph("Images/Player/HP_Bar.png");
 
 	image_size_x = 40;
@@ -235,49 +239,9 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
-	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
+	PlayerUiDraw(x, y);
 
-	//FUELバーの表示ここから
-	if (fuel >= 50)
-	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
-	}
-	else if (fuel >= 20)
-	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
-	}
-	else
-	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
-	}
-	//ここまで
-
-	//HPバーの表示ここから
-	float hp_start = 140;
-	DrawRotaGraphF(230, 580,0.75,0, hp_image, true);
-	if (hp >= 50)
-	{
-		DrawBoxAA(hp_start, 605, hp_start + (now_hp - 1), 605 + HP_BAR_HEIGHT, GREEN, TRUE);
-	}
-	else if (hp >= 20)
-	{
-		DrawBoxAA(hp_start, 605, hp_start + (now_hp - 1), 605 + HP_BAR_HEIGHT, YELLOW, TRUE);
-	}
-	else
-	{
-		DrawBoxAA(hp_start, 605, hp_start + (now_hp - 1), 605 + HP_BAR_HEIGHT, RED, TRUE);
-	}
-    DrawBox(hp_start, 605, hp_start + HP_BAR_WIDTH - 1, 605 + HP_BAR_HEIGHT, 0x000000, FALSE);
-	//ここまで
-
-	for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
-	{
-		DrawFormatString(160 + (70 * i), 670, 0xffffff, "%d", element[i]->GetVolume());
-	}
+	
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -290,6 +254,21 @@ void Player::Draw() const
 	//ダメージを受けた時点滅する
 	if (damage_flg)
 	{
+		if (player_state == PLAYER_STATE::FLY)
+		{
+			if (flashing_count < 5)
+			{
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
+				DrawRotaGraphF(x, y, PLAYER_SIZE, 0, jump_image[image_count], TRUE, move_left);
+
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+			}
+			else if (flashing_count < 10)
+			{
+				DrawRotaGraphF(x, y, PLAYER_SIZE, 0, jump_image[image_count], TRUE, move_left);
+			}
+			else {}
+		}
 		if (flashing_count < 5)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
@@ -305,39 +284,19 @@ void Player::Draw() const
 	}
 	else
 	{
-		DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
+		if (player_state == PLAYER_STATE::FLY)
+		{
+			DrawRotaGraphF(x, y, PLAYER_SIZE, 0, jump_image[image_count], TRUE, move_left);
+		}
+		else
+		{
+			DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
+		}
 	}
 
 	SetFontSize(30);
 
-	//上の選択肢
-	if (display_attribute - 1 < 0)
-	{
-		DrawFormatString(1000, 10, 0xffffff, "%s", attribute_c[display_attribute + 5]);
-		ChemicalFormulaDraw(display_attribute + 5, -40);
-	}
-	else
-	{
-		DrawFormatString(1000, 10, 0xffffff, "%s", attribute_c[display_attribute - 1]);
-		ChemicalFormulaDraw(display_attribute - 1, -40);
-	}
 
-	//下の選択肢
-	if (display_attribute + 1 > 5)
-	{
-		DrawFormatString(1000, 90, 0xffffff, "%s", attribute_c[display_attribute - 5]);
-		ChemicalFormulaDraw(display_attribute + 5, 40);
-	}
-	else
-	{
-		DrawFormatString(1000, 90, 0xffffff, "%s", attribute_c[display_attribute + 1]);
-		ChemicalFormulaDraw(display_attribute + 1, 40);
-	}
-
-	//現在の選択肢
-	DrawCircle(990, 60, 5, 0x000000, TRUE);
-	DrawFormatString(1000, 50, 0xffffff, "%s", attribute_c[display_attribute]);
-	ChemicalFormulaDraw(display_attribute, 0);
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
 }
@@ -347,6 +306,103 @@ void Player::PouchDraw() const
 	if (pouch_open)
 	{
 		pouch->Draw();
+	}
+}
+
+void Player::PlayerUiDraw(float x, float y) const
+{
+	//燃料ゲージ
+	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
+	float fuel_x = x - 50;
+	float fuel_y = y - (area.height / 2);
+	if (fuel >= 50)
+	{
+		DrawBoxAA(fuel_x, fuel_y + (FUEL_MAX - now_fuel),
+			fuel_x + 5, fuel_y + FUEL_BAR_HEIGHT, GREEN, TRUE);
+	}
+	else if (fuel >= 20)
+	{
+		DrawBoxAA(fuel_x, fuel_y + (FUEL_MAX - now_fuel),
+			fuel_x + 5, fuel_y + FUEL_BAR_HEIGHT, YELLOW, TRUE);
+	}
+	else
+	{
+		DrawBoxAA(fuel_x, fuel_y + (FUEL_MAX - now_fuel),
+			fuel_x + 5, fuel_y + FUEL_BAR_HEIGHT, RED, TRUE);
+	}
+	//ここまで
+
+	//Hpゲージ
+	//HPバーの表示ここから
+	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
+	float hp_start = 120;
+	float hp_y = 620;
+	if (hp >= 50)
+	{
+		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, GREEN, TRUE);
+	}
+	else if (hp >= 20)
+	{
+		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, YELLOW, TRUE);
+	}
+	else
+	{
+		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, RED, TRUE);
+	}
+	DrawRotaGraphF(230, 580, 0.75, 0, hp_image, true);
+	//ここまで
+
+	//現在の選択肢
+	float chemical_formula_y = hp_y - 25;
+	float bullet_remain_y = chemical_formula_y - 35;
+	float bullet_remain_x = hp_start - 70;
+	float chemical_icon_x = hp_start - 43;
+	float chemical_icon_y = hp_y + 25;
+	switch (display_attribute)
+	{
+	case 0:
+		DrawStringF(hp_start, chemical_formula_y, "--", 0x00ff00);
+		DrawStringF(bullet_remain_x, bullet_remain_y, "--", 0x00ff00);
+		break;
+	case 1:
+		DrawGraph(hp_start, chemical_formula_y, explosion->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", explosion->number_of_bullets);
+		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
+			attribute_images[5], TRUE);
+		break;
+	case 2:
+		DrawGraph(hp_start, chemical_formula_y, melt->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", melt->number_of_bullets);
+		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
+			attribute_images[9], TRUE);
+		break;
+	case 3:
+		DrawGraph(hp_start, chemical_formula_y, poison->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", poison->number_of_bullets);
+		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
+			attribute_images[6], TRUE);
+		break;
+	case 4:
+		DrawGraph(hp_start, chemical_formula_y, pararysis->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", pararysis->number_of_bullets);
+		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
+			attribute_images[7], TRUE);
+		break;
+	case 5:
+		DrawGraph(hp_start, chemical_formula_y, heal->name_image, TRUE);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", heal->number_of_bullets);
+		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
+			attribute_images[8], TRUE);
+		break;
+	default:
+		break;
+	}
+	ChemicalFormulaDraw(display_attribute, 0);
+	float element_thing = hp_start + 15;
+	SetFontSize(30);
+	for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
+	{
+		DrawFormatString(element_thing + (50 * i), 670, 0xffffff, "%d", element[0]->GetVolume());
 	}
 }
 
@@ -425,7 +481,8 @@ void Player::Update()
 	old_x = location.x;
 	old_y = location.y;
 
-	
+	float old_rstick_r_x = PAD_INPUT::GetRStick().x;
+	float old_rstick_l_x = PAD_INPUT::GetLStick().x;
 
 	if (damage_flg == true)
 	{
@@ -457,37 +514,37 @@ void Player::Update()
 
 	if (fire_flg)
 	{
-			if (++damage_count % 60 == 0)
+		if (++damage_count % 60 == 0)
+		{
+			if (!fire_second_bool)
 			{
-				if (!fire_second_bool)
-				{
-					fire_second_bool = true;
-				}
+				fire_second_bool = true;
 			}
+		}
 
-			if (fire_second_bool)
+		if (fire_second_bool)
+		{
+			if (damage_second++ < damage_by_second)
 			{
-				if (damage_second++ < damage_by_second)
-				{
-					hp--;
-				}
-				else
-				{
-					damage_second = 0;
-					fire_second_bool = false;
-				}
+				hp--;
 			}
+			else
+			{
+				damage_second = 0;
+				fire_second_bool = false;
+			}
+		}
 
-			if (damage_count > damage_time)
-			{
-				fire_flg = false;
-				damage_time = 0;
-				damage_count = 0;
-			}
-		
+		if (damage_count > damage_time)
+		{
+			fire_flg = false;
+			damage_time = 0;
+			damage_count = 0;
+		}
+
 	}
 
-	
+
 
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
@@ -549,13 +606,13 @@ void Player::Update()
 		}
 	}
 
-	//スティック右入力
+	//左スティック右入力
 	if (PAD_INPUT::GetLStick().x >= 10000)
 	{
 		move_left = false;
 		RightMove();
 	}
-	//スティック左入力
+	//左スティック左入力
 	else if (PAD_INPUT::GetLStick().x <= -10000)
 	{
 		move_left = true;
@@ -602,38 +659,56 @@ void Player::Update()
 		}
 	}
 
-	if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
+
+
+	//Bボタン長押し
+	if (PAD_INPUT::GetOldKey(XINPUT_BUTTON_B) & PAD_INPUT::GetNowKey(XINPUT_BUTTON_B)
+		&& fuel > 0)
 	{
-		if (fuel > 0)
+		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
-			Hovering();
+			if (fuel > 0)
+			{
+				player_state = PLAYER_STATE::FLY;
+				Hovering();
+			}
+			else
+			{
+				NotFly();
+			}
+		}
+		else
+		{
+			Fly();
+		}
+	}
+	//Bボタン未入力
+	else
+	{
+		jump_bottun_count = 0;
+		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
+		{
+			if (fuel > 0)
+			{
+				player_state = PLAYER_STATE::FLY;
+				Hovering();
+			}
+			else
+			{
+				NotFly();
+			}
 		}
 		else
 		{
 			NotFly();
 		}
 	}
-	else
+
+
+	//Bボタン解放時
+	if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
 	{
-		//Bボタン長押し
-		if (PAD_INPUT::GetOldKey(XINPUT_BUTTON_B) & PAD_INPUT::GetNowKey(XINPUT_BUTTON_B)
-			&& fuel > 0)
-		{
-			Fly();
-		}
-		//Bボタン未入力
-		else
-		{
-			jump_bottun_count = 0;
-			NotFly();
-		}
-
-
-		//Bボタン解放時
-		if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
-		{
-			player_state = PLAYER_STATE::DOWN;
-		}
+		player_state = PLAYER_STATE::DOWN;
 	}
 
 	//弾のアップデート呼び出し
@@ -856,6 +931,7 @@ void Player::Jump()
 
 void Player::Hovering()
 {
+	MoveAnimation();
 	if (fly > 0)
 	{
 		if (!HitBlock(stage))
@@ -918,6 +994,7 @@ void Player::Fly()
 	image_count = 0;
 	player_state = PLAYER_STATE::FLY;
 	not_jet_count = 0;
+	MoveAnimation();
 
 	gravity_down = 0.0;
 
@@ -1165,7 +1242,7 @@ void Player::ElementUpdate()
 		chemical_formula[5] = heal->make_bool;
 	}
 
-	if (PAD_INPUT::GetRStick().y > 5000)
+	if (PAD_INPUT::GetRStick().x > 5000)
 	{
 		if (select_count % 10 == 0)
 		{
@@ -1198,7 +1275,7 @@ void Player::ElementUpdate()
 		}
 	}
 
-	if (PAD_INPUT::GetRStick().y < -5000)
+	if (PAD_INPUT::GetRStick().x < -5000)
 	{
 		if (select_count % 10 == 0)
 		{
@@ -1381,6 +1458,16 @@ void Player::SetHeal(ChemicalFormulaParameter* a)
 
 void Player::MoveAnimation()
 {
+	int image_chenge = 0;
+
+	if (player_state == PLAYER_STATE::FLY)
+	{
+		image_chenge = 3;
+	}
+	else
+	{
+		image_chenge = PLAYER_IMAGES;
+	}
 
 	animation++;
 	if (animation % ANIMATION_MOVE == 0)
@@ -1388,7 +1475,7 @@ void Player::MoveAnimation()
 		image_count++;
 	}
 
-	if (image_count >= PLAYER_IMAGES)
+	if (image_count >= image_chenge)
 	{
 		image_count = 1;
 	}
@@ -1424,7 +1511,7 @@ void Player::Update(const PLAYER_STATE state)
 //-----------------------------------
 void Player::DebugDraw()
 {
-	DrawRotaGraphF(location.x, location.y, PLAYER_SIZE, 0, image[image_count], TRUE,TRUE);
+	DrawRotaGraphF(location.x, location.y, PLAYER_SIZE, 0, image[image_count], TRUE, TRUE);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

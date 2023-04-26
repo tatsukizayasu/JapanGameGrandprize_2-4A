@@ -280,6 +280,7 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 //アップデート
 void Pouch::Update()
 {
+
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
 		move_down = false;

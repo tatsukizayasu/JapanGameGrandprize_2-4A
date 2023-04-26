@@ -103,7 +103,8 @@ void Element_Item_Drop_Object::Draw()const
 		float x = location.x - CameraWork::GetCamera().x;
 		float y = location.y - CameraWork::GetCamera().y;
 
-		DrawRotaGraphF(x, y, 1.8f, 0, image, TRUE);
+		//DrawCircleAA(x, y, MAP_CHIP_SIZE,32, 0x00ff00, TRUE);
+		//DrawRotaGraphF(x, y, 1.8f, 0, image, TRUE);
 	}
 	else
 	{
