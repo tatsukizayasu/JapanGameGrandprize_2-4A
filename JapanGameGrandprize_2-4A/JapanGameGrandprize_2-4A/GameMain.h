@@ -40,6 +40,8 @@ private:
     BulletManager* bullet_manager; //弾の管理
 public:
 
+
+    GameMain() = default;
     //コンストラクタ
     GameMain(short stage_num);
 
