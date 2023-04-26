@@ -111,6 +111,8 @@ Player::Player(Stage* stage)
 	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
 	jump_image = new int[3];
 	LoadDivGraph("Images/Player/Fly_ON.png", 3, 3, 1, 250, 250, jump_image);
+	attribute_images = new int[ATTRIBUTE_IMAGES];
+	//LoadDivGraph("Images/Player/attribute/")
 	hp_image = LoadGraph("Images/Player/HP_Bar.png");
 
 	image_size_x = 40;

@@ -20,6 +20,7 @@
 #define FUEL_BAR_HEIGHT 100
 
 #define PLAYER_IMAGES 7
+#define ATTRIBUTE_IMAGES 5
 
 #define PLAYER_SPEED_X 5.0
 
@@ -45,6 +46,7 @@ private:
 	int image_count;				//画像の要素数用
 	int* image;						//画像用変数
 	int* jump_image;				//飛んでるときの画像
+	int* attribute_images;			//属性の画像
 	int hp_image;
 	int image_size_x, image_size_y; //画像のサイズ
 	int hp;							//体力
