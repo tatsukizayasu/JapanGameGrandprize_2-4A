@@ -282,7 +282,7 @@ void EnemySlimeBoss::Draw()const
 	}
 	DrawDamageLog();
 
-	DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
+	//DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
 	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, slime_boss_image, true, !left_move);
 
 	//DrawFormatString(0, 0, 0xffffff, "%d", breath_time);
