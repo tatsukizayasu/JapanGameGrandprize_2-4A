@@ -4,8 +4,8 @@
 #include "DxLib.h"
 
 //ハーピィの画像サイズ(未定、画像が出来次第調整）
-#define HARPY_SIZE_X 100
-#define HARPY_SIZE_Y 100
+#define HARPY_SIZE_X 80
+#define HARPY_SIZE_Y 80
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 300
@@ -196,7 +196,11 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 		{
 			location = old_location;
-			left_move = !left_move;
+
+			if (state != ENEMY_STATE::ATTACK)
+			{
+				left_move = !left_move;
+			}
 		}
 
 	}

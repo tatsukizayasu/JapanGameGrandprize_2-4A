@@ -11,6 +11,7 @@
 #include "Wyvern.h"
 #include "Torrent.h"
 #include "EnemySlimeBoss.h"
+#include "Kraken.h"
 #include"Dragon.h"
 #include"Kraken.h"
 #include "DotByDot.h"
@@ -41,7 +42,12 @@ GameMain::GameMain(short stage_num)
 	EnemyBase::CreateLogFont();
 
 	SpawnEnemy();
+
+	stage->SetEnemy(enemy);
+	stage->InitStage();
+
 	camera_work = new CameraWork(0, 0, player, stage, stage_num);
+
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
 	
@@ -113,7 +119,7 @@ AbstractScene* GameMain::Update()
 	}//Stage03の場合、背景を独立に動かす
 	else
 	{
-		background_location.x += 1.0f;
+		background_location.x += 10.0f;
 	}
 
 	if (EnemyUpdate() == true)
@@ -139,7 +145,13 @@ void GameMain::SpawnEnemy()
 	spawn = stage->GetEnemy_SpawnLocation();
 
 	enemy_spawn_volume = spawn.size();
+
 	enemy = new EnemyBase * [enemy_spawn_volume];
+	for (int i = 0; i < enemy_spawn_volume; i++)
+	{
+		enemy[i] = nullptr;
+	}
+
 	int i;
 	for (i = 0; i < enemy_spawn_volume; i++)
 	{
@@ -163,20 +175,20 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
 			enemy[i] = new Wyvern(spawn[i].location);
 			break;
-		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
-			enemy[i] = nullptr;
-			break;
-		case ENEMY_KIND::TORRENT:	//トレントボスの生成
-			enemy[i] = new Torrent(spawn[i].location);
-			break;
+		//case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
+		//	enemy[i] = nullptr;
+		//	break;
+		//case ENEMY_KIND::TORRENT:	//トレントボスの生成
+		//	enemy[i] = new Torrent(spawn[i].location);
+		//	break;
 		case ENEMY_KIND::KRAKEN:	//クラーケンボスの生成
 			enemy[i] = new Kraken(spawn[i].location);
 			break;
-		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
-			enemy[i] = new Dragon(spawn[i].location);
-			break;
-		case ENEMY_KIND::END_BOSS:	//ラスボスの生成
-			break;
+		//case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
+		//	enemy[i] = new Dragon(spawn[i].location);
+		//	break;
+		//case ENEMY_KIND::END_BOSS:	//ラスボスの生成
+		//	break;
 		case ENEMY_KIND::NONE:
 		default:
 			enemy[i] = nullptr;
@@ -207,9 +219,27 @@ bool GameMain::EnemyUpdate()
 			{
 				if (enemy[i] == nullptr)
 				{
-					enemy[i] = new EnemySlimeBoss(spawn[i].location);
-					is_spawn_boss = true;
-					break;
+					switch (static_cast<ENEMY_KIND>(spawn[i].id))
+					{
+					case ENEMY_KIND::SLIME_BOSS:
+						enemy[i] = new EnemySlimeBoss(spawn[i].location);
+						is_spawn_boss = true;
+						break;
+					case ENEMY_KIND::TORRENT:
+						enemy[i] = new Torrent(spawn[i].location);
+						break;
+
+					case ENEMY_KIND::DRAGON:
+						enemy[i] = new Dragon(spawn[i].location);
+						break;
+
+					case ENEMY_KIND::END_BOSS:
+						break;
+
+					default:
+						break;
+					}
+					
 				}
 			}
 		}
@@ -226,7 +256,7 @@ bool GameMain::EnemyUpdate()
 			if (stage_num == 3 &&
 				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
 			{
-				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 1.0f,enemy[i]->GetLocation().y });
+				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 2.0f,enemy[i]->GetLocation().y });
 			}
 
 				enemy[i]->Update(player, stage);

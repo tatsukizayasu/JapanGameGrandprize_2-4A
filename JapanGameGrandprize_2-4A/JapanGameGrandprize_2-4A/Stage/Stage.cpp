@@ -8,6 +8,7 @@
 #include "../Player.h"
 #include "../CameraWork.h"
 #include "Element/Stage_Element.h"
+#include "../EnemyBase.h"
 
 #define STAGE_NAME	"debugStage";
 #define STAGE_NAME	"sample_stage2";
@@ -21,7 +22,7 @@
 Stage::Stage(short stage_num)
 {
 
-	element = new Stage_Element();
+	element = new Stage_Element(this);
 	this->camera_work = camera_work;
 
 	//スポーン地点に初期値をセット
@@ -39,8 +40,6 @@ Stage::Stage(short stage_num)
 
 	//マップデータの読み込み
 	LoadMap(stage_num);
-
-	InitStage();
 
 	//ステージ要素のパラメーターを設定
 	element->SetElementParameter();
@@ -102,6 +101,9 @@ Stage::~Stage()
 void Stage::Update(Player* player)
 {
 	Location player_location = player->GetLocation();
+
+	//ElementにEnemyオブジェクトポインタ配列をセット
+	if (enemy != nullptr) { element->SetEnemy(enemy); }
 
 	// 中間地点との当たり判定
 	if (abs(halfway_point.x - player_location.x) <= MAP_CHIP_SIZE
@@ -254,8 +256,32 @@ void Stage::LoadMap(short stage_num)
 
 		while (tmp != NULL)
 		{
+			short chip_num = std::stoi(tmp);
+			map_data[i].push_back(static_cast<int>(chip_num));
 
-			map_data[i].push_back(std::stoi(tmp));
+			//スポーン地点ID
+			const short spawn_point_id = 777;
+			if (chip_num == spawn_point_id) {
+				spawn_point = { j * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					i * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				};
+			}
+
+			//中間地点ID
+			const short halfway_point_id = 100;
+			if (i == halfway_point_id) {
+				halfway_point = { j * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					i * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				};
+			}
+
+			//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
+			if (enemy_id.find(chip_num) != enemy_id.end()) {
+				enemy_init_location.push_back({ chip_num,
+						j * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+						i * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+					});
+			}
 
 			tmp = strtok_s(NULL, ",", &context);
 			j++;
@@ -283,33 +309,6 @@ void Stage::InitStage(void)
 			short i = map_data.at(y).at(x);
 			if (i != 0 && i != -1)
 			{
-				//スポーン地点ID
-				const short spawn_point_id = 777;
-				if (i == spawn_point_id) {
-					spawn_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-					};
-					continue;
-				}
-
-				//中間地点ID
-				const short halfway_point_id = 100;
-				if (i == halfway_point_id) {
-					halfway_point = { x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-						y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-					};
-					continue;
-				}
-
-				//エネミーのidの場合は、enemy_init_locationにPushしてスキップ
-				if (enemy_id.find(i) != enemy_id.end()) {
-					enemy_init_location.push_back({ i,
-							x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-							y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-						});
-					continue;
-				}
-
 				if (element->GetElementID().find(i) != element->GetElementID().end()) {
 
 					element->AddElement(i, {
@@ -363,6 +362,12 @@ void Stage::AddFixedMapChip(short id, float x, float y)
 			}, { CHIP_SIZE,CHIP_SIZE }));
 	}
 
+}
+
+void Stage::SetEnemy(EnemyBase** enemy)
+{
+	this->enemy = enemy;
+	this->element->SetEnemy(enemy);
 }
 
 std::vector<MapChip*> Stage::GetMapChip() const
