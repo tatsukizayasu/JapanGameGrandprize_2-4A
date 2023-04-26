@@ -1727,8 +1727,11 @@ BoxCollider* StageBuilder::LoadBoxCollider(istringstream* i_stringstream)
 //------------------------------------------
 vector<ObjectBase*> StageBuilder::OutPutObjects()
 {
+	Directory::Open("\\Stage\\StageBuilder\\dat");
 	char stage[16] = "stage4.csv";
 	LoadStage(stage);
+
+	return objects;
 }
 
 #endif

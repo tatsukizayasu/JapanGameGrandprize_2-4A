@@ -11,6 +11,8 @@
 #include "EnumEnemyType.h"
 #include <vector>
 
+#include "Stage/StageBuilder/StageBuilder.h"
+
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100.f
@@ -40,6 +42,11 @@ enum class PLAYER_STATE
 class Player : public BoxCollider
 {
 private:
+#ifdef _STAGE_BUILDER
+	StageBuilder* stage_builder;
+
+	std::vector<ObjectBase*>objects;
+#endif
 
 	int animation;					//画像アニメーション用
 	int image_count;				//画像の要素数用

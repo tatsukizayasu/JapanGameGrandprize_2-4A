@@ -17,6 +17,9 @@
 Player::Player()
 {
 
+	stage_builder = new StageBuilder();
+	objects = stage_builder->OutPutObjects();
+
 	animation = 0;
 	location.x = 100;
 	location.y = 80;
@@ -99,6 +102,8 @@ Player::Player()
 //-----------------------------------
 Player::Player(Stage* stage)
 {
+	stage_builder = new StageBuilder();
+	objects = stage_builder->OutPutObjects();
 
 	animation = 0;
 	area.height = 80;
@@ -1341,6 +1346,28 @@ bool Player::HitBlock(const Stage* stage_pointa)
 			}
 		}
 	}
+
+
+	for (ObjectBase* object : objects)
+	{
+		if (object != nullptr)
+		{
+
+			Location draw_location = object->GetColllider()->GetLocation();
+			Area draw = { SCREEN_HEIGHT + CHIP_SIZE,SCREEN_WIDTH + CHIP_SIZE };
+
+			// 画面内にあるMapChipオブジェクトだけUpdateする
+			if ((camera.x < draw_location.x + draw.width) && (draw_location.x < camera.x + draw.width)
+				&& (camera.y < draw_location.y + draw.height) && (draw_location.y < camera.y + draw.height))
+			{
+				if (HitCheck(object->GetColllider()))
+				{
+					return true;
+				}
+			}
+		}
+	}
+
 	return false;
 }
 
