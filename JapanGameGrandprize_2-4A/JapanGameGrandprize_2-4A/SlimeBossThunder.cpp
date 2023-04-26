@@ -19,6 +19,7 @@ SlimeBossThunder::SlimeBossThunder(Location spawn_location)
 {
 	type = ENEMY_TYPE::THUNDER;
 	location = spawn_location;
+	//ボスステージの縮小により落下位置を下げた
 	location.y = 280;
 
 	cloud_location = spawn_location;
