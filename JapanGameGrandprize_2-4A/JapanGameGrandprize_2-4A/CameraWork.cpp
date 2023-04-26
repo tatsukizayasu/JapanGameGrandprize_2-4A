@@ -88,13 +88,17 @@ CameraWork::~CameraWork()
 //-----------------------------------
 void CameraWork::Update()
 {
+	
 	if (is_lock == true) { return; }
 	//printfDx("state:%d\n", state);
-
+	
 	//clsDx();
+	
+	//float player_x = player->GetLocation().x;
+
 	Camera player_p;
 	player_p = { player->GetLocation().x, player->GetLocation().y };
-	//float player_x = player->GetLocation().x;
+	camera.y = player_p.y - 400;
 
 	//プレイヤーが移動開始ラインを超えたらカメラの状態を移動にする
 	if (player_p.x > moveing_line) { state = STATE::MOVE; }
@@ -166,16 +170,16 @@ void CameraWork::Update()
 		}
 	}
 
-	// カメラのy座標を更新
-	if (player->GetLocation().y - camera.y < 200) 
-	{
-		camera.y = player->GetLocation().y - 200;
-	}
-	else if (player->GetLocation().y - camera.y > 420) 
-	{
-		camera.y = player->GetLocation().y - 420;
-		//camera.y + 0.25;
-	}
+	//// カメラのy座標を更新
+	//if (player->GetLocation().y - camera.y < 200) 
+	//{
+	//	camera.y = player->GetLocation().y - 200;
+	//}
+	//else if (player->GetLocation().y - camera.y > 420) 
+	//{
+	//	camera.y = player->GetLocation().y - 420;
+	//	//camera.y + 0.25;
+	//}
 
 	if (camera.x < 0)
 	{
@@ -193,10 +197,10 @@ void CameraWork::Update()
 	{
 		camera.y = 0;
 	}
-	else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT)
+	/*else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT)
 	{
 		camera.y = stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT;
-	}
+	}*/
 
 	float player_speed_y = player_p.y - old_player.y;
 
