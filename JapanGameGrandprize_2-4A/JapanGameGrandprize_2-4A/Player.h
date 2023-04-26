@@ -20,7 +20,7 @@
 #define FUEL_BAR_HEIGHT 100
 
 #define PLAYER_IMAGES 7
-#define ATTRIBUTE_IMAGES 5
+#define ATTRIBUTE_IMAGES 10
 
 #define PLAYER_SPEED_X 5.0
 
@@ -108,6 +108,7 @@ public:
 	void Draw()const;
 	void PouchDraw()const;
 	void ChemicalFormulaDraw(int,int) const;
+	void PlayerUiDraw(float,float) const;
 	void Update();
 	void ElementUpdate();
 
