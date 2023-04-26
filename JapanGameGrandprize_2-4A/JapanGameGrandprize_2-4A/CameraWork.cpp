@@ -151,9 +151,9 @@ void CameraWork::Update()
 			{
 				//camera.y = 0;
 			}
-			else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - 800) 
+			else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - 700) 
 			{
-				camera.y = stage->GetMapSize().y * CHIP_SIZE - 800;
+				camera.y = stage->GetMapSize().y * CHIP_SIZE - 700;
 			}
 		}
 
