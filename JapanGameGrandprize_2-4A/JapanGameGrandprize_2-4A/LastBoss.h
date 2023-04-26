@@ -6,7 +6,8 @@ enum class LAST_BOSS_ATTACK
     MAGIC = 0,  //魔法攻撃
     PUNCH,      //パンチ
     SWORD,      //剣での攻撃
-    DEATHBLOW   //必殺
+    DEATHBLO,   //必殺
+    NONE
 };
 
 class LastBoss :
@@ -23,6 +24,8 @@ private:
     EnemyBase** hand; //手
 
     HitMapChip hit_stage; //ステージとの当たり判定
+
+    LAST_BOSS_ATTACK attack_state; //攻撃
 private:
 
     //移動時のアニメーション
@@ -30,6 +33,12 @@ private:
 
     //ダウンからの復帰
     bool Revival();
+
+    //パンチ処理
+    void Punch();
+
+    //攻撃しない
+    void AttackNone();
 public:
 
     //コンストラクタ

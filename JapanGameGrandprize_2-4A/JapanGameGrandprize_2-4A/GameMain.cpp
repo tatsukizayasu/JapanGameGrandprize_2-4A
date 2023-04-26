@@ -175,23 +175,15 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
 			enemy[i] = new Wyvern(spawn[i].location);
 			break;
-		//case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
-		//	enemy[i] = nullptr;
-		//	break;
-		//case ENEMY_KIND::TORRENT:	//トレントボスの生成
-		//	enemy[i] = new Torrent(spawn[i].location);
-		//	break;
+		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
+		case ENEMY_KIND::TORRENT:	//トレントボスの生成
 		case ENEMY_KIND::KRAKEN:	//クラーケンボスの生成
-			enemy[i] = new Kraken(spawn[i].location);
-			break;
-		//case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
-		//	enemy[i] = new Dragon(spawn[i].location);
-		//	break;
-		//case ENEMY_KIND::END_BOSS:	//ラスボスの生成
-		//	break;
+		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
+		case ENEMY_KIND::LAST_BOSS:	//ラスボスの生成
 		case ENEMY_KIND::NONE:
-		default:
 			enemy[i] = nullptr;
+			break;
+		default:
 			break;
 		}
 	}
@@ -236,7 +228,7 @@ bool GameMain::EnemyUpdate()
 						enemy[i] = new Dragon(spawn[i].location);
 						break;
 
-					case ENEMY_KIND::END_BOSS:
+					case ENEMY_KIND::LAST_BOSS:
 						break;
 
 					default:

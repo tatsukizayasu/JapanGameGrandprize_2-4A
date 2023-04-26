@@ -35,7 +35,7 @@ private:
 private:
 
     //テレポート
-    void Teleport(const class Stage* stage);
+    bool Teleport();
 
     //パンチ
     void Punch();
@@ -43,6 +43,9 @@ private:
     //移動時のアニメーション
     void MoveAnimation();
 public:
+
+    //コンストラクタ
+    LastBossHand() {}
 
     //コンストラクタ
     LastBossHand(const Location, const bool);
@@ -73,6 +76,12 @@ public:
 
     //プレイヤーの弾との当たり判定
     void HitBullet(const BulletBase* bullet) override;
+
+    //攻撃開始
+    void StartAttack();
+
+    //攻撃終了
+    void EndAttack();
 
     //描画
     void Draw() const override;

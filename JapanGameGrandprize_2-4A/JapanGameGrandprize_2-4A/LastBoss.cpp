@@ -11,6 +11,13 @@
 
 //ダウンしている時間
 #define DOWN_TIME 1200
+
+//パンチしている時間
+#define PUNCH_TIME 60 * 60
+
+//攻撃間隔
+#define ATTACK_INTERVAL 60 * 1
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -40,7 +47,10 @@ LastBoss::LastBoss(Location spawn_location)
 	down = false;
 	attack = false;
 	down_time = 0;
-	attack_interval = 0;
+	attack_interval = ATTACK_INTERVAL;
+
+	state = ENEMY_STATE::ATTACK;
+	attack_state = LAST_BOSS_ATTACK::NONE;
 }
 
 //-----------------------------------
@@ -84,6 +94,7 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 		case ENEMY_STATE::FALL:
 			break;
 		case ENEMY_STATE::ATTACK:
+			Attack(player->GetLocation());
 			break;
 		case ENEMY_STATE::DEATH:
 			break;
@@ -152,9 +163,71 @@ void LastBoss::Fall()
 //-----------------------------------
 void  LastBoss::Attack(const Location)
 {
+	switch (attack_state)
+	{
+	case LAST_BOSS_ATTACK::MAGIC:
+		break;
+	case LAST_BOSS_ATTACK::PUNCH:
+		Punch();
+		break;
+	case LAST_BOSS_ATTACK::SWORD:
+		break;
+	case LAST_BOSS_ATTACK::DEATHBLO:
+		break;
+	case LAST_BOSS_ATTACK::NONE:
+		AttackNone();
+		break;
+	default:
+		break;
+	}
 
+	
 }
 
+//-----------------------------------
+//パンチ処理
+//-----------------------------------
+void LastBoss::Punch()
+{
+	
+}
+
+//攻撃しない
+void LastBoss::AttackNone()
+{
+	attack_interval--;
+	if (attack_interval < 0)
+	{
+		LAST_BOSS_ATTACK next_attack = LAST_BOSS_ATTACK::PUNCH;
+
+		switch (next_attack)
+		{
+		case LAST_BOSS_ATTACK::MAGIC:
+			break;
+		case LAST_BOSS_ATTACK::PUNCH:
+		{
+			LastBossHand* me_hand;
+
+			attack_state = LAST_BOSS_ATTACK::PUNCH;
+
+			for (int i = 0; i < HAND_NUM; i++)
+			{
+				me_hand = dynamic_cast<LastBossHand*>(hand[i]);
+
+				me_hand->StartAttack();
+			}
+		}
+			break;
+		case LAST_BOSS_ATTACK::SWORD:
+			break;
+		case LAST_BOSS_ATTACK::DEATHBLO:
+			break;
+		case LAST_BOSS_ATTACK::NONE:
+		default:
+			break;
+		}
+	}
+}
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------

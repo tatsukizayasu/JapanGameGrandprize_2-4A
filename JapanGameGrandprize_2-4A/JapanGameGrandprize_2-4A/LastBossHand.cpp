@@ -22,6 +22,9 @@
 //パンチのダメージ
 #define PUNCH_DAMAGE 15
 
+//パンチのスポーン地点(Y座標)
+#define PUNCH_Y 300
+
 //HP
 #define HAND_HP 100
 
@@ -39,6 +42,8 @@
 
 //移動半径
 #define MOVE_RADIUS 150
+
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -82,7 +87,7 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 
 	kind = ENEMY_KIND::LAST_BOSS;
 	type = new ENEMY_TYPE[1];
-	state = ENEMY_STATE::ATTACK;
+	state = ENEMY_STATE::IDOL;
 
 	move = HAND_MOVE::UP_DOWN;
 
@@ -218,6 +223,16 @@ void LastBossHand::Move(const Location player_location)
 }
 
 //-----------------------------------
+//テレポート
+//-----------------------------------
+bool LastBossHand::Teleport()
+{
+	bool ret = false;
+
+	return ret;
+}
+
+//-----------------------------------
 //落下
 //-----------------------------------
 void LastBossHand::Fall()
@@ -238,20 +253,57 @@ void LastBossHand::Attack(const Location player_location)
 	}
 	else
 	{
-		location.x = player_location.x;
-		punch = true;
-		speed = PUNCH_SPEED;
+		if (attack_interval < 0)
+		{
+			punch_start.x = player_location.x;;
+			punch_start.y = player_location.y - PUNCH_Y;
+
+			location = punch_start;
+			punch = true;
+			speed = PUNCH_SPEED;
+		}
 	}
 
 	if (old_punch && (old_punch != punch)) //パンチ終了
 	{
-		location = spawn_location;
-		state = ENEMY_STATE::MOVE;
-		move = static_cast<HAND_MOVE>(GetRand(2));
-		speed = HAND_MOVE_SPEED;
-		attack_interval = PUNCH_INTERVAL;
+		if (left_hand)
+		{
+			attack_interval = PUNCH_INTERVAL;
+		}
+		else
+		{
+			attack_interval = PUNCH_INTERVAL + (PUNCH_INTERVAL / 2);
+		}
 		attack = false;
 	}
+}
+
+
+//-----------------------------------
+//攻撃開始
+//-----------------------------------
+void LastBossHand::StartAttack()
+{
+	state = ENEMY_STATE::ATTACK;
+	attack = false;
+	punch_standby_time = PUNCH_STANDBY_TIME;
+	if (left_hand)
+	{
+		attack_interval = PUNCH_INTERVAL;
+	}
+	else
+	{
+		attack_interval = PUNCH_INTERVAL + (PUNCH_INTERVAL / 2);
+	}
+}
+
+//-----------------------------------
+//攻撃終了
+//-----------------------------------
+void LastBossHand::EndAttack()
+{
+	state = ENEMY_STATE::MOVE;
+	location = spawn_location;
 }
 
 //-----------------------------------
@@ -268,7 +320,7 @@ void LastBossHand::Punch()
 			attack = false;
 		}
 
-		if (location.y <= punch_start.y )
+		if (location.y < punch_start.y )
 		{
 			punch = false;
 		}
