@@ -19,7 +19,7 @@ SlimeBossThunder::SlimeBossThunder(Location spawn_location)
 {
 	type = ENEMY_TYPE::THUNDER;
 	location = spawn_location;
-	location.y = 130;
+	location.y = 280;
 
 	cloud_location = spawn_location;
 
