@@ -15,11 +15,13 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-SlimeBossThunder::SlimeBossThunder(Location spawn_location, Location player_location)
+SlimeBossThunder::SlimeBossThunder(Location spawn_location)
 {
 	type = ENEMY_TYPE::THUNDER;
-	location = player_location;
-	location.y = player_location.y - 400;
+	location = spawn_location;
+	location.y = 130;
+
+	cloud_location = spawn_location;
 
 	for (int i = 0; i < LOCATION_DATA; i++)
 	{
@@ -40,6 +42,7 @@ SlimeBossThunder::SlimeBossThunder(Location spawn_location, Location player_loca
 
 	orientation_time = ORIENTATION_TIME;
 	data_switch = 0;
+	
 	
 	color = GetColor(255, 255, 0);
 }
@@ -92,5 +95,17 @@ void SlimeBossThunder::Draw() const
 
 		DrawCircle(x, y, old_radius[i], color, TRUE);
 	}
+
+	Draw_Cloud();
 }
 
+void SlimeBossThunder::Draw_Cloud()const
+{
+	Location draw_location = cloud_location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
+
+	int color = GetColor(255, 255, 255);
+
+	DrawCircle(draw_location.x, 0, 70, color, true, true);
+}
