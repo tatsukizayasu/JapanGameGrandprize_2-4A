@@ -299,7 +299,17 @@ void EnemyBase::DrawHPBar(const int max_hp) const
 
 	draw_location = draw_location - camera;
 
-	int color = GetColor(7 + (248 *(1 - static_cast<float>(hp) / max_hp)),255 * static_cast<float>(hp) / max_hp,0);
+	int color = GetColor(7,255,0);
+
+	if (hp <= (max_hp / 2))
+	{
+		color = GetColor(255,255 * static_cast<float>(hp) / max_hp, 0);
+	}
+	else
+	{
+		color = GetColor(7 + 2 * (248 * (1 - static_cast<float>(hp) / max_hp)),255, 0);
+	}
+
 	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
 		draw_location.x + max_hp / 4 + 1, draw_location.y - 70, 0x000000, TRUE);
 	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
