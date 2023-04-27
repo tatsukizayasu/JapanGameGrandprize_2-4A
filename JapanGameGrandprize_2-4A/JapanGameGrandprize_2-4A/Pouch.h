@@ -4,6 +4,7 @@
 
 #define CURSOL_SPEED 12
 
+#define ATTRIBUTE_IMAGES 10
 #define POUCH_WIDTH 200
 #define POUCH_HEIGHT 500
 #define POUCH_START_X 1080
@@ -15,7 +16,11 @@ private:
 
 	short old;
 	float x, y;
+	int window_x, window_y;
+	int attribute_name_x, attribute_name_y;
 	int second_tab_image[4];
+	int* attribute_images;
+	int window_image;
 	int elemental_count;
 	int page_jump_count;
 	int cursol;

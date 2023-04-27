@@ -68,6 +68,7 @@ struct ChemicalFormulaParameter
 	ChemicalFormulaMaterial material;
 	bool make_bool;
 	int name_image;
+	int tag_number;
 };
 
 struct Bullet_Effect {
