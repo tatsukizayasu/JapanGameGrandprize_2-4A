@@ -20,7 +20,7 @@
 #define FUEL_BAR_HEIGHT 100
 
 #define PLAYER_IMAGES 7
-#define ATTRIBUTE_IMAGES 10
+
 
 #define PLAYER_SPEED_X 5.0
 
