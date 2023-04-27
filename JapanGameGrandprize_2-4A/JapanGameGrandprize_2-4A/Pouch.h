@@ -13,6 +13,7 @@ class Pouch
 {
 private:
 
+	short old;
 	float x, y;
 	int second_tab_image[4];
 	int elemental_count;

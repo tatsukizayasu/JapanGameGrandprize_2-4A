@@ -34,7 +34,9 @@ EnemyBase::EnemyBase()
 	InitDamageLog();
 }
 
+//-----------------------------------
 //ログ用のフォントの作成
+//-----------------------------------
 void EnemyBase::CreateLogFont()
 {
 	log_font[0] = CreateFontToHandle("Weakness", 24, 1, DX_FONTTYPE_NORMAL);
@@ -43,7 +45,9 @@ void EnemyBase::CreateLogFont()
 	log_font[3] = CreateFontToHandle("Invalid", 16, 1, DX_FONTTYPE_NORMAL);
 }
 
+//-----------------------------------
 //ログ用のフォントの削除
+//-----------------------------------
 void EnemyBase::DeleteLogFont()
 {
 	for (int i = 0; i < 4; i++)
@@ -51,6 +55,7 @@ void EnemyBase::DeleteLogFont()
 		DeleteFontToHandle(log_font[i]);
 	}
 }
+
 //-----------------------------------
 // HPが0かどうか判断(0になったらtrue)
 //-----------------------------------
@@ -293,10 +298,22 @@ void EnemyBase::DrawHPBar(const int max_hp) const
 	Location camera = CameraWork::GetCamera();
 
 	draw_location = draw_location - camera;
+
+	int color = GetColor(7,255,0);
+
+	if (hp <= (max_hp / 2))
+	{
+		color = GetColor(255,255 * static_cast<float>(hp) / max_hp, 0);
+	}
+	else
+	{
+		color = GetColor(7 + 2 * (248 * (1 - static_cast<float>(hp) / max_hp)),255, 0);
+	}
+
 	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
 		draw_location.x + max_hp / 4 + 1, draw_location.y - 70, 0x000000, TRUE);
 	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
-		draw_location.x - max_hp / 4 + (max_hp / 2 * (static_cast<float>(hp) / max_hp)), draw_location.y - 70, 0x07ff00, TRUE);
+		draw_location.x - max_hp / 4 + (max_hp / 2 * (static_cast<float>(hp) / max_hp)), draw_location.y - 70, color, TRUE);
 	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
 		draw_location.x + max_hp / 4 + 1, draw_location.y - 70, 0x8f917f, FALSE);
 }

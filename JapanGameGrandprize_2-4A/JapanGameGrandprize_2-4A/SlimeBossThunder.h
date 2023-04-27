@@ -20,11 +20,12 @@ class SlimeBossThunder :
 
     int old_radius[LOCATION_DATA];
     Location old_location[LOCATION_DATA];
+    Location cloud_location;
 
 public:
 
     //コンスタラクタ
-    SlimeBossThunder(Location, Location);
+    SlimeBossThunder(Location);
 
     //デストラクタ
     ~SlimeBossThunder();
@@ -34,4 +35,5 @@ public:
 
     //描画
     void Draw() const override;
+    void Draw_Cloud()const;
 };

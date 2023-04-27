@@ -18,9 +18,7 @@
 #define BOSS_SLIME_HP 500
 
 #define SLIME_BOSS_WAIT_TIME 60
-
-#define SLIME_BOSS_BREATH_TIME 120
-
+#define CLOUD_MOVE_TIME 80
 #define SLIME_BOSS_WIDTH 180
 #define SLIME_BOSS_HEIGHT 200
 
@@ -65,11 +63,12 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
-
 	wait_time = 0;
-	breath_time = 0;
 
 	slime_boss_image = LoadGraph("Images/Enemy/SlimeBoss3.png");
+
+	cloud_brightness = 0;
+	attack_type = ATTACKTYPE::NONE;
 }
 
 EnemySlimeBoss::~EnemySlimeBoss()
@@ -87,7 +86,7 @@ EnemySlimeBoss::~EnemySlimeBoss()
 
 void EnemySlimeBoss::MagicBullet(const Location player_location)
 {
-	if (breath_time == SLIME_BOSS_BREATH_TIME / 2)
+	if (attack_type == ATTACKTYPE::MAGIC_BULLET)
 	{
 		BulletManager::GetInstance()->CreateEnemyBullet
 		(new SlimeBossBullet(location, player_location));
@@ -97,16 +96,36 @@ void EnemySlimeBoss::MagicBullet(const Location player_location)
 
 void EnemySlimeBoss::Thunder(const Location player_location)
 {
-	if (breath_time == SLIME_BOSS_BREATH_TIME)
+	BulletManager::GetInstance()->CreateEnemyBullet
+	(new SlimeBossThunder(cloud_location));
+}
+
+void EnemySlimeBoss::Update_Cloud(const Player* player)
+{
+	if (attack_type == ATTACKTYPE::THUNDER)
 	{
-		BulletManager::GetInstance()->CreateEnemyBullet
-		(new SlimeBossThunder(location, player_location));
+		if (cloud_brightness <= 255)cloud_brightness += 5;
+		else cloud_brightness = 255;
+
+		if (++cloud_move_time < CLOUD_MOVE_TIME)
+		{
+			cloud_location = player->GetLocation();
+			cloud_location.y = 280;
+		}
+	}
+	else
+	{
+		cloud_brightness = 0;
+		cloud_location = player->GetLocation();
+		cloud_location.y = 280;
 	}
 }
 
 
 void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 {
+	Update_Cloud(player);
+
 	state = now_state;
 
 	Location old_location = location;	//ëOÇÃç¿ïW
@@ -123,7 +142,7 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 		if (left_move)speed = -SLIME_BOSS_SPEED;
 		else speed = SLIME_BOSS_SPEED;
 
-		if (--wait_time <= 0)
+		if (wait_time <= 0)
 		{
 
 			speed_y = -(slime_boss_jump_distance / 3);
@@ -148,7 +167,6 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 				location.y = old_location.y;
 			}
-
 			Move(player->GetLocation());
 
 			hit_stage = HitStage(stage);
@@ -165,12 +183,23 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 		}
 		else
 		{
-			if (breath_time >= SLIME_BOSS_BREATH_TIME)breath_time = 0;
-			++breath_time;
-			
-			MagicBullet(player->GetLocation());
-			Thunder(player->GetLocation());
+			if (wait_time == SLIME_BOSS_WAIT_TIME)
+			{
+				if (attack_type == ATTACKTYPE::NONE)attack_type = ATTACKTYPE::MAGIC_BULLET;
+				else if (attack_type == ATTACKTYPE::MAGIC_BULLET)
+				{
+					MagicBullet(player->GetLocation());
+					attack_type = ATTACKTYPE::THUNDER;
+					cloud_move_time = 0;
+				}
+				else
+				{
+					Thunder(player->GetLocation());
+					attack_type = ATTACKTYPE::MAGIC_BULLET;
+				}
+			}
 		}
+		wait_time--;
 
 		if (ScreenOut())
 		{
@@ -262,11 +291,29 @@ void EnemySlimeBoss::Draw()const
 	}
 	DrawDamageLog();
 
-	DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
+	//DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
 	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, slime_boss_image, true, !left_move);
 
-	//DrawFormatString(0, 0, 0xffffff, "%d", slime_boss_jump_distance);
+	//DrawFormatString(0, 0, 0xffffff, "%d", breath_time);
 
+	Draw_Cloud();
+
+}
+
+void EnemySlimeBoss::Draw_Cloud()const
+{
+	if(attack_type == ATTACKTYPE::THUNDER)
+	{
+		Location draw_location = cloud_location;
+		Location camera = CameraWork::GetCamera();
+		draw_location = draw_location - camera;
+
+		int color = GetColor(255, 255, 255);
+
+		SetDrawBright(cloud_brightness, cloud_brightness, cloud_brightness);
+		DrawCircle(draw_location.x, draw_location.y, 70, color, true, true);
+		SetDrawBright(255, 255, 255);
+	}
 }
 
 //-----------------------------------

@@ -347,6 +347,7 @@ Location KrakenTentacle::GetLocation() const
 	return Location();
 }
 
+#ifdef _DEBUG
 void KrakenTentacle::Update(const ENEMY_STATE state)
 {
 	switch (state)
@@ -372,3 +373,5 @@ void KrakenTentacle::DebugDraw()
 		location.x + area.width / 2, location.y + area.height / 2,
 		0xff0000, FALSE);
 }
+#endif // _DEBUG
+
