@@ -6,7 +6,7 @@
 
 //GŽèƒTƒCƒY
 #define SIZE_X 100
-#define SIZE_Y 100
+#define SIZE_Y 40
 
 //GŽèˆÚ“®‘¬“x
 #define ATTACK_SPEED 3
@@ -46,7 +46,9 @@ KrakenTentacle::KrakenTentacle(Location spawn_location)
 	kind = ENEMY_KIND::KRAKEN;
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::WATER;
-	state = ENEMY_STATE::IDOL;
+	state = ENEMY_STATE::MOVE;
+
+	attack_move = KRAKEN_TENTACLE::NONE;
 
 	drop_volume = 0;
 	poison_time = 0;
@@ -103,7 +105,6 @@ void KrakenTentacle::Update(const Player* player, const Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
-
 		break;
 	case ENEMY_STATE::FALL:
 
@@ -202,14 +203,14 @@ void KrakenTentacle::Move(const Location player_location)
 
 	if (go_back == true)
 	{
-		float distance = location.x - old_x;
+		float distance = old_x - location.x ;
 		float vector = sqrt(distance * distance);
 		float radian = distance / vector;
 
-		location.x = old_x;
+		location.x += radian * 5;
 
 
-		if (location.x+10 > old_x && location.x-10 < old_x)
+		if (location.x + 10 > old_x && location.x - 10 < old_x)
 		{
 			go_back = false;
 		}
@@ -224,6 +225,7 @@ void KrakenTentacle::Move(const Location player_location)
 			attack_state = true;
 			old_player = player_location.x;
 			state = ENEMY_STATE::ATTACK;
+			attack_move=KRAKEN_TENTACLE::TENTACLE_ATTACK;
 		}
 	}
 	
@@ -242,12 +244,14 @@ void KrakenTentacle::Attack(const Location player_location)
 	float distance_y = player_location.y - location.y;
 	float vector = sqrt(distance * distance + distance_y * distance_y);
 	float radian = distance / vector;
+	float radian_y = distance_y / vector;
 
 	
 
 	location.x += radian * speed;
+	location.y += radian_y * speed;
 
-	if (++back_time % 20 == 0|| old_player + 10 > location.x && old_player - 10 < location.x)
+	if ( old_player + 10 > location.x && old_player - 10 < location.x)
 	{
 		go_back = true;
 		attack_state = false;

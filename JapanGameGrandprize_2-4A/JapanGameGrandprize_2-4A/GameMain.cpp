@@ -14,6 +14,7 @@
 #include "Kraken.h"
 #include"Dragon.h"
 #include"Kraken.h"
+#include"KrakenTentacle.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"
