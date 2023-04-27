@@ -113,7 +113,12 @@ void EnemySlimeBoss::Update_Cloud(const Player* player)
 			cloud_location.y = 280;
 		}
 	}
-	else cloud_brightness = 0;
+	else
+	{
+		cloud_brightness = 0;
+		cloud_location = player->GetLocation();
+		cloud_location.y = 280;
+	}
 }
 
 
