@@ -1,18 +1,18 @@
-#include "Title.h"
+#include "END.h"
 #include "DxLib.h"
-#include "GameMain.h"
+#include "Title.h"
 #include "PadInput.h"
 
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Title::Title()
+END::END()
 {
 	title_font = CreateFontToHandle("Algerian", 100, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 
 	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 
-	background_image = LoadGraph("Images/Scene/title.png");
+	background_image = LoadGraph("Images/Scene/end.png");
 
 
 	select_se = 0;
@@ -22,14 +22,14 @@ Title::Title()
 
 	select_menu = 0;
 
-	top_menu[0] = { 0,"PLAY" };
+	top_menu[0] = { 0,"TITLE" };
 	top_menu[1] = { 1, "EXIT" };
 }
 
 //-----------------------------------
 // デストラクタ
 //-----------------------------------
-Title::~Title()
+END::~END()
 {
 	DeleteFontToHandle(title_font);
 }
@@ -37,7 +37,7 @@ Title::~Title()
 //-----------------------------------
 // 更新
 //-----------------------------------
-AbstractScene* Title::Update()
+AbstractScene* END::Update()
 {
 
 	if (input_margin < 30)
@@ -66,9 +66,9 @@ AbstractScene* Title::Update()
 		input_margin = 0;
 		switch (select_menu)
 		{
-			// PLAY
+			// TITLE
 		case 0:
-			return new GameMain(1);
+			return new Title();
 			break;
 
 			// EXIT
@@ -90,10 +90,10 @@ AbstractScene* Title::Update()
 //-----------------------------------
 // 描画
 //-----------------------------------
-void Title::Draw()const
+void END::Draw()const
 {
 	DrawGraph(0, 0, background_image, FALSE);
-	DrawStringToHandle(GetDrawCenterX("Elemental War", title_font), 100, "Elemental War", 0x66290E, title_font, 0xFFFFFF);
+	DrawStringToHandle(GetDrawCenterX("Thanks!", title_font), 100, "Thanks!", 0x66290E, title_font, 0xFFFFFF);
 
 	for (int i = 0; i < 2; i++)
 	{
