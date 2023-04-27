@@ -107,7 +107,11 @@ void EnemySlimeBoss::Update_Cloud(const Player* player)
 		if (cloud_brightness <= 255)cloud_brightness += 5;
 		else cloud_brightness = 255;
 
-		if (++cloud_move_time < CLOUD_MOVE_TIME)cloud_location = player->GetLocation();
+		if (++cloud_move_time < CLOUD_MOVE_TIME)
+		{
+			cloud_location = player->GetLocation();
+			cloud_location.y = 280;
+		}
 	}
 	else cloud_brightness = 0;
 }
@@ -302,7 +306,7 @@ void EnemySlimeBoss::Draw_Cloud()const
 		int color = GetColor(255, 255, 255);
 
 		SetDrawBright(cloud_brightness, cloud_brightness, cloud_brightness);
-		DrawCircle(draw_location.x, 0, 70, color, true, true);
+		DrawCircle(draw_location.x, draw_location.y, 70, color, true, true);
 		SetDrawBright(255, 255, 255);
 	}
 }
