@@ -507,19 +507,19 @@ void Pouch::SetElementConstruct(int i)
 		element[i]->SetVolume(50);
 		break;
 	case ELEMENT_ITEM::OXYGEN:
-		element[i]->SetVolume(30);
+		element[i]->SetVolume(40);
 		break;
 	case ELEMENT_ITEM::CARBON:
 		element[i]->SetVolume(30);
 		break;
 	case ELEMENT_ITEM::NITROGEN:
-		element[i]->SetVolume(30);
+		element[i]->SetVolume(20);
 		break;
 	case ELEMENT_ITEM::SULFUR:
 		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::CHLORINE:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(5);
 		break;
 	case ELEMENT_ITEM::URANIUM:
 		element[i]->SetVolume(1);
