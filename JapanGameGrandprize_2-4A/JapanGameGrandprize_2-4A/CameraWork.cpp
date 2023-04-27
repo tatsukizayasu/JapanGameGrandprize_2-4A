@@ -197,10 +197,10 @@ void CameraWork::Update()
 	{
 		camera.y = 0;
 	}
-	/*else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT)
+	else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT)
 	{
 		camera.y = stage->GetMapSize().y * CHIP_SIZE - SCREEN_HEIGHT;
-	}*/
+	}
 
 	float player_speed_y = player_p.y - old_player.y;
 
