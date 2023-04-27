@@ -2,6 +2,7 @@
 #include "PadInput.h"
 
 Location CameraWork::camera;
+CameraWork::STATE CameraWork::state;
 
 //#define DEBUG
 
@@ -88,7 +89,6 @@ CameraWork::~CameraWork()
 //-----------------------------------
 void CameraWork::Update()
 {
-	
 	if (is_lock == true) { return; }
 	//printfDx("state:%d\n", state);
 	
@@ -100,6 +100,19 @@ void CameraWork::Update()
 	player_p = { player->GetLocation().x, player->GetLocation().y };
 	camera.y = player_p.y - 400;
 
+	POINT stage_size = stage->GetMapSize();
+
+	if (state == STATE::BOSS)
+	{
+		camera.x += 2;
+
+		if (stage_size.x * MAP_CHIP_SIZE - SCREEN_WIDTH < camera.x)
+		{
+			state = STATE::FIXED;
+		}
+		return;
+	}
+
 	//プレイヤーが移動開始ラインを超えたらカメラの状態を移動にする
 	if (player_p.x > moveing_line) { state = STATE::MOVE; }
 
@@ -107,8 +120,14 @@ void CameraWork::Update()
 	if (state == STATE::MOVE) 
 	{
 
-		//移動開始ラインの変動
+		if (stage_size.x * MAP_CHIP_SIZE - SCREEN_WIDTH + MAP_CHIP_SIZE*2 < player_p.x)
+		{
+			state = STATE::BOSS;
 
+			return;
+		}
+
+		//移動開始ラインの変動
 		float player_speed_w = player_p.x - old_player.x;
 		if (player_dir == true)
 		{
@@ -120,13 +139,13 @@ void CameraWork::Update()
 		}
 
 		//マップの右端に着いたら止める
-		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) 
+		/*if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) 
 			                                                        < ceilf(player->GetLocation().x))
 		{
 			camera.x = stage->GetMapSize().x * CHIP_SIZE - SCREEN_WIDTH;
 			state = STATE::FIXED;
 			return;
-		}
+		}*/
 
 		//float player_speed = player_p.x - old_player.x;
 		float player_speed = 1.0f;

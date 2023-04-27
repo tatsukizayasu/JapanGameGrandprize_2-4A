@@ -480,6 +480,19 @@ void Player::ChemicalFormulaDraw(int i, int plus_y) const
 //-----------------------------------
 void Player::Update()
 {
+	/*clsDx();
+	printfDx("state:%d\n", player_state);
+	
+
+	if (CameraWork::GetCameraState() == CameraWork::STATE::BOSS)
+	{
+		if (player_state == PLAYER_STATE::FLY || player_state == PLAYER_STATE::DOWN)
+		{
+			NotFly();
+		}
+		return;
+	}*/
+
 	old_x = location.x;
 	old_y = location.y;
 
