@@ -8,15 +8,22 @@
 //-----------------------------------
 Title::Title()
 {
-	title_font = CreateFontToHandle("UD デジタル 教科書体 N-B", 120, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
+	title_font = CreateFontToHandle("Algerian", 100, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 
-	background_image = 0;
+	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 
-	bgm = 0;
+	background_image = LoadGraph("Images/Scene/title.png");
+
+
 	select_se = 0;
 	decision_se = 0;
 
 	input_margin = 0;
+
+	select_menu = 0;
+
+	top_menu[0] = { 0,"PLAY" };
+	top_menu[1] = { 1, "EXIT" };
 }
 
 //-----------------------------------
@@ -39,10 +46,49 @@ AbstractScene* Title::Update()
 		return new GameMain();
 	}
 
-	if (input_margin < 30) 
+	if (input_margin < 30)
 	{
 		input_margin++;
 	}
+	else {
+
+
+		if (PAD_INPUT::GetLStick().y > 20000)
+		{
+			select_menu = (select_menu + 1) % 2;
+			input_margin = 0;
+		}
+		else if (PAD_INPUT::GetLStick().y < -20000)
+		{
+
+			select_menu = (select_menu + 1) % 2;
+			input_margin = 0;
+		}
+	}
+
+
+	if (PAD_INPUT::GetNowKey(XINPUT_BUTTON_A) && (PAD_INPUT::OnPressed(XINPUT_BUTTON_A) == true))
+	{
+		input_margin = 0;
+		switch (select_menu)
+		{
+			// PLAY
+		case 0:
+			return new GameMain(1);
+			break;
+
+			// EXIT
+		case 1:
+			DxLib_End();
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+
 
 	return this;
 }
@@ -52,30 +98,24 @@ AbstractScene* Title::Update()
 //-----------------------------------
 void Title::Draw()const
 {
-	DrawStringToHandle(GetDrawCenterX("タイトル",title_font), 100, "タイトル", 0x56F590, title_font, 0xFFFFFF);
-}
+	DrawGraph(0, 0, background_image, FALSE);
+	DrawStringToHandle(GetDrawCenterX("Elemental War", title_font), 100, "Elemental War", 0x66290E, title_font, 0xFFFFFF);
 
-//-----------------------------------
-// 画面の中心をとる
-//-----------------------------------
-int Title::GetDrawCenterX(const char* string, int font_handle, int margin)const
-{
-
-	//画面幅
-	const int screenX = 1280;
-
-	if (margin >= screenX || margin <= -screenX)
+	for (int i = 0; i < 2; i++)
 	{
-		margin = 0;
+		// 文字色
+		int color = 0xFFFFFF;
+		// 文字外枠色
+		int border_color = 0x000000;
+
+		// カーソルが合っている場合、文字色と文字外枠色を反転させる
+		if (select_menu == top_menu[i].number) {
+			color = ~color;
+			border_color = ~border_color;
+		}
+
+		DrawStringToHandle(GetDrawCenterX(top_menu[i].string.c_str(), menu_font), i * 100 + 400, top_menu[i].string.c_str(), color, menu_font, border_color);
 	}
 
-	if (font_handle == 0) 
-	{
-		font_handle = DX_DEFAULT_FONT_HANDLE;
-	}
 
-	const int w = screenX / 2 + margin 
-		- (GetDrawFormatStringWidthToHandle(font_handle, string) / 2);
-
-	return w;
 }

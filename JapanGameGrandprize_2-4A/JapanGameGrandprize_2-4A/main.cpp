@@ -4,6 +4,7 @@
 #include "GameMain.h"
 #include "PadInput.h"
 #include "GameMain.h"
+#include "Title.h"
 
 #define FRAMERATE 60.0 //フレームレート
 
@@ -16,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	double dNextTime = GetNowCount();
 
-	SetMainWindowText("Stick To Wall");
+	SetMainWindowText("Elemental War");
 
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
 
@@ -32,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	try
 	{
-		sceneMng = new SceneManager((AbstractScene*)new GameMain(1));
+		sceneMng = new SceneManager((AbstractScene*)new Title());
 	}
 	catch (const char* err)
 	{
