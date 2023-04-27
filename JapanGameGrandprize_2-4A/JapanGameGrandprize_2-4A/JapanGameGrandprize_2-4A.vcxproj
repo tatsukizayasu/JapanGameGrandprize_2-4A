@@ -164,6 +164,7 @@
     <ClInclude Include="DragonBullet.h" />
     <ClInclude Include="DragonThunder.h" />
     <ClInclude Include="ElementItem.h" />
+    <ClInclude Include="END.h" />
     <ClInclude Include="EnemyBulletBase.h" />
     <ClInclude Include="EnemySlimeBoss.h" />
     <ClInclude Include="EnumElementItem.h" />
@@ -221,6 +222,7 @@
     <ClInclude Include="Stage\Element\Element_DamageWall.h" />
     <ClInclude Include="Stage\MapChip.h" />
     <ClInclude Include="Stage\Stage.h" />
+    <ClInclude Include="Title.h" />
     <ClInclude Include="Torrent.h" />
     <ClInclude Include="TorrentBullet.h" />
     <ClInclude Include="TorrentNuts.h" />
@@ -237,6 +239,7 @@
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="DragonBullet.cpp" />
     <ClCompile Include="DragonThunder.cpp" />
+    <ClCompile Include="END.cpp" />
     <ClCompile Include="EnemyBulletBase.cpp" />
     <ClCompile Include="EnemyGhost.cpp" />
     <ClCompile Include="CameraWork.cpp" />
@@ -292,6 +295,7 @@
     <ClCompile Include="Stage\Element\Element_DamageWall.cpp" />
     <ClCompile Include="Stage\MapChip.cpp" />
     <ClCompile Include="Stage\Stage.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="Torrent.cpp" />
     <ClCompile Include="TorrentBullet.cpp" />
     <ClCompile Include="TorrentNuts.cpp" />

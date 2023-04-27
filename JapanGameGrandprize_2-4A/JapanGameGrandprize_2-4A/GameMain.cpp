@@ -19,6 +19,7 @@
 #include <math.h>
 #include "GameOver.h"
 #include "GameClear.h"
+#include "END.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -123,8 +124,12 @@ AbstractScene* GameMain::Update()
 		background_location.x += 10.0f;
 	}
 
+	// ボスを倒した場合
 	if (EnemyUpdate() == true)
 	{
+		// 最後のステージをクリアした場合
+		if (stage_num == 3) { return new END(); }
+
 		return new GameClear(stage_num);
 	}
 	item_controller->Update(player);

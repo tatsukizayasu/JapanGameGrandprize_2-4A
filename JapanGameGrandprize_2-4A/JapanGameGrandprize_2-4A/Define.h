@@ -68,6 +68,7 @@ struct ChemicalFormulaParameter
 	ChemicalFormulaMaterial material;
 	bool make_bool;
 	int name_image;
+	int tag_number;
 };
 
 struct Bullet_Effect {
@@ -90,6 +91,14 @@ struct Bullet_Effect {
 
 	float OvalY_Array_radius[PARTICLE];
 	int OvalY_Array_permit[PARTICLE];
+};
+
+struct Delete_Effect {
+	int Delete_x;
+	int Delete_y;
+	int Delete_display_permit;
+	int Delete_image_array[10];
+	int Delete_frame;
 };
 
 //íÜêSç¿ïW

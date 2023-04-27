@@ -241,7 +241,7 @@ void Player::Draw() const
 
 	PlayerUiDraw(x, y);
 
-	
+
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -400,10 +400,12 @@ void Player::PlayerUiDraw(float x, float y) const
 	ChemicalFormulaDraw(display_attribute, 0);
 	float element_thing = hp_start + 15;
 	SetFontSize(30);
-	for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
-	{
-		DrawFormatString(element_thing + (50 * i), 670, 0xffffff, "%d", element[0]->GetVolume());
-	}
+	DrawFormatString(element_thing, 670, 0xffffff, "%d", element[2]->GetVolume());
+	DrawFormatString(element_thing + (50 * 1), 670, 0xffffff, "%d", element[0]->GetVolume());
+	DrawFormatString(element_thing + (50 * 2), 670, 0xffffff, "%d", element[3]->GetVolume());
+	DrawFormatString(element_thing + (50 * 3), 670, 0xffffff, "%d", element[1]->GetVolume());
+	DrawFormatString(element_thing + (50 * 4), 670, 0xffffff, "%d", element[4]->GetVolume());
+	DrawFormatString(element_thing + (50 * 5), 670, 0xffffff, "%d", element[5]->GetVolume());
 }
 
 void Player::ChemicalFormulaDraw(int i, int plus_y) const
@@ -480,6 +482,16 @@ void Player::Update()
 {
 	old_x = location.x;
 	old_y = location.y;
+
+	//ƒ{ƒX•”‰®‚É“ü‚Á‚½ÛA“®‚«‚ğ~‚ß”ò‚ñ‚Å‚¢‚½‚ç—‰º‚³‚¹‚é
+	if (CameraWork::GetCameraState() == CameraWork::STATE::BOSS)
+	{
+		if (player_state == PLAYER_STATE::FLY || player_state == PLAYER_STATE::DOWN)
+		{
+			NotFly();
+		}
+		return;
+	}
 
 	float old_rstick_r_x = PAD_INPUT::GetRStick().x;
 	float old_rstick_l_x = PAD_INPUT::GetLStick().x;

@@ -2,19 +2,10 @@
 #include "AbstractScene.h"
 #include <string>
 
-class Title :
+class END :
     public AbstractScene
 {
 private:
-
-    //タイトルメニュー
-    enum class TITLE_MENU
-    {
-        PLAY,
-        /*OPTION,
-        HELP,*/
-        END
-    };
 
     struct TOP_MENU
     {
@@ -38,10 +29,10 @@ private:
 public:
 
     //コンストラクタ
-    Title();
+    END();
 
     //デストラクタ
-    ~Title();
+    ~END();
 
     //描画以外の更新を実行
     AbstractScene* Update() override;
