@@ -24,7 +24,7 @@
 //コンストラクタ
 Pouch::Pouch()
 {
-
+	old = PAD_INPUT::GetRStick().x;
 	x = 1040;
 	y = 100;
 	cursol = 0;
@@ -280,48 +280,56 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 //アップデート
 void Pouch::Update()
 {
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
+
+
+	if (old < 5000)
 	{
-		move_down = false;
-		move_up = false;
-		switch (tab)
+		if (5000 < PAD_INPUT::GetRStick().x)
 		{
-		case ATTRIBUTE::EXPLOSION:
-			each_cursor[EXPLOSION_NUM] = cursol;
-			cursol = each_cursor[MELT_NUM];
-			move_string = (30 * cursol);
-			tab = ATTRIBUTE::MELT;
-			break;
-		case ATTRIBUTE::MELT:
-			each_cursor[MELT_NUM] = cursol;
-			cursol = each_cursor[POISON_NUM];
-			move_string = (30 * cursol);
-			tab = ATTRIBUTE::POISON;
-			break;
-		case ATTRIBUTE::POISON:
-			each_cursor[POISON_NUM] = cursol;
-			cursol = each_cursor[PARARYSIS_NUM];
-			move_string = (30 * cursol);
-			tab = ATTRIBUTE::PARALYSIS;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			each_cursor[PARARYSIS_NUM] = cursol;
-			cursol = each_cursor[HEAL_NUM];
-			move_string = (30 * cursol);
-			tab = ATTRIBUTE::HEAL;
-			break;
-		case ATTRIBUTE::HEAL:
-			each_cursor[HEAL_NUM] = cursol;
-			cursol = each_cursor[EXPLOSION_NUM];
-			move_string = (30 * cursol);
-			tab = ATTRIBUTE::EXPLOSION;
-			break;
-		default:
-			break;
+			move_down = false;
+			move_up = false;
+			switch (tab)
+			{
+			case ATTRIBUTE::EXPLOSION:
+				each_cursor[EXPLOSION_NUM] = cursol;
+				cursol = each_cursor[MELT_NUM];
+				move_string = (30 * cursol);
+				tab = ATTRIBUTE::MELT;
+				break;
+			case ATTRIBUTE::MELT:
+				each_cursor[MELT_NUM] = cursol;
+				cursol = each_cursor[POISON_NUM];
+				move_string = (30 * cursol);
+				tab = ATTRIBUTE::POISON;
+				break;
+			case ATTRIBUTE::POISON:
+				each_cursor[POISON_NUM] = cursol;
+				cursol = each_cursor[PARARYSIS_NUM];
+				move_string = (30 * cursol);
+				tab = ATTRIBUTE::PARALYSIS;
+				break;
+			case ATTRIBUTE::PARALYSIS:
+				each_cursor[PARARYSIS_NUM] = cursol;
+				cursol = each_cursor[HEAL_NUM];
+				move_string = (30 * cursol);
+				tab = ATTRIBUTE::HEAL;
+				break;
+			case ATTRIBUTE::HEAL:
+				each_cursor[HEAL_NUM] = cursol;
+				cursol = each_cursor[EXPLOSION_NUM];
+				move_string = (30 * cursol);
+				tab = ATTRIBUTE::EXPLOSION;
+				break;
+			default:
+				break;
+			}
 		}
+
 	}
 
-		if (PAD_INPUT::OnButton(XINPUT_BUTTON_LEFT_SHOULDER))
+	if (old > -5000)
+	{
+		if (-5000 > PAD_INPUT::GetRStick().x)
 		{
 			move_down = false;
 			move_up = false;
@@ -361,88 +369,90 @@ void Pouch::Update()
 				break;
 			}
 		}
+	}
 
+	switch (tab)
+	{
+	case ATTRIBUTE::EXPLOSION:
+		TabUpdate(EXPLOSION_MAX_NUM);
+		break;
+	case ATTRIBUTE::MELT:
+		TabUpdate(MELT_MAX_NUM);
+		break;
+	case ATTRIBUTE::POISON:
+		TabUpdate(POISON_MAX_NUM);
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		TabUpdate(PARARYSIS_MAX_NUM);
+		break;
+	case ATTRIBUTE::HEAL:
+		TabUpdate(HEAL_MAX_NUM);
+		break;
+	default:
+		break;
+	}
+
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A))
+	{
+		on_bool = true;
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
-			TabUpdate(EXPLOSION_MAX_NUM);
+			if (!select_explosion.make_bool)
+			{
+				if (ComparisonElement(chemical_formula_explosion[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
+			}
 			break;
 		case ATTRIBUTE::MELT:
-			TabUpdate(MELT_MAX_NUM);
+			if (!select_melt.make_bool)
+			{
+				if (ComparisonElement(chemical_formula_melt[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
+			}
 			break;
 		case ATTRIBUTE::POISON:
-			TabUpdate(POISON_MAX_NUM);
+			if (!select_poison.make_bool)
+			{
+				if (ComparisonElement(chemical_formula_poison[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
+			}
 			break;
 		case ATTRIBUTE::PARALYSIS:
-			TabUpdate(PARARYSIS_MAX_NUM);
+			if (!select_pararysis.make_bool)
+			{
+				if (ComparisonElement(chemical_formula_pararysis[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
+			}
 			break;
 		case ATTRIBUTE::HEAL:
-			TabUpdate(HEAL_MAX_NUM);
+			if (!select_heal.make_bool)
+			{
+				if (ComparisonElement(chemical_formula_heal[cursol]))
+				{
+					SetChemicalFormulaParameter();
+					ConsumptionMaterial();
+				}
+			}
 			break;
 		default:
 			break;
 		}
+	}
 
-		if (PAD_INPUT::OnButton(XINPUT_BUTTON_A))
-		{
-			on_bool = true;
-			switch (tab)
-			{
-			case ATTRIBUTE::EXPLOSION:
-				if (!select_explosion.make_bool)
-				{
-					if (ComparisonElement(chemical_formula_explosion[cursol]))
-					{
-						SetChemicalFormulaParameter();
-						ConsumptionMaterial();
-					}
-				}
-				break;
-			case ATTRIBUTE::MELT:
-				if (!select_melt.make_bool)
-				{
-					if (ComparisonElement(chemical_formula_melt[cursol]))
-					{
-						SetChemicalFormulaParameter();
-						ConsumptionMaterial();
-					}
-				}
-				break;
-			case ATTRIBUTE::POISON:
-				if (!select_poison.make_bool)
-				{
-					if (ComparisonElement(chemical_formula_poison[cursol]))
-					{
-						SetChemicalFormulaParameter();
-						ConsumptionMaterial();
-					}
-				}
-				break;
-			case ATTRIBUTE::PARALYSIS:
-				if (!select_pararysis.make_bool)
-				{
-					if (ComparisonElement(chemical_formula_pararysis[cursol]))
-					{
-						SetChemicalFormulaParameter();
-						ConsumptionMaterial();
-					}
-				}
-				break;
-			case ATTRIBUTE::HEAL:
-				if (!select_heal.make_bool)
-				{
-					if (ComparisonElement(chemical_formula_heal[cursol]))
-					{
-						SetChemicalFormulaParameter();
-						ConsumptionMaterial();
-					}
-				}
-				break;
-			default:
-				break;
-			}
-		}
-	
+	old = PAD_INPUT::GetRStick().x;
 }
 
 void Pouch::TabUpdate(int max_num)
@@ -497,19 +507,19 @@ void Pouch::SetElementConstruct(int i)
 		element[i]->SetVolume(50);
 		break;
 	case ELEMENT_ITEM::OXYGEN:
-		element[i]->SetVolume(30);
+		element[i]->SetVolume(40);
 		break;
 	case ELEMENT_ITEM::CARBON:
 		element[i]->SetVolume(30);
 		break;
 	case ELEMENT_ITEM::NITROGEN:
-		element[i]->SetVolume(30);
+		element[i]->SetVolume(20);
 		break;
 	case ELEMENT_ITEM::SULFUR:
 		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::CHLORINE:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(5);
 		break;
 	case ELEMENT_ITEM::URANIUM:
 		element[i]->SetVolume(1);

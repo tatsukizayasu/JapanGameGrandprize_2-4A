@@ -44,6 +44,8 @@ public:
 	virtual void Update(const Player* player, const Stage* stage)override;
 	//•`‰æ
 	virtual void Draw()const override;
+	void Update_Cloud(const Player* player);
+
 	void Draw_Cloud()const;
 
 	//ˆÚ“®
@@ -75,7 +77,6 @@ public:
 #ifdef _DEBUG
 	//XV(DotByDot)
 	void Update(const ENEMY_STATE state) override;
-	void Update_Cloud(const Player* player);
 
 	//•`‰æ(DotByDot)
 	void DebugDraw() override;
