@@ -1,32 +1,38 @@
 #pragma once
 #include "AbstractScene.h"
-#include <string>
+
+// タイトルにデバックメニューを追加
+#define TITLE_DEBUG
 
 class Title :
     public AbstractScene
 {
 private:
 
-    //タイトルメニュー
-    enum class TITLE_MENU
+    enum class MENU
     {
         PLAY,
         /*OPTION,
         HELP,*/
-        END
+        EXIT,
+        MENU_SIZE
     };
 
-    struct TOP_MENU
-    {
-        short number;
-        std::string string;
-    }top_menu[2];
+    const char* menu_items[static_cast<int>(MENU::MENU_SIZE)] = {
+        "PLAY",
+        "EXIT"
+    };
 
+    // 選択しているメニュー
     int select_menu;
 
 
     int menu_font;
 
+#ifdef TITLE_DEBUG
+    // デバックメニュー選択用フラグ
+    bool is_select_debug;
+#endif // TITLE_DEBUG
 
     //選択SE用サウンドハンドル
     int select_se;

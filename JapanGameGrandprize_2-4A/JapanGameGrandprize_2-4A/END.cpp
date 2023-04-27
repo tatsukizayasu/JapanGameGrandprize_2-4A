@@ -10,7 +10,7 @@ END::END()
 {
 	title_font = CreateFontToHandle("Algerian", 100, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 
-	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
+	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 4);
 
 	background_image = LoadGraph("Images/Scene/end.png");
 
@@ -20,10 +20,7 @@ END::END()
 
 	input_margin = 0;
 
-	select_menu = 0;
-
-	top_menu[0] = { 0,"TITLE" };
-	top_menu[1] = { 1, "EXIT" };
+	select_menu = static_cast<int>(MENU::TITLE);
 }
 
 //-----------------------------------
@@ -31,7 +28,9 @@ END::END()
 //-----------------------------------
 END::~END()
 {
+	DeleteGraph(background_image);
 	DeleteFontToHandle(title_font);
+	DeleteFontToHandle(menu_font);
 }
 
 //-----------------------------------
@@ -39,24 +38,20 @@ END::~END()
 //-----------------------------------
 AbstractScene* END::Update()
 {
+	const int max_input_margin = 30;
+	const int stick_sensitivity = 20000;
 
-	if (input_margin < 30)
+	if (input_margin < max_input_margin)
 	{
 		input_margin++;
 	}
 	else {
 
+		if (std::abs(PAD_INPUT::GetLStick().y) > stick_sensitivity) {
 
-		if (PAD_INPUT::GetLStick().y > 20000)
-		{
-			select_menu = (select_menu + 1) % 2;
+			select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
 			input_margin = 0;
-		}
-		else if (PAD_INPUT::GetLStick().y < -20000)
-		{
 
-			select_menu = (select_menu + 1) % 2;
-			input_margin = 0;
 		}
 	}
 
@@ -64,16 +59,15 @@ AbstractScene* END::Update()
 	if (PAD_INPUT::GetNowKey(XINPUT_BUTTON_A) && (PAD_INPUT::OnButton(XINPUT_BUTTON_A) == true))
 	{
 		input_margin = 0;
-		switch (select_menu)
+		MENU current_selection = static_cast<MENU>(select_menu);
+		switch (current_selection)
 		{
-			// TITLE
-		case 0:
+		case MENU::TITLE:
 			return new Title();
 			break;
 
-			// EXIT
-		case 1:
-			DxLib_End();
+		case MENU::EXIT:
+			return nullptr;
 			break;
 
 		default:
@@ -93,9 +87,9 @@ AbstractScene* END::Update()
 void END::Draw()const
 {
 	DrawGraph(0, 0, background_image, FALSE);
-	DrawStringToHandle(GetDrawCenterX("Thanks!", title_font), 100, "Thanks!", 0x66290E, title_font, 0xFFFFFF);
+	DrawStringToHandle(GetDrawCenterX("Thanks!", title_font), 100, "Thanks!", 0xE1D000, title_font, 0xFFFFFF);
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < static_cast<int>(MENU::MENU_SIZE); i++)
 	{
 		// 文字色
 		int color = 0xFFFFFF;
@@ -103,12 +97,12 @@ void END::Draw()const
 		int border_color = 0x000000;
 
 		// カーソルが合っている場合、文字色と文字外枠色を反転させる
-		if (select_menu == top_menu[i].number) {
+		if (select_menu == i) {
 			color = ~color;
 			border_color = ~border_color;
 		}
 
-		DrawStringToHandle(GetDrawCenterX(top_menu[i].string.c_str(), menu_font), i * 100 + 400, top_menu[i].string.c_str(), color, menu_font, border_color);
+		DrawStringToHandle(GetDrawCenterX(menu_items[i], menu_font), i * 100 + 400, menu_items[i], color, menu_font, border_color);
 	}
 
 

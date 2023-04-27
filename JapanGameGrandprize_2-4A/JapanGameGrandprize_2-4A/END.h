@@ -7,12 +7,19 @@ class END :
 {
 private:
 
-    struct TOP_MENU
+    enum class MENU
     {
-        short number;
-        std::string string;
-    }top_menu[2];
+        TITLE,
+        EXIT,
+        MENU_SIZE
+    };
 
+    const char* menu_items[static_cast<int>(MENU::MENU_SIZE)] = {
+        "TITLE",
+        "EXIT"
+    };
+
+    // ‘I‘ğ‚µ‚Ä‚¢‚éƒƒjƒ…[
     int select_menu;
 
 
