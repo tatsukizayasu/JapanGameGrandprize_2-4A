@@ -23,6 +23,7 @@ SlimeBossThunder::SlimeBossThunder(Location spawn_location)
 	location.y = 280;
 
 	cloud_location = spawn_location;
+	cloud_location.y = 280;
 
 	for (int i = 0; i < LOCATION_DATA; i++)
 	{
@@ -108,5 +109,5 @@ void SlimeBossThunder::Draw_Cloud()const
 
 	int color = GetColor(255, 255, 255);
 
-	DrawCircle(draw_location.x, 0, 70, color, true, true);
+	DrawCircle(draw_location.x, draw_location.y, 70, color, true, true);
 }
