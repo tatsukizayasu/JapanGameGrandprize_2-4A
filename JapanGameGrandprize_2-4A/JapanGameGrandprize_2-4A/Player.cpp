@@ -106,7 +106,7 @@ Player::Player(Stage* stage)
 
 	this->stage = stage;
 	location.x = stage->GetSpawnPoint().x;
-	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0;
+	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0-MAP_CHIP_SIZE*7;
 	image = new int[PLAYER_IMAGES];
 	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
 	jump_image = new int[3];
@@ -480,9 +480,11 @@ void Player::ChemicalFormulaDraw(int i, int plus_y) const
 //-----------------------------------
 void Player::Update()
 {
-	/*clsDx();
-	printfDx("state:%d\n", player_state);
+	clsDx();
+	printfDx("location.y:%f\n", location.y);
 	
+	old_x = location.x;
+	old_y = location.y;
 
 	if (CameraWork::GetCameraState() == CameraWork::STATE::BOSS)
 	{
@@ -491,10 +493,7 @@ void Player::Update()
 			NotFly();
 		}
 		return;
-	}*/
-
-	old_x = location.x;
-	old_y = location.y;
+	}
 
 	float old_rstick_r_x = PAD_INPUT::GetRStick().x;
 	float old_rstick_l_x = PAD_INPUT::GetLStick().x;
