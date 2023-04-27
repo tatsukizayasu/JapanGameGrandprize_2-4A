@@ -14,12 +14,16 @@ class LastBossHand :
 {
 private:
 
+    bool teleporting; //テレポート中
+    bool teleport; //テレポート
     bool punch;  //パンチしている
     bool left_hand; //true:左手,false:右手
     bool attack; //攻撃が当たったか
     int move_volume; //移動量
     float angle; //角度
     int radius; //半径
+    int teleport_time; //テレポート時間
+    float size; //大きさ
     int attack_interval; //次の攻撃までの時間
     int punch_standby_time; //パンチするまでの時間
     int animation; //アニメーション
@@ -35,7 +39,7 @@ private:
 private:
 
     //テレポート
-    bool Teleport();
+    void Teleport(const Location);
 
     //パンチ
     void Punch();
@@ -45,7 +49,7 @@ private:
 public:
 
     //コンストラクタ
-    LastBossHand() {}
+    LastBossHand();
 
     //コンストラクタ
     LastBossHand(const Location, const bool);
@@ -91,6 +95,9 @@ public:
 
     //座標の取得
     Location GetLocation() const override;
+
+    //攻撃中かどうか
+    bool IfAttack() const;
 
 #ifdef _DEBUG
     //更新(DotByDot)

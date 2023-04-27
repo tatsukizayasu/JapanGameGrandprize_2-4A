@@ -74,11 +74,15 @@ public:
     //プレイヤーの弾との当たり判定
     bool CheckHitBulelt(const BulletBase* bullet);
 
+    //プレイヤーとパンチとの当たり判定
+    AttackResource PunchAttack(const BoxCollider*);
+
     //描画
     void Draw() const override;
 
     //座標の取得
     Location GetLocation() const override;
+
 
 #ifdef _DEBUG
     //更新(DotByDot)

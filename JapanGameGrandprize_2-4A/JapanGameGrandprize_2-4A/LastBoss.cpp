@@ -228,12 +228,38 @@ void LastBoss::AttackNone()
 		}
 	}
 }
+
 //-----------------------------------
 //攻撃が当たっているか
 //-----------------------------------
 AttackResource LastBoss::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 };
+
+	return ret;
+}
+
+//-----------------------------------
+//プレイヤーとパンチとの当たり判定
+//-----------------------------------
+AttackResource LastBoss::PunchAttack(const BoxCollider* player)
+{
+	AttackResource ret = { 0,nullptr,0 };
+
+	LastBossHand* me_hand;
+	for (int i = 0; i < HAND_NUM; i++)
+	{
+		me_hand = dynamic_cast<LastBossHand*>(hand[i]);
+
+		if (me_hand->IfAttack())
+		{
+			if (me_hand->HitBox(player))
+			{
+				ret = me_hand->Hit();
+			}
+		}
+	}
+
 	return ret;
 }
 

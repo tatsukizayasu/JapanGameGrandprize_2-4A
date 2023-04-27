@@ -234,7 +234,7 @@ bool GameMain::EnemyUpdate()
 					default:
 						break;
 					}
-					
+
 				}
 			}
 		}
@@ -254,17 +254,28 @@ bool GameMain::EnemyUpdate()
 				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 2.0f,enemy[i]->GetLocation().y });
 			}
 
-				enemy[i]->Update(player, stage);
+			enemy[i]->Update(player, stage);
 
 			//エネミーの攻撃
-			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
+
+			if (enemy[i]->GetEnemyKind() == ENEMY_KIND::LAST_BOSS)
 			{
-				if (player->HitBox(enemy[i]))
+				LastBoss* last_boss;
+				last_boss = dynamic_cast<LastBoss*>(enemy[i]);
+				
+				player->HpDamage(last_boss->PunchAttack(player));
+			}
+			else
+			{
+				if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
 				{
-					player->HpDamage(enemy[i]->Hit());
+					if (player->HitBox(enemy[i]))
+					{
+						player->HpDamage(enemy[i]->Hit());
+					}
 				}
 			}
-			
+
 			//プレイヤーの弾との当たり判定
 			for (int j = 0; j < BULLET_MAX; j++)
 			{

@@ -7,23 +7,25 @@
 
 #define HAND_IMAGES
 
+#define HAND_WIDTH 100
+#define HAND_HEIGHT 100
 //移動速度
 #define HAND_MOVE_SPEED 2
 
 //次のパンチまでの時間
-#define PUNCH_INTERVAL 300
+#define PUNCH_INTERVAL 60
 
 //パンチするまでの時間
-#define PUNCH_STANDBY_TIME 60 
+#define PUNCH_STANDBY_TIME 30 
 
 //パンチのスピード
-#define PUNCH_SPEED 8
+#define PUNCH_SPEED 15
 
 //パンチのダメージ
 #define PUNCH_DAMAGE 15
 
 //パンチのスポーン地点(Y座標)
-#define PUNCH_Y 300
+#define PUNCH_Y 200
 
 //HP
 #define HAND_HP 100
@@ -43,7 +45,67 @@
 //移動半径
 #define MOVE_RADIUS 150
 
+//テレポート時間
+#define TELEPORT_TIME 30
 
+
+//-----------------------------------
+//コンストラクタ
+//-----------------------------------
+LastBossHand::LastBossHand()
+{
+	spawn_location.x = 0;
+	spawn_location.y = 0;
+
+	location = spawn_location;
+	punch_start = location;
+
+	area.height = HAND_HEIGHT;
+	area.width = HAND_WIDTH;
+
+	teleporting = false;
+	teleport = false;
+	punch = false;
+	attack = false;
+
+	move_volume = 0;
+	angle = 0;
+	radius = 0;
+	teleport_time = 0;
+	attack_interval = 0;
+	punch_standby_time = 0;
+	animation = 0;
+	image_argument = 0;
+	size = 0;
+
+
+	can_delete = false;
+	left_hand = false;
+	left_move = false;
+	poison = false;
+	paralysis = false;
+
+	damage = 0;
+	images = nullptr;
+	hp = HAND_HP;
+	speed = -HAND_MOVE_SPEED;
+	death_time = 0;
+	poison_time = 0;
+	poison_damage = 0;
+	paralysis_time = 0;
+	drop_volume = 0;
+	drop_type_volume = 0;
+	drop_element = nullptr;
+
+	kind = ENEMY_KIND::LAST_BOSS;
+	type = new ENEMY_TYPE[1];
+	state = ENEMY_STATE::IDOL;
+
+	move = HAND_MOVE::UP_DOWN;
+
+	hit_block.chip = nullptr;
+	hit_block.hit = false;
+}
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -53,19 +115,23 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 	location = spawn_location;
 	punch_start = location;
 
-	area.height = 100;
-	area.width = 100;
+	area.height = HAND_HEIGHT;
+	area.width = HAND_WIDTH;
 
+	teleporting = false;
+	teleport = false;
 	punch = false;
 	attack = false;
 
 	move_volume = 0;
 	angle = 0;
 	radius = 0;
+	teleport_time = 0;
 	attack_interval = 0;
 	punch_standby_time = 0;
 	animation = 0; 
 	image_argument = 0;
+	size = 0;
 
 	can_delete = false;
 	this->left_hand = left_hand;
@@ -225,11 +291,36 @@ void LastBossHand::Move(const Location player_location)
 //-----------------------------------
 //テレポート
 //-----------------------------------
-bool LastBossHand::Teleport()
+void LastBossHand::Teleport(const Location teleport_location)
 {
-	bool ret = false;
 
-	return ret;
+	if(teleport)
+	{
+		teleport_time++;
+		size = 1 - (static_cast<float>(teleport_time) / TELEPORT_TIME);
+
+		area.width = HAND_WIDTH * size;
+		area.height = HAND_HEIGHT * size;
+
+		if (size <= 0)
+		{
+			location = teleport_location;
+			teleport = false;
+		}
+	}
+	else
+	{
+		teleport_time -= 2;
+		size = 1 - (static_cast<float>(teleport_time) / TELEPORT_TIME);
+
+		area.width = HAND_WIDTH * size;
+		area.height = HAND_HEIGHT * size;
+
+		if (1 <= size)
+		{
+			teleporting = false;
+		}
+	}
 }
 
 //-----------------------------------
@@ -246,6 +337,7 @@ void LastBossHand::Fall()
 void LastBossHand::Attack(const Location player_location)
 {
 	bool old_punch = punch;
+	bool old_teleporting = teleporting;
 
 	if (punch) //パンチしている
 	{
@@ -255,26 +347,30 @@ void LastBossHand::Attack(const Location player_location)
 	{
 		if (attack_interval < 0)
 		{
-			punch_start.x = player_location.x;;
-			punch_start.y = player_location.y - PUNCH_Y;
 
-			location = punch_start;
-			punch = true;
-			speed = PUNCH_SPEED;
+			if (!teleporting)
+			{
+				teleporting = true;
+				teleport = true;
+				teleport_time = 0;
+				punch_start.x = player_location.x;
+				punch_start.y = player_location.y - PUNCH_Y;
+			}
+
+			Teleport(punch_start);
+
+			if (old_teleporting  && !teleporting)
+			{
+				attack = true;
+				punch = true;
+				speed = PUNCH_SPEED;
+			}
 		}
 	}
 
 	if (old_punch && (old_punch != punch)) //パンチ終了
 	{
-		if (left_hand)
-		{
-			attack_interval = PUNCH_INTERVAL;
-		}
-		else
-		{
-			attack_interval = PUNCH_INTERVAL + (PUNCH_INTERVAL / 2);
-		}
-		attack = false;
+		attack_interval = PUNCH_INTERVAL * 2;
 	}
 }
 
@@ -293,7 +389,7 @@ void LastBossHand::StartAttack()
 	}
 	else
 	{
-		attack_interval = PUNCH_INTERVAL + (PUNCH_INTERVAL / 2);
+		attack_interval = PUNCH_INTERVAL * 2;
 	}
 }
 
@@ -339,12 +435,12 @@ AttackResource LastBossHand::Hit()
 	AttackResource ret = { 0,nullptr,0 };
 	ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::NORMAL };
 
-	if (punch && attack)
-	{
-		ret.damage = PUNCH_DAMAGE;
-		ret.type = attack_type;
-		ret.type_count = 1;
-	}
+
+	ret.damage = PUNCH_DAMAGE;
+	ret.type = attack_type;
+	ret.type_count = 1;
+	attack = false;
+
 	return ret;
 }
 
@@ -353,15 +449,28 @@ AttackResource LastBossHand::Hit()
 //-----------------------------------
 void LastBossHand::Death()
 {
+	bool old_teleporting = teleporting;
+
 	death_time--;
 
 	if (death_time < 0)
 	{
-		state = ENEMY_STATE::MOVE;
-		location = spawn_location;
-		hp = HAND_HP;
+		if (!teleporting)
+		{
+			teleporting = true;
+			teleport = true;
+			teleport_time = 0;
+		}
 
-		move = static_cast<HAND_MOVE>(GetRand(2));
+		Teleport(spawn_location);
+
+		if (old_teleporting && !teleporting)
+		{
+			state = ENEMY_STATE::MOVE;
+			hp = HAND_HP;
+
+			move = static_cast<HAND_MOVE>(GetRand(2));
+		}
 	}
 }
 
@@ -479,6 +588,21 @@ void LastBossHand::DrawHPBar(const int)const
 Location LastBossHand::GetLocation() const
 {
 	return location;
+}
+
+//-----------------------------------
+//攻撃中かどうか
+//-----------------------------------
+bool LastBossHand::IfAttack() const
+{
+	bool ret = false; //戻り値
+
+	if (punch && attack)
+	{
+		ret = true;
+	}
+
+	return ret;
 }
 
 #ifdef _DEBUG
