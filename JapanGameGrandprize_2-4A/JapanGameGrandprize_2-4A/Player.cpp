@@ -106,7 +106,7 @@ Player::Player(Stage* stage)
 
 	this->stage = stage;
 	location.x = stage->GetSpawnPoint().x;
-	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0-MAP_CHIP_SIZE*7;
+	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0;
 	image = new int[PLAYER_IMAGES];
 	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
 	jump_image = new int[3];
