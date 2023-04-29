@@ -18,6 +18,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	SetMainWindowText("Elemental War");
 
+	SetWindowIconID(01);
+
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
 
 	SetAlwaysRunFlag(true);		//常にアクティブにする
