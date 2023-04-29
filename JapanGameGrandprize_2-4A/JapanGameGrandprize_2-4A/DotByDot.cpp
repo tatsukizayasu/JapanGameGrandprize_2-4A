@@ -39,6 +39,10 @@ DotByDot::DotByDot()
 	enemy[2] = new EnemySlime(spawn_location);
 
 	player = new Player();
+	element = new Stage_Element();
+
+	element->InitDemo({100.0f,400.0f});
+
 
 	font = CreateFontToHandle("DotByDotFont", 32, 1, DX_FONTTYPE_NORMAL);
 }
@@ -84,9 +88,11 @@ AbstractScene* DotByDot::Update()
 	player->Update(static_cast<PLAYER_STATE>(state % 6));
 #endif // _DEBUG
 
-	
+	element->Update(player);
 
 	return this;
+
+	
 }
 
 //-----------------------------------
@@ -104,7 +110,7 @@ void DotByDot::Draw() const
 	player->DebugDraw();
 #endif // _DEBUG
 
-	
+	element->Draw();
 
 	DrawFormatStringToHandle(1160, 660, 0x000000, font, "%s", str[state % 5]);
 

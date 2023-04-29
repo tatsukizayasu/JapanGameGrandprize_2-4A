@@ -28,6 +28,20 @@ Stage_Element::~Stage_Element()
 	element.shrink_to_fit();
 }
 
+void Stage_Element::InitDemo(Location location)
+{
+	AddElement(Element::DAMAGE_WALL, { location.x , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::WOODEN_FLOOR, { location.x + 80.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::FALL_FLOOR, {  location.x + 160.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::ITEM_DROP_OBJECT, { location.x + 240.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::TRAP, { location.x + 320.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::MOVE_FLOOR, { location.x + 400.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::BARRICADE_UP, { location.x + 480.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::BARRICADE_CENTER, { location.x + 480.0f , location.y + 40.0f }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::BARRICADE_DOWN, { location.x + 480.0f , location.y + 80.0f }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+
+}
+
 void Stage_Element::AddElement(short type, Location location, Area area)
 {
 
