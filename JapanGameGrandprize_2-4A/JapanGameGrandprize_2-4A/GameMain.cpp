@@ -165,35 +165,27 @@ void GameMain::SpawnEnemy()
 		case ENEMY_KIND::SLIME: //スライムの生成
 			enemy[i] = new EnemySlime(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::UNDEAD:	//アンデットの生成
 			enemy[i] = new Undead(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::HARPY:		//ハーピーの生成
 			enemy[i] = new Harpy(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::MAGE:		//メイジの生成
 			enemy[i] = new Mage(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::GHOST:		//ゴーストの生成
 			enemy[i] = new EnemyGhost(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
 			enemy[i] = new Wyvern(spawn[i].location);
 			break;
-		//case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
-		//	enemy[i] = nullptr;
-		//	break;
-		//case ENEMY_KIND::TORRENT:	//トレントボスの生成
-		//	enemy[i] = new Torrent(spawn[i].location);
-		//	break;
-		case ENEMY_KIND::KRAKEN:	//クラーケンボスの生成
-			enemy[i] = new Kraken(spawn[i].location);
-			break;
-		//case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
-		//	enemy[i] = new Dragon(spawn[i].location);
-		//	break;
-		//case ENEMY_KIND::END_BOSS:	//ラスボスの生成
-		//	break;
+
 		case ENEMY_KIND::NONE:
 		default:
 			enemy[i] = nullptr;
@@ -210,51 +202,75 @@ bool GameMain::EnemyUpdate()
 	//クリア判定用フラグ
 	bool is_clear = false;
 
-	//プレイヤーがボスエリアに入った際、ボスを出現させる
-	if (camera_work->GetCameraLock() == true && is_spawn_boss == false)
-	{
-		vector<ENEMY_LOCATION> spawn;
-		spawn = stage->GetEnemy_SpawnLocation();
+	vector<ENEMY_LOCATION> spawn;
+	spawn = stage->GetEnemy_SpawnLocation();
 
-		enemy_spawn_volume = spawn.size();
-		int boss_index;
-		for (int i = 0; i < enemy_spawn_volume; i++)
+	BulletBase** player_bullet;
+	player_bullet = player->GetBullet();
+
+	//ステージ内に生存している敵の数
+	short enemy_count = 0;
+
+	for (int i = 0; i < enemy_spawn_volume; i++)
+	{
+		//プレイヤーがボスエリアに入った際、ボスを出現させる
+		if (camera_work->GetCameraLock() == true && is_spawn_boss == false)
 		{
+
+			if (stage_num == 3)
+			{
+				if (enemy[i] != nullptr)
+				{
+					enemy_count++;
+				}
+			}
+
 			if (static_cast<short>(ENEMY_KIND::SLIME_BOSS) <= spawn[i].id)
 			{
 				if (enemy[i] == nullptr)
 				{
 					switch (static_cast<ENEMY_KIND>(spawn[i].id))
 					{
+						//スライムボスの生成
 					case ENEMY_KIND::SLIME_BOSS:
 						enemy[i] = new EnemySlimeBoss(spawn[i].location);
 						is_spawn_boss = true;
 						break;
+
+						//トレントボスの生成
 					case ENEMY_KIND::TORRENT:
 						enemy[i] = new Torrent(spawn[i].location);
+						is_spawn_boss = true;
 						break;
 
+						//クラーケンボスの生成
+					case ENEMY_KIND::KRAKEN:
+						if (enemy_count == 0)
+						{
+							enemy[i] = new Kraken(spawn[i].location);
+							is_spawn_boss = true;
+						}
+						break;
+
+						//ドラゴンボスの生成
 					case ENEMY_KIND::DRAGON:
 						enemy[i] = new Dragon(spawn[i].location);
+						is_spawn_boss = true;
 						break;
 
+						//ラスボスの生成
 					case ENEMY_KIND::END_BOSS:
+						is_spawn_boss = true;
 						break;
 
 					default:
 						break;
 					}
-					
+
 				}
 			}
 		}
-	}
 
-	BulletBase** player_bullet;
-	player_bullet = player->GetBullet();
-
-	for (int i = 0; i < enemy_spawn_volume; i++)
-	{
 		if (enemy[i] != nullptr)
 		{
 			//Stage03の場合、画面内に収まるまで敵を強制移動
@@ -293,14 +309,19 @@ bool GameMain::EnemyUpdate()
 				}
 			}
 
-			if (enemy[i]->GetCanDelete()) //エネミーの削除
+				//エネミーの削除
+			if (enemy[i]->GetCanDelete() || enemy[i]->GetLocation().x + enemy[i]->GetArea().width < 0)
 			{
 				if (ENEMY_KIND::SLIME_BOSS == enemy[i]->GetEnemyKind())
 				{
 					is_clear = true;
 				}
 
-				item_controller->SpawnItem(enemy[i]);
+				//エネミーがステージ内で死んだらアイテムを生成
+				if (0 <= enemy[i]->GetLocation().x + enemy[i]->GetArea().width)
+				{
+					item_controller->SpawnItem(enemy[i]);
+				}
 				delete enemy[i];
 				enemy[i] = nullptr;
 				i--;
