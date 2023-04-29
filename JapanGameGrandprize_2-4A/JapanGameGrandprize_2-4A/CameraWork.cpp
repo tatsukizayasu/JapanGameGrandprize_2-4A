@@ -102,9 +102,10 @@ void CameraWork::Update()
 
 	POINT stage_size = stage->GetMapSize();
 
+	//ƒ{ƒX•”‰®‚É‘«‚ğ“¥‚İ“ü‚ê‚é‚Æ‰æ–Ê‚ğ‹­§“I‚É“®‚©‚·
 	if (state == STATE::BOSS)
 	{
-		camera.x += 2;
+		camera.x += 4;
 
 		if (stage_size.x * MAP_CHIP_SIZE - SCREEN_WIDTH < camera.x)
 		{

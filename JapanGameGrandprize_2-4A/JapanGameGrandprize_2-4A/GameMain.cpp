@@ -107,8 +107,6 @@ AbstractScene* GameMain::Update()
 	}
 #endif
 
-
-
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
@@ -310,9 +308,9 @@ bool GameMain::EnemyUpdate()
 			}
 
 				//エネミーの削除
-			if (enemy[i]->GetCanDelete() || enemy[i]->GetLocation().x + enemy[i]->GetArea().width < 0)
+			if (enemy[i]->GetCanDelete() || (enemy[i]->GetLocation().x + enemy[i]->GetArea().width < 0 && enemy[i]->GetEnemyKind() != ENEMY_KIND::WYVERN))
 			{
-				if (ENEMY_KIND::SLIME_BOSS == enemy[i]->GetEnemyKind())
+				if (ENEMY_KIND::SLIME_BOSS <= enemy[i]->GetEnemyKind())
 				{
 					is_clear = true;
 				}
