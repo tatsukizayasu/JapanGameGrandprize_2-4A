@@ -45,7 +45,10 @@ Title::~Title()
 //-----------------------------------
 AbstractScene* Title::Update()
 {
-	const int max_input_margin = 30;
+	// 操作間隔時間
+	const int max_input_margin = 15;
+
+	// スティックの感度
 	const int stick_sensitivity = 20000;
 
 	if (input_margin < max_input_margin)
@@ -54,9 +57,22 @@ AbstractScene* Title::Update()
 	}
 	else {
 
-		if (std::abs(PAD_INPUT::GetLStick().y) > stick_sensitivity) {
+		// スティックのY座標を取得
+		int stick_y = PAD_INPUT::GetLStick().y;
 
-			select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
+		if (std::abs(stick_y) > stick_sensitivity) {
+
+			// スティックが上に移動した場合
+			if (stick_y > 0) {
+				// メニュー選択肢を一つ前に移動
+				select_menu = (select_menu - 1 + static_cast<int>(MENU::MENU_SIZE)) % static_cast<int>(MENU::MENU_SIZE);
+			}
+			// スティックが下に移動した場合
+			else if (stick_y < 0) {
+				// メニュー選択肢を一つ次に移動
+				select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
+			}
+
 			input_margin = 0;
 
 		}
@@ -95,6 +111,7 @@ AbstractScene* Title::Update()
 			break;
 
 		default:
+			printfDx("未実装な機能です。\n");
 			break;
 		}
 
@@ -115,6 +132,12 @@ void Title::Draw()const
 
 	for (int i = 0; i < static_cast<int>(MENU::MENU_SIZE); i++)
 	{
+		// 文字列の最小Y座標
+		const int base_y = 400;
+
+		// 文字列のY座標間隔
+		const int margin_y = 100;
+
 		// 文字色
 		int color = 0xFFFFFF;
 		// 文字外枠色
@@ -147,7 +170,7 @@ void Title::Draw()const
 
 #endif // TITLE_DEBUG
 
-		DrawStringToHandle(GetDrawCenterX(menu_items[i], menu_font), i * 100 + 400, menu_items[i], color, menu_font, border_color);
+		DrawStringToHandle(GetDrawCenterX(menu_items[i], menu_font), i * margin_y + base_y, menu_items[i], color, menu_font, border_color);
 	}
 
 

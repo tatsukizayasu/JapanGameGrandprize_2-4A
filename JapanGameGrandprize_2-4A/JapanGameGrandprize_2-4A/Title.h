@@ -12,14 +12,16 @@ private:
     enum class MENU
     {
         PLAY,
-        /*OPTION,
-        HELP,*/
+        //OPTION,
+        //HELP,
         EXIT,
         MENU_SIZE
     };
 
     const char* menu_items[static_cast<int>(MENU::MENU_SIZE)] = {
         "PLAY",
+        //"OPTION",
+        //"HELP",
         "EXIT"
     };
 
@@ -27,12 +29,13 @@ private:
     int select_menu;
 
 
-    int menu_font;
-
 #ifdef TITLE_DEBUG
     // デバックメニュー選択用フラグ
     bool is_select_debug;
 #endif // TITLE_DEBUG
+
+    // フォントハンドル
+    int menu_font;
 
     //選択SE用サウンドハンドル
     int select_se;
