@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="BoxCollider.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="FpsController.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -16,17 +13,11 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SphereCollider.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\Stage.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="LineCollider.cpp">
-      <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="CameraWork.cpp">
       <Filter>ソースファイル</Filter>
@@ -72,9 +63,6 @@
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="LineCollider.cpp" />
-    <ClCompile Include="ColliderBase.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Pouch.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -222,11 +210,20 @@
     <ClCompile Include="Scene\AbstractScene.cpp">
       <Filter>ソースファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>ソースファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderBase.cpp">
+      <Filter>ソースファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCollider.cpp">
+      <Filter>ソースファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollider.cpp">
+      <Filter>ソースファイル\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BoxCollider.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
@@ -240,9 +237,6 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereCollider.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Stage.h">
@@ -286,12 +280,6 @@
     </ClInclude>
     <ClInclude Include="EnemyGhost.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="ColliderBase.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="LineCollider.h">
-      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\StageBuilder\Debug.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
@@ -452,6 +440,18 @@
     <ClInclude Include="Scene\AbstractScene.h">
       <Filter>ヘッダーファイル\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderBase.h">
+      <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="LineCollider.h">
+      <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereCollider.h">
+      <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -507,6 +507,12 @@
     </Filter>
     <Filter Include="ヘッダーファイル\Scene">
       <UniqueIdentifier>{acec3a04-f352-4059-94b1-1689604dcbfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Collider">
+      <UniqueIdentifier>{69ae6354-dc4b-4abd-9408-8793e9d1af57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Collider">
+      <UniqueIdentifier>{0c1beecd-8781-4c98-b088-1817e1458e1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
