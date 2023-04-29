@@ -1,6 +1,6 @@
 #include "GameClear.h"
 #include "GameMain.h"
-#include "PadInput.h"
+#include "../PadInput.h"
 #include "DxLib.h"
 
 GameClear::GameClear(short stage_num)

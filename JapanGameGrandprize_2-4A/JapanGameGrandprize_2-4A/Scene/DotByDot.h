@@ -1,9 +1,9 @@
 #pragma once
 #include "AbstractScene.h"
-#include "Define.h"
-#include "EnemyBase.h"
-#include "Player.h"
-#include "Stage/Element/Stage_Element.h"
+#include "../Define.h"
+#include "../EnemyBase.h"
+#include "../Player.h"
+#include "../Stage/Element/Stage_Element.h"
 
 
 class DotByDot :

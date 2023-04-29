@@ -1,13 +1,13 @@
 #include "DotByDot.h"
-#include "PadInput.h"
+#include "../PadInput.h"
 #include "GameMain.h"
-#include "Undead.h"
-#include"EnemySlime.h"
-#include"EnemyGhost.h"
-#include"Harpy.h"
-#include "Mage.h"
-#include "Torrent.h"
-#include "EnemySlimeBoss.h"
+#include "../Undead.h"
+#include"../EnemySlime.h"
+#include"../EnemyGhost.h"
+#include"../Harpy.h"
+#include "../Mage.h"
+#include "../Torrent.h"
+#include "../EnemySlimeBoss.h"
 
 #define ENEMY_NUM 3
 

@@ -16,9 +16,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="SphereCollider.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -138,12 +135,6 @@
     <ClCompile Include="Stage\Element\Element_Move_Floor.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>ソースファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Pause.cpp">
-      <Filter>ソースファイル\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\Element\Element_Fall_Floor.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
@@ -162,9 +153,6 @@
     <ClCompile Include="SlimeBossBody.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="DotByDot.cpp">
-      <Filter>ソースファイル\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Dragon.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
@@ -173,9 +161,6 @@
     </ClCompile>
     <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOver.cpp">
-      <Filter>ソースファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="DragonBullet.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
@@ -188,12 +173,6 @@
     </ClCompile>
     <ClCompile Include="DragonThunder.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
-    </ClCompile>
-    <ClCompile Include="GameClear.cpp">
-      <Filter>ソースファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="AbstractScene.cpp">
-      <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="LastBoss.cpp">
       <Filter>ソースファイル\Enemy</Filter>
@@ -216,17 +195,35 @@
     <ClCompile Include="KrakenTentacle.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
+    <ClCompile Include="Scene\DotByDot.cpp">
       <Filter>ソースファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="END.cpp">
+    <ClCompile Include="Scene\END.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameClear.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameMain.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameOver.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Pause.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Title.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\AbstractScene.cpp">
       <Filter>ソースファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractScene.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="BoxCollider.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
@@ -243,9 +240,6 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="SphereCollider.h">
@@ -371,12 +365,6 @@
     <ClInclude Include="Stage\Element\Element_Move_Floor.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
-    <ClInclude Include="GameMain.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Pause.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Stage\Element\Element_Fall_Floor.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
@@ -392,9 +380,6 @@
     <ClInclude Include="SlimeBossBody.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="DotByDot.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="HarpyBullet.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
@@ -407,9 +392,6 @@
     <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
-    <ClInclude Include="GameOver.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="DragonBullet.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
@@ -418,9 +400,6 @@
     </ClInclude>
     <ClInclude Include="WyvernBless.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClear.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="DragonThunder.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
@@ -446,10 +425,31 @@
     <ClInclude Include="KrakenTentacle.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Title.h">
+    <ClInclude Include="Scene\DotByDot.h">
       <Filter>ヘッダーファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="END.h">
+    <ClInclude Include="Scene\END.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameClear.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameMain.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameOver.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Pause.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Title.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\AbstractScene.h">
       <Filter>ヘッダーファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #include "END.h"
 #include "DxLib.h"
 #include "Title.h"
-#include "PadInput.h"
+#include "../PadInput.h"
 
 //-----------------------------------
 // コンストラクタ
