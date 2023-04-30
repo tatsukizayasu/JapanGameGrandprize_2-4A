@@ -105,14 +105,19 @@ void END::Draw()const
 		int color = 0xFFFFFF;
 		// 文字外枠色
 		int border_color = 0x000000;
+		// 透明度
+		int transparency = 180;
 
 		// カーソルが合っている場合、文字色と文字外枠色を反転させる
 		if (select_menu == i) {
 			color = ~color;
 			border_color = ~border_color;
+			transparency = 255;
 		}
 
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, transparency);
 		DrawStringToHandle(GetDrawCenterX(menu_items[i], menu_font), i * margin_y + base_y, menu_items[i], color, menu_font, border_color);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
 
