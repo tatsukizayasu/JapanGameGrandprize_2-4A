@@ -4,6 +4,8 @@
 #include "../PadInput.h"
 #include "DotByDot.h"
 
+#define FADE_TIME 300
+
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -28,6 +30,8 @@ Title::Title()
 
 	select_menu = static_cast<int>(MENU::PLAY);
 
+	fade_counter = 0;
+
 }
 
 //-----------------------------------
@@ -38,6 +42,7 @@ Title::~Title()
 	DeleteGraph(background_image);
 	DeleteFontToHandle(title_font);
 	DeleteFontToHandle(menu_font);
+	SetDrawBright(255, 255, 255);
 }
 
 //-----------------------------------
@@ -117,7 +122,10 @@ AbstractScene* Title::Update()
 
 	}
 
-
+	if (fade_counter < FADE_TIME)
+	{
+		fade_counter++;
+	}
 
 	return this;
 }
@@ -127,6 +135,10 @@ AbstractScene* Title::Update()
 //-----------------------------------
 void Title::Draw()const
 {
+	
+	int bright = (int)((float)fade_counter / FADE_TIME * 255);
+	SetDrawBright(bright, bright, bright);
+
 	DrawGraph(0, 0, background_image, FALSE);
 	DrawStringToHandle(GetDrawCenterX("Elemental War", title_font), 100, "Elemental War", 0x66290E, title_font, 0xFFFFFF);
 
@@ -143,6 +155,9 @@ void Title::Draw()const
 		// 文字外枠色
 		int border_color = 0x000000;
 
+		// 透明度
+		int transparency = 180;
+
 #ifdef TITLE_DEBUG
 
 		// 文字色
@@ -150,15 +165,24 @@ void Title::Draw()const
 		// 文字外枠色
 		int debug_border_color = 0x000000;
 
+		// 透明度
+		int debug_transparency = 100;
+
 		if (is_select_debug == true) {
 			debug_color = ~color;
 			debug_border_color = ~border_color;
+			debug_transparency = 255;
+			
 		}else if (select_menu == i) {
 			color = ~color;
 			border_color = ~border_color;
+			transparency = 255;
 		}
 
+		
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, debug_transparency);
 		DrawStringToHandle(100, 600, "DEBUG", debug_color, menu_font, debug_border_color);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 #else
 
@@ -166,11 +190,14 @@ void Title::Draw()const
 		if (select_menu == i) {
 			color = ~color;
 			border_color = ~border_color;
+			transparency = 255;
 		}
 
 #endif // TITLE_DEBUG
 
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, transparency);
 		DrawStringToHandle(GetDrawCenterX(menu_items[i], menu_font), i * margin_y + base_y, menu_items[i], color, menu_font, border_color);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
 

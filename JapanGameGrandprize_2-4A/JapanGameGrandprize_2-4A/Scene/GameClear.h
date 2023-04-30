@@ -4,6 +4,8 @@ class GameClear :
     public AbstractScene
 {
 private:
+    // フォントハンドル
+    int menu_font;
 
 public:
     //コンストラクタ
