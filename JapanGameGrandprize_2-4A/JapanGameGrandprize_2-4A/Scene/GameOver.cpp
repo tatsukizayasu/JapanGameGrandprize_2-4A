@@ -101,7 +101,7 @@ void GameOver::Draw() const
 {
 
 	const int fade_time = FADE_TIME;
-	int bright = (int)((float)fade_counter / fade_time * 255);
+	int bright = static_cast<int>((static_cast<float>(fade_counter) / FADE_TIME * 255));
 	SetDrawBright(bright, bright, bright);
 
 	DrawGraph(0, 0, background_image, FALSE);

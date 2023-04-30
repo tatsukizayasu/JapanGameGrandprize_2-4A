@@ -136,7 +136,7 @@ AbstractScene* Title::Update()
 void Title::Draw()const
 {
 	
-	int bright = (int)((float)fade_counter / FADE_TIME * 255);
+	int bright = static_cast<int>((static_cast<float>(fade_counter) / FADE_TIME * 255));
 	SetDrawBright(bright, bright, bright);
 
 	DrawGraph(0, 0, background_image, FALSE);
