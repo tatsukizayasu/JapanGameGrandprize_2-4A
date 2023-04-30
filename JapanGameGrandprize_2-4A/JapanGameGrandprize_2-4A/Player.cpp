@@ -486,7 +486,7 @@ void Player::Update()
 	//ボス部屋に入った際、動きを止め飛んでいたら落下させる
 	if (CameraWork::GetCameraState() == CameraWork::STATE::BOSS)
 	{
-		if (player_state == PLAYER_STATE::FLY || player_state == PLAYER_STATE::DOWN)
+		if (player_state == PLAYER_STATE::FLY || player_state == PLAYER_STATE::DOWN || player_state == PLAYER_STATE::STOP)
 		{
 			NotFly();
 		}
@@ -757,6 +757,12 @@ void Player::Update()
 	if (hp <= 0)
 	{
 		player_state = PLAYER_STATE::DEATH;
+	}
+
+	//プレイヤーが画面外へ出たら移動前に戻す
+	if (y < MAP_CHIP_SIZE)
+	{
+		location.y = old_y;
 	}
 }
 

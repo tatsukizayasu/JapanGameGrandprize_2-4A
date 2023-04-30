@@ -73,11 +73,11 @@ Torrent::Torrent(Location spawn_location)
 
 	/*ìñÇΩÇËîªíËÇÃê›íË*/
 	area.width = 160;
-	area.height = SCREEN_HEIGHT / 2;
+	area.height = SCREEN_HEIGHT / 3;
 	location = spawn_location;
 
 	location.x -= MAP_CHIP_SIZE / 2;
-	//location.y -= MAP_CHIP_SIZE / 2;
+	location.y += MAP_CHIP_SIZE / 2;
 
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::SOIL;
