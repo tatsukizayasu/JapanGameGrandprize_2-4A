@@ -221,11 +221,14 @@ void BulletManager::CreateEnemyNuts(class EnemyBulletBase* nuts)
             {
                 if (i < enemy_nuts_count)
                 {
-                    enemy_bullets[i] = temporary_nuts[i];
+                    if (enemy_nuts[i] != nullptr)
+                    {
+                        enemy_nuts[i] = temporary_nuts[i];
+                    }
                 }
                 else
                 {
-                    enemy_bullets[i] = nullptr;
+                    enemy_nuts[i] = nullptr;
                 }
             }
             delete[] temporary_nuts;

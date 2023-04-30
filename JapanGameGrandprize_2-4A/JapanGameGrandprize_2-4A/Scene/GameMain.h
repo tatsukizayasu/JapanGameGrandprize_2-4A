@@ -1,11 +1,11 @@
 #pragma once
 #include "AbstractScene.h"
-#include "Player.h"
-#include "EnemyBase.h"
-#include "Stage/Stage.h"
-#include "CameraWork.h"
-#include "ItemController.h"
-#include "BulletManager.h"
+#include "../Player.h"
+#include "../EnemyBase.h"
+#include "../Stage/Stage.h"
+#include "../CameraWork.h"
+#include "../ItemController.h"
+#include "../BulletManager.h"
 #include "Pause.h"
 
 class GameMain :

@@ -17,6 +17,7 @@ public:
 	enum class STATE
 	{
 		MOVE,	//ˆÚ“®
+		BOSS,	//ƒ{ƒX•”‰®
 		FIXED	//ŒÅ’è
 	};
 
@@ -52,7 +53,7 @@ protected:
 private:
 
 	//ƒJƒƒ‰‚Ìó‘Ô
-	STATE state;
+	static STATE state;
 	bool is_lock;
 
 public:
@@ -65,7 +66,7 @@ public:
 	~CameraWork();
 	void Update();
 	static Location GetCamera() { return camera; }
-	STATE GetCameraState() { return state; }
+	static STATE GetCameraState() { return state; }
 	bool GetCameraLock(){ return is_lock; }
 	void SetCameraLock(bool is_lock) { this->is_lock = is_lock; }
 };

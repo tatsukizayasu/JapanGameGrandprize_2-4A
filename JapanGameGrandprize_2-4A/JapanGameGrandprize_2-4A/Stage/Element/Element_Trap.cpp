@@ -7,10 +7,9 @@
 
 #define ATTACK_RANGE 200.0f
 
-Element_Trap::Element_Trap(short type,
-	std::vector<std::shared_ptr<Stage_Element_Base>> element, Stage* stage,
+Element_Trap::Element_Trap(short type, Stage* stage,
 	EnemyBase** enemy, std::vector<int> images, Location location, Area area)
-	: Stage_Element_Base(element, &images.at(0), location, area)
+	: Stage_Element_Base(&images.at(0), location, area)
 {
 	this->area = area;
 	this->type = type;

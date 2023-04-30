@@ -147,20 +147,21 @@ void Stage::Update(Player* player)
 
 
 	// カメラワークが固定されたらボス部屋を閉める
-	if (camera_work != nullptr) {
+	if (camera_work != nullptr)
+	{
 		if (camera_work->GetCameraState() == CameraWork::STATE::FIXED &&
-			player_location.x > SCREEN_WIDTH
-			) {
-			if (false == camera_work->GetCameraLock()) {
+			SCREEN_WIDTH < player_location.x)
+		{
+			if (camera_work->GetCameraLock() == false)
+			{
 				camera_work->SetCameraLock(true);
-				
-				
-				
+
 				float p_x = fmodf(player_location.x / MAP_CHIP_SIZE, SCREEN_WIDTH / CHIP_SIZE);
 				float wall_location = player_location.x / CHIP_SIZE - p_x + 2;
 
 				int map_height = map_data.size();
-				for (int i = 0; i < map_height; i++) {
+				for (int i = 0; i < map_height; i++)
+				{
 					if (map_data.at(i).at(static_cast<int>(wall_location)) < 1)
 					{
 						//画面端にブロックを設置
@@ -168,7 +169,6 @@ void Stage::Update(Player* player)
 					}
 				}
 			}
-			
 		}
 	}
 

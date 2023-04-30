@@ -3,7 +3,7 @@
 #include "../CameraWork.h"
 #include "Stage_Element.h"	
 
-Element_Barricade::Element_Barricade(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area, Area margin_area, DIRECTION direction) : Stage_Element_Base(element, &images.at(0), location, area)
+Element_Barricade::Element_Barricade(short type, std::vector<int> images, Location location, Area area, Area margin_area, DIRECTION direction) : Stage_Element_Base(&images.at(0), location, area)
 {
 
 	this->area = area;

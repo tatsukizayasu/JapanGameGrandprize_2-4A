@@ -483,6 +483,16 @@ void Player::Update()
 	old_x = location.x;
 	old_y = location.y;
 
+	//ƒ{ƒX•”‰®‚É“ü‚Á‚½ÛA“®‚«‚ğ~‚ß”ò‚ñ‚Å‚¢‚½‚ç—‰º‚³‚¹‚é
+	if (CameraWork::GetCameraState() == CameraWork::STATE::BOSS)
+	{
+		if (player_state == PLAYER_STATE::FLY || player_state == PLAYER_STATE::DOWN)
+		{
+			NotFly();
+		}
+		return;
+	}
+
 	float old_rstick_r_x = PAD_INPUT::GetRStick().x;
 	float old_rstick_l_x = PAD_INPUT::GetLStick().x;
 
