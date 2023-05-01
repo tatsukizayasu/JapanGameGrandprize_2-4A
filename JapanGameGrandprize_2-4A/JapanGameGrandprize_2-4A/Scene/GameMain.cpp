@@ -46,6 +46,7 @@ GameMain::GameMain(short stage_num)
 
 	stage->SetEnemy(enemy);
 	stage->InitStage();
+	stage->SetElement();
 
 	camera_work = new CameraWork(0, 0, player, stage, stage_num);
 
