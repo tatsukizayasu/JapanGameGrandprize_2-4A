@@ -272,8 +272,8 @@ void Wyvern::Move(const Location player_location)
 
 	location.x += speed;
 
-	if ((location.x < area.width / 2) || 
-		(SCREEN_WIDTH - area.width / 2 < location.x))
+	if ((location.x - CameraWork::GetCamera().x < area.width / 2) || 
+		(SCREEN_WIDTH - area.width / 2 < location.x - CameraWork::GetCamera().x))
 	{
 		left_move = !left_move;
 		speed = -speed;
