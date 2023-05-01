@@ -238,54 +238,59 @@ void LastBossHand::Idol()
 //-----------------------------------
 void LastBossHand::Move(const Location player_location)
 {
-
-	switch (move)
+	if (!teleporting)
 	{
-	case HAND_MOVE::UP_DOWN:
-	{
-		location.y += speed;
-		move_volume += speed;
-
-		if ((move_volume < -MOVE_VOLUME) || ((MOVE_VOLUME /4) < move_volume))
+		switch (move)
 		{
-			speed = -speed;
+		case HAND_MOVE::UP_DOWN:
+		{
+			location.y += speed;
+			move_volume += speed;
+
+			if ((move_volume < -MOVE_VOLUME) || ((MOVE_VOLUME / 4) < move_volume))
+			{
+				speed = -speed;
+			}
+		}
+		break;
+		case HAND_MOVE::CIRCULAR_MOTION:
+		{
+			Location circular_speed; //ƒXƒs[ƒh
+			float radian = 0; //Šp“x
+
+			if (left_hand)		//Šp“x‚ÌÝ’è
+			{
+				angle += ADD_ANGLE;
+			}
+			else
+			{
+				angle += -ADD_ANGLE;
+			}
+
+			if (radius < MOVE_RADIUS) //”¼Œa
+			{
+				radius += ADD_RADIUS;
+			}
+
+			//Šp“x‚ÌŒvŽZ
+			radian = angle * (M_PI / 180);
+
+			//ƒXƒs[ƒh‚ÌŒvŽZ
+			circular_speed.x = cosf(radian) * radius;
+			circular_speed.y = sinf(radian) * radius;
+
+			location = spawn_location + circular_speed;
+		}
+		break;
+		case HAND_MOVE::NONE:
+		default:
+			break;
 		}
 	}
-		break;
-	case HAND_MOVE::CIRCULAR_MOTION:
+	else
 	{
-		Location circular_speed; //ƒXƒs[ƒh
-		float radian = 0; //Šp“x
-
-		if (left_hand)		//Šp“x‚ÌÝ’è
-		{
-			angle += ADD_ANGLE;
-		}
-		else
-		{
-			angle += -ADD_ANGLE;
-		}
-
-		if (radius < MOVE_RADIUS) //”¼Œa
-		{
-			radius += ADD_RADIUS;
-		}
-
-		//Šp“x‚ÌŒvŽZ
-		radian = angle * (M_PI / 180);
-
-		//ƒXƒs[ƒh‚ÌŒvŽZ
-		circular_speed.x = cosf(radian) * radius;
-		circular_speed.y = sinf(radian) * radius;
-
-		location = spawn_location + circular_speed;
+		Teleport(spawn_location);
 	}
-		break;
-	case HAND_MOVE::NONE:
-	default:
-		break;
-	}
-	
 }
 
 //-----------------------------------
@@ -399,7 +404,9 @@ void LastBossHand::StartAttack()
 void LastBossHand::EndAttack()
 {
 	state = ENEMY_STATE::MOVE;
-	location = spawn_location;
+	teleporting = true;
+	teleport = true;
+	teleport_time = 0;
 }
 
 //-----------------------------------

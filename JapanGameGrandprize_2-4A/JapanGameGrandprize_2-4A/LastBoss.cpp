@@ -12,11 +12,24 @@
 //ダウンしている時間
 #define DOWN_TIME 1200
 
-//パンチしている時間
-#define PUNCH_TIME 60 * 60
+//魔法攻撃
+#define MAGIC_TIME 60 * 30
+
+//パンチ攻撃している時間
+#define PUNCH_TIME 60 * 20
 
 //攻撃間隔
 #define ATTACK_INTERVAL 60 * 1
+
+//次の魔法攻撃までの時間
+#define MAGIC_INTERVAL 60 * 10
+
+//次のパンチまでの時間
+#define PUNCH_INTERVAL 60 * 10
+
+
+//次の剣攻撃までの時間
+#define SWORD_INTERVAL 60 * 10
 
 //-----------------------------------
 //コンストラクタ
@@ -46,11 +59,20 @@ LastBoss::LastBoss(Location spawn_location)
 
 	down = false;
 	attack = false;
+	attack_time = 0;
 	down_time = 0;
 	attack_interval = ATTACK_INTERVAL;
+	magic_interval = 0;
+	punch_interval = 0;
+	sword_interval = 0;
+
+	animation = 0;
+	image_argument = 0;
 
 	state = ENEMY_STATE::ATTACK;
 	attack_state = LAST_BOSS_ATTACK::NONE;
+	hit_stage = { false,nullptr };
+
 }
 
 //-----------------------------------
@@ -113,6 +135,10 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 			down = true;
 			down_time = DOWN_TIME;
 		}
+
+		punch_interval--;
+		magic_interval--;
+		sword_interval--;
 	}
 	hit_stage = HitStage(stage);
 }
@@ -126,6 +152,7 @@ bool LastBoss::Revival()
 
 	return ret;
 }
+
 //-----------------------------------
 //アイドル状態
 //-----------------------------------
@@ -163,14 +190,18 @@ void LastBoss::Fall()
 //-----------------------------------
 void  LastBoss::Attack(const Location)
 {
+	attack_time--;
+
 	switch (attack_state)
 	{
 	case LAST_BOSS_ATTACK::MAGIC:
+		Magic();
 		break;
 	case LAST_BOSS_ATTACK::PUNCH:
 		Punch();
 		break;
 	case LAST_BOSS_ATTACK::SWORD:
+		Sword();
 		break;
 	case LAST_BOSS_ATTACK::DEATHBLO:
 		break;
@@ -180,53 +211,163 @@ void  LastBoss::Attack(const Location)
 	default:
 		break;
 	}
-
-	
 }
 
 //-----------------------------------
-//パンチ処理
+//魔法攻撃の初期化
+//-----------------------------------
+void LastBoss::InitMagic()
+{
+
+}
+
+//-----------------------------------
+//魔法攻撃
+//-----------------------------------
+void LastBoss::Magic()
+{
+
+}
+
+//-----------------------------------
+//パンチ攻撃の初期化
+//-----------------------------------
+void LastBoss::InitPunch()
+{
+	LastBossHand* me_hand;
+
+	attack_state = LAST_BOSS_ATTACK::PUNCH;
+
+	for (int i = 0; i < HAND_NUM; i++)
+	{
+		me_hand = dynamic_cast<LastBossHand*>(hand[i]);
+
+		me_hand->StartAttack();
+	}
+	attack_time = PUNCH_TIME;
+}
+
+//-----------------------------------
+//パンチ攻撃
 //-----------------------------------
 void LastBoss::Punch()
 {
-	
+	LastBossHand* me_hand;
+
+	if (attack_time < 0)
+	{
+		for (int i = 0; i < HAND_NUM; i++)
+		{
+			me_hand = dynamic_cast<LastBossHand*>(hand[i]);
+
+			me_hand->EndAttack();
+		}
+		attack_state = LAST_BOSS_ATTACK::NONE;
+		punch_interval = PUNCH_INTERVAL;
+	}
 }
 
+//-----------------------------------
+//剣攻撃の初期化
+//-----------------------------------
+void LastBoss::InitSword()
+{
+
+}
+
+//-----------------------------------
+//剣攻撃
+//-----------------------------------
+void LastBoss::Sword()
+{
+
+
+}
+
+//-----------------------------------
 //攻撃しない
+//-----------------------------------
 void LastBoss::AttackNone()
 {
+	LAST_BOSS_ATTACK next_attack = LAST_BOSS_ATTACK::NONE; //次の攻撃
+	int attack_num = 0; //攻撃ができる種類の数
 	attack_interval--;
-	if (attack_interval < 0)
+	if (attack_interval < 0) //攻撃可能
 	{
-		LAST_BOSS_ATTACK next_attack = LAST_BOSS_ATTACK::PUNCH;
+		if (magic_interval < 0) //魔法攻撃可能
+		{
+			attack_num++;
+		}
 
-		switch (next_attack)
+		if (punch_interval < 0) //パンチ攻撃可能
+		{
+			attack_num++;
+		}
+
+		if (sword_interval < 0) //剣攻撃可能
+		{
+			attack_num++;
+		}
+
+		if ((attack_num == 3) || (attack_num == 0)) //攻撃ができる種類の数が3個か0個
+		{
+			next_attack = static_cast<LAST_BOSS_ATTACK>(GetRand(2));
+		}
+		else if (attack_num == 2) //攻撃ができる種類の数が2個
+		{
+			int rand = GetRand(1);
+
+			if ((magic_interval < 0) && (punch_interval < 0)) //魔法攻撃とパンチ攻撃が可能
+			{
+				next_attack = static_cast<LAST_BOSS_ATTACK>(rand);
+			}
+			else if((magic_interval < 0) && (sword_interval < 0)) //魔法攻撃と剣攻撃が可能
+			{
+				next_attack = static_cast<LAST_BOSS_ATTACK>(2 * rand);
+			}
+			else if ((punch_interval < 0) && (sword_interval < 0)) //パンチ攻撃と剣攻撃が可能
+			{
+				next_attack = static_cast<LAST_BOSS_ATTACK>(rand + 1);
+			}
+			else{}
+		}
+		else if (attack_num == 1) //攻撃ができる種類の数が1個
+		{
+			if (magic_interval < 0) //魔法攻撃可能
+			{
+				next_attack = LAST_BOSS_ATTACK::MAGIC;
+			}
+			else if (punch_interval < 0) //パンチ攻撃可能
+			{
+				next_attack = LAST_BOSS_ATTACK::PUNCH;
+			}
+			else if (sword_interval < 0) //剣攻撃可能
+			{
+				next_attack = LAST_BOSS_ATTACK::SWORD;
+			}
+			else{}
+		}
+		else{}
+
+		switch (next_attack) //次の攻撃
 		{
 		case LAST_BOSS_ATTACK::MAGIC:
+			InitMagic();
 			break;
 		case LAST_BOSS_ATTACK::PUNCH:
-		{
-			LastBossHand* me_hand;
-
-			attack_state = LAST_BOSS_ATTACK::PUNCH;
-
-			for (int i = 0; i < HAND_NUM; i++)
-			{
-				me_hand = dynamic_cast<LastBossHand*>(hand[i]);
-
-				me_hand->StartAttack();
-			}
-		}
+			InitPunch();
 			break;
 		case LAST_BOSS_ATTACK::SWORD:
+			InitSword();
 			break;
 		case LAST_BOSS_ATTACK::DEATHBLO:
-			break;
 		case LAST_BOSS_ATTACK::NONE:
 		default:
 			break;
 		}
 	}
+
+		
 }
 
 //-----------------------------------

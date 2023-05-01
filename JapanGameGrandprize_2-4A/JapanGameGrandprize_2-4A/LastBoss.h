@@ -18,9 +18,12 @@ private:
     bool attack; //攻撃が当たったか
     int down_time; //ダウンしている時間
     int attack_interval; //次の攻撃までの時間
+    int magic_interval; //次の魔法攻撃までの時間
+    int punch_interval; //次のパンチ攻撃までの時間
+    int sword_interval; //剣攻撃までの時間
     int animation; //アニメーション
     int image_argument; //画像の引数
-    int attack_time; //攻撃している時間(デバッグ用)
+    int attack_time; //攻撃している時間
     EnemyBase** hand; //手
 
     HitMapChip hit_stage; //ステージとの当たり判定
@@ -34,8 +37,23 @@ private:
     //ダウンからの復帰
     bool Revival();
 
-    //パンチ処理
+    //魔法攻撃の初期化
+    void InitMagic();
+
+    //魔法攻撃
+    void Magic();
+
+    //パンチ攻撃の初期化
+    void InitPunch();
+
+    //パンチ攻撃
     void Punch();
+
+    //剣攻撃の初期化
+    void InitSword();
+
+    //剣攻撃
+    void Sword();
 
     //攻撃しない
     void AttackNone();
