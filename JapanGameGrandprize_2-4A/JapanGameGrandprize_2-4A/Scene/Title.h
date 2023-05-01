@@ -44,6 +44,10 @@ private:
     
     //操作間隔時間
     int input_margin;
+
+    //フェード用カウンタ
+    int fade_counter;
+
 public:
 
     //コンストラクタ
