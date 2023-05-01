@@ -747,6 +747,7 @@ void Player::Update()
 		ElementUpdate();
 	}
 
+	int x = location.x - CameraWork::GetCamera().x;
 	int y = location.y - CameraWork::GetCamera().y;
 
 	if (y > 740)
@@ -760,7 +761,12 @@ void Player::Update()
 	}
 
 	//プレイヤーが画面外へ出たら移動前に戻す
-	if (y < MAP_CHIP_SIZE)
+	if (x - area.width / 2 < 0 || SCREEN_WIDTH < x + area.width / 2)
+	{
+		location.x = old_x;
+	}
+
+	if (y - area.height / 2 < 0)
 	{
 		location.y = old_y;
 	}
