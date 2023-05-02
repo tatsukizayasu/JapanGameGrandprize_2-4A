@@ -2,26 +2,24 @@
 #include "AbstractScene.h"
 #include <string>
 
-class Title :
+class END :
     public AbstractScene
 {
 private:
 
-    //タイトルメニュー
-    enum class TITLE_MENU
+    enum class MENU
     {
-        PLAY,
-        /*OPTION,
-        HELP,*/
-        END
+        TITLE,
+        EXIT,
+        MENU_SIZE
     };
 
-    struct TOP_MENU
-    {
-        short number;
-        std::string string;
-    }top_menu[2];
+    const char* menu_items[static_cast<int>(MENU::MENU_SIZE)] = {
+        "TITLE",
+        "EXIT"
+    };
 
+    // 選択しているメニュー
     int select_menu;
 
 
@@ -38,10 +36,10 @@ private:
 public:
 
     //コンストラクタ
-    Title();
+    END();
 
     //デストラクタ
-    ~Title();
+    ~END();
 
     //描画以外の更新を実行
     AbstractScene* Update() override;

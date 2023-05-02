@@ -102,9 +102,11 @@ void CameraWork::Update()
 
 	POINT stage_size = stage->GetMapSize();
 
-	if (state == STATE::BOSS)
+	//ボス部屋に足を踏み入れると画面を強制的に動かす
+	//プレイヤーが飛んでいたら、着地させてから動かす
+	if (state == STATE::BOSS && player->GetState()==PLAYER_STATE::STOP)
 	{
-		camera.x += 2;
+		camera.x += 4;
 
 		if (stage_size.x * MAP_CHIP_SIZE - SCREEN_WIDTH < camera.x)
 		{

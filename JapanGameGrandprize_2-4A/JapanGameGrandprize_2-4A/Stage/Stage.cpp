@@ -41,9 +41,6 @@ Stage::Stage(short stage_num)
 	//マップデータの読み込み
 	LoadMap(stage_num);
 
-	//ステージ要素のパラメーターを設定
-	element->SetElementParameter();
-
 	//フラグリセット
 	is_halfway_point = false;
 
@@ -383,4 +380,9 @@ std::vector<Stage_Element_Base*> Stage::GetElement_MapChip() const
 {
 
 	return	element->GetMapChip();
+}
+
+void Stage::SetElement()
+{
+	element->SetElementParameter();
 }

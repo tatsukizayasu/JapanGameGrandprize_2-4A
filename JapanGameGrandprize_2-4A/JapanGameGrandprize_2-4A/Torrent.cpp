@@ -54,7 +54,8 @@
 //-----------------------------------
 Torrent::Torrent(Location spawn_location)
 {
-
+	//âºhp
+	hp = 500;
 	left_move = true;
 	attack = false;
 	tackle_end = false;
@@ -72,11 +73,11 @@ Torrent::Torrent(Location spawn_location)
 
 	/*ìñÇΩÇËîªíËÇÃê›íË*/
 	area.width = 160;
-	area.height = SCREEN_HEIGHT;
+	area.height = SCREEN_HEIGHT / 3;
 	location = spawn_location;
 
 	location.x -= MAP_CHIP_SIZE / 2;
-	location.y -= MAP_CHIP_SIZE / 2;
+	location.y += MAP_CHIP_SIZE / 2;
 
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::SOIL;
@@ -588,13 +589,19 @@ void Torrent::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void Torrent::Draw() const
 {
-
 	Location draw_location = location; //ï`âÊç¿ïW
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffffff, TRUE);
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xdeb887, TRUE);
+
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(500);
+	}
+	DrawDamageLog();
+
 }
 
 //-----------------------------------

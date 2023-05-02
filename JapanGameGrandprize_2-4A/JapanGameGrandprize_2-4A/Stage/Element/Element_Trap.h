@@ -21,7 +21,7 @@ private:
 public:
 
 	//コンストラクタ
-	Element_Trap(short type,std::vector<std::shared_ptr<Stage_Element_Base>> element, Stage* stage,EnemyBase** enemy, std::vector<int> images, Location location, Area area);
+	Element_Trap(short type, Stage* stage,EnemyBase** enemy, std::vector<int> images, Location location, Area area);
 	//デストラクタ
 	~Element_Trap();
 	//更新

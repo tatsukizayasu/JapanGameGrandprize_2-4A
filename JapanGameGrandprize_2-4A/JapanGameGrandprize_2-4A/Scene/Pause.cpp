@@ -1,6 +1,6 @@
 #include "Pause.h"
 #include "DxLib.h"
-#include "PadInput.h"
+#include "../PadInput.h"
 
 Pause::Pause()
 {

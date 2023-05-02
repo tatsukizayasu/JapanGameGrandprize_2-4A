@@ -51,11 +51,18 @@ private:
 		MOVE_FLOOR, MOVE_FLOOR_GOAL, BARRICADE_UP, BARRICADE_CENTER, BARRICADE_DOWN, YellowButton };
 public:
 
+	Stage_Element() = default;
 	//コンストラクタ
 	Stage_Element(Stage* stage);
 
 	//デストラクタ
 	~Stage_Element();
+
+	/// <summary>
+	/// Demo表示用
+	/// </summary>
+	/// <param name = "location">基準座標</param>
+	void InitDemo(Location location = { 100.0f,400.0f });
 
 	/// <summary>
 	/// Stage_ElementクラスにPlayerオブジェクトを渡すSetter

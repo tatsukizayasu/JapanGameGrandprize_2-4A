@@ -486,7 +486,7 @@ void Player::Update()
 	//ボス部屋に入った際、動きを止め飛んでいたら落下させる
 	if (CameraWork::GetCameraState() == CameraWork::STATE::BOSS)
 	{
-		if (player_state == PLAYER_STATE::FLY || player_state == PLAYER_STATE::DOWN)
+		if (player_state == PLAYER_STATE::FLY || player_state == PLAYER_STATE::DOWN || player_state == PLAYER_STATE::STOP)
 		{
 			NotFly();
 		}
@@ -747,6 +747,7 @@ void Player::Update()
 		ElementUpdate();
 	}
 
+	int x = location.x - CameraWork::GetCamera().x;
 	int y = location.y - CameraWork::GetCamera().y;
 
 	if (y > 740)
@@ -757,6 +758,17 @@ void Player::Update()
 	if (hp <= 0)
 	{
 		player_state = PLAYER_STATE::DEATH;
+	}
+
+	//プレイヤーが画面外へ出たら移動前に戻す
+	if (x - area.width / 2 < 0 || SCREEN_WIDTH < x + area.width / 2)
+	{
+		location.x = old_x;
+	}
+
+	if (y - area.height / 2 < 0)
+	{
+		location.y = old_y;
 	}
 }
 

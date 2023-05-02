@@ -1,10 +1,9 @@
 #include "DxLib.h"
 #include "Define.h"
-#include "SceneManager.h"
-#include "GameMain.h"
+#include "Scene/SceneManager.h"
+#include "Scene/GameMain.h"
 #include "PadInput.h"
-#include "GameMain.h"
-#include "Title.h"
+#include "Scene/Title.h"
 
 #define FRAMERATE 60.0 //フレームレート
 
@@ -18,6 +17,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	double dNextTime = GetNowCount();
 
 	SetMainWindowText("Elemental War");
+
+	SetWindowIconID(01);
 
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
 

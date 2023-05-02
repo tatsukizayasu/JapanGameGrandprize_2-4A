@@ -14,7 +14,7 @@ Stage_Element_Base::Stage_Element_Base()
 	margin_area = { 0, 0 };
 }
 
-Stage_Element_Base::Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area) : MapChip(image, location, area)
+Stage_Element_Base::Stage_Element_Base(int* image, Location location, Area area) : MapChip(image, location, area)
 {
 
 	type = 0;
