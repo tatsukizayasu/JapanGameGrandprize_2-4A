@@ -181,4 +181,9 @@ public:
 	/// </summary>
 	/// <returns>ベクター型(ENEMY_LOCATION構造体型)</returns>	
 	std::vector<ENEMY_LOCATION> GetEnemy_SpawnLocation() const { return enemy_init_location; }
+
+	/// <summary>
+	/// エレメントパラメータ設定関数
+	/// </summary>
+	void SetElement();
 };
