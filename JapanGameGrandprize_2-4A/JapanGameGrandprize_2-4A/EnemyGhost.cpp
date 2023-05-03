@@ -103,6 +103,11 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	attack_state = GHOST_ATTACK::NONE;
 	state = ENEMY_STATE::IDOL;
 	action_type = GHOST_STATE::NORMAL;
+
+
+#ifdef _DEBUG
+	ENEMY_STATE old_state = state;
+#endif // _DEBUG
 }
 
 //-----------------------------------
@@ -426,12 +431,12 @@ void EnemyGhost::Draw()const
 
 	if (attack == false)
 	{
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		DrawRotaGraphF(draw_location.x, draw_location.y, 1.3f,
 			M_PI / 180, images[animation], TRUE, !left_move);
 	}
 	else
 	{
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		DrawRotaGraphF(draw_location.x, draw_location.y, 1.3f,
 			M_PI / 180, attack_image[attack_anime], TRUE, !left_move);
 	}
 }
@@ -545,6 +550,12 @@ Location EnemyGhost::GetLocation() const
 void EnemyGhost::Update(const ENEMY_STATE state)
 {
 
+	if ((old_state == ENEMY_STATE::ATTACK) &&
+		(state != ENEMY_STATE::ATTACK))
+	{
+		attack = false;
+	}
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -564,12 +575,29 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 	case ENEMY_STATE::FALL:
 		break;
 	case ENEMY_STATE::ATTACK:
+
+		if (!attack)
+		{
+			attack = true;
+		}
+
+		if (++animation_time % 10 == 0)
+		{
+			++attack_anime;
+		}
+
+		if (attack_anime > 1)
+		{
+			attack_anime = 0;
+		}
 		break;
 	case ENEMY_STATE::DEATH:
 		break;
 	default:
 		break;
 	}
+
+	old_state = state;
 }
 
 //-----------------------------------
@@ -577,7 +605,16 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 //-----------------------------------
 void EnemyGhost::DebugDraw()
 {
-	DrawRotaGraphF(location.x, location.y, 1.5f, M_PI / 180, images[animation], TRUE);
+	if (!attack)
+	{
+		DrawRotaGraphF(location.x, location.y, 1.3f,
+			M_PI / 180, images[animation], TRUE, !left_move);
+	}
+	else
+	{
+		DrawRotaGraphF(location.x, location.y, 1.3f,
+			M_PI / 180, attack_image[attack_anime], TRUE, !left_move);
+	}
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,
