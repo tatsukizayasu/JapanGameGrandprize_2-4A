@@ -126,7 +126,7 @@ AbstractScene* GameMain::Update()
 	if (EnemyUpdate() == true)
 	{
 		// 最後のステージをクリアした場合
-		if (stage_num == 3) { return new END(); }
+		if (stage_num == 5) { return new END(); }
 
 		return new GameClear(stage_num);
 	}
