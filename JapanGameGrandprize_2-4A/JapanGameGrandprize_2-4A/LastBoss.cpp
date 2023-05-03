@@ -15,6 +15,9 @@
 //魔法攻撃
 #define MAGIC_TIME 60 * 30
 
+//魔法の発動レート
+#define MAGIC_RATE 20
+
 //パンチ攻撃している時間
 #define PUNCH_TIME 60 * 20
 
@@ -218,7 +221,7 @@ void  LastBoss::Attack(const Location)
 //-----------------------------------
 void LastBoss::InitMagic()
 {
-
+	attack_time = MAGIC_TIME;
 }
 
 //-----------------------------------
@@ -226,7 +229,11 @@ void LastBoss::InitMagic()
 //-----------------------------------
 void LastBoss::Magic()
 {
+	attack_time--;
+	if (attack_time % MAGIC_RATE == 0)
+	{
 
+	}
 }
 
 //-----------------------------------
@@ -244,6 +251,7 @@ void LastBoss::InitPunch()
 
 		me_hand->StartAttack();
 	}
+
 	attack_time = PUNCH_TIME;
 }
 

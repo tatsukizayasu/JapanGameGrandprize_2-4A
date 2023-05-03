@@ -106,6 +106,7 @@ LastBossHand::LastBossHand()
 	hit_block.chip = nullptr;
 	hit_block.hit = false;
 }
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -375,7 +376,7 @@ void LastBossHand::Attack(const Location player_location)
 
 	if (old_punch && (old_punch != punch)) //パンチ終了
 	{
-		attack_interval = PUNCH_INTERVAL * 2;
+		attack_interval = PUNCH_INTERVAL;
 	}
 }
 
@@ -407,6 +408,7 @@ void LastBossHand::EndAttack()
 	teleporting = true;
 	teleport = true;
 	teleport_time = 0;
+	speed = HAND_MOVE_SPEED;
 }
 
 //-----------------------------------

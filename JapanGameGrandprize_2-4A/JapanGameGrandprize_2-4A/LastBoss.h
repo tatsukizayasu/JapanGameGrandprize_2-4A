@@ -21,6 +21,7 @@ private:
     int magic_interval; //次の魔法攻撃までの時間
     int punch_interval; //次のパンチ攻撃までの時間
     int sword_interval; //剣攻撃までの時間
+    int magic_rate; //魔法攻撃のレート
     int animation; //アニメーション
     int image_argument; //画像の引数
     int attack_time; //攻撃している時間
