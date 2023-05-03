@@ -566,6 +566,16 @@ void Harpy::Update(const ENEMY_STATE state)
 	case ENEMY_STATE::IDOL:
 		break;
 	case ENEMY_STATE::MOVE:
+		//アニメーション
+		if (++animation_time % 10 == 0)
+		{
+			--animation;
+		}
+
+		if (animation < 0)
+		{
+			animation = 5;
+		}
 		break;
 	case ENEMY_STATE::FALL:
 		break;
@@ -583,6 +593,9 @@ void Harpy::Update(const ENEMY_STATE state)
 //-----------------------------------
 void Harpy::DebugDraw()
 {
+	DrawRotaGraphF(location.x, location.y, 1.4f,
+		M_PI / 180, images[animation], TRUE, !left_move);
+
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,
 		0xff0000, FALSE);

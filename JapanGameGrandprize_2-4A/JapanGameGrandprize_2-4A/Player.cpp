@@ -19,9 +19,11 @@ Player::Player()
 
 	animation = 0;
 	location.x = 100;
-	location.y = 80;
+	location.y = 60;
 	image = new int[PLAYER_IMAGES];
 	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
+	jump_image = new int[3];
+	LoadDivGraph("Images/Player/Fly_ON.png", 3, 3, 1, 250, 250, jump_image);
 	image_size_x = 40;
 	image_size_y = 80;
 	area.width = image_size_x;
@@ -1509,22 +1511,29 @@ void Player::MoveAnimation()
 //-----------------------------------
 // çXêV(DotByDot)
 //-----------------------------------
-void Player::Update(const PLAYER_STATE state)
+void Player::Update(const PLAYER_DEBUG_STATE state)
 {
 	switch (state)
 	{
-	case PLAYER_STATE::STOP:
+	case PLAYER_DEBUG_STATE::STOP:
 		break;
-	case PLAYER_STATE::MOVE_LEFT:
+	case PLAYER_DEBUG_STATE::MOVE:
+		if (player_state != PLAYER_STATE::MOVE_LEFT)
+		{
+			player_state = PLAYER_STATE::MOVE_LEFT;
+		}
 		MoveAnimation();
 		break;
-	case PLAYER_STATE::MOVE_RIGHT:
+	case PLAYER_DEBUG_STATE::FLY:
+		if (player_state != PLAYER_STATE::FLY)
+		{
+			player_state = PLAYER_STATE::FLY;
+		}
+		MoveAnimation();
 		break;
-	case PLAYER_STATE::JUMP:
+	case PLAYER_DEBUG_STATE::DOWN:
 		break;
-	case PLAYER_STATE::DOWN:
-		break;
-	case PLAYER_STATE::DEATH:
+	case PLAYER_DEBUG_STATE::DEATH:
 		break;
 	default:
 		break;
@@ -1535,7 +1544,15 @@ void Player::Update(const PLAYER_STATE state)
 //-----------------------------------
 void Player::DebugDraw()
 {
-	DrawRotaGraphF(location.x, location.y, PLAYER_SIZE, 0, image[image_count], TRUE, TRUE);
+	if (player_state == PLAYER_STATE::FLY)
+	{
+		DrawRotaGraphF(location.x, location.y, PLAYER_SIZE, 0, jump_image[image_count], TRUE, TRUE);
+
+	}
+	else
+	{
+		DrawRotaGraphF(location.x, location.y, PLAYER_SIZE, 0, image[image_count], TRUE, TRUE);
+	}
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

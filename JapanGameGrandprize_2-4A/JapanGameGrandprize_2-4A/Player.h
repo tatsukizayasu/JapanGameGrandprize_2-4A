@@ -38,6 +38,15 @@ enum class PLAYER_STATE
 	DEATH
 };
 
+enum class PLAYER_DEBUG_STATE
+{
+	STOP = 0,
+	MOVE,
+	FLY,
+	DOWN,
+	DEATH
+};
+
 class Player : public BoxCollider
 {
 private:
@@ -143,7 +152,7 @@ public:
 
 #ifdef _DEBUG
 	//çXêV(DotByDot)
-	void Update(const PLAYER_STATE state);
+	void Update(const PLAYER_DEBUG_STATE state);
 
 	//ï`âÊ(DotByDot)
 	void DebugDraw();
