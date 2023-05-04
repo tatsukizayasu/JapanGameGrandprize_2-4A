@@ -222,6 +222,9 @@
     <ClCompile Include="SphereCollider.cpp">
       <Filter>ソースファイル\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="LastBossHand.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h">
@@ -451,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="SphereCollider.h">
       <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="LastBossHand.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

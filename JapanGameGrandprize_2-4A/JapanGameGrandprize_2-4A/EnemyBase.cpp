@@ -103,9 +103,6 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 	//マップチップ
 	std::vector<MapChip*>map_chip = stage->GetMapChip();
 
-	//カメラの位置
-	Location camera = CameraWork::GetCamera();
-
 	for (MapChip* chip : map_chip)
 	{
 		if (chip != nullptr)

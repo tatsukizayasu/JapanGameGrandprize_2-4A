@@ -14,6 +14,7 @@
 #include "../Kraken.h"
 #include"../Dragon.h"
 #include"../Kraken.h"
+#include "../LastBoss.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"
@@ -149,7 +150,6 @@ void GameMain::SpawnEnemy()
 	spawn = stage->GetEnemy_SpawnLocation();
 
 	enemy_spawn_volume = spawn.size();
-
 	enemy = new EnemyBase * [enemy_spawn_volume];
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
@@ -157,7 +157,7 @@ void GameMain::SpawnEnemy()
 	}
 
 	int i;
-	for (i = 0; i < enemy_spawn_volume; i++)
+	for (i = 0; i < enemy_spawn_volume - 1 ; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -186,8 +186,9 @@ void GameMain::SpawnEnemy()
 			break;
 
 		case ENEMY_KIND::NONE:
-		default:
 			enemy[i] = nullptr;
+			break;
+		default:
 			break;
 		}
 	}
@@ -257,8 +258,7 @@ bool GameMain::EnemyUpdate()
 						is_spawn_boss = true;
 						break;
 
-						//ラスボスの生成
-					case ENEMY_KIND::END_BOSS:
+					case ENEMY_KIND::LAST_BOSS:
 						is_spawn_boss = true;
 						break;
 
@@ -279,17 +279,28 @@ bool GameMain::EnemyUpdate()
 				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 2.0f,enemy[i]->GetLocation().y });
 			}
 
-				enemy[i]->Update(player, stage);
+			enemy[i]->Update(player, stage);
 
 			//エネミーの攻撃
-			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
+
+			if (enemy[i]->GetEnemyKind() == ENEMY_KIND::LAST_BOSS)
 			{
-				if (player->HitBox(enemy[i]))
+				LastBoss* last_boss;
+				last_boss = dynamic_cast<LastBoss*>(enemy[i]);
+				
+				player->HpDamage(last_boss->PunchAttack(player));
+			}
+			else
+			{
+				if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
 				{
-					player->HpDamage(enemy[i]->Hit());
+					if (player->HitBox(enemy[i]))
+					{
+						player->HpDamage(enemy[i]->Hit());
+					}
 				}
 			}
-			
+
 			//プレイヤーの弾との当たり判定
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
@@ -298,13 +309,29 @@ bool GameMain::EnemyUpdate()
 					break;
 				}
 
-				if(enemy[i]->HitSphere(player_bullet[j]))
+				if (enemy[i]->GetEnemyKind() == ENEMY_KIND::LAST_BOSS)
 				{
-					enemy[i]->HitBullet(player_bullet[j]);
-					delete player_bullet[j];
-					player_bullet[j] = nullptr;
-					player->SortBullet(j);
-					j--;
+					LastBoss* last_boss;
+					last_boss = dynamic_cast<LastBoss*>(enemy[i]);
+
+					if (last_boss->CheckHitBulelt(player_bullet[j]))
+					{
+						delete player_bullet[j];
+						player_bullet[j] = nullptr;
+						player->SortBullet(j);
+						j--;
+					}
+				}
+				else
+				{
+					if (enemy[i]->HitSphere(player_bullet[j]))
+					{
+						enemy[i]->HitBullet(player_bullet[j]);
+						delete player_bullet[j];
+						player_bullet[j] = nullptr;
+						player->SortBullet(j);
+						j--;
+					}
 				}
 			}
 
@@ -368,6 +395,10 @@ bool GameMain::EnemyUpdate()
 				player->HpDamage(bullet_manager->HitEnemyNuts(i));
 				bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
 				i--;
+				if (i < 0)
+				{
+					break;
+				}
 			}
 
 			if (enemy_nuts[i] == nullptr)
@@ -391,6 +422,11 @@ bool GameMain::EnemyUpdate()
 					player_bullet[j] = nullptr;
 					player->SortBullet(j);
 					j--;
+
+					if (i < 0)
+					{
+						break;
+					}
 				}
 			}
 		}

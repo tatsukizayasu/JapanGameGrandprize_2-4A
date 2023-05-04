@@ -402,6 +402,7 @@ void Undead::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::POISON:
+		damage = bullet->GetDamage();
 		if (!poison)
 		{
 			poison = true;

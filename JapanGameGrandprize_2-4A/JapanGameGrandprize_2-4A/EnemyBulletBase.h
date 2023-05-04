@@ -6,6 +6,11 @@ class EnemyBulletBase :
 	public SphereCollider
 {
 public:
+	//コンストラクタ
+	EnemyBulletBase();
+
+	//デストラクタ
+	~EnemyBulletBase();
 
 	//更新
 	virtual void Update() = 0;
