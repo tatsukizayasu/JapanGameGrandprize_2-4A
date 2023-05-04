@@ -13,10 +13,10 @@
 #define HAND_MOVE_SPEED 2
 
 //次のパンチまでの時間
-#define PUNCH_INTERVAL 60
+#define PUNCH_INTERVAL 60 * 2
 
 //パンチするまでの時間
-#define PUNCH_STANDBY_TIME 30 
+#define PUNCH_STANDBY_TIME 60
 
 //パンチのスピード
 #define PUNCH_SPEED 15
@@ -28,7 +28,7 @@
 #define PUNCH_Y 200
 
 //HP
-#define HAND_HP 100
+#define HAND_HP 200
 
 //死亡している時間
 #define DEATH_TIME 1200
@@ -434,6 +434,19 @@ void LastBossHand::Punch()
 	{
 		punch_standby_time--;
 	}
+}
+
+//-----------------------------------
+//ダウンからの復帰
+//-----------------------------------
+void LastBossHand::Revival()
+{
+	hp = HAND_HP;
+	location = spawn_location;
+	state = ENEMY_STATE::MOVE;
+	move = static_cast<HAND_MOVE>(GetRand(2));
+	teleporting = true;
+	teleport = true;
 }
 
 //-----------------------------------

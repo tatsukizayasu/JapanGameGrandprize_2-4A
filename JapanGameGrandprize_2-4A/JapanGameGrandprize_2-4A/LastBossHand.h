@@ -87,6 +87,9 @@ public:
     //攻撃終了
     void EndAttack();
 
+    //ダウンからの復帰
+    void Revival();
+
     //描画
     void Draw() const override;
 

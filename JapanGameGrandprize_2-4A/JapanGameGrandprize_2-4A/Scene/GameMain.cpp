@@ -149,7 +149,7 @@ void GameMain::SpawnEnemy()
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
-	enemy_spawn_volume = spawn.size() + 1;
+	enemy_spawn_volume = spawn.size();
 	enemy = new EnemyBase * [enemy_spawn_volume];
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
@@ -192,9 +192,6 @@ void GameMain::SpawnEnemy()
 			break;
 		}
 	}
-
-	Location spawn_location = { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 };
-	enemy[i] = new LastBoss(spawn_location);
 }
 
 //-----------------------------------
@@ -398,6 +395,10 @@ bool GameMain::EnemyUpdate()
 				player->HpDamage(bullet_manager->HitEnemyNuts(i));
 				bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
 				i--;
+				if (i < 0)
+				{
+					break;
+				}
 			}
 
 			if (enemy_nuts[i] == nullptr)
@@ -421,6 +422,11 @@ bool GameMain::EnemyUpdate()
 					player_bullet[j] = nullptr;
 					player->SortBullet(j);
 					j--;
+
+					if (i < 0)
+					{
+						break;
+					}
 				}
 			}
 		}

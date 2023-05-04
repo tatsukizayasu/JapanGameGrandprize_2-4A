@@ -3,10 +3,10 @@
 
 enum class LAST_BOSS_ATTACK
 {
-    MAGIC = 0,  //魔法攻撃
-    PUNCH,      //パンチ
-    SWORD,      //剣での攻撃
-    DEATHBLO,   //必殺
+    MAGIC = 0,      //魔法攻撃
+    PUNCH,          //パンチ
+    SWORD,          //剣での攻撃
+    SPECIAL_MOVES,  //必殺
     NONE
 };
 
@@ -14,6 +14,7 @@ class LastBoss :
     public EnemyBase
 {
 private:
+    bool special_moves; //必殺技をしたか
     bool down; //ダウン
     bool attack; //攻撃が当たったか
     int down_time; //ダウンしている時間
@@ -22,9 +23,12 @@ private:
     int punch_interval; //次のパンチ攻撃までの時間
     int sword_interval; //剣攻撃までの時間
     int magic_rate; //魔法攻撃のレート
+    int special_moves_time; //必殺技の時間
     int animation; //アニメーション
     int image_argument; //画像の引数
     int attack_time; //攻撃している時間
+
+    Location spawn_location; //スポーン座標
     EnemyBase** hand; //手
 
     HitMapChip hit_stage; //ステージとの当たり判定
@@ -98,6 +102,9 @@ public:
 
     //描画
     void Draw() const override;
+
+    //HPバーの描画
+    void DrawHPBar(const int) const;
 
     //座標の取得
     Location GetLocation() const override;

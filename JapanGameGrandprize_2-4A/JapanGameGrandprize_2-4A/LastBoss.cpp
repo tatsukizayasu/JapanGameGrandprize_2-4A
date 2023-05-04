@@ -3,14 +3,17 @@
 #include "DxLib.h"
 #include "CameraWork.h"
 
+//体力
+#define LAST_BOSS_HP 5000
+
 //手の数
 #define HAND_NUM 2
 
 //ダウン時の落ちる速度
-#define DOWN_MOVE_SPEED 10;
+#define DOWN_MOVE_SPEED 10
 
 //ダウンしている時間
-#define DOWN_TIME 1200
+#define DOWN_TIME 60 * 10
 
 //魔法攻撃
 #define MAGIC_TIME 60 * 30
@@ -30,9 +33,11 @@
 //次のパンチまでの時間
 #define PUNCH_INTERVAL 60 * 10
 
-
 //次の剣攻撃までの時間
 #define SWORD_INTERVAL 60 * 10
+
+//必殺技の時間
+#define SPECIAL_MOVES_TIME 60 * 10
 
 //-----------------------------------
 //コンストラクタ
@@ -40,6 +45,7 @@
 LastBoss::LastBoss(Location spawn_location)
 {
 	Location spawn_hand;
+	this->spawn_location = spawn_location;
 	location = spawn_location;
 
 	spawn_hand = location;
@@ -60,6 +66,7 @@ LastBoss::LastBoss(Location spawn_location)
 
 	kind = ENEMY_KIND::LAST_BOSS;
 
+	special_moves = false;
 	down = false;
 	attack = false;
 	attack_time = 0;
@@ -68,7 +75,9 @@ LastBoss::LastBoss(Location spawn_location)
 	magic_interval = 0;
 	punch_interval = 0;
 	sword_interval = 0;
-
+	magic_rate = 0;
+	special_moves_time = 0;
+	hp = LAST_BOSS_HP;
 	animation = 0;
 	image_argument = 0;
 
@@ -96,16 +105,30 @@ LastBoss::~LastBoss()
 //-----------------------------------
 void LastBoss::Update(const class Player* player, const class Stage* stage)
 {
+	LastBossHand* me_hand;
+
 	if (down)
 	{
-		if (!hit_stage.hit)
-		{
-			location.y += DOWN_MOVE_SPEED;
-		}
 		down_time--;
 		if (down_time < 0)
 		{
-			down = false;
+			if (Revival())
+			{
+				down = false;
+				for (int i = 0; i < HAND_NUM; i++)
+				{
+					me_hand = dynamic_cast<LastBossHand*>(hand[i]);
+
+					me_hand->Revival();
+				}
+			}
+		}
+		else
+		{
+			if (!hit_stage.hit)
+			{
+				location.y += DOWN_MOVE_SPEED;
+			}
 		}
 	}
 	else
@@ -144,6 +167,15 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 		sword_interval--;
 	}
 	hit_stage = HitStage(stage);
+
+	UpdateDamageLog();
+
+	if ((hp <= 1) && (!special_moves))
+	{
+		hp = 1;
+		special_moves = true;
+		attack_state = LAST_BOSS_ATTACK::SPECIAL_MOVES;
+	}
 }
 
 //-----------------------------------
@@ -152,6 +184,13 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 bool LastBoss::Revival()
 {
 	bool ret = false; //戻り値
+
+	location.y -= DOWN_MOVE_SPEED / 2;
+
+	if (spawn_location == location)
+	{
+		ret = true;
+	}
 
 	return ret;
 }
@@ -206,7 +245,7 @@ void  LastBoss::Attack(const Location)
 	case LAST_BOSS_ATTACK::SWORD:
 		Sword();
 		break;
-	case LAST_BOSS_ATTACK::DEATHBLO:
+	case LAST_BOSS_ATTACK::SPECIAL_MOVES:
 		break;
 	case LAST_BOSS_ATTACK::NONE:
 		AttackNone();
@@ -368,7 +407,7 @@ void LastBoss::AttackNone()
 		case LAST_BOSS_ATTACK::SWORD:
 			InitSword();
 			break;
-		case LAST_BOSS_ATTACK::DEATHBLO:
+		case LAST_BOSS_ATTACK::SPECIAL_MOVES:
 		case LAST_BOSS_ATTACK::NONE:
 		default:
 			break;
@@ -425,7 +464,51 @@ void LastBoss::Death()
 //-----------------------------------
 void LastBoss::HitBullet(const BulletBase* bullet)
 {
+	int i;
+	int damage = 0;
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
 
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
+	switch (bullet->GetAttribute())
+	{
+	case ATTRIBUTE::NORMAL:
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+		break;
+	case ATTRIBUTE::EXPLOSION:
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		break;
+	case ATTRIBUTE::MELT:
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		break;
+	case ATTRIBUTE::POISON:
+	case ATTRIBUTE::PARALYSIS:
+	case ATTRIBUTE::HEAL:
+	default:
+		break;
+	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 }
 
 //-----------------------------------
@@ -469,6 +552,11 @@ void LastBoss::Draw() const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+
+
+	DrawHPBar(LAST_BOSS_HP);
+	DrawDamageLog();
+
 	if (down)
 	{
 		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
@@ -484,6 +572,27 @@ void LastBoss::Draw() const
 	{
 		hand[i]->Draw();
 	}
+}
+
+//-----------------------------------
+//HPバーの描画
+//-----------------------------------
+void LastBoss::DrawHPBar(const int max_hp) const
+{
+	int color = GetColor(7, 255, 0);
+
+	if (hp <= (max_hp / 2))
+	{
+		color = GetColor(255, 255 * static_cast<float>(hp) / max_hp, 0);
+	}
+	else
+	{
+		color = GetColor(7 + 2 * (248 * (1 - static_cast<float>(hp) / max_hp)), 255, 0);
+	}
+
+	DrawBox(160, 10,SCREEN_WIDTH - 160, 40, 0x000000, TRUE);
+	DrawBox(160, 10,160 + (960 * (static_cast<float>(hp) / max_hp)), 40, color, TRUE);
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x8f917f, FALSE);
 }
 
 //-----------------------------------
