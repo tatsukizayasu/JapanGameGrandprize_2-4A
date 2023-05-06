@@ -18,7 +18,10 @@ private:
 
 
 
-    const char str[5][10] = { "idol","move","fall","attack","death" };
+    const char enemy_str[5][10] = { "idol","move","fall","attack","death" };
+    const char player_str[5][10] = { "idol","move","fly","down","death" };
+
+
 public:
     //コンストラクタ
     DotByDot();

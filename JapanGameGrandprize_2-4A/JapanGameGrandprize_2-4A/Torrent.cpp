@@ -12,24 +12,28 @@
 
 //タックルのダメージ
 #define TORRENT_TACKLE_DAMAGE 10
+
+//体力
+#define TORRENT_HP 1000
+
 //タックル準備時間
-#define TPRRENT_TACKLE_PREPARATION 60
+#define TORRENT_TACKLE_PREPARATION 60
 
 //発射速度
-#define TORRENT_SHOT_RATE 30
+#define TORRENT_SHOT_RATE 40
 
 //ドロップ数
 #define TORRENT_MIN_DROP 20
 #define TORRENT_DROP 20
 
 //葉っぱを飛ばしている時間
-#define LEAF_CUTTER_TIME 1800
+#define LEAF_CUTTER_TIME 1200
 
 //次の葉っぱを飛ばす攻撃に移る時間
 #define LEAF_CUTTER_INTERVAL 1800
 
 //木の実を落としている時間
-#define DROP_NUTS_TIME 1200
+#define DROP_NUTS_TIME 600
 
 //次の木の実を落とす攻撃に移る時間
 #define DROP_NUTS_INTERVAL 1200
@@ -38,7 +42,7 @@
 #define SPAWN_NUTS_INTERVAL 30
 
 //木の実の生成地点数
-#define SPAWN_NUTS_POINT 16
+#define SPAWN_NUTS_POINT 8
 
 //木の実が一回でスポーンできる最大数
 #define SPAWN_NUTS_MAX 6
@@ -47,7 +51,7 @@
 #define SPAWN_NUTS_Y 100
 
 //スポーン地点の間隔
-#define NUTS_SPAWN_SPACE 60
+#define NUTS_SPAWN_SPACE 120
 
 //-----------------------------------
 //コンストラクタ
@@ -55,7 +59,7 @@
 Torrent::Torrent(Location spawn_location)
 {
 	//仮hp
-	hp = 500;
+	hp = TORRENT_HP;
 	left_move = true;
 	attack = false;
 	tackle_end = false;
@@ -315,17 +319,18 @@ void Torrent::LeafCutter(const Location player_location)
 			{
 			case TORRENT_ATTACK::TACKLE:
 				attack_state = TORRENT_ATTACK::TACKLE;
-				attack_time = TPRRENT_TACKLE_PREPARATION;
+				attack_time = TORRENT_TACKLE_PREPARATION;
 				tackle_end = false;
+				tackle_end_point = CameraWork::GetCamera().x;
 				if (left_move) //左に向いている
 				{
 					speed = -TORRENT_SPEED;
-					tackle_end_point = static_cast<int>(area.width / 2);
+					tackle_end_point += static_cast<int>(area.width / 2) + MAP_CHIP_SIZE;
 				}
 				else
 				{
 					speed = TORRENT_SPEED;
-					tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
+					tackle_end_point += static_cast<int>(SCREEN_WIDTH - area.width / 2) - MAP_CHIP_SIZE;
 				}
 				break;
 			case TORRENT_ATTACK::DROP_NUTS:
@@ -341,7 +346,7 @@ void Torrent::LeafCutter(const Location player_location)
 		else
 		{
 			attack_state = TORRENT_ATTACK::TACKLE; //タックル攻撃に移行
-			attack_time = TPRRENT_TACKLE_PREPARATION;
+			attack_time = TORRENT_TACKLE_PREPARATION;
 			tackle_end = false;
 			if (left_move) //左に向いている
 			{
@@ -395,7 +400,7 @@ void Torrent::DropNuts()
 			{
 			case TORRENT_ATTACK::TACKLE:
 				attack_state = TORRENT_ATTACK::TACKLE;
-				attack_time = TPRRENT_TACKLE_PREPARATION;
+				attack_time = TORRENT_TACKLE_PREPARATION;
 				tackle_end = false;
 				if (left_move) //左に向いている
 				{
@@ -421,7 +426,7 @@ void Torrent::DropNuts()
 		else
 		{
 			attack_state = TORRENT_ATTACK::TACKLE; //タックル攻撃に移行
-			attack_time = TPRRENT_TACKLE_PREPARATION;
+			attack_time = TORRENT_TACKLE_PREPARATION;
 			tackle_end = false;
 			if (left_move) //左に向いている
 			{
@@ -468,8 +473,8 @@ void Torrent::CreateNuts()
 				spawn_point_rand = GetRand(SPAWN_NUTS_POINT - 1); //スポーン地点の設定
 				if (!spawn_point[spawn_point_rand])
 				{
-					Location spawn_location; //スポーン地点
-					spawn_location.x = (spawn_point_rand + 1) * NUTS_SPAWN_SPACE;
+					Location spawn_location = CameraWork::GetCamera(); //スポーン地点
+					spawn_location.x += (spawn_point_rand + 1) * NUTS_SPAWN_SPACE;
 					if (!left_move)
 					{
 						spawn_location.x += (area.width / 2);
@@ -478,7 +483,7 @@ void Torrent::CreateNuts()
 					spawn_point[spawn_point_rand] = true;
 					spawn = true;
 
-					BulletManager::GetInstance()->
+           			BulletManager::GetInstance()->
 						CreateEnemyNuts(new TorrentNuts(ENEMY_TYPE::WATER, spawn_location));
 				}
 
@@ -598,11 +603,33 @@ void Torrent::Draw() const
 
 	if (state != ENEMY_STATE::DEATH)
 	{
-		DrawHPBar(500);
+		DrawHPBar(TORRENT_HP);
 	}
 	DrawDamageLog();
 
 }
+
+//-----------------------------------
+//HPバーの描画
+//-----------------------------------
+void Torrent::DrawHPBar(const int max_hp) const
+{
+	int color = GetColor(7, 255, 0);
+
+	if (hp <= (max_hp / 2))
+	{
+		color = GetColor(255, 255 * static_cast<float>(hp) / max_hp, 0);
+	}
+	else
+	{
+		color = GetColor(7 + 2 * (248 * (1 - static_cast<float>(hp) / max_hp)), 255, 0);
+	}
+
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x000000, TRUE);
+	DrawBox(160, 10, 160 + (960 * (static_cast<float>(hp) / max_hp)), 40, color, TRUE);
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x8f917f, FALSE);
+}
+
 
 //-----------------------------------
 //座標の取得
