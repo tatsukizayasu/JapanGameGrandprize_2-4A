@@ -243,43 +243,43 @@ void Player::Draw() const
 	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
 	float now_fuel = (fuel / FUEL_MAX) * FUEL_BAR_HEIGHT;
 
-	//FUELバーの表示ここから
-	if (fuel >= 50)
-	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
-	}
-	else if (fuel >= 20)
-	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
-	}
-	else
-	{
-		DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
-			(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
-	}
-	//ここまで
+	////FUELバーの表示ここから
+	//if (fuel >= 50)
+	//{
+	//	DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
+	//		(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, GREEN, TRUE);
+	//}
+	//else if (fuel >= 20)
+	//{
+	//	DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
+	//		(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, YELLOW, TRUE);
+	//}
+	//else
+	//{
+	//	DrawBoxAA(x - 50, (y - (area.height / 2)) + (FUEL_MAX - now_fuel),
+	//		(x - 45), (y - (area.height / 2)) + FUEL_BAR_HEIGHT, RED, TRUE);
+	//}
+	////ここまで
 
-	//HPバーの表示ここから
-	float hp_start = 140;
-	DrawGraph(10, 380, hp_image, true);
-	if (hp >= 50)
-	{
-		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, GREEN, TRUE);
-	}
-	else if (hp >= 20)
-	{
-		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, YELLOW, TRUE);
-	}
-	else
-	{
-		DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, RED, TRUE);
-	}
-	DrawBox(hp_start, 605, HP_BAR_WIDTH - 1, 605 + HP_BAR_HEIGHT, 0x000000, FALSE);
+	////HPバーの表示ここから
+	//float hp_start = 140;
+	//DrawGraph(10, 380, hp_image, true);
+	//if (hp >= 50)
+	//{
+	//	DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, GREEN, TRUE);
+	//}
+	//else if (hp >= 20)
+	//{
+	//	DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, YELLOW, TRUE);
+	//}
+	//else
+	//{
+	//	DrawBoxAA(hp_start, 605, now_hp - 1, 605 + HP_BAR_HEIGHT, RED, TRUE);
+	//}
+	//DrawBox(hp_start, 605, HP_BAR_WIDTH - 1, 605 + HP_BAR_HEIGHT, 0x000000, FALSE);
 
 
-	//ここまで
+	////ここまで
 
 	for (int i = 0; i < PLAYER_ELEMENT - 1; i++)
 	{

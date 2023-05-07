@@ -12,7 +12,7 @@ class ObjectBase
 {
 private:
 	const char* class_name = OBJECT_NAME_DEFAULT;
-	const char* texture_name = "yuka_1";
+	std::string texture_name;
 	int image;
 	ColliderBase* collider;
 	SphereCollider* pivot;
@@ -23,7 +23,7 @@ private:
 	void ColliderCast(ColliderBase* p_collider);
 public:
 	ObjectBase();
-	ObjectBase(Location pivot, ColliderBase* p_collider ,const char* texture_name);
+	ObjectBase(Location pivot, ColliderBase* p_collider , std::string texture_name);
 	~ObjectBase();
 
 	void Draw()const;
@@ -50,6 +50,7 @@ public:
 	ColliderBase* GetColllider()const { return collider; }
 	SphereCollider* GetPivot()const { return pivot; }
 	const char* GetObjectName() { return class_name; }
-	const char* GetTextureName() { return texture_name; }
+	const char* GetTextureName() { return texture_name.c_str(); }
+	Location GetVector() { return vector; }
 
 };

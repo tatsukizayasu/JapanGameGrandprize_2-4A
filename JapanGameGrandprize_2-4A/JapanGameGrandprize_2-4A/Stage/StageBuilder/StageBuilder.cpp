@@ -1096,9 +1096,9 @@ void StageBuilder::MakeObject()
 	case BRUSH_BOX :
 		if (KeyManager::OnMouseClicked(MOUSE_INPUT_LEFT))
 		{
-			Location shift = { 0,50 };
+			Location shift = { 0,20 };
 			BoxCollider box = 
-				BoxCollider(mouse->GetLocation() + shift, { 100,100 });
+				BoxCollider(mouse->GetLocation() + shift, { 50 , 270 });
 			objects.push_back(new ObjectBase(
 				mouse->GetLocation()
 				, &box
@@ -1375,6 +1375,7 @@ void StageBuilder::LoadStage(char* stage_name)
 	int collider_type;
 	const char* object_name;
 	string texture_name;
+	Location vector{};
 
 
 	string str_conma_buf;
@@ -1407,25 +1408,34 @@ void StageBuilder::LoadStage(char* stage_name)
 
 			getline(i_stringstream, str_conma_buf, ',');
 			arg_location.y = atof(str_conma_buf.c_str());
+			
+			getline(i_stringstream, str_conma_buf, ',');
+			vector.x = atof(str_conma_buf.c_str());
+			
+			getline(i_stringstream, str_conma_buf, ',');
+			vector.y = atof(str_conma_buf.c_str());
 
 			getline(i_stringstream, str_conma_buf, ',');
-
 			collider_type = atoi(str_conma_buf.c_str());
 
 
 			if (collider_type == (int)COLLIDER::BOX)
 			{
 				BoxCollider* loaded = LoadBoxCollider(&i_stringstream);
+				Location collider_location = arg_location + vector;
+				loaded->SetLocation(collider_location);
 				objects.push_back
-				(new ObjectBase(arg_location, loaded, texture_name.c_str()));
+				(new ObjectBase(arg_location, loaded, texture_name));
 				continue;
 			}
 
 			if (collider_type == (int)COLLIDER::POLY_LINE)
 			{
 				PolyLine* loaded = LoadPolyLine(&i_stringstream);
+				Location collider_location = arg_location + vector;
+				loaded->SetLocation(collider_location);
 				objects.push_back
-				(new ObjectBase(arg_location, loaded, texture_name.c_str()));
+				(new ObjectBase(arg_location, loaded, texture_name));
 				continue;
 			}
 		}
@@ -1559,11 +1569,13 @@ void StageBuilder::SaveObject(FILE* fp)
 	{
 		for (int i = 0; i < objects.size(); i++)
 		{
-			fprintf_s(fp, "%s,%s,%lf,%lf,",
+			fprintf_s(fp, "%s,%s,%lf,%lf,%lf,%lf,",
 				objects[i]->GetObjectName(),
 				objects[i]->GetTextureName(),
 				objects[i]->GetPivot()->GetLocation().x,
-				objects[i]->GetPivot()->GetLocation().y
+				objects[i]->GetPivot()->GetLocation().y,
+				objects[i]->GetVector().x,
+				objects[i]->GetVector().y
 			);
 
 
@@ -1728,7 +1740,7 @@ BoxCollider* StageBuilder::LoadBoxCollider(istringstream* i_stringstream)
 vector<ObjectBase*> StageBuilder::OutPutObjects()
 {
 	Directory::Open("\\Stage\\StageBuilder\\dat");
-	char stage[16] = "stage4.csv";
+	char stage[16] = "stage1.csv";
 	LoadStage(stage);
 
 	return objects;

@@ -13,12 +13,12 @@ ObjectBase::ObjectBase()
 //--------------------------------
 // コンストラクタ
 //--------------------------------
-ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider, const char* texture_name)
+ObjectBase::ObjectBase(Location pivot, ColliderBase* p_collider , std::string texture_name)
 {
 
 	this->texture_name = texture_name;
 	TextureContainer* instance_texture = TextureContainer::GetInstance();
-	image = instance_texture->GetTexture(texture_name);
+	image = instance_texture->GetTexture(texture_name.c_str());
 
 	this->pivot = new SphereCollider(pivot);
 	
