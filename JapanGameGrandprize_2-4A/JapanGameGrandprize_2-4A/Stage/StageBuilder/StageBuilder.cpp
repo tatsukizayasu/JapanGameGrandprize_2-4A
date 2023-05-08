@@ -1434,6 +1434,7 @@ void StageBuilder::LoadStage(char* stage_name)
 				PolyLine* loaded = LoadPolyLine(&i_stringstream);
 				Location collider_location = arg_location + vector;
 				loaded->SetLocation(collider_location);
+				loaded->Update();
 				objects.push_back
 				(new ObjectBase(arg_location, loaded, texture_name));
 				continue;
