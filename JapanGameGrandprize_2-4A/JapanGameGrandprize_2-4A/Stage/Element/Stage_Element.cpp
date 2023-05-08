@@ -1,12 +1,13 @@
 #include "Stage_Element.h"
 #include "../CameraWork.h"
+#
 
 //#define NODEBUG
 
-Stage_Element::Stage_Element()
+Stage_Element::Stage_Element(Stage* stage)
 {
-
 	player = nullptr;
+	this->stage = stage;
 }
 
 Stage_Element::~Stage_Element()
@@ -27,6 +28,20 @@ Stage_Element::~Stage_Element()
 	element.shrink_to_fit();
 }
 
+void Stage_Element::InitDemo(Location location)
+{
+	AddElement(Element::DAMAGE_WALL, { location.x , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::WOODEN_FLOOR, { location.x + 80.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::FALL_FLOOR, {  location.x + 160.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::ITEM_DROP_OBJECT, { location.x + 240.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::TRAP, { location.x + 320.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::MOVE_FLOOR, { location.x + 400.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::BARRICADE_UP, { location.x + 480.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::BARRICADE_CENTER, { location.x + 480.0f , location.y + 40.0f }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+	AddElement(Element::BARRICADE_DOWN, { location.x + 480.0f , location.y + 80.0f }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
+
+}
+
 void Stage_Element::AddElement(short type, Location location, Area area)
 {
 
@@ -39,27 +54,27 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 	switch (type)
 	{
 	case DAMAGE_WALL:
-		element.push_back(std::make_shared<Element_DamageWall>(type, element, images, location, Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_DamageWall>(type, images, location, Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE }));
 		break;
 
 	case WOODEN_FLOOR:
-		element.push_back(std::make_shared <Element_Wooden_Floor>(type, element, images, location, Area{ 10.0f, MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared <Element_Wooden_Floor>(type, images, location, Area{ 10.0f, MAP_CHIP_SIZE }));
 		break;
 
 	case FALL_FLOOR:
-		element.push_back(std::make_shared<Element_Fall_Floor>(type, element, images, location, Area{ 8.0f , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Fall_Floor>(type, images, location, Area{ 8.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case ITEM_DROP_OBJECT:
-		element.push_back(std::make_shared<Element_Item_Drop_Object>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Item_Drop_Object>(type, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case TRAP:
-		element.push_back(std::make_shared<Element_Trap>(type, element, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Trap>(type, stage, enemy, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case MOVE_FLOOR:
-		element.push_back(std::make_shared<Element_Move_Floor>(type, element, images, location, area));
+		element.push_back(std::make_shared<Element_Move_Floor>(type, images, location, area));
 		break;
 
 	case MOVE_FLOOR_GOAL:
@@ -67,15 +82,15 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case BARRICADE_UP:
-		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ -18.0f, 0.0f }, Element_Barricade::DIRECTION::UP));
+		element.push_back(std::make_shared<Element_Barricade>(type, images, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ -18.0f, 0.0f }, Element_Barricade::DIRECTION::UP));
 		break;
 
 	case BARRICADE_CENTER:
-		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, Area{ -MAP_CHIP_SIZE, MAP_CHIP_SIZE * 1 / 10}, Area{ 0.0f, 0.0f }, Element_Barricade::DIRECTION::CENTER));
+		element.push_back(std::make_shared<Element_Barricade>(type, images, location, Area{ -MAP_CHIP_SIZE, MAP_CHIP_SIZE * 1 / 10}, Area{ 0.0f, 0.0f }, Element_Barricade::DIRECTION::CENTER));
 		break;
 
 	case BARRICADE_DOWN:
-		element.push_back(std::make_shared<Element_Barricade>(type, element, images, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ + 18.0f, 0.0f }, Element_Barricade::DIRECTION::DOWN));
+		element.push_back(std::make_shared<Element_Barricade>(type, images, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ + 18.0f, 0.0f }, Element_Barricade::DIRECTION::DOWN));
 		break;
 
 	default:

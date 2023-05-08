@@ -3,9 +3,8 @@
 #include "../CameraWork.h"
 
 Element_Item_Drop_Object::Element_Item_Drop_Object(short type,
-	std::vector<std::shared_ptr<Stage_Element_Base>> element,
 	std::vector<int> images, Location location, Area area)
-	: Stage_Element_Base(element, &images.at(0), location, area)
+	: Stage_Element_Base(&images.at(0), location, area)
 {
 
 	this->area = area;
@@ -103,7 +102,8 @@ void Element_Item_Drop_Object::Draw()const
 		float x = location.x - CameraWork::GetCamera().x;
 		float y = location.y - CameraWork::GetCamera().y;
 
-		DrawRotaGraphF(x, y, 1.8f, 0, image, TRUE);
+		//DrawCircleAA(x, y, MAP_CHIP_SIZE,32, 0x00ff00, TRUE);
+		//DrawRotaGraphF(x, y, 1.8f, 0, image, TRUE);
 	}
 	else
 	{

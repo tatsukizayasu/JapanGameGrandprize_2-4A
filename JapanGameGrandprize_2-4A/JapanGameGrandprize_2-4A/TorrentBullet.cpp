@@ -22,7 +22,7 @@ TorrentBullet::TorrentBullet(const ENEMY_TYPE type,
 	image = 0;
 	damage = TORRENT_BULLET_DAMAGE;
 	float radian; //Šp“x
-	radian = atan2f((player_location.y - 10) - location.y, player_location.x - location.x);
+	radian = atan2f((player_location.y + 20) - location.y, player_location.x - location.x);
 	x_speed = static_cast<int>(speed * cosf(radian));
 	y_speed = static_cast<int>(speed * sinf(radian));
 }

@@ -13,11 +13,11 @@
 #define SCREEN_WIDTH 1280	//画面サイズ (横)
 #define GRAVITY 10 //重力
 
-#define EXPLOSION_MAX_NUM 13	//爆発の化合物の個数
-#define POISON_MAX_NUM 18		//毒　の化合物の個数
-#define MELT_MAX_NUM 13			//溶解の化合物の個数
-#define PARARYSIS_MAX_NUM 12	//麻痺の化合物の個数
-#define HEAL_MAX_NUM 7			//回復の化合物の個数
+#define EXPLOSION_MAX_NUM 5	//爆発の化合物の個数
+#define POISON_MAX_NUM 5		//毒　の化合物の個数
+#define MELT_MAX_NUM 5			//溶解の化合物の個数
+#define PARARYSIS_MAX_NUM 5	//麻痺の化合物の個数
+#define HEAL_MAX_NUM 2			//回復の化合物の個数
 
 #define GREEN GetColor(0,255,0)
 #define RED GetColor(255,0,0)
@@ -73,6 +73,7 @@ struct ChemicalFormulaParameter
 	ChemicalFormulaMaterial material;
 	bool make_bool;
 	int name_image;
+	int tag_number;
 };
 
 struct Bullet_Effect {
@@ -95,6 +96,14 @@ struct Bullet_Effect {
 
 	float OvalY_Array_radius[PARTICLE];
 	int OvalY_Array_permit[PARTICLE];
+};
+
+struct Delete_Effect {
+	int Delete_x;
+	int Delete_y;
+	int Delete_display_permit;
+	int Delete_image_array[10];
+	int Delete_frame;
 };
 
 //中心座標

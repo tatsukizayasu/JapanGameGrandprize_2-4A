@@ -27,7 +27,9 @@ private:
 	int magic_num; //魔法攻撃した数
 	int magic_time; //魔法攻撃の間隔。標
 	int standby_num;
-	int images;
+	int images[6];
+	int animation; 
+	int animation_time; 
 	float vector; //ベクトル
 	int physical_time; //物理攻撃時間
 	float range; //プレイヤーとの距離	

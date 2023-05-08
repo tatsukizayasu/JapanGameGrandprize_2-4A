@@ -8,6 +8,7 @@
 
 #define STRING_DISTANCE 100
 
+#define CURSOL_MOVE 48
 #define EXPLOSION_NUM 0
 #define MELT_NUM 1
 #define POISON_NUM 2
@@ -24,9 +25,13 @@
 //コンストラクタ
 Pouch::Pouch()
 {
-
+	old = PAD_INPUT::GetRStick().x;
 	x = 1040;
 	y = 100;
+	window_x = x - 140;
+	window_y = y - 15;
+	attribute_name_x = x - 45;
+	attribute_name_y = y + 40;
 	cursol = 0;
 	for (int i = 0; i < 5; i++)
 	{
@@ -46,6 +51,9 @@ Pouch::Pouch()
 	second_tab_image[2] = LoadGraph("Images/ItemTab/explosion/paralysis.png");
 	second_tab_image[3] = LoadGraph("Images/ItemTab/explosion/heal.png");
 	elemental_count = LoadGraph("Images/ItemTab/P_kazu.png");
+	window_image = LoadGraph("Images/ItemTab/poti_back.png");
+	attribute_images = new int[ATTRIBUTE_IMAGES];
+	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
 	int images_init_explosion[EXPLOSION_MAX_NUM];
 	int images_init_melt[MELT_MAX_NUM];
 	int images_init_pararysis[PARARYSIS_MAX_NUM];
@@ -123,28 +131,17 @@ void Pouch::ExplosionTabDraw() const
 
 
 
-	if (page == 0)
+	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
 	{
-		for (int i = 0; i < 9; i++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_explosion[i].name_image,true);
-		}
-	}
-	if (page == 1)
-	{
-		for (int i = 9, j = 0; i < EXPLOSION_MAX_NUM; i++, j++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * j), chemical_formula_explosion[i].name_image, true);
-		}
+		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_explosion[i].name_image, true);
 	}
 
 
 	ElementDraw(chemical_formula_explosion[cursol]);
 
-	DrawString(x, y, "EXPLOSION", 0xaa5500);
+	DrawString(attribute_name_x, attribute_name_y, "EXPLOSION", 0xaa5500);
 
 
-	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 }
 
 //溶解
@@ -154,31 +151,19 @@ void Pouch::MeltTabDraw() const
 	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_melt[cursol].chemical_formula);
 	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_melt[cursol].number_of_bullets);
 	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_melt[cursol].damage);
-	
 
 
-
-	if (page == 0)
+	for (int i = 0; i < MELT_MAX_NUM; i++)
 	{
-		for (int i = 0; i < 9; i++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_melt[i].name_image, true);
-		}
+		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_melt[i].name_image, true);
 	}
-	if (page == 1)
-	{
-		for (int i = 9, j = 0; i < MELT_MAX_NUM; i++, j++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * j), chemical_formula_melt[i].name_image, true);
-		}
-	}
+
 
 
 	ElementDraw(chemical_formula_melt[cursol]);
 
 
-	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
-	DrawString(POUCH_START_X, POUCH_START_Y + 50, "MELT", 0x000000);
+	DrawString(attribute_name_x, attribute_name_y, "MELT", 0x000000);
 }
 
 //麻痺
@@ -191,30 +176,18 @@ void Pouch::ParalysisTabDraw()const
 	DrawFormatString(x + 165, y + 440, 0xffffff, "%d", chemical_formula_pararysis[cursol].time / 60);
 	DrawString(x + 190, y + 440, "秒", 0xffffff);
 
-
-
-
-	if (page == 0)
+	for (int i = 0; i < PARARYSIS_MAX_NUM; i++)
 	{
-		for (int i = 0; i < 9; i++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_pararysis[i].name_image, true);
-		}
+		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].name_image, true);
 	}
-	if (page == 1)
-	{
-		for (int i = 9, j = 0; i < PARARYSIS_MAX_NUM; i++, j++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * j), chemical_formula_pararysis[i].name_image, true);
-		}
-	}
+
 
 
 	ElementDraw(chemical_formula_pararysis[cursol]);
 
 
-	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
-	DrawString(POUCH_START_X, POUCH_START_Y + 50, "PARARYSIS", 0x000000);
+
+	DrawString(attribute_name_x, attribute_name_y, "PARARYSIS", 0x000000);
 }
 
 //毒
@@ -230,27 +203,16 @@ void Pouch::PoisonTabDraw()const
 
 
 
-	if (page == 0)
+	for (int i = 0; i < POISON_MAX_NUM; i++)
 	{
-		for (int i = 0; i < 9; i++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_poison[i].name_image, true);
-		}
-	}
-	if (page == 1)
-	{
-		for (int i = 9, j = 0; i < POISON_MAX_NUM; i++, j++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * j), chemical_formula_poison[i].name_image, true);
-		}
+		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_poison[i].name_image, true);
 	}
 
 
 	ElementDraw(chemical_formula_poison[cursol]);
 
 
-	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
-	DrawString(POUCH_START_X, POUCH_START_Y + 50, "POISON", 0x000000);
+	DrawString(attribute_name_x, attribute_name_y, "POISON", 0x000000);
 }
 //回復
 void Pouch::HealTabDraw()const
@@ -262,47 +224,61 @@ void Pouch::HealTabDraw()const
 
 
 
-	if (page == 0)
+	for (int i = 0; i < HEAL_MAX_NUM; i++)
 	{
-		for (int i = 0; i < HEAL_MAX_NUM; i++)
-		{
-			DrawGraph(x - 140, y + 80 + (30 * i), chemical_formula_heal[i].name_image, true);
-		}
+		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_heal[i].name_image, true);
 	}
 
 
 	ElementDraw(chemical_formula_heal[cursol]);
 
 
-	DrawBox(x, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
-	DrawString(POUCH_START_X, POUCH_START_Y + 50, "HEAL", 0x000000);
+
+	DrawString(attribute_name_x, attribute_name_y, "HEAL", 0x000000);
 }
 
 //描画
 void Pouch::Draw() const
 {
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 127);
+	DrawGraph(x - 210, y - 50, window_image, TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+
+
+	DrawGraph(window_x, window_y, attribute_images[0], TRUE);
+	DrawGraph(window_x + (65 * 1), window_y, attribute_images[4], TRUE);
+	DrawGraph(window_x + (65 * 2), window_y, attribute_images[1], TRUE);
+	DrawGraph(window_x + (65 * 3), window_y, attribute_images[2], TRUE);
+	DrawGraph(window_x + (65 * 4), window_y, attribute_images[3], TRUE);
+
 
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
 		ExplosionTabDraw();
+		DrawGraph(window_x, window_y, attribute_images[5], TRUE);
 		break;
 	case ATTRIBUTE::MELT:
 		MeltTabDraw();
+		DrawGraph(window_x + (65 * 1), window_y, attribute_images[9], TRUE);
 		break;
 	case ATTRIBUTE::POISON:
 		PoisonTabDraw();
+		DrawGraph(window_x + (65 * 2), window_y, attribute_images[6], TRUE);
 		break;
 	case ATTRIBUTE::PARALYSIS:
 		ParalysisTabDraw();
+		DrawGraph(window_x + (65 * 3), window_y, attribute_images[7], TRUE);
 		break;
 	case ATTRIBUTE::HEAL:
 		HealTabDraw();
+		DrawGraph(window_x + (65 * 4), window_y, attribute_images[8], TRUE);
 		break;
 	default:
 		break;
 	}
-
+	DrawBox(x - 150, y + 80 + move_string, x + POUCH_WIDTH, y + move_string + 110, 0xff00ff, FALSE);
 	DrawGraph(x - 170, y + 360, elemental_count, TRUE);
 }
 
@@ -310,7 +286,7 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 {
 	int i = 0;
 	int tab_x = x - 100;
-	
+
 	DrawFormatString(tab_x, y + 385, 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume() - bring.material.carbon);
 	DrawFormatString(tab_x, y + 415 + (30 * i), 0xffffff, "%d    %d",
@@ -329,111 +305,94 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 //アップデート
 void Pouch::Update()
 {
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_RIGHT_SHOULDER))
+
+
+	if (old < 10000)
 	{
-		move_down = false;
-		move_up = false;
-		switch (tab)
+		if (10000 < PAD_INPUT::GetRStick().x)
 		{
-		case ATTRIBUTE::EXPLOSION:
-			each_cursor[EXPLOSION_NUM] = cursol;
-			cursol = each_cursor[MELT_NUM];
-			each_page[EXPLOSION_NUM] = page;
-			page = each_page[MELT_NUM];
-			tab = ATTRIBUTE::MELT;
-			break;
-		case ATTRIBUTE::MELT:
-			each_cursor[MELT_NUM] = cursol;
-			cursol = each_cursor[POISON_NUM];
-			each_page[MELT_NUM] = page;
-			page = each_page[POISON_NUM];
-			tab = ATTRIBUTE::POISON;
-			break;
-		case ATTRIBUTE::POISON:
-			each_cursor[POISON_NUM] = cursol;
-			cursol = each_cursor[PARARYSIS_NUM];
-			each_page[POISON_NUM] = page;
-			page = each_page[PARARYSIS_NUM];
-			tab = ATTRIBUTE::PARALYSIS;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			each_cursor[PARARYSIS_NUM] = cursol;
-			cursol = each_cursor[HEAL_NUM];
-			each_page[PARARYSIS_NUM] = page;
-			page = 0;
-			tab = ATTRIBUTE::HEAL;
-			break;
-		case ATTRIBUTE::HEAL:
-			each_cursor[HEAL_NUM] = cursol;
-			cursol = each_cursor[EXPLOSION_NUM];
-			each_page[HEAL_NUM] = page;
-			page = each_page[EXPLOSION_NUM];
-			tab = ATTRIBUTE::EXPLOSION;
-			break;
-		default:
-			break;
+			move_down = false;
+			move_up = false;
+			switch (tab)
+			{
+			case ATTRIBUTE::EXPLOSION:
+				each_cursor[EXPLOSION_NUM] = cursol;
+				cursol = each_cursor[MELT_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::MELT;
+				break;
+			case ATTRIBUTE::MELT:
+				each_cursor[MELT_NUM] = cursol;
+				cursol = each_cursor[POISON_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::POISON;
+				break;
+			case ATTRIBUTE::POISON:
+				each_cursor[POISON_NUM] = cursol;
+				cursol = each_cursor[PARARYSIS_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::PARALYSIS;
+				break;
+			case ATTRIBUTE::PARALYSIS:
+				each_cursor[PARARYSIS_NUM] = cursol;
+				cursol = each_cursor[HEAL_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::HEAL;
+				break;
+			case ATTRIBUTE::HEAL:
+				each_cursor[HEAL_NUM] = cursol;
+				cursol = each_cursor[EXPLOSION_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::EXPLOSION;
+				break;
+			default:
+				break;
+			}
 		}
-		if (page == 0)
-		{
-			move_string = 30 * cursol;
-		}
-		else
-		{
-			move_string = 30 * (cursol - 9);
-		}
+
 	}
 
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_LEFT_SHOULDER))
+	if (old > -10000)
 	{
-		move_down = false;
-		move_up = false;
-		switch (tab)
+		if (-10000 > PAD_INPUT::GetRStick().x)
 		{
-		case ATTRIBUTE::EXPLOSION:
-			each_cursor[EXPLOSION_NUM] = cursol;
-			cursol = each_cursor[HEAL_NUM];
-			each_page[EXPLOSION_NUM] = page;
-			page = each_page[HEAL_NUM];
-			tab = ATTRIBUTE::HEAL;
-			break;
-		case ATTRIBUTE::MELT:
-			each_cursor[MELT_NUM] = cursol;
-			cursol = each_cursor[EXPLOSION_NUM];
-			each_page[MELT_NUM] = page;
-			page = each_page[EXPLOSION_NUM];
-			tab = ATTRIBUTE::EXPLOSION;
-			break;
-		case ATTRIBUTE::POISON:
-			each_cursor[POISON_NUM] = cursol;
-			cursol = each_cursor[MELT_NUM];
-			each_page[POISON_NUM] = page;
-			page = each_page[MELT_NUM];
-			tab = ATTRIBUTE::MELT;
-			break;
-		case ATTRIBUTE::PARALYSIS:
-			each_cursor[PARARYSIS_NUM] = cursol;
-			cursol = each_cursor[POISON_NUM];
-			each_page[PARARYSIS_NUM] = page;
-			page = each_page[POISON_NUM];
-			tab = ATTRIBUTE::POISON;
-			break;
-		case ATTRIBUTE::HEAL:
-			each_cursor[HEAL_NUM] = cursol;
-			cursol = each_cursor[PARARYSIS_NUM];
-			each_page[HEAL_NUM] = page;
-			page = each_page[PARARYSIS_NUM];
-			tab = ATTRIBUTE::PARALYSIS;
-			break;
-		default:
-			break;
-		}
-		if (page == 0)
-		{
-			move_string = 30 * cursol;
-		}
-		else
-		{
-			move_string = 30 * (cursol - 9);
+			move_down = false;
+			move_up = false;
+			switch (tab)
+			{
+			case ATTRIBUTE::EXPLOSION:
+				each_cursor[EXPLOSION_NUM] = cursol;
+				cursol = each_cursor[HEAL_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::HEAL;
+				break;
+			case ATTRIBUTE::MELT:
+				each_cursor[MELT_NUM] = cursol;
+				cursol = each_cursor[EXPLOSION_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::EXPLOSION;
+				break;
+			case ATTRIBUTE::POISON:
+				each_cursor[POISON_NUM] = cursol;
+				cursol = each_cursor[MELT_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::MELT;
+				break;
+			case ATTRIBUTE::PARALYSIS:
+				each_cursor[PARARYSIS_NUM] = cursol;
+				cursol = each_cursor[POISON_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::POISON;
+				break;
+			case ATTRIBUTE::HEAL:
+				each_cursor[HEAL_NUM] = cursol;
+				cursol = each_cursor[PARARYSIS_NUM];
+				move_string = (CURSOL_MOVE * cursol);
+				tab = ATTRIBUTE::PARALYSIS;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -464,12 +423,30 @@ void Pouch::Update()
 		switch (tab)
 		{
 		case ATTRIBUTE::EXPLOSION:
-			if (!select_explosion.make_bool)
+			if (!select_explosion.make_bool || 
+				select_explosion.tag_number == chemical_formula_explosion[cursol].tag_number)
 			{
+
 				if (ComparisonElement(chemical_formula_explosion[cursol]))
 				{
-					SetChemicalFormulaParameter();
-					ConsumptionMaterial();
+					if (select_explosion.tag_number == chemical_formula_explosion[cursol].tag_number)
+					{
+						if (select_explosion.number_of_bullets < 100)
+						{
+							select_explosion.number_of_bullets += chemical_formula_explosion[cursol].number_of_bullets;
+							ConsumptionMaterial();
+						}
+
+						if (select_explosion.number_of_bullets >= 100)
+						{
+							select_explosion.number_of_bullets = 100;
+						}
+					}
+					else
+					{
+						SetChemicalFormulaParameter();
+						ConsumptionMaterial();
+					}
 				}
 			}
 			break;
@@ -517,6 +494,8 @@ void Pouch::Update()
 			break;
 		}
 	}
+
+	old = PAD_INPUT::GetRStick().x;
 }
 
 void Pouch::TabUpdate(int max_num)
@@ -525,51 +504,16 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-			if (tab == ATTRIBUTE::HEAL)
+
+			if (cursol > 0)
 			{
-				if (cursol > 0)
-				{
-					move_string -= 30;
-					cursol--;
-				}
-				else
-				{
-					move_string = 30 * 6;
-					cursol = HEAL_MAX_NUM - 1;
-				}
+				cursol--;
+				move_string = (CURSOL_MOVE * cursol);
 			}
 			else
 			{
-				switch (page)
-				{
-				case 0:
-					if (cursol > 0)
-					{
-						move_string -= 30;
-						cursol--;
-					}
-					else
-					{
-						move_string = 30 * 8;
-						cursol = 8;
-					}
-					break;
-				case 1:
-					if (cursol > 9)
-					{
-						move_string -= 30;
-						cursol--;
-					}
-					else
-					{
-						move_string = 30 * 8;
-						cursol = 8;
-						page = 0;
-					}
-					break;
-				default:
-					break;
-				}
+				move_string = CURSOL_MOVE * (max_num - 1);
+				cursol = max_num - 1;
 			}
 		}
 	}
@@ -578,92 +522,15 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-			if (tab == ATTRIBUTE::HEAL)
+			cursol++;
+			if (cursol < max_num)
 			{
-				if (cursol < max_num - 1)
-				{
-					move_string += 30;
-					cursol++;
-				}
-				else
-				{
-					move_string = 0;
-					cursol = 0;
-				}
+				move_string = (CURSOL_MOVE * cursol);
 			}
 			else
 			{
-				switch (page)
-				{
-				case 0:
-					if (cursol < 8)
-					{
-						move_string += 30;
-						cursol++;
-					}
-					else
-					{
-						move_string = 0;
-						cursol = 9;
-						page = 1;
-					}
-					break;
-				case 1:
-					if (cursol < max_num - 1)
-					{
-						move_string += 30;
-						cursol++;
-					}
-					else
-					{
-						move_string = 0;
-						cursol = 9;
-					}
-					break;
-				default:
-					break;
-				}
-			}
-		}
-	}
-
-	if (tab != ATTRIBUTE::HEAL)
-	{
-		if (PAD_INPUT::GetRStick().x > 5000)
-		{
-			if (page_jump_count++ % 15 == 0)
-			{
-				if (page == 0)
-				{
-					page = 1;
-					move_string = 0;
-					cursol = 9;
-				}
-				else if (page == 1)
-				{
-					move_string = 0;
-					page = 0;
-					cursol = 0;
-				}
-			}
-		}
-
-		if (PAD_INPUT::GetRStick().x < -5000)
-		{
-			if (page_jump_count++ % 15 == 0)
-			{
-				if (page == 0)
-				{
-					page = 1;
-					move_string = 0;
-					cursol = 9;
-				}
-				else if (page == 1)
-				{
-					move_string = 0;
-					page = 0;
-					cursol = 0;
-				}
+				move_string = 0;
+				cursol = 0;
 			}
 		}
 	}
@@ -683,19 +550,19 @@ void Pouch::SetElementConstruct(int i)
 		element[i]->SetVolume(50);
 		break;
 	case ELEMENT_ITEM::OXYGEN:
-		element[i]->SetVolume(30);
+		element[i]->SetVolume(40);
 		break;
 	case ELEMENT_ITEM::CARBON:
 		element[i]->SetVolume(30);
 		break;
 	case ELEMENT_ITEM::NITROGEN:
-		element[i]->SetVolume(30);
+		element[i]->SetVolume(20);
 		break;
 	case ELEMENT_ITEM::SULFUR:
 		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::CHLORINE:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(5);
 		break;
 	case ELEMENT_ITEM::URANIUM:
 		element[i]->SetVolume(1);
@@ -722,7 +589,7 @@ void Pouch::InitChemicalParameter()
 		char line[100];
 		for (int i = 0; i < EXPLOSION_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
-			sscanf_s(line, "%[^,],%[^,],%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
+			sscanf_s(line, "%[^,],%[^,],%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
 				chemical_formula_explosion[i].chemical_formula_name,
 				MAX_STRING,
 				chemical_formula_explosion[i].chemical_formula,
@@ -737,13 +604,14 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_explosion[i].damage,
 				&chemical_formula_explosion[i].damage_per_second,
 				&chemical_formula_explosion[i].time,
-				&attribute);
+				&attribute,
+				&chemical_formula_explosion[i].tag_number);
 			chemical_formula_explosion[i].atribute = static_cast <ATTRIBUTE>(attribute);
 			chemical_formula_explosion[i].make_bool = true;
 		}
 		for (int i = 0; i < POISON_MAX_NUM && (fgets(line, 100, fp) != NULL); i++)
 		{
-			sscanf_s(line, "%[^,],%[^,],%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
+			sscanf_s(line, "%[^,],%[^,],%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",//入っている数字や文字に合わせてdとかfとか変える
 				chemical_formula_poison[i].chemical_formula_name,
 				MAX_STRING,
 				chemical_formula_poison[i].chemical_formula,
@@ -758,7 +626,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_poison[i].damage,
 				&chemical_formula_poison[i].damage_per_second,
 				&chemical_formula_poison[i].time,
-				&attribute);
+				&attribute,
+				&chemical_formula_poison[i].tag_number);
 			chemical_formula_poison[i].atribute = static_cast <ATTRIBUTE>(attribute);
 			chemical_formula_poison[i].make_bool = true;
 		}
@@ -780,7 +649,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_pararysis[i].damage,
 				&chemical_formula_pararysis[i].damage_per_second,
 				&chemical_formula_pararysis[i].time,
-				&attribute);
+				&attribute,
+				&chemical_formula_pararysis[i].tag_number);
 			chemical_formula_pararysis[i].atribute = static_cast <ATTRIBUTE>(attribute);
 			chemical_formula_pararysis[i].make_bool = true;
 		}
@@ -802,7 +672,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_heal[i].damage,
 				&chemical_formula_heal[i].damage_per_second,
 				&chemical_formula_heal[i].time,
-				&attribute);
+				&attribute, 
+				&chemical_formula_heal[i].tag_number);
 			chemical_formula_heal[i].atribute = static_cast <ATTRIBUTE>(attribute);
 			chemical_formula_heal[i].make_bool = true;
 
@@ -825,7 +696,8 @@ void Pouch::InitChemicalParameter()
 				&chemical_formula_melt[i].damage,
 				&chemical_formula_melt[i].damage_per_second,
 				&chemical_formula_melt[i].time,
-				&attribute);
+				&attribute,
+				&chemical_formula_melt[i].tag_number);
 			chemical_formula_melt[i].atribute = static_cast <ATTRIBUTE>(attribute);
 			chemical_formula_melt[i].make_bool = true;
 		}
@@ -935,19 +807,19 @@ void Pouch::SetChemicalFormulaParameter()
 	switch (tab)
 	{
 	case ATTRIBUTE::EXPLOSION:
-			select_explosion = chemical_formula_explosion[cursol];
+		select_explosion = chemical_formula_explosion[cursol];
 		break;
 	case ATTRIBUTE::MELT:
-			select_melt = chemical_formula_melt[cursol];
+		select_melt = chemical_formula_melt[cursol];
 		break;
 	case ATTRIBUTE::POISON:
-			select_poison = chemical_formula_poison[cursol];
+		select_poison = chemical_formula_poison[cursol];
 		break;
 	case ATTRIBUTE::PARALYSIS:
-			select_pararysis = chemical_formula_pararysis[cursol];
+		select_pararysis = chemical_formula_pararysis[cursol];
 		break;
 	case ATTRIBUTE::HEAL:
-			select_heal = chemical_formula_heal[cursol];
+		select_heal = chemical_formula_heal[cursol];
 		break;
 	default:
 		break;

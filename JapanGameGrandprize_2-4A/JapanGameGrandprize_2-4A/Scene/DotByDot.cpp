@@ -1,24 +1,16 @@
 #include "DotByDot.h"
-#include "PadInput.h"
+#include "../PadInput.h"
 #include "GameMain.h"
-#include "Undead.h"
-#include"EnemySlime.h"
-#include"EnemyGhost.h"
-#include"Harpy.h"
-#include "Mage.h"
-#include "Torrent.h"
-#include "EnemySlimeBoss.h"
+#include "../Undead.h"
+#include"../EnemySlime.h"
+#include"../EnemyGhost.h"
+#include"../Harpy.h"
+#include "../Mage.h"
+#include "../Torrent.h"
+#include "../EnemySlimeBoss.h"
 
-#define ENEMY_NUM 3
 
-enum class CHARACTER_STATE
-{
-	IDOL,   //ƒAƒCƒhƒ‹ó‘Ô
-	MOVE,   //ˆÚ“®
-	FALL,	//—Ž‰º
-	ATTACK, //UŒ‚
-	DEATH,  //Ž€–S
-};
+#define ENEMY_NUM 4
 
 
 
@@ -33,12 +25,21 @@ DotByDot::DotByDot()
 	spawn_location.y = 100;
 	spawn_location.x = 280;
 	enemy[0] = new Undead(spawn_location);
-	spawn_location.x = 500;
+	spawn_location.y = 78;
+	spawn_location.x = 450;
 	enemy[1] = new EnemyGhost(spawn_location);
+	spawn_location.y = 93;
 	spawn_location.x = 700;
 	enemy[2] = new EnemySlime(spawn_location);
+	spawn_location.y = 80;
+	spawn_location.x = 900;
+	enemy[3] = new Harpy(spawn_location);
 
 	player = new Player();
+	element = new Stage_Element();
+
+	element->InitDemo({100.0f,400.0f});
+
 
 	font = CreateFontToHandle("DotByDotFont", 32, 1, DX_FONTTYPE_NORMAL);
 }
@@ -56,6 +57,8 @@ DotByDot::~DotByDot()
 	delete[] enemy;
 
 	delete player;
+
+	delete element;
 
 	DeleteFontToHandle(font);
 }
@@ -81,12 +84,14 @@ AbstractScene* DotByDot::Update()
 		enemy[i]->Update(static_cast<ENEMY_STATE>(state % 5));
 	}
 
-	player->Update(static_cast<PLAYER_STATE>(state % 6));
+	player->Update(static_cast<PLAYER_DEBUG_STATE>(state % 5));
 #endif // _DEBUG
 
-	
+	element->Update(player);
 
 	return this;
+
+	
 }
 
 //-----------------------------------
@@ -95,6 +100,7 @@ AbstractScene* DotByDot::Update()
 void DotByDot::Draw() const
 {
 	SetBackgroundColor(0,255,255);
+	DrawLine(0, 100, SCREEN_WIDTH, 100, 0x000000, true);
 #ifdef _DEBUG
 	for (int i = 0; i < ENEMY_NUM; i++)
 	{
@@ -104,8 +110,9 @@ void DotByDot::Draw() const
 	player->DebugDraw();
 #endif // _DEBUG
 
-	
+	element->Draw();
 
-	DrawFormatStringToHandle(1160, 660, 0x000000, font, "%s", str[state % 5]);
+	DrawFormatStringToHandle(1060, 610, 0x000000, font, "Player:%s", player_str[state % 5]);
 
+	DrawFormatStringToHandle(1060, 660, 0x000000, font, " Enemy:%s", enemy_str[state % 5]);
 }

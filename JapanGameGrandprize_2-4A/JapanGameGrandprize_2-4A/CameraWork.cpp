@@ -2,6 +2,7 @@
 #include "PadInput.h"
 
 Location CameraWork::camera;
+CameraWork::STATE CameraWork::state;
 
 //#define DEBUG
 
@@ -90,11 +91,29 @@ void CameraWork::Update()
 {
 	if (is_lock == true) { return; }
 	//printfDx("state:%d\n", state);
-
+	
 	//clsDx();
+	
+	//float player_x = player->GetLocation().x;
+
 	Camera player_p;
 	player_p = { player->GetLocation().x, player->GetLocation().y };
-	//float player_x = player->GetLocation().x;
+	camera.y = player_p.y - 400;
+
+	POINT stage_size = stage->GetMapSize();
+
+	//ボス部屋に足を踏み入れると画面を強制的に動かす
+	//プレイヤーが飛んでいたら、着地させてから動かす
+	if (state == STATE::BOSS && player->GetState()==PLAYER_STATE::STOP)
+	{
+		camera.x += 4;
+
+		if (stage_size.x * MAP_CHIP_SIZE - SCREEN_WIDTH < camera.x)
+		{
+			state = STATE::FIXED;
+		}
+		return;
+	}
 
 	//プレイヤーが移動開始ラインを超えたらカメラの状態を移動にする
 	if (player_p.x > moveing_line) { state = STATE::MOVE; }
@@ -103,8 +122,14 @@ void CameraWork::Update()
 	if (state == STATE::MOVE) 
 	{
 
-		//移動開始ラインの変動
+		if (stage_size.x * MAP_CHIP_SIZE - SCREEN_WIDTH + MAP_CHIP_SIZE*2 < player_p.x)
+		{
+			state = STATE::BOSS;
 
+			return;
+		}
+
+		//移動開始ラインの変動
 		float player_speed_w = player_p.x - old_player.x;
 		if (player_dir == true)
 		{
@@ -116,13 +141,13 @@ void CameraWork::Update()
 		}
 
 		//マップの右端に着いたら止める
-		if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) 
+		/*if (static_cast<float>(stage->GetMapSize().x * CHIP_SIZE - (SCREEN_WIDTH - moveing_line)) 
 			                                                        < ceilf(player->GetLocation().x))
 		{
 			camera.x = stage->GetMapSize().x * CHIP_SIZE - SCREEN_WIDTH;
 			state = STATE::FIXED;
 			return;
-		}
+		}*/
 
 		//float player_speed = player_p.x - old_player.x;
 		float player_speed = 1.0f;
@@ -149,7 +174,7 @@ void CameraWork::Update()
 			}
 			else if (camera.y > stage->GetMapSize().y * CHIP_SIZE - 700) 
 			{
-				//camera.y = stage->GetMapSize().y * CHIP_SIZE - 700;
+				camera.y = stage->GetMapSize().y * CHIP_SIZE - 700;
 			}
 		}
 
@@ -166,16 +191,16 @@ void CameraWork::Update()
 		}
 	}
 
-	// カメラのy座標を更新
-	if (player->GetLocation().y - camera.y < 200) 
-	{
-		camera.y = player->GetLocation().y - 200;
-	}
-	else if (player->GetLocation().y - camera.y > 420) 
-	{
-		camera.y = player->GetLocation().y - 420;
-		//camera.y + 0.25;
-	}
+	//// カメラのy座標を更新
+	//if (player->GetLocation().y - camera.y < 200) 
+	//{
+	//	camera.y = player->GetLocation().y - 200;
+	//}
+	//else if (player->GetLocation().y - camera.y > 420) 
+	//{
+	//	camera.y = player->GetLocation().y - 420;
+	//	//camera.y + 0.25;
+	//}
 
 	if (camera.x < 0)
 	{

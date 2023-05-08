@@ -57,7 +57,7 @@ public:
 	//デフォルトコンストラクタ
 	Stage_Element_Base();
 
-	Stage_Element_Base(std::vector<std::shared_ptr<Stage_Element_Base>> element, int* image, Location location, Area area);
+	Stage_Element_Base(int* image, Location location, Area area);
 	//コンストラクタ
 	//Stage_Element(const int* p_image, Location location, Area area);
 	//デストラクタ

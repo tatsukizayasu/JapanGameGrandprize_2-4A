@@ -16,12 +16,13 @@
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100.f
-#define HP_BAR_WIDTH 530
-#define HP_BAR_HEIGHT 31
+#define HP_BAR_WIDTH 300
+#define HP_BAR_HEIGHT 28
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
 
 #define PLAYER_IMAGES 7
+
 
 #define PLAYER_SPEED_X 5.0
 
@@ -39,6 +40,15 @@ enum class PLAYER_STATE
 	DEATH
 };
 
+enum class PLAYER_DEBUG_STATE
+{
+	STOP = 0,
+	MOVE,
+	FLY,
+	DOWN,
+	DEATH
+};
+
 class Player : public BoxCollider
 {
 private:
@@ -51,6 +61,8 @@ private:
 	int animation;					//画像アニメーション用
 	int image_count;				//画像の要素数用
 	int* image;						//画像用変数
+	int* jump_image;				//飛んでるときの画像
+	int* attribute_images;			//属性の画像
 	int hp_image;
 	int image_size_x, image_size_y; //画像のサイズ
 	int hp;							//体力
@@ -112,6 +124,7 @@ public:
 	void Draw()const;
 	void PouchDraw()const;
 	void ChemicalFormulaDraw(int,int) const;
+	void PlayerUiDraw(float,float) const;
 	void Update();
 	void ElementUpdate();
 
@@ -146,7 +159,7 @@ public:
 
 #ifdef _DEBUG
 	//更新(DotByDot)
-	void Update(const PLAYER_STATE state);
+	void Update(const PLAYER_DEBUG_STATE state);
 
 	//描画(DotByDot)
 	void DebugDraw();

@@ -6,7 +6,7 @@ class Element_Conveyor_Belt : public Stage_Element_Base
 public:
 
 	//コンストラクタ
-	Element_Conveyor_Belt(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area);
+	Element_Conveyor_Belt(short type, std::vector<int> images, Location location, Area area);
 	//デストラクタ
 	~Element_Conveyor_Belt();
 	//更新

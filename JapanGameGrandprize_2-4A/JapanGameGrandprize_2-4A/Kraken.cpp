@@ -1,5 +1,4 @@
 #include "Kraken.h"
-
 #include "DxLib.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -7,20 +6,24 @@
 #include "BulletManager.h"
 
 //クラーケンの画像  (画像なし、適当な数字を入れます）
-#define KRAKEN_X 100
-#define KRAKEN_Y 100
+#define KRAKEN_X 250
+#define KRAKEN_Y 250
 
 //クラーケン
 #define KRAKEN_HP 500 //（HP調節）
 
-//攻撃をする範囲
-
+//接近攻撃をする範囲
+#define ATTACK_SCOPE 100
+#define ATTACK_SCOPE_Y 100
 
 //次の攻撃までの時間
 
 
-//歩くスピード
+//移動スピード
+#define MOVE_SPEED 3
 
+//移動時間
+#define MOVE_TIME 120
 
 //ドロップ量(最小)
 #define MIN_DROP 40
@@ -29,10 +32,10 @@
 #define MAX_DROP 60
 
 //攻撃力
-
+#define ATTACK_DAMAGE 20 
 
 //体力
-#define KRAKEN_HP 400
+#define KRAKEN_HP 600
 
 
 
@@ -49,13 +52,15 @@ Kraken::Kraken(Location spawn_location)
 	hp = KRAKEN_HP;
 	damage = 0;
 
-	
+
 	kind = ENEMY_KIND::KRAKEN;
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::WATER;
 	state = ENEMY_STATE::IDOL;
 	attack_state = KRAKEN_ATTACK::NONE;
+	move_state = KRAKEN_STATE::NONE;
 
+	attack_num = 1;
 	drop_volume = 0;
 	poison_time = 0;
 	poison_damage = 0;
@@ -63,7 +68,6 @@ Kraken::Kraken(Location spawn_location)
 	location = spawn_location;
 
 	standby_attack = 0;
-	standby_move = 0;
 
 	/*当たり判定の設定*/
 	area.width = KRAKEN_X;
@@ -136,6 +140,7 @@ void Kraken::Update(const Player* player, const Stage* stage)
 			}
 		}
 
+		break;
 	case ENEMY_STATE::FALL:
 		Fall();
 
@@ -158,11 +163,6 @@ void Kraken::Update(const Player* player, const Stage* stage)
 			}
 		}
 
-		if (ScreenOut())
-		{
-			state = ENEMY_STATE::IDOL;
-			speed = 0;
-		}
 		break;
 	case ENEMY_STATE::ATTACK:
 		Attack(player->GetLocation());
@@ -199,7 +199,7 @@ void  Kraken::Idol()
 	{
 		state = ENEMY_STATE::MOVE;
 	}
-	
+
 }
 
 //-----------------------------------
@@ -207,13 +207,34 @@ void  Kraken::Idol()
 //-----------------------------------
 void Kraken::Move(const Location player_location)
 {
-	
 
-	--standby_move; //次の攻撃準備（待機時間)
-	if (standby_move < 0)
+	int range = player_location.x - location.x;
+	int range_y = player_location.y - location.y;
+
+	//接近攻撃
+	if (range <= ATTACK_SCOPE && range >= -ATTACK_SCOPE &&
+		range_y <= ATTACK_SCOPE_Y && range_y >= -ATTACK_SCOPE_Y)
 	{
-		
+		state = ENEMY_STATE::ATTACK;
+		attack_state = KRAKEN_ATTACK::TENTACLE_ATTACK;
 	}
+
+		switch (attack_num)
+		{
+		case 0:
+			attack_state = KRAKEN_ATTACK::BREATH;
+			state = ENEMY_STATE::ATTACK;
+			standby_attack = 40;
+			break;
+		case 1:
+			attack_state = KRAKEN_ATTACK::HARD_ATTACK;
+			state = ENEMY_STATE::ATTACK;
+			standby_attack = 200;
+			break;
+		default:
+			break;
+		}
+
 }
 
 //-----------------------------------
@@ -240,14 +261,16 @@ void  Kraken::Attack(const Location player_location)
 		switch (attack_state)
 		{
 		case KRAKEN_ATTACK::TENTACLE_ATTACK: //触手攻撃
-
+			state = ENEMY_STATE::MOVE;
 			break;
 		case KRAKEN_ATTACK::BREATH: //ブレス攻撃
+			AttackBreath(player_location);
 			break;
 		case KRAKEN_ATTACK::HARD_ATTACK: //水の塊を落とす
 			AttackWater(player_location);
+			attack_num = GetRand(1);
 			state = ENEMY_STATE::MOVE;
-			standby_move = 100;
+			move_state = KRAKEN_STATE::NORMAL;
 			break;
 		case KRAKEN_ATTACK::NONE: //ノーマル
 		default:
@@ -263,6 +286,23 @@ void Kraken::AttackWater(Location player_location)
 {
 	BulletManager::GetInstance()->CreateEnemyBullet
 	(new KrakenBullet(location, player_location));
+
+}
+
+
+//-----------------------------------
+//遠距離攻撃（ブレス攻撃）
+//-----------------------------------
+void Kraken::AttackBreath(const Location player_location)
+{
+	
+		BulletManager::GetInstance()->CreateEnemyBullet
+		(new KrakenBreath(location, player_location));
+		
+		attack_num = GetRand(1);
+		state = ENEMY_STATE::MOVE;
+		move_state = KRAKEN_STATE::NORMAL;
+	
 }
 
 
@@ -272,16 +312,17 @@ void Kraken::AttackWater(Location player_location)
 AttackResource Kraken::Hit()
 {
 
+	//触手出現させてみる？
+
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	/*if (attack_state == KRAKEN_ATTACK::TENTACLE_ATTACK)
+	if (attack_state == KRAKEN_ATTACK::TENTACLE_ATTACK)
 	{
-		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };
-		ret.damage = ATTACK_DITE;
+		ret.damage = ATTACK_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;
-	}*/
+	}
 
 	return ret;
 }
@@ -328,7 +369,7 @@ void Kraken::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		damage = bullet->GetDamage()* WEAKNESS_DAMAGE;
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
@@ -380,6 +421,10 @@ void Kraken::Draw() const
 	}
 
 	DrawDamageLog();
+
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
+		GetColor(255, 255, 0), TRUE);
 
 }
 
