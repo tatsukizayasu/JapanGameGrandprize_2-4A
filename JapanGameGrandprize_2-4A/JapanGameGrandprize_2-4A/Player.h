@@ -116,6 +116,8 @@ private:
 	ChemicalFormulaParameter* melt;
 	ChemicalFormulaParameter* pararysis;
 	ChemicalFormulaParameter* heal;
+
+	PolyLine* hit_line = nullptr;
 public:
 
 	Player();

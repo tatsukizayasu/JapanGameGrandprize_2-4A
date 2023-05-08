@@ -49,19 +49,15 @@ StageBuilder::StageBuilder()
 		};
 		poly_lines.push_back(new PolyLine(test, 3));
 	}
+
+
 	Location testloc[4]{ {300,300},{500,500},{200,700} , {900,400} };
 	PolyLine testline(testloc, 4);
-	//poly_lines.push_back(new PolyLine(testloc, 4));
-
-	//boxes.push_back(new BoxCollider({ 640,360 }, { 100,100 }));
-
-	BoxCollider box = BoxCollider({ 640,360 }, { 100,100 });
 
 
-	objects.push_back(new ObjectBase({ 640,460 }, &testline, "yuka_1"));
+	testline.GetRadian();
 
 
-	Location mouse_line_loc[4]{ {0,0},{100,0},{150,100} , {200,100} };
 
 
 #endif // _DEV

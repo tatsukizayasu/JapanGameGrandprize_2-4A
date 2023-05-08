@@ -373,3 +373,20 @@ void PolyLine::MakeLocation()
 	pivot.SetLocation(middle);
 #endif
 }
+
+//---------------------------------------------
+// Šp“x‚ÌŒvŽZ
+//---------------------------------------------
+float PolyLine::GetRadian(int index)
+{
+	Location start = lines[index]->GetLocation(LINE_START);
+	Location end = lines[index]->GetLocation(LINE_END);
+	start = { 0,0 };
+	end = { 0,100 };
+
+	Location vector = end - start;
+
+	float radian =atan2f(vector.y, vector.x);
+
+	return radian;
+}

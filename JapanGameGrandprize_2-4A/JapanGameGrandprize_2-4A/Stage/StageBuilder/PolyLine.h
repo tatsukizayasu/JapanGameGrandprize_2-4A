@@ -47,6 +47,9 @@ public:
     //’†SÀ•W‚ÌŒvZAÄŒvZ
     void MakeLocation();
 
+    //Šp“x‚ÌŒvZ
+    float GetRadian(int index = 0);
+
     vector<SphereCollider*> GetPoints()const{return bend_points;}
     const vector<LineCollider*>*GetLines()const { return &lines; }
 

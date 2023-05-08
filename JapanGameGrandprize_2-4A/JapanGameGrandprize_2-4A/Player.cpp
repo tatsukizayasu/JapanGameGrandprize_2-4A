@@ -916,6 +916,11 @@ void Player::RightMove()
 
 	if (HitBlock(stage))
 	{
+		if (hit_line)
+		{
+			
+		}
+
 		location.x = old_x;
 		speed_x = 0.0;
 	}
@@ -1465,7 +1470,12 @@ bool Player::HitBlock(const Stage* stage_pointa)
 			{
 				if (HitCheck(object->GetColllider()))
 				{
+					hit_line = dynamic_cast<PolyLine*>(object->GetColllider());
 					return true;
+				}
+				else
+				{
+					hit_line = nullptr;
 				}
 			}
 		}
