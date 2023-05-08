@@ -32,7 +32,9 @@ private:
 	int physical_time; //物理攻撃時間
 	int magic_num; //魔法攻撃した数
 	int magic_time; //魔法攻撃時間
-	int attack_image[7]; //攻撃画像
+	int attack_image[2]; //攻撃画像
+	int attack_anime;
+	int halt_time; //停止タイム
 	float speed; //ゴーストの移動速度
 	float travel; //X座標に動く量
 	float travel_y; //ｙ座標に動く量
@@ -44,8 +46,14 @@ private:
 	bool physical_attack; //物理攻撃に入る（true)なら
 	bool close_attack; //接近攻撃の続行
 	bool hit_ground; //地面との当たり判定
+	bool attack_halt; //攻撃を停止する。
 	GHOST_STATE action_type; //行動パターン
 	GHOST_ATTACK attack_state; //攻撃状態
+
+#ifdef _DEBUG
+	ENEMY_STATE old_state;
+#endif // _DEBUG
+
 public:
 
 	//コンスタラクタ

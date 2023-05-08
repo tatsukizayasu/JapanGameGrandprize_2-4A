@@ -81,6 +81,9 @@ public:
     //•`‰æ
     void Draw() const override;
 
+    //HPƒo[‚Ì•`‰æ
+    void DrawHPBar(const int) const;
+
     //À•W‚Ìæ“¾
     Location GetLocation() const override;
 

@@ -19,7 +19,7 @@ private:
 
 public:
 
-	Element_Item_Drop_Object(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area);
+	Element_Item_Drop_Object(short type, std::vector<int> images, Location location, Area area);
 	~Element_Item_Drop_Object();
 	void Update(Player* player)override;
 	void Draw()const override;

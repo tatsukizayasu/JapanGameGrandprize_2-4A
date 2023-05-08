@@ -21,7 +21,7 @@ private:
 public:
 
 	//動く床のコンストラクタ
-	Element_Move_Floor(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area);
+	Element_Move_Floor(short type, std::vector<int> images, Location location, Area area);
 	//動く床（目標地点のコンストラクタ)
 	Element_Move_Floor(short type, Location location);
 	~Element_Move_Floor();

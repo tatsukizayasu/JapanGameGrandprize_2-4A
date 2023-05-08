@@ -31,7 +31,7 @@
 #define UNDEAD_MOVE_IMAGES 5
 
 //çUåÇâÊëú
-#define UNDEAD_ATTACK_IMAGES 3
+#define UNDEAD_ATTACK_IMAGES 4
 
 //âÊëú
 #define UNDEAD_IMAGES UNDEAD_MOVE_IMAGES + UNDEAD_ATTACK_IMAGES
@@ -92,7 +92,7 @@ Undead::Undead(Location spawn_location)
 	}
 
 	images = new int[UNDEAD_IMAGES];
-	LoadDivGraph("Images/Enemy/undead.png", 8, 8, 1, 150, 150, images);
+	LoadDivGraph("Images/Enemy/undead.png", UNDEAD_IMAGES, UNDEAD_IMAGES, 1, 250, 250, images);
 	GetGraphSizeF(images[0], &size.width, &size.height);
 
 	InitDamageLog();
@@ -238,9 +238,20 @@ void Undead::DistancePlayer(const Location player_location)
 	if ((distance < UNDEAD_ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
 		state = ENEMY_STATE::ATTACK;
-		area.width += UNDEAD_WIDTH / 3;
+		area.width += UNDEAD_WIDTH / 2;
 		image_argument = UNDEAD_MOVE_IMAGES;
 		animation = 0;
+
+		if (player_location.x <= location.x)
+		{
+			left_move = true;
+			speed = -UNDEAD_SPEED;
+		}
+		else
+		{
+			left_move = false;
+			speed = UNDEAD_SPEED;
+		}
 	}
 	else if(distance < UNDEAD_TRACKING_DISTANCE && (UNDEAD_TRACKING_DISTANCE < old_distance)) //àÍíËîÕàÕì‡ÇæÇ∆ÉvÉåÉCÉÑÅ[Çí«Ç¢Ç©ÇØÇÈ
 	{
@@ -391,6 +402,7 @@ void Undead::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::POISON:
+		damage = bullet->GetDamage();
 		if (!poison)
 		{
 			poison = true;
@@ -478,7 +490,7 @@ void Undead::Draw() const
 	DrawDamageLog();
 
 	DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
-		0.6, 0,images[image_argument], TRUE, !left_move);
+		0.4, 0,images[image_argument], TRUE, !left_move);
 
 }
 
@@ -545,7 +557,7 @@ void Undead::DebugDraw()
 	center.height = size.height / 2;
 
 	DrawRotaGraph2F(location.x, location.y, center.width, center.height,
-		0.6, 0,images[image_argument], TRUE, !left_move);
+		0.4, 0,images[image_argument], TRUE, !left_move);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

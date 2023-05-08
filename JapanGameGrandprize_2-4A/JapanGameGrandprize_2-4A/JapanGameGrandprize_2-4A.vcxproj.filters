@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="BoxCollider.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="FpsController.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -16,20 +13,11 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SphereCollider.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\Stage.cpp">
       <Filter>ソースファイル\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Stage\MapChip.cpp">
       <Filter>ソースファイル\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="LineCollider.cpp">
-      <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="CameraWork.cpp">
       <Filter>ソースファイル</Filter>
@@ -75,9 +63,6 @@
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="LineCollider.cpp" />
-    <ClCompile Include="ColliderBase.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Pouch.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -138,12 +123,6 @@
     <ClCompile Include="Stage\Element\Element_Move_Floor.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>ソースファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Pause.cpp">
-      <Filter>ソースファイル\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Stage\Element\Element_Fall_Floor.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
     </ClCompile>
@@ -162,9 +141,6 @@
     <ClCompile Include="SlimeBossBody.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="DotByDot.cpp">
-      <Filter>ソースファイル\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Dragon.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
@@ -173,9 +149,6 @@
     </ClCompile>
     <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp">
       <Filter>ソースファイル\Stage\Element</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOver.cpp">
-      <Filter>ソースファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="DragonBullet.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
@@ -188,12 +161,6 @@
     </ClCompile>
     <ClCompile Include="DragonThunder.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
-    </ClCompile>
-    <ClCompile Include="GameClear.cpp">
-      <Filter>ソースファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="AbstractScene.cpp">
-      <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="LastBoss.cpp">
       <Filter>ソースファイル\Enemy</Filter>
@@ -216,14 +183,53 @@
     <ClCompile Include="TextureContainer.cpp">
       <Filter>ソースファイル\Stage\StageBuilder</Filter>
     </ClCompile>
+    <ClCompile Include="KrakenTentacle.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\DotByDot.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\END.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameClear.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameMain.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameOver.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Pause.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Title.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\AbstractScene.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>ソースファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderBase.cpp">
+      <Filter>ソースファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCollider.cpp">
+      <Filter>ソースファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereCollider.cpp">
+      <Filter>ソースファイル\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="LastBossHand.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractScene.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="BoxCollider.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
@@ -237,12 +243,6 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SphereCollider.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\Stage.h">
@@ -286,12 +286,6 @@
     </ClInclude>
     <ClInclude Include="EnemyGhost.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="ColliderBase.h">
-      <Filter>ヘッダーファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="LineCollider.h">
-      <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="Stage\StageBuilder\Debug.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
@@ -365,12 +359,6 @@
     <ClInclude Include="Stage\Element\Element_Move_Floor.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
-    <ClInclude Include="GameMain.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Pause.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Stage\Element\Element_Fall_Floor.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
@@ -386,9 +374,6 @@
     <ClInclude Include="SlimeBossBody.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="DotByDot.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="HarpyBullet.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
@@ -401,9 +386,6 @@
     <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h">
       <Filter>ヘッダーファイル\Stage\Element</Filter>
     </ClInclude>
-    <ClInclude Include="GameOver.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="DragonBullet.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
@@ -412,9 +394,6 @@
     </ClInclude>
     <ClInclude Include="WyvernBless.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
-    </ClInclude>
-    <ClInclude Include="GameClear.h">
-      <Filter>ヘッダーファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="DragonThunder.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
@@ -439,6 +418,51 @@
     </ClInclude>
     <ClInclude Include="TextureContainer.h">
       <Filter>ヘッダーファイル\Stage\StageBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="KrakenTentacle.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\DotByDot.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\END.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameClear.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameMain.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameOver.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Pause.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Title.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\AbstractScene.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderBase.h">
+      <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="LineCollider.h">
+      <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereCollider.h">
+      <Filter>ヘッダーファイル\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="LastBossHand.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -495,6 +519,12 @@
     </Filter>
     <Filter Include="ヘッダーファイル\Scene">
       <UniqueIdentifier>{acec3a04-f352-4059-94b1-1689604dcbfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Collider">
+      <UniqueIdentifier>{69ae6354-dc4b-4abd-9408-8793e9d1af57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダーファイル\Collider">
+      <UniqueIdentifier>{0c1beecd-8781-4c98-b088-1817e1458e1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

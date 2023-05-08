@@ -272,8 +272,8 @@ void Wyvern::Move(const Location player_location)
 
 	location.x += speed;
 
-	if ((location.x < area.width / 2) || 
-		(SCREEN_WIDTH - area.width / 2 < location.x))
+	if ((location.x - CameraWork::GetCamera().x < area.width / 2) || 
+		(SCREEN_WIDTH - area.width / 2 < location.x - CameraWork::GetCamera().x))
 	{
 		left_move = !left_move;
 		speed = -speed;
@@ -502,11 +502,11 @@ void Wyvern::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage = static_cast<int>(bullet->GetDamage() * RESISTANCE_DAMAGE);
 		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		break;
 	case ATTRIBUTE::MELT:
-		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage = static_cast<int>(bullet->GetDamage() * WEAKNESS_DAMAGE);
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
@@ -514,7 +514,7 @@ void Wyvern::HitBullet(const BulletBase* bullet)
 		{
 			poison = true;
 			poison_damage = bullet->GetDamage();
-			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			poison_time = static_cast<int>(bullet->GetDebuffTime() * RESISTANCE_DEBUFF);
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
@@ -522,7 +522,7 @@ void Wyvern::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		if (!paralysis)
 		{
-			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			paralysis_time = static_cast<int>(bullet->GetDebuffTime() * RESISTANCE_DEBUFF);
 		}
 		break;
 	case ATTRIBUTE::HEAL:

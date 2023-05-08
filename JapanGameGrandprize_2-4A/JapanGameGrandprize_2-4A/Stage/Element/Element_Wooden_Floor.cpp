@@ -4,9 +4,8 @@
 #include "Stage_Element.h"
 #include "../CameraWork.h"
 
-Element_Wooden_Floor::Element_Wooden_Floor(short type, 
-	std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, 
-	Location location, Area area) : Stage_Element_Base(element, &images.at(0), location, area)
+Element_Wooden_Floor::Element_Wooden_Floor(short type,  std::vector<int> images, 
+	Location location, Area area) : Stage_Element_Base(&images.at(0), location, area)
 {
 
 	this->type = type;

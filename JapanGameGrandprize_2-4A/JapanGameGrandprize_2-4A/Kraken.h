@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
 #include"KrakenBullet.h"
+#include"KrakenBreath.h"
 
 
 enum class KRAKEN_STATE
@@ -22,9 +23,12 @@ class Kraken :
     public EnemyBase
 {
 private:
-	int standby_attack; //UŒ‚‘Ò‹@ŠÔ
-	int standby_move; //ˆÚ“®‘Ò‹@ŠÔ
-	KRAKEN_ATTACK attack_state;
+	
+	int attack_num; //UŒ‚‚Ìí—Ş
+	int standby_attack; //UŒ‚‘Ò‹@
+
+	KRAKEN_ATTACK attack_state; //UŒ‚
+	KRAKEN_STATE move_state; //“®‚«
 
 public:
 
@@ -46,11 +50,11 @@ public:
 	//ˆÚ“®
 	void Move(const Location player_location) override;
 
-	//Ú‹ßUŒ‚i•¨—UŒ‚j‚Ì“®‚«
-	void PhysicalMove(const Location player_location);
-
 	//‰“‹——£UŒ‚i…‚Ì‰ò‚ğ—‚Æ‚·j
 	void AttackWater(const Location player_location);
+
+	//ƒuƒŒƒXUŒ‚
+	void AttackBreath(const Location player_location);
 
 	//—‰º
 	void Fall() override;

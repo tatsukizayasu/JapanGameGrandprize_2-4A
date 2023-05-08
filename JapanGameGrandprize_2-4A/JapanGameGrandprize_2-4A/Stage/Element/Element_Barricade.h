@@ -21,7 +21,7 @@ public:
 
 
 	//コンストラクタ
-	Element_Barricade(short type, std::vector<std::shared_ptr<Stage_Element_Base>> element, std::vector<int> images, Location location, Area area, Area margin_area, DIRECTION direction);
+	Element_Barricade(short type, std::vector<int> images, Location location, Area area, Area margin_area, DIRECTION direction);
 	//デストラクタ
 	~Element_Barricade();
 	//更新

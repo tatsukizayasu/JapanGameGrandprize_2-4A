@@ -1,21 +1,25 @@
 #include "GameMain.h"
 #include "DxLib.h"
-#include "CameraWork.h"
-#include "PadInput.h"
-#include "Undead.h"
-#include "EnemySlime.h"
-#include "EnemyGhost.h"
-#include "Harpy.h"
-#include "BULLET.h"
-#include "Mage.h"
-#include "Wyvern.h"
-#include "Torrent.h"
-#include "EnemySlimeBoss.h"
-#include"Dragon.h"
+#include "../CameraWork.h"
+#include "../PadInput.h"
+#include "../Undead.h"
+#include "../EnemySlime.h"
+#include "../EnemyGhost.h"
+#include "../Harpy.h"
+#include "../BULLET.h"
+#include "../Mage.h"
+#include "../Wyvern.h"
+#include "../Torrent.h"
+#include "../EnemySlimeBoss.h"
+#include "../Kraken.h"
+#include"../Dragon.h"
+#include"../Kraken.h"
+#include "../LastBoss.h"
 #include "DotByDot.h"
 #include <math.h>
 #include "GameOver.h"
 #include "GameClear.h"
+#include "END.h"
 
 //-----------------------------------
 // コンストラクタ
@@ -40,7 +44,13 @@ GameMain::GameMain(short stage_num)
 	EnemyBase::CreateLogFont();
 
 	SpawnEnemy();
+
+	stage->SetEnemy(enemy);
+	stage->InitStage();
+	stage->SetElement();
+
 	camera_work = new CameraWork(0, 0, player, stage, stage_num);
+
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
 	
@@ -99,8 +109,6 @@ AbstractScene* GameMain::Update()
 	}
 #endif
 
-
-
 	camera_work->Update();
 	player->Update();
 	stage->Update(player);
@@ -112,11 +120,15 @@ AbstractScene* GameMain::Update()
 	}//Stage03の場合、背景を独立に動かす
 	else
 	{
-		background_location.x += 1.0f;
+		background_location.x += 10.0f;
 	}
 
+	// ボスを倒した場合
 	if (EnemyUpdate() == true)
 	{
+		// 最後のステージをクリアした場合
+		if (stage_num == 5) { return new END(); }
+
 		return new GameClear(stage_num);
 	}
 	item_controller->Update(player);
@@ -139,45 +151,44 @@ void GameMain::SpawnEnemy()
 
 	enemy_spawn_volume = spawn.size();
 	enemy = new EnemyBase * [enemy_spawn_volume];
+	for (int i = 0; i < enemy_spawn_volume; i++)
+	{
+		enemy[i] = nullptr;
+	}
+
 	int i;
-	for (i = 0; i < enemy_spawn_volume; i++)
+	for (i = 0; i < enemy_spawn_volume - 1 ; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
 		case ENEMY_KIND::SLIME: //スライムの生成
 			enemy[i] = new EnemySlime(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::UNDEAD:	//アンデットの生成
 			enemy[i] = new Undead(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::HARPY:		//ハーピーの生成
 			enemy[i] = new Harpy(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::MAGE:		//メイジの生成
 			enemy[i] = new Mage(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::GHOST:		//ゴーストの生成
 			enemy[i] = new EnemyGhost(spawn[i].location);
 			break;
+
 		case ENEMY_KIND::WYVERN:	//ワイバーンの生成
 			enemy[i] = new Wyvern(spawn[i].location);
 			break;
-		case ENEMY_KIND::SLIME_BOSS://スライムボスの生成
-			enemy[i] = nullptr;
-			break;
-		case ENEMY_KIND::TORRENT:	//トレントボスの生成
-			enemy[i] = new Torrent(spawn[i].location);
-			break;
-		case ENEMY_KIND::KRAKEN:	//クラーケンボスの生成
-			break;
-		case ENEMY_KIND::DRAGON:	//ドラゴンボスの生成
-			enemy[i] = new Dragon(spawn[i].location);
-			break;
-		case ENEMY_KIND::END_BOSS:	//ラスボスの生成
-			break;
+
 		case ENEMY_KIND::NONE:
-		default:
 			enemy[i] = nullptr;
+			break;
+		default:
 			break;
 		}
 	}
@@ -191,53 +202,106 @@ bool GameMain::EnemyUpdate()
 	//クリア判定用フラグ
 	bool is_clear = false;
 
-	//プレイヤーがボスエリアに入った際、ボスを出現させる
-	if (camera_work->GetCameraLock() == true && is_spawn_boss == false)
-	{
-		vector<ENEMY_LOCATION> spawn;
-		spawn = stage->GetEnemy_SpawnLocation();
-
-		enemy_spawn_volume = spawn.size();
-		int boss_index;
-		for (int i = 0; i < enemy_spawn_volume; i++)
-		{
-			if (static_cast<short>(ENEMY_KIND::SLIME_BOSS) <= spawn[i].id)
-			{
-				if (enemy[i] == nullptr)
-				{
-					enemy[i] = new EnemySlimeBoss(spawn[i].location);
-					is_spawn_boss = true;
-					break;
-				}
-			}
-		}
-	}
+	vector<ENEMY_LOCATION> spawn;
+	spawn = stage->GetEnemy_SpawnLocation();
 
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
 
+	//ステージ内に生存している敵の数
+	short enemy_count = 0;
+
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
+		//プレイヤーがボスエリアに入った際、ボスを出現させる
+		if (camera_work->GetCameraLock() == true && is_spawn_boss == false)
+		{
+
+			if (stage_num == 3)
+			{
+				if (enemy[i] != nullptr)
+				{
+					enemy_count++;
+				}
+			}
+
+			if (static_cast<short>(ENEMY_KIND::SLIME_BOSS) <= spawn[i].id)
+			{
+				if (enemy[i] == nullptr)
+				{
+					switch (static_cast<ENEMY_KIND>(spawn[i].id))
+					{
+						//スライムボスの生成
+					case ENEMY_KIND::SLIME_BOSS:
+						enemy[i] = new EnemySlimeBoss(spawn[i].location);
+						is_spawn_boss = true;
+						break;
+
+						//トレントボスの生成
+					case ENEMY_KIND::TORRENT:
+						enemy[i] = new Torrent(spawn[i].location);
+						is_spawn_boss = true;
+						break;
+
+						//クラーケンボスの生成
+					case ENEMY_KIND::KRAKEN:
+						if (enemy_count == 0)
+						{
+							enemy[i] = new Kraken(spawn[i].location);
+							is_spawn_boss = true;
+						}
+						break;
+
+						//ドラゴンボスの生成
+					case ENEMY_KIND::DRAGON:
+						enemy[i] = new Dragon(spawn[i].location);
+						is_spawn_boss = true;
+						break;
+
+					case ENEMY_KIND::LAST_BOSS:
+						enemy[i] = new LastBoss(spawn[i].location);
+						is_spawn_boss = true;
+						break;
+
+					default:
+						break;
+					}
+
+				}
+			}
+		}
+
 		if (enemy[i] != nullptr)
 		{
 			//Stage03の場合、画面内に収まるまで敵を強制移動
 			if (stage_num == 3 &&
 				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
 			{
-				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 1.0f,enemy[i]->GetLocation().y });
+				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 2.0f,enemy[i]->GetLocation().y });
 			}
 
-				enemy[i]->Update(player, stage);
+			enemy[i]->Update(player, stage);
 
 			//エネミーの攻撃
-			if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
+
+			if (enemy[i]->GetEnemyKind() == ENEMY_KIND::LAST_BOSS)
 			{
-				if (player->HitBox(enemy[i]))
+				LastBoss* last_boss;
+				last_boss = dynamic_cast<LastBoss*>(enemy[i]);
+				
+				player->HpDamage(last_boss->PunchAttack(player));
+			}
+			else
+			{
+				if (enemy[i]->GetState() == ENEMY_STATE::ATTACK)
 				{
-					player->HpDamage(enemy[i]->Hit());
+					if (player->HitBox(enemy[i]))
+					{
+						player->HpDamage(enemy[i]->Hit());
+					}
 				}
 			}
-			
+
 			//プレイヤーの弾との当たり判定
 			for (int j = 0; j < BULLET_MAX; j++)
 			{
@@ -246,24 +310,45 @@ bool GameMain::EnemyUpdate()
 					break;
 				}
 
-				if(enemy[i]->HitSphere(player_bullet[j]))
+				if (enemy[i]->GetEnemyKind() == ENEMY_KIND::LAST_BOSS)
 				{
-					enemy[i]->HitBullet(player_bullet[j]);
-					delete player_bullet[j];
-					player_bullet[j] = nullptr;
-					player->SortBullet(j);
-					j--;
+					LastBoss* last_boss;
+					last_boss = dynamic_cast<LastBoss*>(enemy[i]);
+
+					if (last_boss->CheckHitBulelt(player_bullet[j]))
+					{
+						delete player_bullet[j];
+						player_bullet[j] = nullptr;
+						player->SortBullet(j);
+						j--;
+					}
+				}
+				else
+				{
+					if (enemy[i]->HitSphere(player_bullet[j]))
+					{
+						enemy[i]->HitBullet(player_bullet[j]);
+						delete player_bullet[j];
+						player_bullet[j] = nullptr;
+						player->SortBullet(j);
+						j--;
+					}
 				}
 			}
 
-			if (enemy[i]->GetCanDelete()) //エネミーの削除
+				//エネミーの削除
+			if (enemy[i]->GetCanDelete() || (enemy[i]->GetLocation().x + enemy[i]->GetArea().width < 0 && enemy[i]->GetEnemyKind() != ENEMY_KIND::WYVERN))
 			{
-				if (ENEMY_KIND::SLIME_BOSS == enemy[i]->GetEnemyKind())
+				if (ENEMY_KIND::SLIME_BOSS <= enemy[i]->GetEnemyKind())
 				{
 					is_clear = true;
 				}
 
-				item_controller->SpawnItem(enemy[i]);
+				//エネミーがステージ内で死んだらアイテムを生成
+				if (0 <= enemy[i]->GetLocation().x + enemy[i]->GetArea().width)
+				{
+					item_controller->SpawnItem(enemy[i]);
+				}
 				delete enemy[i];
 				enemy[i] = nullptr;
 				i--;
@@ -311,6 +396,10 @@ bool GameMain::EnemyUpdate()
 				player->HpDamage(bullet_manager->HitEnemyNuts(i));
 				bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
 				i--;
+				if (i < 0)
+				{
+					break;
+				}
 			}
 
 			if (enemy_nuts[i] == nullptr)
@@ -334,6 +423,11 @@ bool GameMain::EnemyUpdate()
 					player_bullet[j] = nullptr;
 					player->SortBullet(j);
 					j--;
+
+					if (i < 0)
+					{
+						break;
+					}
 				}
 			}
 		}

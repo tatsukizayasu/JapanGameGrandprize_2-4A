@@ -11,6 +11,8 @@
 
 class Player;
 
+class EnemyBase;
+
 class CameraWork;
 
 class Stage_Element;
@@ -33,6 +35,7 @@ private:
 	//オブジェクト変数
 	Player* player;
 	Stage_Element* element;
+	EnemyBase** enemy;
 	CameraWork* camera_work;
 
 #ifdef _STAGE_BUILDER
@@ -137,6 +140,12 @@ public:
 	void SetPlayer(Player *player) { this->player = player; }
 
 	/// <summary>
+	/// StageクラスにEnemyオブジェクトを渡すSetter
+	/// </summary>
+	/// <param name = "*player">Playerオブジェクトポインタ</param>
+	void SetEnemy(EnemyBase** enemy);
+
+	/// <summary>
 	/// StageクラスにCameraWorkオブジェクトを渡すSetter
 	/// </summary>
 	/// <param name = "*camera">CameraWorkオブジェクトポインタ</param>
@@ -172,4 +181,9 @@ public:
 	/// </summary>
 	/// <returns>ベクター型(ENEMY_LOCATION構造体型)</returns>	
 	std::vector<ENEMY_LOCATION> GetEnemy_SpawnLocation() const { return enemy_init_location; }
+
+	/// <summary>
+	/// エレメントパラメータ設定関数
+	/// </summary>
+	void SetElement();
 };

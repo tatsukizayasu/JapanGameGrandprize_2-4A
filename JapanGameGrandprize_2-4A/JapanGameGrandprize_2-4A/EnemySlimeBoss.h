@@ -7,6 +7,13 @@
 #include"SlimeBossThunder.h"
 
 
+enum class ATTACKTYPE
+{
+	NONE,
+	MAGIC_BULLET,
+	THUNDER
+};
+
 class EnemySlimeBoss : public EnemyBase
 {
 private:
@@ -15,9 +22,13 @@ private:
 	int slime_boss_jump_distance;
 	int speed_y;
 	int wait_time;
-	int breath_time;
+	int cloud_move_time;
+	int cloud_brightness;
 
 	ENEMY_STATE now_state;
+	Location cloud_location;
+
+	ATTACKTYPE attack_type;
 
 #ifdef _DEBUG
 	ENEMY_STATE old_state; //ˆê‚Â‘O‚Ìó‘Ô
@@ -33,6 +44,9 @@ public:
 	virtual void Update(const Player* player, const Stage* stage)override;
 	//•`‰æ
 	virtual void Draw()const override;
+	void Update_Cloud(const Player* player);
+
+	void Draw_Cloud()const;
 
 	//ˆÚ“®
 	void Move(const Location player_location) override;

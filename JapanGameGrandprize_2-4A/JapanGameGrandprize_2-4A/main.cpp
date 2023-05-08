@@ -1,9 +1,9 @@
 #include "DxLib.h"
 #include "Define.h"
-#include "SceneManager.h"
-#include "GameMain.h"
+#include "Scene/SceneManager.h"
+#include "Scene/GameMain.h"
 #include "PadInput.h"
-#include "GameMain.h"
+#include "Scene/Title.h"
 
 #define FRAMERATE 60.0 //フレームレート
 
@@ -16,7 +16,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	double dNextTime = GetNowCount();
 
-	SetMainWindowText("Stick To Wall");
+	SetMainWindowText("Elemental War");
+
+	SetWindowIconID(01);
 
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
 
@@ -32,7 +34,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	try
 	{
-		sceneMng = new SceneManager((AbstractScene*)new GameMain(1));
+		sceneMng = new SceneManager((AbstractScene*)new Title());
 	}
 	catch (const char* err)
 	{
@@ -82,7 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 
 		//フレームレートの設定
-		dNextTime += static_cast<double>(1.0 / 60.0 * 1000.0);
+		dNextTime += 1.0 / 60.0 * 1000.0;
 
 		if (dNextTime > GetNowCount()) 
 		{

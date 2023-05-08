@@ -1,21 +1,24 @@
 #pragma once
 #include "AbstractScene.h"
-class GameOver :
-	public AbstractScene
+class GameClear :
+    public AbstractScene
 {
 private:
+    // フォントハンドル
+    int menu_font;
 
 public:
     //コンストラクタ
-    GameOver(short stage_num);
+    GameClear(short stage_num);
 
     //デストラクタ
-    ~GameOver();
+    ~GameClear();
 
     //更新
     AbstractScene* Update() override;
 
     //描画
     void Draw() const override;
+
 };
 

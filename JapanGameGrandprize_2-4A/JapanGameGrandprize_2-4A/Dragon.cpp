@@ -175,6 +175,7 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	}
 
 	hit_stage = HitStage(stage);
+
 	if (hit_stage.hit) //ステージとの当たり判定
 	{
 		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
@@ -193,6 +194,27 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 			state = ENEMY_STATE::MOVE;
 		}
 
+	}
+
+	//画面内座標
+	Location s_location = { location.x - CameraWork::GetCamera().x,location.y - CameraWork::GetCamera().y };
+
+	//画面外(横)に出たかの判定
+	bool is_out_screen = s_location.x - area.width / 2 < 0 || SCREEN_WIDTH < s_location.x + area.width / 2;
+
+	if (is_out_screen == true)
+	{
+		location = old_location;
+		left_move = !left_move;
+		wall_hit = true;
+
+		state = ENEMY_STATE::MOVE;
+	}
+
+	//画面上部から出たら元の位置に戻す
+	if (s_location.y - area.height / 2 < 0)
+	{
+		location = old_location;
 	}
 
 
@@ -220,6 +242,7 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	{
 		state = ENEMY_STATE::DEATH;
 	}
+
 }
 
 //-----------------------------------
@@ -238,6 +261,12 @@ void Dragon::Draw() const
 
 	/*DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 		M_PI / 180, image, TRUE);*/
+
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(HIT_POINTS);
+	}
+	DrawDamageLog();
 
 }
 
