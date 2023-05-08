@@ -28,7 +28,7 @@
 #define	ROAR_TIME 130
 
 //雷の数
-#define THUNDER 4
+#define THUNDER 3
 
 //ドラゴンの攻撃力(攻撃別）
 //尻尾攻撃
@@ -262,6 +262,8 @@ void Dragon::Draw() const
 	/*DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 		M_PI / 180, image, TRUE);*/
 
+	DrawFormatString(draw_location.x, draw_location.y, GetColor(0, 0, 255), "%d", location.y);
+
 	if (state != ENEMY_STATE::DEATH)
 	{
 		DrawHPBar(HIT_POINTS);
@@ -411,14 +413,27 @@ void Dragon::DreathMove(const Location player_location)
 void Dragon::RoarMove(const Location player_location)
 {
 
-	//for (int i = 0; i < THUNDER; i++)
-	//{
-	//  GetRand(???)を使って、ランダムな座標に雷を落とす処理
-	// 	//ステージとの兼ね合いがあるため、現在はコメントアウト
-	// 
-	//	BulletManager::GetInstance()->CreateEnemyBullet
-	//	(new DragonThunder(player_location.x, player_location.y-60)); 
-	//}
+	for (int i = 0; i < THUNDER; i++)
+	{
+	  
+		switch (i)
+		{
+		case 0:
+			BulletManager::GetInstance()->CreateEnemyBullet
+			(new DragonThunder(player_location.x, 250));
+			break;
+		case 1:
+			BulletManager::GetInstance()->CreateEnemyBullet
+			(new DragonThunder(player_location.x-200, 250));
+			break;
+		case 2:
+			BulletManager::GetInstance()->CreateEnemyBullet
+			(new DragonThunder(player_location.x+200, 250));
+			break;
+		default:
+			break;
+		}
+	}
 
 
 
@@ -581,6 +596,26 @@ void Dragon::HitBullet(const BulletBase* bullet)
 	damage_log[i].log = true;
 	damage_log[i].time = LOG_TIME;
 	damage_log[i].damage = damage;
+}
+
+
+
+void Dragon::DrawHPBar(const int max_hp) const
+{
+	int color = GetColor(7, 255, 0);
+
+	if (hp <= (max_hp / 2))
+	{
+		color = GetColor(255, 255 * static_cast<float>(hp) / max_hp, 0);
+	}
+	else
+	{
+		color = GetColor(7 + 2 * (248 * (1 - static_cast<float>(hp) / max_hp)), 255, 0);
+	}
+
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x000000, TRUE);
+	DrawBox(160, 10, 160 + (960 * (static_cast<float>(hp) / max_hp)), 40, color, TRUE);
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x8f917f, FALSE);
 }
 
 //-----------------------------------

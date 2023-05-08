@@ -2,7 +2,7 @@
 #include "CameraWork.h"
 
 //ドラゴンの遠距離攻撃の移動速度
-#define BULLET_SPEED 20
+#define BULLET_SPEED 10
 
 //ドラゴンの遠距離ダメージ
 #define BULLET_DAMAGE 30
