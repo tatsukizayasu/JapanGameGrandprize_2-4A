@@ -404,6 +404,24 @@ void Kraken::HitBullet(const BulletBase* bullet)
 	hp -= damage;
 }
 
+void Kraken::DrawHPBar(const int max_hp) const
+{
+	int color = GetColor(7, 255, 0);
+
+	if (hp <= (max_hp / 2))
+	{
+		color = GetColor(255, 255 * static_cast<float>(hp) / max_hp, 0);
+	}
+	else
+	{
+		color = GetColor(7 + 2 * (248 * (1 - static_cast<float>(hp) / max_hp)), 255, 0);
+	}
+
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x000000, TRUE);
+	DrawBox(160, 10, 160 + (960 * (static_cast<float>(hp) / max_hp)), 40, color, TRUE);
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x8f917f, FALSE);
+}
+
 
 //-----------------------------------
 // •`‰æ

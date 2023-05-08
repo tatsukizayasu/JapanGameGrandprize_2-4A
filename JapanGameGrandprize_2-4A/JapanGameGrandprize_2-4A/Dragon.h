@@ -97,6 +97,9 @@ public:
 	//プレイヤーの弾丸との当たり判定
 	void HitBullet(const BulletBase* bullet) override;
 
+	//HPバーの描画
+	void DrawHPBar(const int) const;
+
 	//座標の取得
 	Location GetLocation() const override;
 

@@ -96,9 +96,6 @@ void CameraWork::Update()
 	
 	//float player_x = player->GetLocation().x;
 
-	Camera player_p;
-	player_p = { player->GetLocation().x, player->GetLocation().y };
-	camera.y = player_p.y - 400;
 
 	POINT stage_size = stage->GetMapSize();
 
@@ -113,6 +110,16 @@ void CameraWork::Update()
 			state = STATE::FIXED;
 		}
 		return;
+	}
+
+
+	Camera player_p;
+	player_p = { player->GetLocation().x, player->GetLocation().y };
+	camera.y = player_p.y - 400;
+
+	if (camera.y < 0)
+	{
+		camera.y = 0;
 	}
 
 	//プレイヤーが移動開始ラインを超えたらカメラの状態を移動にする
