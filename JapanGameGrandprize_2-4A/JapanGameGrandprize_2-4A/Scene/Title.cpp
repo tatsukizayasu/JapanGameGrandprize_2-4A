@@ -17,6 +17,19 @@ Title::Title()
 
 	background_image = LoadGraph("Images/Scene/title.png");
 
+	if ((background_music = LoadSoundMem("Sounds/BGM/title.mp3")) == -1) {
+		throw "Sounds/BGM/title.mp3";
+	}
+
+	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {
+		throw "Sounds/SE/enter.mp3";
+	}
+
+	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.mp3")) == -1)
+	{
+		throw "Sounds/SE/cursor_move.mp3";
+	}
+
 
 	select_se = 0;
 	decision_se = 0;
@@ -32,6 +45,8 @@ Title::Title()
 
 	fade_counter = 0;
 
+	PlaySoundMem(background_music, DX_PLAYTYPE_BACK, FALSE);
+
 }
 
 //-----------------------------------
@@ -40,6 +55,10 @@ Title::Title()
 Title::~Title()
 {
 	DeleteGraph(background_image);
+	StopSoundMem(background_music);
+	DeleteSoundMem(background_music);
+	DeleteSoundMem(enter_se);
+	DeleteSoundMem(cursor_move_se);
 	DeleteFontToHandle(title_font);
 	DeleteFontToHandle(menu_font);
 	SetDrawBright(255, 255, 255);
@@ -67,6 +86,8 @@ AbstractScene* Title::Update()
 
 		if (std::abs(stick_y) > stick_sensitivity) {
 
+			PlaySoundMem(cursor_move_se, DX_PLAYTYPE_BACK, TRUE);
+
 			// スティックが上に移動した場合
 			if (stick_y > 0) {
 				// メニュー選択肢を一つ前に移動
@@ -85,6 +106,7 @@ AbstractScene* Title::Update()
 #ifdef TITLE_DEBUG
 		if (std::abs(PAD_INPUT::GetLStick().x) > stick_sensitivity) {
 
+			PlaySoundMem(cursor_move_se, DX_PLAYTYPE_BACK, TRUE);
 			is_select_debug = !is_select_debug;
 			input_margin = 0;
 
@@ -96,6 +118,10 @@ AbstractScene* Title::Update()
 
 	if (PAD_INPUT::GetNowKey(XINPUT_BUTTON_A) && (PAD_INPUT::OnButton(XINPUT_BUTTON_A) == true))
 	{
+
+		PlaySoundMem(enter_se, DX_PLAYTYPE_BACK, TRUE);
+		while (CheckSoundMem(enter_se)) {}
+
 #ifdef TITLE_DEBUG
 		if (is_select_debug == true) {
 			return new DotByDot();
