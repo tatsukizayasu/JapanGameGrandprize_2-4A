@@ -37,7 +37,7 @@ GameMain::GameMain(short stage_num)
 #endif
 	enemy_spawn_volume = 0;
 	this->stage_num = stage_num;
-	stage = new Stage(stage_num);
+	stage = new Stage(5);
 	player = new Player(stage);
 	stage->SetPlayer(player);
 
@@ -260,6 +260,7 @@ bool GameMain::EnemyUpdate()
 
 					case ENEMY_KIND::LAST_BOSS:
 						is_spawn_boss = true;
+						enemy[i] = new LastBoss(spawn[i].location);
 						break;
 
 					default:

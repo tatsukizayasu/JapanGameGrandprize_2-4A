@@ -2,12 +2,19 @@
 #include "LastBossHand.h"
 #include "DxLib.h"
 #include "CameraWork.h"
+#include "LastBossMagic.h"
 
 //体力
 #define LAST_BOSS_HP 5000
 
 //手の数
 #define HAND_NUM 2
+
+//魔法の発動数
+#define MAGIC_NUM1 2
+#define MAGIC_NUM2 3
+#define MAGIC_NUM3 4
+
 
 //ダウン時の落ちる速度
 #define DOWN_MOVE_SPEED 10
@@ -76,6 +83,7 @@ LastBoss::LastBoss(Location spawn_location)
 	punch_interval = 0;
 	sword_interval = 0;
 	magic_rate = 0;
+	magic_volume = 0;
 	special_moves_time = 0;
 	hp = LAST_BOSS_HP;
 	animation = 0;
@@ -261,6 +269,23 @@ void  LastBoss::Attack(const Location)
 void LastBoss::InitMagic()
 {
 	attack_time = MAGIC_TIME;
+	if(hp < (LAST_BOSS_HP / 3)) //魔法の発動数の設定
+	{
+		magic_volume = MAGIC_NUM3;
+	}
+	else if (hp < ((LAST_BOSS_HP / 3) * 2))
+	{
+		magic_volume = MAGIC_NUM2;
+	}
+	else
+	{
+		magic_volume = MAGIC_NUM1;
+	}
+	magic = new EnemyBulletBase * [magic_volume];
+
+	attack_state = LAST_BOSS_ATTACK::MAGIC;
+
+
 }
 
 //-----------------------------------
@@ -271,7 +296,24 @@ void LastBoss::Magic()
 	attack_time--;
 	if (attack_time % MAGIC_RATE == 0)
 	{
+		for (int i = 0; i < magic_volume; i++)
+		{
+			if (magic[i] == nullptr)
+			{
+				Location magic_location;
+				magic_location.x = GetRand(SCREEN_WIDTH - MAGIC_AREA * 2) + MAGIC_AREA;
+				magic_location.y = GetRand(SCREEN_HEIGHT - MAGIC_AREA * 2) + MAGIC_AREA;
 
+				magic[i] = new LastBossMagic(magic_location, GetRand(1));
+				break;
+			}
+		}
+	}
+
+	if (attack_time < 0)
+	{
+		attack_state = LAST_BOSS_ATTACK::NONE;
+		magic_interval = MAGIC_INTERVAL;
 	}
 }
 

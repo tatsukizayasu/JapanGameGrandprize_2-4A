@@ -225,6 +225,9 @@
     <ClCompile Include="LastBossHand.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="LastBossMagic.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h">
@@ -458,6 +461,9 @@
     <ClInclude Include="LastBossHand.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="LastBossMagic.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -520,5 +526,8 @@
     <Filter Include="ヘッダーファイル\Collider">
       <UniqueIdentifier>{0c1beecd-8781-4c98-b088-1817e1458e1f}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\Resource.rc" />
   </ItemGroup>
 </Project>

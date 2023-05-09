@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyBase.h"
+#include "EnemyBulletBase.h"
 
 enum class LAST_BOSS_ATTACK
 {
@@ -23,6 +24,7 @@ private:
     int punch_interval; //次のパンチ攻撃までの時間
     int sword_interval; //剣攻撃までの時間
     int magic_rate; //魔法攻撃のレート
+    int magic_volume; //魔法の数
     int special_moves_time; //必殺技の時間
     int animation; //アニメーション
     int image_argument; //画像の引数
@@ -34,6 +36,9 @@ private:
     HitMapChip hit_stage; //ステージとの当たり判定
 
     LAST_BOSS_ATTACK attack_state; //攻撃
+
+    EnemyBulletBase** magic; //魔法
+
 private:
 
     //移動時のアニメーション
