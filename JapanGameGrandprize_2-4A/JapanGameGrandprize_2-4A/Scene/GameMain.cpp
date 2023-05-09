@@ -32,6 +32,13 @@ GameMain::GameMain(short stage_num)
 	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
 #ifdef _DEBUG
 
+	char dis_stage_se[30];
+	sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", stage_num);
+
+	if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
+		throw dis_stage_se;
+	}
+
 #else
 	pause = new Pause();
 #endif
@@ -60,6 +67,8 @@ GameMain::GameMain(short stage_num)
 	is_spawn_boss = false;
 
 	background_location = { 0.0f,0.0f };
+
+	PlaySoundMem(background_music, DX_PLAYTYPE_BACK, FALSE);
 }
 
 //-----------------------------------
@@ -67,6 +76,9 @@ GameMain::GameMain(short stage_num)
 //-----------------------------------
 GameMain::~GameMain()
 {
+
+	StopSoundMem(background_music);
+	DeleteSoundMem(background_music);
 
 	delete camera_work;
 #ifdef _DEBUG
@@ -259,6 +271,7 @@ bool GameMain::EnemyUpdate()
 						break;
 
 					case ENEMY_KIND::LAST_BOSS:
+						enemy[i] = new LastBoss(spawn[i].location);
 						is_spawn_boss = true;
 						break;
 

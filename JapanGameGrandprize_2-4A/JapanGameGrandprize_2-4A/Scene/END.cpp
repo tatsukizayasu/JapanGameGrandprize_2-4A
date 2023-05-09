@@ -21,6 +21,22 @@ END::END()
 	input_margin = 0;
 
 	select_menu = static_cast<int>(MENU::TITLE);
+
+	if ((background_music = LoadSoundMem("Sounds/BGM/end.mp3")) == -1) {
+		throw "Sounds/BGM/end.mp3";
+	}
+
+	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {
+		throw "Sounds/SE/enter.mp3";
+	}
+
+	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.mp3")) == -1)
+	{
+		throw "Sounds/SE/cursor_move.mp3";
+	}
+
+	PlaySoundMem(background_music, DX_PLAYTYPE_BACK, FALSE);
+
 }
 
 //-----------------------------------
@@ -28,6 +44,10 @@ END::END()
 //-----------------------------------
 END::~END()
 {
+	StopSoundMem(background_music);
+	DeleteSoundMem(background_music);
+	DeleteSoundMem(enter_se);
+	DeleteSoundMem(cursor_move_se);
 	DeleteGraph(background_image);
 	DeleteFontToHandle(title_font);
 	DeleteFontToHandle(menu_font);
@@ -52,6 +72,7 @@ AbstractScene* END::Update()
 
 		if (std::abs(PAD_INPUT::GetLStick().y) > stick_sensitivity) {
 
+			PlaySoundMem(cursor_move_se, DX_PLAYTYPE_BACK, TRUE);
 			select_menu = (select_menu + 1) % static_cast<int>(MENU::MENU_SIZE);
 			input_margin = 0;
 
@@ -61,6 +82,9 @@ AbstractScene* END::Update()
 
 	if (PAD_INPUT::GetNowKey(XINPUT_BUTTON_A) && (PAD_INPUT::OnButton(XINPUT_BUTTON_A) == true))
 	{
+		PlaySoundMem(enter_se, DX_PLAYTYPE_BACK, TRUE);
+		while (CheckSoundMem(enter_se)) {}
+
 		input_margin = 0;
 		MENU current_selection = static_cast<MENU>(select_menu);
 		switch (current_selection)
