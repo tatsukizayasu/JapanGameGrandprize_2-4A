@@ -71,6 +71,8 @@ LastBoss::LastBoss(Location spawn_location)
 		hand[i] = new LastBossHand(spawn_hand, static_cast<bool>(i));
 	}
 
+	magic = nullptr;
+
 	kind = ENEMY_KIND::LAST_BOSS;
 
 	special_moves = false;
@@ -106,6 +108,11 @@ LastBoss::~LastBoss()
 	}
 	delete[] hand;
 
+	for (int i = 0; i < magic_volume; i++)
+	{
+		delete magic;
+	}
+	delete[] magic;
 }
 
 //-----------------------------------
@@ -312,6 +319,14 @@ void LastBoss::Magic()
 
 	if (attack_time < 0)
 	{
+		for (int i = 0; i < magic_volume; i++)
+		{
+			delete magic;
+		}
+		delete[] magic;
+
+		magic = nullptr;
+
 		attack_state = LAST_BOSS_ATTACK::NONE;
 		magic_interval = MAGIC_INTERVAL;
 	}
