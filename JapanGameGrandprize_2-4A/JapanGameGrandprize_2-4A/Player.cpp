@@ -877,7 +877,21 @@ void Player::LeftMove()
 
 	if (HitBlock(stage))
 	{
-		location.x = old_x;
+		if (hit_line)
+		{
+			float radian = hit_line->GetRadian();
+			float move_x = cosf(radian) * speed_x;
+			float move_y = sinf(radian) * speed_x;
+
+			location.x = old_x + move_x;
+			location.y = old_y + move_y;
+			old_y = location.y;
+		}
+		else
+		{
+			location.x = old_x;
+			speed_x = 0.0;
+		}
 	}
 }
 
@@ -918,11 +932,19 @@ void Player::RightMove()
 	{
 		if (hit_line)
 		{
-			
-		}
+			float radian = hit_line->GetRadian();
+			float move_x = cosf(radian) * speed_x;
+			float move_y = sinf(radian) * speed_x;
 
-		location.x = old_x;
-		speed_x = 0.0;
+			location.x = old_x + move_x;
+			location.y = old_y + move_y;
+			old_y = location.y;
+		}
+		else
+		{
+			location.x = old_x;
+			speed_x = 0.0;
+		}
 	}
 
 	if (location.x < 0)

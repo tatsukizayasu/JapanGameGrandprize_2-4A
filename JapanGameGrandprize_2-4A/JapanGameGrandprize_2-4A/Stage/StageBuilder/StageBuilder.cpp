@@ -58,7 +58,7 @@ StageBuilder::StageBuilder()
 	testline.GetRadian();
 
 
-
+	ray = new Ray(mouse->GetLocationPointer());
 
 #endif // _DEV
 }
@@ -100,6 +100,8 @@ StageBuilder::~StageBuilder()
 		delete objects[i];
 	}
 	objects.clear();
+
+	delete ray;
 
 }
 

@@ -52,6 +52,10 @@ public:
 	{
 		return location;
 	}
+	const Location* GetLocationPointer() const
+	{
+		return &location;
+	}
 
 	//”¼Œa‚ÌŽæ“¾
 	int GetRadius() const

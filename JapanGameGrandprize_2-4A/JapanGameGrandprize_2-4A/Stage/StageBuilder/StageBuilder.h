@@ -10,6 +10,7 @@
 #include "../../LineCollider.h"
 #include "PolyLine.h"
 #include "ObjectBase.h"
+#include "Ray.h"
 #include <vector>
 #include <string>
 #include <fstream>
@@ -105,6 +106,8 @@ private:
 	int brush_mode_state;
 
 
+	//テスト
+	Ray* ray;
 public:
 	/*******************更新描画系統*******************/
 	//コンストラクタ
