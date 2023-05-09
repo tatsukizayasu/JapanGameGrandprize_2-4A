@@ -314,7 +314,8 @@ void EnemySlimeBoss::Draw_Cloud()const
 		draw_location = draw_location - camera;
 
 		double work = cloud_brightness;
-		double size = (work / 255);;
+		double size = (work / 255);
+		if (size >= 1)size = 1;
 		
 		SetDrawBright(cloud_brightness, cloud_brightness, cloud_brightness);
 		DrawRotaGraph(draw_location.x, draw_location.y, size, 0, magic_circle_image, true, false);
@@ -395,6 +396,24 @@ AttackResource EnemySlimeBoss::Hit()
 void EnemySlimeBoss::Death()
 {
 	can_delete = true;
+}
+
+void EnemySlimeBoss::DrawHPBar(const int max_hp) const
+{
+	int color = GetColor(7, 255, 0);
+
+	if (hp <= (max_hp / 2))
+	{
+		color = GetColor(255, 255 * static_cast<float>(hp) / max_hp, 0);
+	}
+	else
+	{
+		color = GetColor(7 + 2 * (248 * (1 - static_cast<float>(hp) / max_hp)), 255, 0);
+	}
+
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x000000, TRUE);
+	DrawBox(160, 10, 160 + (960 * (static_cast<float>(hp) / max_hp)), 40, color, TRUE);
+	DrawBox(160, 10, SCREEN_WIDTH - 160, 40, 0x8f917f, FALSE);
 }
 
 //-----------------------------------
