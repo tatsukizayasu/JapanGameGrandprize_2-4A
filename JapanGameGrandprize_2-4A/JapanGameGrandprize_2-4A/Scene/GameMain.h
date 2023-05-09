@@ -15,6 +15,7 @@ private:
 
     int enemy_spawn_volume; //エネミーの数
     //各クラスのオブジェクト
+    Pause* pause;
     Player* player;
     Stage* stage;
     CameraWork* camera_work;
@@ -26,11 +27,6 @@ private:
     //背景画像座標
     Location background_location;
 
-#ifdef _DEBUG
-
-#else
-    Pause* pause;
-#endif
 
     //操作間隔時間
     int input_margin;
