@@ -1282,8 +1282,8 @@ void Player::ElementUpdate()
 	{
 		chemical_formula[5] = heal->make_bool;
 	}
-
-	if (PAD_INPUT::GetRStick().x > 5000)
+	
+	if (PAD_INPUT::GetRStick().x < -5000)
 	{
 		if (select_count % 10 == 0)
 		{
@@ -1316,7 +1316,7 @@ void Player::ElementUpdate()
 		}
 	}
 
-	if (PAD_INPUT::GetRStick().x < -5000)
+	if (PAD_INPUT::GetRStick().x > 5000)
 	{
 		if (select_count % 10 == 0)
 		{
