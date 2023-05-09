@@ -199,6 +199,7 @@
     <ClInclude Include="Scene\END.h" />
     <ClInclude Include="Scene\GameClear.h" />
     <ClInclude Include="Scene\GameMain.h" />
+    <ClInclude Include="Scene\GameMain_Restart.h" />
     <ClInclude Include="Scene\GameOver.h" />
     <ClInclude Include="Scene\Pause.h" />
     <ClInclude Include="Scene\SceneManager.h" />
@@ -277,6 +278,7 @@
     <ClCompile Include="Scene\END.cpp" />
     <ClCompile Include="Scene\GameClear.cpp" />
     <ClCompile Include="Scene\GameMain.cpp" />
+    <ClCompile Include="Scene\GameMain_Restart.cpp" />
     <ClCompile Include="Scene\GameOver.cpp" />
     <ClCompile Include="Scene\Pause.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />

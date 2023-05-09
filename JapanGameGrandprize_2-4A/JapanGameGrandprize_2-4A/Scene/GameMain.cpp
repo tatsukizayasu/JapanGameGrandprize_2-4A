@@ -17,8 +17,10 @@
 #include "../LastBoss.h"
 #include "DotByDot.h"
 #include <math.h>
+#include "GameMain_Restart.h"
 #include "GameOver.h"
 #include "GameClear.h"
+#include "Title.h"
 #include "END.h"
 
 //-----------------------------------
@@ -30,7 +32,7 @@ GameMain::GameMain(short stage_num)
 	//背景画像読み込み
 	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
 	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
-#ifdef _DEBUG
+
 
 	char dis_stage_se[30];
 
@@ -46,9 +48,9 @@ GameMain::GameMain(short stage_num)
 		}
 	}
 
-#else
+
 	pause = new Pause();
-#endif
+
 	enemy_spawn_volume = 0;
 	this->stage_num = stage_num;
 	stage = new Stage(stage_num);
@@ -67,7 +69,7 @@ GameMain::GameMain(short stage_num)
 
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
-	
+
 	bullet_manager = BulletManager::GetInstance();
 
 	input_margin = 0;
@@ -112,13 +114,37 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
-#ifdef _DEBUG
+	pause->Update(stage_num);
 
-#else
-	pause->Update();
-	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
-	if (pause->IsPause() == TRUE) { return this; }
-#endif
+	if (pause->IsPause() == TRUE) {
+
+		short next_scene = pause->GetNextScene();
+
+		if (next_scene == -1) { return this; }
+
+		int now_graph = MakeGraph(1280, 720);
+
+		Pause::MENU current_selection = static_cast<Pause::MENU>(next_scene);
+		switch (current_selection)
+		{
+		case Pause::MENU::RETRY:
+			
+			GetDrawScreenGraph(0, 0, 1280, 720, now_graph);
+			return new GameMain_Restart(stage_num, now_graph);
+			break;
+
+		case Pause::MENU::TITLE:
+			return new Title();
+			break;
+
+		default:
+			printfDx("未実装な機能です。\n");
+			break;
+		}
+		return this;
+	}
+
+
 
 
 #ifdef _DEBUG
@@ -307,7 +333,7 @@ bool GameMain::EnemyUpdate()
 			{
 				LastBoss* last_boss;
 				last_boss = dynamic_cast<LastBoss*>(enemy[i]);
-				
+
 				player->HpDamage(last_boss->PunchAttack(player));
 			}
 			else
@@ -355,7 +381,7 @@ bool GameMain::EnemyUpdate()
 				}
 			}
 
-				//エネミーの削除
+			//エネミーの削除
 			if (enemy[i]->GetCanDelete() || (enemy[i]->GetLocation().x + enemy[i]->GetArea().width < 0 && enemy[i]->GetEnemyKind() != ENEMY_KIND::WYVERN))
 			{
 				if (ENEMY_KIND::SLIME_BOSS <= enemy[i]->GetEnemyKind())
@@ -462,12 +488,12 @@ void GameMain::Draw()const
 {
 	////背景	描画
 	// DrawGraph(0, 0, background_image, FALSE);
-	
-	DrawGraphF(-fmodf( background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-	DrawGraphF(-fmodf( background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
-	DrawGraphF(-fmodf( background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
-	DrawGraphF(-fmodf( background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+	DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+
+	DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+	DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 
 	stage->Draw();
 	item_controller->Draw();
@@ -484,10 +510,8 @@ void GameMain::Draw()const
 	bullet_manager->Draw();
 
 	player->PouchDraw();
-#ifdef _DEBUG
 
-#else
 	//ポーズ		描画
 	if (pause->IsPause() == true) { pause->Draw(); }
-#endif
+
 }
