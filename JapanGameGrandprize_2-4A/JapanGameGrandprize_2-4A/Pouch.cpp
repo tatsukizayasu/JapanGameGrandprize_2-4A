@@ -53,6 +53,8 @@ Pouch::Pouch()
 	elemental_count = LoadGraph("Images/ItemTab/P_kazu.png");
 	window_image = LoadGraph("Images/ItemTab/poti_back.png");
 	window_image_two = LoadGraph("Images/ItemTab/poti_waku.png");
+	text_window_image_lit = LoadGraph("Images/ItemTab/P_Text_BackBox.png");
+	text_window_image_dark = LoadGraph("Images/ItemTab/P_Text_nBackBox.png");
 	attribute_images = new int[ATTRIBUTE_IMAGES];
 	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
 	int images_init_explosion[EXPLOSION_MAX_NUM];
@@ -134,7 +136,18 @@ void Pouch::ExplosionTabDraw() const
 
 	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
 	{
-		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_explosion[i].name_image, true);
+		if (ComparisonElement(chemical_formula_explosion[i]))
+		{
+			SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_explosion[i].name_image, true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+		}
+		else
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_explosion[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+		}
 	}
 
 
@@ -156,7 +169,16 @@ void Pouch::MeltTabDraw() const
 
 	for (int i = 0; i < MELT_MAX_NUM; i++)
 	{
-		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_melt[i].name_image, true);
+		if (ComparisonElement(chemical_formula_melt[i]))
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_melt[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+		}
+		else
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_melt[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+		}
 	}
 
 
@@ -179,7 +201,16 @@ void Pouch::ParalysisTabDraw()const
 
 	for (int i = 0; i < PARARYSIS_MAX_NUM; i++)
 	{
-		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].name_image, true);
+		if (ComparisonElement(chemical_formula_pararysis[i]))
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+		}
+		else
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+		}
 	}
 
 
@@ -206,7 +237,16 @@ void Pouch::PoisonTabDraw()const
 
 	for (int i = 0; i < POISON_MAX_NUM; i++)
 	{
-		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_poison[i].name_image, true);
+		if (ComparisonElement(chemical_formula_poison[i]))
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_poison[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+		}
+		else
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_poison[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+		}
 	}
 
 
@@ -227,7 +267,16 @@ void Pouch::HealTabDraw()const
 
 	for (int i = 0; i < HEAL_MAX_NUM; i++)
 	{
-		DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), chemical_formula_heal[i].name_image, true);
+		if (ComparisonElement(chemical_formula_heal[i]))
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_heal[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+		}
+		else
+		{
+			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_heal[i].name_image, true);
+			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+		}
 	}
 
 

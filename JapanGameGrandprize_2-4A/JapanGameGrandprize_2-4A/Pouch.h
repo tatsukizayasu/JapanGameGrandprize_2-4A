@@ -22,6 +22,8 @@ private:
 	int* attribute_images;
 	int window_image;
 	int window_image_two;
+	int text_window_image_lit;
+	int text_window_image_dark;
 	int elemental_count;
 	int page_jump_count;
 	int cursol;
