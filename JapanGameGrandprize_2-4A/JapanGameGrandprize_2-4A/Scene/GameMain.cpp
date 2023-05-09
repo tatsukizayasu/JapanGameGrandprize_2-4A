@@ -68,7 +68,7 @@ GameMain::GameMain(short stage_num)
 
 	background_location = { 0.0f,0.0f };
 
-	PlaySoundMem(background_music, DX_PLAYTYPE_BACK, FALSE);
+	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 }
 
 //-----------------------------------

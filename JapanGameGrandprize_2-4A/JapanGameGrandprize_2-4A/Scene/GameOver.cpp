@@ -37,7 +37,7 @@ GameOver::GameOver(short stage_num)
 
 	fade_counter = 0;
 
-	PlaySoundMem(background_music, DX_PLAYTYPE_BACK, FALSE);
+	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 }
 
 //-----------------------------------
