@@ -36,12 +36,15 @@ GameMain::GameMain(short stage_num)
 
 	char dis_stage_se[30];
 
-	sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", stage_num);
+	if (stage_num != 5)
+	{
+		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", stage_num);
 
-	if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
-		background_music = LoadSoundMem("Sounds/BGM/stage1.mp3");
-		if (background_music == -1) {
-			throw dis_stage_se;
+		if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
+			background_music = LoadSoundMem("Sounds/BGM/stage1.mp3");
+			if (background_music == -1) {
+				throw dis_stage_se;
+			}
 		}
 	}
 
