@@ -45,7 +45,7 @@ SlimeBossThunder::SlimeBossThunder(Location spawn_location)
 	orientation_time = ORIENTATION_TIME;
 	data_switch = 0;
 	
-	
+	magic_circle_image = LoadGraph("Images/Enemy/cloud.png");
 	color = GetColor(255, 255, 0);
 }
 
@@ -90,6 +90,7 @@ void SlimeBossThunder::Draw() const
 {
 	float x, y;
 
+
 	for (int i = 0; i < LOCATION_DATA; i++)
 	{
 		x = old_location[i].x - CameraWork::GetCamera().x;
@@ -97,6 +98,7 @@ void SlimeBossThunder::Draw() const
 
 		DrawCircle(x, y, old_radius[i], color, TRUE);
 	}
+
 
 	Draw_Cloud();
 }
@@ -107,7 +109,5 @@ void SlimeBossThunder::Draw_Cloud()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	int color = GetColor(255, 255, 255);
-
-	DrawCircle(draw_location.x, draw_location.y, 70, color, true, true);
+	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0 , magic_circle_image, true, false);
 }
