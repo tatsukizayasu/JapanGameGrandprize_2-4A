@@ -21,6 +21,7 @@ private:
 	int second_tab_image[4];
 	int* attribute_images;
 	int window_image;
+	int window_image_two;
 	int elemental_count;
 	int page_jump_count;
 	int cursol;

@@ -52,6 +52,7 @@ Pouch::Pouch()
 	second_tab_image[3] = LoadGraph("Images/ItemTab/explosion/heal.png");
 	elemental_count = LoadGraph("Images/ItemTab/P_kazu.png");
 	window_image = LoadGraph("Images/ItemTab/poti_back.png");
+	window_image_two = LoadGraph("Images/ItemTab/poti_waku.png");
 	attribute_images = new int[ATTRIBUTE_IMAGES];
 	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
 	int images_init_explosion[EXPLOSION_MAX_NUM];
@@ -244,7 +245,7 @@ void Pouch::Draw() const
 	DrawGraph(x - 210, y - 50, window_image, TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
-
+	DrawGraph(x - 197, y - 55, window_image_two, TRUE);
 
 	DrawGraph(window_x, window_y, attribute_images[0], TRUE);
 	DrawGraph(window_x + (65 * 1), window_y, attribute_images[4], TRUE);
