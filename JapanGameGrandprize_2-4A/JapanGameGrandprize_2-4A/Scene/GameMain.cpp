@@ -176,7 +176,7 @@ void GameMain::SpawnEnemy()
 	}
 
 	int i;
-	for (i = 0; i < enemy_spawn_volume - 1 ; i++)
+	for (i = 0; i < enemy_spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
