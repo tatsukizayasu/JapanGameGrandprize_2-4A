@@ -482,8 +482,8 @@ void Harpy::HitBullet(const BulletBase* bullet)
 	switch (bullet->GetAttribute()) //Žó‚¯‚½‰»‡•¨‚Ì‘®«
 	{
 	case ATTRIBUTE::NORMAL: //’Êí’e 
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage = bullet->GetDamage()* WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::EXPLOSION: //”š”­ 
 		damage = bullet->GetDamage();

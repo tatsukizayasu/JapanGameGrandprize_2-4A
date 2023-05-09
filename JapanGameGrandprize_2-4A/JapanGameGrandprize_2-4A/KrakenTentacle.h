@@ -13,9 +13,11 @@ private:
 
 	int image;
 	int time; //攻撃開始を測る
+	int back_time; //古い座標に戻る
 
 
 	float old_x;
+	float old_player;
 	bool go_back; //古い座標に戻る
 	bool attack_state; //攻撃開始
 	bool attack;

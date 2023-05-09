@@ -62,7 +62,6 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="Pouch.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -224,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="LastBossHand.cpp">
       <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameMain_Restart.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCollider.cpp">
+      <Filter>ソースファイル\Collider</Filter>
     </ClCompile>
     <ClCompile Include="LastBossMagic.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
@@ -460,6 +465,9 @@
     </ClInclude>
     <ClInclude Include="LastBossHand.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameMain_Restart.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="LastBossMagic.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>

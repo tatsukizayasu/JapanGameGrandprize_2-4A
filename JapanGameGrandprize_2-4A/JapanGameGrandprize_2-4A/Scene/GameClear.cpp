@@ -10,11 +10,30 @@ GameClear::GameClear(short stage_num)
 
 	background_image = LoadGraph("Images/Scene/game_clear.png");
 
+	if ((background_music = LoadSoundMem("Sounds/BGM/game_clear.mp3")) == -1) {
+		throw "Sounds/BGM/game_clear.mp3";
+	}
+
+	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {
+		throw "Sounds/SE/enter.mp3";
+	}
+
+	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.mp3")) == -1)
+	{
+		throw "Sounds/SE/cursor_move.mp3";
+	}
+
 	this->stage_num = stage_num;
+
+	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 }
 
 GameClear::~GameClear()
 {
+	StopSoundMem(background_music);
+	DeleteSoundMem(background_music);
+	DeleteSoundMem(enter_se);
+	DeleteSoundMem(cursor_move_se);
 	DeleteFontToHandle(title_font);
 	DeleteFontToHandle(menu_font);
 	DeleteGraph(background_image);
@@ -24,6 +43,9 @@ AbstractScene* GameClear::Update()
 {
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A))
 	{
+		PlaySoundMem(enter_se, DX_PLAYTYPE_BACK, TRUE);
+		while (CheckSoundMem(enter_se)) {}
+
 		if (stage_num < 5)
 		{
 			return new GameMain(stage_num + 1);

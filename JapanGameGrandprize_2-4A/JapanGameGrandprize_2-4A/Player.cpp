@@ -488,6 +488,21 @@ void Player::Update()
 	//ƒ{ƒX•”‰®‚É“ü‚Á‚½ÛA“®‚«‚ğ~‚ß”ò‚ñ‚Å‚¢‚½‚ç—‰º‚³‚¹‚é
 	if (CameraWork::GetCameraState() == CameraWork::STATE::BOSS)
 	{
+		for (int i = 0; i < BULLET_MAX; i++)
+		{
+			if (bullet[i] != nullptr)
+			{
+				delete bullet[i];
+				bullet[i] = nullptr;
+				SortBullet(i);
+				i--;
+			}
+			else
+			{
+				break;
+			}
+		}
+
 		if (player_state == PLAYER_STATE::FLY || player_state == PLAYER_STATE::DOWN || player_state == PLAYER_STATE::STOP)
 		{
 			NotFly();
@@ -1267,8 +1282,8 @@ void Player::ElementUpdate()
 	{
 		chemical_formula[5] = heal->make_bool;
 	}
-
-	if (PAD_INPUT::GetRStick().x > 5000)
+	
+	if (PAD_INPUT::GetRStick().x < -5000)
 	{
 		if (select_count % 10 == 0)
 		{
@@ -1301,7 +1316,7 @@ void Player::ElementUpdate()
 		}
 	}
 
-	if (PAD_INPUT::GetRStick().x < -5000)
+	if (PAD_INPUT::GetRStick().x > 5000)
 	{
 		if (select_count % 10 == 0)
 		{
