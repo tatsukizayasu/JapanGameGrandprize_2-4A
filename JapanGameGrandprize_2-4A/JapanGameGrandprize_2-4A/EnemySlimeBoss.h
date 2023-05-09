@@ -25,6 +25,8 @@ private:
 	int cloud_move_time;
 	int cloud_brightness;
 
+	int magic_circle_image;
+
 	ENEMY_STATE now_state;
 	Location cloud_location;
 

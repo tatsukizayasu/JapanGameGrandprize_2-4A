@@ -67,6 +67,7 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	wait_time = 0;
 
 	slime_boss_image = LoadGraph("Images/Enemy/SlimeBoss3.png");
+	magic_circle_image = LoadGraph("Images/Enemy/cloud.png");
 
 	cloud_brightness = 0;
 	attack_type = ATTACKTYPE::NONE;
@@ -295,7 +296,10 @@ void EnemySlimeBoss::Draw()const
 	//DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
 	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, slime_boss_image, true, !left_move);
 
-	//DrawFormatString(0, 0, 0xffffff, "%d", breath_time);
+	//DrawGraph(100, 200, magic_circle_image, true);
+	//DrawModiGraph(100, 200, 300, 200, 300, 240, 100, 240, magic_circle_image, true);
+
+	//DrawFormatString(0, 0, 0xffffff, "%d", draw_location.x);
 
 	Draw_Cloud();
 
@@ -309,10 +313,12 @@ void EnemySlimeBoss::Draw_Cloud()const
 		Location camera = CameraWork::GetCamera();
 		draw_location = draw_location - camera;
 
-		int color = GetColor(255, 255, 255);
-
+		double work = cloud_brightness;
+		double size = (work / 255);;
+		
 		SetDrawBright(cloud_brightness, cloud_brightness, cloud_brightness);
-		DrawCircle(draw_location.x, draw_location.y, 70, color, true, true);
+		DrawRotaGraph(draw_location.x, draw_location.y, size, 0, magic_circle_image, true, false);
+
 		SetDrawBright(255, 255, 255);
 	}
 }
