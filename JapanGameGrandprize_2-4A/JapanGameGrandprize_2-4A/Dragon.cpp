@@ -262,7 +262,6 @@ void Dragon::Draw() const
 	/*DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 		M_PI / 180, image, TRUE);*/
 
-	DrawFormatString(draw_location.x, draw_location.y, GetColor(0, 0, 255), "%d", location.y);
 
 	if (state != ENEMY_STATE::DEATH)
 	{
@@ -566,12 +565,15 @@ void Dragon::HitBullet(const BulletBase* bullet)
 	{
 	case ATTRIBUTE::NORMAL: //通常弾 
 		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE; //効きにくい
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		break;
 	case ATTRIBUTE::EXPLOSION: //爆発 
 		hp -= bullet->GetDamage() * 0; //効かない
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::MELT: //溶かす 　通常
 		hp -= bullet->GetDamage(); //通常ダメージ
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		break;
 	case ATTRIBUTE::POISON: //毒　
 		if (!poison)
@@ -579,6 +581,7 @@ void Dragon::HitBullet(const BulletBase* bullet)
 			poison = true;
 			poison_time = bullet->GetDebuffTime();
 			poison_damage = bullet->GetDamage();
+			damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS: //麻痺 弱点
@@ -586,6 +589,7 @@ void Dragon::HitBullet(const BulletBase* bullet)
 		{
 			paralysis = true;
 			paralysis_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;  //弱点
+			damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		}
 		break;
 	case ATTRIBUTE::HEAL:
