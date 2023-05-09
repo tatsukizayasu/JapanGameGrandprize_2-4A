@@ -25,7 +25,7 @@ GameClear::GameClear(short stage_num)
 
 	this->stage_num = stage_num;
 
-	PlaySoundMem(background_music, DX_PLAYTYPE_BACK, FALSE);
+	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 }
 
 GameClear::~GameClear()

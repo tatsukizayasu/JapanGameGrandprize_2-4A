@@ -35,7 +35,7 @@ END::END()
 		throw "Sounds/SE/cursor_move.mp3";
 	}
 
-	PlaySoundMem(background_music, DX_PLAYTYPE_BACK, FALSE);
+	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 
 }
 
