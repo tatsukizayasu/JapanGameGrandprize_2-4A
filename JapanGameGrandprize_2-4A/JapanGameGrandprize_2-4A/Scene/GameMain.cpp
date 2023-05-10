@@ -39,7 +39,7 @@ GameMain::GameMain(short stage_num)
 
 	char dis_stage_se[30];
 
-	if (stage_num != 5)
+	if (this->stage_num != 5)
 	{
 		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", this->stage_num);
 
