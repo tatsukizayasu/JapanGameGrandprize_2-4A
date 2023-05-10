@@ -230,6 +230,9 @@
     <ClCompile Include="LineCollider.cpp">
       <Filter>ソースファイル\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="LastBossMagic.cpp">
+      <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h">
@@ -465,6 +468,9 @@
     </ClInclude>
     <ClInclude Include="Scene\GameMain_Restart.h">
       <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LastBossMagic.h">
+      <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

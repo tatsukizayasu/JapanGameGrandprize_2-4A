@@ -2,12 +2,19 @@
 #include "LastBossHand.h"
 #include "DxLib.h"
 #include "CameraWork.h"
+#include "LastBossMagic.h"
 
 //体力
-#define LAST_BOSS_HP 5000
+#define LAST_BOSS_HP 1000
 
 //手の数
 #define HAND_NUM 2
+
+//魔法の発動数
+#define MAGIC_NUM1 3
+#define MAGIC_NUM2 4
+#define MAGIC_NUM3 5
+
 
 //ダウン時の落ちる速度
 #define DOWN_MOVE_SPEED 10
@@ -19,7 +26,7 @@
 #define MAGIC_TIME 60 * 30
 
 //魔法の発動レート
-#define MAGIC_RATE 20
+#define MAGIC_RATE 60
 
 //パンチ攻撃している時間
 #define PUNCH_TIME 60 * 20
@@ -64,6 +71,8 @@ LastBoss::LastBoss(Location spawn_location)
 		hand[i] = new LastBossHand(spawn_hand, static_cast<bool>(i));
 	}
 
+	magic = nullptr;
+
 	kind = ENEMY_KIND::LAST_BOSS;
 
 	special_moves = false;
@@ -76,6 +85,7 @@ LastBoss::LastBoss(Location spawn_location)
 	punch_interval = 0;
 	sword_interval = 0;
 	magic_rate = 0;
+	magic_volume = 0;
 	special_moves_time = 0;
 	hp = LAST_BOSS_HP;
 	animation = 0;
@@ -98,6 +108,11 @@ LastBoss::~LastBoss()
 	}
 	delete[] hand;
 
+	for (int i = 0; i < magic_volume; i++)
+	{
+		delete magic;
+	}
+	delete[] magic;
 }
 
 //-----------------------------------
@@ -160,6 +175,20 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 		{
 			down = true;
 			down_time = DOWN_TIME;
+
+			if (magic != nullptr)
+			{
+				for (int i = 0; i < magic_volume; i++)
+				{
+					delete magic[i];
+				}
+				delete[] magic;
+			}
+
+			magic = nullptr;
+
+			attack_state = LAST_BOSS_ATTACK::NONE;
+			magic_interval = MAGIC_INTERVAL;
 		}
 
 		punch_interval--;
@@ -230,14 +259,14 @@ void LastBoss::Fall()
 //-----------------------------------
 //攻撃
 //-----------------------------------
-void  LastBoss::Attack(const Location)
+void  LastBoss::Attack(const Location player_location)
 {
 	attack_time--;
 
 	switch (attack_state)
 	{
 	case LAST_BOSS_ATTACK::MAGIC:
-		Magic();
+		Magic(player_location);
 		break;
 	case LAST_BOSS_ATTACK::PUNCH:
 		Punch();
@@ -261,17 +290,110 @@ void  LastBoss::Attack(const Location)
 void LastBoss::InitMagic()
 {
 	attack_time = MAGIC_TIME;
+	if(hp < (LAST_BOSS_HP / 3)) //魔法の発動数の設定
+	{
+		magic_volume = MAGIC_NUM3;
+		magic_rate = MAGIC_RATE / 3;
+	}
+	else if (hp < ((LAST_BOSS_HP / 3) * 2))
+	{
+		magic_volume = MAGIC_NUM2;
+		magic_rate = MAGIC_RATE / 2;
+
+	}
+	else
+	{
+		magic_volume = MAGIC_NUM1;
+		magic_rate = MAGIC_RATE;
+
+	}
+	magic = new EnemyBulletBase * [magic_volume];
+
+	for (int i = 0; i < magic_volume; i++)
+	{
+		magic[i] = nullptr;
+	}
+	attack_state = LAST_BOSS_ATTACK::MAGIC;
+
+
 }
 
 //-----------------------------------
 //魔法攻撃
 //-----------------------------------
-void LastBoss::Magic()
+void LastBoss::Magic(const Location player_location)
 {
+	bool player_spawn;
+	bool end = true;
 	attack_time--;
-	if (attack_time % MAGIC_RATE == 0)
+	if (0 < attack_time)
 	{
+		//魔法の生成
+		if (attack_time % magic_rate == 0)
+		{
+			for (int i = 0; i < magic_volume; i++)
+			{
+				if (magic[i] == nullptr)
+				{
+					player_spawn = static_cast<bool>(GetRand(1));
+					if (player_spawn)
+					{
+						magic[i] = new LastBossMagic(player_location);
+					}
+					else
+					{
+						magic[i] = new LastBossMagic();
+					}
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		//すべての魔法が発動終了しているかどうか
+		for (int i = 0; i < magic_volume; i++)
+		{
+			if (magic[i] != nullptr)
+			{
+				end = false;
+				break;
+			}
+		}
 
+		if (end) //終了
+		{
+			for (int i = 0; i < magic_volume; i++)
+			{
+				delete magic[i];
+			}
+			delete[] magic;
+
+			magic = nullptr;
+
+			attack_state = LAST_BOSS_ATTACK::NONE;
+			magic_interval = MAGIC_INTERVAL;
+		}
+	}
+
+	//魔法の発動
+	if (magic != nullptr)
+	{
+		for (int i = 0; i < magic_volume; i++)
+		{
+			if (magic[i] != nullptr)
+			{
+				LastBossMagic* my_magic = static_cast<LastBossMagic*>(magic[i]);
+
+				my_magic->Update();
+
+				if (my_magic->GetCanDelete())
+				{
+					delete magic[i];
+					magic[i] = nullptr;
+				}
+			}
+		}
 	}
 }
 
@@ -428,22 +550,66 @@ AttackResource LastBoss::Hit()
 }
 
 //-----------------------------------
+//攻撃が当たっているか
+//-----------------------------------
+AttackResource LastBoss::Hit(const BoxCollider* player)
+{
+	AttackResource ret = { 0,nullptr,0 };
+
+	switch (attack_state)
+	{
+	case LAST_BOSS_ATTACK::MAGIC:
+		for (int i = 0; i < magic_volume; i++)
+		{
+			if (magic[i] != nullptr)
+			{
+				LastBossMagic* my_magic = static_cast<LastBossMagic*>(magic[i]);
+
+				if (!my_magic->GetDoStandby())
+				{
+					if (my_magic->HitBox(player))
+					{
+						ret.type_count = 1;
+						ENEMY_TYPE type[1] = { magic[i]->GetType() };
+						ret.type = type;
+						ret.damage = magic[i]->GetDamage();
+					}
+				}
+			}
+		}
+		break;
+	case LAST_BOSS_ATTACK::PUNCH:
+		ret = PunchAttack(player);
+		break;
+	case LAST_BOSS_ATTACK::SWORD:
+		break;
+	case LAST_BOSS_ATTACK::SPECIAL_MOVES:
+		break;
+	case LAST_BOSS_ATTACK::NONE:
+		break;
+	default:
+		break;
+	}
+
+	return ret;
+}
+//-----------------------------------
 //プレイヤーとパンチとの当たり判定
 //-----------------------------------
 AttackResource LastBoss::PunchAttack(const BoxCollider* player)
 {
 	AttackResource ret = { 0,nullptr,0 };
 
-	LastBossHand* me_hand;
+	LastBossHand* my_hand;
 	for (int i = 0; i < HAND_NUM; i++)
 	{
-		me_hand = dynamic_cast<LastBossHand*>(hand[i]);
+		my_hand = dynamic_cast<LastBossHand*>(hand[i]);
 
-		if (me_hand->IfAttack())
+		if (my_hand->IfAttack())
 		{
-			if (me_hand->HitBox(player))
+			if (my_hand->HitBox(player))
 			{
-				ret = me_hand->Hit();
+				ret = my_hand->Hit();
 			}
 		}
 	}
@@ -571,6 +737,18 @@ void LastBoss::Draw() const
 	for (int i = 0; i < HAND_NUM; i++)
 	{
 		hand[i]->Draw();
+	}
+
+
+	if (magic != nullptr)
+	{
+		for (int i = 0; i < magic_volume; i++)
+		{
+			if (magic[i] != nullptr)
+			{
+				magic[i]->Draw();
+			}
+		}
 	}
 }
 
