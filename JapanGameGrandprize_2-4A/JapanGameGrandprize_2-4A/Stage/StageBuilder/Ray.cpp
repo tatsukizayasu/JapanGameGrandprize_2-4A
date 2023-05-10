@@ -17,13 +17,13 @@ Ray::Ray(const Location* location, float shift_x, float shift_y) :base_location(
 	LineCollider::SetLocation(Location{ 0,100 }, LINE_END);
 	Location base_location = *(this->base_location);
 
+	shift = Location{ shift_x,shift_y };
 	LineCollider::ColliderBase::SetLocation
 	(
-		base_location - LineCollider::GetVector(LINE_START)
+		base_location - LineCollider::GetVector(LINE_START) + shift
 	);
 
 	hit_collider_type = COLLIDER::NONE;
-	shift = Location{ shift_x,shift_y };
 }
 
 //------------------------------

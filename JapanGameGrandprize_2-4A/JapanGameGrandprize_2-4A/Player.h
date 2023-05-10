@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "Stage/StageBuilder/StageBuilder.h"
+#include "Stage/StageBuilder/Ray.h"
 
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
@@ -56,6 +57,7 @@ private:
 	StageBuilder* stage_builder;
 
 	std::vector<ObjectBase*>objects;
+	Ray* ray[2];
 #endif
 
 	int animation;					//画像アニメーション用

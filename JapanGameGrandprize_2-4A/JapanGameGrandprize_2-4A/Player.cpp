@@ -104,8 +104,6 @@ Player::Player()
 //-----------------------------------
 Player::Player(Stage* stage)
 {
-	stage_builder = new StageBuilder();
-	objects = stage_builder->OutPutObjects();
 
 	animation = 0;
 	area.height = 80;
@@ -222,6 +220,12 @@ Player::Player(Stage* stage)
 		pouch->SetElement(element[i], i);
 		pouch->SetElementConstruct(i);
 	}
+
+
+	stage_builder = new StageBuilder();
+	objects = stage_builder->OutPutObjects();
+	ray[0] = new Ray(&location, area.width / 2, area.height / 2);
+	ray[1] = new Ray(&location, -area.width / 2, area.height / 2);
 }
 
 //-----------------------------------
@@ -235,6 +239,9 @@ Player::~Player()
 		delete bullet[i];
 	}
 	delete[] bullet;
+
+	delete ray[0];
+	delete ray[1];
 }
 
 //-----------------------------------
@@ -242,6 +249,8 @@ Player::~Player()
 //-----------------------------------
 void Player::Draw() const
 {
+	ray[0]->Draw();
+	ray[1]->Draw();
 
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
@@ -487,6 +496,8 @@ void Player::ChemicalFormulaDraw(int i, int plus_y) const
 //-----------------------------------
 void Player::Update()
 {
+	ray[0]->Update();
+	ray[1]->Update();
 	old_x = location.x;
 	old_y = location.y;
 
