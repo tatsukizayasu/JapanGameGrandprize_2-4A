@@ -32,6 +32,7 @@ GameMain::GameMain(short stage_num)
 	//”wŒi‰æ‘œ“Ç‚İ‚İ
 	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
 	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
+	background_image[2] = LoadGraph("Images/Scene/Stage/3/BackImage.png");
 
 
 	char dis_stage_se[30];
@@ -86,6 +87,11 @@ GameMain::GameMain(short stage_num)
 GameMain::~GameMain()
 {
 
+	for (int i = 0; i < 3; i++)
+	{
+		DeleteGraph(background_image[i]);
+	}
+
 	StopSoundMem(background_music);
 	DeleteSoundMem(background_music);
 
@@ -115,7 +121,7 @@ GameMain::~GameMain()
 AbstractScene* GameMain::Update()
 {
 	pause->Update(stage_num);
-
+		
 	if (pause->IsPause() == TRUE) {
 
 		short next_scene = pause->GetNextScene();
@@ -202,7 +208,7 @@ void GameMain::SpawnEnemy()
 	}
 
 	int i;
-	for (i = 0; i < enemy_spawn_volume - 1; i++)
+	for (i = 0; i < enemy_spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -495,9 +501,15 @@ void GameMain::Draw()const
 	DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
 	DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 
-	stage->Draw();
-	item_controller->Draw();
+	if (stage_num == 3) {
+		DrawGraph(0, 0, background_image[2], FALSE);
+	}
 
+	stage->Draw();
+	stage->DrawObject();
+
+	item_controller->Draw();
+	
 	player->Draw();
 
 	for (int i = 0; i < enemy_spawn_volume; i++)

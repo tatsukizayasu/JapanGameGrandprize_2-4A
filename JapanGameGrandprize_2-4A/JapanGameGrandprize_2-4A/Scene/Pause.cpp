@@ -60,8 +60,10 @@ void Pause::Update(short stage_num)
 		TogglePause();
 	}
 
+	if (is_paused == false) { return; }
+
 	//ポーズ時徐々にぼかす
-	if (pause_effect_timer < 50 && is_paused == true)
+	if (pause_effect_timer < 50)
 	{
 		pause_effect_timer++;
 		if (pause_effect_timer % 5 == 0) 
@@ -109,7 +111,7 @@ void Pause::Update(short stage_num)
 		}
 
 
-		if (is_paused && PAD_INPUT::GetNowKey(XINPUT_BUTTON_A) && (PAD_INPUT::OnRelease(XINPUT_BUTTON_A) == true))
+		if (PAD_INPUT::GetNowKey(XINPUT_BUTTON_A) && (PAD_INPUT::OnRelease(XINPUT_BUTTON_A) == true))
 		{
 			PlaySoundMem(enter_se, DX_PLAYTYPE_BACK, TRUE);
 			while (CheckSoundMem(enter_se)) {}
