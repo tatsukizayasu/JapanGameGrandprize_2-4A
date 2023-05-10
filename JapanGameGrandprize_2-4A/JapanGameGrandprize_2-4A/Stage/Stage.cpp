@@ -38,6 +38,9 @@ Stage::Stage(short stage_num)
 		throw "Images/Stage/stage1_blocks.png";
 	}
 
+	// オブジェクト画像の読み込み
+	int bort_image = LoadGraph("Images/Scene/Stage/3/Bort.png");
+
 	//マップデータの読み込み
 	LoadMap(stage_num);
 
@@ -385,4 +388,11 @@ std::vector<Stage_Element_Base*> Stage::GetElement_MapChip() const
 void Stage::SetElement()
 {
 	element->SetElementParameter();
+}
+
+void Stage::DrawObject()
+{
+	if (stage_num == 3) {
+		DrawGraphF(80, 460, bort_image, TRUE);
+	}
 }

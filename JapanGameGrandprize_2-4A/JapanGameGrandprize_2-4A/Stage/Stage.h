@@ -67,12 +67,16 @@ private:
 	int background_images;
 	int block_images[50];
 	int stage1_block_images[10];
+	int bort_image;
 
 	//ステージ足場ブロックのID
 	std::set<short> stage_id_base{ Ground::STAGE01_BASE };
 
 	//ステージ地中ブロックのID
 	std::set<short> stage_id_underground{ Ground::STAGE01_UNDERGROUND };
+
+	//ステージの番号
+	short stage_num;
 
 
 protected:
@@ -186,4 +190,9 @@ public:
 	/// エレメントパラメータ設定関数
 	/// </summary>
 	void SetElement();
+
+	/// <summary>
+	/// オブジェクト 描画関数
+	/// </summary>
+	void DrawObject();
 };
