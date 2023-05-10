@@ -499,8 +499,6 @@ void GameMain::Draw()const
 	stage->Draw();
 	item_controller->Draw();
 
-	player->Draw();
-
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		if (enemy[i] != nullptr)
@@ -508,6 +506,10 @@ void GameMain::Draw()const
 			enemy[i]->Draw();
 		}
 	}
+
+	player->Draw();
+
+	
 	bullet_manager->Draw();
 
 	player->PouchDraw();

@@ -14,6 +14,7 @@ class LastBossHand :
 {
 private:
 
+    bool old_stage_hit; //ステージとの当たり判定
     bool teleporting; //テレポート中
     bool teleport; //テレポート
     bool punch;  //パンチしている
@@ -23,6 +24,7 @@ private:
     float angle; //角度
     int radius; //半径
     int teleport_time; //テレポート時間
+    int standby_time; //スタンバイ時間
     float size; //大きさ
     int attack_interval; //次の攻撃までの時間
     int punch_standby_time; //パンチするまでの時間

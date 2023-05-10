@@ -176,11 +176,14 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 			down = true;
 			down_time = DOWN_TIME;
 
-			for (int i = 0; i < magic_volume; i++)
+			if (magic != nullptr)
 			{
-				delete magic[i];
+				for (int i = 0; i < magic_volume; i++)
+				{
+					delete magic[i];
+				}
+				delete[] magic;
 			}
-			delete[] magic;
 
 			magic = nullptr;
 
@@ -515,7 +518,7 @@ void LastBoss::AttackNone()
 		}
 		else{}
 
-		switch (LAST_BOSS_ATTACK::MAGIC) //ŽŸ‚ÌUŒ‚
+		switch (next_attack) //ŽŸ‚ÌUŒ‚
 		{
 		case LAST_BOSS_ATTACK::MAGIC:
 			InitMagic();

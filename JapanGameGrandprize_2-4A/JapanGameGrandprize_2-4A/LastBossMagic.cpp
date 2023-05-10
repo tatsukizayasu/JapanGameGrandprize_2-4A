@@ -8,7 +8,7 @@
 #define STANDBY_TIME 60
 
 //アニメーション
-#define MAGIC_ANIMATION 5
+#define MAGIC_ANIMATION 3
 
 //魔法の範囲
 #define MAGIC_AREA 60
