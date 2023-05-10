@@ -110,6 +110,8 @@ private:
 	ChemicalFormulaParameter* melt;
 	ChemicalFormulaParameter* pararysis;
 	ChemicalFormulaParameter* heal;
+	
+	Heal_Effect effect_heal;
 public:
 
 	Player();
@@ -150,6 +152,7 @@ public:
 	void SetHeal(ChemicalFormulaParameter*);
 
 	void MoveAnimation();
+	void HealAnimation(int x,int y);
 
 #ifdef _DEBUG
 	//çXêV(DotByDot)
