@@ -51,7 +51,7 @@ private:
     void InitMagic();
 
     //–‚–@UŒ‚
-    void Magic();
+    void Magic(const Location);
 
     //ƒpƒ“ƒ`UŒ‚‚Ì‰Šú‰»
     void InitPunch();
@@ -92,6 +92,9 @@ public:
 
     //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
     AttackResource Hit() override;
+
+    //UŒ‚‚ª“–‚½‚Á‚Ä‚¢‚é‚©
+    AttackResource Hit(const BoxCollider*);
 
     //€–S
     void Death() override;

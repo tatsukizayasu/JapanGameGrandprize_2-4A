@@ -53,7 +53,7 @@ GameMain::GameMain(short stage_num)
 
 	enemy_spawn_volume = 0;
 	this->stage_num = stage_num;
-	stage = new Stage(5);
+	stage = new Stage(stage_num);
 	player = new Player(stage);
 	stage->SetPlayer(player);
 
@@ -335,7 +335,7 @@ bool GameMain::EnemyUpdate()
 				LastBoss* last_boss;
 				last_boss = dynamic_cast<LastBoss*>(enemy[i]);
 
-				player->HpDamage(last_boss->PunchAttack(player));
+				player->HpDamage(last_boss->Hit(player));
 			}
 			else
 			{

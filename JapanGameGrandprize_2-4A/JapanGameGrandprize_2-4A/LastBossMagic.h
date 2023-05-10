@@ -1,8 +1,6 @@
 #pragma once
 #include "EnemyBulletBase.h"
 
-#define MAGIC_AREA 40
-
 class LastBossMagic :
     public EnemyBulletBase
 {
@@ -19,7 +17,10 @@ private:
 	int argument; //画像の引数
 public:
 	//コンストラクタ
-	LastBossMagic(const Location, const int);
+	LastBossMagic();
+
+	//コンストラクタ
+	LastBossMagic(const Location);
 
 	//デストラクタ
 	~LastBossMagic();
@@ -32,5 +33,8 @@ public:
 
 	//削除可能フラグの取得
 	bool GetCanDelete() const;
+
+	//スタンバイ状態の取得
+	bool GetDoStandby() const;
 };
 

@@ -5,10 +5,16 @@
 #define MAGIC_IMAGES 10
 
 //スタンバイの時間
-#define STANDBY_TIME 60 * 2
+#define STANDBY_TIME 60
 
 //アニメーション
-#define MAGIC_ANIMATION 10
+#define MAGIC_ANIMATION 5
+
+//魔法の範囲
+#define MAGIC_AREA 60
+
+//魔法攻撃のダメージ
+#define MAGIC_DAMAGE 10
 
 enum class MAGIC_TYPE 
 {
@@ -19,7 +25,47 @@ enum class MAGIC_TYPE
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-LastBossMagic::LastBossMagic(const Location spawn_location, const int type)
+LastBossMagic::LastBossMagic()
+{
+	standby = true;
+	can_delete = false;
+	Location camera = CameraWork::GetCamera();
+
+	Location spawn_location;
+	spawn_location.x = MAGIC_AREA + GetRand(SCREEN_WIDTH - (MAGIC_AREA * 2));
+	spawn_location.y = MAGIC_AREA + GetRand(SCREEN_HEIGHT - (MAGIC_AREA * 3));
+
+	location = spawn_location + camera;
+	radius = 0;
+
+	images = new int[MAGIC_IMAGES];
+
+	switch (static_cast<MAGIC_TYPE>(GetRand(1)))
+	{
+	case MAGIC_TYPE::SLASH:
+		LoadDivGraph("Images/Enemy/Magic/Slash.png", MAGIC_IMAGES, 5, 2, 192, 192, images);
+		this->type = ENEMY_TYPE::NORMAL;
+		break;
+	case MAGIC_TYPE::THUNDER:
+		LoadDivGraph("Images/Enemy/Magic/Thunder.png", MAGIC_IMAGES, 5, 2, 192, 192, images);
+		this->type = ENEMY_TYPE::THUNDER;
+		break;
+	default:
+		break;
+	}
+
+	size = 0.0;
+	standby_time = STANDBY_TIME;
+
+	animation = 0;
+	argument = 0;
+	damage = MAGIC_DAMAGE;
+}
+
+//-----------------------------------
+//コンストラクタ
+//-----------------------------------
+LastBossMagic::LastBossMagic(const Location spawn_location)
 {
 	standby = true;
 	can_delete = false;
@@ -29,7 +75,7 @@ LastBossMagic::LastBossMagic(const Location spawn_location, const int type)
 
 	images = new int[MAGIC_IMAGES];
 
-		switch (static_cast<MAGIC_TYPE>(type))
+		switch (static_cast<MAGIC_TYPE>(GetRand(1)))
 		{
 		case MAGIC_TYPE::SLASH:
 			LoadDivGraph("Images/Enemy/Magic/Slash.png", MAGIC_IMAGES, 5, 2, 192, 192, images);
@@ -48,6 +94,7 @@ LastBossMagic::LastBossMagic(const Location spawn_location, const int type)
 
 	animation = 0;
 	argument = 0;
+	damage = MAGIC_DAMAGE;
 }
 
 //-----------------------------------
@@ -75,13 +122,15 @@ void LastBossMagic::Update()
 		{
 			if (size < 1.0)
 			{
-				size += 0.1;
+				size += 0.2;
 				radius = MAGIC_AREA * size;
 			}
 		}
 		if (standby_time < 0)
 		{
 			standby = false;
+			radius = 0;
+			size = 0;
 		}
 	}
 	else
@@ -90,8 +139,11 @@ void LastBossMagic::Update()
 		if (animation % MAGIC_ANIMATION == 0)
 		{
 			argument++;
-			size += 0.1;
-			radius = MAGIC_AREA * size;
+			if (size < 1.0)
+			{
+				size += 0.5;
+				radius = MAGIC_AREA * size;
+			}
 			if (MAGIC_IMAGES - 1 < argument)
 			{
 				can_delete = true;
@@ -112,11 +164,11 @@ void LastBossMagic::Draw() const
 	if (standby) //スタンバイ中
 	{
 		DrawCircle(static_cast<int>(draw_location.x), static_cast<int>(draw_location.y),
-			radius * size, 0xff0000, FALSE);
+			radius, 0xff0000, FALSE);
 	}
 	else
 	{
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.0, 0.5, images[argument], TRUE);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.75, 0.0, images[argument], TRUE);
 	}
 }
 
@@ -126,4 +178,12 @@ void LastBossMagic::Draw() const
 bool LastBossMagic::GetCanDelete() const
 {
 	return can_delete;
+}
+
+//-----------------------------------
+//スタンバイ状態の取得
+//-----------------------------------
+bool LastBossMagic::GetDoStandby() const
+{
+	return standby;
 }
