@@ -21,6 +21,8 @@
 //-----------------------------------
 Stage::Stage(short stage_num)
 {
+	//ステージ番号をセット
+	this->stage_num = stage_num;
 
 	element = new Stage_Element(this);
 	this->camera_work = camera_work;
