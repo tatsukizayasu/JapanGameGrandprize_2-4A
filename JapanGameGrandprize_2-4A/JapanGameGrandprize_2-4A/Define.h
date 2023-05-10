@@ -103,6 +103,15 @@ struct Delete_Effect {
 	int Delete_frame;
 };
 
+struct Heal_Effect {
+	int Tick;
+	int x;
+	int y;
+	int display_permit;
+	int image_array[20];
+	int frame;
+};
+
 //’†SÀ•W
 struct Location
 {

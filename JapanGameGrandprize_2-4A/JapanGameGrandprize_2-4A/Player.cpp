@@ -93,6 +93,11 @@ Player::Player()
 	{
 		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
 	}
+	effect_heal.display_permit = FALSE;
+	effect_heal.x = 0;
+	effect_heal.y = 0;
+	effect_heal.frame = 0;
+	LoadDivGraph("Images/Player/stand.png", 12, 12, 1, 94, 150, effect_heal.image_array, FALSE);
 
 	pouch = nullptr;
 }
@@ -218,6 +223,12 @@ Player::Player(Stage* stage)
 		pouch->SetElement(element[i], i);
 		pouch->SetElementConstruct(i);
 	}
+	effect_heal.display_permit = FALSE;
+	effect_heal.x = 0;
+	effect_heal.y = 0;
+	effect_heal.frame = 0;
+	LoadDivGraph("Images/Player/出現エフェクト.png", 12, 12, 1, 94, 150, effect_heal.image_array, FALSE);
+
 }
 
 //-----------------------------------
@@ -242,9 +253,9 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
+	
+
 	PlayerUiDraw(x, y);
-
-
 
 	for (int i = 0; i < bullet_count; i++)
 	{
@@ -299,7 +310,12 @@ void Player::Draw() const
 
 	SetFontSize(30);
 
-
+	if (effect_heal.display_permit == TRUE) {
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+		DrawRotaGraph(effect_heal.x, effect_heal.y, 1, 0, effect_heal.image_array[effect_heal.frame], TRUE, FALSE, FALSE);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 
 	DrawFormatString(0, 400, 0x999999, "%d", hp);
 }
@@ -574,7 +590,9 @@ void Player::Update()
 
 	}
 
-
+	if (effect_heal.display_permit == TRUE) {
+		HealAnimation(static_cast<int>(location.x - CameraWork::GetCamera().x), static_cast<int>(location.y - CameraWork::GetCamera().y));
+	}
 
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
@@ -589,7 +607,6 @@ void Player::Update()
 	{
 		pouch_open = false;
 	}
-
 
 	//ポーチオープン
 	if (pouch_open)
@@ -667,6 +684,8 @@ void Player::Update()
 					{
 						if (heal != nullptr)
 						{
+							effect_heal.Tick = 0;
+							effect_heal.display_permit = TRUE;
 							if (hp < HP_MAX)
 							{
 								Hp_Heal(heal->damage);
@@ -1517,6 +1536,22 @@ void Player::MoveAnimation()
 	if (image_count >= image_chenge)
 	{
 		image_count = 1;
+	}
+}
+
+void Player::HealAnimation(int x,int y){
+	if (effect_heal.display_permit == TRUE) {
+		effect_heal.Tick++;
+		effect_heal.x = x;
+		effect_heal.y = y - 15;
+		if (effect_heal.Tick % 2 == 0) {
+			effect_heal.frame++;
+		}
+		if (12 < effect_heal.frame) {
+			effect_heal.Tick = 0;
+			effect_heal.frame = 0;
+			effect_heal.display_permit = FALSE;
+		}
 	}
 }
 
