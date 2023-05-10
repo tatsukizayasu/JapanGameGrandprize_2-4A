@@ -7,6 +7,7 @@
 #include <iostream>
 
 #define ANIMATION_MOVE 10
+#define JUMP_ANIMATION 6
 #define CHEMICAL_FORMURA_DRAW_X 50
 #define CHEMICAL_FORMURA_DRAW_Y 150
 #define PLAYER_SIZE 0.32
@@ -111,8 +112,8 @@ Player::Player(Stage* stage)
 	location.y = (stage->GetSpawnPoint().y - MAP_CHIP_SIZE / 2) - 1.0;
 	image = new int[PLAYER_IMAGES];
 	LoadDivGraph("Images/Player/Player.png", 7, 7, 1, 250, 250, image);
-	jump_image = new int[3];
-	LoadDivGraph("Images/Player/Fly_ON.png", 3, 3, 1, 250, 250, jump_image);
+	jump_image = new int[JUMP_ANIMATION];
+	LoadDivGraph("Images/Player/Fly_ON.png", JUMP_ANIMATION, JUMP_ANIMATION, 1, 250, 250, jump_image);
 	attribute_images = new int[ATTRIBUTE_IMAGES];
 	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
 	hp_image = LoadGraph("Images/Player/HP_Bar.png");
@@ -688,8 +689,6 @@ void Player::Update()
 		}
 	}
 
-
-
 	//Bボタン長押し
 	if (PAD_INPUT::GetOldKey(XINPUT_BUTTON_B) & PAD_INPUT::GetNowKey(XINPUT_BUTTON_B)
 		&& fuel > 0)
@@ -792,7 +791,6 @@ void Player::Update()
 //スティックを入力していないとき
 void Player::NotInputStick()
 {
-	image_count = 0;
 	if (speed_x > 0)
 	{
 		if (player_state == PLAYER_STATE::JUMP || player_state == PLAYER_STATE::DOWN)
@@ -801,6 +799,7 @@ void Player::NotInputStick()
 		}
 		else
 		{
+			image_count = 0;
 			speed_x -= WARK_INERTIA;
 		}
 
@@ -1032,7 +1031,6 @@ void Player::Fly()
 {
 
 	float y = location.y - CameraWork::GetCamera().y;
-	image_count = 0;
 	player_state = PLAYER_STATE::FLY;
 	not_jet_count = 0;
 	MoveAnimation();
@@ -1503,11 +1501,11 @@ void Player::MoveAnimation()
 
 	if (player_state == PLAYER_STATE::FLY)
 	{
-		image_chenge = 3;
+		image_chenge = JUMP_ANIMATION - 1;
 	}
 	else
 	{
-		image_chenge = PLAYER_IMAGES;
+		image_chenge = PLAYER_IMAGES - 1;
 	}
 
 	animation++;
