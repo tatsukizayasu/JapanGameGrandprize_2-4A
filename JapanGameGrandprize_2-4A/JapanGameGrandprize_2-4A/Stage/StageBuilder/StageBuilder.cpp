@@ -147,6 +147,15 @@ void StageBuilder::Update()
 
 #ifdef _DEV
 
+	ray->Update();
+
+	for (ObjectBase* object : objects)
+	{
+		if (ray->HitCheck(object->GetColllider()))
+		{
+			ray->HitFunction(object->GetColllider());
+		}
+	}
 
 #endif // _DEV
 }
@@ -197,6 +206,7 @@ void StageBuilder::Draw()const
 	}
 
 
+	ray->Draw();
 
 #endif // _DEV
 

@@ -43,6 +43,9 @@ enum class COLLIDER
 	,BOX
 	,LINE
 	,POLY_LINE
+
+
+	,NONE = 99
 };
 
 enum class OBJECT

@@ -160,6 +160,8 @@ bool LineCollider::HitBox(const BoxCollider* box)const
 	bool box_ishit = false;
 	float sign = 0;
 
+	location;
+
 	Location vertex[4] =
 	{
 		//Žl‹÷
@@ -177,13 +179,13 @@ bool LineCollider::HitBox(const BoxCollider* box)const
 
 	};
 
-	for (int i = 0; i < 4; i++)
+	
+	if (vertex[0].x <= GetMax().x && GetMin().x <= vertex[1].x
+		&& vertex[0].y <= GetMax().y && GetMin().y <= vertex[2].y)
 	{
-		if ((GetMin() <= vertex[i]) && vertex[i] <= GetMax())
-		{
-			box_ishit = true;
-		}
+		box_ishit = true;
 	}
+
 	if (box_ishit == false)return false; //ü•ª‚ðˆÍ‚¤ŽlŠpŒ`‚É‚·‚ç“–‚½‚Á‚Ä‚È‚¢
 	
 	for (int i = 0; i < 4; i++)

@@ -179,14 +179,14 @@ bool BoxCollider::HitLine(const class LineCollider* line_collider) const
 
 	};
 
-	for (int i = 0; i < 4; i++)
+	Location min = line_collider->GetMin();
+	Location max = line_collider->GetMax();
+	if (vertex[0].x <= max.x && min.x <= vertex[1].x
+		&& vertex[0].y <= max.y && min.y <= vertex[2].y)
 	{
-		if ((line_collider->GetMin() <= vertex[i]) && 
-			vertex[i] <= line_collider->GetMax())
-		{
-			box_ishit = true;
-		}
+		box_ishit = true;
 	}
+
 	if (box_ishit == false)return false; //ü•ª‚ğˆÍ‚¤lŠpŒ`‚É‚·‚ç“–‚½‚Á‚Ä‚È‚¢
 
 
