@@ -75,6 +75,8 @@ struct Bullet_Effect {
 	int Tick;
 	int speed;
 	int image;
+	int image_Array[30];
+	int frame;
 
 	int x;
 	int y;
