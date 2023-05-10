@@ -41,8 +41,12 @@ Stage::Stage(short stage_num)
 	}
 
 	// オブジェクト画像の読み込み
-	int bort_image = LoadGraph("Images/Scene/Stage/3/Bort.png");
-
+	bort_image = LoadGraph("Images/Scene/Stage/3/Bort.png");
+	if (bort_image == -1) {
+		throw "Images/Scene/Stage/3/Bort.png";
+	}
+	
+	
 	//マップデータの読み込み
 	LoadMap(stage_num);
 
@@ -395,6 +399,7 @@ void Stage::SetElement()
 void Stage::DrawObject()
 {
 	if (stage_num == 3) {
+		
 		DrawGraphF(80, 460, bort_image, TRUE);
 	}
 }

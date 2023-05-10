@@ -28,6 +28,8 @@
 //-----------------------------------
 GameMain::GameMain(short stage_num)
 {
+	this->stage_num = stage_num;
+
 #undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
 	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
@@ -39,7 +41,7 @@ GameMain::GameMain(short stage_num)
 
 	if (stage_num != 5)
 	{
-		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", stage_num);
+		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", this->stage_num);
 
 		if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
 			background_music = LoadSoundMem("Sounds/BGM/stage1.mp3");
@@ -53,8 +55,8 @@ GameMain::GameMain(short stage_num)
 	pause = new Pause();
 
 	enemy_spawn_volume = 0;
-	this->stage_num = stage_num;
-	stage = new Stage(stage_num);
+	
+	stage = new Stage(this->stage_num);
 	player = new Player(stage);
 	stage->SetPlayer(player);
 
@@ -66,7 +68,7 @@ GameMain::GameMain(short stage_num)
 	stage->InitStage();
 	stage->SetElement();
 
-	camera_work = new CameraWork(0, 0, player, stage, stage_num);
+	camera_work = new CameraWork(0, 0, player, stage, this->stage_num);
 
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
