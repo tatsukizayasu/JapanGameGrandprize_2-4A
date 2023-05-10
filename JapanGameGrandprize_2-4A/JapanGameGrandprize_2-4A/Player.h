@@ -88,6 +88,7 @@ private:
 	bool move_left;					//プレイヤーの向き true:左　false:右
 	bool pouch_open;				//ポーチを開けている
 	bool hit_stage;					//ステージのブロックに触れている
+	bool boost;
 
 	ATTRIBUTE attribute[6];         //弾の属性
 	const char* attribute_c[6];     //弾の属性の文字列

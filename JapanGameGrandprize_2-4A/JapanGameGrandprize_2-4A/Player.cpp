@@ -134,6 +134,7 @@ Player::Player(Stage* stage)
 	speed_x = 0.0;
 	old_x = 0.0;
 	old_y = 0.0;
+	boost = true;
 	fuel = 100.0;
 	gravity_down = 0.0;
 	jump_power = 100.0f;
@@ -697,8 +698,11 @@ void Player::Update()
 		{
 			if (fuel > 0)
 			{
-				player_state = PLAYER_STATE::FLY;
-				Hovering();
+				if (boost)
+				{
+					player_state = PLAYER_STATE::FLY;
+					Hovering();
+				}
 			}
 			else
 			{
@@ -718,8 +722,11 @@ void Player::Update()
 		{
 			if (fuel > 0)
 			{
-				player_state = PLAYER_STATE::FLY;
-				Hovering();
+				if (boost)
+				{
+					player_state = PLAYER_STATE::FLY;
+					Hovering();
+				}
 			}
 			else
 			{
@@ -1096,6 +1103,15 @@ void Player::NotFly()
 		{
 			fuel = 100;
 		}
+	}
+
+	if (fuel < 10)
+	{
+		boost = false;
+	}
+	else
+	{
+		boost = true;
 	}
 
 	if (not_jet_count >= 120)
