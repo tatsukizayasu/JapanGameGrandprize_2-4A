@@ -360,7 +360,6 @@ void Pouch::Draw() const
 	}
 	DrawGraph(x - 150, y + 80 + move_string, cursor_image, true);
 	DrawGraph(x - 150, y + 80 + move_string, cursor_image, true);
-	DrawGraph(x - 150, y + 80 + move_string, cursor_image, true);
 	DrawGraph(x - 170, y + 360, elemental_count, TRUE);
 }
 
@@ -379,7 +378,7 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 		element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume() - bring.material.oxygen);
 	DrawFormatString(tab_x, y + 505 + (30 * i), 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume() - bring.material.sulfur);
-	DrawFormatString(tab_x, y + 535 + (30 * i), 0xffffff, "%d    %d",
+	DrawFormatString(tab_x +15, y + 535 + (30 * i), 0xffffff, "%d    %d",
 		element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume() - bring.material.chlorine);
 
 }
