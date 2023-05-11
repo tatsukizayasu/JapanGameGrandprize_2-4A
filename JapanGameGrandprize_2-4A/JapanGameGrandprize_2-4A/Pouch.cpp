@@ -53,6 +53,8 @@ Pouch::Pouch()
 	elemental_count = LoadGraph("Images/ItemTab/P_kazu.png");
 	window_image = LoadGraph("Images/ItemTab/poti_back.png");
 	window_image_two = LoadGraph("Images/ItemTab/poti_waku.png");
+	stick_image_l = LoadGraph("Images/ItemTab/Rstick_L.png");
+	stick_image_r = LoadGraph("Images/ItemTab/Rstick_R.png");
 	text_window_image_lit = LoadGraph("Images/ItemTab/P_Text_BackBox.png");
 	text_window_image_dark = LoadGraph("Images/ItemTab/P_Text_nBackBox.png");
 	cursor_image = LoadGraph("Images/ItemTab/Cursor.png");
@@ -211,7 +213,7 @@ void Pouch::ExplosionTabDraw() const
 
 	ElementDraw(chemical_formula_explosion[cursol]);
 
-	DrawGraph(attribute_name_x - 40, attribute_name_y, attribute_text_images[0], true);
+	DrawGraph(attribute_name_x - 40, attribute_name_y - 5, attribute_text_images[0], true);
 }
 
 
@@ -243,7 +245,7 @@ void Pouch::MeltTabDraw() const
 	ElementDraw(chemical_formula_melt[cursol]);
 
 
-	DrawGraph(attribute_name_x, attribute_name_y, attribute_text_images[1], true);
+	DrawGraph(attribute_name_x, attribute_name_y - 5, attribute_text_images[1], true);
 }
 
 //–ƒáƒ
@@ -277,7 +279,7 @@ void Pouch::ParalysisTabDraw()const
 
 
 
-	DrawGraph(attribute_name_x - 30, attribute_name_y, attribute_text_images[3], true);
+	DrawGraph(attribute_name_x - 30, attribute_name_y - 5, attribute_text_images[3], true);
 }
 
 //“Å
@@ -311,7 +313,7 @@ void Pouch::PoisonTabDraw()const
 	ElementDraw(chemical_formula_poison[cursol]);
 
 
-	DrawGraph(attribute_name_x, attribute_name_y, attribute_text_images[2], true);
+	DrawGraph(attribute_name_x, attribute_name_y - 5, attribute_text_images[2], true);
 }
 //‰ñ•œ
 void Pouch::HealTabDraw()const
@@ -342,7 +344,7 @@ void Pouch::HealTabDraw()const
 
 
 
-	DrawGraph(attribute_name_x, attribute_name_y, attribute_text_images[4], true);
+	DrawGraph(attribute_name_x, attribute_name_y - 5, attribute_text_images[4], true);
 }
 
 //•`‰æ
@@ -389,6 +391,8 @@ void Pouch::Draw() const
 	DrawGraph(x - 150, y + 80 + move_string, cursor_image, true);
 	DrawGraph(x - 150, y + 80 + move_string, cursor_image, true);
 	DrawGraph(x - 170, y + 360, elemental_count, TRUE);
+	DrawRotaGraph(x - 120, attribute_name_y + 15,0.9,0, stick_image_l, true);
+	DrawRotaGraph(x + 180, attribute_name_y + 15, 0.9, 0, stick_image_r, true);
 }
 
 void Pouch::ElementDraw(ChemicalFormulaParameter bring) const

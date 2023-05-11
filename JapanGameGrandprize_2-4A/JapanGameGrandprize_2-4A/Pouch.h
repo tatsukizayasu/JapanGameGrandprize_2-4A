@@ -21,6 +21,8 @@ private:
 	int second_tab_image[4];
 	int* attribute_images;
 	int* attribute_text_images;
+	int stick_image_r;
+	int stick_image_l;
 	int cursor_image;
 	int window_image;
 	int window_image_two;
