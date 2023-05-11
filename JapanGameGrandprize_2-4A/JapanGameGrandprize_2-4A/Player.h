@@ -88,6 +88,7 @@ private:
 	bool move_left;					//プレイヤーの向き true:左　false:右
 	bool pouch_open;				//ポーチを開けている
 	bool hit_stage;					//ステージのブロックに触れている
+	bool boost;
 
 	ATTRIBUTE attribute[6];         //弾の属性
 	const char* attribute_c[6];     //弾の属性の文字列
@@ -109,6 +110,8 @@ private:
 	ChemicalFormulaParameter* melt;
 	ChemicalFormulaParameter* pararysis;
 	ChemicalFormulaParameter* heal;
+	
+	Heal_Effect effect_heal;
 public:
 
 	Player();
@@ -149,6 +152,7 @@ public:
 	void SetHeal(ChemicalFormulaParameter*);
 
 	void MoveAnimation();
+	void HealAnimation(int x,int y);
 
 #ifdef _DEBUG
 	//更新(DotByDot)
