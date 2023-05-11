@@ -23,7 +23,8 @@ private:
 	int image_addition;
 	int slime_angle;
 	int wait_time;
-
+	int poisonsound;//“Å‚Ì’e
+	int slimeataack;//ƒXƒ^ƒCƒ€‘Ì“–‚½‚è
 	Location jump_distance;
 private:
 #ifdef _DEBUG

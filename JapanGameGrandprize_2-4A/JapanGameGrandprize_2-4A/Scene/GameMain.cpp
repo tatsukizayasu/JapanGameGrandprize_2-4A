@@ -39,7 +39,7 @@ GameMain::GameMain(short stage_num)
 		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
 		break;
 	case 3:
-		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage.png");
+		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage1.png");
 		background_image[1] = LoadGraph("Images/Scene/Stage/3/BackImage2.png");
 		break;
 	default:
@@ -53,7 +53,7 @@ GameMain::GameMain(short stage_num)
 		c = 255;
 	}
 
-	backgraound_blend = 160;
+	backgraound_blend = 220;
 
 	char dis_stage_se[30];
 
