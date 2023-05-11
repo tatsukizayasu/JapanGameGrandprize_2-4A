@@ -356,10 +356,6 @@ void Player::PlayerUiDraw(float x, float y) const
 	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
 	float hp_start = 129;
 	float hp_y = 630;
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
-	DrawRotaGraphF(230, 640, 1.0, 0, hp_image, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	DrawRotaGraphF(230, 640, 1.0, 0, hp_image_top, true);
 	if (hp >= 50)
 	{
 		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, GREEN, TRUE);
@@ -372,6 +368,11 @@ void Player::PlayerUiDraw(float x, float y) const
 	{
 		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, RED, TRUE);
 	}
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
+	DrawRotaGraphF(230, 640, 1.0, 0, hp_image, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	DrawRotaGraphF(230, 640, 1.0, 0, hp_image_top, true);
+	
 	
 	//‚±‚±‚Ü‚Å
 
