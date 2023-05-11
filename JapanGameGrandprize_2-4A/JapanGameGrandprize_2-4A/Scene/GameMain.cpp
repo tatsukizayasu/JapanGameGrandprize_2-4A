@@ -246,7 +246,7 @@ void GameMain::SpawnEnemy()
 
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
-
+	
 	enemy_spawn_volume = spawn.size();
 	enemy = new EnemyBase * [enemy_spawn_volume];
 	for (int i = 0; i < enemy_spawn_volume; i++)
@@ -371,6 +371,16 @@ bool GameMain::EnemyUpdate()
 
 		if (enemy[i] != nullptr)
 		{
+			
+			//ボス部屋に入った際、ボス以外の敵を削除
+			if (is_spawn_boss == true && enemy[i]->GetEnemyKind() < ENEMY_KIND::SLIME_BOSS)
+			{
+				delete enemy[i];
+				enemy[i] = nullptr;
+				i--;
+				break;
+			}
+
 			//Stage03の場合、画面内に収まるまで敵を強制移動
 			if (stage_num == 3 &&
 				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
