@@ -21,6 +21,14 @@ Stage_Element::~Stage_Element()
 			DeleteGraph(value);
 		}
 	}
+	// 読み込んだ全Elementの音声を解放
+	for (const auto& entry : sound_cache)
+	{
+		for (auto& value : entry.second)
+		{
+			DeleteSoundMem(value);
+		}
+	}
 
 	// element Vectorを解放
 	// 各インスタンスは自動的に解放される。
@@ -35,7 +43,6 @@ void Stage_Element::InitDemo(Location location)
 	AddElement(Element::FALL_FLOOR, {  location.x + 160.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
 	AddElement(Element::ITEM_DROP_OBJECT, { location.x + 240.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
 	AddElement(Element::TRAP, { location.x + 320.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
-	AddElement(Element::MOVE_FLOOR, { location.x + 400.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
 	AddElement(Element::BARRICADE_UP, { location.x + 480.0f , location.y }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
 	AddElement(Element::BARRICADE_CENTER, { location.x + 480.0f , location.y + 40.0f }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
 	AddElement(Element::BARRICADE_DOWN, { location.x + 480.0f , location.y + 80.0f }, { MAP_CHIP_SIZE, MAP_CHIP_SIZE });
@@ -48,49 +55,46 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 #ifndef NODEBUG
 
 	std::vector<int> images = GetImage(type);
+	std::vector<int> sounds = GetSounds(type);
 	/*int* images = new int[buf.size()];
 	std::copy(buf.begin(), buf.end(), images);*/
+
+
+
+	Resource resource{ images, sounds };
 
 	switch (type)
 	{
 	case DAMAGE_WALL:
-		element.push_back(std::make_shared<Element_DamageWall>(type, images, location, Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_DamageWall>(type, resource, location, Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE }));
 		break;
 
 	case WOODEN_FLOOR:
-		element.push_back(std::make_shared <Element_Wooden_Floor>(type, images, location, Area{ 10.0f, MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared <Element_Wooden_Floor>(type, resource, location, Area{ 10.0f, MAP_CHIP_SIZE }));
 		break;
 
 	case FALL_FLOOR:
-		element.push_back(std::make_shared<Element_Fall_Floor>(type, images, location, Area{ 8.0f , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Fall_Floor>(type, resource, location, Area{ 8.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case ITEM_DROP_OBJECT:
-		element.push_back(std::make_shared<Element_Item_Drop_Object>(type, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared<Element_Item_Drop_Object>(type, resource, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case TRAP:
-		element.push_back(std::make_shared<Element_Trap>(type, stage, enemy, images, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
-		break;
-
-	case MOVE_FLOOR:
-		element.push_back(std::make_shared<Element_Move_Floor>(type, images, location, area));
-		break;
-
-	case MOVE_FLOOR_GOAL:
-		element.push_back(std::make_shared<Element_Move_Floor>(type, location));
+		element.push_back(std::make_shared<Element_Trap>(type, stage, enemy, resource, Location{ location.x, location.y - 16.0f }, Area{ 50.0f , MAP_CHIP_SIZE }));
 		break;
 
 	case BARRICADE_UP:
-		element.push_back(std::make_shared<Element_Barricade>(type, images, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ -18.0f, 0.0f }, Element_Barricade::DIRECTION::UP));
+		element.push_back(std::make_shared<Element_Barricade>(type, resource, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ -18.0f, 0.0f }, Element_Barricade::DIRECTION::UP));
 		break;
 
 	case BARRICADE_CENTER:
-		element.push_back(std::make_shared<Element_Barricade>(type, images, location, Area{ -MAP_CHIP_SIZE, MAP_CHIP_SIZE * 1 / 10}, Area{ 0.0f, 0.0f }, Element_Barricade::DIRECTION::CENTER));
+		element.push_back(std::make_shared<Element_Barricade>(type, resource, location, Area{ -MAP_CHIP_SIZE, MAP_CHIP_SIZE * 1 / 10}, Area{ 0.0f, 0.0f }, Element_Barricade::DIRECTION::CENTER));
 		break;
 
 	case BARRICADE_DOWN:
-		element.push_back(std::make_shared<Element_Barricade>(type, images, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ + 18.0f, 0.0f }, Element_Barricade::DIRECTION::DOWN));
+		element.push_back(std::make_shared<Element_Barricade>(type, resource, location, Area{ MAP_CHIP_SIZE * 1 / 17, MAP_CHIP_SIZE}, Area{ + 18.0f, 0.0f }, Element_Barricade::DIRECTION::DOWN));
 		break;
 
 	default:
@@ -108,22 +112,22 @@ void Stage_Element::SetElementParameter()
 
 void Stage_Element::SetMoveFloorNextLocation()
 {
-	int element_size = element.size();
-	for (int i = 0; i < element_size; i++)
-	{
-		if (element.at(i)->GetType() == Element::MOVE_FLOOR)
-		{
-			for (int j = i + 1; j < element_size; j++)
-			{
-				if (element.at(j)->GetType() == Element::MOVE_FLOOR_GOAL && element.at(i)->GetLocation().x < element.at(j)->GetLocation().x)
-				{
-					element.at(i)->SetLocation(element.at(j)->GetLocation());
-					i = j + 1;
-					break;
-				}
-			}
-		}
-	}
+	//int element_size = element.size();
+	//for (int i = 0; i < element_size; i++)
+	//{
+	//	if (element.at(i)->GetType() == Element::MOVE_FLOOR)
+	//	{
+	//		for (int j = i + 1; j < element_size; j++)
+	//		{
+	//			if (element.at(j)->GetType() == Element::MOVE_FLOOR_GOAL && element.at(i)->GetLocation().x < element.at(j)->GetLocation().x)
+	//			{
+	//				element.at(i)->SetLocation(element.at(j)->GetLocation());
+	//				i = j + 1;
+	//				break;
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 void Stage_Element::Update(Player* player)
@@ -240,13 +244,6 @@ std::vector<int> Stage_Element::GetImage(short type)
 		filename = "TRAP.png";
 		break;
 
-	case MOVE_FLOOR:
-		filename = "Move_Floor.png";
-		break;
-	case MOVE_FLOOR_GOAL:
-		filename = "DamageWall.png";
-		break;
-
 	case BARRICADE_UP:
 	case BARRICADE_CENTER:
 	case BARRICADE_DOWN:
@@ -309,6 +306,82 @@ std::vector<int> Stage_Element::LoadImage(const std::string& filename)
 #endif // 0
 
 	return images;
+
+	//return std::vector<int>();
+}
+
+std::vector<int> Stage_Element::GetSounds(short type)
+{
+	// すでに読み込まれた画像がキャッシュにあるかどうかを確認
+	if (sound_cache.find(type) != sound_cache.end()) {
+
+		return sound_cache[type];
+	}
+
+	// 画像がキャッシュにない場合、読み込みを行う
+
+	std::string filename = "";
+
+	switch (type)
+	{
+	case DAMAGE_WALL:
+		filename = "explosion.mp3";
+		break;
+
+	case WOODEN_FLOOR:
+		filename = "explosion.mp3";
+		break;
+
+	case FALL_FLOOR:
+		filename = "explosion.mp3";
+		break;
+
+	case ITEM_DROP_OBJECT:
+		filename = "explosion.mp3";
+		break;
+
+	case TRAP:
+		filename = "explosion.mp3";
+		break;
+
+	case BARRICADE_UP:
+	case BARRICADE_CENTER:
+	case BARRICADE_DOWN:
+		filename = "explosion.mp3";
+		break;
+
+	default:
+		filename = "explosion.mp3";
+		break;
+	}
+
+	// 読み込んだ画像をキャッシュに保存
+	sound_cache[type] = LoadSounds(filename);
+
+	return sound_cache[type];
+}
+
+std::vector<int> Stage_Element::LoadSounds(const std::string& filename) const
+{
+	//デフォルトディレクトリ
+	const std::string default_dir = "Sounds/SE/Stage/Element/";
+
+	const std::string file_dir = default_dir + filename;
+
+	std::vector<int> sounds;
+
+	int buf = LoadSoundMem(TEXT(file_dir.c_str()));
+
+	sounds.push_back(buf);
+
+#if 1
+	//読み込みログ
+	for (int i = 0; i < sounds.size(); i++) {
+		printfDx("[%d]ID:%d\t%s\n", i, sounds.at(i), TEXT(filename.c_str()));
+	}
+#endif // 0
+
+	return sounds;
 
 	//return std::vector<int>();
 }
