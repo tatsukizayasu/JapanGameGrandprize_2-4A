@@ -14,8 +14,8 @@
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100.f
-#define HP_BAR_WIDTH 300
-#define HP_BAR_HEIGHT 28
+#define HP_BAR_WIDTH 286
+#define HP_BAR_HEIGHT 22
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
 
@@ -120,7 +120,6 @@ public:
 	~Player();
 	void Draw()const;
 	void PouchDraw()const;
-	void ChemicalFormulaDraw(int,int) const;
 	void PlayerUiDraw(float,float) const;
 	void Update();
 	void ElementUpdate();
