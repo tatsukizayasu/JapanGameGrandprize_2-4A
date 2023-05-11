@@ -196,6 +196,22 @@ void Stage_Element_Base::ResetElapsedTime(float time)
 	}
 }
 
+void Stage_Element_Base::SetPan(int SoundHandle, Player* player, Stage_Element_Base* base)
+{
+	Location player_location = player->GetLocation();
+	Location base_location = base->GetLocation();
+
+	
+	float result = base_location.x - player_location.x;
+	result = fmodf(result, 1280);
+
+	int pan = static_cast<int>(result) % 255;
+
+	//printfDx("%d\n", pan);
+
+	ChangePanSoundMem(pan, SoundHandle);
+}
+
 //std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
 //{
 //	for (auto elem : element) {
