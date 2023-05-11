@@ -32,10 +32,28 @@ GameMain::GameMain(short stage_num)
 
 #undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚İ‚İ
-	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
-	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
-	background_image[2] = LoadGraph("Images/Scene/Stage/3/BackImage.png");
+	switch (this->stage_num)
+	{
+	case 1:
+		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
+		break;
+	case 3:
+		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/3/BackImage2.png");
+		break;
+	default:
+		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
+		break;
+	}
 
+	for (int& c : backgraound_image_color)
+	{
+		c = 255;
+	}
+
+	backgraound_blend = 160;
 
 	char dis_stage_se[30];
 
@@ -122,6 +140,31 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+	//ƒXƒe[ƒW3‚ÅƒNƒ‰[ƒPƒ“‚ªoŒ»‚·‚é‚Æ‚«”wŒi‚ğ•Ï‰»‚³‚¹‚é
+	if (stage_num == 3)
+	{
+		//ƒuƒŒƒ“ƒh’l‚ğ•ÏX
+		if (fmodf(background_location.x, SCREEN_WIDTH) == 0 && 80 < backgraound_blend)
+		{
+			backgraound_blend -= 1;
+		}
+
+		if (is_spawn_boss == true)
+		{
+			//•`‰æ‹P“x•ÏX
+			//Green
+			if (100 < backgraound_image_color[1])
+			{
+				backgraound_image_color[1]--;
+			}
+			//Blue
+			if (200 < backgraound_image_color[2])
+			{
+				backgraound_image_color[2]--;
+			}
+		}
+	}
+
 	pause->Update(stage_num);
 		
 	if (pause->IsPause() == TRUE) {
@@ -189,6 +232,8 @@ AbstractScene* GameMain::Update()
 	{
 		return new GameOver(stage_num);
 	}
+
+
 
 	return this;
 }
@@ -496,15 +541,35 @@ void GameMain::Draw()const
 {
 	////”wŒi	•`‰æ
 	// DrawGraph(0, 0, background_image, FALSE);
+	if (stage_num == 3)
+	{
+		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
+		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
 
-	DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-	DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2), 0, background_image[1], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[1], TRUE);
 
-	DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
-	DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
+	}
+	else
+	{
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
-	if (stage_num == 3) {
-		DrawGraph(0, 0, background_image[2], FALSE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+	}
+
+	
+	
+
+	if (stage_num == 3) 
+	{
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(255, 255, 255);
 	}
 
 	stage->Draw();

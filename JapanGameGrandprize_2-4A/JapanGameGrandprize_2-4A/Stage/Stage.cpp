@@ -162,18 +162,18 @@ void Stage::Update(Player* player)
 			{
 				camera_work->SetCameraLock(true);
 
-				float p_x = fmodf(player_location.x / MAP_CHIP_SIZE, SCREEN_WIDTH / CHIP_SIZE);
-				float wall_location = player_location.x / CHIP_SIZE - p_x + 2;
+				//float p_x = fmodf(player_location.x / MAP_CHIP_SIZE, SCREEN_WIDTH / CHIP_SIZE);
+				//float wall_location = player_location.x / CHIP_SIZE - p_x + 2;
 
-				int map_height = map_data.size();
-				for (int i = 0; i < map_height; i++)
-				{
-					if (map_data.at(i).at(static_cast<int>(wall_location)) < 1)
-					{
-						//画面端にブロックを設置
-						AddFixedMapChip(25, wall_location, static_cast<float>(i));
-					}
-				}
+				//int map_height = map_data.size();
+				//for (int i = 0; i < map_height; i++)
+				//{
+				//	if (map_data.at(i).at(static_cast<int>(wall_location)) < 1)
+				//	{
+				//		//画面端にブロックを設置
+				//		//AddFixedMapChip(25, wall_location, static_cast<float>(i));
+				//	}
+				//}
 			}
 		}
 	}
