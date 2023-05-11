@@ -62,6 +62,8 @@ DotByDot::~DotByDot()
 	delete element;
 
 	DeleteFontToHandle(font);
+
+	SetBackgroundColor(0, 0, 0);
 }
 
 //-----------------------------------
