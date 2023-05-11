@@ -19,7 +19,8 @@ private:
 
 public:
     Ray();
-    Ray(const Location* location, float shift_x = 0, float shift_y = 0);
+    Ray(const Location* location,
+        float length = 5, float shift_x = 0, float shift_y = 0);
     ~Ray();
 
     void Update();

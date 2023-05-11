@@ -224,8 +224,8 @@ Player::Player(Stage* stage)
 
 	stage_builder = new StageBuilder();
 	objects = stage_builder->OutPutObjects();
-	ray[0] = new Ray(&location, area.width / 2, area.height / 2);
-	ray[1] = new Ray(&location, -area.width / 2, area.height / 2);
+	ray[0] = new Ray(&location, 100, area.width / 2, area.height / 2);
+	ray[1] = new Ray(&location, 100, -area.width / 2, area.height / 2);
 }
 
 //-----------------------------------
@@ -496,10 +496,9 @@ void Player::ChemicalFormulaDraw(int i, int plus_y) const
 //-----------------------------------
 void Player::Update()
 {
-	ray[0]->Update();
-	ray[1]->Update();
 	old_x = location.x;
 	old_y = location.y;
+
 
 	//ボス部屋に入った際、動きを止め飛んでいたら落下させる
 	if (CameraWork::GetCameraState() == CameraWork::STATE::BOSS)
@@ -788,6 +787,9 @@ void Player::Update()
 	{
 		location.y = old_y;
 	}
+
+
+	UpdateRay();
 }
 
 //スティックを入力していないとき
@@ -878,8 +880,8 @@ void Player::LeftMove()
 
 	if (!HitBlock(stage))
 	{
-		location.x += speed_x;
 	}
+		Move();
 
 	if (location.x < 0)
 	{
@@ -888,22 +890,12 @@ void Player::LeftMove()
 
 	if (HitBlock(stage))
 	{
-		if (hit_line)
-		{
-			float radian = hit_line->GetRadian();
-			float move_x = cosf(radian) * speed_x;
-			float move_y = sinf(radian) * speed_x;
-
-			location.x = old_x + move_x;
-			location.y = old_y + move_y;
-			old_y = location.y;
-		}
-		else
-		{
-			location.x = old_x;
-			speed_x = 0.0;
-		}
+		location.x = old_x;
+		speed_x = 0.0;
 	}
+
+	old_x = location.x;
+	old_y = location.y;
 }
 
 //右移動
@@ -936,32 +928,22 @@ void Player::RightMove()
 
 	if (!HitBlock(stage))
 	{
-		location.x += speed_x;
+		Move();
 	}
 
 	if (HitBlock(stage))
 	{
-		if (hit_line)
-		{
-			float radian = hit_line->GetRadian();
-			float move_x = cosf(radian) * speed_x;
-			float move_y = sinf(radian) * speed_x;
-
-			location.x = old_x + move_x;
-			location.y = old_y + move_y;
-			old_y = location.y;
-		}
-		else
-		{
-			location.x = old_x;
-			speed_x = 0.0;
-		}
+		location.x = old_x;
+		speed_x = 0.0;
 	}
 
 	if (location.x < 0)
 	{
 		speed_x = 0.0;
 	}
+
+	old_x = location.x;
+	old_y = location.y;
 }
 
 
@@ -1629,3 +1611,80 @@ void Player::DebugDraw()
 		0xff0000, FALSE);
 }
 #endif
+
+//-----------------------------------------
+// rayの更新 移動処理系終わった後に呼ぶ
+//-----------------------------------------
+void Player::UpdateRay()
+{
+	//描画範囲
+	Location camera = CameraWork::GetCamera();
+
+	for (ObjectBase* object : objects)
+	{
+		if (object != nullptr)
+		{
+
+			Location draw_location = object->GetColllider()->GetLocation();
+			Area draw = { SCREEN_HEIGHT,SCREEN_WIDTH };
+
+			// 画面内にあるオブジェクトだけUpdateする
+			if ((camera.x < draw_location.x + draw.width) && (draw_location.x < camera.x + draw.width)
+				&& (camera.y < draw_location.y + draw.height) && (draw_location.y < camera.y + draw.height))
+			{
+				if (ray[0]->HitCheck(object->GetColllider()))
+				{
+					ray[0]->HitFunction(object->GetColllider());
+				}
+
+				if (ray[1]->HitCheck(object->GetColllider()))
+				{
+					ray[1]->HitFunction(object->GetColllider());
+				}
+			}
+		}
+	}
+
+	ray[0]->Update();
+	ray[1]->Update();
+
+}
+
+
+//--------------------
+// 坂を上る処理
+//--------------------
+void Player::Move()
+{
+	const PolyLine* hit_line = static_cast<const PolyLine*>
+		(ray[move_left]->SearchCollider(COLLIDER::POLY_LINE));
+	if (!hit_line)
+	{
+		hit_line = static_cast<const PolyLine*>
+			(ray[!move_left]->SearchCollider(COLLIDER::POLY_LINE));
+	}
+
+	if (hit_line)
+	{
+		float radian = hit_line->GetRadian();
+		float move_x = cosf(radian) * speed_x;
+		float move_y = sinf(radian) * speed_x;
+
+		location.x = old_x + move_x;
+		location.y = old_y + move_y;
+	}
+	else
+	{
+		location.x += speed_x;
+	}
+}
+
+//-----------------------------------
+// 当たり判定内から押し出される
+//-----------------------------------
+void Player::PushedOut()
+{
+	const PolyLine* hit_line = static_cast<const PolyLine*>
+		(ray[move_left]->SearchCollider(COLLIDER::POLY_LINE));
+
+}

@@ -377,7 +377,7 @@ void PolyLine::MakeLocation()
 //---------------------------------------------
 // Šp“x‚ÌŒvŽZ
 //---------------------------------------------
-float PolyLine::GetRadian(int index)
+float PolyLine::GetRadian(int index)const
 {
 	Location start = lines[index]->GetLocation(LINE_START);
 	Location end = lines[index]->GetLocation(LINE_END);

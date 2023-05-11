@@ -58,6 +58,10 @@ private:
 
 	std::vector<ObjectBase*>objects;
 	Ray* ray[2];
+	void UpdateRay();
+	void Move();
+	void PushedOut();
+	PolyLine* hit_line = nullptr;
 #endif
 
 	int animation;					//画像アニメーション用
@@ -119,7 +123,6 @@ private:
 	ChemicalFormulaParameter* pararysis;
 	ChemicalFormulaParameter* heal;
 
-	PolyLine* hit_line = nullptr;
 public:
 
 	Player();

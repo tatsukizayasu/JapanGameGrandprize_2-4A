@@ -11,10 +11,11 @@ Ray::Ray()
 //------------------------------
 // コンストラクタ
 //------------------------------
-Ray::Ray(const Location* location, float shift_x, float shift_y) :base_location(location)
+Ray::Ray(const Location* location,
+	float length, float shift_x, float shift_y) :base_location(location)
 {
 	LineCollider::SetLocation(Location{ 0,0 }, LINE_START);
-	LineCollider::SetLocation(Location{ 0,100 }, LINE_END);
+	LineCollider::SetLocation(Location{ 0,length }, LINE_END);
 	Location base_location = *(this->base_location);
 
 	shift = Location{ shift_x,shift_y };
