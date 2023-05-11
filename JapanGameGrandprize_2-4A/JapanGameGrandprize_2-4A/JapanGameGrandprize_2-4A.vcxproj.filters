@@ -62,7 +62,6 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="LineCollider.cpp" />
     <ClCompile Include="Pouch.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
@@ -224,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="LastBossHand.cpp">
       <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameMain_Restart.cpp">
+      <Filter>ソースファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="LineCollider.cpp">
+      <Filter>ソースファイル\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -458,6 +463,9 @@
     <ClInclude Include="LastBossHand.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\GameMain_Restart.h">
+      <Filter>ヘッダーファイル\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -520,5 +528,8 @@
     <Filter Include="ヘッダーファイル\Collider">
       <UniqueIdentifier>{0c1beecd-8781-4c98-b088-1817e1458e1f}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\Resource.rc" />
   </ItemGroup>
 </Project>

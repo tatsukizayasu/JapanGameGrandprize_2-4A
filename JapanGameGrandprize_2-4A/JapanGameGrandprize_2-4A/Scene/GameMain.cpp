@@ -17,8 +17,10 @@
 #include "../LastBoss.h"
 #include "DotByDot.h"
 #include <math.h>
+#include "GameMain_Restart.h"
 #include "GameOver.h"
 #include "GameClear.h"
+#include "Title.h"
 #include "END.h"
 
 //-----------------------------------
@@ -26,18 +28,53 @@
 //-----------------------------------
 GameMain::GameMain(short stage_num)
 {
+	this->stage_num = stage_num;
+
 #undef DOT_BY_DOT
 	//背景画像読み込み
-	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
-	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
-#ifdef _DEBUG
+	switch (this->stage_num)
+	{
+	case 1:
+		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
+		break;
+	case 3:
+		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/3/BackImage2.png");
+		break;
+	default:
+		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
+		break;
+	}
 
-#else
+	for (int& c : backgraound_image_color)
+	{
+		c = 255;
+	}
+
+	backgraound_blend = 160;
+
+	char dis_stage_se[30];
+
+	if (this->stage_num != 5)
+	{
+		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", this->stage_num);
+
+		if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
+			background_music = LoadSoundMem("Sounds/BGM/stage1.mp3");
+			if (background_music == -1) {
+				throw dis_stage_se;
+			}
+		}
+	}
+
+
 	pause = new Pause();
-#endif
+
 	enemy_spawn_volume = 0;
-	this->stage_num = stage_num;
-	stage = new Stage(stage_num);
+	
+	stage = new Stage(this->stage_num);
 	player = new Player(stage);
 	stage->SetPlayer(player);
 
@@ -49,17 +86,19 @@ GameMain::GameMain(short stage_num)
 	stage->InitStage();
 	stage->SetElement();
 
-	camera_work = new CameraWork(0, 0, player, stage, stage_num);
+	camera_work = new CameraWork(0, 0, player, stage, this->stage_num);
 
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
-	
+
 	bullet_manager = BulletManager::GetInstance();
 
 	input_margin = 0;
 	is_spawn_boss = false;
 
 	background_location = { 0.0f,0.0f };
+
+	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 }
 
 //-----------------------------------
@@ -67,6 +106,14 @@ GameMain::GameMain(short stage_num)
 //-----------------------------------
 GameMain::~GameMain()
 {
+
+	for (int i = 0; i < 3; i++)
+	{
+		DeleteGraph(background_image[i]);
+	}
+
+	StopSoundMem(background_music);
+	DeleteSoundMem(background_music);
 
 	delete camera_work;
 #ifdef _DEBUG
@@ -93,13 +140,62 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
-#ifdef _DEBUG
+	//ステージ3でクラーケンが出現するとき背景を変化させる
+	if (stage_num == 3)
+	{
+		//ブレンド値を変更
+		if (fmodf(background_location.x, SCREEN_WIDTH) == 0 && 80 < backgraound_blend)
+		{
+			backgraound_blend -= 1;
+		}
 
-#else
-	pause->Update();
-	if (pause->GetNextMenu() == TRUE) { return new GameMain(); }
-	if (pause->IsPause() == TRUE) { return this; }
-#endif
+		if (is_spawn_boss == true)
+		{
+			//描画輝度変更
+			//Green
+			if (100 < backgraound_image_color[1])
+			{
+				backgraound_image_color[1]--;
+			}
+			//Blue
+			if (200 < backgraound_image_color[2])
+			{
+				backgraound_image_color[2]--;
+			}
+		}
+	}
+
+	pause->Update(stage_num);
+		
+	if (pause->IsPause() == TRUE) {
+
+		short next_scene = pause->GetNextScene();
+
+		if (next_scene == -1) { return this; }
+
+		int now_graph = MakeGraph(1280, 720);
+
+		Pause::MENU current_selection = static_cast<Pause::MENU>(next_scene);
+		switch (current_selection)
+		{
+		case Pause::MENU::RETRY:
+			
+			GetDrawScreenGraph(0, 0, 1280, 720, now_graph);
+			return new GameMain_Restart(stage_num, now_graph);
+			break;
+
+		case Pause::MENU::TITLE:
+			return new Title();
+			break;
+
+		default:
+			printfDx("未実装な機能です。\n");
+			break;
+		}
+		return this;
+	}
+
+
 
 
 #ifdef _DEBUG
@@ -137,6 +233,8 @@ AbstractScene* GameMain::Update()
 		return new GameOver(stage_num);
 	}
 
+
+
 	return this;
 }
 
@@ -148,7 +246,7 @@ void GameMain::SpawnEnemy()
 
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
-
+	
 	enemy_spawn_volume = spawn.size();
 	enemy = new EnemyBase * [enemy_spawn_volume];
 	for (int i = 0; i < enemy_spawn_volume; i++)
@@ -157,7 +255,7 @@ void GameMain::SpawnEnemy()
 	}
 
 	int i;
-	for (i = 0; i < enemy_spawn_volume - 1 ; i++)
+	for (i = 0; i < enemy_spawn_volume; i++)
 	{
 		switch (static_cast<ENEMY_KIND>(spawn[i].id))
 		{
@@ -259,6 +357,7 @@ bool GameMain::EnemyUpdate()
 						break;
 
 					case ENEMY_KIND::LAST_BOSS:
+						enemy[i] = new LastBoss(spawn[i].location);
 						is_spawn_boss = true;
 						break;
 
@@ -272,6 +371,16 @@ bool GameMain::EnemyUpdate()
 
 		if (enemy[i] != nullptr)
 		{
+			
+			//ボス部屋に入った際、ボス以外の敵を削除
+			if (is_spawn_boss == true && enemy[i]->GetEnemyKind() < ENEMY_KIND::SLIME_BOSS)
+			{
+				delete enemy[i];
+				enemy[i] = nullptr;
+				i--;
+				break;
+			}
+
 			//Stage03の場合、画面内に収まるまで敵を強制移動
 			if (stage_num == 3 &&
 				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
@@ -287,7 +396,7 @@ bool GameMain::EnemyUpdate()
 			{
 				LastBoss* last_boss;
 				last_boss = dynamic_cast<LastBoss*>(enemy[i]);
-				
+
 				player->HpDamage(last_boss->PunchAttack(player));
 			}
 			else
@@ -335,7 +444,7 @@ bool GameMain::EnemyUpdate()
 				}
 			}
 
-				//エネミーの削除
+			//エネミーの削除
 			if (enemy[i]->GetCanDelete() || (enemy[i]->GetLocation().x + enemy[i]->GetArea().width < 0 && enemy[i]->GetEnemyKind() != ENEMY_KIND::WYVERN))
 			{
 				if (ENEMY_KIND::SLIME_BOSS <= enemy[i]->GetEnemyKind())
@@ -442,16 +551,42 @@ void GameMain::Draw()const
 {
 	////背景	描画
 	// DrawGraph(0, 0, background_image, FALSE);
-	
-	DrawGraphF(-fmodf( background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-	DrawGraphF(-fmodf( background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+	if (stage_num == 3)
+	{
+		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
+		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
 
-	DrawGraphF(-fmodf( background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
-	DrawGraphF(-fmodf( background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2), 0, background_image[1], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[1], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
+	}
+	else
+	{
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+	}
+
+	
+	
+
+	if (stage_num == 3) 
+	{
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(255, 255, 255);
+	}
 
 	stage->Draw();
-	item_controller->Draw();
+	stage->DrawObject();
 
+	item_controller->Draw();
+	
 	player->Draw();
 
 	for (int i = 0; i < enemy_spawn_volume; i++)
@@ -464,10 +599,8 @@ void GameMain::Draw()const
 	bullet_manager->Draw();
 
 	player->PouchDraw();
-#ifdef _DEBUG
 
-#else
 	//ポーズ		描画
 	if (pause->IsPause() == true) { pause->Draw(); }
-#endif
+
 }

@@ -936,6 +936,11 @@ bool NormalBullet::NormalBulletEfect()		//着弾エフェクト
 	return false;
 }
 
+int NormalBullet::GetDamageParSecond()
+{
+	return chemical_formula->damage_per_second;
+}
+
 bool NormalBullet::GetDelete_flg() {
 	if (exp.Delete_display_permit == TRUE) {
 		return true;

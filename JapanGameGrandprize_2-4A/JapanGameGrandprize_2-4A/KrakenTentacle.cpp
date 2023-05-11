@@ -6,7 +6,7 @@
 
 //GŽèƒTƒCƒY
 #define SIZE_X 100
-#define SIZE_Y 100
+#define SIZE_Y 40
 
 //GŽèˆÚ“®‘¬“x
 #define ATTACK_SPEED 3
@@ -35,6 +35,8 @@ KrakenTentacle::KrakenTentacle(Location spawn_location)
 
 	image = 0;
 	time = 0;
+	back_time = 0;
+	old_player = 0;
 	old_x = 0;
 	go_back = false;
 	attack = false;
@@ -44,7 +46,9 @@ KrakenTentacle::KrakenTentacle(Location spawn_location)
 	kind = ENEMY_KIND::KRAKEN;
 	type = new ENEMY_TYPE[1];
 	type[0] = ENEMY_TYPE::WATER;
-	state = ENEMY_STATE::IDOL;
+	state = ENEMY_STATE::MOVE;
+
+	attack_move = KRAKEN_TENTACLE::NONE;
 
 	drop_volume = 0;
 	poison_time = 0;
@@ -101,7 +105,6 @@ void KrakenTentacle::Update(const Player* player, const Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
-
 		break;
 	case ENEMY_STATE::FALL:
 
@@ -200,29 +203,32 @@ void KrakenTentacle::Move(const Location player_location)
 
 	if (go_back == true)
 	{
-		if (old_x < location.x)
-		{
-			location.x += speed;
-		}
-		else
+		float distance = old_x - location.x ;
+		float vector = sqrt(distance * distance);
+		float radian = distance / vector;
+
+		location.x += radian * 5;
+
+
+		if (location.x + 10 > old_x && location.x - 10 < old_x)
 		{
 			go_back = false;
 		}
-
 	}
 	else
 	{
-
+		location.y = player_location.y;
 
 		if (++time % ATTACK_TIME == 0 && attack_state == false)
 		{
 			old_x = location.x;
 			attack_state = true;
-
+			old_player = player_location.x;
 			state = ENEMY_STATE::ATTACK;
+			attack_move=KRAKEN_TENTACLE::TENTACLE_ATTACK;
 		}
-
 	}
+	
 }
 
 void KrakenTentacle::Fall()
@@ -234,26 +240,25 @@ void KrakenTentacle::Attack(const Location player_location)
 {
 
 
-	if (location.y > 100)
+	float distance = old_player - location.x;
+	float distance_y = player_location.y - location.y;
+	float vector = sqrt(distance * distance + distance_y * distance_y);
+	float radian = distance / vector;
+	float radian_y = distance_y / vector;
+
+	
+
+	location.x += radian * speed;
+	location.y += radian_y * speed;
+
+	if ( old_player + 10 > location.x && old_player - 10 < location.x)
 	{
-		location.y -= speed;
+		go_back = true;
+		attack_state = false;
+		state = ENEMY_STATE::MOVE;
 	}
 
-	if (old_x - 400 > location.x)
-	{
-		location.x -= speed;
-	}
 
-	if (location.y < 100 && old_x - 400 < location.x)
-	{
-		attack = true;
-	}
-
-
-	if (attack == true)
-	{
-		location.y + speed;
-	}
 }
 
 AttackResource KrakenTentacle::Hit()

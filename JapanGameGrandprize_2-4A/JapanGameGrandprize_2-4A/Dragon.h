@@ -24,6 +24,7 @@ class Dragon :public EnemyBase
 private:
 	int image;
 	int animation; //画像のアニメーション
+	int fly_image[2]; //飛ぶ画像
 	int magic_num; //遠距離攻撃を使った回数
 	int attack_method; //攻撃方法
 	int switchover_time; //攻撃切り替え時間
@@ -96,6 +97,9 @@ public:
 
 	//プレイヤーの弾丸との当たり判定
 	void HitBullet(const BulletBase* bullet) override;
+
+	//HPバーの描画
+	void DrawHPBar(const int) const;
 
 	//座標の取得
 	Location GetLocation() const override;

@@ -69,12 +69,17 @@ struct ChemicalFormulaParameter
 	bool make_bool;
 	int name_image;
 	int tag_number;
+	int dark_name_image;
+	int ui_name_image;
+
 };
 
 struct Bullet_Effect {
 	int Tick;
 	int speed;
 	int image;
+	int image_Array[30];
+	int frame;
 
 	int x;
 	int y;
@@ -99,6 +104,15 @@ struct Delete_Effect {
 	int Delete_display_permit;
 	int Delete_image_array[10];
 	int Delete_frame;
+};
+
+struct Heal_Effect {
+	int Tick;
+	int x;
+	int y;
+	int display_permit;
+	int image_array[20];
+	int frame;
 };
 
 //’†SÀ•W

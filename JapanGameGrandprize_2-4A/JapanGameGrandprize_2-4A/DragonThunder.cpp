@@ -2,20 +2,20 @@
 #include "CameraWork.h"
 
 //雷の移動速度
-#define BULLET_SPEED 30
+#define BULLET_SPEED 20
 
 //雷ダメージ
 #define BULLET_DAMAGE 30
 
 //雷待機時間（攻撃予測時間？）
-#define ATTACK_TIME 120
+#define ATTACK_TIME 360
 
 DragonThunder::DragonThunder(float x, float y)
 {
 	type = ENEMY_TYPE::THUNDER;
 	location.x = x;
 	location.y = y;
-	radius = 5;
+	radius = 25;
 	speed = BULLET_SPEED;
 	thunder_time = 0;
 	image = 0;

@@ -10,6 +10,9 @@ protected:
 	//背景音楽
 	int background_music;
 
+	int cursor_move_se;
+	int enter_se;
+
 	int title_font;
 
 	//ステージ番号
