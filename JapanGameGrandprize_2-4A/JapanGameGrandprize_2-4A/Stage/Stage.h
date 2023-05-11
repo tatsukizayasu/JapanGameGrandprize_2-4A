@@ -75,6 +75,7 @@ private:
 	std::set<short> stage_id_underground{ Ground::STAGE01_UNDERGROUND };
 
 
+
 protected:
 
 

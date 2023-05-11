@@ -94,7 +94,7 @@ Undead::Undead(Location spawn_location)
 	images = new int[UNDEAD_IMAGES];
 	LoadDivGraph("Images/Enemy/undead.png", UNDEAD_IMAGES, UNDEAD_IMAGES, 1, 250, 250, images);
 	GetGraphSizeF(images[0], &size.width, &size.height);
-
+	undeadslash = LoadSoundMem("sound/Enemybgm/undeadslash.mp3");
 	InitDamageLog();
 }
 
@@ -237,11 +237,12 @@ void Undead::DistancePlayer(const Location player_location)
 	//UŒ‚”ÍˆÍ‚É“ü‚Á‚Ä‚¢‚é‚©‚ÂUŒ‚‚Ü‚Å‚ÌŠÔ‚ª0ˆÈ‰º‚¾‚Á‚½‚çUŒ‚‚·‚é
 	if ((distance < UNDEAD_ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
+		PlaySoundMem(undeadslash, DX_PLAYTYPE_BACK);
 		state = ENEMY_STATE::ATTACK;
 		area.width += UNDEAD_WIDTH / 2;
 		image_argument = UNDEAD_MOVE_IMAGES;
 		animation = 0;
-
+	
 		if (player_location.x <= location.x)
 		{
 			left_move = true;
@@ -320,7 +321,6 @@ void Undead::Fall()
 //-----------------------------------
 void  Undead::Attack(const Location player_location)
 {
-
 	AttackAnimation();
 
 	if (UNDEAD_IMAGES - 1 <= image_argument)
@@ -456,7 +456,7 @@ void Undead::AttackAnimation()
 	{
 		image_argument = ++image_argument;
 	}
-
+	
 }
 
 //-----------------------------------
@@ -533,7 +533,6 @@ void Undead::Update(const ENEMY_STATE state)
 		break;
 	case ENEMY_STATE::ATTACK:
 		AttackAnimation();
-
 		if (UNDEAD_IMAGES - 1 <= image_argument)
 		{
 			image_argument = UNDEAD_MOVE_IMAGES;

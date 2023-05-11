@@ -117,6 +117,13 @@ Player::Player(Stage* stage)
 	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
 	hp_image = LoadGraph("Images/Player/HP_Bar.png");
 
+
+	bulletssound = LoadSoundMem("Sound/Playerbgm/shot.mp3");
+	flysound = LoadSoundMem("sound/Playerbgm/jump.mp3");
+	healsound = LoadSoundMem("sound/Playerbgm/heal01.mp3");
+	deathsound = LoadSoundMem("sound/Playerbgm/se_enemy_down01.mp3");
+	
+
 	image_size_x = 40;
 	image_size_y = 80;
 	area.width = image_size_x;
@@ -693,6 +700,7 @@ void Player::Update()
 		}
 		else
 		{
+
 			Fly();
 		}
 	}
@@ -754,6 +762,7 @@ void Player::Update()
 
 	if (y > 740)
 	{
+		PlaySoundMem(deathsound, DX_PLAYTYPE_BACK);
 		player_state = PLAYER_STATE::DEATH;
 	}
 
@@ -930,6 +939,7 @@ void Player::Jump()
 	jump = jump_power - GRAVITY;
 	if (jump > 0)
 	{
+
 		jump_power -= 0.25;
 	}
 	else
@@ -1117,6 +1127,7 @@ void Player::NotFly()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
+	PlaySoundMem(bulletssound, DX_PLAYTYPE_BACK);
 	if (bullet[bullet_count] == nullptr)
 	{
 		switch (display_attribute)
@@ -1206,7 +1217,7 @@ void Player::Shoot_Gun()
 			}
 			break;
 		case 5:
-
+			PlaySoundMem(healsound, DX_PLAYTYPE_BACK);
 			break;
 		default:
 			break;
@@ -1396,6 +1407,7 @@ void Player::HpDamage(AttackResource attack)
 //-----------------------------------
 void Player::Hp_Heal(int heal_value)
 {
+	PlaySoundMem(healsound, DX_PLAYTYPE_BACK);
 	pouch->ReduceAmmo(attribute[display_attribute]);
 	hp += heal_value;
 	if (hp >= HP_MAX)
