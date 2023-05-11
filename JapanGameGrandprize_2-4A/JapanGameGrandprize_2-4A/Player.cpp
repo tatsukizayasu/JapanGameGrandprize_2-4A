@@ -381,6 +381,7 @@ void Player::PlayerUiDraw(float x, float y) const
 	float bullet_remain_x = hp_start - 85;
 	float chemical_icon_x = hp_start - 50;
 	float chemical_icon_y = hp_y + 25;
+	int k = 10;
 	switch (display_attribute)
 	{
 	case 0:
@@ -388,31 +389,31 @@ void Player::PlayerUiDraw(float x, float y) const
 		DrawStringF(bullet_remain_x, bullet_remain_y, "--", 0x00ff00);
 		break;
 	case 1:
-		DrawGraph(hp_start, chemical_formula_y, explosion->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, explosion->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", explosion->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[5], TRUE);
 		break;
 	case 2:
-		DrawGraph(hp_start, chemical_formula_y, melt->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, melt->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", melt->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[9], TRUE);
 		break;
 	case 3:
-		DrawGraph(hp_start, chemical_formula_y, poison->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, poison->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", poison->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[6], TRUE);
 		break;
 	case 4:
-		DrawGraph(hp_start, chemical_formula_y, pararysis->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, pararysis->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", pararysis->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[7], TRUE);
 		break;
 	case 5:
-		DrawGraph(hp_start, chemical_formula_y, heal->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, heal->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", heal->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[8], TRUE);

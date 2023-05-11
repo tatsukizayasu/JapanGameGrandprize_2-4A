@@ -75,6 +75,11 @@ Pouch::Pouch()
 	{
 		chemical_formula_explosion[i].dark_name_image = images_init_explosion[i];
 	}
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_explosion.png", EXPLOSION_MAX_NUM, 1, EXPLOSION_MAX_NUM, 350, 23, images_init_explosion);
+	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
+	{
+		chemical_formula_explosion[i].ui_name_image = images_init_explosion[i];
+	}
 
 	//—n‰ð‚Ì‰»‡•¨‚Ì–¼‘O‰æ‘œ
 	LoadDivGraph("Images/ItemTab/Secret_FILE/melt.png", MELT_MAX_NUM, 1, MELT_MAX_NUM, 350, 23, images_init_melt);
@@ -86,6 +91,11 @@ Pouch::Pouch()
 	for (int i = 0; i < MELT_MAX_NUM; i++)
 	{
 		chemical_formula_melt[i].dark_name_image = images_init_melt[i];
+	}
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_melt.png", MELT_MAX_NUM, 1, MELT_MAX_NUM, 350, 23, images_init_melt);
+	for (int i = 0; i < MELT_MAX_NUM; i++)
+	{
+		chemical_formula_melt[i].ui_name_image = images_init_melt[i];
 	}
 
 	//–ƒáƒ‚Ì‰»‡•¨‚Ì–¼‘O‚ª‚¼‚¤
@@ -99,7 +109,11 @@ Pouch::Pouch()
 	{
 		chemical_formula_pararysis[i].dark_name_image = images_init_pararysis[i];
 	}
-
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_paralysis.png", PARARYSIS_MAX_NUM, 1, PARARYSIS_MAX_NUM, 350, 23, images_init_pararysis);
+	for (int i = 0; i < PARARYSIS_MAX_NUM; i++)
+	{
+		chemical_formula_pararysis[i].ui_name_image = images_init_pararysis[i];
+	}
 
 	//“Å‚Ì‰»‡•¨‚Ì–¼‘O‰æ‘œ
 	LoadDivGraph("Images/ItemTab/Secret_FILE/poison.png", POISON_MAX_NUM, 1, POISON_MAX_NUM, 350, 23, images_init_poison);
@@ -111,6 +125,11 @@ Pouch::Pouch()
 	for (int i = 0; i < POISON_MAX_NUM; i++)
 	{
 		chemical_formula_poison[i].dark_name_image = images_init_poison[i];
+	}
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_poison.png", POISON_MAX_NUM, 1, POISON_MAX_NUM, 350, 23, images_init_poison);
+	for (int i = 0; i < POISON_MAX_NUM; i++)
+	{
+		chemical_formula_poison[i].ui_name_image = images_init_poison[i];
 	}
 
 	//‰ñ•œ‚Ì‰»‡•¨‚Ì–¼‘O‰æ‘œ
@@ -124,6 +143,12 @@ Pouch::Pouch()
 	{
 		chemical_formula_heal[i].dark_name_image = images_init_heal[i];
 	}
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_heal.png", HEAL_MAX_NUM, 1, HEAL_MAX_NUM, 350, 23, images_init_heal);
+	for (int i = 0; i < HEAL_MAX_NUM; i++)
+	{
+		chemical_formula_heal[i].ui_name_image = images_init_heal[i];
+	}
+
 	//Œ³‘f‚Ì‰Šú‰»
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
@@ -765,22 +790,22 @@ void Pouch::SetElementConstruct(int i)
 	switch (element[i]->GetType())
 	{
 	case ELEMENT_ITEM::HYDROGEN:
-		element[i]->SetVolume(5);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::OXYGEN:
-		element[i]->SetVolume(5);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::CARBON:
-		element[i]->SetVolume(5);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::NITROGEN:
-		element[i]->SetVolume(5);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::SULFUR:
-		element[i]->SetVolume(5);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::CHLORINE:
-		element[i]->SetVolume(5);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::URANIUM:
 		element[i]->SetVolume(1);
