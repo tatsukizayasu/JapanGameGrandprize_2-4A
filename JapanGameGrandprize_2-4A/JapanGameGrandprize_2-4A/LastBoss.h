@@ -1,6 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
 #include "EnemyBulletBase.h"
+#include "LastBossSpecialMoves.h"
 
 enum class LAST_BOSS_ATTACK
 {
@@ -15,7 +16,7 @@ class LastBoss :
     public EnemyBase
 {
 private:
-    bool special_moves; //•KE‹Z‚ğ‚µ‚½‚©
+    bool can_special_moves; //•KE‹Z‚ğ‚µ‚½‚©
     bool down; //ƒ_ƒEƒ“
     bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
     int down_time; //ƒ_ƒEƒ“‚µ‚Ä‚¢‚éŠÔ
@@ -38,6 +39,8 @@ private:
     LAST_BOSS_ATTACK attack_state; //UŒ‚
 
     EnemyBulletBase** magic; //–‚–@
+
+    LastBossSpecialMoves* special_moves; //•KE‹Z
 
 private:
 

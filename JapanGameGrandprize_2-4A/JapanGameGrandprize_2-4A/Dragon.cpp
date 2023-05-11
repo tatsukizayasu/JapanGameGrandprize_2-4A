@@ -260,7 +260,7 @@ void Dragon::Draw() const
 		GetColor(255, 0, 0), TRUE);
 
 	/*DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-		M_PI / 180, image, TRUE);*/
+		M_PI / 180, images, TRUE);*/
 
 
 	if (state != ENEMY_STATE::DEATH)

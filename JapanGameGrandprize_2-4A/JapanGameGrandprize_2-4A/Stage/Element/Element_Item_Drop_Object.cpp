@@ -34,9 +34,9 @@ Element_Item_Drop_Object::~Element_Item_Drop_Object()
 	element_item.shrink_to_fit();
 
 	image = 0;
-	/*for (int& image : images)
+	/*for (int& images : images)
 	{
-		DeleteGraph(image);
+		DeleteGraph(images);
 	}*/
 }
 
@@ -103,7 +103,7 @@ void Element_Item_Drop_Object::Draw()const
 		float y = location.y - CameraWork::GetCamera().y;
 
 		//DrawCircleAA(x, y, MAP_CHIP_SIZE,32, 0x00ff00, TRUE);
-		//DrawRotaGraphF(x, y, 1.8f, 0, image, TRUE);
+		//DrawRotaGraphF(x, y, 1.8f, 0, images, TRUE);
 	}
 	else
 	{

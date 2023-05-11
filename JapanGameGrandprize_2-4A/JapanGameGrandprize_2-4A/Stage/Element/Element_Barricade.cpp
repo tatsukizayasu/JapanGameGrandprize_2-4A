@@ -96,12 +96,12 @@ void Element_Barricade::Update(Player* player)
 //{
 //
 //	//‰æ‘œ‚ª‚È‚¢–”‚ÍƒGƒ‰[‚Ìê‡‚Í•`‰æ‚µ‚È‚¢
-//	if (image == 0) { return; }
+//	if (images == 0) { return; }
 //
 //	//printfDx("camera_x:%f\tcamera_y:%f\n", CameraWork::GetCamera().x, CameraWork::GetCamera().y);
 //	float x = location.x - CameraWork::GetCamera().x;
 //	float y = location.y - CameraWork::GetCamera().y;
 //
-//	//DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
+//	//DrawRotaGraphF(x, y, 1.0f, 0, images, TRUE);
 //	//DrawFormatStringF(x, y, 0xFFFFFF, "%d", direction);
 //}

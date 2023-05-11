@@ -33,9 +33,9 @@ Element_Trap::Element_Trap(short type, Stage* stage,
 Element_Trap::~Element_Trap()
 {
 	image = 0;
-	/*for (int& image : images) 
+	/*for (int& images : images) 
 	{
-		DeleteGraph(image);
+		DeleteGraph(images);
 	}*/
 }
 

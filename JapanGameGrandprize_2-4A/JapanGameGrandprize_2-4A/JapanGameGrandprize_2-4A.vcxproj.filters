@@ -233,6 +233,9 @@
     <ClCompile Include="LastBossMagic.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
+    <ClCompile Include="LastBossSpecialMoves.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h">
@@ -471,6 +474,9 @@
     </ClInclude>
     <ClInclude Include="LastBossMagic.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
+    </ClInclude>
+    <ClInclude Include="LastBossSpecialMoves.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
