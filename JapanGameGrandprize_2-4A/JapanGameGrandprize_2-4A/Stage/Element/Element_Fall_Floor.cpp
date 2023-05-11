@@ -5,34 +5,25 @@
 #define TIMER	1.8f
 
 Element_Fall_Floor::Element_Fall_Floor(short type,
-	std::vector<int> images, Location location, Area area) : Stage_Element_Base(&images.at(0), location, area)
+	Resource resource, Location location, Area area) : Stage_Element_Base(&resource.images.at(0), location, area)
 {
 
 	this->area = area;
 	this->type = type;
 	margin_area = { -16.0f,0.0f };
-	this->images = images;
+	this->images = resource.images;
 
-	is_flash = false;
-	fall_speed = 4.0f;
-	increment = 0.1f;
+	this->is_flash = false;
+	this->fall_speed = 4.0f;
+	this->increment = 0.1f;
 	
 	state = STATE::NONE;
 }
 
-Element_Fall_Floor::~Element_Fall_Floor()
-{
-
-	for (int& image : images) 
-	{
-		DeleteGraph(image);
-	}
-}
+Element_Fall_Floor::~Element_Fall_Floor() = default;
 
 void Element_Fall_Floor::Update(Player* player)
 {
-
-	//LoopImages(anim_images, 0.1, 9, nullptr);
 
 	HIT_DIRECTION is_hit_dir = std::get<1>(HitPlayer(player));
 

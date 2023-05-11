@@ -4,8 +4,8 @@
 #include "Stage_Element.h"
 #include "../CameraWork.h"
 
-Element_Wooden_Floor::Element_Wooden_Floor(short type,  std::vector<int> images, 
-	Location location, Area area) : Stage_Element_Base(&images.at(0), location, area)
+Element_Wooden_Floor::Element_Wooden_Floor(short type, Resource resource,
+	Location location, Area area) : Stage_Element_Base(&resource.images.at(0), location, area)
 {
 
 	this->type = type;
@@ -16,8 +16,8 @@ Element_Wooden_Floor::Element_Wooden_Floor(short type,  std::vector<int> images,
 
 	original_collision = area;
 
-	SetImage(images.at(0));
-	original_image = images.at(0);
+	SetImage(resource.images.at(0));
+	original_image = resource.images.at(0);
 }
 
 Element_Wooden_Floor::~Element_Wooden_Floor()
@@ -55,11 +55,4 @@ void Element_Wooden_Floor::Update(Player* player)
 	{
 		SetArea(original_collision);
 	}
-
-	//if (is_hit == true) {
-	//	//SetArea(original_collision);
-	//	static int count = 0;
-	//	printfDx("ìñÇΩÇËÅ` %dâÒñ⁄\n", count);
-	//	count++;
-	//}
 }

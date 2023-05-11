@@ -11,13 +11,6 @@
 
 class Player;
 
-//struct RECT
-//{
-//	float x;
-//	float y;
-//	float width;
-//	float height;
-//};
 
 enum class HIT_DIRECTION
 {
@@ -26,6 +19,12 @@ enum class HIT_DIRECTION
 	DOWN,
 	LEFT,
 	RIGHT
+};
+
+struct Resource
+{
+	std::vector<int> images;
+	std::vector<int> sounds;
 };
 
 class Stage_Element_Base : public MapChip

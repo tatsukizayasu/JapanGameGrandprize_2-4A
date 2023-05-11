@@ -3,14 +3,14 @@
 #include "../CameraWork.h"
 #include "Stage_Element.h"	
 
-Element_Barricade::Element_Barricade(short type, std::vector<int> images, Location location, Area area, Area margin_area, DIRECTION direction) : Stage_Element_Base(&images.at(0), location, area)
+Element_Barricade::Element_Barricade(short type, Resource resource, Location location, Area area, Area margin_area, DIRECTION direction) : Stage_Element_Base(&resource.images.at(0), location, area)
 {
 
 	this->area = area;
 	this->type = type;
 	this->margin_area = margin_area;
-	this->images = images;
-	this->direction = direction;	
+	this->images = resource.images;
+	this->direction = direction;
 
 	switch (direction)
 	{
@@ -41,15 +41,12 @@ Element_Barricade::Element_Barricade(short type, std::vector<int> images, Locati
 
 }
 
-Element_Barricade::~Element_Barricade()
-{
-
-}
+Element_Barricade::~Element_Barricade() = default;
 
 void Element_Barricade::Update(Player* player)
 {
 	LoopImages(images, 0.1f, 4, nullptr);
-	
+
 	switch (direction)
 	{
 	case Element_Barricade::DIRECTION::NONE:
@@ -71,7 +68,7 @@ void Element_Barricade::Update(Player* player)
 			ENEMY_TYPE enemyType = ENEMY_TYPE::THUNDER;
 			std::function<void()> Attack = [&]() { player->HpDamage(AttackResource{ 10, &enemyType, 5 }); };
 			Attack();
-		}	
+		}
 
 		//アニメーション更新
 		//LoopImages(images, 1.0f, 11, nullptr, 5	);
@@ -91,17 +88,3 @@ void Element_Barricade::Update(Player* player)
 		break;
 	}
 }
-
-//void Element_Barricade::Draw()const
-//{
-//
-//	//画像がない又はエラーの場合は描画しない
-//	if (image == 0) { return; }
-//
-//	//printfDx("camera_x:%f\tcamera_y:%f\n", CameraWork::GetCamera().x, CameraWork::GetCamera().y);
-//	float x = location.x - CameraWork::GetCamera().x;
-//	float y = location.y - CameraWork::GetCamera().y;
-//
-//	//DrawRotaGraphF(x, y, 1.0f, 0, image, TRUE);
-//	//DrawFormatStringF(x, y, 0xFFFFFF, "%d", direction);
-//}
