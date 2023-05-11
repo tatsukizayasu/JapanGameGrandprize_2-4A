@@ -28,18 +28,38 @@
 //-----------------------------------
 GameMain::GameMain(short stage_num)
 {
+	this->stage_num = stage_num;
+
 #undef DOT_BY_DOT
 	//背景画像読み込み
-	background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
-	background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
-	background_image[2] = LoadGraph("Images/Scene/Stage/3/BackImage.png");
+	switch (this->stage_num)
+	{
+	case 1:
+		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
+		break;
+	case 3:
+		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage1.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/3/BackImage2.png");
+		break;
+	default:
+		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
+		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
+		break;
+	}
 
+	for (int& c : backgraound_image_color)
+	{
+		c = 255;
+	}
+
+	backgraound_blend = 220;
 
 	char dis_stage_se[30];
 
-	if (stage_num != 5)
+	if (this->stage_num != 5)
 	{
-		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", stage_num);
+		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", this->stage_num);
 
 		if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
 			background_music = LoadSoundMem("Sounds/BGM/stage1.mp3");
@@ -53,8 +73,8 @@ GameMain::GameMain(short stage_num)
 	pause = new Pause();
 
 	enemy_spawn_volume = 0;
-	this->stage_num = stage_num;
-	stage = new Stage(stage_num);
+	
+	stage = new Stage(this->stage_num);
 	player = new Player(stage);
 	stage->SetPlayer(player);
 
@@ -66,7 +86,7 @@ GameMain::GameMain(short stage_num)
 	stage->InitStage();
 	stage->SetElement();
 
-	camera_work = new CameraWork(0, 0, player, stage, stage_num);
+	camera_work = new CameraWork(0, 0, player, stage, this->stage_num);
 
 	stage->SetCameraWork(camera_work);
 	item_controller = new ItemController();
@@ -120,6 +140,31 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+	//ステージ3でクラーケンが出現するとき背景を変化させる
+	if (stage_num == 3)
+	{
+		//ブレンド値を変更
+		if (fmodf(background_location.x, SCREEN_WIDTH) == 0 && 80 < backgraound_blend)
+		{
+			backgraound_blend -= 1;
+		}
+
+		if (is_spawn_boss == true)
+		{
+			//描画輝度変更
+			//Green
+			if (100 < backgraound_image_color[1])
+			{
+				backgraound_image_color[1]--;
+			}
+			//Blue
+			if (200 < backgraound_image_color[2])
+			{
+				backgraound_image_color[2]--;
+			}
+		}
+	}
+
 	pause->Update(stage_num);
 		
 	if (pause->IsPause() == TRUE) {
@@ -188,6 +233,8 @@ AbstractScene* GameMain::Update()
 		return new GameOver(stage_num);
 	}
 
+
+
 	return this;
 }
 
@@ -199,7 +246,7 @@ void GameMain::SpawnEnemy()
 
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
-
+	
 	enemy_spawn_volume = spawn.size();
 	enemy = new EnemyBase * [enemy_spawn_volume];
 	for (int i = 0; i < enemy_spawn_volume; i++)
@@ -325,6 +372,16 @@ bool GameMain::EnemyUpdate()
 
 		if (enemy[i] != nullptr)
 		{
+			
+			//ボス部屋に入った際、ボス以外の敵を削除
+			if (is_spawn_boss == true && enemy[i]->GetEnemyKind() < ENEMY_KIND::SLIME_BOSS)
+			{
+				delete enemy[i];
+				enemy[i] = nullptr;
+				i--;
+				break;
+			}
+
 			//Stage03の場合、画面内に収まるまで敵を強制移動
 			if (stage_num == 3 &&
 				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
@@ -495,15 +552,35 @@ void GameMain::Draw()const
 {
 	////背景	描画
 	// DrawGraph(0, 0, background_image, FALSE);
+	if (stage_num == 3)
+	{
+		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
+		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
 
-	DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-	DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2), 0, background_image[1], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[1], TRUE);
 
-	DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
-	DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
+	}
+	else
+	{
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
-	if (stage_num == 3) {
-		DrawGraph(0, 0, background_image[2], FALSE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+	}
+
+	
+	
+
+	if (stage_num == 3) 
+	{
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(255, 255, 255);
 	}
 
 	stage->Draw();

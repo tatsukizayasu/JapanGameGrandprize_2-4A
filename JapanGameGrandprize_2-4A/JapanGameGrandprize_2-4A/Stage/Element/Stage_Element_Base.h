@@ -11,13 +11,6 @@
 
 class Player;
 
-//struct RECT
-//{
-//	float x;
-//	float y;
-//	float width;
-//	float height;
-//};
 
 enum class HIT_DIRECTION
 {
@@ -26,6 +19,12 @@ enum class HIT_DIRECTION
 	DOWN,
 	LEFT,
 	RIGHT
+};
+
+struct Resource
+{
+	std::vector<int> images;
+	std::vector<int> sounds;
 };
 
 class Stage_Element_Base : public MapChip
@@ -37,6 +36,9 @@ protected:
 
 	//LoopImagesの開始時間
 	std::chrono::steady_clock::time_point start_time;
+
+	//リソースハンドル構造体
+	Resource resource;
 
 	//グラフィックハンドル用Vector
 	std::vector<int> images;
@@ -120,4 +122,10 @@ public:
 	/// </summary>
 	/// <param name = "time">リセットしたいタイマーの秒数</param>
 	void ResetElapsedTime(float time);
+
+	/// <summary>
+	/// 2Dパン	Setter
+	/// </summary>
+	/// <param name = "time">リセットしたいタイマーの秒数</param>
+	void SetPan(int SoundHandle, Player* player, Stage_Element_Base* base);
 };

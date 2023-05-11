@@ -21,6 +21,8 @@
 //-----------------------------------
 Stage::Stage(short stage_num)
 {
+	//ステージ番号をセット
+	this->stage_num = stage_num;
 
 	element = new Stage_Element(this);
 	this->camera_work = camera_work;
@@ -39,8 +41,12 @@ Stage::Stage(short stage_num)
 	}
 
 	// オブジェクト画像の読み込み
-	int bort_image = LoadGraph("Images/Scene/Stage/3/Bort.png");
-
+	bort_image = LoadGraph("Images/Scene/Stage/3/Bort.png");
+	if (bort_image == -1) {
+		throw "Images/Scene/Stage/3/Bort.png";
+	}
+	
+	
 	//マップデータの読み込み
 	LoadMap(stage_num);
 
@@ -156,18 +162,18 @@ void Stage::Update(Player* player)
 			{
 				camera_work->SetCameraLock(true);
 
-				float p_x = fmodf(player_location.x / MAP_CHIP_SIZE, SCREEN_WIDTH / CHIP_SIZE);
-				float wall_location = player_location.x / CHIP_SIZE - p_x + 2;
+				//float p_x = fmodf(player_location.x / MAP_CHIP_SIZE, SCREEN_WIDTH / CHIP_SIZE);
+				//float wall_location = player_location.x / CHIP_SIZE - p_x + 2;
 
-				int map_height = map_data.size();
-				for (int i = 0; i < map_height; i++)
-				{
-					if (map_data.at(i).at(static_cast<int>(wall_location)) < 1)
-					{
-						//画面端にブロックを設置
-						AddFixedMapChip(25, wall_location, static_cast<float>(i));
-					}
-				}
+				//int map_height = map_data.size();
+				//for (int i = 0; i < map_height; i++)
+				//{
+				//	if (map_data.at(i).at(static_cast<int>(wall_location)) < 1)
+				//	{
+				//		//画面端にブロックを設置
+				//		//AddFixedMapChip(25, wall_location, static_cast<float>(i));
+				//	}
+				//}
 			}
 		}
 	}
@@ -393,6 +399,7 @@ void Stage::SetElement()
 void Stage::DrawObject()
 {
 	if (stage_num == 3) {
+		
 		DrawGraphF(80, 460, bort_image, TRUE);
 	}
 }

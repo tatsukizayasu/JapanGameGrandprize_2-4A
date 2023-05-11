@@ -1,6 +1,7 @@
 #include "DotByDot.h"
 #include "../PadInput.h"
 #include "GameMain.h"
+#include "Title.h"
 #include "../Undead.h"
 #include"../EnemySlime.h"
 #include"../EnemyGhost.h"
@@ -61,6 +62,8 @@ DotByDot::~DotByDot()
 	delete element;
 
 	DeleteFontToHandle(font);
+
+	SetBackgroundColor(0, 0, 0);
 }
 
 //-----------------------------------
@@ -76,6 +79,11 @@ AbstractScene* DotByDot::Update()
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A))
 	{
 		state++;
+	}
+
+	if (PAD_INPUT::OnButton(XINPUT_BUTTON_B))
+	{
+		return new Title();
 	}
 
 #ifdef _DEBUG
@@ -112,7 +120,11 @@ void DotByDot::Draw() const
 
 	element->Draw();
 
-	DrawFormatStringToHandle(1060, 610, 0x000000, font, "Player:%s", player_str[state % 5]);
+	DrawStringToHandle(1010, 490, "B:Back to Title", 0x000000, font);
 
-	DrawFormatStringToHandle(1060, 660, 0x000000, font, " Enemy:%s", enemy_str[state % 5]);
+	DrawStringToHandle(1010, 550, "A:Mode Change", 0x000000, font);
+
+	DrawFormatStringToHandle(1010, 610, 0x000000, font, "Player:%s", player_str[state % 5]);
+
+	DrawFormatStringToHandle(1010, 660, 0x000000, font, " Enemy:%s", enemy_str[state % 5]);
 }

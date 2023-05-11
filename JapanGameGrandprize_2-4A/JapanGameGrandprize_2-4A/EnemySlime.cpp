@@ -54,7 +54,8 @@ EnemySlime::EnemySlime(Location spawn_location)
 	images = new int[7];
 	 LoadDivGraph("Images/Enemy/mov_slime.png", 7, 7, 1, 102,61, images);
 	slime_angle = 0;
-
+	poisonsound = LoadSoundMem("sound/Playerbgm/poison.mp3");
+	slimeataack = LoadSoundMem("sound/Enemybgm/silmeataack.mp3");
 	//ドロップアイテムの設定
 	switch (type[0])
 	{
@@ -369,7 +370,6 @@ void EnemySlime::Fall()
 //-----------------------------------
 void  EnemySlime::Attack(const Location player_location)
 {
-
 	location.y -= (jump_distance.y / 3);
 	jump_distance.y -= 1;
 
@@ -395,6 +395,7 @@ AttackResource EnemySlime::Hit()
 
 	if (!attack)
 	{
+		PlaySoundMem(slimeataack, DX_PLAYTYPE_BACK);
 		attack = true;
 		slime_attack = SLIME_ATTACK::AFTER_ATTACK;
 		ENEMY_TYPE attack_type[1] = { *type };
@@ -481,6 +482,7 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
+		PlaySoundMem(poisonsound, DX_PLAYTYPE_BACK);
 		if (!poison)
 		{
 			poison_damage = bullet->GetDamage() * 0;

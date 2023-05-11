@@ -75,6 +75,11 @@ Pouch::Pouch()
 	{
 		chemical_formula_explosion[i].dark_name_image = images_init_explosion[i];
 	}
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_explosion.png", EXPLOSION_MAX_NUM, 1, EXPLOSION_MAX_NUM, 350, 23, images_init_explosion);
+	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
+	{
+		chemical_formula_explosion[i].ui_name_image = images_init_explosion[i];
+	}
 
 	//—n‰ð‚Ì‰»‡•¨‚Ì–¼‘O‰æ‘œ
 	LoadDivGraph("Images/ItemTab/Secret_FILE/melt.png", MELT_MAX_NUM, 1, MELT_MAX_NUM, 350, 23, images_init_melt);
@@ -86,6 +91,11 @@ Pouch::Pouch()
 	for (int i = 0; i < MELT_MAX_NUM; i++)
 	{
 		chemical_formula_melt[i].dark_name_image = images_init_melt[i];
+	}
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_melt.png", MELT_MAX_NUM, 1, MELT_MAX_NUM, 350, 23, images_init_melt);
+	for (int i = 0; i < MELT_MAX_NUM; i++)
+	{
+		chemical_formula_melt[i].ui_name_image = images_init_melt[i];
 	}
 
 	//–ƒáƒ‚Ì‰»‡•¨‚Ì–¼‘O‚ª‚¼‚¤
@@ -99,7 +109,11 @@ Pouch::Pouch()
 	{
 		chemical_formula_pararysis[i].dark_name_image = images_init_pararysis[i];
 	}
-
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_paralysis.png", PARARYSIS_MAX_NUM, 1, PARARYSIS_MAX_NUM, 350, 23, images_init_pararysis);
+	for (int i = 0; i < PARARYSIS_MAX_NUM; i++)
+	{
+		chemical_formula_pararysis[i].ui_name_image = images_init_pararysis[i];
+	}
 
 	//“Å‚Ì‰»‡•¨‚Ì–¼‘O‰æ‘œ
 	LoadDivGraph("Images/ItemTab/Secret_FILE/poison.png", POISON_MAX_NUM, 1, POISON_MAX_NUM, 350, 23, images_init_poison);
@@ -111,6 +125,11 @@ Pouch::Pouch()
 	for (int i = 0; i < POISON_MAX_NUM; i++)
 	{
 		chemical_formula_poison[i].dark_name_image = images_init_poison[i];
+	}
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_poison.png", POISON_MAX_NUM, 1, POISON_MAX_NUM, 350, 23, images_init_poison);
+	for (int i = 0; i < POISON_MAX_NUM; i++)
+	{
+		chemical_formula_poison[i].ui_name_image = images_init_poison[i];
 	}
 
 	//‰ñ•œ‚Ì‰»‡•¨‚Ì–¼‘O‰æ‘œ
@@ -124,6 +143,12 @@ Pouch::Pouch()
 	{
 		chemical_formula_heal[i].dark_name_image = images_init_heal[i];
 	}
+	LoadDivGraph("Images/ItemTab/HP_Text/HP_heal.png", HEAL_MAX_NUM, 1, HEAL_MAX_NUM, 350, 23, images_init_heal);
+	for (int i = 0; i < HEAL_MAX_NUM; i++)
+	{
+		chemical_formula_heal[i].ui_name_image = images_init_heal[i];
+	}
+
 	//Œ³‘f‚Ì‰Šú‰»
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
@@ -368,18 +393,83 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 	int i = 0;
 	int tab_x = x - 100;
 
-	DrawFormatString(tab_x, y + 385, 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume() - bring.material.carbon);
-	DrawFormatString(tab_x, y + 415 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume() - bring.material.hydrogen);
-	DrawFormatString(tab_x, y + 445 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume() - bring.material.nitrogen);
-	DrawFormatString(tab_x, y + 475 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume() - bring.material.oxygen);
-	DrawFormatString(tab_x, y + 505 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume() - bring.material.sulfur);
-	DrawFormatString(tab_x +15, y + 535 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume() - bring.material.chlorine);
+	//C‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 382, 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume());
+	int c = element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume() - bring.material.carbon;
+	if (c < 0)
+	{
+		DrawFormatString(x - 20, y + 382, 0xff0000, "%3d",c);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 382, 0xffffff, "%3d",c);
+	}
+
+	//H‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 415 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume());
+	int h = element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume() - bring.material.hydrogen;
+	if (h < 0)
+	{
+		DrawFormatString(x - 20, y + 415 + (30 * i), 0xff0000, "%3d",h);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 415 + (30 * i), 0xffffff, "%3d", h);
+	}
+
+	//N‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 445 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume());
+	int n = element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume() - bring.material.nitrogen;
+	if (n < 0)
+	{
+		DrawFormatString(x - 20, y + 445 + (30 * i), 0xff0000, "%3d",n);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 445 + (30 * i), 0xffffff, "%3d",n);
+	}
+
+	//O‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 475 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume());
+	int o = element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume() - bring.material.oxygen;
+	if (o < 0)
+	{
+		DrawFormatString(x - 20, y + 475 + (30 * i), 0xff0000, "%3d",o);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 475 + (30 * i), 0xffffff, "%3d",o);
+	}
+
+	//S‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 505 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume());
+	int s = element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume() - bring.material.sulfur;
+	if (s < 0)
+	{
+		DrawFormatString(x - 20, y + 505 + (30 * i), 0xff0000, "%3d",s);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 505 + (30 * i), 0xffffff, "%3d",s);
+	}
+
+	//CH‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 535 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume());
+	int ch = element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume() - bring.material.chlorine;
+	if (ch < 0)
+	{
+		DrawFormatString(x - 20, y + 535 + (30 * i), 0xff0000, "%3d", ch);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 535 + (30 * i), 0xffffff, "%3d", ch);
+	}
 
 }
 
@@ -700,22 +790,22 @@ void Pouch::SetElementConstruct(int i)
 	switch (element[i]->GetType())
 	{
 	case ELEMENT_ITEM::HYDROGEN:
-		element[i]->SetVolume(50);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::OXYGEN:
-		element[i]->SetVolume(40);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::CARBON:
-		element[i]->SetVolume(30);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::NITROGEN:
-		element[i]->SetVolume(20);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::SULFUR:
 		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::CHLORINE:
-		element[i]->SetVolume(5);
+		element[i]->SetVolume(10);
 		break;
 	case ELEMENT_ITEM::URANIUM:
 		element[i]->SetVolume(1);

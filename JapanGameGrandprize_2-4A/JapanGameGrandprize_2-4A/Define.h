@@ -70,6 +70,8 @@ struct ChemicalFormulaParameter
 	int name_image;
 	int tag_number;
 	int dark_name_image;
+	int ui_name_image;
+
 };
 
 struct Bullet_Effect {

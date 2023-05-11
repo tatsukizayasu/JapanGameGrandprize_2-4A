@@ -180,8 +180,18 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 				location.x = old_location.x;
 				left_move = !left_move;
-
 			}
+
+
+			Location scroll = location - CameraWork::GetCamera();
+			Area harea = { area.height / 2 + 20,area.width / 2 };
+
+			if (scroll.x - harea.width < 10 || SCREEN_WIDTH < scroll.x + harea.width)
+			{
+				location.x = old_location.x;
+				left_move = !left_move;
+			}
+			
 		}
 		else
 		{
@@ -302,7 +312,6 @@ void EnemySlimeBoss::Draw()const
 	//DrawFormatString(0, 0, 0xffffff, "%d", draw_location.x);
 
 	Draw_Cloud();
-
 }
 
 void EnemySlimeBoss::Draw_Cloud()const

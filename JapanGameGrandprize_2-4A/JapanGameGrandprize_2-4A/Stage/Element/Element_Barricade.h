@@ -21,13 +21,10 @@ public:
 
 
 	//コンストラクタ
-	Element_Barricade(short type, std::vector<int> images, Location location, Area area, Area margin_area, DIRECTION direction);
+	Element_Barricade(short type, Resource resource, Location location, Area area, Area margin_area, DIRECTION direction);
 	//デストラクタ
 	~Element_Barricade();
 	//更新
 	void Update(Player* player) override;
-
-	/*void Draw()const override;*/
-
 
 };
