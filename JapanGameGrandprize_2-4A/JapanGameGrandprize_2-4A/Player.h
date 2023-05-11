@@ -57,6 +57,7 @@ private:
 	int* jump_image;				//”ò‚ñ‚Å‚é‚Æ‚«‚Ì‰æ‘œ
 	int* attribute_images;			//‘®«‚Ì‰æ‘œ
 	int hp_image;
+	int hp_image_top;
 	int image_size_x, image_size_y; //‰æ‘œ‚ÌƒTƒCƒY
 	int hp;							//‘Ì—Í
 	int bullet_count;				//Œ‚‚Á‚½’e‚Ì”

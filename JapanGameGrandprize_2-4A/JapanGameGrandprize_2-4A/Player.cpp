@@ -121,7 +121,8 @@ Player::Player(Stage* stage)
 	LoadDivGraph("Images/Player/Fly_ON.png", JUMP_ANIMATION, JUMP_ANIMATION, 1, 250, 250, jump_image);
 	attribute_images = new int[ATTRIBUTE_IMAGES];
 	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
-	hp_image = LoadGraph("Images/Player/HP_Bar.png");
+	hp_image = LoadGraph("Images/Player/HP_Bar_back.png");
+	hp_image_top = LoadGraph("Images/Player/HP_Bar_Top.png");
 
 	image_size_x = 40;
 	image_size_y = 80;
@@ -357,6 +358,10 @@ void Player::PlayerUiDraw(float x, float y) const
 	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
 	float hp_start = 120;
 	float hp_y = 620;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
+	DrawRotaGraphF(230, 640, 1.0, 0, hp_image, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	DrawRotaGraphF(230, 640, 1.0, 0, hp_image_top, true);
 	if (hp >= 50)
 	{
 		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, GREEN, TRUE);
@@ -369,7 +374,7 @@ void Player::PlayerUiDraw(float x, float y) const
 	{
 		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, RED, TRUE);
 	}
-	DrawRotaGraphF(230, 580, 0.75, 0, hp_image, true);
+	
 	//‚±‚±‚Ü‚Å
 
 	//Œ»Ý‚Ì‘I‘ðŽˆ
@@ -418,14 +423,14 @@ void Player::PlayerUiDraw(float x, float y) const
 		break;
 	}
 	ChemicalFormulaDraw(display_attribute, 0);
-	float element_thing = hp_start + 15;
-	SetFontSize(30);
-	DrawFormatString(element_thing, 670, 0xffffff, "%d", element[2]->GetVolume());
-	DrawFormatString(element_thing + (50 * 1), 670, 0xffffff, "%d", element[0]->GetVolume());
-	DrawFormatString(element_thing + (50 * 2), 670, 0xffffff, "%d", element[3]->GetVolume());
-	DrawFormatString(element_thing + (50 * 3), 670, 0xffffff, "%d", element[1]->GetVolume());
-	DrawFormatString(element_thing + (50 * 4), 670, 0xffffff, "%d", element[4]->GetVolume());
-	DrawFormatString(element_thing + (50 * 5), 670, 0xffffff, "%d", element[5]->GetVolume());
+	float element_thing = hp_start + 14;
+	SetFontSize(23);
+	DrawFormatString(element_thing, 670, 0xffffff, "%3d", element[2]->GetVolume());
+	DrawFormatString(element_thing + 50, 670, 0xffffff, "%3d", element[0]->GetVolume());
+	DrawFormatString(element_thing + (50 * 2), 670, 0xffffff, "%3d", element[3]->GetVolume());
+	DrawFormatString(element_thing + 149, 670, 0xffffff, "%3d", element[1]->GetVolume());
+	DrawFormatString(element_thing + 199, 670, 0xffffff, "%3d", element[4]->GetVolume());
+	DrawFormatString(element_thing + 248, 670, 0xffffff, "%3d", element[5]->GetVolume());
 }
 
 void Player::ChemicalFormulaDraw(int i, int plus_y) const
