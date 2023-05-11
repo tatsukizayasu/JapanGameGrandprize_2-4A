@@ -368,18 +368,83 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 	int i = 0;
 	int tab_x = x - 100;
 
-	DrawFormatString(tab_x, y + 385, 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume() - bring.material.carbon);
-	DrawFormatString(tab_x, y + 415 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume() - bring.material.hydrogen);
-	DrawFormatString(tab_x, y + 445 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume() - bring.material.nitrogen);
-	DrawFormatString(tab_x, y + 475 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume() - bring.material.oxygen);
-	DrawFormatString(tab_x, y + 505 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume() - bring.material.sulfur);
-	DrawFormatString(tab_x +15, y + 535 + (30 * i), 0xffffff, "%d    %d",
-		element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume(), element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume() - bring.material.chlorine);
+	//C‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 382, 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume());
+	int c = element[static_cast<int>(ELEMENT_ITEM::CARBON)]->GetVolume() - bring.material.carbon;
+	if (c < 0)
+	{
+		DrawFormatString(x - 20, y + 382, 0xff0000, "%3d",c);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 382, 0xffffff, "%3d",c);
+	}
+
+	//H‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 415 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume());
+	int h = element[static_cast<int>(ELEMENT_ITEM::HYDROGEN)]->GetVolume() - bring.material.hydrogen;
+	if (h < 0)
+	{
+		DrawFormatString(x - 20, y + 415 + (30 * i), 0xff0000, "%3d",h);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 415 + (30 * i), 0xffffff, "%3d", h);
+	}
+
+	//N‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 445 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume());
+	int n = element[static_cast<int>(ELEMENT_ITEM::NITROGEN)]->GetVolume() - bring.material.nitrogen;
+	if (n < 0)
+	{
+		DrawFormatString(x - 20, y + 445 + (30 * i), 0xff0000, "%3d",n);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 445 + (30 * i), 0xffffff, "%3d",n);
+	}
+
+	//O‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 475 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume());
+	int o = element[static_cast<int>(ELEMENT_ITEM::OXYGEN)]->GetVolume() - bring.material.oxygen;
+	if (o < 0)
+	{
+		DrawFormatString(x - 20, y + 475 + (30 * i), 0xff0000, "%3d",o);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 475 + (30 * i), 0xffffff, "%3d",o);
+	}
+
+	//S‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 505 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume());
+	int s = element[static_cast<int>(ELEMENT_ITEM::SULFUR)]->GetVolume() - bring.material.sulfur;
+	if (s < 0)
+	{
+		DrawFormatString(x - 20, y + 505 + (30 * i), 0xff0000, "%3d",s);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 505 + (30 * i), 0xffffff, "%3d",s);
+	}
+
+	//CH‚Ì•`‰æ
+	DrawFormatString(tab_x, y + 535 + (30 * i), 0xffffff, "%3d",
+		element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume());
+	int ch = element[static_cast<int>(ELEMENT_ITEM::CHLORINE)]->GetVolume() - bring.material.chlorine;
+	if (ch < 0)
+	{
+		DrawFormatString(x - 20, y + 535 + (30 * i), 0xff0000, "%3d", ch);
+	}
+	else
+	{
+		DrawFormatString(x - 20, y + 535 + (30 * i), 0xffffff, "%3d", ch);
+	}
 
 }
 
@@ -700,19 +765,19 @@ void Pouch::SetElementConstruct(int i)
 	switch (element[i]->GetType())
 	{
 	case ELEMENT_ITEM::HYDROGEN:
-		element[i]->SetVolume(50);
+		element[i]->SetVolume(5);
 		break;
 	case ELEMENT_ITEM::OXYGEN:
-		element[i]->SetVolume(40);
+		element[i]->SetVolume(5);
 		break;
 	case ELEMENT_ITEM::CARBON:
-		element[i]->SetVolume(30);
+		element[i]->SetVolume(5);
 		break;
 	case ELEMENT_ITEM::NITROGEN:
-		element[i]->SetVolume(20);
+		element[i]->SetVolume(5);
 		break;
 	case ELEMENT_ITEM::SULFUR:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(5);
 		break;
 	case ELEMENT_ITEM::CHLORINE:
 		element[i]->SetVolume(5);

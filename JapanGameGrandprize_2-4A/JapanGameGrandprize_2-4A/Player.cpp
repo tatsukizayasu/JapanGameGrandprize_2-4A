@@ -121,7 +121,8 @@ Player::Player(Stage* stage)
 	LoadDivGraph("Images/Player/Fly_ON.png", JUMP_ANIMATION, JUMP_ANIMATION, 1, 250, 250, jump_image);
 	attribute_images = new int[ATTRIBUTE_IMAGES];
 	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
-	hp_image = LoadGraph("Images/Player/HP_Bar.png");
+	hp_image = LoadGraph("Images/Player/HP_Bar_back.png");
+	hp_image_top = LoadGraph("Images/Player/HP_Bar_Top.png");
 
 	image_size_x = 40;
 	image_size_y = 80;
@@ -317,8 +318,6 @@ void Player::Draw() const
 		DrawRotaGraph(effect_heal.x, effect_heal.y, 1, 0, effect_heal.image_array[effect_heal.frame], TRUE, FALSE, FALSE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
-
-	DrawFormatString(0, 400, 0x999999, "%d", hp);
 }
 
 void Player::PouchDraw() const
@@ -355,8 +354,12 @@ void Player::PlayerUiDraw(float x, float y) const
 	//Hpゲージ
 	//HPバーの表示ここから
 	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
-	float hp_start = 120;
-	float hp_y = 620;
+	float hp_start = 129;
+	float hp_y = 630;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
+	DrawRotaGraphF(230, 640, 1.0, 0, hp_image, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	DrawRotaGraphF(230, 640, 1.0, 0, hp_image_top, true);
 	if (hp >= 50)
 	{
 		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, GREEN, TRUE);
@@ -369,14 +372,14 @@ void Player::PlayerUiDraw(float x, float y) const
 	{
 		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, RED, TRUE);
 	}
-	DrawRotaGraphF(230, 580, 0.75, 0, hp_image, true);
+	
 	//ここまで
 
 	//現在の選択肢
-	float chemical_formula_y = hp_y - 25;
+	float chemical_formula_y = hp_y - 28;
 	float bullet_remain_y = chemical_formula_y - 35;
-	float bullet_remain_x = hp_start - 70;
-	float chemical_icon_x = hp_start - 43;
+	float bullet_remain_x = hp_start - 85;
+	float chemical_icon_x = hp_start - 50;
 	float chemical_icon_y = hp_y + 25;
 	switch (display_attribute)
 	{
@@ -386,114 +389,47 @@ void Player::PlayerUiDraw(float x, float y) const
 		break;
 	case 1:
 		DrawGraph(hp_start, chemical_formula_y, explosion->name_image, TRUE);
-		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", explosion->number_of_bullets);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", explosion->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[5], TRUE);
 		break;
 	case 2:
 		DrawGraph(hp_start, chemical_formula_y, melt->name_image, TRUE);
-		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", melt->number_of_bullets);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", melt->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[9], TRUE);
 		break;
 	case 3:
 		DrawGraph(hp_start, chemical_formula_y, poison->name_image, TRUE);
-		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", poison->number_of_bullets);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", poison->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[6], TRUE);
 		break;
 	case 4:
 		DrawGraph(hp_start, chemical_formula_y, pararysis->name_image, TRUE);
-		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", pararysis->number_of_bullets);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", pararysis->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[7], TRUE);
 		break;
 	case 5:
 		DrawGraph(hp_start, chemical_formula_y, heal->name_image, TRUE);
-		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%d", heal->number_of_bullets);
+		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", heal->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[8], TRUE);
 		break;
 	default:
 		break;
 	}
-	ChemicalFormulaDraw(display_attribute, 0);
-	float element_thing = hp_start + 15;
-	SetFontSize(30);
-	DrawFormatString(element_thing, 670, 0xffffff, "%d", element[2]->GetVolume());
-	DrawFormatString(element_thing + (50 * 1), 670, 0xffffff, "%d", element[0]->GetVolume());
-	DrawFormatString(element_thing + (50 * 2), 670, 0xffffff, "%d", element[3]->GetVolume());
-	DrawFormatString(element_thing + (50 * 3), 670, 0xffffff, "%d", element[1]->GetVolume());
-	DrawFormatString(element_thing + (50 * 4), 670, 0xffffff, "%d", element[4]->GetVolume());
-	DrawFormatString(element_thing + (50 * 5), 670, 0xffffff, "%d", element[5]->GetVolume());
+	float element_thing = hp_start + 5;
+	SetFontSize(23);
+	DrawFormatString(element_thing, 670, 0xffffff, "%3d", element[2]->GetVolume());
+	DrawFormatString(element_thing + 50, 670, 0xffffff, "%3d", element[0]->GetVolume());
+	DrawFormatString(element_thing + (50 * 2), 670, 0xffffff, "%3d", element[3]->GetVolume());
+	DrawFormatString(element_thing + 149, 670, 0xffffff, "%3d", element[1]->GetVolume());
+	DrawFormatString(element_thing + 199, 670, 0xffffff, "%3d", element[4]->GetVolume());
+	DrawFormatString(element_thing + 248, 670, 0xffffff, "%3d", element[5]->GetVolume());
 }
 
-void Player::ChemicalFormulaDraw(int i, int plus_y) const
-{
-	switch (i)
-	{
-	case 0: //通常弾
-		DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "--");
-		break;
-	case 1: //爆発
-		if (explosion != nullptr)
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", explosion->number_of_bullets);
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", explosion->chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
-		}
-		break;
-	case 2: //溶解
-		if (melt != nullptr)
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", melt->number_of_bullets);
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", melt->chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
-		}
-		break;
-	case 3: //毒
-		if (poison != nullptr)
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", poison->number_of_bullets);
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", poison->chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
-		}
-		break;
-	case 4: //麻痺
-		if (pararysis != nullptr)
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", pararysis->number_of_bullets);
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", pararysis->chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
-		}
-		break;
-	case 5: //回復
-		if (heal != nullptr)
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%d", heal->number_of_bullets);
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X + 30, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "%s", heal->chemical_formula_name);
-		}
-		else
-		{
-			DrawFormatString(CHEMICAL_FORMURA_DRAW_X, CHEMICAL_FORMURA_DRAW_Y + plus_y, 0x778877, "0");
-		}
-		break;
-	default:
-		break;
-	}
-}
 
 //-----------------------------------
 // 更新
