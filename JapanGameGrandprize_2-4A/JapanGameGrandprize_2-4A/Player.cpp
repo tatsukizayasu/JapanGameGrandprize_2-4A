@@ -356,10 +356,6 @@ void Player::PlayerUiDraw(float x, float y) const
 	float now_hp = (hp / HP_MAX) * HP_BAR_WIDTH;
 	float hp_start = 129;
 	float hp_y = 630;
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
-	DrawRotaGraphF(230, 640, 1.0, 0, hp_image, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	DrawRotaGraphF(230, 640, 1.0, 0, hp_image_top, true);
 	if (hp >= 50)
 	{
 		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, GREEN, TRUE);
@@ -372,6 +368,11 @@ void Player::PlayerUiDraw(float x, float y) const
 	{
 		DrawBoxAA(hp_start, hp_y, hp_start + (now_hp - 1), hp_y + HP_BAR_HEIGHT, RED, TRUE);
 	}
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
+	DrawRotaGraphF(230, 640, 1.0, 0, hp_image, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	DrawRotaGraphF(230, 640, 1.0, 0, hp_image_top, true);
+	
 	
 	//‚±‚±‚Ü‚Å
 
@@ -381,6 +382,7 @@ void Player::PlayerUiDraw(float x, float y) const
 	float bullet_remain_x = hp_start - 85;
 	float chemical_icon_x = hp_start - 50;
 	float chemical_icon_y = hp_y + 25;
+	int k = 10;
 	switch (display_attribute)
 	{
 	case 0:
@@ -388,31 +390,31 @@ void Player::PlayerUiDraw(float x, float y) const
 		DrawStringF(bullet_remain_x, bullet_remain_y, "--", 0x00ff00);
 		break;
 	case 1:
-		DrawGraph(hp_start, chemical_formula_y, explosion->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, explosion->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", explosion->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[5], TRUE);
 		break;
 	case 2:
-		DrawGraph(hp_start, chemical_formula_y, melt->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, melt->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", melt->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[9], TRUE);
 		break;
 	case 3:
-		DrawGraph(hp_start, chemical_formula_y, poison->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, poison->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", poison->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[6], TRUE);
 		break;
 	case 4:
-		DrawGraph(hp_start, chemical_formula_y, pararysis->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, pararysis->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", pararysis->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[7], TRUE);
 		break;
 	case 5:
-		DrawGraph(hp_start, chemical_formula_y, heal->name_image, TRUE);
+		DrawGraph(hp_start - k, chemical_formula_y, heal->ui_name_image, TRUE);
 		DrawFormatStringF(bullet_remain_x, bullet_remain_y, 0xffffff, "%3d", heal->number_of_bullets);
 		DrawRotaGraph(chemical_icon_x, chemical_icon_y, 1, 0,
 			attribute_images[8], TRUE);
