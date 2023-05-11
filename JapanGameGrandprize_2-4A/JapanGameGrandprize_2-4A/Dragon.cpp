@@ -4,8 +4,8 @@
 #include "DxLib.h"
 
 //ドラゴンの画像サイズ(未定、画像が出来次第調整）
-#define DRAGON_SIZE_X 250
-#define DRAGON_SIZE_Y 250
+#define DRAGON_SIZE_X 330
+#define DRAGON_SIZE_Y 330
 
 //ドラゴンのHP
 #define HIT_POINTS 500
@@ -55,9 +55,8 @@
 Dragon::Dragon(Location spawn_location)
 {
 	location = spawn_location;
-	location.y = 500;
-	location.x -= MAP_CHIP_SIZE / 2;
-	location.y -= MAP_CHIP_SIZE / 2;
+	location.y = 450;
+	location.x = 17680;
 	area.height = DRAGON_SIZE_Y;
 	area.width = DRAGON_SIZE_X;
 
@@ -108,7 +107,8 @@ Dragon::Dragon(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	image = LoadGraph("Images/Enemy/a.png"); //画像読込み
+	image = LoadGraph("Images/Enemy/doragon.png"); //画像読込み
+	LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, fly_image); //通常
 
 }
 
@@ -127,6 +127,18 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 {
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
+
+
+	//アニメーション
+	if (++animation_time % 10 == 0)
+	{
+		++animation;
+	}
+
+	if (animation > 1)
+	{
+		animation = 0;
+	}
 
 	switch (state)
 	{
@@ -208,7 +220,7 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 		left_move = !left_move;
 		wall_hit = true;
 
-		state = ENEMY_STATE::MOVE;
+		//state = ENEMY_STATE::MOVE;
 	}
 
 	//画面上部から出たら元の位置に戻す
@@ -257,10 +269,37 @@ void Dragon::Draw() const
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
-		GetColor(255, 0, 0), TRUE);
+		GetColor(255, 0, 0), FALSE);
 
-	/*DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-		M_PI / 180, image, TRUE);*/
+	switch (state)
+	{
+	case ENEMY_STATE::MOVE:
+		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+			M_PI / 180, image, TRUE, !left_move);
+		break;
+	case ENEMY_STATE::ATTACK:
+	
+		switch (attack_method)
+		{
+		case 0:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+				M_PI / 180, image, TRUE, !left_move);
+			break;
+		case 1:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+				M_PI / 180, fly_image[animation], TRUE, !left_move);
+			break;
+		case 2:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+				M_PI / 180, image, TRUE, !left_move);
+			break;
+		}
+
+		break;
+	default:
+		break;
+	}
+
 
 
 	if (state != ENEMY_STATE::DEATH)
