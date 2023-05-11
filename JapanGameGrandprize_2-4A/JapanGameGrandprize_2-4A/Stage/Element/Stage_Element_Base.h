@@ -37,6 +37,9 @@ protected:
 	//LoopImagesの開始時間
 	std::chrono::steady_clock::time_point start_time;
 
+	//リソースハンドル構造体
+	Resource resource;
+
 	//グラフィックハンドル用Vector
 	std::vector<int> images;
 	
@@ -119,4 +122,10 @@ public:
 	/// </summary>
 	/// <param name = "time">リセットしたいタイマーの秒数</param>
 	void ResetElapsedTime(float time);
+
+	/// <summary>
+	/// 2Dパン	Setter
+	/// </summary>
+	/// <param name = "time">リセットしたいタイマーの秒数</param>
+	void SetPan(int SoundHandle, Player* player, Stage_Element_Base* base);
 };

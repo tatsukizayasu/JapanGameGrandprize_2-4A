@@ -7,6 +7,7 @@ Element_DamageWall::Element_DamageWall(short type, Resource resource, Location l
 	this->area = area;
 	this->type = type;
 	
+	this->resource = resource;
 	this->images = resource.images;
 }
 
@@ -14,6 +15,11 @@ Element_DamageWall::~Element_DamageWall() = default;
 
 void Element_DamageWall::Update(Player* player)
 {
+	
+	if (CheckSoundMem(resource.sounds.at(0)) == FALSE) {
+		SetPan(resource.sounds.at(0), player, this);
+		PlaySoundMem(resource.sounds.at(0), DX_PLAYTYPE_BACK, TRUE);
+	}
 
 	//アニメーション更新
 	LoopImages(images, 0.1f, 9, nullptr);
