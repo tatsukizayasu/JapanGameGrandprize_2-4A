@@ -67,6 +67,7 @@ private:
 	int background_images;
 	int block_images[50];
 	int stage1_block_images[10];
+	
 	int bort_image;
 
 	//ステージ足場ブロックのID

@@ -119,6 +119,7 @@ void Kraken::Update(const Player* player, const Stage* stage)
 
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 	Location old_location = location; //移動前の座標
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -433,7 +434,7 @@ void Kraken::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	if (state != ENEMY_STATE::DEATH)
+	if (location.x - area.width / 2 < SCREEN_WIDTH && state != ENEMY_STATE::DEATH)
 	{
 		DrawHPBar(KRAKEN_HP);
 	}

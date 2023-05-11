@@ -3,8 +3,8 @@
 #include "../CameraWork.h"
 
 Element_Item_Drop_Object::Element_Item_Drop_Object(short type,
-	std::vector<int> images, Location location, Area area)
-	: Stage_Element_Base(&images.at(0), location, area)
+	Resource resource, Location location, Area area)
+	: Stage_Element_Base(&resource.images.at(0), location, area)
 {
 
 	this->area = area;
@@ -34,10 +34,6 @@ Element_Item_Drop_Object::~Element_Item_Drop_Object()
 	element_item.shrink_to_fit();
 
 	image = 0;
-	/*for (int& image : images)
-	{
-		DeleteGraph(image);
-	}*/
 }
 
 void Element_Item_Drop_Object::Update(Player* player)
