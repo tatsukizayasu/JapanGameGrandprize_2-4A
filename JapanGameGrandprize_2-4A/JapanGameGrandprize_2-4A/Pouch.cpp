@@ -57,6 +57,8 @@ Pouch::Pouch()
 	text_window_image_dark = LoadGraph("Images/ItemTab/P_Text_nBackBox.png");
 	cursor_image = LoadGraph("Images/ItemTab/Cursor.png");
 	attribute_images = new int[ATTRIBUTE_IMAGES];
+	attribute_text_images = new int[ATTRIBUTE_IMAGES];
+	LoadDivGraph("Images/ItemTab/Poach_Name.png", 5, 1, 5, 212, 45, attribute_text_images);
 	LoadDivGraph("Images/Player/zokusei_icon_x2.png", 10, 5, 2, 55, 51, attribute_images);
 	int images_init_explosion[EXPLOSION_MAX_NUM];
 	int images_init_melt[MELT_MAX_NUM];
@@ -209,8 +211,9 @@ void Pouch::ExplosionTabDraw() const
 
 	ElementDraw(chemical_formula_explosion[cursol]);
 
-	DrawString(attribute_name_x, attribute_name_y, "EXPLOSION", 0xaa5500);
+	DrawGraph(attribute_name_x - 40, attribute_name_y, attribute_text_images[0], true);
 }
+
 
 //—n‰ð
 void Pouch::MeltTabDraw() const
@@ -240,7 +243,7 @@ void Pouch::MeltTabDraw() const
 	ElementDraw(chemical_formula_melt[cursol]);
 
 
-	DrawString(attribute_name_x, attribute_name_y, "MELT", 0x000000);
+	DrawGraph(attribute_name_x, attribute_name_y, attribute_text_images[1], true);
 }
 
 //–ƒáƒ
@@ -274,7 +277,7 @@ void Pouch::ParalysisTabDraw()const
 
 
 
-	DrawString(attribute_name_x, attribute_name_y, "PARARYSIS", 0x000000);
+	DrawGraph(attribute_name_x - 30, attribute_name_y, attribute_text_images[3], true);
 }
 
 //“Å
@@ -308,7 +311,7 @@ void Pouch::PoisonTabDraw()const
 	ElementDraw(chemical_formula_poison[cursol]);
 
 
-	DrawString(attribute_name_x, attribute_name_y, "POISON", 0x000000);
+	DrawGraph(attribute_name_x, attribute_name_y, attribute_text_images[2], true);
 }
 //‰ñ•œ
 void Pouch::HealTabDraw()const
@@ -339,7 +342,7 @@ void Pouch::HealTabDraw()const
 
 
 
-	DrawString(attribute_name_x, attribute_name_y, "HEAL", 0x000000);
+	DrawGraph(attribute_name_x, attribute_name_y, attribute_text_images[4], true);
 }
 
 //•`‰æ
