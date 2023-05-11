@@ -89,8 +89,8 @@ bool BoxCollider::HitSphere(const class SphereCollider* sphere_collider) const
 	float my_y[2];
 
 	//Šp“x‚ÌŒvŽZ
-	rad = atan2f(sphere_collider->GetLocation().y - location.y,
-			      sphere_collider->GetLocation().x - location.x);
+	rad = atan2f(location.y - sphere_collider->GetLocation().y ,
+		location.x - sphere_collider->GetLocation().x);
 
 	//À•W‚ÌŒvŽZ
 	sphere_x = sphere_collider->GetLocation().x 

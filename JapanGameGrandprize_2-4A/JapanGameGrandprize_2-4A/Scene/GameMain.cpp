@@ -359,6 +359,7 @@ bool GameMain::EnemyUpdate()
 					case ENEMY_KIND::LAST_BOSS:
 						enemy[i] = new LastBoss(spawn[i].location);
 						is_spawn_boss = true;
+						enemy[i] = new LastBoss(spawn[i].location);
 						break;
 
 					default:
@@ -397,7 +398,7 @@ bool GameMain::EnemyUpdate()
 				LastBoss* last_boss;
 				last_boss = dynamic_cast<LastBoss*>(enemy[i]);
 
-				player->HpDamage(last_boss->PunchAttack(player));
+				player->HpDamage(last_boss->Hit(player));
 			}
 			else
 			{
@@ -586,8 +587,6 @@ void GameMain::Draw()const
 	stage->DrawObject();
 
 	item_controller->Draw();
-	
-	player->Draw();
 
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
@@ -596,6 +595,10 @@ void GameMain::Draw()const
 			enemy[i]->Draw();
 		}
 	}
+
+	player->Draw();
+
+	
 	bullet_manager->Draw();
 
 	player->PouchDraw();

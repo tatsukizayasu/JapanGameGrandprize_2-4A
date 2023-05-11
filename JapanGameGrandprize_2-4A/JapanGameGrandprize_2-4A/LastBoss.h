@@ -1,5 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
+#include "EnemyBulletBase.h"
+#include "LastBossSpecialMoves.h"
 
 enum class LAST_BOSS_ATTACK
 {
@@ -14,7 +16,7 @@ class LastBoss :
     public EnemyBase
 {
 private:
-    bool special_moves; //必殺技をしたか
+    bool can_special_moves; //必殺技をしたか
     bool down; //ダウン
     bool attack; //攻撃が当たったか
     int down_time; //ダウンしている時間
@@ -23,6 +25,7 @@ private:
     int punch_interval; //次のパンチ攻撃までの時間
     int sword_interval; //剣攻撃までの時間
     int magic_rate; //魔法攻撃のレート
+    int magic_volume; //魔法の数
     int special_moves_time; //必殺技の時間
     int animation; //アニメーション
     int image_argument; //画像の引数
@@ -34,6 +37,11 @@ private:
     HitMapChip hit_stage; //ステージとの当たり判定
 
     LAST_BOSS_ATTACK attack_state; //攻撃
+
+    EnemyBulletBase** magic; //魔法
+
+    LastBossSpecialMoves* special_moves; //必殺技
+
 private:
 
     //移動時のアニメーション
@@ -46,7 +54,7 @@ private:
     void InitMagic();
 
     //魔法攻撃
-    void Magic();
+    void Magic(const Location);
 
     //パンチ攻撃の初期化
     void InitPunch();
@@ -87,6 +95,9 @@ public:
 
     //攻撃が当たっているか
     AttackResource Hit() override;
+
+    //攻撃が当たっているか
+    AttackResource Hit(const BoxCollider*);
 
     //死亡
     void Death() override;

@@ -189,6 +189,7 @@
     <ClInclude Include="Kraken.h" />
     <ClInclude Include="KrakenBullet.h" />
     <ClInclude Include="LastBossHand.h" />
+    <ClInclude Include="LastBossSpecialMoves.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="MageBullet.h" />
     <ClInclude Include="NormalBullet.h" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Scene\Pause.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\Title.h" />
+    <ClInclude Include="LastBossMagic.h" />
     <ClInclude Include="SlimeBossBullet.h" />
     <ClInclude Include="SlimeBossThunder.h" />
     <ClInclude Include="Stage\Element\Element_Item_Drop_Object.h" />
@@ -269,6 +271,7 @@
     <ClCompile Include="Kraken.cpp" />
     <ClCompile Include="KrakenBullet.cpp" />
     <ClCompile Include="LastBossHand.cpp" />
+    <ClCompile Include="LastBossSpecialMoves.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="MageBullet.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
@@ -283,6 +286,7 @@
     <ClCompile Include="Scene\Pause.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
+    <ClCompile Include="LastBossMagic.cpp" />
     <ClCompile Include="SlimeBossBullet.cpp" />
     <ClCompile Include="SlimeBossThunder.cpp" />
     <ClCompile Include="Stage\Element\Element_Item_Drop_Object.cpp" />
