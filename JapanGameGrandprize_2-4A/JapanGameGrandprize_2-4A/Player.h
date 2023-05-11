@@ -14,8 +14,8 @@
 #define JUMP_INERTIA 0.2
 #define WARK_INERTIA 0.5
 #define HP_MAX 100.f
-#define HP_BAR_WIDTH 300
-#define HP_BAR_HEIGHT 28
+#define HP_BAR_WIDTH 286
+#define HP_BAR_HEIGHT 22
 #define FUEL_MAX 100.f
 #define FUEL_BAR_HEIGHT 100
 
@@ -57,6 +57,7 @@ private:
 	int* jump_image;				//飛んでるときの画像
 	int* attribute_images;			//属性の画像
 	int hp_image;
+	int hp_image_top;
 	int image_size_x, image_size_y; //画像のサイズ
 	int hp;							//体力
 	int bullet_count;				//撃った弾の数
@@ -90,6 +91,12 @@ private:
 	bool hit_stage;					//ステージのブロックに触れている
 	bool boost;
 
+	int bulletssound;//通常弾のBGM
+	int flysound;//飛ぶ
+	int healsound;//回復
+	int deathsound;//死亡
+
+
 	ATTRIBUTE attribute[6];         //弾の属性
 	const char* attribute_c[6];     //弾の属性の文字列
 	int display_attribute;          //画面に表示させる属性
@@ -119,7 +126,6 @@ public:
 	~Player();
 	void Draw()const;
 	void PouchDraw()const;
-	void ChemicalFormulaDraw(int,int) const;
 	void PlayerUiDraw(float,float) const;
 	void Update();
 	void ElementUpdate();
