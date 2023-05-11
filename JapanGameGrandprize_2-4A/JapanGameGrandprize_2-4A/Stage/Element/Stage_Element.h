@@ -23,8 +23,6 @@ namespace Element {
 	const short FALL_FLOOR = 42;		//落ちる床
 	const short ITEM_DROP_OBJECT = 50;		//アイテムドロップオブジェクト
 	const short TRAP = 51;				//トラップ	(爆発物)
-	const short MOVE_FLOOR = 52;		//動く床
-	const short MOVE_FLOOR_GOAL = 53;	//動く床の目的位置
 	const short BARRICADE_UP = 59;			//バリケード 上
 	const short BARRICADE_CENTER = 60;			//バリケード 中央
 	const short BARRICADE_DOWN = 61;		//バリケード 下
@@ -39,6 +37,8 @@ private:
 
 	//読み込んだ画像のキャッシュマップ
 	std::unordered_map<short, std::vector<int>> image_cache;
+	//読み込んだSoundのキャッシュマップ
+	std::unordered_map<short, std::vector<int>> sound_cache;
 
 	//オブジェクト変数
 	std::vector<std::shared_ptr<Stage_Element_Base>> element;
@@ -48,7 +48,7 @@ private:
 
 	//ステージ要素のID
 	std::set<short> elements_id{ /*DEBUG_GRASS,*/ DAMAGE_WALL, WOODEN_FLOOR, FALL_FLOOR, ITEM_DROP_OBJECT, TRAP,
-		MOVE_FLOOR, MOVE_FLOOR_GOAL, BARRICADE_UP, BARRICADE_CENTER, BARRICADE_DOWN, YellowButton };
+		BARRICADE_UP, BARRICADE_CENTER, BARRICADE_DOWN, YellowButton };
 public:
 
 	Stage_Element() = default;
@@ -110,12 +110,23 @@ public:
 	/// <summary>
 	/// マップチップ画像の読み込み
 	/// </summary>
-	std::vector<int> LoadImage(const std::string& filename);
+	std::vector<int> LoadImage(const std::string& filename);	
+	
+	/// <summary>
+	/// SE Getter
+	/// </summary>
+	/// 既に読み込んでいるSEは同じハンドルを返す
+	std::vector<int> GetSounds(short type);
+
+	/// <summary>
+	/// SEの読み込み
+	/// </summary>
+	std::vector<int> LoadSounds (const std::string& filename) const;
 
 	/// <summary>
 	/// ステージ要素ID		Getter
 	/// </summary>
-	const std::set<short>& GetElementID() { return elements_id; }
+	const std::set<short>& GetElementID() const { return elements_id; }
 
 	/// <summary>
 	/// ElementオブジェクトのGetter

@@ -1,25 +1,22 @@
 #include "Element_DamageWall.h"
 #include "../Player.h"
 
-Element_DamageWall::Element_DamageWall(short type, std::vector<int> images, Location location, Area area) : Stage_Element_Base(&images.at(0), location, area)
+Element_DamageWall::Element_DamageWall(short type, Resource resource, Location location, Area area) : Stage_Element_Base(&resource.images.at(0), location, area)
 {
 
 	this->area = area;
 	this->type = type;
 	
-	this->images = images;
+	this->images = resource.images;
 }
 
-Element_DamageWall::~Element_DamageWall()
-{
-
-}
+Element_DamageWall::~Element_DamageWall() = default;
 
 void Element_DamageWall::Update(Player* player)
 {
 
 	//アニメーション更新
-	LoopImages(images, 0.1, 9, nullptr);
+	LoopImages(images, 0.1f, 9, nullptr);
 
 	if (abs(location.x - player->GetLocation().x) <= MAP_CHIP_SIZE 
 		&& abs(location.y - player->GetLocation().y) <= MAP_CHIP_SIZE) {

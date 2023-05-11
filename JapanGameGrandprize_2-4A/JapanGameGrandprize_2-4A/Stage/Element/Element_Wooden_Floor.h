@@ -13,7 +13,7 @@ private:
 public:
 
 	//コンストラクタ
-	Element_Wooden_Floor(short type, std::vector<int> images, Location location, Area area);
+	Element_Wooden_Floor(short type, Resource resource, Location location, Area area);
 	//デストラクタ
 	~Element_Wooden_Floor();
 

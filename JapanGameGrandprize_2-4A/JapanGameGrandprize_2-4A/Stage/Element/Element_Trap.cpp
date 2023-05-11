@@ -8,8 +8,8 @@
 #define ATTACK_RANGE 200.0f
 
 Element_Trap::Element_Trap(short type, Stage* stage,
-	EnemyBase** enemy, std::vector<int> images, Location location, Area area)
-	: Stage_Element_Base(&images.at(0), location, area)
+	EnemyBase** enemy, Resource resource, Location location, Area area)
+	: Stage_Element_Base(&resource.images.at(0), location, area)
 {
 	this->area = area;
 	this->type = type;
@@ -17,7 +17,7 @@ Element_Trap::Element_Trap(short type, Stage* stage,
 	//ƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è‚ð–³Œø‰»
 	margin_area = { 1000.0f,1000.0f };
 
-	this->images = images;
+	this->images = resource.images;
 
 	this->stage = stage;
 	this->enemy = enemy;
@@ -33,10 +33,6 @@ Element_Trap::Element_Trap(short type, Stage* stage,
 Element_Trap::~Element_Trap()
 {
 	image = 0;
-	/*for (int& image : images) 
-	{
-		DeleteGraph(image);
-	}*/
 }
 
 void Element_Trap::Update(Player* player)
