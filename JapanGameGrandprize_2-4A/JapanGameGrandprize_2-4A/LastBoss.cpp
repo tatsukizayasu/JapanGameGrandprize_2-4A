@@ -75,7 +75,7 @@ LastBoss::LastBoss(Location spawn_location)
 
 	kind = ENEMY_KIND::LAST_BOSS;
 
-	special_moves = false;
+	can_special_moves = false;
 	down = false;
 	attack = false;
 	attack_time = 0;
@@ -95,6 +95,10 @@ LastBoss::LastBoss(Location spawn_location)
 	attack_state = LAST_BOSS_ATTACK::NONE;
 	hit_stage = { false,nullptr };
 
+	Location tmp = spawn_location;
+	tmp.y = 0;
+
+	special_moves = nullptr;
 }
 
 //-----------------------------------
@@ -113,6 +117,8 @@ LastBoss::~LastBoss()
 		delete magic;
 	}
 	delete[] magic;
+
+	delete special_moves;
 }
 
 //-----------------------------------
@@ -194,17 +200,22 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 		punch_interval--;
 		magic_interval--;
 		sword_interval--;
+
+		if (special_moves != nullptr)
+		{
+			special_moves->Update();
+		}
 	}
 	hit_stage = HitStage(stage);
 
 	UpdateDamageLog();
 
-	if ((hp <= 1) && (!special_moves))
+	/*if ((hp <= 1) && (!can_special_moves))
 	{
 		hp = 1;
-		special_moves = true;
+		can_special_moves = true;
 		attack_state = LAST_BOSS_ATTACK::SPECIAL_MOVES;
-	}
+	}*/
 }
 
 //-----------------------------------
@@ -750,6 +761,12 @@ void LastBoss::Draw() const
 			}
 		}
 	}
+
+	if (special_moves != nullptr)
+	{
+		special_moves->Draw();
+	}
+
 }
 
 //-----------------------------------

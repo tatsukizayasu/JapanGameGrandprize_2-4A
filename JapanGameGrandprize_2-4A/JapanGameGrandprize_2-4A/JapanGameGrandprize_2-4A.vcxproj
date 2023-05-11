@@ -189,6 +189,7 @@
     <ClInclude Include="Kraken.h" />
     <ClInclude Include="KrakenBullet.h" />
     <ClInclude Include="LastBossHand.h" />
+    <ClInclude Include="LastBossSpecialMoves.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="MageBullet.h" />
     <ClInclude Include="NormalBullet.h" />
@@ -270,6 +271,7 @@
     <ClCompile Include="Kraken.cpp" />
     <ClCompile Include="KrakenBullet.cpp" />
     <ClCompile Include="LastBossHand.cpp" />
+    <ClCompile Include="LastBossSpecialMoves.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="MageBullet.cpp" />
     <ClCompile Include="NormalBullet.cpp" />
