@@ -93,7 +93,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	for (int i = 0; i < WIND_DROP; i++)
 	{
 		volume = GHOST_MIN_DROP + GetRand(GHOST_DROP);
-		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(2 + i));
+		drop_element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}

@@ -18,13 +18,14 @@ SlimeBossBullet::SlimeBossBullet(Location spawn_location, Location player_locati
 	location = spawn_location;
 	location.y += 18;
 	radius = BULLET_RADIUS;
-	speed = BULLET_SPEED;
-	image = 0;
+	//speed = BULLET_SPEED;
 	damage = BULLET_DAMAGE;
 	float radian; //Šp“x
-	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
-	x_speed = speed * cosf(radian);
-	y_speed = speed * sinf(radian);
+	gravity_power = 0;
+
+	x_speed = -((location.x - player_location.x) / 60);
+	y_speed = BULLET_SPEED;
+
 	color = GetColor(24, 168, 203);
 }
 
@@ -41,6 +42,8 @@ SlimeBossBullet::~SlimeBossBullet()
 //-----------------------------------
 void SlimeBossBullet::Update()
 {
+	gravity_power++;
+	y_speed = (-BULLET_SPEED + (gravity_power / 3));
 
 	location.x += x_speed;
 	location.y += y_speed;
