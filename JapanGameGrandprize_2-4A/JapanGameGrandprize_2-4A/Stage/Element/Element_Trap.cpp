@@ -15,7 +15,7 @@ Element_Trap::Element_Trap(short type, Stage* stage,
 	this->type = type;
 	
 	//ƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è‚ğ–³Œø‰»
-	margin_area = { 1000.0f,1000.0f };
+	margin_area = { 0.0f,-9999.0f };
 
 	this->resource = resource;
 	this->images = resource.images;
