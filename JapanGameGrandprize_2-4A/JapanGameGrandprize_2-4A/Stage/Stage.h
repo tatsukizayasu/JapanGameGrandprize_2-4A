@@ -80,6 +80,7 @@ private:
 	short stage_num;
 
 
+
 protected:
 
 

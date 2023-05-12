@@ -91,6 +91,12 @@ private:
 	bool hit_stage;					//ステージのブロックに触れている
 	bool boost;
 
+	int bulletssound;//通常弾のBGM
+	int flysound;//飛ぶ
+	int healsound;//回復
+	int deathsound;//死亡
+
+
 	ATTRIBUTE attribute[6];         //弾の属性
 	const char* attribute_c[6];     //弾の属性の文字列
 	int display_attribute;          //画面に表示させる属性

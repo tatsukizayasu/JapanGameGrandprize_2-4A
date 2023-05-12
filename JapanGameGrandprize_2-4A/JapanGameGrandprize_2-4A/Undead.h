@@ -17,6 +17,7 @@ private:
     int attack_time; //攻撃している時間(デバッグ用)
     float old_distance; //直前のプレイヤーとの距離
     Area size;          //画像サイズ
+    int undeadslash;
 private:
 
     //プレイヤーとの距離

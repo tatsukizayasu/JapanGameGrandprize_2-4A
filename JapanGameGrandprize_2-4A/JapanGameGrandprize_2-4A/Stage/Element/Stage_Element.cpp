@@ -325,7 +325,7 @@ std::vector<int> Stage_Element::GetSounds(short type)
 	switch (type)
 	{
 	case DAMAGE_WALL:
-		filename = "explosion.mp3";
+		filename = "fire.mp3";
 		break;
 
 	case WOODEN_FLOOR:
@@ -374,7 +374,7 @@ std::vector<int> Stage_Element::LoadSounds(const std::string& filename) const
 
 	sounds.push_back(buf);
 
-#if 1
+#if 0
 	//ì«Ç›çûÇ›ÉçÉO
 	for (int i = 0; i < sounds.size(); i++) {
 		printfDx("[%d]ID:%d\t%s\n", i, sounds.at(i), TEXT(filename.c_str()));

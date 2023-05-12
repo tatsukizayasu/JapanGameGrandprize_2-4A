@@ -18,6 +18,8 @@
 //パンチするまでの時間
 #define PUNCH_STANDBY_TIME 60
 
+#define PUNCH_END_STANDBY_TIME 30
+
 //パンチのスピード
 #define PUNCH_SPEED 15
 
@@ -74,6 +76,7 @@ LastBossHand::LastBossHand()
 	teleport_time = 0;
 	attack_interval = 0;
 	punch_standby_time = 0;
+	standby_time = 0;
 	animation = 0;
 	image_argument = 0;
 	size = 0;
@@ -105,6 +108,8 @@ LastBossHand::LastBossHand()
 
 	hit_block.chip = nullptr;
 	hit_block.hit = false;
+	old_stage_hit = hit_block.hit;
+
 }
 
 //-----------------------------------
@@ -209,6 +214,7 @@ void LastBossHand::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
+	old_stage_hit = hit_block.hit;
 
 	hit_block = HitStage(stage);
 
@@ -361,6 +367,10 @@ void LastBossHand::Attack(const Location player_location)
 				teleport_time = 0;
 				punch_start.x = player_location.x;
 				punch_start.y = player_location.y - PUNCH_Y;
+				if (punch_start.y < area.height / 2)
+				{
+					punch_start.y = area.height / 2;
+				}
 			}
 
 			Teleport(punch_start);
@@ -418,17 +428,27 @@ void LastBossHand::Punch()
 {
 	if (punch_standby_time < 0)
 	{
-		location.y += speed;
-		if (hit_block.hit)
+		if (standby_time < 0)
 		{
-			speed = -PUNCH_SPEED;
-			attack = false;
+			location.y += speed;
+		}
+		else
+		{
+			standby_time--;
 		}
 
-		if (location.y < punch_start.y )
+		if (!old_stage_hit && hit_block.hit)
+		{
+			speed = -(PUNCH_SPEED / 3);
+			attack = false;
+			standby_time = PUNCH_END_STANDBY_TIME;
+		}
+
+		if (location.y < punch_start.y)
 		{
 			punch = false;
 		}
+		
 	}
 	else
 	{

@@ -39,7 +39,7 @@ GameMain::GameMain(short stage_num)
 		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
 		break;
 	case 3:
-		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage.png");
+		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage1.png");
 		background_image[1] = LoadGraph("Images/Scene/Stage/3/BackImage2.png");
 		break;
 	default:
@@ -53,7 +53,7 @@ GameMain::GameMain(short stage_num)
 		c = 255;
 	}
 
-	backgraound_blend = 160;
+	backgraound_blend = 220;
 
 	char dis_stage_se[30];
 
@@ -246,7 +246,7 @@ void GameMain::SpawnEnemy()
 
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
-
+	
 	enemy_spawn_volume = spawn.size();
 	enemy = new EnemyBase * [enemy_spawn_volume];
 	for (int i = 0; i < enemy_spawn_volume; i++)
@@ -359,6 +359,7 @@ bool GameMain::EnemyUpdate()
 					case ENEMY_KIND::LAST_BOSS:
 						enemy[i] = new LastBoss(spawn[i].location);
 						is_spawn_boss = true;
+						enemy[i] = new LastBoss(spawn[i].location);
 						break;
 
 					default:
@@ -371,6 +372,16 @@ bool GameMain::EnemyUpdate()
 
 		if (enemy[i] != nullptr)
 		{
+			
+			//ボス部屋に入った際、ボス以外の敵を削除
+			if (is_spawn_boss == true && enemy[i]->GetEnemyKind() < ENEMY_KIND::SLIME_BOSS)
+			{
+				delete enemy[i];
+				enemy[i] = nullptr;
+				i--;
+				break;
+			}
+
 			//Stage03の場合、画面内に収まるまで敵を強制移動
 			if (stage_num == 3 &&
 				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
@@ -387,7 +398,7 @@ bool GameMain::EnemyUpdate()
 				LastBoss* last_boss;
 				last_boss = dynamic_cast<LastBoss*>(enemy[i]);
 
-				player->HpDamage(last_boss->PunchAttack(player));
+				player->HpDamage(last_boss->Hit(player));
 			}
 			else
 			{
@@ -576,8 +587,6 @@ void GameMain::Draw()const
 	stage->DrawObject();
 
 	item_controller->Draw();
-	
-	player->Draw();
 
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
@@ -586,6 +595,10 @@ void GameMain::Draw()const
 			enemy[i]->Draw();
 		}
 	}
+
+	player->Draw();
+
+	
 	bullet_manager->Draw();
 
 	player->PouchDraw();

@@ -17,6 +17,7 @@ Element_Trap::Element_Trap(short type, Stage* stage,
 	//ƒvƒŒƒCƒ„[‚Æ‚Ì“–‚½‚è”»’è‚ð–³Œø‰»
 	margin_area = { 1000.0f,1000.0f };
 
+	this->resource = resource;
 	this->images = resource.images;
 
 	this->stage = stage;
@@ -37,7 +38,7 @@ Element_Trap::~Element_Trap()
 
 void Element_Trap::Update(Player* player)
 {
-
+	
 	if (state == STATE::EXTINGUISHMENT) { return; }
 
 	BulletBase** player_bullet;
@@ -73,6 +74,8 @@ void Element_Trap::Update(Player* player)
 
 	if (state == STATE::EXPLOSION) 
 	{
+		SetPan(resource.sounds.at(0), player, this);
+		PlaySoundMem(resource.sounds.at(0), DX_PLAYTYPE_BACK, TRUE);
 
 		vector<ENEMY_LOCATION> spawn;
 		spawn = stage->GetEnemy_SpawnLocation();
