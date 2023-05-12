@@ -9,6 +9,7 @@
 #include "../MapChip.h"
 #include <tuple>
 
+
 class Player;
 
 
@@ -123,9 +124,11 @@ public:
 	/// <param name = "time">リセットしたいタイマーの秒数</param>
 	void ResetElapsedTime(float time);
 
+	float clamp(float value, float min, float max);
+
 	/// <summary>
 	/// 2Dパン	Setter
 	/// </summary>
 	/// <param name = "time">リセットしたいタイマーの秒数</param>
-	void SetPan(int SoundHandle, Player* player, Stage_Element_Base* base);
+	void PlaySurroundMem(int SoundHandle, Player* player, Stage_Element_Base* base);
 };

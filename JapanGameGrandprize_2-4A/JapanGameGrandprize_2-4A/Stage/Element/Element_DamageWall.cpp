@@ -15,11 +15,7 @@ Element_DamageWall::~Element_DamageWall() = default;
 
 void Element_DamageWall::Update(Player* player)
 {
-	
-	if (CheckSoundMem(resource.sounds.at(0)) == FALSE) {
-		SetPan(resource.sounds.at(0), player, this);
-		PlaySoundMem(resource.sounds.at(0), DX_PLAYTYPE_BACK, TRUE);
-	}
+	PlaySurroundMem(resource.sounds.at(0), player, this);
 
 	//アニメーション更新
 	LoopImages(images, 0.1f, 9, nullptr);
