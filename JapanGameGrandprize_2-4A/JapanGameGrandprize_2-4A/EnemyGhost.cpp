@@ -231,6 +231,7 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 		{
 			location = old_location;
+			left_move = !left_move;
 		}
 	}
 
@@ -240,15 +241,6 @@ void EnemyGhost::Update(const class Player* player, const class Stage* stage)
 	}
 	UpdateDamageLog();
 
-	//ゴーストの画像の向きを決める
-	if (location.x < old_location.x)
-	{
-		left_move = true;
-	}
-	else if (location.x > old_location.x)
-	{
-		left_move = false;
-	}
 
 
 }
@@ -358,6 +350,16 @@ void EnemyGhost::Move(const Location player_location)
 //-----------------------------------
 void  EnemyGhost::Attack(const Location player_location)
 {
+
+	//ゴーストの画像の向きを決める
+	if (location.x < player_location.x)
+	{
+		left_move = false;
+	}
+	else if (location.x > player_location.x)
+	{
+		left_move = true;
+	}
 
 	standby_time--;
 	if (standby_time < 0)
