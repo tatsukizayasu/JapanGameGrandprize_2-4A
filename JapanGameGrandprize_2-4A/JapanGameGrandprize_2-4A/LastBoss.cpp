@@ -5,7 +5,7 @@
 #include "LastBossMagic.h"
 
 //ëÃóÕ
-#define LAST_BOSS_HP 1000
+#define LAST_BOSS_HP 100
 
 //éËÇÃêî
 #define HAND_NUM 2
@@ -75,7 +75,7 @@ LastBoss::LastBoss(Location spawn_location)
 
 	kind = ENEMY_KIND::LAST_BOSS;
 
-	can_special_moves = false;
+	can_special_moves = true;
 	down = false;
 	attack = false;
 	attack_time = 0;
@@ -99,6 +99,7 @@ LastBoss::LastBoss(Location spawn_location)
 	tmp.y = 0;
 
 	special_moves = nullptr;
+	barrier = nullptr;
 }
 
 //-----------------------------------
@@ -119,6 +120,8 @@ LastBoss::~LastBoss()
 	delete[] magic;
 
 	delete special_moves;
+	delete barrier;
+
 }
 
 //-----------------------------------
@@ -136,11 +139,14 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 			if (Revival())
 			{
 				down = false;
-				for (int i = 0; i < HAND_NUM; i++)
+				if (barrier == nullptr)
 				{
-					me_hand = dynamic_cast<LastBossHand*>(hand[i]);
+					for (int i = 0; i < HAND_NUM; i++)
+					{
+						me_hand = dynamic_cast<LastBossHand*>(hand[i]);
 
-					me_hand->Revival();
+						me_hand->Revival();
+					}
 				}
 			}
 		}
@@ -210,12 +216,14 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 
 	UpdateDamageLog();
 
-	/*if ((hp <= 1) && (!can_special_moves))
+	if ((hp <= 1) && (can_special_moves))
 	{
+		can_special_moves = false;
 		hp = 1;
-		can_special_moves = true;
+		barrier = new LastBossBarrier(spawn_location);
+		down_time = 0;
 		attack_state = LAST_BOSS_ATTACK::SPECIAL_MOVES;
-	}*/
+	}
 }
 
 //-----------------------------------
@@ -286,6 +294,21 @@ void  LastBoss::Attack(const Location player_location)
 		Sword();
 		break;
 	case LAST_BOSS_ATTACK::SPECIAL_MOVES:
+		if (barrier != nullptr)
+		{
+			barrier->Update();
+			if (barrier->Break())
+			{
+				down = true;
+				down_time = DOWN_TIME;
+				delete barrier;
+				barrier = nullptr;
+			}
+		}
+		if (special_moves != nullptr)
+		{
+			special_moves->Update();
+		}
 		break;
 	case LAST_BOSS_ATTACK::NONE:
 		AttackNone();
@@ -595,6 +618,16 @@ AttackResource LastBoss::Hit(const BoxCollider* player)
 	case LAST_BOSS_ATTACK::SWORD:
 		break;
 	case LAST_BOSS_ATTACK::SPECIAL_MOVES:
+		if (special_moves != nullptr)
+		{
+			if (special_moves->GetEnd())
+			{
+				ret.type_count = 1;
+				ENEMY_TYPE type[1] = { ENEMY_TYPE::NORMAL };
+				ret.type = type;
+				ret.damage = special_moves->GetDamage();
+			}
+		}
 		break;
 	case LAST_BOSS_ATTACK::NONE:
 		break;
@@ -706,13 +739,24 @@ bool LastBoss::CheckHitBulelt(const BulletBase* bullet)
 
 	if (!ret)
 	{
-		for (int i = 0; i < HAND_NUM; i++)
+		if (barrier != nullptr)
 		{
-			if (hand[i]->HitSphere(bullet))
+			if (barrier->HitSphere(bullet))
 			{
 				ret = true;
-				hand[i]->HitBullet(bullet);
-				break;
+				barrier->HitBullet(bullet);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < HAND_NUM; i++)
+			{
+				if (hand[i]->HitSphere(bullet))
+				{
+					ret = true;
+					hand[i]->HitBullet(bullet);
+					break;
+				}
 			}
 		}
 	}
@@ -730,10 +774,6 @@ void LastBoss::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-
-	DrawHPBar(LAST_BOSS_HP);
-	DrawDamageLog();
-
 	if (down)
 	{
 		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
@@ -744,6 +784,17 @@ void LastBoss::Draw() const
 		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0x777777, TRUE);
 	}
+
+	if (barrier != nullptr)
+	{
+		barrier->DrawDurabilityBar();
+		barrier->Draw();
+	}
+	else
+	{
+		DrawHPBar(LAST_BOSS_HP);
+	}
+	DrawDamageLog();
 
 	for (int i = 0; i < HAND_NUM; i++)
 	{
