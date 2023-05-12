@@ -92,6 +92,8 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+	stage->UpdateStageBackground(is_spawn_boss);
+	
 #ifdef _DEBUG
 
 #else
@@ -114,15 +116,6 @@ AbstractScene* GameMain::Update()
 	player->Update();
 	stage->Update(player);
 
-	//”wŒi‰æ‘œ‚ÌXV
-	if (stage_num != 3)
-	{
-		background_location = CameraWork::GetCamera();
-	}//Stage03‚Ìê‡A”wŒi‚ğ“Æ—§‚É“®‚©‚·
-	else
-	{
-		background_location.x += 10.0f;
-	}
 
 	// ƒ{ƒX‚ğ“|‚µ‚½ê‡
 	if (EnemyUpdate() == true)
