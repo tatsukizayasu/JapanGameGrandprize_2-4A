@@ -108,6 +108,7 @@ Dragon::Dragon(Location spawn_location)
 	}
 
 	image = LoadGraph("Images/Enemy/doragon.png"); //âÊëúì«çûÇ›
+	walk_image = LoadGraph("Images/Enemy/dragonwalk.png");
 	LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, fly_image); //í èÌ
 
 }
@@ -283,7 +284,7 @@ void Dragon::Draw() const
 		{
 		case 0:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, image, TRUE, !left_move);
+				M_PI / 180, walk_image, TRUE, !left_move);
 			break;
 		case 1:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
