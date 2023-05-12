@@ -43,6 +43,9 @@ ELEMENT_ITEM ElementItem::GetType() const
 //-----------------------------------
 void ElementItem::SetVolume(unsigned int num)
 {
-
-	volume = num;
+		volume = num;
+		if (volume > 999)
+		{
+			volume = 999;
+		}
 }

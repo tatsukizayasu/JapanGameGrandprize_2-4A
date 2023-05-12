@@ -51,6 +51,7 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 	location.x = player_x;
 	location.y = player_y - 5;
 	chemical_formula = chemical;
+	damage_second = chemical->damage_per_second;
 	damage = chemical->damage;
 	debuff_time = chemical->time;
 	attribute = chemical->atribute;
@@ -938,7 +939,7 @@ bool NormalBullet::NormalBulletEfect()		//着弾エフェクト
 
 int NormalBullet::GetDamageParSecond() const
 {
-	return chemical_formula->damage_per_second;
+	return damage_second;
 }
 
 bool NormalBullet::GetDelete_flg() {
