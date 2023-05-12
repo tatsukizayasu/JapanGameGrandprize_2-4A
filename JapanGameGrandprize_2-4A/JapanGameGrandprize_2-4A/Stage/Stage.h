@@ -63,6 +63,7 @@ private:
 	//エネミーのID
 	std::set<short> enemy_id{ 200,201,202,203,204,205,206,207,208,209,210 };
 
+
 	//背景画像
 	int background_images;
 	int block_images[50];
@@ -78,6 +79,15 @@ private:
 
 	//ステージの番号
 	short stage_num;
+
+	//背景画像
+	int background_image[3];
+	//背景画像座標
+	Location background_location;
+	//背景画像RGB
+	int backgraound_image_color[3];
+	//背景ブレンド値
+	int backgraound_blend;
 
 
 
@@ -102,9 +112,24 @@ public:
 	void Update(Player* player);
 
 	/// <summary>
+	/// ステージ背景の更新
+	/// </summary>
+	void UpdateStageBackground(bool is_spawn_boss);
+
+	/// <summary>
 	/// ステージの描画
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// ステージ背景の描画
+	/// </summary>
+	void DrawStageBackground();
+
+	/// <summary>
+	/// オブジェクト 描画関数
+	/// </summary>
+	void DrawObject();
 
 	/// <summary>
 	/// ステージの読み込み
@@ -192,9 +217,4 @@ public:
 	/// エレメントパラメータ設定関数
 	/// </summary>
 	void SetElement();
-
-	/// <summary>
-	/// オブジェクト 描画関数
-	/// </summary>
-	void DrawObject();
 };
