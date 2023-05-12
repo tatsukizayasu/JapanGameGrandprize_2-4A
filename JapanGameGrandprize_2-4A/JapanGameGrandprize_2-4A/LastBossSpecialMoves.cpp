@@ -25,6 +25,7 @@
 //落下スピード
 #define EFFECT_FALL_SPEED 3
 
+//ダメージ
 #define SPECIAL_MOVES_DAMAGE 500
 //-----------------------------------
 //コンストラクタ
@@ -59,7 +60,7 @@ LastBossSpecialMoves::LastBossSpecialMoves(const Location spawn_location)
 	}
 
 	//本体の画像
-	LoadDivGraph("Images/Enemy/SpecialMoves/Body.png", EFFECT_BODY_IMAGES, 5, 3, 480, 480, effect[0].images);
+	LoadDivGraph("Images/Enemy/SpecialMoves/雫_赤.png", EFFECT_BODY_IMAGES, 5, 3, 480, 480, effect[0].images);
 
 	//衝撃波の画像
 	for (int i = 1; i < 4; i++)
@@ -70,11 +71,11 @@ LastBossSpecialMoves::LastBossSpecialMoves(const Location spawn_location)
 	//オーラの画像
 	for (int i = 4; i < 6; i++)
 	{
-		effect[i].images[0] = LoadGraph("Images/Enemy/SpecialMoves/Aura.png");
+		effect[i].images[0] = LoadGraph("Images/Enemy/SpecialMoves/nc183332.png");
 	}
 
 	//爆裂エフェクトの画像
-	effect[6].images[0] = LoadGraph("Images/Enemy/SpecialMoves/Explosion.png");
+	effect[6].images[0] = LoadGraph("Images/Enemy/SpecialMoves/炸裂エフェクト-2.png");
 
 	tick = 0;
 

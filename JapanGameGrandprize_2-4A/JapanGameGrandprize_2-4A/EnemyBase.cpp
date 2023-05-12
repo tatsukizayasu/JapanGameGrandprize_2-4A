@@ -221,6 +221,24 @@ STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 //-----------------------------------
 void EnemyBase::Poison()
 {
+	int i;
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
 
 	if (poison)
 	{
@@ -229,6 +247,9 @@ void EnemyBase::Poison()
 		{
 			if (poison_time % POISON_DAMAGE_FLAME == 0)
 			{
+				damage_log[i].log = true;
+				damage_log[i].time = LOG_TIME;
+				damage_log[i].damage = poison_damage;
 				hp -= poison_damage;
 			}
 		}

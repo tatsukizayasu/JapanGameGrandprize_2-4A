@@ -936,7 +936,7 @@ bool NormalBullet::NormalBulletEfect()		//着弾エフェクト
 	return false;
 }
 
-int NormalBullet::GetDamageParSecond()
+int NormalBullet::GetDamageParSecond() const
 {
 	return chemical_formula->damage_per_second;
 }
