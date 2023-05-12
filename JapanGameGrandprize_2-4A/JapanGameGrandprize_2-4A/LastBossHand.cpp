@@ -30,7 +30,7 @@
 #define PUNCH_Y 200
 
 //HP
-#define HAND_HP 200
+#define HAND_HP 20
 
 //Ž€–S‚µ‚Ä‚¢‚éŽžŠÔ
 #define DEATH_TIME 1200
