@@ -196,37 +196,46 @@ void Stage_Element_Base::ResetElapsedTime(float time)
 	}
 }
 
-void Stage_Element_Base::SetPan(int SoundHandle, Player* player, Stage_Element_Base* base)
+float Stage_Element_Base::clamp(float value, float min, float max)
 {
+	if (value < min)
+	{
+		return min;
+	}
+	else if (value > max)
+	{
+		return max;
+	}
+	return value;
+}
+
+void Stage_Element_Base::PlaySurroundMem(int SoundHandle, Player* player, Stage_Element_Base* base)
+{
+	const float screenWidth = 1280.0f; // 画面の横サイズ
+	const float panRange = 255.0f; // パンの範囲
+
 	Location player_location = player->GetLocation();
 	Location base_location = base->GetLocation();
 
 	
 	float result = base_location.x - player_location.x;
-	result = fmodf(result, 1280);
+	// 位置を画面の幅で正規化 (-1.0 ～ 1.0 の範囲におさめる)
+	result /= (screenWidth / 2.0f);
 
-	int pan = static_cast<int>(result) % 255;
+	// 正規化された値をパンの範囲にスケーリング
+	result *= panRange;
 
-	//printfDx("%d\n", pan);
+	// 結果がパンの範囲を超えないように調整
+	int pan = static_cast<int>(clamp(result, -panRange, panRange));
+
 
 	ChangePanSoundMem(pan, SoundHandle);
-}
 
-//std::shared_ptr<Stage_Element_Base> Stage_Element_Base::SearchElement(short type)
-//{
-//	for (auto elem : element) {
-//		if (elem != nullptr && elem->GetType() == type) 
-//		{
-//			//MapChip* mapchip = elem->GetMapChip();
-//
-//			if (mapchip->GetLocation().y > elem->GetMapChip()->GetLocation().y
-//				&& mapchip->GetLocation().x == elem->GetMapChip()->GetLocation().x)
-//			{
-//				SearchElement(type)->GetMapChip()->SetArea(Area{ -MAP_CHIP_SIZE, -MAP_CHIP_SIZE });
-//				SearchElement(type)->GetMapChip()->SetImage(0);
-//				printfDx("aa");
-//				return elem;
-//			}
-//		}
-//	}
-//}
+	if (CheckSoundMem(resource.sounds.at(0)) == FALSE) {
+
+		PlaySoundMem(SoundHandle, DX_PLAYTYPE_BACK, TRUE);
+
+	}
+
+
+}

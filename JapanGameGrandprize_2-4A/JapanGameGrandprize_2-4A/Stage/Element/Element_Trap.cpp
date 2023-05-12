@@ -74,8 +74,7 @@ void Element_Trap::Update(Player* player)
 
 	if (state == STATE::EXPLOSION) 
 	{
-		SetPan(resource.sounds.at(0), player, this);
-		PlaySoundMem(resource.sounds.at(0), DX_PLAYTYPE_BACK, TRUE);
+		PlaySurroundMem(resource.sounds.at(0), player, this);
 
 		vector<ENEMY_LOCATION> spawn;
 		spawn = stage->GetEnemy_SpawnLocation();
