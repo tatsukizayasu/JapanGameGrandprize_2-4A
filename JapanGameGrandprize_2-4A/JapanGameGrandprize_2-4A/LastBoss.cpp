@@ -157,6 +157,11 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 				location.y += DOWN_MOVE_SPEED;
 			}
 		}
+
+		if (state == ENEMY_STATE::DEATH)
+		{
+			can_delete = true;
+		}
 	}
 	else
 	{
@@ -172,35 +177,39 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 			Attack(player->GetLocation());
 			break;
 		case ENEMY_STATE::DEATH:
+			can_delete = true;
 			break;
 		default:
 			break;
 		}
 
-		for (int i = 0; i < HAND_NUM; i++)
+		if (barrier == nullptr)
 		{
-			hand[i]->Update(player, stage);
-		}
-
-		if ((hand[0]->GetState() == ENEMY_STATE::DEATH) &&
-			(hand[1]->GetState() == ENEMY_STATE::DEATH))
-		{
-			down = true;
-			down_time = DOWN_TIME;
-
-			if (magic != nullptr)
+			for (int i = 0; i < HAND_NUM; i++)
 			{
-				for (int i = 0; i < magic_volume; i++)
-				{
-					delete magic[i];
-				}
-				delete[] magic;
+				hand[i]->Update(player, stage);
 			}
 
-			magic = nullptr;
+			if ((hand[0]->GetState() == ENEMY_STATE::DEATH) &&
+				(hand[1]->GetState() == ENEMY_STATE::DEATH))
+			{
+				down = true;
+				down_time = DOWN_TIME;
 
-			attack_state = LAST_BOSS_ATTACK::NONE;
-			magic_interval = MAGIC_INTERVAL;
+				if (magic != nullptr)
+				{
+					for (int i = 0; i < magic_volume; i++)
+					{
+						delete magic[i];
+					}
+					delete[] magic;
+				}
+
+				magic = nullptr;
+
+				attack_state = LAST_BOSS_ATTACK::NONE;
+				magic_interval = MAGIC_INTERVAL;
+			}
 		}
 
 		punch_interval--;
@@ -216,13 +225,9 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 
 	UpdateDamageLog();
 
-	if ((hp <= 1) && (can_special_moves))
+	if (CheckHp())
 	{
-		can_special_moves = false;
-		hp = 1;
-		barrier = new LastBossBarrier(spawn_location);
-		down_time = 0;
-		attack_state = LAST_BOSS_ATTACK::SPECIAL_MOVES;
+		state = ENEMY_STATE::DEATH;
 	}
 }
 
@@ -348,8 +353,6 @@ void LastBoss::InitMagic()
 		magic[i] = nullptr;
 	}
 	attack_state = LAST_BOSS_ATTACK::MAGIC;
-
-
 }
 
 //-----------------------------------
@@ -719,6 +722,20 @@ void LastBoss::HitBullet(const BulletBase* bullet)
 	damage_log[i].time = LOG_TIME;
 	damage_log[i].damage = damage;
 	hp -= damage;
+
+	if (hp < 0)
+	{
+		hp = 0;
+	}
+
+	if ((hp <= 1) && (can_special_moves))
+	{
+		can_special_moves = false;
+		hp = 1;
+		barrier = new LastBossBarrier(spawn_location);
+		down_time = 0;
+		attack_state = LAST_BOSS_ATTACK::SPECIAL_MOVES;
+	}
 }
 
 //-----------------------------------

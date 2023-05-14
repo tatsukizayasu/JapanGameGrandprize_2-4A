@@ -12,23 +12,31 @@
 //エフェクトの本体のアニメーション
 #define BARRIER_ANIMATION 2
 
+
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
 LastBossBarrier::LastBossBarrier(const Location spawn_location)
 {
+	end_deployment = false;
+
 	location = spawn_location;
-	radius = 80;
+	radius = 160;
 	images = new int[14];
 
 	LoadDivGraph("Images/Enemy/SpecialMoves/barrier2_2.png", BARRIER_NUM, 2, 7, 384, 383,images);
 
-	animation = 0;
-	size = 1.0;
+	for (int i = 0; i < BARRIER_VOLUME; i++)
+	{
+		animation[i] = 0;
+	}
+	size = 2.0;
 	angle = 0.0;
 	count = 0;
 	durability = DURABILITY;
 	old_durability = durability;
+	volume = BARRIER_VOLUME;
 }
 
 //-----------------------------------
@@ -50,30 +58,65 @@ void LastBossBarrier::Update()
 {
 	count++;
 
-	if (animation < 9)
+	if (!end_deployment)
 	{
-		if (count % BARRIER_ANIMATION == 0)
-		{
-			animation++;
-		}
+		Deployment();
 	}
 	else
 	{
-		if ((durability % 100) < (old_durability % 100))
+		if ((durability / 20) < (old_durability / 20))
 		{
-			animation++;
+			for (int i = 0; i < ((old_durability / 20) - (durability / 20)); i++)
+			{
+				animation[volume - 1]++;
+				volume--;
+				if (volume <= 1)
+				{
+					volume = BARRIER_VOLUME;
+				}
+			}
+			
 		}
+		old_durability = durability;
 	}
 }
+//バリアの展開
+void LastBossBarrier::Deployment()
+{
+	int end_deployment_count = 0;
 
+	if (count % BARRIER_ANIMATION == 0)
+	{
+		for (int i = 0; i < BARRIER_VOLUME; i++)
+		{
+			if (animation[i] < 9)
+			{
+				animation[i]++;
+			}
+			else
+			{
+				end_deployment_count++;
+
+			}
+		}
+	}
+
+	if (BARRIER_VOLUME <= end_deployment_count)
+	{
+		end_deployment = true;
+		animation[0] = 11;
+	}
+}
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
 void LastBossBarrier::HitBullet(const BulletBase* bullet)
 {
-	old_durability = durability;
-
 	durability -= bullet->GetDamage();
+	if (durability < 0)
+	{
+		durability = 0;
+	}
 }
 
 //-----------------------------------
@@ -81,10 +124,21 @@ void LastBossBarrier::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 void LastBossBarrier::Draw() const
 {
-	Location draw_location = CameraWork::GetCamera();
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+	draw_location = draw_location - camera;
 
-	draw_location = draw_location + location;
-	DrawRotaGraphF(draw_location.x, draw_location.y, size, angle, images[animation], TRUE);
+	DrawCircle(draw_location.x, draw_location.y,radius,0x0000ff,TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
+	for (int i = 0; i < BARRIER_VOLUME; i++)
+	{
+		if (animation[i] <BARRIER_NUM)
+		{
+			DrawRotaGraphF(draw_location.x, draw_location.y, size, angle, images[animation[i]], TRUE);
+		}
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
 }
 
 //-----------------------------------
@@ -104,7 +158,7 @@ bool LastBossBarrier::Break() const
 {
 	bool ret = false;
 
-	if (durability < 0)
+	if (durability <= 0)
 	{
 		ret = true;
 	}
