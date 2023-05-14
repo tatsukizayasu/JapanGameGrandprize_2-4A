@@ -215,11 +215,6 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 		punch_interval--;
 		magic_interval--;
 		sword_interval--;
-
-		if (special_moves != nullptr)
-		{
-			special_moves->Update();
-		}
 	}
 	hit_stage = HitStage(stage);
 
@@ -240,7 +235,7 @@ bool LastBoss::Revival()
 
 	location.y -= DOWN_MOVE_SPEED / 2;
 
-	if (spawn_location == location)
+	if (spawn_location.y <= location.y)
 	{
 		ret = true;
 	}
@@ -308,6 +303,8 @@ void  LastBoss::Attack(const Location player_location)
 				down_time = DOWN_TIME;
 				delete barrier;
 				barrier = nullptr;
+				delete special_moves;
+				special_moves = nullptr;
 			}
 		}
 		if (special_moves != nullptr)
@@ -679,49 +676,53 @@ void LastBoss::HitBullet(const BulletBase* bullet)
 {
 	int i;
 	int damage = 0;
-	for (i = 0; i < LOG_NUM; i++)
+
+	if (barrier == nullptr)
 	{
-		if (!damage_log[i].log)
+		for (i = 0; i < LOG_NUM; i++)
 		{
+			if (!damage_log[i].log)
+			{
+				break;
+			}
+		}
+
+		if (LOG_NUM <= i)
+		{
+			for (i = 0; i < LOG_NUM - 1; i++)
+			{
+				damage_log[i] = damage_log[i + 1];
+			}
+			i = LOG_NUM - 1;
+
+		}
+
+		switch (bullet->GetAttribute())
+		{
+		case ATTRIBUTE::NORMAL:
+			damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+			damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
+			break;
+		case ATTRIBUTE::EXPLOSION:
+			damage = bullet->GetDamage();
+			damage_log[i].congeniality = CONGENIALITY::NOMAL;
+			break;
+		case ATTRIBUTE::MELT:
+			damage = bullet->GetDamage();
+			damage_log[i].congeniality = CONGENIALITY::NOMAL;
+			break;
+		case ATTRIBUTE::POISON:
+		case ATTRIBUTE::PARALYSIS:
+		case ATTRIBUTE::HEAL:
+		default:
 			break;
 		}
+
+		damage_log[i].log = true;
+		damage_log[i].time = LOG_TIME;
+		damage_log[i].damage = damage;
+		hp -= damage;
 	}
-
-	if (LOG_NUM <= i)
-	{
-		for (i = 0; i < LOG_NUM - 1; i++)
-		{
-			damage_log[i] = damage_log[i + 1];
-		}
-		i = LOG_NUM - 1;
-
-	}
-
-	switch (bullet->GetAttribute())
-	{
-	case ATTRIBUTE::NORMAL:
-		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
-		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
-		break;
-	case ATTRIBUTE::EXPLOSION:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
-		break;
-	case ATTRIBUTE::MELT:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
-		break;
-	case ATTRIBUTE::POISON:
-	case ATTRIBUTE::PARALYSIS:
-	case ATTRIBUTE::HEAL:
-	default:
-		break;
-	}
-
-	damage_log[i].log = true;
-	damage_log[i].time = LOG_TIME;
-	damage_log[i].damage = damage;
-	hp -= damage;
 
 	if (hp < 0)
 	{
@@ -733,7 +734,9 @@ void LastBoss::HitBullet(const BulletBase* bullet)
 		can_special_moves = false;
 		hp = 1;
 		barrier = new LastBossBarrier(spawn_location);
-		down_time = 0;
+		special_moves = new LastBossSpecialMoves(spawn_location);
+		down = false;
+		location = spawn_location;
 		attack_state = LAST_BOSS_ATTACK::SPECIAL_MOVES;
 	}
 }

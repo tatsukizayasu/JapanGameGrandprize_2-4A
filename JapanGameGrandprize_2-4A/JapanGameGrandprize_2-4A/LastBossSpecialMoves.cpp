@@ -7,6 +7,9 @@
 //エフェクトの数
 #define EFFECT_NUM 7
 
+//チャージエフェクトの数
+#define CHARGE_EFFECT_NUM 10 
+
 //本体の画像の枚数
 #define EFFECT_BODY_IMAGES 15
 
@@ -23,10 +26,19 @@
 #define MAX_ALPFA_BREND 255
 
 //落下スピード
-#define EFFECT_FALL_SPEED 3
+#define EFFECT_SPEED 3
+
+//チャージエフェクトの距離
+#define CHARGE_EFFECT_DISTANCE 200
 
 //ダメージ
 #define SPECIAL_MOVES_DAMAGE 500
+
+//チャージ時間
+#define CHARGE_TIME 60 * 5
+
+#define SPAWN_INTERVAL 5
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -34,11 +46,13 @@ LastBossSpecialMoves::LastBossSpecialMoves(const Location spawn_location)
 {
 	end = false;
 	effect = new Effect[EFFECT_NUM];
+
 	//エフェクトの初期化
 	for (int i = 0; i < EFFECT_NUM; i++)
 	{
 		effect[i].draw = false;
 		effect[i].location = spawn_location;
+		effect[i].location.y = -50;
 		effect[i].animation = 0;
 		if ((1 <= i) && (i < 4))
 		{
@@ -49,8 +63,10 @@ LastBossSpecialMoves::LastBossSpecialMoves(const Location spawn_location)
 			effect[i].size = 0.3;
 		}
 		effect[i].angle = 0.0;
-		effect[i].alpfa_brend = 255;
+		effect[i].alpfa_brend = MAX_ALPFA_BREND;
 	}
+
+	effect[6].size = 0.01;
 
 	/*画像の読み込み*/
 	effect[0].images = new int[EFFECT_BODY_IMAGES];
@@ -77,9 +93,24 @@ LastBossSpecialMoves::LastBossSpecialMoves(const Location spawn_location)
 	//爆裂エフェクトの画像
 	effect[6].images[0] = LoadGraph("Images/Enemy/SpecialMoves/炸裂エフェクト-2.png");
 
+	charge_effect = new Effect[CHARGE_EFFECT_NUM];
+	for (int i = 0; i < CHARGE_EFFECT_NUM; i++)
+	{
+		charge_effect[i].draw = false;
+		charge_effect[i].location.x = effect[0].location.x 
+			+ GetRand(CHARGE_EFFECT_DISTANCE * 2) - CHARGE_EFFECT_DISTANCE;
+		charge_effect[i].location.y = effect[0].location.y + GetRand(CHARGE_EFFECT_DISTANCE);
+		charge_effect[i].images = new int[EFFECT_BODY_IMAGES];
+		LoadDivGraph("Images/Enemy/SpecialMoves/雫_赤.png", EFFECT_BODY_IMAGES, 5, 3, 480, 480, charge_effect[i].images);
+		charge_effect[i].animation = GetRand(EFFECT_BODY_IMAGES - 1);
+		charge_effect[i].size = (static_cast<double>(GetRand(10)) + 10)/ 100.0;
+		charge_effect[i].angle = 0.0;
+		charge_effect[i].alpfa_brend = GetRand(55) + 200;
+	}
+
 	tick = 0;
 
-	state = SPECIAL_MOVES_STATE::FALL;
+	state = SPECIAL_MOVES_STATE::CHARGE;
 
 }
 
@@ -107,6 +138,16 @@ LastBossSpecialMoves::~LastBossSpecialMoves()
 
 	//エフェクトの削除
 	delete[] effect;
+
+	for (int i = 0; i < CHARGE_EFFECT_NUM; i++)
+	{
+		for (int j = 0; j < EFFECT_BODY_IMAGES; i++)
+		{
+			charge_effect[i].images[j];
+		}
+		charge_effect[i].images;
+	}
+	delete[] charge_effect;
 }
 
 //-----------------------------------
@@ -118,13 +159,63 @@ void LastBossSpecialMoves::Update()
 
 	switch (state)
 	{
+	case SPECIAL_MOVES_STATE::CHARGE:
+	{
+		int speed[2] = { EFFECT_SPEED ,EFFECT_SPEED };
+
+		float radian = 0;
+
+		for (int i = 0; i < CHARGE_EFFECT_NUM; i++)
+		{
+			if (charge_effect[i].draw)
+			{
+				radian = atan2f(effect[0].location.y - charge_effect[i].location.y,
+					effect[0].location.x - charge_effect[i].location.x);
+
+				speed[0] = static_cast<int>(EFFECT_SPEED * cosf(radian));
+				speed[1] = static_cast<int>(EFFECT_SPEED * sinf(radian));
+
+				charge_effect[i].location.x += speed[0];
+				charge_effect[i].location.y += speed[1];
+
+
+				if (charge_effect[i].location.y <= -50)
+				{
+					charge_effect[i].draw = false;
+				}
+
+				if (tick % EFFECT_BODY_ANIMATION == 0) //アニメーション
+				{
+					charge_effect[i].animation = (charge_effect[i].animation++) % EFFECT_BODY_IMAGES;
+				}
+			}
+			else
+			{
+				if (tick % SPAWN_INTERVAL == 0)
+				{
+					charge_effect[i].draw = true;
+					charge_effect[i].location.x = effect[0].location.x
+						+ GetRand(CHARGE_EFFECT_DISTANCE * 2) - CHARGE_EFFECT_DISTANCE;
+					charge_effect[i].location.y = effect[0].location.y +
+						GetRand(CHARGE_EFFECT_DISTANCE);
+					charge_effect[i].alpfa_brend = GetRand(55) + 200;
+				}
+			}
+		}
+
+		if (CHARGE_TIME < tick) //チャージ終了
+		{
+			state = SPECIAL_MOVES_STATE::FALL;
+		}
+	}
+		break;
 	case SPECIAL_MOVES_STATE::FALL:
 		for (int i = 0; i < EFFECT_NUM; i++)
 		{
 			switch (i)
 			{
 			case 0: //本体
-				effect[i].location.y += EFFECT_FALL_SPEED;
+				effect[i].location.y += EFFECT_SPEED;
 				if (!effect[i].draw)
 				{
 					effect[i].draw = true;
@@ -139,7 +230,7 @@ void LastBossSpecialMoves::Update()
 				break;
 			case 4: //オーラ
 			case 5:
-				effect[i].location.y += EFFECT_FALL_SPEED;
+				effect[i].location.y += EFFECT_SPEED;
 
 				if (effect[i].draw)
 				{
@@ -181,14 +272,15 @@ void LastBossSpecialMoves::Update()
 				case 1:
 				case 2:
 				case 3:
-				case 6:
 					effect[i].location = effect[0].location;
 					effect[i].draw = true;
-					effect[i].alpfa_brend = MAX_ALPFA_BREND;
 					break;
 				case 4:
 				case 5:
 					effect[i].draw = false;
+					break;
+				case 6:
+					effect[i].location = effect[0].location;
 					break;
 				case 0:
 				default:
@@ -203,17 +295,14 @@ void LastBossSpecialMoves::Update()
 			switch (i)
 			{
 			case 0: //本体
-				effect[i].size += 0.0181;
+				effect[i].size -= 0.0181;
 
-				if (effect[i].size < 0.0000)
+				if ((effect[i].draw) && (effect[i].size < 0.000))
 				{
 					effect[i].draw = false;
-
-					for (int j = 0; j < 2; j++)
-					{
-						effect[4 + j].draw = true;
-					}
+					effect[6].draw = true;
 				}
+				
 				break;
 			case 1:
 			case 2:
@@ -225,26 +314,27 @@ void LastBossSpecialMoves::Update()
 				}
 				else
 				{
-					effect[i].size *= 1.04;
+					effect[i].size *= 1.1;
 				}
 
 				effect[i].location.x = effect[0].location.x +
 					(static_cast<double>(rand() % 40) - 20) * (effect[i].size / 3);		//-20 ～ 19
 				effect[i].location.y = effect[0].location.y +
 					(static_cast<double>(rand() % 40) - 20) * (effect[i].size / 3);		//-20 ～ 19
-
-				break;
-			case 4: //爆裂
-			case 5:
-				break;
-			case 6:
-				effect[i].size += 1.20;
-
-				if (effect[i].size > 1.500)
+				break;			
+			case 6: //爆裂
+				if (effect[i].draw)
 				{
-					effect[i].draw = false;
+					effect[i].size *= 1.20;
+
+					if (effect[i].size > 1.5)
+					{
+						effect[i].draw = false;
+					}
 				}
 				break;
+			case 4: //オーラ
+			case 5:
 			default:
 				break;
 			}
@@ -261,17 +351,39 @@ void LastBossSpecialMoves::Update()
 //-----------------------------------
 void LastBossSpecialMoves::Draw() const
 {
-	Location draw_location = CameraWork::GetCamera();
-	for (int i = 0; i < EFFECT_NUM; i++)
+	Location draw_location = {};
+	Location camera = CameraWork::GetCamera();
+ 	if (state == SPECIAL_MOVES_STATE::CHARGE)
 	{
-		if (effect[i].draw)
+		for (int i = 0; i < CHARGE_EFFECT_NUM; i++)
 		{
-			draw_location = effect[i].location - draw_location;	//描画座標の計算
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, effect[i].alpfa_brend);
-			DrawRotaGraphF(draw_location.x, draw_location.y, effect[i].size,
-				effect[i].angle, effect[i].images[effect[i].animation], TRUE, FALSE, FALSE);
+			if (charge_effect[i].draw)
+			{
+				draw_location = charge_effect[i].location - camera;	//描画座標の計算
+
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, charge_effect[i].alpfa_brend);
+
+				DrawRotaGraphF(draw_location.x, draw_location.y, charge_effect[i].size,
+					charge_effect[i].angle, charge_effect[i].images[charge_effect[i].animation], TRUE, FALSE, FALSE);
+			}
 		}
 	}
+	else
+	{
+		for (int i = 0; i < EFFECT_NUM; i++)
+		{
+			if (effect[i].draw)
+			{
+				draw_location = effect[i].location - camera;	//描画座標の計算
+
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, effect[i].alpfa_brend);
+
+				DrawRotaGraphF(draw_location.x, draw_location.y, effect[i].size,
+					effect[i].angle, effect[i].images[effect[i].animation], TRUE, FALSE, FALSE);
+			}
+		}
+	}
+	
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
 
