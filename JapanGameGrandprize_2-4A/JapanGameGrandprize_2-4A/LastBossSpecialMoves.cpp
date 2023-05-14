@@ -66,7 +66,7 @@ LastBossSpecialMoves::LastBossSpecialMoves(const Location spawn_location)
 		effect[i].alpfa_brend = MAX_ALPFA_BREND;
 	}
 
-	effect[6].size = 0.01;
+	effect[6].size = 0.05;
 
 	/*‰æ‘œ‚Ì“Ç‚İ‚İ*/
 	effect[0].images = new int[EFFECT_BODY_IMAGES];

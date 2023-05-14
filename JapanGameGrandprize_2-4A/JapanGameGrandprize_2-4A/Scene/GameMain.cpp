@@ -28,7 +28,7 @@
 //-----------------------------------
 GameMain::GameMain(short stage_num)
 {
-	this->stage_num = 5;
+	this->stage_num = stage_num;
 
 #undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚İ‚İ
