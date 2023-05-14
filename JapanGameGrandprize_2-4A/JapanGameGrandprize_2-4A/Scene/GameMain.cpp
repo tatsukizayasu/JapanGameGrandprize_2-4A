@@ -28,7 +28,7 @@
 //-----------------------------------
 GameMain::GameMain(short stage_num)
 {
-	this->stage_num = stage_num;
+	this->stage_num = 5;
 
 #undef DOT_BY_DOT
 	//”wŒi‰æ‘œ“Ç‚İ‚İ
@@ -359,7 +359,6 @@ bool GameMain::EnemyUpdate()
 					case ENEMY_KIND::LAST_BOSS:
 						enemy[i] = new LastBoss(spawn[i].location);
 						is_spawn_boss = true;
-						enemy[i] = new LastBoss(spawn[i].location);
 						break;
 
 					default:

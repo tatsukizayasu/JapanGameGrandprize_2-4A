@@ -568,6 +568,10 @@ void LastBossHand::HitBullet(const BulletBase* bullet)
 	damage_log[i].damage = damage;
 	hp -= damage;
 
+	if (hp < 0)
+	{
+		hp = 0;
+	}
 }
 
 //-----------------------------------
