@@ -24,15 +24,6 @@ private:
     //ボスがスポーンしたかのフラグ
     bool is_spawn_boss;
 
-    //背景画像
-    int background_image[3];
-    //背景画像座標
-    Location background_location;
-    //背景画像RGB
-    int backgraound_image_color[3];
-    //背景ブレンド値
-    int backgraound_blend;
-
 
     //操作間隔時間
     int input_margin;
