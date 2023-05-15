@@ -200,8 +200,24 @@ void Pouch::ExplosionTabDraw() const
 	{
 		if (ComparisonElement(chemical_formula_explosion[i]))
 		{
-			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
-			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_explosion[i].name_image, true);
+			if (select_explosion.make_bool)
+			{
+				if (select_explosion.tag_number == chemical_formula_explosion[i].tag_number)
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_explosion[i].name_image, true);
+				}
+				else
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_explosion[i].dark_name_image, true);
+				}
+			}
+			else
+			{
+				DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+				DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_explosion[i].name_image, true);
+			}
 		}
 		else
 		{
@@ -230,8 +246,24 @@ void Pouch::MeltTabDraw() const
 	{
 		if (ComparisonElement(chemical_formula_melt[i]))
 		{
-			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
-			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_melt[i].name_image, true);
+			if (select_melt.make_bool)
+			{
+				if (select_melt.tag_number == chemical_formula_melt[i].tag_number)
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_melt[i].name_image, true);
+				}
+				else
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_melt[i].dark_name_image, true);
+				}
+			}
+			else
+			{
+				DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+				DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_melt[i].name_image, true);
+			}
 		}
 		else
 		{
@@ -262,14 +294,29 @@ void Pouch::ParalysisTabDraw()const
 	{
 		if (ComparisonElement(chemical_formula_pararysis[i]))
 		{
-			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
-			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].name_image, true);
+			if (select_pararysis.make_bool)
+			{
+				if (select_pararysis.tag_number == chemical_formula_pararysis[i].tag_number)
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].name_image, true);
+				}
+				else
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].dark_name_image, true);
+				}
+			}
+			else
+			{
+				DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+				DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].name_image, true);
+			}
 		}
 		else
 		{
 			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
 			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_pararysis[i].dark_name_image, true);
-
 		}
 	}
 
@@ -299,8 +346,24 @@ void Pouch::PoisonTabDraw()const
 	{
 		if (ComparisonElement(chemical_formula_poison[i]))
 		{
-			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
-			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_poison[i].name_image, true);
+			if (select_poison.make_bool)
+			{
+				if (select_poison.tag_number == chemical_formula_poison[i].tag_number)
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_poison[i].name_image, true);
+				}
+				else
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_poison[i].dark_name_image, true);
+				}
+			}
+			else
+			{
+				DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+				DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_poison[i].name_image, true);
+			}
 		}
 		else
 		{
@@ -308,7 +371,6 @@ void Pouch::PoisonTabDraw()const
 			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_poison[i].dark_name_image, true);
 		}
 	}
-
 
 	ElementDraw(chemical_formula_poison[cursol]);
 
@@ -329,8 +391,24 @@ void Pouch::HealTabDraw()const
 	{
 		if (ComparisonElement(chemical_formula_heal[i]))
 		{
-			DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
-			DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_heal[i].name_image, true);
+			if (select_heal.make_bool)
+			{
+				if (select_heal.tag_number == chemical_formula_heal[i].tag_number)
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_heal[i].name_image, true);
+				}
+				else
+				{
+					DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_dark, true);
+					DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_heal[i].dark_name_image, true);
+				}
+			}
+			else
+			{
+				DrawGraph(x - 140, y + 80 + (CURSOL_MOVE * i), text_window_image_lit, true);
+				DrawGraph(x - 130, y + 90 + (CURSOL_MOVE * i), chemical_formula_heal[i].name_image, true);
+			}
 		}
 		else
 		{
@@ -341,8 +419,6 @@ void Pouch::HealTabDraw()const
 
 
 	ElementDraw(chemical_formula_heal[cursol]);
-
-
 
 	DrawGraph(attribute_name_x, attribute_name_y - 5, attribute_text_images[4], true);
 }
@@ -483,8 +559,6 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 //アップデート
 void Pouch::Update()
 {
-
-
 	if (old < 10000)
 	{
 		if (10000 < PAD_INPUT::GetRStick().x)
@@ -793,26 +867,26 @@ void Pouch::SetElement(ElementItem* item, int i)
 
 void Pouch::SetElementConstruct(int i)
 {
-
+	int a = 999;
 	switch (element[i]->GetType())
 	{
 	case ELEMENT_ITEM::HYDROGEN:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(a);
 		break;
 	case ELEMENT_ITEM::OXYGEN:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(a);
 		break;
 	case ELEMENT_ITEM::CARBON:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(a);
 		break;
 	case ELEMENT_ITEM::NITROGEN:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(a);
 		break;
 	case ELEMENT_ITEM::SULFUR:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(a);
 		break;
 	case ELEMENT_ITEM::CHLORINE:
-		element[i]->SetVolume(10);
+		element[i]->SetVolume(a);
 		break;
 	case ELEMENT_ITEM::URANIUM:
 		element[i]->SetVolume(1);
@@ -1058,6 +1132,7 @@ void Pouch::SetChemicalFormulaParameter()
 	{
 	case ATTRIBUTE::EXPLOSION:
 		select_explosion = chemical_formula_explosion[cursol];
+		chemical_formula_explosion[cursol].make_bool = true;
 		break;
 	case ATTRIBUTE::MELT:
 		select_melt = chemical_formula_melt[cursol];
@@ -1164,7 +1239,7 @@ void Pouch::ConsumptionMaterial()
 void Pouch::InitializeExplosion()
 {
 	select_explosion = { 0 };
-	select_explosion.make_bool = false;
+	select_explosion.make_bool = false;	
 }
 
 void Pouch::InitializeHeal()

@@ -30,7 +30,7 @@
 #define PUNCH_Y 200
 
 //HP
-#define HAND_HP 200
+#define HAND_HP 20
 
 //Ž€–S‚µ‚Ä‚¢‚éŽžŠÔ
 #define DEATH_TIME 1200
@@ -568,6 +568,10 @@ void LastBossHand::HitBullet(const BulletBase* bullet)
 	damage_log[i].damage = damage;
 	hp -= damage;
 
+	if (hp < 0)
+	{
+		hp = 0;
+	}
 }
 
 //-----------------------------------

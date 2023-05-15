@@ -129,7 +129,7 @@ Player::Player(Stage* stage)
 	flysound = LoadSoundMem("sound/Playerbgm/jump.mp3");
 	healsound = LoadSoundMem("sound/Playerbgm/heal01.mp3");
 	deathsound = LoadSoundMem("sound/Playerbgm/se_enemy_down01.mp3");
-	
+
 
 	image_size_x = 40;
 	image_size_y = 80;
@@ -262,7 +262,7 @@ void Player::Draw() const
 	float x = location.x - CameraWork::GetCamera().x;
 	float y = location.y - CameraWork::GetCamera().y;
 
-	
+
 
 	PlayerUiDraw(x, y);
 
@@ -379,8 +379,8 @@ void Player::PlayerUiDraw(float x, float y) const
 	DrawRotaGraphF(230, 640, 1.0, 0, hp_image, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	DrawRotaGraphF(230, 640, 1.0, 0, hp_image_top, true);
-	
-	
+
+
 	//‚±‚±‚Ü‚Å
 
 	//Œ»Ý‚Ì‘I‘ðŽˆ
@@ -1169,7 +1169,7 @@ void Player::Shoot_Gun()
 				{
 					if (poison->number_of_bullets > 0)
 					{
-						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, poison);
+						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left,poison);
 						bullet_count++;
 						pouch->ReduceAmmo(attribute[display_attribute]);
 					}
@@ -1264,7 +1264,7 @@ void Player::ElementUpdate()
 	{
 		chemical_formula[5] = heal->make_bool;
 	}
-	
+
 	if (PAD_INPUT::GetRStick().x < -5000)
 	{
 		if (select_count % 10 == 0)
@@ -1409,8 +1409,33 @@ void Player::SetElementItem(class Item* item)
 {
 
 	int num = static_cast<int>(item->GetElementType());
+	ELEMENT_ITEM element_item;
 
-	element[num]->SetVolume(element[num]->GetVolume() + 1);
+	element_item = item->GetElementType();
+
+	switch (element_item)
+	{
+	case ELEMENT_ITEM::HYDROGEN:
+		element[num]->SetVolume(element[num]->GetVolume() + 1);
+		break;
+	case ELEMENT_ITEM::CARBON:
+		element[num]->SetVolume(element[num]->GetVolume() + 1);
+		break;
+	case ELEMENT_ITEM::CHLORINE:
+		element[num]->SetVolume(element[num]->GetVolume() + 1);
+		break;
+	case ELEMENT_ITEM::NITROGEN:
+		element[num]->SetVolume(element[num]->GetVolume() + 1);
+		break;
+	case ELEMENT_ITEM::OXYGEN:
+		element[num]->SetVolume(element[num]->GetVolume() + 2);
+		break;
+	case ELEMENT_ITEM::SULFUR:
+		element[num]->SetVolume(element[num]->GetVolume() + 1);
+		break;
+	default:
+		break;
+	}
 
 }
 
@@ -1505,7 +1530,7 @@ void Player::MoveAnimation()
 	}
 }
 
-void Player::HealAnimation(int x,int y){
+void Player::HealAnimation(int x, int y) {
 	if (effect_heal.display_permit == TRUE) {
 		effect_heal.Tick++;
 		effect_heal.x = x;

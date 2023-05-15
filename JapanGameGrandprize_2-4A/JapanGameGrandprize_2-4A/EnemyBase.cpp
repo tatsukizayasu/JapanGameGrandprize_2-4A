@@ -83,8 +83,10 @@ bool EnemyBase::ScreenOut()
 	Location camera = CameraWork::GetCamera(); //ƒJƒƒ‰
 	scroll = location - camera;
 
-	if ((scroll.x < -area.width) || ((SCREEN_WIDTH + area.width) < scroll.x) ||
-		(scroll.y < -area.height) || ((SCREEN_HEIGHT + area.height) < scroll.y))
+	if ((scroll.x < (-(SCREEN_WIDTH * 2) + -area.width)) ||
+		(((SCREEN_WIDTH * 2) + area.width) < scroll.x) ||
+		(scroll.y < (-(SCREEN_HEIGHT * 2) + -area.height)) || 
+		(((SCREEN_HEIGHT * 2) + area.height) < scroll.y))
 	{
 		ret = true;
 	}
@@ -221,6 +223,24 @@ STAGE_DIRECTION EnemyBase::HitDirection(const MapChip* map_chip)
 //-----------------------------------
 void EnemyBase::Poison()
 {
+	int i;
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
 
 	if (poison)
 	{
@@ -229,7 +249,15 @@ void EnemyBase::Poison()
 		{
 			if (poison_time % POISON_DAMAGE_FLAME == 0)
 			{
+				damage_log[i].log = true;
+				damage_log[i].time = LOG_TIME;
+				damage_log[i].damage = poison_damage;
 				hp -= poison_damage;
+
+				if (hp < 0)
+				{
+					hp = 0;
+				}
 			}
 		}
 		else

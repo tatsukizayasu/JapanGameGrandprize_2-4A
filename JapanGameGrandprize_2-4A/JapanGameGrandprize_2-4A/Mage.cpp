@@ -424,6 +424,11 @@ void Mage::HitBullet(const BulletBase* bullet)
 	damage_log[i].time = LOG_TIME;
 	damage_log[i].damage = damage;
 	hp -= damage;
+
+	if (hp < 0)
+	{
+		hp = 0;
+	}
 }
 
 //-----------------------------------
