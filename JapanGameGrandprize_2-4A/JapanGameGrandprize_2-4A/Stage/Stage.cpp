@@ -29,21 +29,22 @@ Stage::Stage(short stage_num)
 
 
 	//背景画像読み込み
-	switch (this->stage_num)
-	{
-	case 1:
-		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
-		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
-		break;
-	case 3:
-		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage1.png");
-		background_image[1] = LoadGraph("Images/Scene/Stage/3/BackImage2.png");
-		break;
-	default:
-		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
-		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
-		break;
+	for (int i = 0; i < 2; i++) {
+		background_image[i] = 0;
+
+		string dis_stage_graph;
+		dis_stage_graph = "Images/Scene/Stage/" + to_string(this->stage_num) + "/BackImage" + to_string(i + 1) + ".png";
+		const char* dis_stage_graphc = dis_stage_graph.c_str();
+		background_image[i] = LoadGraph(dis_stage_graphc);
+		if (background_image[i] == -1) {
+			/*background_image[i] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");*/
+			background_image[i] = 0;
+			if (background_image[i] == -1) {
+				throw dis_stage_graph;
+			}
+		}
 	}
+
 
 	for (int& c : backgraound_image_color)
 	{
@@ -73,8 +74,8 @@ Stage::Stage(short stage_num)
 	if (bort_image == -1) {
 		throw "Images/Scene/Stage/3/Bort.png";
 	}
-	
-	
+
+
 	//マップデータの読み込み
 	LoadMap(stage_num);
 
@@ -302,9 +303,33 @@ void Stage::Draw()
 	element->Draw();
 }
 
-void Stage::DrawStageBackground()
+void Stage::DrawStageBackground() const
 {
-	if (stage_num == 3)
+	// 描画する画像の数
+	int image_num = 2;
+	// 色を変更するか
+	bool is_color_change = false;
+
+	switch (stage_num)
+	{
+	case 1:
+		break;
+	case 2:
+		image_num = 1;
+		break;
+	case 3:
+		is_color_change = true;
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+
+	default:
+		break;
+	}
+
+	if (is_color_change == true)
 	{
 		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
 		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
@@ -316,8 +341,11 @@ void Stage::DrawStageBackground()
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
 		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(255, 255, 255);
 	}
-	else
+	
+	if(image_num == 2)
 	{
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
@@ -325,16 +353,14 @@ void Stage::DrawStageBackground()
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 	}
-
-
-	if (stage_num == 3)
+	else if (image_num == 1)
 	{
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		SetDrawBright(255, 255, 255);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 	}
 }
 
-void Stage::DrawObject()
+void Stage::DrawObject() const
 {
 	if (stage_num == 3) {
 
