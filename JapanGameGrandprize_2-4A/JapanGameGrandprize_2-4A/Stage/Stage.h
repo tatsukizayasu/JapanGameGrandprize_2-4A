@@ -124,12 +124,12 @@ public:
 	/// <summary>
 	/// ステージ背景の描画
 	/// </summary>
-	void DrawStageBackground();
+	void DrawStageBackground() const;
 
 	/// <summary>
 	/// オブジェクト 描画関数
 	/// </summary>
-	void DrawObject();
+	void DrawObject() const;
 
 	/// <summary>
 	/// ステージの読み込み
