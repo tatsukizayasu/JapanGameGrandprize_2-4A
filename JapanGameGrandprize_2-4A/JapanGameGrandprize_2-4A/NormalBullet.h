@@ -39,5 +39,5 @@ public:
 	
 	bool GetDelete_flg();								//trueをSetした後にエネミーはfalse待ちの状態にしてほしいです
 														//falseが入った後にDeleteしてください
-	int GetDamageParSecond();
+	int GetDamageParSecond() const override ;
 };

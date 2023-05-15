@@ -15,7 +15,8 @@ struct Effect
 
 enum class SPECIAL_MOVES_STATE
 {
-	FALL = 0,	//落下
+	CHARGE = 0,	//チャージ
+	FALL,		//落下
 	LANDING,	//着弾
 };
 
@@ -25,6 +26,7 @@ private:
 	int end; //終了
 	int tick; //更新
 	Effect* effect; //エフェクト
+	Effect* charge_effect; //チャージエフェクト
 	SPECIAL_MOVES_STATE state; //状態
 public:
 	//コンストラクタ

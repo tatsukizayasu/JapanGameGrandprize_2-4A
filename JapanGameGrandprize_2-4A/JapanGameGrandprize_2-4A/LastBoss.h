@@ -2,6 +2,7 @@
 #include "EnemyBase.h"
 #include "EnemyBulletBase.h"
 #include "LastBossSpecialMoves.h"
+#include "LastBossBarrier.h"
 
 enum class LAST_BOSS_ATTACK
 {
@@ -41,6 +42,7 @@ private:
     EnemyBulletBase** magic; //魔法
 
     LastBossSpecialMoves* special_moves; //必殺技
+    LastBossBarrier* barrier; //バリア
 
 private:
 

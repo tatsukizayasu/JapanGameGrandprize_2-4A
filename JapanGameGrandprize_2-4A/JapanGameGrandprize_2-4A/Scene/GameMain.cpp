@@ -297,7 +297,6 @@ bool GameMain::EnemyUpdate()
 					case ENEMY_KIND::LAST_BOSS:
 						enemy[i] = new LastBoss(spawn[i].location);
 						is_spawn_boss = true;
-						enemy[i] = new LastBoss(spawn[i].location);
 						break;
 
 					default:

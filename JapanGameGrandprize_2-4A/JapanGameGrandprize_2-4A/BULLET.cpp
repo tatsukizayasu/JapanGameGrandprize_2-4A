@@ -32,7 +32,7 @@ bool BulletBase::GetEfectFlg() const
 
 int BulletBase::GetDamage() const
 {
-
+	 
 	return damage;
 }
 

@@ -140,7 +140,7 @@ void Stage_Element::Update(Player* player)
 		float height;
 	} draw;
 
-	draw = { SCREEN_WIDTH + CHIP_SIZE,SCREEN_HEIGHT + CHIP_SIZE };
+	draw = { SCREEN_WIDTH + CHIP_SIZE * 3,SCREEN_HEIGHT + CHIP_SIZE * 3};
 
 	Location camera = CameraWork::GetCamera();
 
@@ -158,8 +158,8 @@ void Stage_Element::Update(Player* player)
 		h = MAP_CHIP_SIZE;
 
 		// 画面内にあるMapChipオブジェクトだけUpdateする
-		if (x + w < camera.x || camera.x + draw.width < x ||
-			y + h < camera.y || camera.y + draw.height < y) continue;
+		if (x + w < camera.x - MAP_CHIP_SIZE * 3 || camera.x + draw.width < x ||
+			y + h < camera.y - MAP_CHIP_SIZE * 3 || camera.y + draw.height < y) continue;
 
 		e->Update(player);
 
@@ -184,7 +184,7 @@ void Stage_Element::Draw() const
 		float height;
 	} draw;
 
-	draw = { SCREEN_WIDTH + CHIP_SIZE,SCREEN_HEIGHT + CHIP_SIZE };
+	draw = { SCREEN_WIDTH + CHIP_SIZE * 3,SCREEN_HEIGHT + CHIP_SIZE * 3 };
 
 	Location camera = CameraWork::GetCamera();
 
@@ -202,8 +202,8 @@ void Stage_Element::Draw() const
 		h = MAP_CHIP_SIZE;
 
 		// 画面内にあるMapChipオブジェクトだけUpdateする
-		if (x + w < camera.x || camera.x + draw.width < x ||
-			y + h < camera.y || camera.y + draw.height < y) continue;
+		if (x + w < camera.x - MAP_CHIP_SIZE * 3 || camera.x + draw.width < x ||
+			y + h < camera.y - MAP_CHIP_SIZE * 3 || camera.y + draw.height < y) continue;
 
 		e->Draw();
 	}

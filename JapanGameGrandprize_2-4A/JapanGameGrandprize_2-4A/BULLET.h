@@ -52,4 +52,6 @@ public:
 	int GetDebuffTime() const;
 	int GetDamage() const;
 	ATTRIBUTE GetAttribute() const;
+
+	virtual int GetDamageParSecond() const = 0 ;
 };

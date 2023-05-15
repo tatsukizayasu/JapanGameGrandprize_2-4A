@@ -453,6 +453,11 @@ void EnemySlimeBoss::HitBullet(const BulletBase* bullet)
 	default:
 		break;
 	}
+
+	if (hp < 0)
+	{
+		hp = 0;
+	}
 }
 
 //-----------------------------------

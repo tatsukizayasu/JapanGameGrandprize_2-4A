@@ -369,6 +369,7 @@ void Undead::HitBullet(const BulletBase* bullet)
 
 	int i;
 	int damage = 0;
+
 	for (i = 0; i < LOG_NUM; i++)
 	{
 		if (!damage_log[i].log)
@@ -406,7 +407,7 @@ void Undead::HitBullet(const BulletBase* bullet)
 		if (!poison)
 		{
 			poison = true;
-			poison_damage = bullet->GetDamage();
+			poison_damage = bullet->GetDamageParSecond();
 			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
 		}
 		break;
@@ -428,6 +429,11 @@ void Undead::HitBullet(const BulletBase* bullet)
 	damage_log[i].time = LOG_TIME;
 	damage_log[i].damage = damage;
 	hp -= damage;
+
+	if (hp < 0)
+	{
+		hp = 0;
+	}
 }
 
 //-----------------------------------
