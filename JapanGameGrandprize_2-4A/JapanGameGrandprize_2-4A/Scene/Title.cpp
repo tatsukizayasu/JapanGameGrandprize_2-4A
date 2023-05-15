@@ -136,6 +136,12 @@ AbstractScene* Title::Update()
 		case Title::MENU::PLAY:
 			return new GameMain(1);
 			break;
+			
+		case Title::MENU::HELP:
+			GameMain* help = new GameMain(0);
+
+			return new GameMain(0);
+			break;
 
 		case Title::MENU::EXIT:
 			return nullptr;

@@ -447,7 +447,7 @@ void Stage::InitStage(void)
 	//マップチップの描画情報をセット
 	for (float y = 0; y < map_data.size(); y++)
 	{
-		for (float x = 0; x < map_data.at(0).size(); x++)
+		for (float x = 0; x < map_data.at(y).size(); x++)
 		{
 			short i = map_data.at(y).at(x);
 			if (i != 0 && i != -1)
