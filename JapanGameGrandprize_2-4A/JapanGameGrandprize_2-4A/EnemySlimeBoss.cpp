@@ -17,7 +17,7 @@
 
 #define BOSS_SLIME_HP 500
 
-#define SLIME_BOSS_WAIT_TIME 60
+#define SLIME_BOSS_WAIT_TIME 120
 #define CLOUD_MOVE_TIME 80
 #define SLIME_BOSS_WIDTH 180
 #define SLIME_BOSS_HEIGHT 200
@@ -136,7 +136,7 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
-		Idol();
+		Idol(player);
 		break;
 
 	case ENEMY_STATE::MOVE:
@@ -144,45 +144,42 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 		if (left_move)speed = -SLIME_BOSS_SPEED;
 		else speed = SLIME_BOSS_SPEED;
 
-		if (wait_time <= 0)
+		speed_y = -(slime_boss_jump_distance / 3);
+		if (--slime_boss_jump_distance <= 0)
 		{
+			state = ENEMY_STATE::FALL;
+			speed_y = 0;
+			slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
+		}
 
-			speed_y = -(slime_boss_jump_distance / 3);
-			if (--slime_boss_jump_distance <= 0)
-			{
-				state = ENEMY_STATE::FALL;
-				speed_y = 0;
-				slime_boss_jump_distance = SLIME_BOSS_JUMP_DISTANCE;
-			}
+		location.y += speed_y;
 
-			location.y += speed_y;
+		hit_stage = HitStage(stage);
 
-			hit_stage = HitStage(stage);
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			Location chip_location = hit_stage.chip->GetLocation();
+			Area chip_area = hit_stage.chip->GetArea();
 
-			if (hit_stage.hit) //ステージとの当たり判定
-			{
-				Location chip_location = hit_stage.chip->GetLocation();
-				Area chip_area = hit_stage.chip->GetArea();
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
 
-				STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-				hit_direction = HitDirection(hit_stage.chip);
+			location.y = old_location.y;
+		}
+		Move(player->GetLocation());
 
-				location.y = old_location.y;
-			}
-			Move(player->GetLocation());
+		hit_stage = HitStage(stage);
 
-			hit_stage = HitStage(stage);
+		if (hit_stage.hit) //ステージとの当たり判定
+		{
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
 
-			if (hit_stage.hit) //ステージとの当たり判定
-			{
-				STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-				hit_direction = HitDirection(hit_stage.chip);
-
-				location.x = old_location.x;
-				left_move = !left_move;
-			}
-
-
+			location.x = old_location.x;
+			left_move = !left_move;
+		}
+		if (state == ENEMY_STATE::MOVE)
+		{
 			Location scroll = location - CameraWork::GetCamera();
 			Area harea = { area.height / 2 + 20,area.width / 2 };
 
@@ -191,34 +188,8 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 				location.x = old_location.x;
 				left_move = !left_move;
 			}
-			
 		}
-		else
-		{
-			if (wait_time == SLIME_BOSS_WAIT_TIME)
-			{
-				if (attack_type == ATTACKTYPE::NONE)attack_type = ATTACKTYPE::MAGIC_BULLET;
-				else if (attack_type == ATTACKTYPE::MAGIC_BULLET)
-				{
-					MagicBullet(player->GetLocation());
-					attack_type = ATTACKTYPE::THUNDER;
-					cloud_move_time = 0;
-				}
-				else
-				{
-					Thunder(player->GetLocation());
-					attack_type = ATTACKTYPE::MAGIC_BULLET;
-				}
-			}
-		}
-		wait_time--;
-
-		if (ScreenOut())
-		{
-			state = ENEMY_STATE::IDOL;
-			speed = 0;
-			slime_boss_jump_distance = 0;
-		}
+		
 		break;
 
 	case ENEMY_STATE::FALL:
@@ -241,6 +212,17 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 			location.x = old_location.x;
 			left_move = !left_move;	
 		}
+		if (state == ENEMY_STATE::FALL)
+		{
+			Location scroll = location - CameraWork::GetCamera();
+			Area harea = { area.height / 2 + 20,area.width / 2 };
+
+			if (scroll.x - harea.width < 10 || SCREEN_WIDTH < scroll.x + harea.width)
+			{
+				location.x = old_location.x;
+				left_move = !left_move;
+			}
+		}
 
 		Fall();
 
@@ -256,16 +238,10 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 			location.y = old_location.y;
 
-			state = ENEMY_STATE::MOVE;
+			state = ENEMY_STATE::IDOL;
 
 			wait_time = SLIME_BOSS_WAIT_TIME;
 
-		}
-		if (ScreenOut())
-		{
-			state = ENEMY_STATE::IDOL;
-			speed = 0;
-			slime_boss_jump_distance = 0;
 		}
 
 		break;
@@ -336,23 +312,36 @@ void EnemySlimeBoss::Draw_Cloud()const
 //-----------------------------------
 //アイドル状態
 //-----------------------------------
-void EnemySlimeBoss::Idol()
+void EnemySlimeBoss::Idol(const Player* player)
 {
 	if (!ScreenOut())
 	{
-		state = ENEMY_STATE::MOVE;
-		if (left_move)
+		if (wait_time == SLIME_BOSS_WAIT_TIME / 2)
 		{
-			speed = -SLIME_BOSS_SPEED;
+			if (attack_type == ATTACKTYPE::MAGIC_BULLET)
+			{
+				MagicBullet(player->GetLocation());	
+			}
+			else if(attack_type == ATTACKTYPE::THUNDER)
+			{
+				
+				Thunder(player->GetLocation());
+			}
 		}
-		else
+
+		if (--wait_time <= 0)
 		{
-			speed = SLIME_BOSS_SPEED;
-		}
-		if (paralysis)
-		{
-			speed *= PARALYSIS_SPEED;
-		}
+			wait_time = 0;
+			state = ENEMY_STATE::MOVE;
+
+			if (attack_type == ATTACKTYPE::NONE)attack_type = ATTACKTYPE::MAGIC_BULLET;
+			else if (attack_type == ATTACKTYPE::MAGIC_BULLET)
+			{
+				attack_type = ATTACKTYPE::THUNDER;
+				cloud_move_time = 0;
+			}
+			else attack_type = ATTACKTYPE::MAGIC_BULLET;
+		}	
 	}
 }
 

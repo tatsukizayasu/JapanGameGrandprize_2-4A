@@ -31,29 +31,6 @@ GameMain::GameMain(short stage_num)
 	this->stage_num = stage_num;
 
 #undef DOT_BY_DOT
-	//”wŒi‰æ‘œ“Ç‚Ýž‚Ý
-	switch (this->stage_num)
-	{
-	case 1:
-		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
-		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
-		break;
-	case 3:
-		background_image[0] = LoadGraph("Images/Scene/Stage/3/BackImage1.png");
-		background_image[1] = LoadGraph("Images/Scene/Stage/3/BackImage2.png");
-		break;
-	default:
-		background_image[0] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");
-		background_image[1] = LoadGraph("Images/Scene/Stage/1/BackImage2.png");
-		break;
-	}
-
-	for (int& c : backgraound_image_color)
-	{
-		c = 255;
-	}
-
-	backgraound_blend = 220;
 
 	char dis_stage_se[30];
 
@@ -96,8 +73,6 @@ GameMain::GameMain(short stage_num)
 	input_margin = 0;
 	is_spawn_boss = false;
 
-	background_location = { 0.0f,0.0f };
-
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 }
 
@@ -106,11 +81,6 @@ GameMain::GameMain(short stage_num)
 //-----------------------------------
 GameMain::~GameMain()
 {
-
-	for (int i = 0; i < 3; i++)
-	{
-		DeleteGraph(background_image[i]);
-	}
 
 	StopSoundMem(background_music);
 	DeleteSoundMem(background_music);
@@ -140,30 +110,7 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
-	//ƒXƒe[ƒW3‚ÅƒNƒ‰[ƒPƒ“‚ªoŒ»‚·‚é‚Æ‚«”wŒi‚ð•Ï‰»‚³‚¹‚é
-	if (stage_num == 3)
-	{
-		//ƒuƒŒƒ“ƒh’l‚ð•ÏX
-		if (fmodf(background_location.x, SCREEN_WIDTH) == 0 && 80 < backgraound_blend)
-		{
-			backgraound_blend -= 1;
-		}
-
-		if (is_spawn_boss == true)
-		{
-			//•`‰æ‹P“x•ÏX
-			//Green
-			if (100 < backgraound_image_color[1])
-			{
-				backgraound_image_color[1]--;
-			}
-			//Blue
-			if (200 < backgraound_image_color[2])
-			{
-				backgraound_image_color[2]--;
-			}
-		}
-	}
+	stage->UpdateStageBackground(is_spawn_boss);
 
 	pause->Update(stage_num);
 		
@@ -209,15 +156,6 @@ AbstractScene* GameMain::Update()
 	player->Update();
 	stage->Update(player);
 
-	//”wŒi‰æ‘œ‚ÌXV
-	if (stage_num != 3)
-	{
-		background_location = CameraWork::GetCamera();
-	}//Stage03‚Ìê‡A”wŒi‚ð“Æ—§‚É“®‚©‚·
-	else
-	{
-		background_location.x += 10.0f;
-	}
 
 	// ƒ{ƒX‚ð“|‚µ‚½ê‡
 	if (EnemyUpdate() == true)
@@ -549,38 +487,8 @@ bool GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
-	////”wŒi	•`‰æ
-	// DrawGraph(0, 0, background_image, FALSE);
-	if (stage_num == 3)
-	{
-		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
-		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
-
-		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2), 0, background_image[1], TRUE);
-		DrawTurnGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[1], TRUE);
-		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[1], TRUE);
-
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
-		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
-	}
-	else
-	{
-		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
-
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
-	}
-
-	
-	
-
-	if (stage_num == 3) 
-	{
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		SetDrawBright(255, 255, 255);
-	}
+	//ƒXƒe[ƒW‚Ì•`‰æ
+	stage->DrawStageBackground();
 
 	stage->Draw();
 	stage->DrawObject();

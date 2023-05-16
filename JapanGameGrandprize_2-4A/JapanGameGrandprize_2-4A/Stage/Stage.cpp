@@ -27,6 +27,35 @@ Stage::Stage(short stage_num)
 	element = new Stage_Element(this);
 	this->camera_work = camera_work;
 
+
+	//背景画像読み込み
+	for (int i = 0; i < 2; i++) {
+		background_image[i] = 0;
+
+		string dis_stage_graph;
+		dis_stage_graph = "Images/Scene/Stage/" + to_string(this->stage_num) + "/BackImage" + to_string(i + 1) + ".png";
+		const char* dis_stage_graphc = dis_stage_graph.c_str();
+		background_image[i] = LoadGraph(dis_stage_graphc);
+		if (background_image[i] == -1) {
+			/*background_image[i] = LoadGraph("Images/Scene/Stage/1/BackImage1.png");*/
+			background_image[i] = 0;
+			if (background_image[i] == -1) {
+				throw dis_stage_graph;
+			}
+		}
+	}
+
+
+	for (int& c : backgraound_image_color)
+	{
+		c = 255;
+	}
+
+	backgraound_blend = 220;
+
+	background_location = { 0.0f,0.0f };
+
+
 	//スポーン地点に初期値をセット
 	spawn_point = { MAP_CHIP_SIZE / 2, SCREEN_HEIGHT / 2 };
 
@@ -45,8 +74,8 @@ Stage::Stage(short stage_num)
 	if (bort_image == -1) {
 		throw "Images/Scene/Stage/3/Bort.png";
 	}
-	
-	
+
+
 	//マップデータの読み込み
 	LoadMap(stage_num);
 
@@ -63,6 +92,11 @@ Stage::Stage(short stage_num)
 //-----------------------------------
 Stage::~Stage()
 {
+	// ステージ背景画像を削除
+	for (int i = 0; i < 3; i++)
+	{
+		DeleteGraph(background_image[i]);
+	}
 
 	// マップチップ画像を削除
 	for (int i = 0; i < 50; i++)
@@ -186,6 +220,44 @@ void Stage::Update(Player* player)
 
 }
 
+void Stage::UpdateStageBackground(bool is_spawn_boss)
+{
+	//ステージ3でクラーケンが出現するとき背景を変化させる
+	if (stage_num == 3)
+	{
+		//ブレンド値を変更
+		if (fmodf(background_location.x, SCREEN_WIDTH) == 0 && 80 < backgraound_blend)
+		{
+			backgraound_blend -= 1;
+		}
+
+		if (is_spawn_boss == true)
+		{
+			//描画輝度変更
+			//Green
+			if (100 < backgraound_image_color[1])
+			{
+				backgraound_image_color[1]--;
+			}
+			//Blue
+			if (200 < backgraound_image_color[2])
+			{
+				backgraound_image_color[2]--;
+			}
+		}
+	}
+
+	//背景画像の更新
+	if (stage_num != 3)
+	{
+		background_location = CameraWork::GetCamera();
+	}//Stage03の場合、背景を独立に動かす
+	else
+	{
+		background_location.x += 10.0f;
+	}
+}
+
 //-----------------------------------
 // 描画
 //-----------------------------------
@@ -229,6 +301,71 @@ void Stage::Draw()
 #endif
 
 	element->Draw();
+}
+
+void Stage::DrawStageBackground() const
+{
+	// 描画する画像の数
+	int image_num = 2;
+	// 色を変更するか
+	bool is_color_change = false;
+
+	switch (stage_num)
+	{
+	case 1:
+		break;
+	case 2:
+		image_num = 1;
+		break;
+	case 3:
+		is_color_change = true;
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+
+	default:
+		break;
+	}
+
+	if (is_color_change == true)
+	{
+		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
+		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
+
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2), 0, background_image[1], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[1], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		SetDrawBright(255, 255, 255);
+	}
+	
+	if(image_num == 2)
+	{
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+	}
+	else if (image_num == 1)
+	{
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+	}
+}
+
+void Stage::DrawObject() const
+{
+	if (stage_num == 3) {
+
+		DrawGraphF(80, 460, bort_image, TRUE);
+	}
 }
 
 //-----------------------------------
@@ -394,12 +531,4 @@ std::vector<Stage_Element_Base*> Stage::GetElement_MapChip() const
 void Stage::SetElement()
 {
 	element->SetElementParameter();
-}
-
-void Stage::DrawObject()
-{
-	if (stage_num == 3) {
-		
-		DrawGraphF(80, 460, bort_image, TRUE);
-	}
 }
