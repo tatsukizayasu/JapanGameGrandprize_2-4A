@@ -268,14 +268,9 @@ void Mage::Teleport(const Stage* stage)
 
 		//ステージとの当たり判定の取得
 		hit_stage = HitStage(stage);
-
-		if ((-area.width < scroll.x) && (scroll.x < SCREEN_WIDTH + area.width) &&
-			(-area.height < scroll.y) && (scroll.y < SCREEN_HEIGHT + area.height))
+		if (!hit_stage.hit)
 		{
-			if (!hit_stage.hit)
-			{
-				break;
-			}
+			break;
 		}
 	}
 	can_teleport = false;
