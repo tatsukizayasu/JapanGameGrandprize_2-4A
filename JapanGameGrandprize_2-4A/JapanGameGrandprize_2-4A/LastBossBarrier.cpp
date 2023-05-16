@@ -128,7 +128,6 @@ void LastBossBarrier::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawCircle(draw_location.x, draw_location.y,radius,0x0000ff,TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
 	for (int i = 0; i < BARRIER_VOLUME; i++)
 	{

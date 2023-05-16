@@ -7,6 +7,9 @@
 #include "BulletManager.h"
 #include "CameraWork.h"
 
+//画像枚数
+#define TORRENT_IMAGES 17
+
 //移動速度
 #define TORRENT_SPEED 4
 
@@ -20,7 +23,7 @@
 #define TORRENT_TACKLE_PREPARATION 60
 
 //発射速度
-#define TORRENT_SHOT_RATE 40
+#define TORRENT_SHOT_RATE 20
 
 //ドロップ数
 #define TORRENT_MIN_DROP 20
@@ -53,6 +56,9 @@
 //スポーン地点の間隔
 #define NUTS_SPAWN_SPACE 120
 
+//アニメーション
+#define TORRENT_ANIMATION 5
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -77,7 +83,7 @@ Torrent::Torrent(Location spawn_location)
 
 	/*当たり判定の設定*/
 	area.width = 160;
-	area.height = SCREEN_HEIGHT / 3;
+	area.height = SCREEN_HEIGHT / 2;
 	location = spawn_location;
 
 	location.x -= MAP_CHIP_SIZE / 2;
@@ -100,6 +106,12 @@ Torrent::Torrent(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+
+	images = new int[TORRENT_IMAGES];
+
+	LoadDivGraph("Images/Enemy/torrent_tackle.png", 8, 8, 1, 500, 500, images);
+	LoadDivGraph("Images/Enemy/torrent_nut.png", 9, 9, 1, 500, 500, &images[8]);
+
 }
 
 //-----------------------------------
@@ -123,7 +135,7 @@ Torrent::~Torrent()
 //-----------------------------------
 void Torrent::Update(const Player* player, const Stage* stage)
 {
-
+	animation++;
 	Location old_location = location;	//前の座標
 
 	switch (state)
@@ -198,12 +210,14 @@ void  Torrent::Attack(Location player_location)
 	{
 	case TORRENT_ATTACK::TACKLE:
 		Tackle();
+		TackleAnimation();
 		break;
 	case TORRENT_ATTACK::LEAF_CUTTER:
 		LeafCutter(player_location);
 		break;
 	case TORRENT_ATTACK::DROP_NUTS:
 		DropNuts();
+		DropNutsAnimation();
 		break;
 	case TORRENT_ATTACK::NONE:
 		AttackNone();
@@ -291,6 +305,7 @@ void Torrent::Tackle()
 					attack_time = DROP_NUTS_TIME;
 				}
 			}
+			image_argument = 0;
 		}
 	}
 	else
@@ -342,6 +357,7 @@ void Torrent::LeafCutter(const Location player_location)
 			default:
 				break;
 			}
+			image_argument = 0;
 		}
 		else
 		{
@@ -358,6 +374,7 @@ void Torrent::LeafCutter(const Location player_location)
 				speed = TORRENT_SPEED;
 				tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
 			}
+			image_argument = 0;
 		}
 	}
 }
@@ -439,6 +456,7 @@ void Torrent::DropNuts()
 				tackle_end_point = SCREEN_WIDTH - area.width / 2;
 			}
 		}
+		image_argument = 0;
 	}
 }
 
@@ -520,6 +538,7 @@ void Torrent::AttackNone()
 		default:
 			break;
 		}
+		image_argument = 0;
 	}
 }
 
@@ -595,6 +614,28 @@ void Torrent::HitBullet(const BulletBase* bullet)
 }
 
 //-----------------------------------
+//タックルのアニメーション
+//-----------------------------------
+void Torrent::TackleAnimation()
+{
+	if (animation % TORRENT_ANIMATION == 0)
+	{
+		image_argument = (++image_argument) % 8;
+	}
+}
+
+//-----------------------------------
+//木の実を落とす攻撃のアニメーション
+//-----------------------------------
+void Torrent::DropNutsAnimation()
+{
+	if (animation % TORRENT_ANIMATION == 0)
+	{
+		image_argument = (++image_argument) % 9;
+	}
+}
+
+//-----------------------------------
 //描画
 //-----------------------------------
 void Torrent::Draw() const
@@ -603,8 +644,23 @@ void Torrent::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xdeb887, TRUE);
+	switch (attack_state)
+	{
+	case TORRENT_ATTACK::TACKLE:
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument], TRUE, !left_move);
+		break;
+	case TORRENT_ATTACK::LEAF_CUTTER:
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[0], TRUE, !left_move);
+		break;
+	case TORRENT_ATTACK::DROP_NUTS:
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument + 8], TRUE, !left_move);
+		break;
+	case TORRENT_ATTACK::NONE:
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[0], TRUE, !left_move);
+		break;
+	default:
+		break;
+	}
 
 	if (state != ENEMY_STATE::DEATH)
 	{

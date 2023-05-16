@@ -239,6 +239,9 @@
     <ClCompile Include="LastBossBarrier.cpp">
       <Filter>ソースファイル\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="EnemySE.cpp">
+      <Filter>ソースファイル\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h">
@@ -482,6 +485,12 @@
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="LastBossBarrier.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySE.h">
+      <Filter>ヘッダーファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyKind.h">
       <Filter>ヘッダーファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

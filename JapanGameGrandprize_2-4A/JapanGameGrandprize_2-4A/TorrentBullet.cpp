@@ -7,6 +7,9 @@
 //弾のダメージ
 #define TORRENT_BULLET_DAMAGE 5
 
+//最大値
+#define MAX_LEAF_RADIAN 90
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -23,6 +26,7 @@ TorrentBullet::TorrentBullet(const ENEMY_TYPE type,
 	damage = TORRENT_BULLET_DAMAGE;
 	float radian; //角度
 	radian = atan2f((player_location.y + 20) - location.y, player_location.x - location.x);
+	radian += (M_PI / 180) * (GetRand(MAX_LEAF_RADIAN) - MAX_LEAF_RADIAN / 2);
 	x_speed = static_cast<int>(speed * cosf(radian));
 	y_speed = static_cast<int>(speed * sinf(radian));
 }
