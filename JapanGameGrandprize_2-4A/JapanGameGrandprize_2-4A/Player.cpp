@@ -662,14 +662,12 @@ void Player::Update()
 	{
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
-			if (fuel > 0)
+			if (boost)
 			{
-				if (boost)
-				{
-					player_state = PLAYER_STATE::FLY;
-					Hovering();
-				}
+				player_state = PLAYER_STATE::FLY;
+				Hovering();
 			}
+
 			else
 			{
 				NotFly();
@@ -688,12 +686,12 @@ void Player::Update()
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
 
-				if (boost)
-				{
-					player_state = PLAYER_STATE::FLY;
-					Hovering();
-				}
-			
+			if (boost)
+			{
+				player_state = PLAYER_STATE::FLY;
+				Hovering();
+			}
+
 			else
 			{
 				NotFly();
@@ -947,7 +945,8 @@ void Player::Jump()
 void Player::Hovering()
 {
 	MoveAnimation();
-	ChangeVolumeSoundMem(255,flysound);
+	ChangeVolumeSoundMem(255, flysound);
+
 	PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
 	not_jet_count = 0;
 	if (fly > 0)
@@ -1080,7 +1079,7 @@ void Player::NotFly()
 		}
 	}
 
-	if (fuel < 10)
+	if (fuel < 1)
 	{
 		boost = false;
 	}
@@ -1177,7 +1176,7 @@ void Player::Shoot_Gun()
 				{
 					if (poison->number_of_bullets > 0)
 					{
-						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left,poison);
+						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, poison);
 						bullet_count++;
 						pouch->ReduceAmmo(attribute[display_attribute]);
 					}
