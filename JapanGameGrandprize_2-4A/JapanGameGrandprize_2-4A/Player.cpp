@@ -126,7 +126,7 @@ Player::Player(Stage* stage)
 
 
 	bulletssound = LoadSoundMem("Sound/Playerbgm/shot.mp3");
-	flysound = LoadSoundMem("sound/Playerbgm/jump.mp3");
+	flysound = LoadSoundMem("sound/Playerbgm/fly.mp3");
 	healsound = LoadSoundMem("sound/Playerbgm/heal01.mp3");
 	deathsound = LoadSoundMem("sound/Playerbgm/se_enemy_down01.mp3");
 
@@ -946,6 +946,8 @@ void Player::Jump()
 void Player::Hovering()
 {
 	MoveAnimation();
+	ChangeVolumeSoundMem(255,flysound);
+	PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
 	if (fly > 0)
 	{
 		if (!HitBlock(stage))
@@ -1008,6 +1010,9 @@ void Player::Fly()
 	player_state = PLAYER_STATE::FLY;
 	not_jet_count = 0;
 	MoveAnimation();
+	ChangeVolumeSoundMem(255, flysound);
+
+	PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
 
 	gravity_down = 0.0;
 
