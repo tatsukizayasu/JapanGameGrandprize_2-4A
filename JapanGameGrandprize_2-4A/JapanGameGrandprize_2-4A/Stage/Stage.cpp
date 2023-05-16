@@ -344,8 +344,7 @@ void Stage::DrawStageBackground() const
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		SetDrawBright(255, 255, 255);
 	}
-	
-	if(image_num == 2)
+	else if(image_num == 2)
 	{
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
