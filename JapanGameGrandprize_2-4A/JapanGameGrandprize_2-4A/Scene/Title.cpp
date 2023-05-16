@@ -138,11 +138,12 @@ AbstractScene* Title::Update()
 			break;
 			
 		case Title::MENU::HELP:
+		{
 			GameMain* help = new GameMain(0);
-
-			return new GameMain(0);
+			help->SetHelpMode(true);
+			return help;
 			break;
-
+		}
 		case Title::MENU::EXIT:
 			return nullptr;
 			break;

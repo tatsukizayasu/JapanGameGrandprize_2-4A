@@ -69,4 +69,5 @@ public:
 	static STATE GetCameraState() { return state; }
 	bool GetCameraLock(){ return is_lock; }
 	void SetCameraLock(bool is_lock) { this->is_lock = is_lock; }
+	void SetCameraState(STATE state) { this->state = state; }
 };

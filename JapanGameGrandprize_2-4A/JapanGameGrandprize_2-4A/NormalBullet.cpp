@@ -329,6 +329,13 @@ void NormalBullet::Draw() const
 	default:
 		break;
 	}
+	static float show_y = location.y;
+	if (show_y != location.y)
+	{
+		int a = 0;
+	}
+
+	show_y = location.y;
 }
 
 //-----------------------------------
