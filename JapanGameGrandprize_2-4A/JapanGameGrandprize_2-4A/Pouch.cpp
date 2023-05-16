@@ -867,7 +867,7 @@ void Pouch::SetElement(ElementItem* item, int i)
 
 void Pouch::SetElementConstruct(int i)
 {
-	int a = 999;
+	int a = 10;
 	switch (element[i]->GetType())
 	{
 	case ELEMENT_ITEM::HYDROGEN:
