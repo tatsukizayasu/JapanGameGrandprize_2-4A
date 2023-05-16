@@ -35,6 +35,16 @@ void EnemySE::DeleteSound()
 }
 
 //-----------------------------------
+//音量の設定
+//-----------------------------------
+void EnemySE::ChangeSoundVolume(const float volume)
+{
+	ChangeVolumeSoundMem(255 * (volume / 100), slime_se.attack);
+	ChangeVolumeSoundMem(255 * (volume / 100), undead_se.attack);
+
+}
+
+//-----------------------------------
 //通常エネミーのSEの取得
 //-----------------------------------
 NomalEnemySE EnemySE::GetEnemySE(const ENEMY_KIND kind)

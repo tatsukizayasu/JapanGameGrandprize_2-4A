@@ -32,6 +32,9 @@ public:
     //サウンドの削除
     static void DeleteSound();
 
+    //音量の設定
+    static void ChangeSoundVolume(const float);
+
     //通常エネミーのSEの取得
     static NomalEnemySE GetEnemySE(const ENEMY_KIND);
 };
