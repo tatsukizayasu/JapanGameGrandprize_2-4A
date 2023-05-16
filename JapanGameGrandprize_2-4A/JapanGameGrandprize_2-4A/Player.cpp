@@ -325,6 +325,8 @@ void Player::Draw() const
 		DrawRotaGraph(effect_heal.x, effect_heal.y, 1, 0, effect_heal.image_array[effect_heal.frame], TRUE, FALSE, FALSE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
+
+	BoxCollider::Draw();
 }
 
 void Player::PouchDraw() const
@@ -685,14 +687,13 @@ void Player::Update()
 		jump_bottun_count = 0;
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
-			if (fuel > 0)
-			{
+
 				if (boost)
 				{
 					player_state = PLAYER_STATE::FLY;
 					Hovering();
 				}
-			}
+			
 			else
 			{
 				NotFly();
@@ -948,6 +949,7 @@ void Player::Hovering()
 	MoveAnimation();
 	ChangeVolumeSoundMem(255,flysound);
 	PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
+	not_jet_count = 0;
 	if (fly > 0)
 	{
 		if (!HitBlock(stage))
@@ -995,6 +997,7 @@ void Player::Hovering()
 	if (fuel < 0)
 	{
 		fuel = 0;
+		boost = false;
 	}
 	else
 	{
