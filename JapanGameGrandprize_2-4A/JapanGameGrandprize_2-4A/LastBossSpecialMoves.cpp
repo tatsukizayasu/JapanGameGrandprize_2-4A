@@ -124,7 +124,7 @@ LastBossSpecialMoves::~LastBossSpecialMoves()
 	{
 		if (i == 0)
 		{
-			for (int j = 0; j < EFFECT_BODY_IMAGES; i++)
+			for (int j = 0; j < EFFECT_BODY_IMAGES; j++)
 			{
 				DeleteGraph(effect[i].images[j]);
 			}
@@ -141,11 +141,11 @@ LastBossSpecialMoves::~LastBossSpecialMoves()
 
 	for (int i = 0; i < CHARGE_EFFECT_NUM; i++)
 	{
-		for (int j = 0; j < EFFECT_BODY_IMAGES; i++)
+		for (int j = 0; j < EFFECT_BODY_IMAGES; j++)
 		{
 			charge_effect[i].images[j];
 		}
-		charge_effect[i].images;
+		delete[] charge_effect[i].images;
 	}
 	delete[] charge_effect;
 }
@@ -394,7 +394,20 @@ int LastBossSpecialMoves::GetDamage() const
 }
 
 //終了情報の取得
-int LastBossSpecialMoves::GetEnd() const
+bool LastBossSpecialMoves::GetEnd() const
 {
 	return end;
+}
+
+//チャージ終了
+bool LastBossSpecialMoves::EndCharge() const
+{
+	bool ret = false;
+
+	if (state != SPECIAL_MOVES_STATE::CHARGE)
+	{
+		ret = true;
+	}
+
+	return ret;
 }
