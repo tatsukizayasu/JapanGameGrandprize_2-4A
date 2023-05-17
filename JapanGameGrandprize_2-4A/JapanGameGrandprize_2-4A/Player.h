@@ -96,6 +96,13 @@ private:
 	int healsound;//回復
 	int deathsound;//死亡
 	int open_menu;		//メニューを開く音
+	int close_menu;		//メニューを閉じる音
+	
+	int explosion_sound;
+	int melt_sound;
+	int pararysis_sound;
+	int poison_sound;
+	int heal_sound;
 
 
 
