@@ -4,7 +4,7 @@
 Element_DamageWall::Element_DamageWall(short type, Resource resource, Location location, Area area) : Stage_Element_Base(&resource.images.at(0), location, area)
 {
 
-	this->area = area;
+	this->area = { -999.0f,-999.0f };
 	this->type = type;
 	
 	this->resource = resource;
