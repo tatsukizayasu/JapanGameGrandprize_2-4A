@@ -95,6 +95,8 @@ private:
 	int flysound;//”ò‚Ô
 	int healsound;//‰ñ•œ
 	int deathsound;//€–S
+	int open_menu;		//ƒƒjƒ…[‚ğŠJ‚­‰¹
+
 
 
 	ATTRIBUTE attribute[6];         //’e‚Ì‘®«

@@ -129,6 +129,8 @@ Player::Player(Stage* stage)
 	flysound = LoadSoundMem("sound/Playerbgm/fly.mp3");
 	healsound = LoadSoundMem("sound/Playerbgm/heal01.mp3");
 	deathsound = LoadSoundMem("sound/Playerbgm/se_enemy_down01.mp3");
+	open_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craftmenu.mp3");
+
 
 
 	image_size_x = 40;
@@ -545,6 +547,7 @@ void Player::Update()
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
+		PlaySoundMem(open_menu, DX_PLAYTYPE_BACK);
 		pouch_open = true;
 		for (int i = 0; i < PLAYER_ELEMENT; i++)
 		{
