@@ -26,7 +26,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-GameMain::GameMain(short stage_num)
+GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT])
 {
 	this->stage_num = stage_num;
 
@@ -52,7 +52,14 @@ GameMain::GameMain(short stage_num)
 	enemy_spawn_volume = 0;
 	
 	stage = new Stage(this->stage_num);
-	player = new Player(stage);
+
+	player = new Player(stage, element_volume);
+
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		old_element_volume[i] = element_volume[i];
+	}
+
 	stage->SetPlayer(player);
 
 	EnemyBase::CreateLogFont();
@@ -128,7 +135,7 @@ AbstractScene* GameMain::Update()
 		case Pause::MENU::RETRY:
 			
 			GetDrawScreenGraph(0, 0, 1280, 720, now_graph);
-			return new GameMain_Restart(stage_num, now_graph);
+			return new GameMain_Restart(stage_num, now_graph, old_element_volume);
 			break;
 
 		case Pause::MENU::TITLE:
@@ -156,19 +163,27 @@ AbstractScene* GameMain::Update()
 	player->Update();
 	stage->Update(player);
 
-
 	// ボスを倒した場合
 	if (EnemyUpdate() == true)
 	{
+		ElementItem** element = player->GetPlayerElement();
+		unsigned int element_volume[PLAYER_ELEMENT] = { 0 };
+		for (int i = 0; i < PLAYER_ELEMENT; i++)
+		{
+			element_volume[i] = element[i]->GetVolume();
+		}
+		
+
+
 		// 最後のステージをクリアした場合
 		if (stage_num == 5) { return new END(); }
 
-		return new GameClear(stage_num);
+		return new GameClear(stage_num, element_volume);
 	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		return new GameOver(stage_num);
+		return new GameOver(stage_num, old_element_volume);
 	}
 
 
