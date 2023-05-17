@@ -175,7 +175,9 @@
     <ClInclude Include="DragonThunder.h" />
     <ClInclude Include="ElementItem.h" />
     <ClInclude Include="EnemyBulletBase.h" />
+    <ClInclude Include="EnemySE.h" />
     <ClInclude Include="EnemySlimeBoss.h" />
+    <ClInclude Include="EnemyKind.h" />
     <ClInclude Include="EnumElementItem.h" />
     <ClInclude Include="EnumEnemyType.h" />
     <ClInclude Include="GhostBullet.h" />
@@ -260,6 +262,7 @@
     <ClCompile Include="ColliderBase.cpp" />
     <ClCompile Include="EfectBeam.cpp" />
     <ClCompile Include="ElementItem.cpp" />
+    <ClCompile Include="EnemySE.cpp" />
     <ClCompile Include="EnemySlimeBoss.cpp" />
     <ClCompile Include="GhostBullet.cpp" />
     <ClCompile Include="Harpy.cpp" />

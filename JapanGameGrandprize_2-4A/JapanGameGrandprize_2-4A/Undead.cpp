@@ -4,6 +4,8 @@
 #include <math.h>
 #include "Define.h"
 #include "CameraWork.h"
+#include "EnemySE.h"
+
 
 //UŒ‚‚ğ‚·‚é”ÍˆÍ
 #define UNDEAD_ATTACK_DISTANCE 50
@@ -94,7 +96,6 @@ Undead::Undead(Location spawn_location)
 	images = new int[UNDEAD_IMAGES];
 	LoadDivGraph("Images/Enemy/undead.png", UNDEAD_IMAGES, UNDEAD_IMAGES, 1, 250, 250, images);
 	GetGraphSizeF(images[0], &size.width, &size.height);
-	undeadslash = LoadSoundMem("sound/Enemybgm/undeadslash.mp3");
 	InitDamageLog();
 }
 
@@ -237,7 +238,8 @@ void Undead::DistancePlayer(const Location player_location)
 	//UŒ‚”ÍˆÍ‚É“ü‚Á‚Ä‚¢‚é‚©‚ÂUŒ‚‚Ü‚Å‚ÌŠÔ‚ª0ˆÈ‰º‚¾‚Á‚½‚çUŒ‚‚·‚é
 	if ((distance < UNDEAD_ATTACK_DISTANCE) && (attack_interval <= 0))
 	{
-		PlaySoundMem(undeadslash, DX_PLAYTYPE_BACK);
+		PlaySoundMem(EnemySE::GetEnemySE(kind).attack, DX_PLAYTYPE_BACK);
+
 		state = ENEMY_STATE::ATTACK;
 		area.width += UNDEAD_WIDTH / 2;
 		image_argument = UNDEAD_MOVE_IMAGES;

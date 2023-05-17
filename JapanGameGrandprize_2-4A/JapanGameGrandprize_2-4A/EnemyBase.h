@@ -3,8 +3,10 @@
 #include "Bullet.h"
 #include "ElementItem.h"
 #include "EnumEnemyType.h"
+#include "EnemyKind.h"
 #include "BoxCollider.h"
 #include "Stage/Stage.h"
+
 
 //各属性のドロップ数
 #define FIRE_DROP 4
@@ -64,25 +66,6 @@ enum class STAGE_DIRECTION
 	RIGHT	//右面
 };
 
-//エネミーの種類
-enum class ENEMY_KIND
-{
-	/*雑魚敵*/
-	SLIME = 200,	//スライム
-	UNDEAD,		//アンデット
-	HARPY,		//ハーピィ
-	MAGE,		//メイジ
-	GHOST,		//ゴースト
-	WYVERN,		//ワイバーン
-
-	/*ボス*/
-	SLIME_BOSS, //スライムキング
-	TORRENT,	//トレント
-	KRAKEN,	    //クラーケン
-	DRAGON,		//ドラゴン
-	LAST_BOSS,	//ラスボス
-	NONE
-};
 
 //エネミーの状態
 enum class ENEMY_STATE
