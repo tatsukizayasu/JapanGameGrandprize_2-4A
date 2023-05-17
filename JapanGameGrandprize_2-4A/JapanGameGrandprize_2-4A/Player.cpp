@@ -129,7 +129,7 @@ Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT])
 	flysound = LoadSoundMem("sound/Playerbgm/fly.mp3");
 	healsound = LoadSoundMem("sound/Playerbgm/heal01.mp3");
 	deathsound = LoadSoundMem("sound/Playerbgm/se_enemy_down01.mp3");
-	open_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craftmenu.mp3");
+	open_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craftmenu.wav");
 
 
 

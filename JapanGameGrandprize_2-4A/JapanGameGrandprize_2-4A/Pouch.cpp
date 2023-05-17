@@ -155,7 +155,7 @@ Pouch::Pouch()
 		chemical_formula_heal[i].ui_name_image = images_init_heal[i];
 	}
 
-	craft = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craft.mp3");
+	craft = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craft.wav");
 	cancel = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/cancel.wav");
 	cursor_move = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menumove.wav");
 
@@ -714,6 +714,10 @@ void Pouch::Update()
 					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 				}
 			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
+			}
 			break;
 		case ATTRIBUTE::MELT:
 			if (!select_melt.make_bool ||
@@ -746,6 +750,10 @@ void Pouch::Update()
 				{
 					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 				}
+			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 			}
 			break;
 		case ATTRIBUTE::POISON:
@@ -780,6 +788,10 @@ void Pouch::Update()
 					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 				}
 			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
+			}
 			break;
 		case ATTRIBUTE::PARALYSIS:
 			if (!select_pararysis.make_bool ||
@@ -813,6 +825,10 @@ void Pouch::Update()
 					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 				}
 			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
+			}
 			break;
 		case ATTRIBUTE::HEAL:
 			if (!select_heal.make_bool ||
@@ -844,6 +860,10 @@ void Pouch::Update()
 				{
 					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 				}
+			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 			}
 			break;
 		default:
