@@ -535,7 +535,7 @@ std::vector<MapChip*> Stage::GetMapChip() const
 
 	std::vector<MapChip*>map_chip = mapchip;
 	std::vector<Stage_Element_Base*>e_map_chip = GetElement_MapChip();
-	map_chip.insert(map_chip.end(), e_map_chip.begin(), e_map_chip.end());
+	map_chip.insert(map_chip.begin(), e_map_chip.begin(), e_map_chip.end());
 	return map_chip;
 }
 

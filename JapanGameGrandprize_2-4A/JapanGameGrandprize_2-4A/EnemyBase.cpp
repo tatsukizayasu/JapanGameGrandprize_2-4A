@@ -112,6 +112,15 @@ HitMapChip EnemyBase::HitStage(const Stage* stage)
 			Location chip_location = chip->GetLocation();
 			Area chip_area = chip->GetArea();
 
+			//Enemy‚ÌUpdate”ÍˆÍŠO‚É‚ ‚émap_chip‚ÍŒvŽZ‚µ‚È‚¢
+			if ((chip_location.x < location.x - SCREEN_WIDTH) ||
+				(location.x + SCREEN_WIDTH < chip_location.x) ||
+				(chip_location.y < location.y - SCREEN_HEIGHT) ||
+				(location.y + SCREEN_HEIGHT < chip_location.y))
+			{
+				continue;
+			}
+
 			if ((location.x - (area.width / 2) <= chip_location.x + (chip_area.width / 2)) &&
 				(chip_location.x - (chip_area.width / 2) <= location.x + (area.width / 2)))
 			{

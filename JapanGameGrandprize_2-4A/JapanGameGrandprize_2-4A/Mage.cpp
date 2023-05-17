@@ -251,6 +251,16 @@ void Mage::Teleport(const Stage* stage)
 
 	Location camera = CameraWork::GetCamera();
 
+	//テレポート前画面内座標
+	Location s_location = old_location - camera;
+
+	//画面外にいる場合はテレポートしない
+	if (s_location.x < -area.width / 2 || SCREEN_WIDTH + area.width / 2 < s_location.x
+		|| s_location.y < -area.height / 2 || SCREEN_HEIGHT + area.height / 2 < s_location.y)
+	{
+		return;
+	}
+
 	while (true)
 	{
 		//テレポートする距離設定

@@ -57,7 +57,8 @@ public:
 	//—‰º
 	void Fall() override;
 
-	void Idol() override;
+	void Idol(const Player* player);
+	void Idol()override {};
 
 	//UŒ‚
 	void  Attack(Location) override;
