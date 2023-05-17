@@ -105,7 +105,7 @@ Player::Player()
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Player::Player(Stage* stage)
+Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT])
 {
 
 	animation = 0;
@@ -232,7 +232,7 @@ Player::Player(Stage* stage)
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
 		pouch->SetElement(element[i], i);
-		pouch->SetElementConstruct(i);
+		pouch->SetElementConstruct(i,element_volume[i]);
 	}
 	effect_heal.display_permit = FALSE;
 	effect_heal.x = 0;

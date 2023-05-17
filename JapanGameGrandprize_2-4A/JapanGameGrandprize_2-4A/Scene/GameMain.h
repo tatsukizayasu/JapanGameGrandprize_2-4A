@@ -31,12 +31,16 @@ private:
 
     ItemController* item_controller; //アイテム管理
     BulletManager* bullet_manager; //弾の管理
+
+    //ステージ開始時のプレイヤー所持元素
+    unsigned int old_element_volume[PLAYER_ELEMENT];
+
 public:
 
 
     GameMain() = default;
     //コンストラクタ
-    GameMain(short stage_num);
+    GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT]);
 
     //デストラクタ
     ~GameMain();
