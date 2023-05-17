@@ -1,5 +1,6 @@
 #pragma once
 #include "AbstractScene.h"
+
 class GameOver :
 	public AbstractScene
 {
@@ -28,9 +29,12 @@ private:
     //フェード用カウンタ
     int fade_counter;
 
+    //プレイヤー所持元素
+    unsigned int old_element_volume[7];
+
 public:
     //コンストラクタ
-    GameOver(short stage_num);
+    GameOver(short stage_num, unsigned int old_element_volume[7]);
 
     //デストラクタ
     ~GameOver();

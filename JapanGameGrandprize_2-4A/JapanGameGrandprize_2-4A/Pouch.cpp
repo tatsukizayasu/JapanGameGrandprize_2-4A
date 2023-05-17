@@ -865,9 +865,11 @@ void Pouch::SetElement(ElementItem* item, int i)
 	element[i] = item;
 }
 
-void Pouch::SetElementConstruct(int i)
+void Pouch::SetElementConstruct(int i, unsigned int element_volume)
 {
 	int a = 10;
+	a = element_volume;
+
 	switch (element[i]->GetType())
 	{
 	case ELEMENT_ITEM::HYDROGEN:
@@ -894,6 +896,7 @@ void Pouch::SetElementConstruct(int i)
 	default:
 		break;
 	}
+
 }
 
 void Pouch::InitChemicalParameter()
