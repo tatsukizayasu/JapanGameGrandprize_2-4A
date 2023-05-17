@@ -4,6 +4,7 @@
 #include "Scene/GameMain.h"
 #include "PadInput.h"
 #include "Scene/Title.h"
+#include "EnemySE.h"
 
 #define FRAMERATE 60.0 //フレームレート
 
@@ -51,6 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return 0;
 	}
 
+	EnemySE::LoadSound();
 	// ゲームループ
 	while ((ProcessMessage() == 0) && (sceneMng->Update() != nullptr))
 	{
@@ -92,6 +94,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 		else { dNextTime = GetNowCount(); }		//補正
 	}
+
+	EnemySE::DeleteSound();
 
 	return 0;
 }

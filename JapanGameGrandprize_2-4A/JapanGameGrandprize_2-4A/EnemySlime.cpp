@@ -4,6 +4,7 @@
 #include <math.h>
 #include "Player.h"
 #include "Stage/Stage.h"
+#include "EnemySE.h"
 
 #define SLIME_ATTACK_DISTANCE_Y 15
 #define SLIME_ATTACK_SPEED 5
@@ -54,8 +55,6 @@ EnemySlime::EnemySlime(Location spawn_location)
 	images = new int[7];
 	 LoadDivGraph("Images/Enemy/mov_slime.png", 7, 7, 1, 102,61, images);
 	slime_angle = 0;
-	poisonsound = LoadSoundMem("sound/Playerbgm/poison.mp3");
-	slimeataack = LoadSoundMem("sound/Enemybgm/silmeataack.mp3");
 	//ドロップアイテムの設定
 	switch (type[0])
 	{
@@ -395,7 +394,7 @@ AttackResource EnemySlime::Hit()
 
 	if (!attack)
 	{
-		PlaySoundMem(slimeataack, DX_PLAYTYPE_BACK);
+		PlaySoundMem(EnemySE::GetEnemySE(kind).attack, DX_PLAYTYPE_BACK);
 		attack = true;
 		slime_attack = SLIME_ATTACK::AFTER_ATTACK;
 		ENEMY_TYPE attack_type[1] = { *type };
@@ -482,7 +481,6 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
-		PlaySoundMem(poisonsound, DX_PLAYTYPE_BACK);
 		if (!poison)
 		{
 			poison_damage = bullet->GetDamage() * 0;

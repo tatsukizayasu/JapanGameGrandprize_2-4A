@@ -4,7 +4,7 @@
 #include <math.h>
 #include "CameraWork.h"
 
-#define MAGE_BULLET_SPEED 5
+#define MAGE_BULLET_SPEED 7
 #define MAGE_BULLET_DAMAGE 2
 
 //-----------------------------------
