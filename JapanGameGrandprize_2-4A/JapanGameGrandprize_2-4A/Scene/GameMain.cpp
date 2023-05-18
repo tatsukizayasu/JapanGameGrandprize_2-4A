@@ -46,6 +46,16 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 		}
 	}
 
+	if ((help_image[0] = LoadGraph("Images/Help/controller_test1.png")) == -1)
+	{
+		throw "images/help/controller_test1";
+	}
+
+	if ((help_image[1] = LoadGraph("images/help/controller_test2.png")) == -1)
+	{
+		throw "images/help/controller_test2";
+	}
+
 
 	pause = new Pause();
 
@@ -162,7 +172,7 @@ AbstractScene* GameMain::Update()
 	}*/
 #endif
 
-	camera_work->Update();
+	if(!is_help_mode)camera_work->Update();
 	player->Update();
 	stage->Update(player);
 
@@ -507,8 +517,21 @@ bool GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
+
 	//ステージの描画
 	stage->DrawStageBackground();
+
+	if (is_help_mode)
+	{
+		if (player->GetIsPouchOpen())
+		{
+			DrawGraph(0, 0, help_image[1], TRUE);
+		}
+		else
+		{
+			DrawGraph(240, 0, help_image[0], TRUE);
+		}
+	}
 
 	stage->Draw();
 	stage->DrawObject();
@@ -533,4 +556,12 @@ void GameMain::Draw()const
 	//ポーズ		描画
 	if (pause->IsPause() == true) { pause->Draw(); }
 
+
+}
+
+void GameMain::SetHelpMode(bool is_help)
+{
+	is_help_mode = is_help;
+	camera_work->SetCameraLock(is_help);
+	camera_work->SetCameraState(CameraWork::STATE::FIXED);
 }

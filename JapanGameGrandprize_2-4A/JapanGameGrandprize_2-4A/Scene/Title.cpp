@@ -142,7 +142,14 @@ AbstractScene* Title::Update()
 		case Title::MENU::PLAY:
 			return new GameMain(1, element_volume, pouch);
 			break;
-
+			
+		case Title::MENU::HELP:
+		{
+			GameMain* help = new GameMain(0, element_volume, pouch);
+			help->SetHelpMode(true);
+			return help;
+			break;
+		}
 		case Title::MENU::EXIT:
 			return nullptr;
 			break;
