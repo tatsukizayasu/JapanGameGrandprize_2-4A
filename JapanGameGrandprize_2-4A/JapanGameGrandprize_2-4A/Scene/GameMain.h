@@ -34,7 +34,8 @@ private:
 
     //ステージ開始時のプレイヤー所持元素
     unsigned int old_element_volume[PLAYER_ELEMENT];
-    Pouch* old_pouch;
+    //ステージ開始時のプレイヤーのポーチ
+    Pouch old_pouch;
 
 public:
 

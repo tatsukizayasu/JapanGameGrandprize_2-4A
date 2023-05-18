@@ -252,7 +252,7 @@ Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT], Pouch*
 		
 		explosion = pouch->GetExplosion();
 		melt = pouch->GetMelt();
-		poison = pouch->GetPararysis();
+		poison = pouch->GetPoison();
 		pararysis = pouch->GetPararysis();
 		heal = pouch->GetHeal();
 	}
