@@ -84,7 +84,7 @@ AttackResource SlimeBossBody::Hit()
 	{
 		attack = true;
 		ENEMY_TYPE attack_type[1] = { *type };
-		//ret.damage = SLIME_BOSS_ATTACK_DAMAGE;
+		//ret.bless_se = SLIME_BOSS_ATTACK_DAMAGE;
 		//ret.type = attack_type;
 		ret.type_count = 1;
 	}

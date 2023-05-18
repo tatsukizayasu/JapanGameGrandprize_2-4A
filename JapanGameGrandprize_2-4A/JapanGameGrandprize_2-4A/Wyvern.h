@@ -17,7 +17,6 @@ private:
     bool attack_end; //攻撃が終わった
     bool attack; //攻撃が当たったか
     bool now_assault; //強襲攻撃かどうか
-    int damage; //ダメージ
     int movement; //y座標の移動量
     int attack_interval;        //次の攻撃までの時間
     int bless_wait_time;        //ブレスを打つまでの待機時間
@@ -33,6 +32,7 @@ private:
 
     WYVERN_ATTACK attack_state; //攻撃
     HitMapChip hit_stage;
+
 private:
 
     //移動時のアニメーション
