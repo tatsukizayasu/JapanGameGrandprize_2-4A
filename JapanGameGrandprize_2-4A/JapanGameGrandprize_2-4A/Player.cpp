@@ -351,7 +351,7 @@ void Player::Draw() const
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
-	BoxCollider::Draw();
+	//BoxCollider::Draw();
 }
 
 void Player::PouchDraw() const
