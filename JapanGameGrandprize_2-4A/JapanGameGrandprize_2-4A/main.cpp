@@ -4,6 +4,8 @@
 #include "Scene/GameMain.h"
 #include "PadInput.h"
 #include "Scene/Title.h"
+#include "EnemySE.h"
+#include "Pouch.h"
 
 #define FRAMERATE 60.0 //フレームレート
 
@@ -34,6 +36,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	try
 	{
+		unsigned int a[7];
+		
 		sceneMng = new SceneManager((AbstractScene*)new Title());
 	}
 	catch (const char* err)
@@ -51,6 +55,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return 0;
 	}
 
+	EnemySE::LoadSound();
 	// ゲームループ
 	while ((ProcessMessage() == 0) && (sceneMng->Update() != nullptr))
 	{
@@ -92,6 +97,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 		else { dNextTime = GetNowCount(); }		//補正
 	}
+
+	EnemySE::DeleteSound();
 
 	return 0;
 }

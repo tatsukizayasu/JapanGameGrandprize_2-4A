@@ -2,8 +2,9 @@
 #include "GameMain.h"
 #include "../PadInput.h"
 #include "DxLib.h"
+#include "../Pouch.h"
 
-GameClear::GameClear(short stage_num)
+GameClear::GameClear(short stage_num, unsigned int element_volume[PLAYER_ELEMENT], Pouch* pouch)
 {
 	title_font = CreateFontToHandle("Algerian", 100, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 4);
@@ -26,6 +27,13 @@ GameClear::GameClear(short stage_num)
 	this->stage_num = stage_num;
 
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
+
+	for (int i=0;i<PLAYER_ELEMENT;i++)
+	{
+		this->element_volume[i] = element_volume[i];	
+	}
+
+	this->pouch = pouch;
 }
 
 GameClear::~GameClear()
@@ -48,7 +56,7 @@ AbstractScene* GameClear::Update()
 
 		if (stage_num < 5)
 		{
-			return new GameMain(stage_num + 1);
+			return new GameMain(stage_num + 1, element_volume, pouch);
 		}
 		//else
 		//{

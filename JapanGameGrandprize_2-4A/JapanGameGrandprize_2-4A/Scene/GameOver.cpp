@@ -3,13 +3,14 @@
 #include "GameMain.h"
 #include "../PadInput.h"
 #include "Title.h"
+#include "../Pouch.h"
 
 #define FADE_TIME 120
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-GameOver::GameOver(short stage_num)
+GameOver::GameOver(short stage_num, unsigned int old_element_volume[PLAYER_ELEMENT], Pouch* old_pouch)
 {
 	title_font = CreateFontToHandle("Algerian", 100, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 4);
@@ -38,6 +39,13 @@ GameOver::GameOver(short stage_num)
 	fade_counter = 0;
 
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
+
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		this->old_element_volume[i] = old_element_volume[i];
+	}
+
+	this->old_pouch = old_pouch;
 }
 
 //-----------------------------------
@@ -91,7 +99,7 @@ AbstractScene* GameOver::Update()
 		switch (current_selection)
 		{
 		case MENU::RETRY:
-			return new GameMain(stage_num);
+			return new GameMain(stage_num, old_element_volume,old_pouch);
 			break;
 
 		case MENU::TITLE:

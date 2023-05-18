@@ -42,6 +42,14 @@ private:
 	StageBuilder* stage_builder;
 #endif
 
+	// オブジェクトのカメラワーク座標
+	Location object_camera_work;
+
+	// カメラワークの旧座標
+	Location old_camera_work;
+
+	
+
 	//スポーン地点
 	Location spawn_point;
 
@@ -132,6 +140,11 @@ public:
 	void DrawObject() const;
 
 	/// <summary>
+	/// オブジェクト カメラワーク
+	/// </summary>
+	void ObjectCameraWork(Player* player);
+
+	/// <summary>
 	/// ステージの読み込み
 	/// </summary>
 	void LoadMap(short stage_num);
@@ -217,4 +230,6 @@ public:
 	/// エレメントパラメータ設定関数
 	/// </summary>
 	void SetElement();
+
+	short GetStageNum() { return stage_num; }
 };

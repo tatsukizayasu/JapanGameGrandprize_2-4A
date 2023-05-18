@@ -27,16 +27,14 @@ LastBossBarrier::LastBossBarrier(const Location spawn_location)
 
 	LoadDivGraph("Images/Enemy/SpecialMoves/barrier2_2.png", BARRIER_NUM, 2, 7, 384, 383,images);
 
-	for (int i = 0; i < BARRIER_VOLUME; i++)
-	{
-		animation[i] = 0;
-	}
+
+		animation = 0;
 	size = 2.0;
 	angle = 0.0;
 	count = 0;
 	durability = DURABILITY;
 	old_durability = durability;
-	volume = BARRIER_VOLUME;
+	alpha = 255;
 }
 
 //-----------------------------------
@@ -58,55 +56,39 @@ void LastBossBarrier::Update()
 {
 	count++;
 
+
+
 	if (!end_deployment)
 	{
 		Deployment();
 	}
 	else
 	{
-		if ((durability / 20) < (old_durability / 20))
+		alpha = static_cast<int>(255 * (static_cast<double>(durability) / DURABILITY));
+		if (count % static_cast<int>(BARRIER_ANIMATION * 2.5) == 0)
 		{
-			for (int i = 0; i < ((old_durability / 20) - (durability / 20)); i++)
-			{
-				animation[volume - 1]++;
-				volume--;
-				if (volume <= 1)
-				{
-					volume = BARRIER_VOLUME;
-				}
-			}
-			
+			animation = (++animation) % 3;
 		}
-		old_durability = durability;
+
 	}
+	
 }
+
 //バリアの展開
 void LastBossBarrier::Deployment()
 {
-	int end_deployment_count = 0;
 
+	
 	if (count % BARRIER_ANIMATION == 0)
 	{
-		for (int i = 0; i < BARRIER_VOLUME; i++)
-		{
-			if (animation[i] < 9)
-			{
-				animation[i]++;
-			}
-			else
-			{
-				end_deployment_count++;
-
-			}
-		}
+		animation++;
 	}
-
-	if (BARRIER_VOLUME <= end_deployment_count)
+	if (9 < animation)
 	{
 		end_deployment = true;
-		animation[0] = 11;
 	}
 }
+
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
@@ -128,14 +110,14 @@ void LastBossBarrier::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	DrawCircle(draw_location.x, draw_location.y,radius,0x0000ff,TRUE);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 125);
-	for (int i = 0; i < BARRIER_VOLUME; i++)
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+	if (end_deployment)
 	{
-		if (animation[i] <BARRIER_NUM)
-		{
-			DrawRotaGraphF(draw_location.x, draw_location.y, size, angle, images[animation[i]], TRUE);
-		}
+		DrawRotaGraphF(draw_location.x, draw_location.y, size, angle, images[animation + 8], TRUE);
+	}
+	else
+	{
+		DrawRotaGraphF(draw_location.x, draw_location.y, size, angle, images[animation], TRUE);
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
