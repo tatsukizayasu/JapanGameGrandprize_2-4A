@@ -46,6 +46,8 @@ Pouch::Pouch()
 	move_up = false;
 	move_down = false;
 	tab = ATTRIBUTE::EXPLOSION;
+
+	//画像
 	second_tab_image[0] = LoadGraph("Images/ItemTab/explosion/melt_explosion.png");
 	second_tab_image[1] = LoadGraph("Images/ItemTab/explosion/poison.png");
 	second_tab_image[2] = LoadGraph("Images/ItemTab/explosion/paralysis.png");
@@ -152,6 +154,10 @@ Pouch::Pouch()
 	{
 		chemical_formula_heal[i].ui_name_image = images_init_heal[i];
 	}
+
+	craft = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craft.wav");
+	cancel = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/cancel.wav");
+	cursor_move = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menumove.wav");
 
 	//元素の初期化
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
@@ -559,12 +565,13 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 //アップデート
 void Pouch::Update()
 {
-	if (old < 10000)
+	if (old < 15000)
 	{
-		if (10000 < PAD_INPUT::GetRStick().x)
+		if (15000 < PAD_INPUT::GetRStick().x)
 		{
 			move_down = false;
 			move_up = false;
+			PlaySoundMem(cursor_move, DX_PLAYTYPE_BACK);
 			switch (tab)
 			{
 			case ATTRIBUTE::EXPLOSION:
@@ -604,12 +611,13 @@ void Pouch::Update()
 
 	}
 
-	if (old > -10000)
+	if (old > -15000)
 	{
-		if (-10000 > PAD_INPUT::GetRStick().x)
+		if (-15000 > PAD_INPUT::GetRStick().x)
 		{
 			move_down = false;
 			move_up = false;
+			PlaySoundMem(cursor_move, DX_PLAYTYPE_BACK);
 			switch (tab)
 			{
 			case ATTRIBUTE::EXPLOSION:
@@ -681,6 +689,7 @@ void Pouch::Update()
 
 				if (ComparisonElement(chemical_formula_explosion[cursol]))
 				{
+					PlaySoundMem(craft, DX_PLAYTYPE_BACK);
 					if (select_explosion.tag_number == chemical_formula_explosion[cursol].tag_number)
 					{
 						if (select_explosion.number_of_bullets < 100)
@@ -700,6 +709,14 @@ void Pouch::Update()
 						ConsumptionMaterial();
 					}
 				}
+				else
+				{
+					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
+				}
+			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 			}
 			break;
 		case ATTRIBUTE::MELT:
@@ -709,6 +726,7 @@ void Pouch::Update()
 
 				if (ComparisonElement(chemical_formula_melt[cursol]))
 				{
+					PlaySoundMem(craft, DX_PLAYTYPE_BACK);
 					if (select_melt.tag_number == chemical_formula_melt[cursol].tag_number)
 					{
 						if (select_melt.number_of_bullets < 100)
@@ -728,6 +746,14 @@ void Pouch::Update()
 						ConsumptionMaterial();
 					}
 				}
+				else
+				{
+					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
+				}
+			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 			}
 			break;
 		case ATTRIBUTE::POISON:
@@ -737,6 +763,7 @@ void Pouch::Update()
 
 				if (ComparisonElement(chemical_formula_poison[cursol]))
 				{
+					PlaySoundMem(craft, DX_PLAYTYPE_BACK);
 					if (select_poison.tag_number == chemical_formula_poison[cursol].tag_number)
 					{
 						if (select_poison.number_of_bullets < 100)
@@ -756,6 +783,14 @@ void Pouch::Update()
 						ConsumptionMaterial();
 					}
 				}
+				else
+				{
+					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
+				}
+			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 			}
 			break;
 		case ATTRIBUTE::PARALYSIS:
@@ -765,6 +800,7 @@ void Pouch::Update()
 
 				if (ComparisonElement(chemical_formula_pararysis[cursol]))
 				{
+					PlaySoundMem(craft, DX_PLAYTYPE_BACK);
 					if (select_pararysis.tag_number == chemical_formula_pararysis[cursol].tag_number)
 					{
 						if (select_pararysis.number_of_bullets < 100)
@@ -784,13 +820,21 @@ void Pouch::Update()
 						ConsumptionMaterial();
 					}
 				}
+				else
+				{
+					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
+				}
+			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 			}
 			break;
 		case ATTRIBUTE::HEAL:
 			if (!select_heal.make_bool ||
 				select_heal.tag_number == chemical_formula_heal[cursol].tag_number)
 			{
-
+				PlaySoundMem(craft, DX_PLAYTYPE_BACK);
 				if (ComparisonElement(chemical_formula_heal[cursol]))
 				{
 					if (select_heal.tag_number == chemical_formula_heal[cursol].tag_number)
@@ -812,6 +856,14 @@ void Pouch::Update()
 						ConsumptionMaterial();
 					}
 				}
+				else
+				{
+					PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
+				}
+			}
+			else
+			{
+				PlaySoundMem(cancel, DX_PLAYTYPE_BACK);
 			}
 			break;
 		default:
@@ -828,7 +880,7 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
-
+			PlaySoundMem(craft, DX_PLAYTYPE_BACK);
 			if (cursol > 0)
 			{
 				cursol--;
@@ -846,6 +898,7 @@ void Pouch::TabUpdate(int max_num)
 	{
 		if (count++ % 10 == 0)
 		{
+			PlaySoundMem(craft, DX_PLAYTYPE_BACK);
 			cursol++;
 			if (cursol < max_num)
 			{
