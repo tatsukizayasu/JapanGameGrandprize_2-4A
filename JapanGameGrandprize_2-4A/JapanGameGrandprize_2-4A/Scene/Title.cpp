@@ -145,7 +145,7 @@ AbstractScene* Title::Update()
 			
 		case Title::MENU::HELP:
 		{
-			GameMain* help = new GameMain(0);
+			GameMain* help = new GameMain(0, element_volume, pouch);
 			help->SetHelpMode(true);
 			return help;
 			break;
