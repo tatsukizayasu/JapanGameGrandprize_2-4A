@@ -102,4 +102,6 @@ public:
 	void InitializePararysis();
 
 	void InitializeDisplayChemicalFormula();
+
+	ElementItem* GetElement(int num)const { return element[num]; }
 };

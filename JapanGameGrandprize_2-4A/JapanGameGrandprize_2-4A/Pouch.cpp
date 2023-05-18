@@ -565,9 +565,9 @@ void Pouch::ElementDraw(ChemicalFormulaParameter bring) const
 //アップデート
 void Pouch::Update()
 {
-	if (old < 10000)
+	if (old < 15000)
 	{
-		if (10000 < PAD_INPUT::GetRStick().x)
+		if (15000 < PAD_INPUT::GetRStick().x)
 		{
 			move_down = false;
 			move_up = false;
@@ -611,9 +611,9 @@ void Pouch::Update()
 
 	}
 
-	if (old > -10000)
+	if (old > -15000)
 	{
-		if (-10000 > PAD_INPUT::GetRStick().x)
+		if (-15000 > PAD_INPUT::GetRStick().x)
 		{
 			move_down = false;
 			move_up = false;

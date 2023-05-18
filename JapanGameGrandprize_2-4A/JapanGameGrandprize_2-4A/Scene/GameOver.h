@@ -1,6 +1,8 @@
 #pragma once
 #include "AbstractScene.h"
 
+class Pouch;
+
 class GameOver :
 	public AbstractScene
 {
@@ -32,9 +34,12 @@ private:
     //プレイヤー所持元素
     unsigned int old_element_volume[7];
 
+    //ステージ開始時のプレイヤーポーチ
+    Pouch* old_pouch;
+
 public:
     //コンストラクタ
-    GameOver(short stage_num, unsigned int old_element_volume[7]);
+    GameOver(short stage_num, unsigned int old_element_volume[7], Pouch* old_pouch);
 
     //デストラクタ
     ~GameOver();

@@ -13,6 +13,7 @@
 #define SCREEN_WIDTH 1280	//画面サイズ (横)
 #define GRAVITY 10 //重力
 
+#define BULLET_KINDS 5		//調合できる弾の種類数
 #define EXPLOSION_MAX_NUM 5	//爆発の化合物の個数
 #define POISON_MAX_NUM 5		//毒　の化合物の個数
 #define MELT_MAX_NUM 5			//溶解の化合物の個数

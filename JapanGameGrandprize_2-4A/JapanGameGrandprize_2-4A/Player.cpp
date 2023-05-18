@@ -105,7 +105,7 @@ Player::Player()
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT])
+Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT], Pouch* pouch)
 {
 
 	animation = 0;
@@ -235,13 +235,28 @@ Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT])
 		element[i] = new ElementItem(static_cast<ELEMENT_ITEM>(i));
 	}
 
-	pouch = new Pouch();
+	this->pouch = new Pouch();
+
+	
 
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
-		pouch->SetElement(element[i], i);
-		pouch->SetElementConstruct(i,element_volume[i]);
+		this->pouch->SetElement(element[i], i);
+		
+		this->pouch->SetElementConstruct(i, element_volume[i]);
 	}
+
+	if (stage->GetStageNum() != 1)
+	{
+		this->pouch = pouch;
+		
+		explosion = pouch->GetExplosion();
+		melt = pouch->GetMelt();
+		poison = pouch->GetPararysis();
+		pararysis = pouch->GetPararysis();
+		heal = pouch->GetHeal();
+	}
+
 	effect_heal.display_permit = FALSE;
 	effect_heal.x = 0;
 	effect_heal.y = 0;
@@ -394,7 +409,7 @@ void Player::PlayerUiDraw(float x, float y) const
 
 
 	//ここまで
-
+	
 	//現在の選択肢
 	float chemical_formula_y = hp_y - 28;
 	float bullet_remain_y = chemical_formula_y - 35;
@@ -760,6 +775,7 @@ void Player::Update()
 
 	if (hp <= 0)
 	{
+		PlaySoundMem(deathsound, DX_PLAYTYPE_BACK);
 		player_state = PLAYER_STATE::DEATH;
 	}
 
