@@ -45,6 +45,11 @@ Stage::Stage(short stage_num)
 		}
 	}
 
+	background_image[0] = LoadGraph("Images/Scene/Stage/1/GackGround1.png");
+	background_image[1] = LoadGraph("Images/Scene/Stage/1/GackGround2.png");
+	background_image[2] = LoadGraph("Images/Scene/Stage/1/GackGround3.png");
+	background_image[3] = LoadGraph("Images/Scene/Stage/1/GackGround4.png");
+	background_image[4] = LoadGraph("Images/Scene/Stage/1/GackGround5.png");
 
 	for (int& c : backgraound_image_color)
 	{
@@ -311,11 +316,23 @@ void Stage::DrawStageBackground() const
 	switch (stage_num)
 	{
 	case 1:
-		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+		DrawBox(0, 0, 1280, 720, 0xffeeee, true);
+		DrawGraphF(-fmodf(background_location.x * 0.2, SCREEN_WIDTH), 0				   - background_location.y * 0.2+100, background_image[4], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.2, SCREEN_WIDTH) + SCREEN_WIDTH, 0 - background_location.y * 0.2 + 100, background_image[4], TRUE);
 
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.3, SCREEN_WIDTH), 0				   - background_location.y * 0.3 + 100, background_image[3], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.3, SCREEN_WIDTH) + SCREEN_WIDTH, 0 - background_location.y * 0.3 + 100, background_image[3], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x * 0.6, SCREEN_WIDTH), 0				   - background_location.y * 0.4 + 100, background_image[2], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.6, SCREEN_WIDTH) + SCREEN_WIDTH, 0 - background_location.y * 0.4 + 100, background_image[2], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0				   - background_location.y * 0.5 + 100, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0 - background_location.y * 0.5 + 100, background_image[1], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x,       SCREEN_WIDTH), 0				   - background_location.y * 0.7 + 100, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x,       SCREEN_WIDTH) + SCREEN_WIDTH, 0 - background_location.y * 0.7 + 100
+			
+, background_image[0], TRUE);
 		break;
 	case 2:
 
