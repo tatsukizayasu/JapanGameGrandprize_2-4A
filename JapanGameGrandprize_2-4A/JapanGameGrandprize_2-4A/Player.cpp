@@ -760,6 +760,7 @@ void Player::Update()
 
 	if (hp <= 0)
 	{
+		PlaySoundMem(deathsound, DX_PLAYTYPE_BACK);
 		player_state = PLAYER_STATE::DEATH;
 	}
 
