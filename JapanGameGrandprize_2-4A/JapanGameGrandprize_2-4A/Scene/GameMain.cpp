@@ -81,6 +81,8 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	is_spawn_boss = false;
 
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
+
+	old_pouch = pouch;
 }
 
 //-----------------------------------
