@@ -23,7 +23,7 @@ enum class SPECIAL_MOVES_STATE
 class LastBossSpecialMoves
 {
 private:
-	int end; //終了
+	bool end; //終了
 	int tick; //更新
 	Effect* effect; //エフェクト
 	Effect* charge_effect; //チャージエフェクト
@@ -45,6 +45,9 @@ public:
 	int GetDamage() const;
 
 	//終了情報の取得
-	int GetEnd() const;
+	bool GetEnd() const;
+
+	//チャージ終了
+	bool EndCharge() const;
 };
 

@@ -763,8 +763,12 @@ bool LastBoss::CheckHitBulelt(const BulletBase* bullet)
 		{
 			if (barrier->HitSphere(bullet))
 			{
+				if ((special_moves != nullptr) && !special_moves->EndCharge())
+				{
+					barrier->HitBullet(bullet);
+				}
 				ret = true;
-				barrier->HitBullet(bullet);
+
 			}
 		}
 		else
