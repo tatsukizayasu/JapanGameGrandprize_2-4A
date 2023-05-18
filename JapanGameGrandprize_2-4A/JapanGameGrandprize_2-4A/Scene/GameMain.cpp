@@ -26,7 +26,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT])
+GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT], Pouch* pouch)
 {
 	this->stage_num = stage_num;
 
@@ -53,7 +53,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT])
 	
 	stage = new Stage(this->stage_num);
 
-	player = new Player(stage, element_volume);
+	player = new Player(stage, element_volume, pouch);
 
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
@@ -135,7 +135,7 @@ AbstractScene* GameMain::Update()
 		case Pause::MENU::RETRY:
 			
 			GetDrawScreenGraph(0, 0, 1280, 720, now_graph);
-			return new GameMain_Restart(stage_num, now_graph, old_element_volume);
+			return new GameMain_Restart(stage_num, now_graph, old_element_volume,old_pouch);
 			break;
 
 		case Pause::MENU::TITLE:
@@ -153,10 +153,10 @@ AbstractScene* GameMain::Update()
 
 
 #ifdef _DEBUG
-	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_LEFT))
+	/*if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_LEFT))
 	{
 		return new DotByDot();
-	}
+	}*/
 #endif
 
 	camera_work->Update();
@@ -177,13 +177,15 @@ AbstractScene* GameMain::Update()
 
 		// 最後のステージをクリアした場合
 		if (stage_num == 5) { return new END(); }
+		
+		ChemicalFormulaParameter* chemical_bullets[BULLET_KINDS];
 
-		return new GameClear(stage_num, element_volume);
+		return new GameClear(stage_num, element_volume,player->GetPouch());
 	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		return new GameOver(stage_num, old_element_volume);
+		return new GameOver(stage_num, old_element_volume,old_pouch);
 	}
 
 

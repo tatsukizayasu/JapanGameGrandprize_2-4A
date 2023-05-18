@@ -5,6 +5,7 @@
 #include "PadInput.h"
 #include "Scene/Title.h"
 #include "EnemySE.h"
+#include "Pouch.h"
 
 #define FRAMERATE 60.0 //フレームレート
 
@@ -35,6 +36,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	try
 	{
+		unsigned int a[7];
+		
 		sceneMng = new SceneManager((AbstractScene*)new Title());
 	}
 	catch (const char* err)

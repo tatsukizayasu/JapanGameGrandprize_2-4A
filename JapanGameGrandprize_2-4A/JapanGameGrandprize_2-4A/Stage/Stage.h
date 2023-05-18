@@ -230,4 +230,6 @@ public:
 	/// エレメントパラメータ設定関数
 	/// </summary>
 	void SetElement();
+
+	short GetStageNum() { return stage_num; }
 };

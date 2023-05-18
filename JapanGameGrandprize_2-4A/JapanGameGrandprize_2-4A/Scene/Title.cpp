@@ -134,10 +134,13 @@ AbstractScene* Title::Update()
 
 		unsigned int element_volume[PLAYER_ELEMENT] = { 10,10,10,10,10,10,10 };
 		
+		Pouch* pouch;
+		pouch = new Pouch;
+
 		switch (current_selection)
 		{
 		case Title::MENU::PLAY:
-			return new GameMain(1, element_volume);
+			return new GameMain(1, element_volume, pouch);
 			break;
 
 		case Title::MENU::EXIT:

@@ -34,13 +34,13 @@ private:
 
     //ステージ開始時のプレイヤー所持元素
     unsigned int old_element_volume[PLAYER_ELEMENT];
+    Pouch* old_pouch;
 
 public:
 
-
     GameMain() = default;
     //コンストラクタ
-    GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT]);
+    GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT], Pouch* pouch);
 
     //デストラクタ
     ~GameMain();

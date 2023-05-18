@@ -122,7 +122,7 @@ private:
 public:
 
 	Player();
-	Player(Stage*, unsigned int element_volume[PLAYER_ELEMENT]);
+	Player(Stage*, unsigned int element_volume[PLAYER_ELEMENT], Pouch* pouch);
 	~Player();
 	void Draw()const;
 	void PouchDraw()const;
@@ -148,6 +148,9 @@ public:
 
 	//ƒvƒŒƒCƒ„[ŠŒ³‘fæ“¾ŠÖ”
 	ElementItem** GetPlayerElement() const { return element; }
+	Pouch* GetPouch()const { return pouch; }
+	
+
 
 	//Œ³‘f‚Ì—Ê‚Ìİ’è
 	void SetElementItem(class Item* item);
