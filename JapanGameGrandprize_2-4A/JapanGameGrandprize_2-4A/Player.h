@@ -154,6 +154,7 @@ public:
 
 	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
+	bool GetIsPouchOpen()const { return pouch_open; }
 
 	//ƒvƒŒƒCƒ„[ŠŒ³‘fæ“¾ŠÖ”
 	ElementItem** GetPlayerElement() const { return element; }

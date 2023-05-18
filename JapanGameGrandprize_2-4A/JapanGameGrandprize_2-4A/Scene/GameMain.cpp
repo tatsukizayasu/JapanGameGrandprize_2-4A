@@ -46,6 +46,16 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 		}
 	}
 
+	if ((help_image[0] = LoadGraph("Images/Help/controller_test1.png")) == -1)
+	{
+		throw "images/help/controller_test1";
+	}
+
+	if ((help_image[1] = LoadGraph("images/help/controller_test2.png")) == -1)
+	{
+		throw "images/help/controller_test2";
+	}
+
 
 	pause = new Pause();
 
@@ -83,6 +93,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	ChangeVolumeSoundMem(155, background_music);
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 
+	old_pouch =*pouch;
 }
 
 //-----------------------------------
@@ -137,7 +148,7 @@ AbstractScene* GameMain::Update()
 		case Pause::MENU::RETRY:
 			
 			GetDrawScreenGraph(0, 0, 1280, 720, now_graph);
-			return new GameMain_Restart(stage_num, now_graph, old_element_volume,old_pouch);
+			return new GameMain_Restart(stage_num, now_graph, old_element_volume,&old_pouch);
 			break;
 
 		case Pause::MENU::TITLE:
@@ -161,7 +172,7 @@ AbstractScene* GameMain::Update()
 	}*/
 #endif
 
-	camera_work->Update();
+	if(!is_help_mode)camera_work->Update();
 	player->Update();
 	stage->Update(player);
 
@@ -187,7 +198,7 @@ AbstractScene* GameMain::Update()
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		return new GameOver(stage_num, old_element_volume,old_pouch);
+		return new GameOver(stage_num, old_element_volume,&old_pouch);
 	}
 
 
@@ -506,8 +517,21 @@ bool GameMain::EnemyUpdate()
 //-----------------------------------
 void GameMain::Draw()const
 {
+
 	//ステージの描画
 	stage->DrawStageBackground();
+
+	if (is_help_mode)
+	{
+		if (player->GetIsPouchOpen())
+		{
+			DrawGraph(0, 0, help_image[1], TRUE);
+		}
+		else
+		{
+			DrawGraph(240, 0, help_image[0], TRUE);
+		}
+	}
 
 	stage->Draw();
 	stage->DrawObject();
@@ -532,4 +556,12 @@ void GameMain::Draw()const
 	//ポーズ		描画
 	if (pause->IsPause() == true) { pause->Draw(); }
 
+
+}
+
+void GameMain::SetHelpMode(bool is_help)
+{
+	is_help_mode = is_help;
+	camera_work->SetCameraLock(is_help);
+	camera_work->SetCameraState(CameraWork::STATE::FIXED);
 }

@@ -13,7 +13,7 @@ private:
     {
         PLAY,
         //OPTION,
-        //HELP,
+        HELP,
         EXIT,
         MENU_SIZE
     };
@@ -21,7 +21,7 @@ private:
     const char* menu_items[static_cast<int>(MENU::MENU_SIZE)] = {
         "PLAY",
         //"OPTION",
-        //"HELP",
+        "HELP",
         "EXIT"
     };
 

@@ -27,14 +27,17 @@ private:
 
     //操作間隔時間
     int input_margin;
-    
+
+    bool is_help_mode;  //ヘルプ用
+    int help_image[2]; //コントローラ/操作説明の画像
 
     ItemController* item_controller; //アイテム管理
     BulletManager* bullet_manager; //弾の管理
 
     //ステージ開始時のプレイヤー所持元素
     unsigned int old_element_volume[PLAYER_ELEMENT];
-    Pouch* old_pouch;
+    //ステージ開始時のプレイヤーのポーチ
+    Pouch old_pouch;
 
 public:
 
@@ -56,4 +59,6 @@ public:
 
     //描画
     void Draw() const override;
+
+    void SetHelpMode(bool is_help);
 };
