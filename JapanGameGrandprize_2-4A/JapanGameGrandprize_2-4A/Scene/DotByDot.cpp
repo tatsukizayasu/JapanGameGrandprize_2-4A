@@ -73,7 +73,9 @@ AbstractScene* DotByDot::Update()
 {
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_DPAD_LEFT))
 	{
-		return new GameMain(1);
+		unsigned int element_volume[PLAYER_ELEMENT] = { 30,30,30,30,30,30,30 };
+
+		return new GameMain(1,element_volume);
 	}
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_A))

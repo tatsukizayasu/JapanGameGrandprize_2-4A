@@ -105,7 +105,7 @@ Player::Player()
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-Player::Player(Stage* stage)
+Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT])
 {
 
 	animation = 0;
@@ -125,10 +125,20 @@ Player::Player(Stage* stage)
 	hp_image_top = LoadGraph("Images/Player/HP_Bar_Top.png");
 
 
-	bulletssound = LoadSoundMem("Sound/Playerbgm/shot.mp3");
-	flysound = LoadSoundMem("sound/Playerbgm/fly.mp3");
-	healsound = LoadSoundMem("sound/Playerbgm/heal01.mp3");
-	deathsound = LoadSoundMem("sound/Playerbgm/se_enemy_down01.mp3");
+	bulletssound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/playershot.wav");
+	flysound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/fly.mp3");
+	healsound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/heal01.mp3");
+	deathsound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/se_enemy_down01.mp3");
+	open_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craftmenu.wav");
+	close_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menuclose.wav");
+
+	explosion_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/explosion.wav");
+	melt_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/melt.wav");
+	pararysis_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/Paralyze.wav");
+	poison_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/poison.wav");
+	heal_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/playerheal.wav");
+
+
 
 
 	image_size_x = 40;
@@ -230,7 +240,7 @@ Player::Player(Stage* stage)
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
 		pouch->SetElement(element[i], i);
-		pouch->SetElementConstruct(i);
+		pouch->SetElementConstruct(i,element_volume[i]);
 	}
 	effect_heal.display_permit = FALSE;
 	effect_heal.x = 0;
@@ -539,12 +549,14 @@ void Player::Update()
 	}
 
 	if (effect_heal.display_permit == TRUE) {
-		HealAnimation(static_cast<int>(location.x - CameraWork::GetCamera().x), static_cast<int>(location.y - CameraWork::GetCamera().y));
+		HealAnimation(static_cast<int>(location.x - CameraWork::GetCamera().x),
+			static_cast<int>(location.y - CameraWork::GetCamera().y));
 	}
 
 
 	if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && !pouch_open)
 	{
+		PlaySoundMem(open_menu, DX_PLAYTYPE_BACK);
 		pouch_open = true;
 		for (int i = 0; i < PLAYER_ELEMENT; i++)
 		{
@@ -553,6 +565,8 @@ void Player::Update()
 	}
 	else if (PAD_INPUT::OnButton(XINPUT_BUTTON_Y) && pouch_open)
 	{
+		StopSoundMem(open_menu);
+		PlaySoundMem(close_menu, DX_PLAYTYPE_BACK);
 		pouch_open = false;
 	}
 
@@ -636,6 +650,7 @@ void Player::Update()
 							effect_heal.display_permit = TRUE;
 							if (hp < HP_MAX)
 							{
+								PlaySoundMem(heal_sound, DX_PLAYTYPE_BACK);
 								Hp_Heal(heal->damage);
 							}
 							if (heal->number_of_bullets <= 0)
@@ -662,14 +677,12 @@ void Player::Update()
 	{
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
-			if (fuel > 0)
+			if (boost)
 			{
-				if (boost)
-				{
-					player_state = PLAYER_STATE::FLY;
-					Hovering();
-				}
+				player_state = PLAYER_STATE::FLY;
+				Hovering();
 			}
+
 			else
 			{
 				NotFly();
@@ -688,12 +701,12 @@ void Player::Update()
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_LEFT_SHOULDER))
 		{
 
-				if (boost)
-				{
-					player_state = PLAYER_STATE::FLY;
-					Hovering();
-				}
-			
+			if (boost)
+			{
+				player_state = PLAYER_STATE::FLY;
+				Hovering();
+			}
+
 			else
 			{
 				NotFly();
@@ -947,7 +960,8 @@ void Player::Jump()
 void Player::Hovering()
 {
 	MoveAnimation();
-	ChangeVolumeSoundMem(255,flysound);
+	ChangeVolumeSoundMem(255, flysound);
+
 	PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
 	not_jet_count = 0;
 	if (fly > 0)
@@ -1080,7 +1094,7 @@ void Player::NotFly()
 		}
 	}
 
-	if (fuel < 10)
+	if (fuel < 1)
 	{
 		boost = false;
 	}
@@ -1121,7 +1135,7 @@ void Player::NotFly()
 //-----------------------------------
 void Player::Shoot_Gun()
 {
-	PlaySoundMem(bulletssound, DX_PLAYTYPE_BACK);
+	
 	if (bullet[bullet_count] == nullptr)
 	{
 		switch (display_attribute)
@@ -1129,6 +1143,7 @@ void Player::Shoot_Gun()
 		case 0:
 			bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, &normal);
 			bullet_count++;
+			PlaySoundMem(bulletssound, DX_PLAYTYPE_BACK);
 			break;
 		case 1:
 			if (pouch->GetExplosion()->make_bool)
@@ -1137,6 +1152,7 @@ void Player::Shoot_Gun()
 				{
 					if (explosion->number_of_bullets > 0)
 					{
+						PlaySoundMem(explosion_sound, DX_PLAYTYPE_BACK);
 						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, explosion);
 						bullet_count++;
 						pouch->ReduceAmmo(attribute[display_attribute]);
@@ -1157,6 +1173,7 @@ void Player::Shoot_Gun()
 				{
 					if (melt->number_of_bullets > 0)
 					{
+						PlaySoundMem(melt_sound, DX_PLAYTYPE_BACK);
 						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, melt);
 						bullet_count++;
 						pouch->ReduceAmmo(attribute[display_attribute]);
@@ -1177,7 +1194,8 @@ void Player::Shoot_Gun()
 				{
 					if (poison->number_of_bullets > 0)
 					{
-						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left,poison);
+						PlaySoundMem(poison_sound, DX_PLAYTYPE_BACK);
+						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, poison);
 						bullet_count++;
 						pouch->ReduceAmmo(attribute[display_attribute]);
 					}
@@ -1197,6 +1215,7 @@ void Player::Shoot_Gun()
 				{
 					if (pararysis->number_of_bullets > 0)
 					{
+						PlaySoundMem(pararysis_sound, DX_PLAYTYPE_BACK);
 						bullet[bullet_count] = new NormalBullet(location.x, location.y, move_left, pararysis);
 						bullet_count++;
 						pouch->ReduceAmmo(attribute[display_attribute]);

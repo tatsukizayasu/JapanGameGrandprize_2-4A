@@ -95,6 +95,15 @@ private:
 	int flysound;//飛ぶ
 	int healsound;//回復
 	int deathsound;//死亡
+	int open_menu;		//メニューを開く音
+	int close_menu;		//メニューを閉じる音
+	
+	int explosion_sound;
+	int melt_sound;
+	int pararysis_sound;
+	int poison_sound;
+	int heal_sound;
+
 
 
 	ATTRIBUTE attribute[6];         //弾の属性
@@ -122,7 +131,7 @@ private:
 public:
 
 	Player();
-	Player(Stage*);
+	Player(Stage*, unsigned int element_volume[PLAYER_ELEMENT]);
 	~Player();
 	void Draw()const;
 	void PouchDraw()const;
@@ -145,6 +154,9 @@ public:
 
 	BulletBase** GetBullet()const { return bullet; }
 	PLAYER_STATE GetState() { return player_state; }
+
+	//プレイヤー所持元素取得関数
+	ElementItem** GetPlayerElement() const { return element; }
 
 	//元素の量の設定
 	void SetElementItem(class Item* item);
