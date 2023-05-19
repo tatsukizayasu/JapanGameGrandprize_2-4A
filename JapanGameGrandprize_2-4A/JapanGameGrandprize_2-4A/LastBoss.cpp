@@ -5,7 +5,7 @@
 #include "LastBossMagic.h"
 
 //‘Ì—Í
-#define LAST_BOSS_HP 100
+#define LAST_BOSS_HP 2500
 
 //Žè‚Ì”
 #define HAND_NUM 2
@@ -763,8 +763,12 @@ bool LastBoss::CheckHitBulelt(const BulletBase* bullet)
 		{
 			if (barrier->HitSphere(bullet))
 			{
+				if ((special_moves != nullptr) && !special_moves->EndCharge())
+				{
+					barrier->HitBullet(bullet);
+				}
 				ret = true;
-				barrier->HitBullet(bullet);
+
 			}
 		}
 		else

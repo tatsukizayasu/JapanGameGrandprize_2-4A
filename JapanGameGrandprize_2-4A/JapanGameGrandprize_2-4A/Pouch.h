@@ -34,7 +34,13 @@ private:
 	int each_cursor[5];
 	int each_page[5];
 	int count;
-	int page;
+
+	int cancel;			//作れない時の音
+	int cursor_move;	//カーソルが動く音
+	int craft;			//弾を作った時の音
+
+
+	int page;			//タブの値
 	int move_string;	//選択肢の移動量
 	bool on_bool;
 	bool move_up;		//選択肢を上に動かす時のフラグ
@@ -96,4 +102,6 @@ public:
 	void InitializePararysis();
 
 	void InitializeDisplayChemicalFormula();
+
+	ElementItem* GetElement(int num)const { return element[num]; }
 };

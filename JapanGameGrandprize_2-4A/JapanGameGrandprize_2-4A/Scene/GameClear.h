@@ -1,7 +1,7 @@
 #pragma once
 #include "AbstractScene.h"
 
-class ElementItem;
+class Pouch;
 
 class GameClear :
     public AbstractScene
@@ -13,9 +13,11 @@ private:
     //プレイヤーの所持元素
     unsigned int element_volume[7];
 
+    Pouch* pouch;
+
 public:
     //コンストラクタ
-    GameClear(short stage_num, unsigned int element_volume[7]);
+    GameClear(short stage_num, unsigned int element_volume[7], Pouch* pouch);
 
     //デストラクタ
     ~GameClear();

@@ -11,12 +11,12 @@ private:
     bool end_deployment; //バリアの展開終了
     int* images; //画像
     int count; //カウント
-    int animation[BARRIER_VOLUME]; //アニメーション
+    int animation; //アニメーション
     double size; //大きさ
     double angle; //角度
     int durability; //耐久値
     int old_durability; //前回の耐久値
-    int volume; //割れたバリアの量
+    int alpha; 
 
 private:
 

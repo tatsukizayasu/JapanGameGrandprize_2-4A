@@ -70,7 +70,7 @@ void Stage_Element::AddElement(short type, Location location, Area area)
 		break;
 
 	case WOODEN_FLOOR:
-		element.push_back(std::make_shared <Element_Wooden_Floor>(type, resource, location, Area{ 10.0f, MAP_CHIP_SIZE }));
+		element.push_back(std::make_shared <Element_Wooden_Floor>(type, resource, location, Area{ 12.0f, MAP_CHIP_SIZE }));
 		break;
 
 	case FALL_FLOOR:
