@@ -132,7 +132,6 @@ void EnemyBase::DeleteWeakness()
 
 		delete[] weakness[i];
 	}
-	delete[] weakness_num;
 }
 
 //-----------------------------------
