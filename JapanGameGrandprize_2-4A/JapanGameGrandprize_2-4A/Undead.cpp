@@ -130,14 +130,13 @@ void Undead::Update(const Player* player, const Stage* stage)
 {
 
 	HitMapChip hit_stage = {false,nullptr}; //ステージとの当たり判定
-	Location old_location = location; //移動前の座標
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
 		Idol();
 		break;
 	case ENEMY_STATE::MOVE:
-		Move(player->GetLocation());
+		//Move(player->GetLocation());
 
 		hit_stage = HitStage(stage);
 		if (hit_stage.hit) //ステージとの当たり判定
@@ -147,7 +146,20 @@ void Undead::Update(const Player* player, const Stage* stage)
 
 			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 			{
-				location = old_location;
+				Location chip_location = hit_stage.chip->GetLocation();
+				Area chip_area = hit_stage.chip->GetArea();
+
+				if (hit_direction == STAGE_DIRECTION::RIGHT)
+				{
+					location.x = chip_location.x +
+						(chip_area.width / 2) + (area.width / 2);
+				}
+				else
+				{
+					location.x = chip_location.x -
+						(chip_area.width / 2) - (area.width / 2);
+				}
+				
 				left_move = !left_move;
 				speed = -speed;
 			}
@@ -494,7 +506,8 @@ void Undead::Draw() const
 	{
 		DrawHPBar(UNDEAD_HP);
 	}
-	
+	DrawWeaknessIcon(UNDEAD_HP);
+
 	DrawDamageLog();
 
 	DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,

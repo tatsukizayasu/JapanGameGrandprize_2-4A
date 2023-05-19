@@ -111,6 +111,9 @@ public:
 	//ダメージログの更新
 	virtual void UpdateDamageLog();
 
+	//弱点属性のアイコン
+	virtual void DrawWeaknessIcon(const int) const;
+
 	//アイドル状態
 	virtual void Idol() = 0;
 
@@ -164,6 +167,12 @@ public:
 
 	//ログ用のフォントの削除
 	static void DeleteLogFont();
+
+	//弱点属性の情報のロード
+	static void LoadWeakness();
+
+	//弱点属性の情報の削除
+	static void DeleteWeakness();
 #ifdef _DEBUG
 	//更新(DotByDot)
 	virtual void Update(const ENEMY_STATE state) = 0;
@@ -179,6 +188,8 @@ protected:
 	bool paralysis; //麻痺状態
 	int damage;		//ダメージ
 	int* images; //画像
+	static int* icon_images; //アイコン画像
+	static int weakness_num[12]; //弱点の数
 	int hp;	//体力
 	int speed; //移動速度
 	int poison_time; //毒の効果時間
@@ -192,6 +203,7 @@ protected:
 	ENEMY_KIND kind; //エネミーの種類
 	ENEMY_TYPE* type; //エネミーのタイプ
 	ENEMY_STATE state; //エネミーの状態
+	static ATTRIBUTE* weakness[12]; //弱点
 	DamageLog damage_log[LOG_NUM]; //ダメージログ
 protected:
 

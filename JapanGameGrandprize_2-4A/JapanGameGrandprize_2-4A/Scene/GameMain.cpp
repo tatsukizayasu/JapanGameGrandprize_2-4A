@@ -73,6 +73,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	stage->SetPlayer(player);
 
 	EnemyBase::CreateLogFont();
+	EnemyBase::LoadWeakness();
 
 	SpawnEnemy();
 
@@ -114,6 +115,7 @@ GameMain::~GameMain()
 	delete player;
 	delete stage;
 
+	EnemyBase::DeleteWeakness();
 	EnemyBase::DeleteLogFont();
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
