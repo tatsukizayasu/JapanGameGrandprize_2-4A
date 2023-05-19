@@ -21,8 +21,9 @@ EnemySE::~EnemySE()
 //-----------------------------------
 void EnemySE::LoadSound()
 {
-	slime_se.attack = LoadSoundMem("sound/Enemybgm/silmeataack.mp3");
-	undead_se.attack = LoadSoundMem("sound/Enemybgm/undeadslash.mp3");
+	slime_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/slimeattack.wav");
+	undead_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/undeadattack.wav");
+	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbless.wav");
 }
 
 //-----------------------------------
@@ -32,6 +33,7 @@ void EnemySE::DeleteSound()
 {
 	DeleteSoundMem(slime_se.attack);
 	DeleteSoundMem(undead_se.attack);
+	DeleteSoundMem(wyvern_se.attack);
 }
 
 //-----------------------------------
@@ -41,6 +43,7 @@ void EnemySE::ChangeSoundVolume(const float volume)
 {
 	ChangeVolumeSoundMem(255 * (volume / 100), slime_se.attack);
 	ChangeVolumeSoundMem(255 * (volume / 100), undead_se.attack);
+	ChangeVolumeSoundMem(255 * (volume / 100), wyvern_se.attack);
 
 }
 
@@ -65,6 +68,7 @@ NomalEnemySE EnemySE::GetEnemySE(const ENEMY_KIND kind)
 	case ENEMY_KIND::GHOST:
 		break;
 	case ENEMY_KIND::WYVERN:
+		ret = wyvern_se;
 		break;
 	case ENEMY_KIND::SLIME_BOSS:
 	case ENEMY_KIND::TORRENT:

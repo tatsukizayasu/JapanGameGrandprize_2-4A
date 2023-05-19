@@ -64,15 +64,7 @@ CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* st
 	player_dir = true;
 	player_dir_y = false;
 
-	//ステージ３の場合カメラを固定
-	if (stage_num!=3)
-	{
-		is_lock = false;
-	}
-	else
-	{
-		is_lock = true;
-	}
+	is_lock = false;
 
 }
 

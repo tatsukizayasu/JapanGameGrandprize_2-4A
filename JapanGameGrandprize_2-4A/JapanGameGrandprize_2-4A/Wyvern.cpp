@@ -5,6 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "CameraWork.h"
+#include "EnemySE.h"
 
 //移動スピード
 #define WYVERN_MOVE_SPEED 2
@@ -62,7 +63,6 @@ Wyvern::Wyvern(Location spawn_location)
 	attack = false;
 
 	hp = WYVERN_HP;
-	damage = 0;
 	movement = 0;
 	attack_interval = WYVERN_ATTACK_INTERVAL;
 	bless_interval = BLESS_INTERVAL;
@@ -360,6 +360,7 @@ void Wyvern::Bless(const Location player_location)
 
 	if (bless_wait_time < 0) //発射待機時間終了
 	{
+		PlaySoundMem(EnemySE::GetEnemySE(kind).attack, DX_PLAYTYPE_BACK);
 		BulletManager::GetInstance()->
 			CreateEnemyBullet(new WyvernBless(location, player_location));
 		attack_end = true;
@@ -379,6 +380,8 @@ void Wyvern::TripleBless(const Location player_location)
 
 		if (shot_rate % WYVERN_SHOT_RATE == 0)
 		{
+			PlaySoundMem(EnemySE::GetEnemySE(kind).attack, DX_PLAYTYPE_BACK);
+
 			BulletManager::GetInstance()->
 				CreateEnemyBullet(new WyvernBless(location, player_location));
 			shot_count++;

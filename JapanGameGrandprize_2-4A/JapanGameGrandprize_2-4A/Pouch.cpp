@@ -1317,6 +1317,35 @@ void Pouch::InitializePararysis()
 	select_pararysis.make_bool = false;
 }
 
+void Pouch::SetChemicalBullets(ChemicalFormulaParameter chemical_bullet)
+{
+	switch (chemical_bullet.atribute)
+	{
+	case ATTRIBUTE::EXPLOSION:
+		select_explosion = chemical_bullet;
+		break;
+
+	case ATTRIBUTE::MELT:
+		select_melt = chemical_bullet;
+		break;
+
+	case ATTRIBUTE::POISON:
+		select_poison = chemical_bullet;
+		break;
+
+	case ATTRIBUTE::PARALYSIS:
+		select_pararysis = chemical_bullet;
+		break;
+
+	case ATTRIBUTE::HEAL:
+		select_heal = chemical_bullet;
+		break;
+
+	default:
+		break;
+	}
+}
+
 void Pouch::InitializePoison()
 {
 	select_poison = { 0 };

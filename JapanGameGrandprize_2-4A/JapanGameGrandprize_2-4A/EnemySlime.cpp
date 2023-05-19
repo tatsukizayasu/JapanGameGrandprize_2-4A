@@ -230,26 +230,52 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 	case ENEMY_STATE::ATTACK:
 
-		Attack(player->GetLocation());
-
-		hit_stage = HitStage(stage);
-
-		if (hit_stage.hit) //ステージとの当たり判定
+		//Attack(player->GetLocation());
+		if (state == ENEMY_STATE::ATTACK)
 		{
-			location = old_location;
-			attack = false;
-			state = ENEMY_STATE::MOVE;
+			location.y -= (jump_distance.y / 3);
+			jump_distance.y -= 1;
+
+			hit_stage = HitStage(stage);
+			if (hit_stage.hit) //ステージとの当たり判定
+			{
+				location.y = old_location.y;
+				attack = false;
+				state = ENEMY_STATE::MOVE;
+			}
+		}
+
+		if (state == ENEMY_STATE::ATTACK)
+		{
 			if (left_move)
 			{
-				speed = -SLIME_SPEED;
+				speed = -SLIME_ATTACK_SPEED;
 			}
 			else
 			{
-				speed = SLIME_SPEED;
+				speed = SLIME_ATTACK_SPEED;
 			}
-			if (paralysis)
+			location.x += speed;
+
+			hit_stage = HitStage(stage);
+
+			if (hit_stage.hit) //ステージとの当たり判定
 			{
-				speed *= PARALYSIS_SPEED;
+				location.x = old_location.x;
+				attack = false;
+				state = ENEMY_STATE::MOVE;
+				if (left_move)
+				{
+					speed = -SLIME_SPEED;
+				}
+				else
+				{
+					speed = SLIME_SPEED;
+				}
+				if (paralysis)
+				{
+					speed *= PARALYSIS_SPEED;
+				}
 			}
 		}
 		break;
