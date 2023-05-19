@@ -168,7 +168,19 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
 			{
-				location = old_location;
+				Location chip_location = hit_stage.chip->GetLocation();
+				Area chip_area = hit_stage.chip->GetArea();
+
+				if (hit_direction == STAGE_DIRECTION::RIGHT)
+				{
+					location.x = chip_location.x +
+						(chip_area.width / 2) + (area.width / 2);
+				}
+				else
+				{
+					location.x = chip_location.x -
+						(chip_area.width / 2) - (area.width / 2);
+				}				
 				left_move = !left_move;
 				speed = -speed;
 			}
@@ -312,7 +324,7 @@ void EnemySlime::Draw()const
 		DrawHPBar(SLIME_HP);
 	}
 	DrawDamageLog();
-
+	DrawWeaknessIcon(SLIME_HP);
 	DrawRotaGraphF(draw_location.x, draw_location.y, 0.85, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 }
 

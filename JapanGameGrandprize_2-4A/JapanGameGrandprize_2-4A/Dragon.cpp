@@ -3,6 +3,7 @@
 #include"BulletManager.h"
 #include "DxLib.h"
 
+
 //ドラゴンの画像サイズ(未定、画像が出来次第調整）
 #define DRAGON_SIZE_X 330
 #define DRAGON_SIZE_Y 330
@@ -612,19 +613,21 @@ void Dragon::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::MELT: //溶かす 　通常
-		hp -= bullet->GetDamage(); //通常ダメージ
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //通常ダメージ
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
-	case ATTRIBUTE::POISON: //毒　
+	case ATTRIBUTE::POISON: //毒
+		damage = bullet->GetDamage();
 		if (!poison)
 		{
 			poison = true;
 			poison_time = bullet->GetDebuffTime();
-			poison_damage = bullet->GetDamage();
+			poison_damage = bullet->GetDamageParSecond();
 			damage_log[i].congeniality = CONGENIALITY::NOMAL;
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS: //麻痺 弱点
+		damage = bullet->GetDamage();
 		if (!paralysis)
 		{
 			paralysis = true;
