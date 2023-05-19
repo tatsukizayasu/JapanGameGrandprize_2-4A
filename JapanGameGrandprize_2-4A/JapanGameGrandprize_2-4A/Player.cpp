@@ -1109,7 +1109,7 @@ void Player::NotFly()
 		fly = -10;
 	}
 
-	if (not_jet_count++ >= 120)
+	if (not_jet_count++ >= 120.0 *(70.0/100.0))
 	{
 		if (fuel < 100)
 		{
