@@ -28,7 +28,7 @@ private:
     //操作間隔時間
     int input_margin;
 
-    bool is_help_mode;  //ヘルプ用
+    static bool is_help_mode;  //ヘルプ用
     int help_image[2]; //コントローラ/操作説明の画像
 
     ItemController* item_controller; //アイテム管理
