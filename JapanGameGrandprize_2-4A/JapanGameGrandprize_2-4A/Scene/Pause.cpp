@@ -111,7 +111,7 @@ void Pause::Update(short stage_num)
 		}
 
 
-		if (PAD_INPUT::GetNowKey(XINPUT_BUTTON_A) && (PAD_INPUT::OnRelease(XINPUT_BUTTON_A) == true))
+		if (PAD_INPUT::OnButton(XINPUT_BUTTON_A) == true)
 		{
 			PlaySoundMem(enter_se, DX_PLAYTYPE_BACK, TRUE);
 			while (CheckSoundMem(enter_se)) {}

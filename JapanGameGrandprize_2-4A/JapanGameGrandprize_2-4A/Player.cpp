@@ -124,7 +124,7 @@ Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT], Pouch*
 	hp_image = LoadGraph("Images/Player/HP_Bar_back.png");
 	hp_image_top = LoadGraph("Images/Player/HP_Bar_Top.png");
 
-
+	//サウンド読み込み
 	bulletssound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/playershot.wav");
 	flysound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/fly.mp3");
 	healsound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/heal01.mp3");
@@ -138,7 +138,8 @@ Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT], Pouch*
 	poison_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/poison.wav");
 	heal_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/playerheal.wav");
 
-
+	//サウンド音量変更
+	ChangeVolumeSoundMem(255, flysound);
 
 
 	image_size_x = 40;
@@ -738,6 +739,11 @@ void Player::Update()
 	if (PAD_INPUT::OnRelease(XINPUT_BUTTON_B))
 	{
 		player_state = PLAYER_STATE::DOWN;
+		StopSoundMem(flysound);
+	}
+	if (PAD_INPUT::OnRelease(XINPUT_BUTTON_LEFT_SHOULDER))
+	{
+		StopSoundMem(flysound);
 	}
 
 	//弾のアップデート呼び出し
@@ -976,9 +982,12 @@ void Player::Jump()
 void Player::Hovering()
 {
 	MoveAnimation();
-	ChangeVolumeSoundMem(255, flysound);
 
-	PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
+	if (CheckSoundMem(flysound) == false)
+	{
+		PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
+	}
+
 	not_jet_count = 0;
 	if (fly > 0)
 	{
@@ -1043,9 +1052,11 @@ void Player::Fly()
 	player_state = PLAYER_STATE::FLY;
 	not_jet_count = 0;
 	MoveAnimation();
-	ChangeVolumeSoundMem(255, flysound);
 
-	PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
+	if (CheckSoundMem(flysound) == false)
+	{
+		PlaySoundMem(flysound, DX_PLAYTYPE_BACK, TRUE);
+	}
 
 	gravity_down = 0.0;
 
