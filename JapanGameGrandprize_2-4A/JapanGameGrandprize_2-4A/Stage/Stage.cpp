@@ -96,6 +96,8 @@ Stage::Stage(short stage_num)
 	//フラグリセット
 	is_halfway_point = false;
 
+	if (stage_num == 0)stage_num = 1;
+
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
 #endif
