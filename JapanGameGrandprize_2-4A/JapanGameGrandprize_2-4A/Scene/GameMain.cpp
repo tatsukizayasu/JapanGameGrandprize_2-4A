@@ -34,7 +34,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 
 	char dis_stage_se[30];
 
-	if (this->stage_num != 5)
+	if (this->stage_num != 4)
 	{
 		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", this->stage_num);
 
@@ -189,7 +189,7 @@ AbstractScene* GameMain::Update()
 
 
 		// 最後のステージをクリアした場合
-		if (stage_num == 5) { return new END(); }
+		if (stage_num == 4) { return new END(); }
 		
 		ChemicalFormulaParameter* chemical_bullets[BULLET_KINDS];
 
@@ -282,15 +282,6 @@ bool GameMain::EnemyUpdate()
 		//プレイヤーがボスエリアに入った際、ボスを出現させる
 		if (camera_work->GetCameraLock() == true && is_spawn_boss == false)
 		{
-
-			if (stage_num == 3)
-			{
-				if (enemy[i] != nullptr)
-				{
-					enemy_count++;
-				}
-			}
-
 			if (static_cast<short>(ENEMY_KIND::SLIME_BOSS) <= spawn[i].id)
 			{
 				if (enemy[i] == nullptr)
@@ -307,15 +298,6 @@ bool GameMain::EnemyUpdate()
 					case ENEMY_KIND::TORRENT:
 						enemy[i] = new Torrent(spawn[i].location);
 						is_spawn_boss = true;
-						break;
-
-						//クラーケンボスの生成
-					case ENEMY_KIND::KRAKEN:
-						if (enemy_count == 0)
-						{
-							enemy[i] = new Kraken(spawn[i].location);
-							is_spawn_boss = true;
-						}
 						break;
 
 						//ドラゴンボスの生成
@@ -347,13 +329,6 @@ bool GameMain::EnemyUpdate()
 				enemy[i] = nullptr;
 				i--;
 				break;
-			}
-
-			//Stage03の場合、画面内に収まるまで敵を強制移動
-			if (stage_num == 3 &&
-				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
-			{
-				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 2.0f,enemy[i]->GetLocation().y });
 			}
 
 			enemy[i]->Update(player, stage);

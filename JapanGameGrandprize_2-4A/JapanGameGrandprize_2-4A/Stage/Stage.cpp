@@ -82,13 +82,6 @@ Stage::Stage(short stage_num)
 		throw "Images/Stage/stage1_blocks.png";
 	}
 
-	// オブジェクト画像の読み込み
-	bort_image = LoadGraph("Images/Scene/Stage/3/Bort.png");
-	if (bort_image == -1) {
-		throw "Images/Scene/Stage/3/Bort.png";
-	}
-
-
 	//マップデータの読み込み
 	LoadMap(stage_num);
 
@@ -247,40 +240,8 @@ void Stage::Update(Player* player)
 
 void Stage::UpdateStageBackground(bool is_spawn_boss)
 {
-	//ステージ3でクラーケンが出現するとき背景を変化させる
-	if (stage_num == 3)
-	{
-		//ブレンド値を変更
-		if (fmodf(background_location.x, SCREEN_WIDTH) == 0 && 80 < backgraound_blend)
-		{
-			backgraound_blend -= 1;
-		}
-
-		if (is_spawn_boss == true)
-		{
-			//描画輝度変更
-			//Green
-			if (100 < backgraound_image_color[1])
-			{
-				backgraound_image_color[1]--;
-			}
-			//Blue
-			if (200 < backgraound_image_color[2])
-			{
-				backgraound_image_color[2]--;
-			}
-		}
-	}
-
 	//背景画像の更新
-	if (stage_num != 3)
-	{
-		background_location = CameraWork::GetCamera();
-	}//Stage03の場合、背景を独立に動かす
-	else
-	{
-		background_location.x += 10.0f;
-	}
+	background_location = CameraWork::GetCamera();
 }
 
 //-----------------------------------
@@ -365,46 +326,31 @@ void Stage::DrawStageBackground() const
 
 		break;
 	case 3:
-		// 交差
-		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
-		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
-
-		DrawGraphF(-fmodf(background_location.x * 0.8f + location.x, SCREEN_WIDTH * 2), 0, background_image[1], TRUE);
-		DrawTurnGraphF(-fmodf(background_location.x * 0.8f + location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[1], TRUE);
-		DrawGraphF(-fmodf(background_location.x * 0.8f + location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[1], TRUE);
-
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
-		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		SetDrawBright(255, 255, 255);
-		break;
-	case 4:
 		SetDrawBright(100, 100, 100);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
 		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
 		SetDrawBright(200, 200, 200);
-		break;
-	case 5:
+
 		break;
 
-	default:
+	case 4:
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		
+		break;
+
+	default:
 		break;
 	}
 }
 
 void Stage::DrawObject() const
 {
-	if (stage_num == 3) {
-
-		DrawGraphF(80, 460, bort_image, TRUE);
-	}
+	
 }
 
 void Stage::ObjectCameraWork(Player* player)
