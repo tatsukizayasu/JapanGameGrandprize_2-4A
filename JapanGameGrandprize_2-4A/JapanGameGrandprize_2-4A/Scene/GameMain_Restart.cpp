@@ -22,7 +22,19 @@ GameMain_Restart::~GameMain_Restart()
 }
 
 AbstractScene* GameMain_Restart::Update() {
-	return new GameMain(stage_num, old_element_volume, old_pouch);
+	if (stage_num != 0)
+	{
+		return new GameMain(stage_num, old_element_volume, old_pouch);
+	}
+	else
+	{
+		GameMain* help = new GameMain(0, old_element_volume, old_pouch);
+		help->SetHelpMode(true);
+		return help;
+	}
+
+
+	
 	return this;
 }
 
