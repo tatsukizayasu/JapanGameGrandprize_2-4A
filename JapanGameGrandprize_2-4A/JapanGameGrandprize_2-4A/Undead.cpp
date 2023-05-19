@@ -136,7 +136,7 @@ void Undead::Update(const Player* player, const Stage* stage)
 		Idol();
 		break;
 	case ENEMY_STATE::MOVE:
-		//Move(player->GetLocation());
+		Move(player->GetLocation());
 
 		hit_stage = HitStage(stage);
 		if (hit_stage.hit) //ステージとの当たり判定
