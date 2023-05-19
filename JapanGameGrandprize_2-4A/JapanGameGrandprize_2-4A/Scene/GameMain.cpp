@@ -23,6 +23,7 @@
 #include "Title.h"
 #include "END.h"
 
+bool GameMain::is_help_mode = false;
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -46,14 +47,14 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 		}
 	}
 
-	if ((help_image[0] = LoadGraph("Images/Help/controller_test1.png")) == -1)
+	if ((help_image[0] = LoadGraph("Images/Help/Normal_Help.png")) == -1)
 	{
-		throw "images/help/controller_test1";
+		throw "images/help/Normal_Help.png";
 	}
 
-	if ((help_image[1] = LoadGraph("images/help/controller_test2.png")) == -1)
+	if ((help_image[1] = LoadGraph("images/help/PouchOpen_Help.png")) == -1)
 	{
-		throw "images/help/controller_test2";
+		throw "images/help/PouchOpen_Help.png";
 	}
 
 
@@ -164,6 +165,7 @@ AbstractScene* GameMain::Update()
 			break;
 
 		case Pause::MENU::TITLE:
+			SetHelpMode(false);
 			return new Title();
 			break;
 
