@@ -252,7 +252,7 @@ Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT], Pouch*
 		
 		explosion = pouch->GetExplosion();
 		melt = pouch->GetMelt();
-		poison = pouch->GetPararysis();
+		poison = pouch->GetPoison();
 		pararysis = pouch->GetPararysis();
 		heal = pouch->GetHeal();
 	}
@@ -351,7 +351,7 @@ void Player::Draw() const
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 
-	BoxCollider::Draw();
+	//BoxCollider::Draw();
 }
 
 void Player::PouchDraw() const

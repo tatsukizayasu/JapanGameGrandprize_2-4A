@@ -27,9 +27,23 @@ Stage::Stage(short stage_num)
 	element = new Stage_Element(this);
 	this->camera_work = camera_work;
 
+	//”wŒi‰æ‘œ–‡”
+	int image_num = 3;
+
+	switch (this->stage_num)
+	{
+	case 1:
+		image_num = 5;
+		break;
+
+	default:
+		break;
+	}
+
+	background_image.resize(image_num);
 
 	//”wŒi‰æ‘œ“Ç‚İ‚İ
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < image_num; i++) {
 		background_image[i] = 0;
 
 		string dis_stage_graph;
@@ -44,7 +58,6 @@ Stage::Stage(short stage_num)
 			}
 		}
 	}
-
 
 	for (int& c : backgraound_image_color)
 	{
@@ -93,10 +106,15 @@ Stage::Stage(short stage_num)
 Stage::~Stage()
 {
 	// ƒXƒe[ƒW”wŒi‰æ‘œ‚ğíœ
-	for (int i = 0; i < 3; i++)
+	int image_num = background_image.size();
+	for (int i = 0; i < image_num; i++)
 	{
 		DeleteGraph(background_image[i]);
 	}
+
+	//”wŒi‰æ‘œvector‚ÌŠJ•ú
+	background_image.clear();
+	background_image.shrink_to_fit();
 
 	// ƒ}ƒbƒvƒ`ƒbƒv‰æ‘œ‚ğíœ
 	for (int i = 0; i < 50; i++)
@@ -111,6 +129,8 @@ Stage::~Stage()
 		inner_vec.clear();
 		inner_vec.shrink_to_fit();
 	}
+
+
 
 	// map_data©‘Ì‚ğ‰ğ•ú
 	map_data.clear();
@@ -129,6 +149,9 @@ Stage::~Stage()
 	enemy_init_location.shrink_to_fit();
 
 	delete element;
+
+	// –¾‚é‚³‚ğƒŠƒZƒbƒg
+	SetDrawBright(255, 255, 255);
 
 #ifdef _STAGE_BUILDER
 	delete stage_builder;
@@ -311,6 +334,16 @@ void Stage::DrawStageBackground() const
 	switch (stage_num)
 	{
 	case 1:
+		// Œğ·
+		DrawGraphF(-fmodf(background_location.x * 0.2, SCREEN_WIDTH), 0, background_image[4], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.2, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[4], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x * 0.4, SCREEN_WIDTH), 0, background_image[3], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.4, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[3], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x * 0.6, SCREEN_WIDTH), 0, background_image[2], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.6, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[2], TRUE);
+
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
@@ -318,7 +351,7 @@ void Stage::DrawStageBackground() const
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 		break;
 	case 2:
-
+		// ‡¬
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
@@ -332,6 +365,7 @@ void Stage::DrawStageBackground() const
 
 		break;
 	case 3:
+		// Œğ·
 		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
 		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
 
@@ -346,6 +380,11 @@ void Stage::DrawStageBackground() const
 		SetDrawBright(255, 255, 255);
 		break;
 	case 4:
+		SetDrawBright(100, 100, 100);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
+		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
+		SetDrawBright(200, 200, 200);
 		break;
 	case 5:
 		break;

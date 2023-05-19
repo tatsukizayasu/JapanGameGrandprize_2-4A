@@ -93,7 +93,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	ChangeVolumeSoundMem(155, background_music);
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 
-	old_pouch = pouch;
+	old_pouch =*pouch;
 }
 
 //-----------------------------------
@@ -148,7 +148,7 @@ AbstractScene* GameMain::Update()
 		case Pause::MENU::RETRY:
 			
 			GetDrawScreenGraph(0, 0, 1280, 720, now_graph);
-			return new GameMain_Restart(stage_num, now_graph, old_element_volume,old_pouch);
+			return new GameMain_Restart(stage_num, now_graph, old_element_volume,&old_pouch);
 			break;
 
 		case Pause::MENU::TITLE:
@@ -198,7 +198,7 @@ AbstractScene* GameMain::Update()
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		return new GameOver(stage_num, old_element_volume,old_pouch);
+		return new GameOver(stage_num, old_element_volume,&old_pouch);
 	}
 
 

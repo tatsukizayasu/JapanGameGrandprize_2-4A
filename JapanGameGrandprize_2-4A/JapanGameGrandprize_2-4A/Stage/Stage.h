@@ -89,7 +89,7 @@ private:
 	short stage_num;
 
 	//”wŒi‰æ‘œ
-	int background_image[3];
+	std::vector<int>background_image;
 	//”wŒi‰æ‘œÀ•W
 	Location background_location;
 	//”wŒi‰æ‘œRGB
