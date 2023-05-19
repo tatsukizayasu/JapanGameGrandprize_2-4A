@@ -60,7 +60,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	pause = new Pause();
 
 	enemy_spawn_volume = 0;
-	
+
 	stage = new Stage(this->stage_num);
 
 	player = new Player(stage, element_volume, pouch);
@@ -93,7 +93,11 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	ChangeVolumeSoundMem(155, background_music);
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 
-	old_pouch =*pouch;
+	old_chemical_bullets[0] = *pouch->GetExplosion();
+	old_chemical_bullets[1] = *pouch->GetMelt();
+	old_chemical_bullets[2] = *pouch->GetPoison();
+	old_chemical_bullets[3] = *pouch->GetPararysis();
+	old_chemical_bullets[4] = *pouch->GetHeal();
 }
 
 //-----------------------------------
@@ -148,7 +152,15 @@ AbstractScene* GameMain::Update()
 		case Pause::MENU::RETRY:
 			
 			GetDrawScreenGraph(0, 0, 1280, 720, now_graph);
-			return new GameMain_Restart(stage_num, now_graph, old_element_volume,&old_pouch);
+
+			Pouch* pouch;
+			pouch = player->GetPouch();
+			for (int i = 0; i < BULLET_KINDS; i++)
+			{
+				pouch->SetChemicalBullets(old_chemical_bullets[i]);
+			}
+
+			return new GameMain_Restart(stage_num, now_graph, old_element_volume,pouch);
 			break;
 
 		case Pause::MENU::TITLE:
@@ -190,15 +202,20 @@ AbstractScene* GameMain::Update()
 
 		// 最後のステージをクリアした場合
 		if (stage_num == 4) { return new END(); }
-		
-		ChemicalFormulaParameter* chemical_bullets[BULLET_KINDS];
 
 		return new GameClear(stage_num, element_volume,player->GetPouch());
 	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		return new GameOver(stage_num, old_element_volume,&old_pouch);
+		Pouch* pouch;
+		pouch = player->GetPouch();
+		for (int i = 0; i < BULLET_KINDS; i++)
+		{
+			pouch->SetChemicalBullets(old_chemical_bullets[i]);
+		}
+		
+		return new GameOver(stage_num, old_element_volume, pouch);
 	}
 
 

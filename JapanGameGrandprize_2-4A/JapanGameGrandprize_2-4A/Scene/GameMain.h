@@ -36,8 +36,8 @@ private:
 
     //ステージ開始時のプレイヤー所持元素
     unsigned int old_element_volume[PLAYER_ELEMENT];
-    //ステージ開始時のプレイヤーのポーチ
-    Pouch old_pouch;
+    //ステージ開始時のプレイヤー所持弾丸
+    ChemicalFormulaParameter old_chemical_bullets[BULLET_KINDS];
 
 public:
 
