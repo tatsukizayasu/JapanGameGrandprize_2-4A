@@ -64,7 +64,15 @@ CameraWork::CameraWork(float camera_x, float camera_y, Player* player, Stage* st
 	player_dir = true;
 	player_dir_y = false;
 
-	is_lock = false;
+	if (stage_num != 4)
+	{
+		is_lock = false;
+	}
+	else
+	{
+		is_lock = true;
+	}
+	
 
 }
 
@@ -81,7 +89,7 @@ CameraWork::~CameraWork()
 //-----------------------------------
 void CameraWork::Update()
 {
-	if (is_lock == true) { return; }
+	if (is_lock == true || stage->GetStageNum() == 4) { return; }
 	//printfDx("state:%d\n", state);
 	
 	//clsDx();
