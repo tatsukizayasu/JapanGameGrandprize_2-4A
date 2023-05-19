@@ -47,7 +47,15 @@ Stage::Stage(short stage_num)
 		background_image[i] = 0;
 
 		string dis_stage_graph;
-		dis_stage_graph = "Images/Scene/Stage/" + to_string(this->stage_num) + "/BackImage" + to_string(i + 1) + ".png";
+		if (stage_num != 0)
+		{
+			dis_stage_graph = "Images/Scene/Stage/" + to_string(this->stage_num) + "/BackImage" + to_string(i + 1) + ".png";
+		}
+		else
+		{
+			dis_stage_graph = "Images/Scene/Stage/" + to_string(1) + "/BackImage" + to_string(i + 1) + ".png";
+
+		}
 		const char* dis_stage_graphc = dis_stage_graph.c_str();
 		background_image[i] = LoadGraph(dis_stage_graphc);
 		if (background_image[i] == -1) {
