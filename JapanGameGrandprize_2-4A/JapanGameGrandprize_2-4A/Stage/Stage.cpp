@@ -32,6 +32,7 @@ Stage::Stage(short stage_num)
 
 	switch (this->stage_num)
 	{
+	case 0:
 	case 1:
 		image_num = 5;
 		break;
@@ -116,7 +117,6 @@ Stage::Stage(short stage_num)
 	//フラグリセット
 	is_halfway_point = false;
 
-	if (stage_num == 0)stage_num = 1;
 
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
@@ -324,6 +324,7 @@ void Stage::DrawStageBackground() const
 	Location location = { 700,200 };
 	switch (stage_num)
 	{
+	case 0:
 	case 1:
 		// 交差
 		DrawGraphF(-fmodf(background_location.x * 0.2, SCREEN_WIDTH), 0, background_image[4], TRUE);
