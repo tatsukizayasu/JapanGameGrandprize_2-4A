@@ -26,6 +26,7 @@ private:
     int spawn_interval; //木の実の生成する時間
     int animation; //アニメーション
     int image_argument; //画像の引数
+    int magic_circle_image; //魔法陣の画像
 
     TORRENT_ATTACK attack_state; //攻撃の状態
 private:

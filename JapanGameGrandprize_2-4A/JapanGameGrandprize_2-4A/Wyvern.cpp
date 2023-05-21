@@ -96,6 +96,7 @@ Wyvern::Wyvern(Location spawn_location)
 	location = spawn_location;
 	assault_start = location;
 	assault_end_time = 0;
+	assault_hit_stage = 0;
 	/*ìñÇΩÇËîªíËÇÃê›íË*/
 	area.width = 40;
 	area.height = 80;
@@ -130,6 +131,10 @@ Wyvern::Wyvern(Location spawn_location)
 //-----------------------------------
 Wyvern::~Wyvern()
 {
+	for (int i = 0; i < 4; i++)
+	{
+		DeleteGraph(images[i]);
+	}
 	delete[] images;
 }
 
@@ -168,6 +173,14 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 				state = ENEMY_STATE::ATTACK;
 				attack_state = WYVERN_ATTACK::BLESS;
 				bless_wait_time = BLESS_WAIT_TIME;
+				if (location.x < player->GetLocation().x)
+				{
+					left_move = false;
+				}
+				else
+				{
+					left_move = true;
+				}
 				break;
 			}
 
@@ -176,7 +189,14 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 				state = ENEMY_STATE::ATTACK;
 				attack_state = WYVERN_ATTACK::TRIPLE_BRACE;
 				bless_wait_time = BLESS_WAIT_TIME;
-
+				if (location.x < player->GetLocation().x)
+				{
+					left_move = false;
+				}
+				else
+				{
+					left_move = true;
+				}
 				break;
 			}
 

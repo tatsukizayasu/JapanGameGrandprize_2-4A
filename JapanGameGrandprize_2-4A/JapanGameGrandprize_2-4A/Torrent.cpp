@@ -23,7 +23,7 @@
 #define TORRENT_TACKLE_PREPARATION 60
 
 //発射速度
-#define TORRENT_SHOT_RATE 20
+#define TORRENT_SHOT_RATE 15
 
 //ドロップ数
 #define TORRENT_MIN_DROP 20
@@ -33,19 +33,19 @@
 #define LEAF_CUTTER_TIME 1200
 
 //次の葉っぱを飛ばす攻撃に移る時間
-#define LEAF_CUTTER_INTERVAL 1800
+#define LEAF_CUTTER_INTERVAL 300
 
 //木の実を落としている時間
 #define DROP_NUTS_TIME 600
 
 //次の木の実を落とす攻撃に移る時間
-#define DROP_NUTS_INTERVAL 1200
+#define DROP_NUTS_INTERVAL 300
 
 //木の実の生成する時間
 #define SPAWN_NUTS_INTERVAL 30
 
 //木の実の生成地点数
-#define SPAWN_NUTS_POINT 8
+#define SPAWN_NUTS_POINT 15
 
 //木の実が一回でスポーンできる最大数
 #define SPAWN_NUTS_MAX 6
@@ -54,7 +54,7 @@
 #define SPAWN_NUTS_Y 100
 
 //スポーン地点の間隔
-#define NUTS_SPAWN_SPACE 120
+#define NUTS_SPAWN_SPACE 80
 
 //アニメーション
 #define TORRENT_ANIMATION 5
@@ -82,8 +82,8 @@ Torrent::Torrent(Location spawn_location)
 	attack_state = TORRENT_ATTACK::NONE;
 
 	/*当たり判定の設定*/
-	area.width = 160;
-	area.height = SCREEN_HEIGHT / 2;
+	area.width = 180;
+	area.height = 300;
 	location = spawn_location;
 
 	location.x -= MAP_CHIP_SIZE / 2;
@@ -111,6 +111,7 @@ Torrent::Torrent(Location spawn_location)
 
 	LoadDivGraph("Images/Enemy/torrent_tackle.png", 8, 8, 1, 500, 500, images);
 	LoadDivGraph("Images/Enemy/torrent_nut.png", 9, 9, 1, 500, 500, &images[8]);
+	magic_circle_image = LoadGraph("Images/Enemy/Magic/MagicCircle.png");
 
 }
 
@@ -119,7 +120,12 @@ Torrent::Torrent(Location spawn_location)
 //-----------------------------------
 Torrent::~Torrent()
 {
+	DeleteGraph(magic_circle_image);
 
+	for (int i = 0; i < TORRENT_IMAGES; i++)
+	{
+		DeleteGraph(images[i]);
+	}
 	delete[] images;
 	delete[] type;
 
@@ -159,6 +165,7 @@ void Torrent::Update(const Player* player, const Stage* stage)
 		break;
 	}
 
+	UpdateDamageLog();
 	Paralysis();
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -196,15 +203,10 @@ void Torrent::Fall()
 void  Torrent::Attack(Location player_location)
 {
 
-	if (0 < leaf_cutter_interval) //次の葉っぱを飛ばす攻撃までの時間のカウント
-	{
-		leaf_cutter_interval--;
-	}
+	
+	leaf_cutter_interval--;
+	drop_nuts_interval--;
 
-	if (0 < drop_nuts_interval) //次の木の実を落とす攻撃までの時間のカウント
-	{
-		drop_nuts_interval--;
-	}
 
 	switch (attack_state)
 	{
@@ -261,40 +263,25 @@ void Torrent::Tackle()
 		if (tackle_end) //タックル終了
 		{
 			attack = false;
-			TORRENT_ATTACK next_attack;	//次の攻撃
-			if (leaf_cutter_interval < 0 && drop_nuts_interval < 0) //2つの攻撃が可能な時
-			{
-				next_attack = static_cast <TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
+			int next_attack;	//次の攻撃
+			next_attack = GetRand(10) + 1;  //次の攻撃の設定
 
-				switch (next_attack)
+			if (7 < next_attack)
+			{
+				if (drop_nuts_interval < leaf_cutter_interval)
 				{
-				case TORRENT_ATTACK::LEAF_CUTTER:
-					attack_state = TORRENT_ATTACK::LEAF_CUTTER;
-					attack_time = LEAF_CUTTER_TIME;
-					break;
-				case TORRENT_ATTACK::DROP_NUTS:
 					attack_state = TORRENT_ATTACK::DROP_NUTS;
 					attack_time = DROP_NUTS_TIME;
-					break;
-				case TORRENT_ATTACK::TACKLE:
-				case TORRENT_ATTACK::NONE:
-				default:
-					break;
+				}
+				else
+				{
+					attack_state = TORRENT_ATTACK::LEAF_CUTTER;
+					attack_time = LEAF_CUTTER_TIME;
 				}
 			}
-			else if (leaf_cutter_interval < 0) //葉っぱを飛ばす攻撃だけが可能な時
+			else
 			{
-				attack_state = TORRENT_ATTACK::LEAF_CUTTER;
-				attack_time = LEAF_CUTTER_TIME;
-			}
-			else if (drop_nuts_interval < 0) //木の実を飛ばす攻撃が可能な時
-			{
-				attack_state = TORRENT_ATTACK::DROP_NUTS;
-				attack_time = DROP_NUTS_TIME;
-			}
-			else //どちらの攻撃も可能じゃないとき
-			{
-				if (leaf_cutter_interval < drop_nuts_interval)
+				if (drop_nuts_interval < leaf_cutter_interval)
 				{
 					attack_state = TORRENT_ATTACK::LEAF_CUTTER;
 					attack_time = LEAF_CUTTER_TIME;
@@ -302,10 +289,13 @@ void Torrent::Tackle()
 				else
 				{
 					attack_state = TORRENT_ATTACK::DROP_NUTS;
-					attack_time = DROP_NUTS_TIME;
+					attack_time = DROP_NUTS_TIME;				
 				}
 			}
+			
+			
 			image_argument = 0;
+
 		}
 	}
 	else
@@ -392,7 +382,7 @@ void Torrent::CreateLeaf(Location player_location)
 		Location spawn_location = location; //生成座標
 		spawn_location.y = location.y - area.height / 2;
 		BulletManager::GetInstance()->
-			CreateEnemyBullet(new TorrentBullet(ENEMY_TYPE::WIND, spawn_location, player_location));
+			CreateEnemyBullet(new TorrentBullet(spawn_location, player_location));
 	}
 }
 
@@ -493,10 +483,7 @@ void Torrent::CreateNuts()
 				{
 					Location spawn_location = CameraWork::GetCamera(); //スポーン地点
 					spawn_location.x += (spawn_point_rand + 1) * NUTS_SPAWN_SPACE;
-					if (!left_move)
-					{
-						spawn_location.x += (area.width / 2);
-					}
+					
 					spawn_location.y = SPAWN_NUTS_Y;
 					spawn_point[spawn_point_rand] = true;
 					spawn = true;
@@ -522,7 +509,6 @@ void Torrent::AttackNone()
 		TORRENT_ATTACK next_attack;	//次の攻撃
 		next_attack = static_cast<TORRENT_ATTACK>(GetRand(1) + 1);  //次の攻撃の設定
 
-		next_attack = TORRENT_ATTACK::DROP_NUTS;
 		switch (next_attack)
 		{
 		case TORRENT_ATTACK::LEAF_CUTTER:
@@ -578,34 +564,61 @@ void Torrent::Death()
 //-----------------------------------
 void Torrent::HitBullet(const BulletBase* bullet)
 {
+	int i;
+	int damage = 0;
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
 
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage = bullet->GetDamage() * 0;
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::MELT:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
-		poison_damage = bullet->GetDamage() * 0;
-		poison_time = bullet->GetDebuffTime() * 0;
-		break;
-	case ATTRIBUTE::PARALYSIS:
-		if (!paralysis)
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		if (!poison)
 		{
-			paralysis = true;
-			paralysis_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+			poison_damage = bullet->GetDamageParSecond();
+			poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
 		}
 		break;
+	case ATTRIBUTE::PARALYSIS:
+		damage = bullet->GetDamage();
 	case ATTRIBUTE::HEAL:
-		break;
 	default:
 		break;
 	}
+
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 
 	if (hp < 0)
 	{
@@ -653,6 +666,7 @@ void Torrent::Draw() const
 		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[0], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::DROP_NUTS:
+		DrawRotaGraph3(SCREEN_WIDTH / 2, 50, 640, 640, 1, 0.05, 0, magic_circle_image, TRUE);
 		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument + 8], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::NONE:
@@ -667,7 +681,9 @@ void Torrent::Draw() const
 		DrawHPBar(TORRENT_HP);
 	}
 	DrawDamageLog();
-
+	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
+		0xff0000, FALSE);
 }
 
 //-----------------------------------
