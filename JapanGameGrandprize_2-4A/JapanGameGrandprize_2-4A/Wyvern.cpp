@@ -7,6 +7,9 @@
 #include "CameraWork.h"
 #include "EnemySE.h"
 
+//アニメーション
+#define WYVERN_ANIMATION 10
+
 //移動スピード
 #define WYVERN_MOVE_SPEED 2
 
@@ -51,6 +54,9 @@
 //攻撃のインターバル
 #define WYVERN_ATTACK_INTERVAL 180
 
+//強襲攻撃の終了時間
+#define ASSAULT_END_TIME 90
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -63,19 +69,18 @@ Wyvern::Wyvern(Location spawn_location)
 	attack = false;
 
 	hp = WYVERN_HP;
-	movement = 0;
 	attack_interval = WYVERN_ATTACK_INTERVAL;
 	bless_interval = BLESS_INTERVAL;
 	triple_bless_interval = TRIPLE_BLESS_INTERVAL;
 	assault_interval = ASSAULT_INTERVAL;
 	bless_wait_time = 0;
 	move_wait_time = 0;
-
+	animation = 0;
 	shot_rate = 0;
 	shot_count = 0;
 	assault_speed.x = 0;
 	assault_speed.y = 0;
-
+	attack_angle = 0;
 	image_argument = 0;
 	speed = 0;
 	kind = ENEMY_KIND::WYVERN;
@@ -90,7 +95,7 @@ Wyvern::Wyvern(Location spawn_location)
 	paralysis_time = 0;
 	location = spawn_location;
 	assault_start = location;
-
+	assault_end_time = 0;
 	/*当たり判定の設定*/
 	area.width = 40;
 	area.height = 80;
@@ -113,7 +118,11 @@ Wyvern::Wyvern(Location spawn_location)
 
 	hit_stage.hit = false;
 	hit_stage.chip = nullptr;
-	images = nullptr;
+	images = new int[4];
+
+	LoadDivGraph("Images/Enemy/Wyvern.png", 2, 2, 1, 250, 250, images);
+	LoadDivGraph("Images/Enemy/Wyvernattack.png", 2, 2, 1, 250, 250, &images[2]);
+
 }
 
 //-----------------------------------
@@ -138,6 +147,14 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
+
+		hit_stage = HitStage(stage);
+
+		if (hit_stage.hit)
+		{
+			left_move = !left_move;
+			speed = -speed;
+		}
 
 		attack_interval--;
 		bless_interval--;
@@ -165,15 +182,14 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 
 			if (assault_interval < 0) //アサルトに移行
 			{
-				float radian; //角度
-
+				
 				state = ENEMY_STATE::ATTACK;
 				attack_state = WYVERN_ATTACK::ASSAULT;
 				now_assault = true;
-				radian = atan2f((player->GetLocation().y + 10) - location.y,
+				attack_angle = atan2f((player->GetLocation().y + 10) - location.y,
 					(player->GetLocation().x + 10) - location.x);
-				assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
-				assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
+				assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(attack_angle);
+				assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(attack_angle);
 				assault_start = location;
 				break;
 			}
@@ -194,16 +210,16 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 				if (hit_stage.hit)
 				{
 					Location distance_location; //xとyそれぞれの強襲攻撃を始めた位置からの距離
-					float radian; //角度
 
 					location = old_location;
 
 					distance_location = assault_start - location;
 
-					radian = atan2f(distance_location.y, distance_location.x);
-					assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(radian);
-					assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(radian);
+					attack_angle = atan2f(distance_location.y, distance_location.x);
+					assault_speed.x = WYVERN_ASSAULT_SPEED * cosf(attack_angle);
+					assault_speed.y = WYVERN_ASSAULT_SPEED * sinf(attack_angle);
 
+					assault_hit_stage++;
 					now_assault = false;
 				}
 			}
@@ -233,10 +249,11 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
+
 	Poison();
 	Paralysis();
 	UpdateDamageLog();
-
+	Animation();
 	if (CheckHp() && (state != ENEMY_STATE::DEATH))
 	{
 		state = ENEMY_STATE::DEATH;
@@ -267,13 +284,10 @@ void Wyvern::Idol()
 //-----------------------------------
 void Wyvern::Move(const Location player_location)
 {
-	movement = (movement + WYVERN_MOVEMENT_Y) % DIAMETER;
-
-
 	location.x += speed;
 
-	if ((location.x - CameraWork::GetCamera().x < area.width / 2) || 
-		(SCREEN_WIDTH - area.width / 2 < location.x - CameraWork::GetCamera().x))
+	if ((location.x - CameraWork::GetCamera().x < -(area.width * 2)) || 
+		((SCREEN_WIDTH + area.width * 2) < location.x - CameraWork::GetCamera().x))
 	{
 		left_move = !left_move;
 		speed = -speed;
@@ -288,9 +302,14 @@ void Wyvern::Move(const Location player_location)
 //-----------------------------------
 //移動時のアニメーション
 //-----------------------------------
-void Wyvern::MoveAnimation()
+void Wyvern::Animation()
 {
+	animation++;
 
+	if (animation % WYVERN_ANIMATION == 0)
+	{
+		image_argument = ++image_argument % 2;
+	}
 }
 
 //-----------------------------------
@@ -338,6 +357,8 @@ void Wyvern::Attack(const Location player_location)
 			assault_interval = ASSAULT_INTERVAL;
 			assault_speed.x = 0;
 			assault_speed.y = 0;
+			assault_end_time = 0;
+			assault_hit_stage = 0;
 			break;
 		case WYVERN_ATTACK::NONE:
 			break;
@@ -421,7 +442,10 @@ void Wyvern::Assault(const Location)
 
 	if (!now_assault)
 	{
-		if (distance < ASSAULT_END_DISTANCE)
+		assault_end_time++;
+		if ((distance < ASSAULT_END_DISTANCE) ||
+			(ASSAULT_END_TIME < assault_end_time) ||
+			(1 < assault_hit_stage) )
 		{
 			attack_end = true;
 		}
@@ -513,10 +537,11 @@ void Wyvern::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
+		damage = bullet->GetDamage();
 		if (!poison)
 		{
 			poison = true;
-			poison_damage = bullet->GetDamage();
+			poison_damage = bullet->GetDamageParSecond();
 			poison_time = static_cast<int>(bullet->GetDebuffTime() * RESISTANCE_DEBUFF);
 		}
 		break;
@@ -561,9 +586,29 @@ void Wyvern::Draw() const
 	DrawDamageLog();
 
 	DrawWeaknessIcon(WYVERN_HP);
+	if (attack_state == WYVERN_ATTACK::ASSAULT)
+	{
+		if (now_assault)
+		{
+			DrawRotaGraphF(draw_location.x, draw_location.y,
+				0.5, attack_angle, images[3], TRUE, !left_move);
+		}
+		else
+		{
+			DrawRotaGraphF(draw_location.x, draw_location.y,
+				0.5, attack_angle, images[image_argument + 2], TRUE, !left_move);
+		}
+		
+	}
+	else
+	{
+		DrawRotaGraphF(draw_location.x, draw_location.y,
+			0.5, 0, images[image_argument], TRUE, !left_move);
+	}
+	
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xff0000, TRUE);
+		draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xff0000, FALSE);
 }
 
 //-----------------------------------
