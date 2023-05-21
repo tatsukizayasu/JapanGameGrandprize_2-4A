@@ -76,6 +76,7 @@ private:
 	int background_images;
 	int block_images[50];
 	int stage1_block_images[10];
+	int stage2_block_images[44];
 	
 	int bort_image;
 

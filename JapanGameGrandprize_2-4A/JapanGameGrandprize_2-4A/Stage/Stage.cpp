@@ -85,10 +85,30 @@ Stage::Stage(short stage_num)
 		throw "Images/Stage/map_chips.png";
 	}
 
-	if (LoadDivGraph("Images/Stage/stage1_blocks.png", 10, 5, 2, CHIP_SIZE, CHIP_SIZE, stage1_block_images) == -1)
+	switch (stage_num)
 	{
-		throw "Images/Stage/stage1_blocks.png";
+	case 1:
+		if (LoadDivGraph("Images/Stage/stage1_blocks.png", 10, 5, 2, CHIP_SIZE, CHIP_SIZE, stage1_block_images) == -1)
+		{
+			throw "Images/Stage/stage1_blocks.png";
+		}
+		break;
+
+	case 2:
+		if (LoadDivGraph("Images/Stage/stage2_blocks.png", 44, 4, 11, CHIP_SIZE, CHIP_SIZE, stage2_block_images + 1) == -1)
+		{
+			throw "Images/Stage/stage2_blocks.png";
+		}
+		break;
+
+	default:
+		if (LoadDivGraph("Images/Stage/stage1_blocks.png", 10, 5, 2, CHIP_SIZE, CHIP_SIZE, stage1_block_images) == -1)
+		{
+			throw "Images/Stage/stage1_blocks.png";
+		}
+		break;
 	}
+	
 
 	//マップデータの読み込み
 	LoadMap(stage_num);
@@ -486,37 +506,63 @@ void Stage::InitStage(void)
 
 void Stage::AddFixedMapChip(short id, float x, float y)
 {
-	if (stage_id_base.find(id) != stage_id_base.end()) {
-		int rand = GetRand(4);
-		rand += 5;
-		mapchip.push_back(new MapChip
-		(&stage1_block_images[rand],
-			{
-				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-			}, { CHIP_SIZE,CHIP_SIZE }));
-	}
 
-	else if (stage_id_underground.find(id) != stage_id_underground.end()) {
-		int rand = GetRand(4);
-		mapchip.push_back(new MapChip
-		(&stage1_block_images[rand],
-			{
-				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-			}, { CHIP_SIZE,CHIP_SIZE }));
+	if (stage_num == 2)
+	{
+		if (id < 44)
+		{
+			mapchip.push_back(new MapChip
+			(&stage2_block_images[id],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
+		else if (id == 99)
+		{
+			mapchip.push_back(new MapChip
+			(&block_images[25],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
 	}
+	else
+	{
+		if (id == 99) { id = 25; }
 
-	//固定マップチップ
-	else if (id < 50) {
-		mapchip.push_back(new MapChip
-		(&block_images[id],
-			{
-				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-			}, { CHIP_SIZE,CHIP_SIZE }));
+		if (stage_id_base.find(id) != stage_id_base.end()) {
+			int rand = GetRand(4);
+			rand += 5;
+			mapchip.push_back(new MapChip
+			(&stage1_block_images[rand],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
+
+		else if (stage_id_underground.find(id) != stage_id_underground.end()) {
+			int rand = GetRand(4);
+			mapchip.push_back(new MapChip
+			(&stage1_block_images[rand],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
+		//固定マップチップ
+		else if (id < 50) {
+
+			mapchip.push_back(new MapChip
+			(&block_images[id],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
 	}
-
 }
 
 void Stage::SetEnemy(EnemyBase** enemy)
