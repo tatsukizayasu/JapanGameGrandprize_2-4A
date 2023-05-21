@@ -104,4 +104,7 @@ public:
 	void InitializeDisplayChemicalFormula();
 
 	ElementItem* GetElement(int num)const { return element[num]; }
+	
+	//’eŠÛ‘ã“ü—p
+	void SetChemicalBullets(ChemicalFormulaParameter chemical_bullet);
 };

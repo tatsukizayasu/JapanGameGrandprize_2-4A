@@ -54,7 +54,7 @@ AbstractScene* GameClear::Update()
 		PlaySoundMem(enter_se, DX_PLAYTYPE_BACK, TRUE);
 		while (CheckSoundMem(enter_se)) {}
 
-		if (stage_num < 5)
+		if (stage_num < 4)
 		{
 			return new GameMain(stage_num + 1, element_volume, pouch);
 		}

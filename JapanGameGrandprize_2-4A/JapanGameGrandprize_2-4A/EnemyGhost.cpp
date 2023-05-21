@@ -104,7 +104,6 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	state = ENEMY_STATE::IDOL;
 	action_type = GHOST_STATE::NORMAL;
 
-
 #ifdef _DEBUG
 	ENEMY_STATE old_state = state;
 #endif // _DEBUG
@@ -430,7 +429,7 @@ void EnemyGhost::Draw()const
 		DrawHPBar(GHOST_HP);
 	}
 	DrawDamageLog();
-
+	DrawWeaknessIcon(GHOST_HP);
 	if (attack == false)
 	{
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.3f,

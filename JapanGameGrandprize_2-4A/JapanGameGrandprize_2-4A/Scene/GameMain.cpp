@@ -23,6 +23,7 @@
 #include "Title.h"
 #include "END.h"
 
+bool GameMain::is_help_mode = false;
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
@@ -34,7 +35,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 
 	char dis_stage_se[30];
 
-	if (this->stage_num != 5)
+	if (this->stage_num != 4)
 	{
 		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", this->stage_num);
 
@@ -46,21 +47,21 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 		}
 	}
 
-	if ((help_image[0] = LoadGraph("Images/Help/controller_test1.png")) == -1)
+	if ((help_image[0] = LoadGraph("Images/Help/Normal_Help.png")) == -1)
 	{
-		throw "images/help/controller_test1";
+		throw "images/help/Normal_Help.png";
 	}
 
-	if ((help_image[1] = LoadGraph("images/help/controller_test2.png")) == -1)
+	if ((help_image[1] = LoadGraph("images/help/PouchOpen_Help.png")) == -1)
 	{
-		throw "images/help/controller_test2";
+		throw "images/help/PouchOpen_Help.png";
 	}
 
 
 	pause = new Pause();
 
 	enemy_spawn_volume = 0;
-	
+
 	stage = new Stage(this->stage_num);
 
 	player = new Player(stage, element_volume, pouch);
@@ -73,6 +74,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	stage->SetPlayer(player);
 
 	EnemyBase::CreateLogFont();
+	EnemyBase::LoadWeakness();
 
 	SpawnEnemy();
 
@@ -93,7 +95,11 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	ChangeVolumeSoundMem(155, background_music);
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 
-	old_pouch =*pouch;
+	old_chemical_bullets[0] = *pouch->GetExplosion();
+	old_chemical_bullets[1] = *pouch->GetMelt();
+	old_chemical_bullets[2] = *pouch->GetPoison();
+	old_chemical_bullets[3] = *pouch->GetPararysis();
+	old_chemical_bullets[4] = *pouch->GetHeal();
 }
 
 //-----------------------------------
@@ -114,6 +120,7 @@ GameMain::~GameMain()
 	delete player;
 	delete stage;
 
+	EnemyBase::DeleteWeakness();
 	EnemyBase::DeleteLogFont();
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
@@ -148,10 +155,19 @@ AbstractScene* GameMain::Update()
 		case Pause::MENU::RETRY:
 			
 			GetDrawScreenGraph(0, 0, 1280, 720, now_graph);
-			return new GameMain_Restart(stage_num, now_graph, old_element_volume,&old_pouch);
+
+			Pouch* pouch;
+			pouch = player->GetPouch();
+			for (int i = 0; i < BULLET_KINDS; i++)
+			{
+				pouch->SetChemicalBullets(old_chemical_bullets[i]);
+			}
+
+			return new GameMain_Restart(stage_num, now_graph, old_element_volume,pouch);
 			break;
 
 		case Pause::MENU::TITLE:
+			SetHelpMode(false);
 			return new Title();
 			break;
 
@@ -189,16 +205,21 @@ AbstractScene* GameMain::Update()
 
 
 		// 最後のステージをクリアした場合
-		if (stage_num == 5) { return new END(); }
-		
-		ChemicalFormulaParameter* chemical_bullets[BULLET_KINDS];
+		if (stage_num == 4) { return new END(); }
 
 		return new GameClear(stage_num, element_volume,player->GetPouch());
 	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		return new GameOver(stage_num, old_element_volume,&old_pouch);
+		Pouch* pouch;
+		pouch = player->GetPouch();
+		for (int i = 0; i < BULLET_KINDS; i++)
+		{
+			pouch->SetChemicalBullets(old_chemical_bullets[i]);
+		}
+		
+		return new GameOver(stage_num, old_element_volume, pouch);
 	}
 
 
@@ -282,15 +303,6 @@ bool GameMain::EnemyUpdate()
 		//プレイヤーがボスエリアに入った際、ボスを出現させる
 		if (camera_work->GetCameraLock() == true && is_spawn_boss == false)
 		{
-
-			if (stage_num == 3)
-			{
-				if (enemy[i] != nullptr)
-				{
-					enemy_count++;
-				}
-			}
-
 			if (static_cast<short>(ENEMY_KIND::SLIME_BOSS) <= spawn[i].id)
 			{
 				if (enemy[i] == nullptr)
@@ -307,15 +319,6 @@ bool GameMain::EnemyUpdate()
 					case ENEMY_KIND::TORRENT:
 						enemy[i] = new Torrent(spawn[i].location);
 						is_spawn_boss = true;
-						break;
-
-						//クラーケンボスの生成
-					case ENEMY_KIND::KRAKEN:
-						if (enemy_count == 0)
-						{
-							enemy[i] = new Kraken(spawn[i].location);
-							is_spawn_boss = true;
-						}
 						break;
 
 						//ドラゴンボスの生成
@@ -347,13 +350,6 @@ bool GameMain::EnemyUpdate()
 				enemy[i] = nullptr;
 				i--;
 				break;
-			}
-
-			//Stage03の場合、画面内に収まるまで敵を強制移動
-			if (stage_num == 3 &&
-				SCREEN_WIDTH - enemy[i]->GetArea().width < enemy[i]->GetLocation().x)
-			{
-				enemy[i]->SetLocation({ enemy[i]->GetLocation().x - 2.0f,enemy[i]->GetLocation().y });
 			}
 
 			enemy[i]->Update(player, stage);

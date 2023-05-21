@@ -18,9 +18,9 @@
 
 namespace Element {
 	//const short DEBUG_GRASS = 1;			//デバック用草ブロック
-	const short DAMAGE_WALL = 40;		//ダメージ床
-	const short WOODEN_FLOOR = 41;		//すり抜ける床
-	const short FALL_FLOOR = 42;		//落ちる床
+	const short DAMAGE_WALL = 45;		//ダメージ床
+	const short WOODEN_FLOOR = 46;		//すり抜ける床
+	const short FALL_FLOOR = 47;		//落ちる床
 	const short ITEM_DROP_OBJECT = 50;		//アイテムドロップオブジェクト
 	const short TRAP = 51;				//トラップ	(爆発物)
 	const short BARRICADE_UP = 59;			//バリケード 上

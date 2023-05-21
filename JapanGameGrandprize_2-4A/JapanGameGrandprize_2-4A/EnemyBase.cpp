@@ -4,13 +4,20 @@
 #include "CameraWork.h"
 
 int EnemyBase::log_font[4];
+int* EnemyBase::icon_images = nullptr;
+int EnemyBase::weakness_num[12];
+ATTRIBUTE* EnemyBase::weakness[12];
+
+#define HP_BAR_Y1 20
+#define HP_BAR_Y2 10
+
+#define HP_BAR 50
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
 EnemyBase::EnemyBase() 
 {
-
 	can_delete = false;
 	left_move = true;
 	poison = false;
@@ -30,8 +37,66 @@ EnemyBase::EnemyBase()
 	state = ENEMY_STATE::IDOL;
 	type = nullptr;
 	images = nullptr;
-	
+
 	InitDamageLog();
+
+	if (icon_images == nullptr)
+	{
+		icon_images = new int[5];
+		LoadDivGraph("Images/Enemy/Icon.png", 5, 5, 1, 23, 22, icon_images);
+	}
+
+}
+
+//-----------------------------------
+//弱点属性の情報のロード
+//-----------------------------------
+void EnemyBase::LoadWeakness()
+{
+	FILE* file = NULL;
+
+	char line[20];
+	int temp[5]; //仮変数
+	int num = 0;
+	int i = 0;
+	errno_t error;
+
+	for (int i = 0; i < 12; i++)
+	{
+		weakness[i] = nullptr;
+	}
+
+	error = fopen_s(&file, "Data/Enemy/EnemyWeakness.csv", "r");
+
+	if (error == 0)
+	{
+		while (fgets(line, 20, file))
+		{
+			sscanf_s(line, "%d,%d,%d,%d,%d,%d",
+				&weakness_num[i], &temp[0], &temp[1], &temp[2], &temp[3], &temp[4]);
+			if (0 < weakness_num[i])
+			{
+				weakness[i] = new ATTRIBUTE[weakness_num[i]];
+			}
+
+			for (int j = 4; 0 <= j; j--)
+			{
+				if (weakness_num[i] <= num)
+				{
+					break;
+				}
+
+				if (temp[j] == 3)
+				{
+					weakness[i][num] = static_cast<ATTRIBUTE>(j);
+					num++;
+				}
+			}
+			i++;
+			num = 0;
+		}
+		fclose(file);
+	}
 }
 
 //-----------------------------------
@@ -39,10 +104,10 @@ EnemyBase::EnemyBase()
 //-----------------------------------
 void EnemyBase::CreateLogFont()
 {
-	log_font[0] = CreateFontToHandle("Weakness", 24, 1, DX_FONTTYPE_NORMAL);
-	log_font[1] = CreateFontToHandle("Nomal", 20, 1, DX_FONTTYPE_NORMAL);
-	log_font[2] = CreateFontToHandle("Resistance", 20, 1, DX_FONTTYPE_NORMAL);
-	log_font[3] = CreateFontToHandle("Invalid", 16, 1, DX_FONTTYPE_NORMAL);
+	log_font[0] = CreateFontToHandle("Weakness", 24, 2, DX_FONTTYPE_ANTIALIASING_EDGE_8X8);
+	log_font[1] = CreateFontToHandle("Nomal", 20, 2, DX_FONTTYPE_ANTIALIASING_EDGE_8X8);
+	log_font[2] = CreateFontToHandle("Resistance", 20, 2, DX_FONTTYPE_ANTIALIASING_EDGE_8X8);
+	log_font[3] = CreateFontToHandle("Invalid", 16, 2, DX_FONTTYPE_ANTIALIASING_EDGE_8X8);
 }
 
 //-----------------------------------
@@ -53,6 +118,19 @@ void EnemyBase::DeleteLogFont()
 	for (int i = 0; i < 4; i++)
 	{
 		DeleteFontToHandle(log_font[i]);
+	}
+}
+
+
+// ---------------------------------- -
+//弱点属性の情報の削除
+//-----------------------------------
+void EnemyBase::DeleteWeakness()
+{
+	for (int i= 0; i < 12; i++)
+	{
+
+		delete[] weakness[i];
 	}
 }
 
@@ -344,12 +422,12 @@ void EnemyBase::DrawHPBar(const int max_hp) const
 		color = GetColor(7 + 2 * (248 * (1 - static_cast<float>(hp) / max_hp)),255, 0);
 	}
 
-	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
-		draw_location.x + max_hp / 4 + 1, draw_location.y - 70, 0x000000, TRUE);
-	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
-		draw_location.x - max_hp / 4 + (max_hp / 2 * (static_cast<float>(hp) / max_hp)), draw_location.y - 70, color, TRUE);
-	DrawBox(draw_location.x - max_hp / 4, draw_location.y - 80,
-		draw_location.x + max_hp / 4 + 1, draw_location.y - 70, 0x8f917f, FALSE);
+	DrawBox(draw_location.x - HP_BAR / 2, draw_location.y - (area.height / 2 + HP_BAR_Y1),
+		draw_location.x + HP_BAR / 2, draw_location.y - (area.height / 2 + HP_BAR_Y2), 0x000000, TRUE);
+	DrawBox(draw_location.x - HP_BAR / 2, draw_location.y - (area.height / 2 + HP_BAR_Y1),
+		draw_location.x - HP_BAR / 2 + (HP_BAR * (static_cast<float>(hp) / max_hp)), draw_location.y - (area.height / 2 + HP_BAR_Y2), color, TRUE);
+	DrawBox(draw_location.x - HP_BAR / 2, draw_location.y - (area.height / 2 + HP_BAR_Y1),
+		draw_location.x + HP_BAR / 2, draw_location.y - (area.height / 2 + HP_BAR_Y2), 0x8f917f, FALSE);
 }
 
 //-----------------------------------
@@ -394,6 +472,21 @@ void EnemyBase::DrawDamageLog()const
 	}
 }
 
+//弱点属性のアイコン
+void EnemyBase::DrawWeaknessIcon(const int max_hp) const
+{
+	Location draw_location = location;
+	Location camera = CameraWork::GetCamera();
+
+	draw_location = draw_location - camera;
+
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME); //弱点の数の添え字
+	for (int i = 0; i < weakness_num[num]; i++)
+	{
+		DrawRotaGraphF((draw_location.x + area.width / 2) - (23 * i), draw_location.y - (area.height / 2 + HP_BAR_Y1 + 10), 0.8, 0.0,
+			icon_images[static_cast<int>(weakness[num][i])], TRUE, TRUE);
+	}
+}
 //-----------------------------------
 //ドロップする種類の量の取得
 //-----------------------------------

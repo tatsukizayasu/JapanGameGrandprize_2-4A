@@ -32,6 +32,7 @@ Stage::Stage(short stage_num)
 
 	switch (this->stage_num)
 	{
+	case 0:
 	case 1:
 		image_num = 5;
 		break;
@@ -47,7 +48,15 @@ Stage::Stage(short stage_num)
 		background_image[i] = 0;
 
 		string dis_stage_graph;
-		dis_stage_graph = "Images/Scene/Stage/" + to_string(this->stage_num) + "/BackImage" + to_string(i + 1) + ".png";
+		if (stage_num != 0)
+		{
+			dis_stage_graph = "Images/Scene/Stage/" + to_string(this->stage_num) + "/BackImage" + to_string(i + 1) + ".png";
+		}
+		else
+		{
+			dis_stage_graph = "Images/Scene/Stage/" + to_string(1) + "/BackImage" + to_string(i + 1) + ".png";
+
+		}
 		const char* dis_stage_graphc = dis_stage_graph.c_str();
 		background_image[i] = LoadGraph(dis_stage_graphc);
 		if (background_image[i] == -1) {
@@ -77,23 +86,37 @@ Stage::Stage(short stage_num)
 		throw "Images/Stage/map_chips.png";
 	}
 
-	if (LoadDivGraph("Images/Stage/stage1_blocks.png", 10, 5, 2, CHIP_SIZE, CHIP_SIZE, stage1_block_images) == -1)
+	switch (stage_num)
 	{
-		throw "Images/Stage/stage1_blocks.png";
-	}
+	case 1:
+		if (LoadDivGraph("Images/Stage/stage1_blocks.png", 10, 5, 2, CHIP_SIZE, CHIP_SIZE, stage1_block_images) == -1)
+		{
+			throw "Images/Stage/stage1_blocks.png";
+		}
+		break;
 
-	// オブジェクト画像の読み込み
-	bort_image = LoadGraph("Images/Scene/Stage/3/Bort.png");
-	if (bort_image == -1) {
-		throw "Images/Scene/Stage/3/Bort.png";
-	}
+	case 2:
+		if (LoadDivGraph("Images/Stage/stage2_blocks.png", 44, 4, 11, CHIP_SIZE, CHIP_SIZE, stage2_block_images + 1) == -1)
+		{
+			throw "Images/Stage/stage2_blocks.png";
+		}
+		break;
 
+	default:
+		if (LoadDivGraph("Images/Stage/stage1_blocks.png", 10, 5, 2, CHIP_SIZE, CHIP_SIZE, stage1_block_images) == -1)
+		{
+			throw "Images/Stage/stage1_blocks.png";
+		}
+		break;
+	}
+	
 
 	//マップデータの読み込み
 	LoadMap(stage_num);
 
 	//フラグリセット
 	is_halfway_point = false;
+
 
 #ifdef _STAGE_BUILDER
 	stage_builder = new StageBuilder();
@@ -247,40 +270,8 @@ void Stage::Update(Player* player)
 
 void Stage::UpdateStageBackground(bool is_spawn_boss)
 {
-	//ステージ3でクラーケンが出現するとき背景を変化させる
-	if (stage_num == 3)
-	{
-		//ブレンド値を変更
-		if (fmodf(background_location.x, SCREEN_WIDTH) == 0 && 80 < backgraound_blend)
-		{
-			backgraound_blend -= 1;
-		}
-
-		if (is_spawn_boss == true)
-		{
-			//描画輝度変更
-			//Green
-			if (100 < backgraound_image_color[1])
-			{
-				backgraound_image_color[1]--;
-			}
-			//Blue
-			if (200 < backgraound_image_color[2])
-			{
-				backgraound_image_color[2]--;
-			}
-		}
-	}
-
 	//背景画像の更新
-	if (stage_num != 3)
-	{
-		background_location = CameraWork::GetCamera();
-	}//Stage03の場合、背景を独立に動かす
-	else
-	{
-		background_location.x += 10.0f;
-	}
+	background_location = CameraWork::GetCamera();
 }
 
 //-----------------------------------
@@ -333,6 +324,7 @@ void Stage::DrawStageBackground() const
 	Location location = { 700,200 };
 	switch (stage_num)
 	{
+	case 0:
 	case 1:
 		// 交差
 		DrawGraphF(-fmodf(background_location.x * 0.2, SCREEN_WIDTH), 0, background_image[4], TRUE);
@@ -365,46 +357,31 @@ void Stage::DrawStageBackground() const
 
 		break;
 	case 3:
-		// 交差
-		SetDrawBlendMode(DX_BLENDGRAPHTYPE_ALPHA, backgraound_blend);
-		SetDrawBright(backgraound_image_color[0], backgraound_image_color[1], backgraound_image_color[2]);
-
-		DrawGraphF(-fmodf(background_location.x * 0.8f + location.x, SCREEN_WIDTH * 2), 0, background_image[1], TRUE);
-		DrawTurnGraphF(-fmodf(background_location.x * 0.8f + location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[1], TRUE);
-		DrawGraphF(-fmodf(background_location.x * 0.8f + location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[1], TRUE);
-
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
-		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
-		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		SetDrawBright(255, 255, 255);
-		break;
-	case 4:
 		SetDrawBright(100, 100, 100);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
 		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
 		SetDrawBright(200, 200, 200);
-		break;
-	case 5:
+
 		break;
 
-	default:
+	case 4:
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
 		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
 
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
+		
+		break;
+
+	default:
 		break;
 	}
 }
 
 void Stage::DrawObject() const
 {
-	if (stage_num == 3) {
-
-		DrawGraphF(80, 460, bort_image, TRUE);
-	}
+	
 }
 
 void Stage::ObjectCameraWork(Player* player)
@@ -530,37 +507,63 @@ void Stage::InitStage(void)
 
 void Stage::AddFixedMapChip(short id, float x, float y)
 {
-	if (stage_id_base.find(id) != stage_id_base.end()) {
-		int rand = GetRand(4);
-		rand += 5;
-		mapchip.push_back(new MapChip
-		(&stage1_block_images[rand],
-			{
-				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-			}, { CHIP_SIZE,CHIP_SIZE }));
-	}
 
-	else if (stage_id_underground.find(id) != stage_id_underground.end()) {
-		int rand = GetRand(4);
-		mapchip.push_back(new MapChip
-		(&stage1_block_images[rand],
-			{
-				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-			}, { CHIP_SIZE,CHIP_SIZE }));
+	if (stage_num == 2)
+	{
+		if (id < 44)
+		{
+			mapchip.push_back(new MapChip
+			(&stage2_block_images[id],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
+		else if (id == 99)
+		{
+			mapchip.push_back(new MapChip
+			(&block_images[25],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
 	}
+	else
+	{
+		if (id == 99) { id = 25; }
 
-	//固定マップチップ
-	else if (id < 50) {
-		mapchip.push_back(new MapChip
-		(&block_images[id],
-			{
-				x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
-				y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
-			}, { CHIP_SIZE,CHIP_SIZE }));
+		if (stage_id_base.find(id) != stage_id_base.end()) {
+			int rand = GetRand(4);
+			rand += 5;
+			mapchip.push_back(new MapChip
+			(&stage1_block_images[rand],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
+
+		else if (stage_id_underground.find(id) != stage_id_underground.end()) {
+			int rand = GetRand(4);
+			mapchip.push_back(new MapChip
+			(&stage1_block_images[rand],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
+		//固定マップチップ
+		else if (id < 50) {
+
+			mapchip.push_back(new MapChip
+			(&block_images[id],
+				{
+					x * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2,
+					y * MAP_CHIP_SIZE + MAP_CHIP_SIZE / 2
+				}, { CHIP_SIZE,CHIP_SIZE }));
+		}
 	}
-
 }
 
 void Stage::SetEnemy(EnemyBase** enemy)
