@@ -235,7 +235,7 @@ bool LastBoss::Revival()
 
 	location.y -= DOWN_MOVE_SPEED / 2;
 
-	if (spawn_location.y <= location.y)
+	if (location.y <= spawn_location.y)
 	{
 		ret = true;
 	}
