@@ -235,21 +235,10 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	//“Å‚Ìƒ_ƒ[ƒW
 	if (poison == true)
 	{
-		if (++effect_time % POISON_DAMAGE_FLAME == 0)
-		{
-			if (--poison_time > 0)
-			{
-				hp -= poison_damage;
-			}
-			else
-			{
-				poison_damage = 0;
-				poison_time = 0;
-				poison = false;
-			}
-
-		}
+		Poison();
 	}
+
+	
 
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
