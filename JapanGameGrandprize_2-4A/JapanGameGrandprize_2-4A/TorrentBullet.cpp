@@ -1,34 +1,50 @@
 #include "TorrentBullet.h"
 #include "CameraWork.h"
 
+
 //弾の速度
-#define TORRENT_BULLET_SPEED 5
+#define TORRENT_BULLET_SPEED 7
 
 //弾のダメージ
 #define TORRENT_BULLET_DAMAGE 5
 
 //最大値
-#define MAX_LEAF_RADIAN 90
+#define MAX_LEAF_RADIAN 20
+
+//角度の変化量
+#define LEAF_ADD_ANGLE 45
+
+//プレイヤーを中心とした半径
+#define LEAF_RADIUS 50
 
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-TorrentBullet::TorrentBullet(const ENEMY_TYPE type,
-	const Location spawn_location, const Location player_location)
+TorrentBullet::TorrentBullet(const Location spawn_location, const Location player_location)
 {
 
 	location = spawn_location;
-	radius = 6;
+	radius = 10;
 	speed = TORRENT_BULLET_SPEED;
-	this->type = type;
+	type = ENEMY_TYPE::WIND;
 
-	image = 0;
 	damage = TORRENT_BULLET_DAMAGE;
 	float radian; //角度
-	radian = atan2f((player_location.y + 20) - location.y, player_location.x - location.x);
-	radian += (M_PI / 180) * (GetRand(MAX_LEAF_RADIAN) - MAX_LEAF_RADIAN / 2);
+
+	radian = atan2f(player_location.y - location.y,
+		player_location.x - location.x);
+
+	radian += (M_PI / STRAIGHT_ANGLE) * 
+		((static_cast<double>(GetRand(5)) * 6) - MAX_LEAF_RADIAN) ;
 	x_speed = static_cast<int>(speed * cosf(radian));
 	y_speed = static_cast<int>(speed * sinf(radian));
+
+	images = new int[3];
+
+	LoadDivGraph("Images/Enemy/Torrent/leaf.png", 3, 3, 1, 80, 80, images);
+
+	image = images[GetRand(2)];
+	angle = 0;
 }
 
 //-----------------------------------
@@ -36,7 +52,11 @@ TorrentBullet::TorrentBullet(const ENEMY_TYPE type,
 //-----------------------------------
 TorrentBullet::~TorrentBullet()
 {
-
+	for (int i = 0; i < 4; i++)
+	{
+		DeleteGraph(images[i]);
+	}
+	delete[] images;
 }
 
 //-----------------------------------
@@ -46,6 +66,7 @@ void TorrentBullet::Update()
 {
 	location.x += x_speed;
 	location.y += y_speed;
+	angle = angle + LEAF_ADD_ANGLE;
 }
 
 //-----------------------------------
@@ -59,5 +80,6 @@ void TorrentBullet::Draw() const
 
 	draw_location = draw_location - camera;
 
-	DrawCircle(draw_location.x, draw_location.y, radius, 0x77ff00, TRUE);
+	DrawRotaGraphF(draw_location.x, draw_location.y, 0.4, (M_PI / STRAIGHT_ANGLE) * angle, image, TRUE);
+	DrawCircle(draw_location.x, draw_location.y, radius, 0x77ff00, FALSE);
 }

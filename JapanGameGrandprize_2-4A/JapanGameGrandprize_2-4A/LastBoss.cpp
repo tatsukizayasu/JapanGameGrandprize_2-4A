@@ -819,7 +819,7 @@ void LastBoss::Draw() const
 		DrawHPBar(LAST_BOSS_HP);
 	}
 	DrawDamageLog();
-
+	DrawWeaknessIcon();
 	for (int i = 0; i < HAND_NUM; i++)
 	{
 		hand[i]->Draw();

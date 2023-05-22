@@ -434,7 +434,7 @@ void Harpy::Draw()const
 		DrawHPBar(HARPY_HP);
 	}
 	DrawDamageLog();
-	DrawWeaknessIcon(HARPY_HP);
+	DrawWeaknessIcon();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 		M_PI / 180, images[animation], TRUE, !left_move);

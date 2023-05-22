@@ -324,7 +324,7 @@ void EnemySlime::Draw()const
 		DrawHPBar(SLIME_HP);
 	}
 	DrawDamageLog();
-	DrawWeaknessIcon(SLIME_HP);
+	DrawWeaknessIcon();
 	DrawRotaGraphF(draw_location.x, draw_location.y, 0.85, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
 }
 
