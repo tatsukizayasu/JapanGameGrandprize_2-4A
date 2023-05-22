@@ -260,6 +260,7 @@ void Dragon::Draw() const
 		DrawHPBar(HIT_POINTS);
 	}
 	DrawDamageLog();
+	DrawWeaknessIcon();
 
 	//ƒXƒNƒ[ƒ‹‚É‡‚í‚¹‚Ä•`‰æ
 	Location draw_location = location;
