@@ -487,6 +487,18 @@ void EnemyBase::DrawWeaknessIcon(const int max_hp) const
 			icon_images[static_cast<int>(weakness[num][i])], TRUE, TRUE);
 	}
 }
+
+//---------------------------------
+// ”í’e‚ÌSEÄ¶
+//---------------------------------
+void EnemyBase::PlayHitBulletSound(ATTRIBUTE attribute)const
+{
+	if (CheckSoundMem(EnemySE::GetBulletSE(attribute)))
+	{
+		PlaySoundMem(EnemySE::GetBulletSE(attribute), DX_PLAYTYPE_BACK);
+	}
+}
+
 //-----------------------------------
 //ƒhƒƒbƒv‚·‚éí—Ş‚Ì—Ê‚Ìæ“¾
 //-----------------------------------

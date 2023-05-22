@@ -6,6 +6,7 @@
 #include "EnemyKind.h"
 #include "BoxCollider.h"
 #include "Stage/Stage.h"
+#include "EnemySE.h"
 
 
 //各属性のドロップ数
@@ -140,6 +141,7 @@ public:
 
 	//プレイヤーの弾との当たり判定
 	virtual void HitBullet(const BulletBase* bullet) = 0;
+	void PlayHitBulletSound(ATTRIBUTE attribute) const;
 
 	//ドロップする種類の量の取得
 	int GetDropTypeVolume() const;
