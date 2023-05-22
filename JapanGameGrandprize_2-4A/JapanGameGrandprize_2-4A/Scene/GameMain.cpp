@@ -91,6 +91,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 
 	input_margin = 0;
 	is_spawn_boss = false;
+	delay_animation_count = 0;
 
 	ChangeVolumeSoundMem(155, background_music);
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
@@ -206,8 +207,9 @@ AbstractScene* GameMain::Update()
 
 		// 最後のステージをクリアした場合
 		if (stage_num == 4) { return new END(); }
-
-		return new GameClear(stage_num, element_volume,player->GetPouch());
+		if (DelayAnimation(DELAY_ANIMATION_TYPE::FADE_IN, 180.0f) == true) {
+			return new GameClear(stage_num, element_volume, player->GetPouch());
+		}
 	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
@@ -218,11 +220,12 @@ AbstractScene* GameMain::Update()
 		{
 			pouch->SetChemicalBullets(old_chemical_bullets[i]);
 		}
+		if (DelayAnimation(DELAY_ANIMATION_TYPE::FADE_OUT, 120.0f) == true)
+		{
+			return new GameOver(stage_num, old_element_volume, pouch);
+		}
 		
-		return new GameOver(stage_num, old_element_volume, pouch);
 	}
-
-
 
 	return this;
 }
@@ -560,4 +563,40 @@ void GameMain::SetHelpMode(bool is_help)
 	is_help_mode = is_help;
 	camera_work->SetCameraLock(is_help);
 	camera_work->SetCameraState(CameraWork::STATE::FIXED);
+}
+
+bool GameMain::DelayAnimation(DELAY_ANIMATION_TYPE type, float time)
+{
+
+	//アニメーションの遅延
+	if (delay_animation_count < static_cast<int>(time))
+	{
+		int bright;
+		switch (type)
+		{
+		case GameMain::DELAY_ANIMATION_TYPE::FADE_IN:
+			// フェードイン
+			bright = static_cast<int>((static_cast<float>(delay_animation_count) / time * 255));
+			SetDrawBlendMode(DX_BLENDMODE_ADD_X4, bright);
+			//DrawBox(0,0, SCREEN_WIDTH, SCREEN_HEIGHT, GetColor(0, 0, 0), TRUE);
+			break;
+		case GameMain::DELAY_ANIMATION_TYPE::FADE_OUT:
+			// フェードアウト
+			bright = static_cast<int>((static_cast<float>(delay_animation_count) / time * -255) + 255);
+			SetDrawBright(bright, bright, bright);
+			break;
+		default:
+			break;
+		}
+		
+		delay_animation_count++;
+		return false;
+	}
+	else
+	{
+		delay_animation_count = 0;
+		return true;
+	}
+
+	return false;
 }
