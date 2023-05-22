@@ -1,10 +1,10 @@
 #pragma once
 
-//”¼Œa
-#define RADIUS 180
+//180‹
+#define STRAIGHT_ANGLE 180
 
-//’¼Œa
-#define DIAMETER RADIUS * 2
+//360‹
+#define COMPLETE_ANGLE STRAIGHT_ANGLE * 2
 
 //ƒvƒŒƒCƒ„[‚ª‚Á‚Ä‚¢‚éŒ³‘f‚Ìí—Ş
 #define PLAYER_ELEMENT 7
