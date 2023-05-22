@@ -445,6 +445,7 @@ void Kraken::Draw() const
 	}
 
 	DrawDamageLog();
+	DrawWeaknessIcon();
 
 	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
 		draw_location.x + area.width / 2, draw_location.y + area.height / 2,

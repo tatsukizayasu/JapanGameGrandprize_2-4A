@@ -17,13 +17,16 @@ private:
     bool attack_end; //攻撃が終わった
     bool attack; //攻撃が当たったか
     bool now_assault; //強襲攻撃かどうか
-    int movement; //y座標の移動量
+    int animation; //アニメーション
+    int attack_angle;           //攻撃時の角度
     int attack_interval;        //次の攻撃までの時間
     int bless_wait_time;        //ブレスを打つまでの待機時間
     int bless_interval;         //次のブレス攻撃までの時間
     int triple_bless_interval;  //次の3連ブレス攻撃までの時間
     int assault_interval;       //次の強襲攻撃までの時間
+    int assault_end_time;       //強襲攻撃が終わるまでの時間
     int move_wait_time;         //攻撃が終わって移動するまでの待機時間
+    int assault_hit_stage;      //強襲時にステージにあたった回数
     int shot_rate;  //ブレスの発射レート
     int shot_count; //発射した弾の数
     Location assault_start;     //強襲攻撃のスタート位置
@@ -36,7 +39,7 @@ private:
 private:
 
     //移動時のアニメーション
-    void MoveAnimation();
+    void Animation();
 
     //ブレス
     void Bless(const Location);
