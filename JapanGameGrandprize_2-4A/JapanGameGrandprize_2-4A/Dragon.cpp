@@ -235,21 +235,10 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	//毒のダメージ
 	if (poison == true)
 	{
-		if (++effect_time % POISON_DAMAGE_FLAME == 0)
-		{
-			if (--poison_time > 0)
-			{
-				hp -= poison_damage;
-			}
-			else
-			{
-				poison_damage = 0;
-				poison_time = 0;
-				poison = false;
-			}
-
-		}
+		Poison();
 	}
+
+	
 
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
@@ -271,6 +260,7 @@ void Dragon::Draw() const
 		DrawHPBar(HIT_POINTS);
 	}
 	DrawDamageLog();
+	DrawWeaknessIcon();
 
 	//スクロールに合わせて描画
 	Location draw_location = location;
