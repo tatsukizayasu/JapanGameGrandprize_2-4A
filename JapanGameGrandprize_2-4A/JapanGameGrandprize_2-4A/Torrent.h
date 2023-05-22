@@ -40,20 +40,17 @@ private:
     //タックル攻撃
     void Tackle();
 
-    //タックルのアニメーション
-    void TackleAnimation();
-
     //葉っぱを飛ばす攻撃
     void LeafCutter(Location);
 
     //木の実を落とす攻撃
     void DropNuts();
 
-    //木の実を落とす攻撃のアニメーション
-    void DropNutsAnimation();
-
     // 攻撃していない
     void AttackNone();
+
+    //アニメーション
+    void Animation();
 public:
 
     //コンストラクタ

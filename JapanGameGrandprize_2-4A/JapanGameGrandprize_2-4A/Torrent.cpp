@@ -8,7 +8,7 @@
 #include "CameraWork.h"
 
 //画像枚数
-#define TORRENT_IMAGES 17
+#define TORRENT_IMAGES 27
 
 //移動速度
 #define TORRENT_SPEED 4
@@ -86,7 +86,7 @@ Torrent::Torrent(Location spawn_location)
 	area.height = 300;
 	location = spawn_location;
 
-	location.x -= MAP_CHIP_SIZE / 2;
+	location.x += MAP_CHIP_SIZE / 2;
 	location.y += MAP_CHIP_SIZE / 2;
 
 	type = new ENEMY_TYPE[1];
@@ -111,6 +111,7 @@ Torrent::Torrent(Location spawn_location)
 
 	LoadDivGraph("Images/Enemy/torrent_tackle.png", 8, 8, 1, 500, 500, images);
 	LoadDivGraph("Images/Enemy/torrent_nut.png", 9, 9, 1, 500, 500, &images[8]);
+	LoadDivGraph("Images/Enemy/torrent_leaf.png", 10, 10, 1, 500, 500, &images[17]);
 	magic_circle_image = LoadGraph("Images/Enemy/Magic/MagicCircle.png");
 
 }
@@ -164,9 +165,9 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
-
+	Animation();
 	UpdateDamageLog();
-	Paralysis();
+	Poison();
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::DEATH;
@@ -212,14 +213,12 @@ void  Torrent::Attack(Location player_location)
 	{
 	case TORRENT_ATTACK::TACKLE:
 		Tackle();
-		TackleAnimation();
 		break;
 	case TORRENT_ATTACK::LEAF_CUTTER:
 		LeafCutter(player_location);
 		break;
 	case TORRENT_ATTACK::DROP_NUTS:
 		DropNuts();
-		DropNutsAnimation();
 		break;
 	case TORRENT_ATTACK::NONE:
 		AttackNone();
@@ -629,24 +628,15 @@ void Torrent::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 //タックルのアニメーション
 //-----------------------------------
-void Torrent::TackleAnimation()
+void Torrent::Animation()
 {
 	if (animation % TORRENT_ANIMATION == 0)
 	{
-		image_argument = (++image_argument) % 8;
+		image_argument++;
 	}
 }
 
-//-----------------------------------
-//木の実を落とす攻撃のアニメーション
-//-----------------------------------
-void Torrent::DropNutsAnimation()
-{
-	if (animation % TORRENT_ANIMATION == 0)
-	{
-		image_argument = (++image_argument) % 9;
-	}
-}
+
 
 //-----------------------------------
 //描画
@@ -660,14 +650,14 @@ void Torrent::Draw() const
 	switch (attack_state)
 	{
 	case TORRENT_ATTACK::TACKLE:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument % 8], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::LEAF_CUTTER:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[0], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[(image_argument % 10) + 17], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::DROP_NUTS:
 		DrawRotaGraph3(SCREEN_WIDTH / 2, 50, 640, 640, 1, 0.05, 0, magic_circle_image, TRUE);
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument + 8], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[(image_argument % 9) + 8], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::NONE:
 		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[0], TRUE, !left_move);
@@ -681,9 +671,7 @@ void Torrent::Draw() const
 		DrawHPBar(TORRENT_HP);
 	}
 	DrawDamageLog();
-	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
-		0xff0000, FALSE);
+	DrawWeaknessIcon(TORRENT_HP);
 }
 
 //-----------------------------------
