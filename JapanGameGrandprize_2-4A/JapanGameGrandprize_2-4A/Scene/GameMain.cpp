@@ -101,6 +101,8 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	old_chemical_bullets[2] = *pouch->GetPoison();
 	old_chemical_bullets[3] = *pouch->GetPararysis();
 	old_chemical_bullets[4] = *pouch->GetHeal();
+
+	is_clear = false;
 }
 
 //-----------------------------------
@@ -138,6 +140,9 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+	clsDx();
+	printfDx("%d", delay_animation_count);
+
 	stage->UpdateStageBackground(is_spawn_boss);
 
 	pause->Update(stage_num);
@@ -192,9 +197,10 @@ AbstractScene* GameMain::Update()
 	if(!is_help_mode)camera_work->Update();
 	player->Update();
 	stage->Update(player);
+	EnemyUpdate();
 
 	// ボスを倒した場合
-	if (EnemyUpdate() == true)
+	if (is_clear == true)
 	{
 		ElementItem** element = player->GetPlayerElement();
 		unsigned int element_volume[PLAYER_ELEMENT] = { 0 };
@@ -287,11 +293,8 @@ void GameMain::SpawnEnemy()
 //-----------------------------------
 // エネミーの更新処理
 //-----------------------------------
-bool GameMain::EnemyUpdate()
+void GameMain::EnemyUpdate()
 {
-	//クリア判定用フラグ
-	bool is_clear = false;
-
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
@@ -507,8 +510,6 @@ bool GameMain::EnemyUpdate()
 			}
 		}
 	}
-
-	return is_clear;
 }
 
 //-----------------------------------
@@ -567,7 +568,6 @@ void GameMain::SetHelpMode(bool is_help)
 
 bool GameMain::DelayAnimation(DELAY_ANIMATION_TYPE type, float time)
 {
-
 	//アニメーションの遅延
 	if (delay_animation_count < static_cast<int>(time))
 	{
