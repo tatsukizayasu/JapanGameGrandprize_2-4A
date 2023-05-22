@@ -605,7 +605,7 @@ void Wyvern::Draw() const
 	}
 	DrawDamageLog();
 
-	DrawWeaknessIcon(WYVERN_HP);
+	DrawWeaknessIcon();
 	if (attack_state == WYVERN_ATTACK::ASSAULT)
 	{
 		if (now_assault)

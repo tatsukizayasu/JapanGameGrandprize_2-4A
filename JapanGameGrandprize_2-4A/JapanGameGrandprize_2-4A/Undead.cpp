@@ -506,7 +506,7 @@ void Undead::Draw() const
 	{
 		DrawHPBar(UNDEAD_HP);
 	}
-	DrawWeaknessIcon(UNDEAD_HP);
+	DrawWeaknessIcon();
 
 	DrawDamageLog();
 

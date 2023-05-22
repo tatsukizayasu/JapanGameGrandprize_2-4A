@@ -671,7 +671,7 @@ void Torrent::Draw() const
 		DrawHPBar(TORRENT_HP);
 	}
 	DrawDamageLog();
-	DrawWeaknessIcon(TORRENT_HP);
+	DrawWeaknessIcon();
 }
 
 //-----------------------------------

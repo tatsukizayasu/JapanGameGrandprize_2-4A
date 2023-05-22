@@ -473,7 +473,7 @@ void EnemyBase::DrawDamageLog()const
 }
 
 //弱点属性のアイコン
-void EnemyBase::DrawWeaknessIcon(const int max_hp) const
+void EnemyBase::DrawWeaknessIcon() const
 {
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
