@@ -112,7 +112,7 @@ public:
 	virtual void UpdateDamageLog();
 
 	//弱点属性のアイコン
-	virtual void DrawWeaknessIcon(const int) const;
+	 void DrawWeaknessIcon() const;
 
 	//アイドル状態
 	virtual void Idol() = 0;

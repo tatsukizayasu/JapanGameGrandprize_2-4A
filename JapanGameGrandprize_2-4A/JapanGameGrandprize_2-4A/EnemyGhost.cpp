@@ -429,7 +429,7 @@ void EnemyGhost::Draw()const
 		DrawHPBar(GHOST_HP);
 	}
 	DrawDamageLog();
-	DrawWeaknessIcon(GHOST_HP);
+	DrawWeaknessIcon();
 	if (attack == false)
 	{
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.3f,
