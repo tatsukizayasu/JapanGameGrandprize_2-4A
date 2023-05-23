@@ -88,8 +88,6 @@ LastBossHand::LastBossHand()
 	poison = false;
 	paralysis = false;
 
-	damage = 0;
-	images = nullptr;
 	hp = HAND_HP;
 	speed = -HAND_MOVE_SPEED;
 	death_time = 0;
@@ -101,7 +99,6 @@ LastBossHand::LastBossHand()
 	drop_element = nullptr;
 
 	kind = ENEMY_KIND::LAST_BOSS;
-	type = new ENEMY_TYPE[1];
 	state = ENEMY_STATE::IDOL;
 
 	move = HAND_MOVE::UP_DOWN;
@@ -145,8 +142,6 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 	poison = false;
 	paralysis = false;
 
-	damage = 0;
-	images = nullptr;
 	hp = HAND_HP;
 	speed = -HAND_MOVE_SPEED;
 	death_time = 0;
@@ -158,7 +153,6 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 	drop_element = nullptr;
 
 	kind = ENEMY_KIND::LAST_BOSS;
-	type = new ENEMY_TYPE[1];
 	state = ENEMY_STATE::IDOL;
 
 	move = HAND_MOVE::UP_DOWN;
@@ -179,14 +173,6 @@ LastBossHand::~LastBossHand()
 
 	delete[] drop_element;
 
-	delete[] type;
-
-	/*for (int i = 0; i < HAND_IMAGES; i++)
-	{
-		DeleteGraph(images[i]);
-	}
-
-	delete[] images;*/
 }
 
 //-----------------------------------

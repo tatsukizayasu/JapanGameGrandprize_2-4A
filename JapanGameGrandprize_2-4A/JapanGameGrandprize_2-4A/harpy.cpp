@@ -80,7 +80,6 @@ Harpy::Harpy(Location spawn_location)
 	magic_attack = false;
 	kind = ENEMY_KIND::HARPY;
 
-	LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 80, 80, images); //通常
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -95,11 +94,19 @@ Harpy::Harpy(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::WIND;
 	attack_state = HARPY_ATTACK::NONE;
 	state = ENEMY_STATE::IDOL;
 	action_type = HARPY_STATE::NORMAL;
+
+	
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
+	if (images[num].empty())
+	{
+		images[num].resize(6);
+		LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 80, 80, &images[num][0]); //通常
+	}
+
 }
 
 //-----------------------------------
@@ -107,9 +114,6 @@ Harpy::Harpy(Location spawn_location)
 //-----------------------------------
 Harpy::~Harpy()
 {
-
-	delete[] type;
-
 	for (int i = 0; i < WIND_DROP; i++)
 	{
 		delete drop_element[i];
@@ -401,7 +405,7 @@ AttackResource Harpy::Hit()
 	if (attack_state == HARPY_ATTACK::PHYSICAL_ATTACK && (!attack))
 	{
 		attack = true;
-		ENEMY_TYPE attack_type[1] = { *type };
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::WIND };
 		ret.damage = HARPY_ATTACK_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;
@@ -428,6 +432,7 @@ void Harpy::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
 	if (state != ENEMY_STATE::DEATH)
 	{
@@ -437,7 +442,7 @@ void Harpy::Draw()const
 	DrawWeaknessIcon();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-		M_PI / 180, images[animation], TRUE, !left_move);
+		M_PI / 180, images[num][animation], TRUE, !left_move);
 }
 
 //-----------------------------------
@@ -599,8 +604,10 @@ void Harpy::Update(const ENEMY_STATE state)
 //-----------------------------------
 void Harpy::DebugDraw()
 {
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 	DrawRotaGraphF(location.x, location.y, 1.4f,
-		M_PI / 180, images[animation], TRUE, !left_move);
+		M_PI / 180, images[num][animation], TRUE, !left_move);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

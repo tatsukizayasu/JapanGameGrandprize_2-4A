@@ -55,8 +55,7 @@ Undead::Undead(Location spawn_location)
 	left_move = true;
 	attack = false;
 
-	hp = 100;
-	damage = 0;
+	hp = UNDEAD_HP;
 	attack_interval = 0;
 	animation = 0;
 	old_distance = 0;
@@ -64,8 +63,6 @@ Undead::Undead(Location spawn_location)
 	image_argument = 0;
 	speed = UNDEAD_SPEED;
 	kind = ENEMY_KIND::UNDEAD;
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::SOIL;
 	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	attack_time = 0;
@@ -93,9 +90,15 @@ Undead::Undead(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	images = new int[UNDEAD_IMAGES];
-	LoadDivGraph("Images/Enemy/undead.png", UNDEAD_IMAGES, UNDEAD_IMAGES, 1, 250, 250, images);
-	GetGraphSizeF(images[0], &size.width, &size.height);
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
+	if (images[num].empty())
+	{
+		images[num].resize(UNDEAD_IMAGES);
+		LoadDivGraph("Images/Enemy/undead.png", UNDEAD_IMAGES, UNDEAD_IMAGES, 1, 250, 250, &images[num][0]);
+	}
+	
+	GetGraphSizeF(images[num][0], &size.width, &size.height);
 	InitDamageLog();
 }
 
@@ -111,15 +114,6 @@ Undead::~Undead()
 	}
 
 	delete[] drop_element;
-
-	delete[] type;
-
-	for (int i = 0; i < UNDEAD_MOVE_IMAGES; i++)
-	{
-		DeleteGraph(images[i]);
-	}
-
-	delete[] images;
 
 }
 
@@ -488,6 +482,7 @@ void Undead::Draw() const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
 	Area center;
 
@@ -511,7 +506,7 @@ void Undead::Draw() const
 	DrawDamageLog();
 
 	DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
-		0.4, 0,images[image_argument], TRUE, !left_move);
+		0.4, 0,images[num][image_argument], TRUE, !left_move);
 
 }
 
@@ -571,13 +566,14 @@ void Undead::Update(const ENEMY_STATE state)
 //-----------------------------------
 void Undead::DebugDraw()
 {
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
 	Area center;
 	center.width = (size.width / 4) * 3;
 	center.height = size.height / 2;
 
 	DrawRotaGraph2F(location.x, location.y, center.width, center.height,
-		0.4, 0,images[image_argument], TRUE, !left_move);
+		0.4, 0, images[num][image_argument], TRUE, !left_move);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

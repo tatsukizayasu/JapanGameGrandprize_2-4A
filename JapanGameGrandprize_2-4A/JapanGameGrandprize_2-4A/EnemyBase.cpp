@@ -7,6 +7,9 @@ int EnemyBase::log_font[4];
 int* EnemyBase::icon_images = nullptr;
 int EnemyBase::weakness_num[12];
 ATTRIBUTE* EnemyBase::weakness[12];
+std::vector<std::vector<int>> EnemyBase::images(11);
+// = { nullptr,nullptr, nullptr, nullptr, nullptr,nullptr,nullptr, nullptr, nullptr, nullptr, nullptr, };//‰æ‘œ
+
 
 #define HP_BAR_Y1 20
 #define HP_BAR_Y2 10
@@ -24,7 +27,6 @@ EnemyBase::EnemyBase()
 	paralysis = false;
 	hp = 0;
 	speed = 0;
-	damage = 0;
 	paralysis_time = 0;
 	poison_damage = 0;
 	poison_time = 0;
@@ -35,8 +37,6 @@ EnemyBase::EnemyBase()
 
 	kind = ENEMY_KIND::NONE; 
 	state = ENEMY_STATE::IDOL;
-	type = nullptr;
-	images = nullptr;
 
 	InitDamageLog();
 
@@ -129,8 +129,32 @@ void EnemyBase::DeleteWeakness()
 {
 	for (int i= 0; i < 12; i++)
 	{
+		delete weakness[i];
+	}
 
-		delete[] weakness[i];
+	for (int i = 0; i < 5; i++)
+	{
+		DeleteGraph(icon_images[i]);
+	}
+	delete[] icon_images;
+	icon_images = nullptr;
+}
+
+//‰æ‘œ‚Ìíœ
+void EnemyBase::DeleteImage()
+{
+	int size = 0;
+
+	for (int i = 0; i < 11; i++)
+	{
+		if (!images[i].empty())
+		{
+			for (int j = 0; j < images[i].size(); j++)
+			{
+				DeleteGraph(images[i][j]);
+			}
+		}
+		images[i].clear();
 	}
 }
 
@@ -161,10 +185,10 @@ bool EnemyBase::ScreenOut()
 	Location camera = CameraWork::GetCamera(); //ƒJƒƒ‰
 	scroll = location - camera;
 
-	if ((scroll.x < (-(SCREEN_WIDTH * 2) + -area.width)) ||
-		(((SCREEN_WIDTH * 2) + area.width) < scroll.x) ||
-		(scroll.y < (-(SCREEN_HEIGHT * 2) + -area.height)) || 
-		(((SCREEN_HEIGHT * 2) + area.height) < scroll.y))
+	if ((scroll.x < (-(SCREEN_WIDTH + area.width) * 2)) ||
+		(((SCREEN_WIDTH + area.width) * 2) < scroll.x) ||
+		(scroll.y < (-(SCREEN_HEIGHT + area.height) * 2)) ||
+		(((SCREEN_HEIGHT + area.height) * 2) < scroll.y))
 	{
 		ret = true;
 	}

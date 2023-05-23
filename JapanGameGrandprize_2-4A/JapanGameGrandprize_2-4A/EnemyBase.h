@@ -6,6 +6,7 @@
 #include "EnemyKind.h"
 #include "BoxCollider.h"
 #include "Stage/Stage.h"
+#include <vector>
 
 
 //各属性のドロップ数
@@ -173,6 +174,9 @@ public:
 
 	//弱点属性の情報の削除
 	static void DeleteWeakness();
+
+	//画像の削除
+	static void DeleteImage();
 #ifdef _DEBUG
 	//更新(DotByDot)
 	virtual void Update(const ENEMY_STATE state) = 0;
@@ -186,8 +190,7 @@ protected:
 	bool left_move; //左に動いているかどうか
 	bool poison;	//毒状態
 	bool paralysis; //麻痺状態
-	int damage;		//ダメージ
-	int* images; //画像
+	static std::vector<std::vector<int>> images; //画像
 	static int* icon_images; //アイコン画像
 	static int weakness_num[12]; //弱点の数
 	int hp;	//体力
@@ -201,7 +204,6 @@ protected:
 	ElementItem** drop_element; //ドロップ元素
 
 	ENEMY_KIND kind; //エネミーの種類
-	ENEMY_TYPE* type; //エネミーのタイプ
 	ENEMY_STATE state; //エネミーの状態
 	static ATTRIBUTE* weakness[12]; //弱点
 	DamageLog damage_log[LOG_NUM]; //ダメージログ

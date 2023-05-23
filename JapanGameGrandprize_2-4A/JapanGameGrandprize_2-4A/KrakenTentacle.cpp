@@ -31,7 +31,6 @@ KrakenTentacle::KrakenTentacle(Location spawn_location)
 	left_move = true;
 
 	hp = HP_TENTACLE;
-	damage = 0;
 
 	image = 0;
 	time = 0;
@@ -44,8 +43,6 @@ KrakenTentacle::KrakenTentacle(Location spawn_location)
 	speed = ATTACK_SPEED;
 
 	kind = ENEMY_KIND::KRAKEN;
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::WATER;
 	state = ENEMY_STATE::MOVE;
 
 	attack_move = KRAKEN_TENTACLE::NONE;
@@ -89,9 +86,7 @@ KrakenTentacle::~KrakenTentacle()
 
 	delete[] drop_element;
 
-	delete[] type;
 
-	delete[] images;
 }
 
 void KrakenTentacle::Update(const Player* player, const Stage* stage)
@@ -267,7 +262,7 @@ AttackResource KrakenTentacle::Hit()
 
 	if (attack_move == KRAKEN_TENTACLE::TENTACLE_ATTACK)
 	{
-		ENEMY_TYPE attack_type[1] = { *type };
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::WATER };
 		ret.damage = ATTACK_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;

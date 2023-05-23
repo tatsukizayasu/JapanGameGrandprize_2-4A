@@ -89,8 +89,6 @@ Torrent::Torrent(Location spawn_location)
 	location.x += MAP_CHIP_SIZE / 2;
 	location.y += MAP_CHIP_SIZE / 2;
 
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::SOIL;
 	kind = ENEMY_KIND::TORRENT;
 
 	//ドロップアイテムの設定
@@ -107,13 +105,17 @@ Torrent::Torrent(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	images = new int[TORRENT_IMAGES];
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
-	LoadDivGraph("Images/Enemy/torrent_tackle.png", 8, 8, 1, 500, 500, images);
-	LoadDivGraph("Images/Enemy/torrent_nut.png", 9, 9, 1, 500, 500, &images[8]);
-	LoadDivGraph("Images/Enemy/torrent_leaf.png", 10, 10, 1, 500, 500, &images[17]);
+	if (images[num].empty())
+	{
+		images[num].resize(TORRENT_IMAGES);
+
+		LoadDivGraph("Images/Enemy/torrent_tackle.png", 8, 8, 1, 500, 500, &images[num][0]);
+		LoadDivGraph("Images/Enemy/torrent_nut.png", 9, 9, 1, 500, 500, &images[num][8]);
+		LoadDivGraph("Images/Enemy/torrent_leaf.png", 10, 10, 1, 500, 500, &images[num][17]);
+	}
 	magic_circle_image = LoadGraph("Images/Enemy/Magic/MagicCircle.png");
-
 }
 
 //-----------------------------------
@@ -122,13 +124,6 @@ Torrent::Torrent(Location spawn_location)
 Torrent::~Torrent()
 {
 	DeleteGraph(magic_circle_image);
-
-	for (int i = 0; i < TORRENT_IMAGES; i++)
-	{
-		DeleteGraph(images[i]);
-	}
-	delete[] images;
-	delete[] type;
 
 	for (int i = 0; i < WIND_DROP; i++)
 	{
@@ -647,20 +642,22 @@ void Torrent::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 	switch (attack_state)
 	{
 	case TORRENT_ATTACK::TACKLE:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument % 8], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 8], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::LEAF_CUTTER:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[(image_argument % 10) + 17], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][(image_argument % 10) + 17], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::DROP_NUTS:
 		DrawRotaGraph3(SCREEN_WIDTH / 2, 50, 640, 640, 1, 0.05, 0, magic_circle_image, TRUE);
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[(image_argument % 9) + 8], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][(image_argument % 9) + 8], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::NONE:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[0], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][0], TRUE, !left_move);
 		break;
 	default:
 		break;

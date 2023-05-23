@@ -128,6 +128,8 @@ GameMain::~GameMain()
 	}
 	delete[] enemy;
 
+	EnemyBase::DeleteImage();
+
 	delete item_controller;
 	delete bullet_manager;
 }

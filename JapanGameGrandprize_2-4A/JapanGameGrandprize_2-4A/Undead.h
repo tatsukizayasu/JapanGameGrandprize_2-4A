@@ -10,7 +10,6 @@ class Undead :
 private:
 
     bool attack; //攻撃が当たったか
-    int damage; //ダメージ
     int attack_interval; //次の攻撃までの時間
     int animation; //アニメーション
     int image_argument; //画像の引数

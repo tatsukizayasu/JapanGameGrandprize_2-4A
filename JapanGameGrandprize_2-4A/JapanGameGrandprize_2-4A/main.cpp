@@ -5,6 +5,7 @@
 #include "PadInput.h"
 #include "Scene/Title.h"
 #include "EnemySE.h"
+#include "EnemyBase.h"
 #include "Pouch.h"
 
 #define FRAMERATE 60.0 //フレームレート
@@ -99,6 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	}
 
 	EnemySE::DeleteSound();
+	EnemyBase::DeleteWeakness();
 
 	return 0;
 }
