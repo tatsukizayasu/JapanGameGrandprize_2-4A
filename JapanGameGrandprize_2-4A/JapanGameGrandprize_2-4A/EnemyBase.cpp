@@ -493,10 +493,12 @@ void EnemyBase::DrawWeaknessIcon(const int max_hp) const
 //---------------------------------
 void EnemyBase::PlayHitBulletSound(ATTRIBUTE attribute)const
 {
-	if (CheckSoundMem(EnemySE::GetBulletSE(attribute)))
-	{
-		PlaySoundMem(EnemySE::GetBulletSE(attribute), DX_PLAYTYPE_BACK);
-	}
+	int se = EnemySE::GetBulletSE(attribute);
+
+	if (!se)return;
+
+	PlaySoundMem(EnemySE::GetBulletSE(attribute), DX_PLAYTYPE_BACK);
+	
 }
 
 //-----------------------------------

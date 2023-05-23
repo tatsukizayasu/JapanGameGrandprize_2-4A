@@ -29,10 +29,12 @@ void EnemySE::LoadSound()
 	undead_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/undeadattack.wav");
 	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbless.wav");
 
-	explosion_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/explosion.wav");
-	melt_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/melt.wav");
-	poison_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/poison.wav");
-	paralyze_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/paralyze.wav");
+	SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
+	explosion_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/explosion.wav",8);
+	melt_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/melt.wav",8);
+	poison_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/poison.wav",8);
+	paralyze_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/paralyze.wav",8);
+	SetCreateSoundDataType(DX_SOUNDDATATYPE_FILE);
 }
 
 //-----------------------------------
@@ -98,7 +100,7 @@ NomalEnemySE EnemySE::GetEnemySE(const ENEMY_KIND kind)
 //-----------------------------------------------
 int EnemySE::GetBulletSE(const ATTRIBUTE attribute)
 {
-	int return_se;
+	int return_se = 0;
 
 	switch (attribute)
 	{
