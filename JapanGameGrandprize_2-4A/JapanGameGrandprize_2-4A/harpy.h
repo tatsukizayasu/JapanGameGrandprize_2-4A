@@ -31,6 +31,7 @@ private:
 	int animation; 
 	int animation_time; 
 	float vector; //ベクトル
+	float speed;
 	int physical_time; //物理攻撃時間
 	float range; //プレイヤーとの距離	
 	float range_y; //プレイヤーとの距離Y座
