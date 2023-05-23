@@ -1,6 +1,7 @@
 #include "Title.h"
 #include "DxLib.h"
 #include "GameMain.h"
+#include"../Credit.h"
 #include "../PadInput.h"
 #include "DotByDot.h"
 
@@ -151,7 +152,7 @@ AbstractScene* Title::Update()
 			break;
 		}
 		case Title::MENU::EXIT:
-			return nullptr;
+			return new Credit();
 			break;
 
 		default:
