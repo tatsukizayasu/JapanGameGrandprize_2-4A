@@ -6,13 +6,15 @@ class TorrentBullet :
 {
 private:
 
-    int image; //画像
+    int* images; //画像
+    int image; //描画用の画像
     int x_speed; //Xのスピード
     int y_speed; //Yのスピード
+    int angle;
 public:
 
     //コンストラクタ
-    TorrentBullet(const ENEMY_TYPE, const Location, const Location);
+    TorrentBullet(const Location, const Location);
 
     //デストラクタ
     ~TorrentBullet();

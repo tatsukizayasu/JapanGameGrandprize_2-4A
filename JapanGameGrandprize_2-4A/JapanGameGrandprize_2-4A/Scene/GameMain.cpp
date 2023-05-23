@@ -91,6 +91,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 
 	input_margin = 0;
 	is_spawn_boss = false;
+	delay_animation_count = 0;
 
 	ChangeVolumeSoundMem(155, background_music);
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
@@ -100,6 +101,8 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	old_chemical_bullets[2] = *pouch->GetPoison();
 	old_chemical_bullets[3] = *pouch->GetPararysis();
 	old_chemical_bullets[4] = *pouch->GetHeal();
+
+	is_clear = false;
 }
 
 //-----------------------------------
@@ -137,6 +140,9 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
+	clsDx();
+	printfDx("%d", delay_animation_count);
+
 	stage->UpdateStageBackground(is_spawn_boss);
 
 	pause->Update(stage_num);
@@ -191,9 +197,10 @@ AbstractScene* GameMain::Update()
 	if(!is_help_mode)camera_work->Update();
 	player->Update();
 	stage->Update(player);
+	EnemyUpdate();
 
 	// ボスを倒した場合
-	if (EnemyUpdate() == true)
+	if (is_clear == true)
 	{
 		ElementItem** element = player->GetPlayerElement();
 		unsigned int element_volume[PLAYER_ELEMENT] = { 0 };
@@ -206,8 +213,9 @@ AbstractScene* GameMain::Update()
 
 		// 最後のステージをクリアした場合
 		if (stage_num == 4) { return new END(); }
-
-		return new GameClear(stage_num, element_volume,player->GetPouch());
+		if (DelayAnimation(DELAY_ANIMATION_TYPE::FADE_IN, 180.0f) == true) {
+			return new GameClear(stage_num, element_volume, player->GetPouch());
+		}
 	}
 	item_controller->Update(player);
 	if (player->GetState() == PLAYER_STATE::DEATH)
@@ -218,11 +226,12 @@ AbstractScene* GameMain::Update()
 		{
 			pouch->SetChemicalBullets(old_chemical_bullets[i]);
 		}
+		if (DelayAnimation(DELAY_ANIMATION_TYPE::FADE_OUT, 120.0f) == true)
+		{
+			return new GameOver(stage_num, old_element_volume, pouch);
+		}
 		
-		return new GameOver(stage_num, old_element_volume, pouch);
 	}
-
-
 
 	return this;
 }
@@ -284,11 +293,8 @@ void GameMain::SpawnEnemy()
 //-----------------------------------
 // エネミーの更新処理
 //-----------------------------------
-bool GameMain::EnemyUpdate()
+void GameMain::EnemyUpdate()
 {
-	//クリア判定用フラグ
-	bool is_clear = false;
-
 	vector<ENEMY_LOCATION> spawn;
 	spawn = stage->GetEnemy_SpawnLocation();
 
@@ -504,8 +510,6 @@ bool GameMain::EnemyUpdate()
 			}
 		}
 	}
-
-	return is_clear;
 }
 
 //-----------------------------------
@@ -560,4 +564,39 @@ void GameMain::SetHelpMode(bool is_help)
 	is_help_mode = is_help;
 	camera_work->SetCameraLock(is_help);
 	camera_work->SetCameraState(CameraWork::STATE::FIXED);
+}
+
+bool GameMain::DelayAnimation(DELAY_ANIMATION_TYPE type, float time)
+{
+	//アニメーションの遅延
+	if (delay_animation_count < static_cast<int>(time))
+	{
+		int bright;
+		switch (type)
+		{
+		case GameMain::DELAY_ANIMATION_TYPE::FADE_IN:
+			// フェードイン
+			bright = static_cast<int>((static_cast<float>(delay_animation_count) / time * 255));
+			SetDrawBlendMode(DX_BLENDMODE_ADD_X4, bright);
+			//DrawBox(0,0, SCREEN_WIDTH, SCREEN_HEIGHT, GetColor(0, 0, 0), TRUE);
+			break;
+		case GameMain::DELAY_ANIMATION_TYPE::FADE_OUT:
+			// フェードアウト
+			bright = static_cast<int>((static_cast<float>(delay_animation_count) / time * -255) + 255);
+			SetDrawBright(bright, bright, bright);
+			break;
+		default:
+			break;
+		}
+		
+		delay_animation_count++;
+		return false;
+	}
+	else
+	{
+		delay_animation_count = 0;
+		return true;
+	}
+
+	return false;
 }

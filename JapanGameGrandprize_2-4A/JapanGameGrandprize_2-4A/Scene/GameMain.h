@@ -23,10 +23,22 @@ private:
 
     //ボスがスポーンしたかのフラグ
     bool is_spawn_boss;
+    //ボスを倒したかのフラグ
+    bool is_clear;
 
 
     //操作間隔時間
     int input_margin;
+
+    //遅延アニメーション用カウンタ
+    int delay_animation_count;
+
+    enum class DELAY_ANIMATION_TYPE
+    {
+		FADE_IN,
+		FADE_OUT,
+		DELAY_ANIMATION_TYPE_SIZE
+	};
 
     static bool is_help_mode;  //ヘルプ用
     int help_image[2]; //コントローラ/操作説明の画像
@@ -55,10 +67,18 @@ public:
     void SpawnEnemy();
 
     //エネミーの更新処理
-    bool EnemyUpdate();
+    void EnemyUpdate();
 
     //描画
     void Draw() const override;
 
     void SetHelpMode(bool is_help);
+
+    /// <summary>
+    /// シーン切替前の遅延アニメーション
+    /// </summary>
+    /// <returns></returns>
+    /// <remarks>シーン切替前に遅延アニメーションを行う</remarks>
+    bool DelayAnimation(DELAY_ANIMATION_TYPE type, float time);
+
 };

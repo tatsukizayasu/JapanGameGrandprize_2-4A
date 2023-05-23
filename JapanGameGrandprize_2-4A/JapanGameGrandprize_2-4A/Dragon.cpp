@@ -9,7 +9,7 @@
 #define DRAGON_SIZE_Y 330
 
 //ドラゴンのHP
-#define HIT_POINTS 500
+#define HIT_POINTS 3000
 
 //ドラゴンの移動速度
 #define ATTACK_SPEED 3
@@ -235,21 +235,10 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	//毒のダメージ
 	if (poison == true)
 	{
-		if (++effect_time % POISON_DAMAGE_FLAME == 0)
-		{
-			if (--poison_time > 0)
-			{
-				hp -= poison_damage;
-			}
-			else
-			{
-				poison_damage = 0;
-				poison_time = 0;
-				poison = false;
-			}
-
-		}
+		Poison();
 	}
+
+	
 
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
@@ -257,6 +246,7 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 		state = ENEMY_STATE::DEATH;
 	}
 
+	UpdateDamageLog();
 }
 
 //-----------------------------------
@@ -264,14 +254,18 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 //-----------------------------------
 void Dragon::Draw() const
 {
+
+	if (state != ENEMY_STATE::DEATH)
+	{
+		DrawHPBar(HIT_POINTS);
+	}
+	DrawDamageLog();
+	DrawWeaknessIcon();
+
 	//スクロールに合わせて描画
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
-
-	DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-		draw_location.x + area.width / 2, draw_location.y + area.height / 2,
-		GetColor(255, 0, 0), FALSE);
 
 	switch (state)
 	{
@@ -285,7 +279,7 @@ void Dragon::Draw() const
 		{
 		case 0:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, walk_image, TRUE, !left_move);
+				M_PI / 180, image, TRUE, !left_move);
 			break;
 		case 1:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
@@ -299,16 +293,14 @@ void Dragon::Draw() const
 
 		break;
 	default:
+		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+			M_PI / 180, image, TRUE, !left_move);
 		break;
 	}
 
 
 
-	if (state != ENEMY_STATE::DEATH)
-	{
-		DrawHPBar(HIT_POINTS);
-	}
-	DrawDamageLog();
+	
 
 }
 
@@ -410,7 +402,6 @@ void Dragon::DiteMove(const Location player_location)
 {
 	//4月7日現在、壁に当たるまで攻撃を続けるのか、←4月10日現在これ（ステージとの兼ね合いがあるため仮決定）
 	//攻撃開始直後のプレイヤーの座標を目指して移動するのか、
-
 	speed = ATTACK_SPEED;
 
 	if (left_move == true)
@@ -583,6 +574,7 @@ void Dragon::HitBullet(const BulletBase* bullet)
 
 	int i = 0;
 	int damage = 0;
+	damage_log[i].log = false;
 
 	for (i = 0; i < LOG_NUM; i++)
 	{
@@ -605,15 +597,15 @@ void Dragon::HitBullet(const BulletBase* bullet)
 	switch (bullet->GetAttribute()) //受けた化合物の属性
 	{
 	case ATTRIBUTE::NORMAL: //通常弾 
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE; //効きにくい
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE; //効きにくい
 		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		break;
 	case ATTRIBUTE::EXPLOSION: //爆発 
-		hp -= bullet->GetDamage() * 0; //効かない
+		damage = bullet->GetDamage() * 0; //効かない
 		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::MELT: //溶かす 　通常
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE; //通常ダメージ
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE; //通常ダメージ
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON: //毒
@@ -633,6 +625,7 @@ void Dragon::HitBullet(const BulletBase* bullet)
 			paralysis = true;
 			paralysis_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;  //弱点
 			damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
+			speed = PARALYSIS_SPEED;
 		}
 		break;
 	case ATTRIBUTE::HEAL:
@@ -643,6 +636,7 @@ void Dragon::HitBullet(const BulletBase* bullet)
 	damage_log[i].log = true;
 	damage_log[i].time = LOG_TIME;
 	damage_log[i].damage = damage;
+	hp -= damage;
 
 	if (hp < 0)
 	{

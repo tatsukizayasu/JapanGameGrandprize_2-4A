@@ -11,7 +11,7 @@ ATTRIBUTE* EnemyBase::weakness[12];
 #define HP_BAR_Y1 20
 #define HP_BAR_Y2 10
 
-#define HP_BAR 50
+#define HP_BAR 60
 
 //-----------------------------------
 //コンストラクタ
@@ -161,10 +161,10 @@ bool EnemyBase::ScreenOut()
 	Location camera = CameraWork::GetCamera(); //カメラ
 	scroll = location - camera;
 
-	if ((scroll.x < (-(SCREEN_WIDTH * 2) + -area.width)) ||
-		(((SCREEN_WIDTH * 2) + area.width) < scroll.x) ||
-		(scroll.y < (-(SCREEN_HEIGHT * 2) + -area.height)) || 
-		(((SCREEN_HEIGHT * 2) + area.height) < scroll.y))
+	if ((scroll.x < (-(SCREEN_WIDTH) + -area.width)) ||
+		(((SCREEN_WIDTH) + area.width) < scroll.x) ||
+		(scroll.y < (-(SCREEN_HEIGHT) + -area.height)) || 
+		(((SCREEN_HEIGHT) + area.height) < scroll.y))
 	{
 		ret = true;
 	}
@@ -473,7 +473,7 @@ void EnemyBase::DrawDamageLog()const
 }
 
 //弱点属性のアイコン
-void EnemyBase::DrawWeaknessIcon(const int max_hp) const
+void EnemyBase::DrawWeaknessIcon() const
 {
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
@@ -483,8 +483,18 @@ void EnemyBase::DrawWeaknessIcon(const int max_hp) const
 	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME); //弱点の数の添え字
 	for (int i = 0; i < weakness_num[num]; i++)
 	{
-		DrawRotaGraphF((draw_location.x + area.width / 2) - (23 * i), draw_location.y - (area.height / 2 + HP_BAR_Y1 + 10), 0.8, 0.0,
-			icon_images[static_cast<int>(weakness[num][i])], TRUE, TRUE);
+		if (static_cast<int>(kind) < static_cast<int>(ENEMY_KIND::SLIME_BOSS))
+		{
+			DrawRotaGraphF((draw_location.x + HP_BAR / 2) - (23 * i),
+				draw_location.y - (area.height / 2 + HP_BAR_Y1 + 10), 0.8, 0.0,
+				icon_images[static_cast<int>(weakness[num][i])], TRUE, TRUE);
+		}
+		else
+		{
+			DrawRotaGraphF(SCREEN_WIDTH - 175 - (46 * i),60, 1.6, 0.0,
+				icon_images[static_cast<int>(weakness[num][i])], TRUE, TRUE);
+		}
+
 	}
 }
 

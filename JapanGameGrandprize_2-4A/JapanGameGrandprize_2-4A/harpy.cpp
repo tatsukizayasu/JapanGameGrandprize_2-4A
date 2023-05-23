@@ -183,26 +183,30 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		break;
 	}
 
-	hit_stage = HitStage(stage);
-	if (hit_stage.hit) //ステージとの当たり判定
+
+	if (state != ENEMY_STATE::IDOL)
 	{
-		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-		hit_direction = HitDirection(hit_stage.chip);
-
-		if (hit_direction == STAGE_DIRECTION::TOP)
+		hit_stage = HitStage(stage);
+		if (hit_stage.hit) //ステージとの当たり判定
 		{
-			location = old_location;
-		}
-		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
-		{
-			location = old_location;
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
 
-			if (state != ENEMY_STATE::ATTACK)
+			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
-				left_move = !left_move;
+				location = old_location;
 			}
-		}
+			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
+			{
+				location = old_location;
 
+				if (state != ENEMY_STATE::ATTACK)
+				{
+					left_move = !left_move;
+				}
+			}
+
+		}
 	}
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
@@ -212,22 +216,15 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 
 	if (poison == true)
 	{
-		if (++time % 60 == 0)
-		{
-			if (--poison_time > 0)
-			{
-				hp -= poison_damage;
-			}
-			else
-			{
-				poison_damage = 0;
-				poison_time = 0;
-				poison = false;
-			}
-
-		}
+		Poison();
 	}
+
 	UpdateDamageLog();
+
+	if (ScreenOut())
+	{
+		state = ENEMY_STATE::IDOL;
+	}
 
 }
 
@@ -434,7 +431,7 @@ void Harpy::Draw()const
 		DrawHPBar(HARPY_HP);
 	}
 	DrawDamageLog();
-	DrawWeaknessIcon(HARPY_HP);
+	DrawWeaknessIcon();
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 		M_PI / 180, images[animation], TRUE, !left_move);
