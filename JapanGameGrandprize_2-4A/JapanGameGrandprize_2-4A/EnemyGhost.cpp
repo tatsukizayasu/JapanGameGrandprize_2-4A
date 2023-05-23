@@ -477,6 +477,8 @@ void EnemyGhost::Fall()
 //-----------------------------------
 void EnemyGhost::HitBullet(const BulletBase* bullet)
 {
+	
+	PlayHitBulletSound(bullet->GetAttribute());
 
 	int i = 0;
 	int damage = 0;

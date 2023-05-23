@@ -9,7 +9,7 @@
 #define DRAGON_SIZE_Y 330
 
 //ƒhƒ‰ƒSƒ“‚ÌHP
-#define HIT_POINTS 1800
+#define HIT_POINTS 3000
 
 //ƒhƒ‰ƒSƒ“‚ÌˆÚ“®‘¬“x
 #define ATTACK_SPEED 3
@@ -279,7 +279,7 @@ void Dragon::Draw() const
 		{
 		case 0:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, walk_image, TRUE, !left_move);
+				M_PI / 180, image, TRUE, !left_move);
 			break;
 		case 1:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
@@ -571,6 +571,7 @@ void Dragon::Death()
 //-----------------------------------
 void Dragon::HitBullet(const BulletBase* bullet)
 {
+	PlayHitBulletSound(bullet->GetAttribute());
 
 	int i = 0;
 	int damage = 0;
@@ -625,6 +626,7 @@ void Dragon::HitBullet(const BulletBase* bullet)
 			paralysis = true;
 			paralysis_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;  //Žã“_
 			damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
+			speed = PARALYSIS_SPEED;
 		}
 		break;
 	case ATTRIBUTE::HEAL:

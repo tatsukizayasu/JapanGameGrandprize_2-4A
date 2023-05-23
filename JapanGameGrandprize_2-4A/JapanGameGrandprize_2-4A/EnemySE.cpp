@@ -9,7 +9,11 @@ NomalEnemySE EnemySE::mage_se = { 0,0 }; //メイジSE
 NomalEnemySE EnemySE::ghost_se = { 0,0 }; //ゴーストSE
 NomalEnemySE EnemySE::wyvern_se = { 0,0 }; //ワイバーンSE
 
-int EnemySE::down_se = 0; //ダウン時SE
+int EnemySE::down_se = 0;		//ダウン時SE
+int EnemySE::explosion_se = 0;	//explosion被弾SE
+int EnemySE::melt_se = 0;		//melt被弾SE
+int EnemySE::poison_se = 0;		//poison被弾SE
+int EnemySE::paralyze_se = 0;	//paralyze被弾SE
 
 EnemySE::~EnemySE()
 {
@@ -24,6 +28,13 @@ void EnemySE::LoadSound()
 	slime_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/slimeattack.wav");
 	undead_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/undeadattack.wav");
 	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbless.wav");
+
+	SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
+	explosion_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/explosion.wav",8);
+	melt_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/melt.wav",8);
+	poison_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/poison.wav",8);
+	paralyze_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/paralyze.wav",8);
+	SetCreateSoundDataType(DX_SOUNDDATATYPE_FILE);
 }
 
 //-----------------------------------
@@ -82,4 +93,46 @@ NomalEnemySE EnemySE::GetEnemySE(const ENEMY_KIND kind)
 	}
 
 	return ret;
+}
+
+//-----------------------------------------------
+// 被弾時のSEの取得
+//-----------------------------------------------
+int EnemySE::GetBulletSE(const ATTRIBUTE attribute)
+{
+	int return_se = 0;
+
+	switch (attribute)
+	{
+	case ATTRIBUTE::NORMAL:
+		;
+		break;
+
+	case ATTRIBUTE::EXPLOSION:
+		return_se = explosion_se;
+		break;
+
+	case ATTRIBUTE::MELT:
+		return_se = melt_se;
+		break;
+
+	case ATTRIBUTE::POISON:
+		return_se = poison_se;
+		break;
+
+	case ATTRIBUTE::PARALYSIS:
+		return_se = paralyze_se;
+		break;
+
+	case ATTRIBUTE::HEAL:
+		;
+		break;
+
+	default:
+		;
+		break;
+	}
+
+
+	return return_se;
 }

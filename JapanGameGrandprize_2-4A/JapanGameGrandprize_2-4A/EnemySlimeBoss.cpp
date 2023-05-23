@@ -443,6 +443,8 @@ void EnemySlimeBoss::HitBullet(const BulletBase* bullet)
 
 	}
 
+	PlayHitBulletSound(bullet->GetAttribute());
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:

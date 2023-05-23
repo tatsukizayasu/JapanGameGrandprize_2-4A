@@ -497,6 +497,20 @@ void EnemyBase::DrawWeaknessIcon() const
 
 	}
 }
+
+//---------------------------------
+// ”í’e‚ÌSEÄ¶
+//---------------------------------
+void EnemyBase::PlayHitBulletSound(ATTRIBUTE attribute)const
+{
+	int se = EnemySE::GetBulletSE(attribute);
+
+	if (!se)return;
+
+	PlaySoundMem(EnemySE::GetBulletSE(attribute), DX_PLAYTYPE_BACK);
+	
+}
+
 //-----------------------------------
 //ƒhƒƒbƒv‚·‚éí—Ş‚Ì—Ê‚Ìæ“¾
 //-----------------------------------
