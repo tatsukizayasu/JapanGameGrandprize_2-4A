@@ -23,6 +23,8 @@ private:
 
     //ボスがスポーンしたかのフラグ
     bool is_spawn_boss;
+    //ボスを倒したかのフラグ
+    bool is_clear;
 
 
     //操作間隔時間
@@ -65,7 +67,7 @@ public:
     void SpawnEnemy();
 
     //エネミーの更新処理
-    bool EnemyUpdate();
+    void EnemyUpdate();
 
     //描画
     void Draw() const override;
