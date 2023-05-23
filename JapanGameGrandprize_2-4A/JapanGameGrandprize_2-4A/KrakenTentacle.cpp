@@ -284,6 +284,8 @@ void KrakenTentacle::Death()
 
 void KrakenTentacle::HitBullet(const BulletBase* bullet)
 {
+	PlayHitBulletSound(bullet->GetAttribute());
+
 	int i;
 	int damage = 0;
 	for (i = 0; i < LOG_NUM; i++)

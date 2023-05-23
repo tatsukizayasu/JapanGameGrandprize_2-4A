@@ -94,6 +94,7 @@ void LastBossBarrier::Deployment()
 //-----------------------------------
 void LastBossBarrier::HitBullet(const BulletBase* bullet)
 {
+
 	durability -= bullet->GetDamage();
 	if (durability < 0)
 	{

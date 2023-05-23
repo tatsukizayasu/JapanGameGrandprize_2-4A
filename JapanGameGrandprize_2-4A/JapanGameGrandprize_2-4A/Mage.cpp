@@ -363,6 +363,7 @@ void Mage::CreateBullet(Location player_location)
 //-----------------------------------
 void Mage::HitBullet(const BulletBase* bullet)
 {
+	PlayHitBulletSound(bullet->GetAttribute());
 
 	int i = 0;
 	int damage = 0;
