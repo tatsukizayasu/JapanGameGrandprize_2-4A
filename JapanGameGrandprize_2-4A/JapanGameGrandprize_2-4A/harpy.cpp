@@ -3,9 +3,9 @@
 #include "BulletManager.h"
 #include "DxLib.h"
 
-//ハーピィの画像サイズ(未定、画像が出来次第調整）
-#define HARPY_SIZE_X 80
-#define HARPY_SIZE_Y 80
+//ハーピィの画像サイズ
+#define HARPY_SIZE_X 90
+#define HARPY_SIZE_Y 105
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 300
@@ -80,7 +80,8 @@ Harpy::Harpy(Location spawn_location)
 	magic_attack = false;
 	kind = ENEMY_KIND::HARPY;
 
-	LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 80, 80, images); //通常
+	LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 250, 250, images); //通常
+	GetGraphSizeF(images[0], &size.width, &size.height);
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -435,6 +436,18 @@ void Harpy::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	Area center;
+
+	if (left_move)
+	{
+		center.width = (size.width / 3)+40;
+	}
+	else
+	{
+		center.width = (size.width / 3);
+	}
+	center.height = (size.height / 3)+20;
+
 
 	if (state != ENEMY_STATE::DEATH)
 	{
@@ -443,8 +456,8 @@ void Harpy::Draw()const
 	DrawDamageLog();
 	DrawWeaknessIcon();
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-		M_PI / 180, images[animation], TRUE, !left_move);
+	DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
+		0.5, 0, images[animation], TRUE, !left_move);
 }
 
 //-----------------------------------
