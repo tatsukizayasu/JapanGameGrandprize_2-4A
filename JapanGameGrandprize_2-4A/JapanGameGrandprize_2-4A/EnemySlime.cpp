@@ -39,7 +39,8 @@ EnemySlime::EnemySlime(Location spawn_location)
 	image_change_time = 0;
 	image_addition = 1;
 	hp = SLIME_HP;
-	speed = SLIME_SPEED;
+	speed_x = SLIME_SPEED;
+	speed_y = 0;
 
 	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 
@@ -153,7 +154,10 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 		break;
 
 	case ENEMY_STATE::MOVE:
+
 		Move(player->GetLocation());
+
+		location.x += speed_x;
 
 		hit_stage = HitStage(stage);
 		if (hit_stage.hit) //ステージとの当たり判定
@@ -166,7 +170,7 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 				Location chip_location = hit_stage.chip->GetLocation();
 				Area chip_area = hit_stage.chip->GetArea();
 
-				if (hit_direction == STAGE_DIRECTION::RIGHT)
+				/*if (hit_direction == STAGE_DIRECTION::RIGHT)
 				{
 					location.x = chip_location.x +
 						(chip_area.width / 2) + (area.width / 2);
@@ -175,26 +179,31 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 				{
 					location.x = chip_location.x -
 						(chip_area.width / 2) - (area.width / 2);
-				}				
+				}*/
+				location.x = old_location.x;
 				left_move = !left_move;
-				speed = -speed;
+				speed_x = -speed_x;
 			}
 		}
 		else
 		{
 			state = ENEMY_STATE::FALL;
-			speed = 0;
+			speed_x = 0;
+			speed_y = 0;
 		}
 
 		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
-			speed = 0;
+			speed_x = 0;
+			speed_y = 0;
 		}
 		break;
 
 	case ENEMY_STATE::FALL:
 		Fall();
+
+		location.y += speed_y;
 
 		hit_stage = HitStage(stage);
 
@@ -212,27 +221,19 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
 				state = ENEMY_STATE::MOVE;
-				if (left_move)speed = -SLIME_SPEED;
-				else speed = SLIME_SPEED;
-				
-				if (paralysis)
-				{
-					if (left_move)speed = -(SLIME_SPEED * PARALYSIS_SPEED);
-					else speed = (SLIME_SPEED * PARALYSIS_SPEED);
-				}
 			}
 		}
 
 		if (ScreenOut())
 		{
 			state = ENEMY_STATE::IDOL;
-			speed = 0;
+			speed_x = 0;
+			speed_y = 0;
 		}
 		break;
 
 	case ENEMY_STATE::ATTACK:
 
-		//Attack(player->GetLocation());
 		if (state == ENEMY_STATE::ATTACK)
 		{
 			location.y -= (jump_distance.y / 3);
@@ -243,21 +244,19 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			{
 				location.y = old_location.y;
 				attack = false;
-				state = ENEMY_STATE::MOVE;
+				state = ENEMY_STATE::FALL;
+
+				speed_x = 0;
+				speed_y = 0;
 			}
 		}
 
 		if (state == ENEMY_STATE::ATTACK)
 		{
-			if (left_move)
-			{
-				speed = -SLIME_ATTACK_SPEED;
-			}
-			else
-			{
-				speed = SLIME_ATTACK_SPEED;
-			}
-			location.x += speed;
+			if (left_move)speed_x = -SLIME_ATTACK_SPEED;
+			else speed_x = SLIME_ATTACK_SPEED;
+
+			location.x += speed_x;
 
 			hit_stage = HitStage(stage);
 
@@ -265,14 +264,10 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			{
 				location.x = old_location.x;
 				attack = false;
-				state = ENEMY_STATE::MOVE;
-				if (left_move)speed = -SLIME_SPEED;
-				else speed = SLIME_SPEED;
-				if (paralysis)
-				{
-					if (left_move)speed = -(SLIME_SPEED * PARALYSIS_SPEED);
-					else speed = (SLIME_SPEED * PARALYSIS_SPEED);
-				}
+				state = ENEMY_STATE::FALL;
+
+				speed_x = 0;
+				speed_y = 0;
 			}
 		}
 		break;
@@ -325,16 +320,16 @@ void EnemySlime::Idol()
 		state = ENEMY_STATE::MOVE;
 		if (left_move)
 		{
-			speed = -SLIME_SPEED;
+			speed_x = -SLIME_SPEED;
 		}
 		else
 		{
-			speed = SLIME_SPEED;
+			speed_x = SLIME_SPEED;
 		}
 		if (paralysis)
 		{
-			if (left_move)speed = -(SLIME_SPEED * PARALYSIS_SPEED);
-			else speed = (SLIME_SPEED * PARALYSIS_SPEED);
+			if (left_move)speed_x = -(SLIME_SPEED * PARALYSIS_SPEED);
+			else speed_x = (SLIME_SPEED * PARALYSIS_SPEED);
 		}
 	}
 }
@@ -360,6 +355,7 @@ void EnemySlime::Move(const Location player_location)
 			jump_distance.y = SLIME_ATTACK_DISTANCE_Y;
 			wait_time = 0;
 		}
+		speed_x = 0;
 	}
 	else
 	{
@@ -370,9 +366,15 @@ void EnemySlime::Move(const Location player_location)
 			else if(image_type == 0) image_addition = 1;
 			image_change_time = 0;
 		}
-
-		location.x += speed;
 		wait_time = 0;
+		if (left_move)speed_x = -SLIME_SPEED;
+		else speed_x = SLIME_SPEED;
+
+		if (paralysis)
+		{
+			if (left_move)speed_x = -(SLIME_SPEED * PARALYSIS_SPEED);
+			else speed_x = (SLIME_SPEED * PARALYSIS_SPEED);
+		}
 	}
 }
 
@@ -381,10 +383,10 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 void EnemySlime::Fall()
 {
-	location.y += speed;
-	if (speed < GRAVITY)
+	
+	if (speed_y < GRAVITY)
 	{
-		speed += ENEMY_FALL_SPEED;
+		speed_y += ENEMY_FALL_SPEED;
 	}
 }
 
@@ -398,14 +400,14 @@ void  EnemySlime::Attack(const Location player_location)
 
 	if (left_move)
 	{
-		speed = -SLIME_ATTACK_SPEED;
+		speed_x = -SLIME_ATTACK_SPEED;
 	}
 	else
 	{
-		speed = SLIME_ATTACK_SPEED;
+		speed_x = SLIME_ATTACK_SPEED;
 	}
 
-	location.x += speed;
+	location.x += speed_x;
 }
 
 //-----------------------------------
@@ -494,8 +496,8 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 		{
 			paralysis = true;
 			paralysis_time = bullet->GetDebuffTime();
-			if(left_move)speed = -(SLIME_SPEED * PARALYSIS_SPEED);
-			else speed = (SLIME_SPEED * PARALYSIS_SPEED);
+			if(left_move)speed_x = -(SLIME_SPEED * PARALYSIS_SPEED);
+			else speed_x = (SLIME_SPEED * PARALYSIS_SPEED);
 		}
 		break;
 	case ATTRIBUTE::HEAL:

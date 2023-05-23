@@ -18,6 +18,8 @@ private:
 
 	SLIME_ATTACK slime_attack;
 
+	int speed_x;
+	int speed_y;
 	int image_type;
 	int image_change_time;
 	int image_addition;
