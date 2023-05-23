@@ -265,6 +265,8 @@ void EnemySlimeBoss::Update(const Player* player, const Stage* stage)
 
 	now_state = state;
 	state = ENEMY_STATE::ATTACK;
+
+	UpdateDamageLog();
 }
 
 void EnemySlimeBoss::Draw()const
@@ -420,35 +422,76 @@ void EnemySlimeBoss::DrawHPBar(const int max_hp) const
 //-----------------------------------
 void EnemySlimeBoss::HitBullet(const BulletBase* bullet)
 {
+	int i = 0;
+	int damage = 0;
+
+	for (i = 0; i < LOG_NUM; i++)
+	{
+		if (!damage_log[i].log)
+		{
+			break;
+		}
+	}
+
+	if (LOG_NUM <= i)
+	{
+		for (i = 0; i < LOG_NUM - 1; i++)
+		{
+			damage_log[i] = damage_log[i + 1];
+		}
+		i = LOG_NUM - 1;
+
+	}
+
+	PlayHitBulletSound(bullet->GetAttribute());
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:
-		hp -= bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		break;
 	case ATTRIBUTE::EXPLOSION:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
-		hp -= bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
-		//poison_damage = bullet->GetDamage();
-		//poison_time = bullet->GetDebuffTime() * RESISTANCE_DEBUFF;
+		if (!poison)
+		{
+			poison_damage = bullet->GetDamage() * 0;
+			poison_time = bullet->GetDebuffTime() * 0;
+		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		paralysis_time = bullet->GetDebuffTime() * 0;
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		if (!paralysis)
+		{
+			paralysis = true;
+			paralysis_time = bullet->GetDebuffTime();
+			speed *= PARALYSIS_SPEED;
+		}
 		break;
 	case ATTRIBUTE::HEAL:
 		break;
 	default:
 		break;
 	}
+	damage_log[i].log = true;
+	damage_log[i].time = LOG_TIME;
+	damage_log[i].damage = damage;
+	hp -= damage;
 
 	if (hp < 0)
 	{
 		hp = 0;
 	}
 }
+
 
 //-----------------------------------
 //À•W‚ÌŽæ“¾

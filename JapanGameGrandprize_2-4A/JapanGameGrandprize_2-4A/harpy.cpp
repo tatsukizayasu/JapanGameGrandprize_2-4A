@@ -27,7 +27,7 @@
 #define Standby 2
 
 //移動スピード
-#define SPEED 2.5
+#define SPEED 2.5f
 
 //攻撃スピード
 #define ATTACK_SPEED 5
@@ -122,6 +122,15 @@ Harpy::~Harpy()
 //-----------------------------------
 void Harpy::Update(const class Player* player, const class Stage* stage)
 {
+
+	if (paralysis == true)
+	{
+		speed = PARALYSIS_SPEED;
+	}
+	else
+	{
+		speed = SPEED;
+	}
 
 	//アニメーション
 	if (++animation_time % 10 == 0)
@@ -220,6 +229,7 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 	}
 
 	UpdateDamageLog();
+	Paralysis();
 
 	if (ScreenOut())
 	{
@@ -456,6 +466,8 @@ void Harpy::Fall()
 //-----------------------------------
 void Harpy::HitBullet(const BulletBase* bullet)
 {
+	PlayHitBulletSound(bullet->GetAttribute());
+
 	int i = 0;
 	int damage = 0;
 
@@ -507,7 +519,7 @@ void Harpy::HitBullet(const BulletBase* bullet)
 		if (!paralysis)
 		{
 			paralysis = true;
-			paralysis_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;  //弱点
+			paralysis_time = static_cast<int>(bullet->GetDebuffTime() * WEAKNESS_DEBUFF);
 		}
 		break;
 	case ATTRIBUTE::HEAL:

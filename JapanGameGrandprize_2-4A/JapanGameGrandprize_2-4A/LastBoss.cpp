@@ -674,6 +674,8 @@ void LastBoss::Death()
 //-----------------------------------
 void LastBoss::HitBullet(const BulletBase* bullet)
 {
+	PlayHitBulletSound(bullet->GetAttribute());
+
 	int i;
 	int damage = 0;
 
