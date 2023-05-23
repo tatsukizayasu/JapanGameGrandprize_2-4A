@@ -435,8 +435,8 @@ void EnemyGhost::Draw()const
 	}
 	else
 	{
-		center.width = (size.width / 3)-10;
-		center1.width = (attack_size.width / 3);
+		center.width = (size.width / 3) - 10;
+		center1.width = (attack_size.width / 3) - 40;
 	}
 	center.height = (size.height / 3) + 20;
 	center1.height = (attack_size.width / 3) + 20;
@@ -452,14 +452,11 @@ void EnemyGhost::Draw()const
 	{
 		DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
 			0.4, 0, images[animation], TRUE, !left_move);
-		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-			draw_location.x + area.width / 2, draw_location.y + area.height / 2,
-			GetColor(255, 0, 0), FALSE);
 	}
 	else
 	{
 		DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
-			0.4, 0, attack_image[animation], TRUE, !left_move);
+			0.4, 0, attack_image[attack_anime], TRUE, !left_move);
 	}
 }
 
