@@ -1,160 +1,471 @@
 ﻿0:ChangeWindowMode実行 
-1:ウインドウモードフラグが立てられました
-5:ＤＸライブラリの初期化処理開始
-7:	システムの情報を出力します
+0:ウインドウモードフラグが立てられました
+6:ＤＸライブラリの初期化処理開始
+6:	システムの情報を出力します
 7:		ＤＸライブラリ Ver3.24b
 7:		論理プロセッサの数 : 12
 7:		ＯＳ  Windows10 ( Build 19045  )
 109:		現時点のＣＰＵ動作速度：大体2.61GHz
 109:		ＭＭＸ命令を使用します
 109:		ＳＳＥ命令が使用可能です
-109:		ＳＳＥ２命令が使用可能です
+110:		ＳＳＥ２命令が使用可能です
 110:		ＣＰＵベンダ：GenuineIntel
 111:		ＣＰＵ名：Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz
-113:	ＣＯＭの初期化... 成功
-163:	非同期読み込み処理の初期化...成功
-163:	ファイルアクセス処理の初期化...成功
-166:	メモリ総量:16227.84MB  空きメモリ領域:7607.11MB 
-166:	タイマーの精度を検査します
-166:	精度結果 更新回数 マルチメディアタイマー：0  パフォーマンスカウンター：60
+111:	ＣＯＭの初期化... 成功
+165:	非同期読み込み処理の初期化...成功
+167:	ファイルアクセス処理の初期化...成功
+167:	メモリ総量:16227.84MB  空きメモリ領域:5537.23MB 
+167:	タイマーの精度を検査します
+167:	精度結果 更新回数 マルチメディアタイマー：0  パフォーマンスカウンター：60
 167:	 パフォーマンスカウンターを使用します タイマー精度 : 10000.000000 KHz 
 167:	 
-169:	ソフトの二重起動検査... 二重起動はされていませんでした
+168:	ソフトの二重起動検査... 二重起動はされていませんでした
 169:	ウインドウクラスを登録します... 登録に成功しました
-170:	ウインドウモード起動用のウインドウを作成します
-170:	ディスプレイ情報のセットアップ開始
-171:		モニターの数：1  ディスプレイデバイスの数：4
-171:		No.0  モニター名：\\.\DISPLAY1　1920x1080　32bit　60Hz  96x96dpi
-186:	ディスプレイ情報のセットアップ完了
-186:	ウインドウ矩形 ( 304, 129 )-( 1600, 888 )
-200:	ウインドウの作成に成功しました
-201:	ウインドウを表示します
-268:	ＩＭＥを無効にしました
-269:	ウインドウスタイルをウインドウモード用に変更します... 完了
-426:	XInput DLL の読み込み中... 成功
-432:	DirectInput関係初期化処理
-435:		DirectInput8 の取得を試みます...成功
-497:			引き続き初期化処理... 初期化成功
-501:		ジョイパッドの初期化... 
-502:			XInput 対応コントローラーのチェックを開始します
-502:				XInput 対応コントローラー No.0 をチェック
-507:				XInput 対応コントローラー No.0 の接続を確認しました
-507:				XInput 対応コントローラー No.0 を入力ナンバー 0 で登録します
-509:				XInput 対応コントローラー No.1 をチェック
-509:				XInput 対応コントローラー No.1 の接続は確認できませんでした
-509:				XInput 対応コントローラー No.2 をチェック
-510:				XInput 対応コントローラー No.2 の接続は確認できませんでした
-510:				XInput 対応コントローラー No.3 をチェック
-510:				XInput 対応コントローラー No.3 の接続は確認できませんでした
-510:			XInput 対応コントローラーのチェック完了
-510:			DirectInput 対応ジョイパッドの列挙を開始します
-542:				DirectInput 対応入力装置を検出しました
-542:						Device Product GUID  : c21d046d,0000,0000,00,00,50,49,44,56,49,44
-543:						Device Instance GUID : 2c5741f0,f6f1,11ec,80,02,44,45,53,54,00,00
-543:					DirectInputDevice8 の作成... 成功
-544:					DirectInputDevice の情報を取得します... 成功
-545:						Device Product Name  : Controller (Gamepad F310)
-545:						Device Instance Name : Controller (Gamepad F310)
-545:					検出した DirectInput 対応入力装置が Xbox360コントローラーか確認... 不一致
-546:					検出した DirectInput 対応入力装置が XboxOneコントローラーか確認... 不一致
-546:					検出した DirectInput 対応入力装置が XInput 対応コントローラーか確認... 一致
-828:				検出した DirectInput 対応入力装置の初期化を中断します
-832:			DirectInput 対応ジョイパッドの列挙終了
-834:		ジョイパッドの初期化は正常に終了しました
-834:		マウスデバイスの初期化... 初期化成功
-834:		キーボードデバイスの初期化... 初期化成功
-843:	DirectInput 関連の初期化は正常に終了しました
-851:	WASAPI の初期化を行います
-939:		デバイス名 : スピーカー (Realtek(R) Audio)
-1018:		デフォルト遅延時間 : 10.000 ms
-1018:		最小遅延時間       : 3.000 ms
-1019:		遅延時間           : 10.000 ms
-1023:		チャンネル数  　   : 2 ch
-1023:		量子化ビット深度   : 32 bit
-1024:		有効ビット深度　   : 32 bit
-1024:		サンプリングレート : 48000 Hz
-1024:		データ形式         : 浮動小数点型
-1122:		動作モード         : 共有モード
-1122:	WASAPI の初期化は正常に終了しました
-1132:	d3d11.dll の読み込み.... 成功
-1137:	dxgi.dll の読み込み.... 成功
-1138:	API CreateDXGIFactory2 のアドレスを取得します.... 成功
-1139:	IDXGIFactory2 を作成します.... 成功
-1163:	API CreateDXGIFactory6 のアドレスを取得します.... 成功
-1163:	IDXGIAdapter を列挙
-1164:		Adapter No.0 Desc:NVIDIA GeForce GTX 1660 Ti  VRAM:5991MB
-1164:		Adapter No.1 Desc:Intel(R) UHD Graphics 630  VRAM:128MB
-1164:			Output Device No.0 Name:\\.\DISPLAY1 ( 0, 0 )-( 1920, 1080 )
-1165:		Adapter No.2 Desc:Microsoft Basic Render Driver  VRAM:0MB
-1168:	API D3D11CreateDevice のアドレスを取得します.... 成功
-1168:	IDXGIAdapter を取得します.... 成功
-1169:	IDXGIAdapter1 を取得します.... 成功
-1170:	IDXGIAdapter2 を取得します.... 成功
-1170:	IDXGIAdapter3 を取得します.... 成功
-1171:	IDXGIAdapter4 を取得します.... 成功
-1171:	Direct3D 11 FeatureLevel 11_0 以上を対象とします
-1171:	ID3D11Device オブジェクトを取得します.... 成功
-1229:	IDXGIDevice1 を取得します.... 成功
-1230:	IDXGIDevice1->SetMaximunFrameLatency( 1 ); を実行しました
-1230:	[ウインドウモード 1280x720 ( 320, 171 )-( 1600, 891 )]
-1230:	IDXGISwapChain2 を作成します.... 成功
-1232:	IDXGIFactory2->CreateSwapChainForHwnd の戻り値：0x00000000
-1232:	IDXGIOutput を取得します.... 成功
-1233:	Graphics Device:Intel(R) UHD Graphics 630
-1233:	画面のフォーマットは DXGI_FORMAT_R8G8B8A8_UNORM です
-1233:	16bit Zバッファフォーマットは DXGI_FORMAT_D16_UNORM です
-1234:	24bit Zバッファフォーマットは DXGI_FORMAT_D24_UNORM_S8_UINT です
-1234:	32bit Zバッファフォーマットは DXGI_FORMAT_D32_FLOAT です
-1235:	16bit カラーフォーマットは DXGI_FORMAT_B5G6R5_UNORM です
-1235:	32bit カラーフォーマットは DXGI_FORMAT_B8G8R8X8_UNORM です
-1235:	アルファ付き 16bit カラーフォーマットは DXGI_FORMAT_B4G4R4A4_UNORM です
-1235:	アルファ付き 32bit カラーフォーマットは DXGI_FORMAT_R8G8B8A8_UNORM です
-1236:	アルファテスト用 16bit カラーフォーマットは DXGI_FORMAT_B5G5R5A1_UNORM です
-1236:	アルファテスト用 32bit カラーフォーマットは DXGI_FORMAT_R8G8B8A8_UNORM です
-1236:	ＤＸＴ１テクスチャフォーマットは DXGI_FORMAT_BC1_UNORM です
-1237:	ＤＸＴ２テクスチャフォーマットは使えません
-1237:	ＤＸＴ３テクスチャフォーマットは DXGI_FORMAT_BC2_UNORM です
-1237:	ＤＸＴ４テクスチャフォーマットは使えません
-1238:	ＤＸＴ５テクスチャフォーマットは DXGI_FORMAT_BC3_UNORM です
-1238:	BC7_UNORM テクスチャフォーマットは DXGI_FORMAT_BC7_UNORM です
-1238:	BC7_UNORM_SRGB テクスチャフォーマットは DXGI_FORMAT_BC7_UNORM_SRGB です
-1239:	ABGR 整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16B16A16_UNORM です
-1239:	ABGR 浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16B16A16_FLOAT です
-1239:	ABGR 浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32G32B32A32_FLOAT です
-1240:	１チャンネル整数 8 ビット型カラーフォーマットは DXGI_FORMAT_R8_UNORM です
-1240:	１チャンネル整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16_UNORM です
-1240:	１チャンネル浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16_FLOAT です
-1241:	１チャンネル浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32_FLOAT です
-1241:	２チャンネル整数 8 ビット型カラーフォーマットは DXGI_FORMAT_R8G8_UNORM です
-1241:	２チャンネル整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16_UNORM です
-1242:	２チャンネル浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16_FLOAT です
-1242:	２チャンネル浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32G32_FLOAT です
-1242:	描画用 16bit カラーフォーマットは DXGI_FORMAT_B5G6R5_UNORM です
-1243:	描画用 32bit カラーフォーマットは DXGI_FORMAT_B8G8R8X8_UNORM です
-1243:	描画用アルファ付き 32bit カラーフォーマットは DXGI_FORMAT_R8G8B8A8_UNORM です
-1244:	描画用 ABGR 整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16B16A16_UNORM です
-1244:	描画用 ABGR 浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16B16A16_FLOAT です
-1244:	描画用 ABGR 浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32G32B32A32_FLOAT です
-1244:	描画用１チャンネル整数 8 ビット型カラーフォーマットは DXGI_FORMAT_R8_UNORM です
-1245:	描画用１チャンネル整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16_UNORM です
-1245:	描画用１チャンネル浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16_FLOAT です
-1246:	描画用１チャンネル浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32_FLOAT です
-1246:	描画用２チャンネル整数 8 ビット型カラーフォーマットは DXGI_FORMAT_R8G8_UNORM です
-1246:	描画用２チャンネル整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16_UNORM です
-1247:	描画用２チャンネル浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16_FLOAT です
-1247:	描画用２チャンネル浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32G32_FLOAT です
-1247:	使用する機能レベル:D3D_FEATURE_LEVEL_11_1
-1248:	同時にレンダリングできるバッファの数:8
-1248:	最大テクスチャサイズ　幅:16384 高さ:16384
-1248:	標準描画用の頂点バッファの作成.... 成功
-1249:	シェーダーコード関係の初期化.... 成功
-1263:	各種シェーダー用定数バッファの作成.... 成功
-1264:	各種 ID3D11InputLayout の作成.... 成功
-1309:	画像の単純転送処理の初期化... 成功
-1309:	深度バッファを作成します.... 成功
-1312:	フォントの初期化を行います
-1314:	フォントの初期化は正常に終了しました
-1394:	文字コードバッファの初期化を行います... 完了しました
-1413:ＤＸライブラリの初期化処理終了
-2092:グラフの構築に失敗しましたグラフの構築に失敗しました画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
-5967:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+169:	ウインドウモード起動用のウインドウを作成します
+169:	ディスプレイ情報のセットアップ開始
+170:		モニターの数：1  ディスプレイデバイスの数：4
+170:		No.0  モニター名：\\.\DISPLAY1　1920x1080　32bit　60Hz  96x96dpi
+181:	ディスプレイ情報のセットアップ完了
+181:	ウインドウ矩形 ( 304, 129 )-( 1600, 888 )
+189:	ウインドウの作成に成功しました
+189:	ウインドウを表示します
+244:	ＩＭＥを無効にしました
+246:	ウインドウスタイルをウインドウモード用に変更します... 完了
+380:	XInput DLL の読み込み中... 成功
+383:	DirectInput関係初期化処理
+385:		DirectInput8 の取得を試みます...成功
+442:			引き続き初期化処理... 初期化成功
+446:		ジョイパッドの初期化... 
+446:			XInput 対応コントローラーのチェックを開始します
+447:				XInput 対応コントローラー No.0 をチェック
+449:				XInput 対応コントローラー No.0 の接続を確認しました
+449:				XInput 対応コントローラー No.0 を入力ナンバー 0 で登録します
+451:				XInput 対応コントローラー No.1 をチェック
+451:				XInput 対応コントローラー No.1 の接続は確認できませんでした
+451:				XInput 対応コントローラー No.2 をチェック
+452:				XInput 対応コントローラー No.2 の接続は確認できませんでした
+452:				XInput 対応コントローラー No.3 をチェック
+453:				XInput 対応コントローラー No.3 の接続は確認できませんでした
+453:			XInput 対応コントローラーのチェック完了
+454:			DirectInput 対応ジョイパッドの列挙を開始します
+484:				DirectInput 対応入力装置を検出しました
+485:						Device Product GUID  : c21d046d,0000,0000,00,00,50,49,44,56,49,44
+485:						Device Instance GUID : 2c5741f0,f6f1,11ec,80,02,44,45,53,54,00,00
+486:					DirectInputDevice8 の作成... 成功
+487:					DirectInputDevice の情報を取得します... 成功
+488:						Device Product Name  : Controller (Gamepad F310)
+488:						Device Instance Name : Controller (Gamepad F310)
+489:					検出した DirectInput 対応入力装置が Xbox360コントローラーか確認... 不一致
+489:					検出した DirectInput 対応入力装置が XboxOneコントローラーか確認... 不一致
+490:					検出した DirectInput 対応入力装置が XInput 対応コントローラーか確認... 一致
+748:				検出した DirectInput 対応入力装置の初期化を中断します
+754:			DirectInput 対応ジョイパッドの列挙終了
+754:		ジョイパッドの初期化は正常に終了しました
+754:		マウスデバイスの初期化... 初期化成功
+755:		キーボードデバイスの初期化... 初期化成功
+765:	DirectInput 関連の初期化は正常に終了しました
+770:	WASAPI の初期化を行います
+862:		デバイス名 : スピーカー (Realtek(R) Audio)
+944:		デフォルト遅延時間 : 10.000 ms
+944:		最小遅延時間       : 3.000 ms
+946:		遅延時間           : 10.000 ms
+947:		チャンネル数  　   : 2 ch
+949:		量子化ビット深度   : 32 bit
+949:		有効ビット深度　   : 32 bit
+949:		サンプリングレート : 48000 Hz
+950:		データ形式         : 浮動小数点型
+1211:		動作モード         : 共有モード
+1211:	WASAPI の初期化は正常に終了しました
+1220:	d3d11.dll の読み込み.... 成功
+1225:	dxgi.dll の読み込み.... 成功
+1225:	API CreateDXGIFactory2 のアドレスを取得します.... 成功
+1225:	IDXGIFactory2 を作成します.... 成功
+1253:	API CreateDXGIFactory6 のアドレスを取得します.... 成功
+1253:	IDXGIAdapter を列挙
+1255:		Adapter No.0 Desc:NVIDIA GeForce GTX 1660 Ti  VRAM:5991MB
+1255:		Adapter No.1 Desc:Intel(R) UHD Graphics 630  VRAM:128MB
+1255:			Output Device No.0 Name:\\.\DISPLAY1 ( 0, 0 )-( 1920, 1080 )
+1255:		Adapter No.2 Desc:Microsoft Basic Render Driver  VRAM:0MB
+1255:	API D3D11CreateDevice のアドレスを取得します.... 成功
+1258:	IDXGIAdapter を取得します.... 成功
+1259:	IDXGIAdapter1 を取得します.... 成功
+1259:	IDXGIAdapter2 を取得します.... 成功
+1259:	IDXGIAdapter3 を取得します.... 成功
+1259:	IDXGIAdapter4 を取得します.... 成功
+1261:	Direct3D 11 FeatureLevel 11_0 以上を対象とします
+1261:	ID3D11Device オブジェクトを取得します.... 成功
+1335:	IDXGIDevice1 を取得します.... 成功
+1336:	IDXGIDevice1->SetMaximunFrameLatency( 1 ); を実行しました
+1336:	[ウインドウモード 1280x720 ( 320, 171 )-( 1600, 891 )]
+1336:	IDXGISwapChain2 を作成します.... 成功
+1337:	IDXGIFactory2->CreateSwapChainForHwnd の戻り値：0x00000000
+1337:	IDXGIOutput を取得します.... 成功
+1338:	Graphics Device:Intel(R) UHD Graphics 630
+1339:	画面のフォーマットは DXGI_FORMAT_R8G8B8A8_UNORM です
+1339:	16bit Zバッファフォーマットは DXGI_FORMAT_D16_UNORM です
+1339:	24bit Zバッファフォーマットは DXGI_FORMAT_D24_UNORM_S8_UINT です
+1339:	32bit Zバッファフォーマットは DXGI_FORMAT_D32_FLOAT です
+1339:	16bit カラーフォーマットは DXGI_FORMAT_B5G6R5_UNORM です
+1339:	32bit カラーフォーマットは DXGI_FORMAT_B8G8R8X8_UNORM です
+1340:	アルファ付き 16bit カラーフォーマットは DXGI_FORMAT_B4G4R4A4_UNORM です
+1340:	アルファ付き 32bit カラーフォーマットは DXGI_FORMAT_R8G8B8A8_UNORM です
+1340:	アルファテスト用 16bit カラーフォーマットは DXGI_FORMAT_B5G5R5A1_UNORM です
+1342:	アルファテスト用 32bit カラーフォーマットは DXGI_FORMAT_R8G8B8A8_UNORM です
+1342:	ＤＸＴ１テクスチャフォーマットは DXGI_FORMAT_BC1_UNORM です
+1342:	ＤＸＴ２テクスチャフォーマットは使えません
+1342:	ＤＸＴ３テクスチャフォーマットは DXGI_FORMAT_BC2_UNORM です
+1343:	ＤＸＴ４テクスチャフォーマットは使えません
+1343:	ＤＸＴ５テクスチャフォーマットは DXGI_FORMAT_BC3_UNORM です
+1343:	BC7_UNORM テクスチャフォーマットは DXGI_FORMAT_BC7_UNORM です
+1344:	BC7_UNORM_SRGB テクスチャフォーマットは DXGI_FORMAT_BC7_UNORM_SRGB です
+1344:	ABGR 整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16B16A16_UNORM です
+1344:	ABGR 浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16B16A16_FLOAT です
+1344:	ABGR 浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32G32B32A32_FLOAT です
+1345:	１チャンネル整数 8 ビット型カラーフォーマットは DXGI_FORMAT_R8_UNORM です
+1345:	１チャンネル整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16_UNORM です
+1345:	１チャンネル浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16_FLOAT です
+1346:	１チャンネル浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32_FLOAT です
+1346:	２チャンネル整数 8 ビット型カラーフォーマットは DXGI_FORMAT_R8G8_UNORM です
+1346:	２チャンネル整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16_UNORM です
+1346:	２チャンネル浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16_FLOAT です
+1347:	２チャンネル浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32G32_FLOAT です
+1347:	描画用 16bit カラーフォーマットは DXGI_FORMAT_B5G6R5_UNORM です
+1347:	描画用 32bit カラーフォーマットは DXGI_FORMAT_B8G8R8X8_UNORM です
+1348:	描画用アルファ付き 32bit カラーフォーマットは DXGI_FORMAT_R8G8B8A8_UNORM です
+1348:	描画用 ABGR 整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16B16A16_UNORM です
+1348:	描画用 ABGR 浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16B16A16_FLOAT です
+1348:	描画用 ABGR 浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32G32B32A32_FLOAT です
+1349:	描画用１チャンネル整数 8 ビット型カラーフォーマットは DXGI_FORMAT_R8_UNORM です
+1349:	描画用１チャンネル整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16_UNORM です
+1349:	描画用１チャンネル浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16_FLOAT です
+1350:	描画用１チャンネル浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32_FLOAT です
+1350:	描画用２チャンネル整数 8 ビット型カラーフォーマットは DXGI_FORMAT_R8G8_UNORM です
+1350:	描画用２チャンネル整数 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16_UNORM です
+1350:	描画用２チャンネル浮動小数点 16 ビット型カラーフォーマットは DXGI_FORMAT_R16G16_FLOAT です
+1350:	描画用２チャンネル浮動小数点 32 ビット型カラーフォーマットは DXGI_FORMAT_R32G32_FLOAT です
+1350:	使用する機能レベル:D3D_FEATURE_LEVEL_11_1
+1351:	同時にレンダリングできるバッファの数:8
+1351:	最大テクスチャサイズ　幅:16384 高さ:16384
+1351:	標準描画用の頂点バッファの作成.... 成功
+1352:	シェーダーコード関係の初期化.... 成功
+1374:	各種シェーダー用定数バッファの作成.... 成功
+1377:	各種 ID3D11InputLayout の作成.... 成功
+1426:	画像の単純転送処理の初期化... 成功
+1428:	深度バッファを作成します.... 成功
+1431:	フォントの初期化を行います
+1433:	フォントの初期化は正常に終了しました
+1519:	文字コードバッファの初期化を行います... 完了しました
+1536:ＤＸライブラリの初期化処理終了
+2280:グラフの構築に失敗しましたグラフの構築に失敗しました画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+5837:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+65736:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+65902:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+66069:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+66236:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+66402:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+66569:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+66736:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+66902:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+67069:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+67236:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+67402:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+67569:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+67736:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+67902:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+68069:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+68236:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+68819:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+69952:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+70119:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+70286:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+93119:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+93286:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+93452:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+93619:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+93786:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+93952:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+94119:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+94286:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+94452:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+94619:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+94786:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+94951:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+95120:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+95519:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+95686:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+95852:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+96019:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+96186:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+96351:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+96519:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+110720:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+110886:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+111052:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+111219:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+111386:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+111552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+111719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+111886:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+113485:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+122436:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+122602:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+122769:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+122936:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+123102:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+123268:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+123435:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+123602:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+123769:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+125919:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+126086:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+139336:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+139502:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+139669:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+140003:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+140168:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+140336:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+140669:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+140836:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+141001:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+143053:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+143219:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+143386:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+143552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+143719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+144052:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+144219:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+144552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+144719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+145053:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+145219:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+147052:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+147220:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+147552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+147719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+148052:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+148220:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+148552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+148721:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+149051:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+149220:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+149552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+149720:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+150051:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+150220:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+150552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+151737:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+151902:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+152237:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+152402:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+152736:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+152902:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+157303:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+157470:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+157636:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+157802:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+157969:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+158319:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+158486:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+160952:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+161286:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+161452:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+161619:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+161786:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+161953:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+162118:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+162286:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+162620:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+164471:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+164637:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+164802:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+165138:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+165303:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+167786:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+167952:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+168819:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+168985:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+169552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+169719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+171201:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+171369:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+175936:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+176102:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+176269:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+186070:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+186235:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+186402:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+186569:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+186902:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+187068:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+187236:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+187402:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+187737:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+187902:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+188069:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+188236:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+188869:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+189036:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+189369:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+189536:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+189702:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+190036:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+190202:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+190369:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+190703:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+192386:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+192552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+192719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+192886:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+193052:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+193219:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+193386:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+193552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+193718:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+193886:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+194052:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+194219:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+194386:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+194551:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+194719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+194886:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+195286:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+195452:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+195618:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+195786:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+195951:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+196119:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+196286:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+196452:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+196619:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+196786:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+196951:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+197536:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+197702:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+197869:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+198036:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+198885:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+199052:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+199219:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+199386:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+199551:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+199719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+199886:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+200052:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+200219:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+200387:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+200552:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+200719:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+210485:グラフの構築に失敗しましたグラフの構築に失敗しました画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+213382:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+252204:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+252370:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+252537:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+252703:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+252904:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+253070:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+253237:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+256120:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+257637:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+261370:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+270703:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+273503:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+274986:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+276137:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+277470:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+280270:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+280937:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+282937:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+283103:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+284353:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+286170:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・par_2.png のロードに失敗しました
+288853:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+290603:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+290770:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+291570:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+291737:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+292670:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+295670:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+298536:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+298703:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+299788:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+301437:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+301604:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+301770:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+301937:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+302103:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+302270:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+304120:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+305920:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+306087:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+326520:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+326870:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+327919:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+328970:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+329137:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+331403:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+332720:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+332887:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+334953:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+336403:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+337503:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+350687:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+350853:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+351019:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+351188:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+351353:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+362737:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+365353:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・poi_2.png のロードに失敗しました
+374820:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+376836:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+377002:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+377170:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+377337:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+377503:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+377670:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+377837:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+378003:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+378169:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+378335:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+378503:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+378670:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+378837:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+379003:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+379170:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+379336:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+379503:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+379670:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+379837:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+380003:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+380169:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+380337:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+380503:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+380670:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+380837:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+381002:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+381170:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+381337:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+381503:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+382120:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+382287:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+382453:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+382620:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+382787:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+383714:グラフの構築に失敗しましたグラフの構築に失敗しました画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+391120:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・exp_2.png のロードに失敗しました
+416193:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+417292:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+417943:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+418110:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+418426:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+418593:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+418760:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+418928:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+419093:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+419259:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+419427:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+419593:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+419760:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+419927:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+420093:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+420260:画像ファイル C:\PG-R4\C++\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\JapanGameGrandprize_2-4A\Images\Player\逹蠑ｾ繧ｨ繝輔ぉ繧ｯ繝・mel_2.png のロードに失敗しました
+457262:グラフの構築に失敗しましたグラフの構築に失敗しました
