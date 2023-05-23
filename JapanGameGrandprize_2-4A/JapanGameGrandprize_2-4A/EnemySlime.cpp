@@ -16,11 +16,7 @@
 #define SLIME_MIN_DROP 1
 #define SLIME_DROP 5
 
-#define GROUND 1200
 #define WAIT_TIME 30 //プレイヤーを見つけて攻撃するまでの時間
-
-#define ONE_ROUND 360 //一周の角度
-#define ROTATION_SPEED 15 //スライムが回転するスピード
 
 #define SLIME_HP 75
 EnemySlime::EnemySlime(Location spawn_location)
@@ -147,7 +143,6 @@ EnemySlime::~EnemySlime()
 
 void EnemySlime::Update(const Player* player, const Stage* stage)
 {
-
 	Location old_location = location;	//前の座標
 	HitMapChip hit_stage = { false,nullptr }; //ステージとの当たり判定
 
@@ -217,18 +212,13 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
 				state = ENEMY_STATE::MOVE;
-				if (left_move)
-				{
-					speed = -SLIME_SPEED;
-				}
-				else
-				{
-					speed = SLIME_SPEED;
-				}
-
+				if (left_move)speed = -SLIME_SPEED;
+				else speed = SLIME_SPEED;
+				
 				if (paralysis)
 				{
-					speed *= PARALYSIS_SPEED;
+					if (left_move)speed = -(SLIME_SPEED * PARALYSIS_SPEED);
+					else speed = (SLIME_SPEED * PARALYSIS_SPEED);
 				}
 			}
 		}
@@ -276,17 +266,12 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 				location.x = old_location.x;
 				attack = false;
 				state = ENEMY_STATE::MOVE;
-				if (left_move)
-				{
-					speed = -SLIME_SPEED;
-				}
-				else
-				{
-					speed = SLIME_SPEED;
-				}
+				if (left_move)speed = -SLIME_SPEED;
+				else speed = SLIME_SPEED;
 				if (paralysis)
 				{
-					speed *= PARALYSIS_SPEED;
+					if (left_move)speed = -(SLIME_SPEED * PARALYSIS_SPEED);
+					else speed = (SLIME_SPEED * PARALYSIS_SPEED);
 				}
 			}
 		}
@@ -301,6 +286,7 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 	}
 	
 	Paralysis();
+	
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
 	{
@@ -347,7 +333,8 @@ void EnemySlime::Idol()
 		}
 		if (paralysis)
 		{
-			speed *= PARALYSIS_SPEED;
+			if (left_move)speed = -(SLIME_SPEED * PARALYSIS_SPEED);
+			else speed = (SLIME_SPEED * PARALYSIS_SPEED);
 		}
 	}
 }
@@ -394,7 +381,6 @@ void EnemySlime::Move(const Location player_location)
 //-----------------------------------
 void EnemySlime::Fall()
 {
-
 	location.y += speed;
 	if (speed < GRAVITY)
 	{
@@ -449,32 +435,7 @@ AttackResource EnemySlime::Hit()
 //-----------------------------------
 void EnemySlime::Death()
 {
-
 	can_delete = true;
-
-	/*if (slime_angle >= (ONE_ROUND * 2.5) || slime_angle <= -(ONE_ROUND * 2.5))
-	{
-		can_delete = true;
-	}
-	else
-	{
-		if (location.y <= GROUND)
-		{
-			location.y -= (jump_distance.y / 3);
-			jump_distance.y--;
-		}
-		if (left_move)
-		{
-			speed = SLIME_ATTACK_SPEED;
-			slime_angle += ROTATION_SPEED;
-		}
-		else
-		{
-			speed = -SLIME_ATTACK_SPEED;
-			slime_angle -= ROTATION_SPEED;
-		}
-		location.x += speed;
-	}*/
 }
 
 //-----------------------------------
@@ -532,7 +493,8 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 		{
 			paralysis = true;
 			paralysis_time = bullet->GetDebuffTime();
-			speed *= PARALYSIS_SPEED;
+			if(left_move)speed = -(SLIME_SPEED * PARALYSIS_SPEED);
+			else speed = (SLIME_SPEED * PARALYSIS_SPEED);
 		}
 		break;
 	case ATTRIBUTE::HEAL:
