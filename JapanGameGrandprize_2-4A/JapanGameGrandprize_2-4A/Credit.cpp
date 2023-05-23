@@ -28,7 +28,7 @@ Credit::~Credit()
 //-----------------------------------
 AbstractScene* Credit::Update()
 {
-	if (++time % 60 == 0)
+	if (++time % 120 == 0)
 	{
 		if (++display_time > DISPLAY == 0)
 		{
@@ -43,8 +43,6 @@ AbstractScene* Credit::Update()
 //-----------------------------------
 void Credit::Draw()const
 {
-
-	
 	DrawString(100,100,"使用したSE、BGM\n",cr);
 	DrawString(100,150,"無料効果音で遊ぼう！\n",cr);
 	DrawString(100,200,"DOVA-SYNDROME\n",cr);
