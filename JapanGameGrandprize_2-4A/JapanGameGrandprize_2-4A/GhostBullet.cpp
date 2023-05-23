@@ -13,8 +13,11 @@ GhostBullet::GhostBullet(const Location spawn_location, const Location player_lo
 	type = ENEMY_TYPE::WIND;
 	location = spawn_location;
 	radius = 5;
+	frame = 0;
+	angle = 0;
+	Tick = 0;
 	speed = GHOST_BULLET_SPEED;
-	image = 0;
+	image = LoadGraph("images/Enemy/Ghost/ghost.png");;
 	damage = GHOST_BULLET_DAMAGE;
 	float radian; //Šp“x
 	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
@@ -38,6 +41,31 @@ void GhostBullet::Update()
 
 	location.x += x_speed;
 	location.y += y_speed;
+
+	Tick++;
+	if (Tick == 1)
+	{
+		frame = 0;
+	}
+	if (Tick % 3 == 0)
+	{
+		frame++;
+		if (frame > 14)
+		{
+			Tick = 0;
+		}
+	}
+	else
+	{
+		frame++;
+		if (frame > 10)
+		{
+			frame = 5;
+		}
+	}
+
+	angle = (Tick * 30) % 360;
+	angle = angle * (M_PI / 180);
 }
 
 //-----------------------------------
@@ -50,5 +78,7 @@ void GhostBullet::Draw() const
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
 
-	DrawCircle(x, y, radius, 0xffffff, TRUE);
+	DrawRotaGraph(x, y, 0.4, angle, image, TRUE, FALSE, FALSE);
+
+	DrawCircle(x, y, radius, GetColor(255,0,255), FALSE);
 }

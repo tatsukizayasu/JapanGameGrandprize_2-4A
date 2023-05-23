@@ -10,6 +10,11 @@ private:
 
     int x_speed; //Xのスピード
     int y_speed; //Yのスピード
+
+    //エフェクト
+    int Tick;
+    int frame;
+    float angle;
 public:
 
     //コンストラクタ
