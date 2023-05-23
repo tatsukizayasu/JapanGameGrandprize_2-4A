@@ -140,9 +140,6 @@ GameMain::~GameMain()
 //-----------------------------------
 AbstractScene* GameMain::Update()
 {
-	clsDx();
-	printfDx("%d", delay_animation_count);
-
 	stage->UpdateStageBackground(is_spawn_boss);
 
 	pause->Update(stage_num);
