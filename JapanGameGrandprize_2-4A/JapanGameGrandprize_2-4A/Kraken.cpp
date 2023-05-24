@@ -50,12 +50,8 @@ Kraken::Kraken(Location spawn_location)
 	left_move = true;
 
 	hp = KRAKEN_HP;
-	damage = 0;
-
 
 	kind = ENEMY_KIND::KRAKEN;
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::WATER;
 	state = ENEMY_STATE::IDOL;
 	attack_state = KRAKEN_ATTACK::NONE;
 	move_state = KRAKEN_STATE::NONE;
@@ -105,9 +101,6 @@ Kraken::~Kraken()
 
 	delete[] drop_element;
 
-	delete[] type;
-
-	delete[] images;
 
 }
 
@@ -319,7 +312,7 @@ AttackResource Kraken::Hit()
 
 	if (attack_state == KRAKEN_ATTACK::TENTACLE_ATTACK)
 	{
-		ENEMY_TYPE attack_type[1] = { *type };
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::WATER };
 		ret.damage = ATTACK_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;

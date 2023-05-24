@@ -1,6 +1,8 @@
 #include "LastBossMagic.h"
 #include "CameraWork.h"
 
+
+
 //画像枚数
 #define MAGIC_IMAGES 10
 
@@ -19,7 +21,9 @@
 enum class MAGIC_TYPE 
 {
 	SLASH = 0,
-	THUNDER
+	THUNDER,
+	FIRE,
+	DARK
 };
 
 //-----------------------------------
@@ -37,19 +41,51 @@ LastBossMagic::LastBossMagic()
 
 	location = spawn_location + camera;
 	radius = 0;
+	angle = 0;
+	
+	images = nullptr;
+	image_num = 0;
+	image_size = 0;
 
-	images = new int[MAGIC_IMAGES];
-
-	switch (static_cast<MAGIC_TYPE>(GetRand(1)))
+	switch (static_cast<MAGIC_TYPE>(GetRand(3)))
 	{
 	case MAGIC_TYPE::SLASH:
-		LoadDivGraph("Images/Enemy/Magic/Slash.png", MAGIC_IMAGES, 5, 2, 192, 192, images);
+	{
+		image_num = MAGIC_IMAGES;
+		images = new int[image_num];
+		LoadDivGraph("Images/Enemy/Magic/Slash.png", image_num, 5, 2, 192, 192, images);
 		this->type = ENEMY_TYPE::NORMAL;
+		image_size = 0.75;
 		break;
+	}
 	case MAGIC_TYPE::THUNDER:
-		LoadDivGraph("Images/Enemy/Magic/Thunder.png", MAGIC_IMAGES, 5, 2, 192, 192, images);
+	{
+		image_num = MAGIC_IMAGES;
+		images = new int[image_num];
+		LoadDivGraph("Images/Enemy/Magic/Thunder.png", image_num, 5, 2, 192, 192, images);
 		this->type = ENEMY_TYPE::THUNDER;
+		image_size = 0.75;
+
 		break;
+	}
+	case MAGIC_TYPE::FIRE:
+	{
+		image_num = MAGIC_IMAGES * 2;
+		images = new int[image_num];
+		LoadDivGraph("Images/Enemy/Magic/tktk_Fire_17.png", image_num, 5, 4, 192, 192, images);
+		this->type = ENEMY_TYPE::FIRE;
+		image_size = 0.8;
+		break;
+	}
+	case MAGIC_TYPE::DARK:
+	{
+		image_num = MAGIC_IMAGES * 1.5;
+		images = new int[image_num];
+		LoadDivGraph("Images/Enemy/Magic/tktk_Darkness_8.png", image_num, 5, 3, 192, 192, images);
+		this->type = ENEMY_TYPE::NORMAL;
+		image_size = 0.8;
+		break;
+	}
 	default:
 		break;
 	}
@@ -60,6 +96,7 @@ LastBossMagic::LastBossMagic()
 	animation = 0;
 	argument = 0;
 	damage = MAGIC_DAMAGE;
+	magic_circle_image = LoadGraph("Images/Enemy/Magic/MagicCircle.png");
 }
 
 //-----------------------------------
@@ -72,22 +109,52 @@ LastBossMagic::LastBossMagic(const Location spawn_location)
 
 	location = spawn_location;
 	radius = 0;
+	angle = 0;
 
-	images = new int[MAGIC_IMAGES];
-
-		switch (static_cast<MAGIC_TYPE>(GetRand(1)))
-		{
-		case MAGIC_TYPE::SLASH:
-			LoadDivGraph("Images/Enemy/Magic/Slash.png", MAGIC_IMAGES, 5, 2, 192, 192, images);
-			this->type = ENEMY_TYPE::NORMAL;
-			break;
-		case MAGIC_TYPE::THUNDER:
-			LoadDivGraph("Images/Enemy/Magic/Thunder.png", MAGIC_IMAGES, 5, 2, 192, 192, images);
-			this->type = ENEMY_TYPE::THUNDER;
-			break;
-		default:
-			break;
-		}
+	images = nullptr;
+	image_num = 0;
+	image_size = 0;
+	switch (static_cast<MAGIC_TYPE>(GetRand(3)))
+	{
+	case MAGIC_TYPE::SLASH:
+	{
+		image_num = MAGIC_IMAGES;
+		images = new int[image_num];
+		LoadDivGraph("Images/Enemy/Magic/Slash.png", image_num, 5, 2, 192, 192, images);
+		this->type = ENEMY_TYPE::NORMAL;
+		image_size = 0.75;
+		break;
+	}
+	case MAGIC_TYPE::THUNDER:
+	{
+		image_num = MAGIC_IMAGES;
+		images = new int[image_num];
+		LoadDivGraph("Images/Enemy/Magic/Thunder.png", image_num, 5, 2, 192, 192, images);
+		this->type = ENEMY_TYPE::THUNDER;
+		image_size = 0.75;
+		break;
+	}
+	case MAGIC_TYPE::FIRE:
+	{
+		image_num = MAGIC_IMAGES * 2;
+		images = new int[image_num];
+		LoadDivGraph("Images/Enemy/Magic/tktk_Fire_17.png", image_num, 5, 4, 192, 192, images);
+		this->type = ENEMY_TYPE::FIRE;
+		image_size = 0.8;
+		break;
+	}
+	case MAGIC_TYPE::DARK:
+	{
+		image_num = MAGIC_IMAGES * 1.5;
+		images = new int[image_num];
+		LoadDivGraph("Images/Enemy/Magic/tktk_Darkness_8.png", image_num, 5, 3, 192, 192, images);
+		this->type = ENEMY_TYPE::NORMAL;
+		image_size = 0.8;
+		break;
+	}
+	default:
+		break;
+	}
 
 	size = 0.0;
 	standby_time = STANDBY_TIME;
@@ -95,6 +162,9 @@ LastBossMagic::LastBossMagic(const Location spawn_location)
 	animation = 0;
 	argument = 0;
 	damage = MAGIC_DAMAGE;
+
+	magic_circle_image = LoadGraph("Images/Enemy/Magic/MagicCircle.png");
+
 }
 
 //-----------------------------------
@@ -102,7 +172,7 @@ LastBossMagic::LastBossMagic(const Location spawn_location)
 //-----------------------------------
 LastBossMagic::~LastBossMagic()
 {
-	for (int i = 0; i < MAGIC_IMAGES; i++)
+	for (int i = 0; i < image_num; i++)
 	{
 		DeleteGraph(images[i]);
 	}
@@ -123,9 +193,9 @@ void LastBossMagic::Update()
 			if (size < 1.0)
 			{
 				size += 0.2;
-				radius = MAGIC_AREA * size;
 			}
 		}
+		angle += 2;
 		if (standby_time < 0)
 		{
 			standby = false;
@@ -144,7 +214,7 @@ void LastBossMagic::Update()
 				size += 0.5;
 				radius = MAGIC_AREA * size;
 			}
-			if (MAGIC_IMAGES - 1 < argument)
+			if (image_num - 1 < argument)
 			{
 				can_delete = true;
 			}
@@ -163,12 +233,11 @@ void LastBossMagic::Draw() const
 
 	if (standby) //スタンバイ中
 	{
-		DrawCircle(static_cast<int>(draw_location.x), static_cast<int>(draw_location.y),
-			radius, 0xff0000, FALSE);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.1 * size, M_PI /180 * angle, magic_circle_image, TRUE);
 	}
 	else
 	{
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.75, 0.0, images[argument], TRUE);
+		DrawRotaGraphF(draw_location.x, draw_location.y, image_size, 0.0, images[argument], TRUE);
 	}
 }
 

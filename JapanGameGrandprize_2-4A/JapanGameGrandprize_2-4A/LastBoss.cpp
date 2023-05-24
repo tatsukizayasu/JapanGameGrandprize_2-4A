@@ -46,6 +46,9 @@
 //必殺技の時間
 #define SPECIAL_MOVES_TIME 60 * 10
 
+//アニメーション
+#define LAST_BOSS_ANIMATION 5
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -100,6 +103,14 @@ LastBoss::LastBoss(Location spawn_location)
 
 	special_moves = nullptr;
 	barrier = nullptr;
+
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
+	if (images[num].empty())
+	{
+		images[num].resize(4);
+		LoadDivGraph("Images/Enemy/lastbossdown1.png", 4, 4, 1, 500, 500, &images[num][0]);
+	}
 }
 
 //-----------------------------------
@@ -136,6 +147,7 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 		down_time--;
 		if (down_time < 0)
 		{
+			Animation();
 			if (Revival())
 			{
 				down = false;
@@ -790,6 +802,19 @@ bool LastBoss::CheckHitBulelt(const BulletBase* bullet)
 	return ret;
 }
 
+
+//-----------------------------------
+//アニメーション
+//-----------------------------------
+void LastBoss::Animation()
+{
+	animation++;
+	if (animation % LAST_BOSS_ANIMATION == 0)
+	{
+		image_argument++;
+	}
+}
+
 //-----------------------------------
 //描画
 //-----------------------------------
@@ -800,15 +825,15 @@ void LastBoss::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 	if (down)
 	{
-		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffffff, TRUE);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, M_PI /180 * 30, images[num][image_argument % 4], TRUE);
 	}
 	else
 	{
-		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0x777777, TRUE);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0.0, images[num][0],TRUE);
 	}
 
 	if (barrier != nullptr)

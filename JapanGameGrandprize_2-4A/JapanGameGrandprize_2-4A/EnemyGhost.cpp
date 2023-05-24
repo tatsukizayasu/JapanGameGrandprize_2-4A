@@ -80,11 +80,7 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 
 	kind = ENEMY_KIND::GHOST;
 
-	images = new int[7];
-	LoadDivGraph("Images/Enemy/ghostman3 .png", 6, 6, 1, 250, 250, images); //通常
-	LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 250, 250, attack_image); //攻撃
-	GetGraphSizeF(images[0], &size.width, &size.height);
-	GetGraphSizeF(attack_image[0], &attack_size.width, &attack_size.height);
+	
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -100,11 +96,21 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	type = new ENEMY_TYPE;
-	*type = ENEMY_TYPE::WIND;
 	attack_state = GHOST_ATTACK::NONE;
 	state = ENEMY_STATE::IDOL;
 	action_type = GHOST_STATE::NORMAL;
+
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
+	if (images[num].empty())
+	{
+		images[num].resize(8);
+		LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, &images[num][0]); //通常
+		LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 60, 60, &images[num][6]); //攻撃
+	}
+	GetGraphSizeF(images[num][0], &size.width, &size.height);
+	GetGraphSizeF(images[num][6], &attack_size.width, &attack_size.height);
+
 
 #ifdef _DEBUG
 	ENEMY_STATE old_state = state;
@@ -116,9 +122,6 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 //-----------------------------------
 EnemyGhost::~EnemyGhost()
 {
-
-	delete[] images;
-	delete[] type;
 
 	for (int i = 0; i < WIND_DROP; i++)
 	{
@@ -397,7 +400,7 @@ AttackResource EnemyGhost::Hit()
 	if (attack_state == GHOST_ATTACK::PHYSICAL_ATTACK && (!attack))
 	{
 			attack = true;
-			ENEMY_TYPE attack_type[1] = { *type };
+			ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::WIND };
 			ret.damage = ATTACK_DAMAGE;
 			ret.type = attack_type;
 			ret.type_count = 1;
@@ -587,16 +590,7 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 	case ENEMY_STATE::IDOL:
 		break;
 	case ENEMY_STATE::MOVE:
-		//アニメーションゴースト
-		if (++animation_time % 10 == 0)
-		{
-			--animation;
-		}
-
-		if (animation < 0)
-		{
-			animation = 5;
-		}
+		
 		break;
 	case ENEMY_STATE::FALL:
 		break;
@@ -605,11 +599,6 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 		if (!attack)
 		{
 			attack = true;
-		}
-
-		if (++animation_time % 10 == 0)
-		{
-			++attack_anime;
 		}
 
 		if (attack_anime > 1)
@@ -624,6 +613,11 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 	}
 
 	old_state = state;
+	//アニメーションゴースト
+	if (++animation_time % 10 == 0)
+	{
+		--animation;
+	}
 }
 
 //-----------------------------------
@@ -631,15 +625,17 @@ void EnemyGhost::Update(const ENEMY_STATE state)
 //-----------------------------------
 void EnemyGhost::DebugDraw()
 {
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 	if (!attack)
 	{
 		DrawRotaGraphF(location.x, location.y, 1.3f,
-			M_PI / 180, images[animation], TRUE, !left_move);
+			M_PI / 180, images[num][animation % 6], TRUE, !left_move);
 	}
 	else
 	{
 		DrawRotaGraphF(location.x, location.y, 1.3f,
-			M_PI / 180, attack_image[attack_anime], TRUE, !left_move);
+			M_PI / 180, images[num][animation % 2 + 6], TRUE, !left_move);
 	}
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,

@@ -72,6 +72,9 @@ private:
 
     //攻撃しない
     void AttackNone();
+    
+    //アニメーション
+    void Animation();
 public:
 
     //コンストラクタ

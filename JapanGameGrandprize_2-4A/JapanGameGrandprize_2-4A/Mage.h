@@ -18,6 +18,7 @@ private:
     int image; //画像
     int drop; //ドロップするアイテムの種類の数
     int attack_interval; //攻撃の間隔
+    ENEMY_TYPE type; // タイプ
 private:
 
     //テレポート
