@@ -1,13 +1,17 @@
 #pragma once
 #include"EnemyBulletBase.h"
 
+#define DRAGON_BULLET_IMAGES_NUM 10
+
 class DragonBullet :
     public EnemyBulletBase
 {
-    int images; //画像
 
+    float direction; //進行方向
     int x_speed; //Xのスピード
     int y_speed; //Yのスピード
+
+    static int images[DRAGON_BULLET_IMAGES_NUM]; //画像
 public:
 
     //コンスタラクタ
