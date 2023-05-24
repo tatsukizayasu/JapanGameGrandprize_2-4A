@@ -259,7 +259,7 @@ void Dragon::Draw() const
 	{
 		DrawHPBar(HIT_POINTS);
 	}
-	DrawDamageLog();
+
 	DrawWeaknessIcon();
 
 	//ƒXƒNƒ[ƒ‹‚É‡‚í‚¹‚Ä•`‰æ
@@ -299,7 +299,7 @@ void Dragon::Draw() const
 	}
 
 
-
+	DrawDamageLog();
 	
 
 }

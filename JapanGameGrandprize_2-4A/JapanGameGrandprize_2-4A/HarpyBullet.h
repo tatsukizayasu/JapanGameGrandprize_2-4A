@@ -8,7 +8,7 @@ class HarpyBullet :public EnemyBulletBase
 {
 private:
 
-    int image; //画像
+    int image[20]; //画像
 
     int x_speed; //Xのスピード
     int y_speed; //Yのスピード
@@ -33,4 +33,5 @@ public:
 
     //描画
     void Draw() const override;
+
 };

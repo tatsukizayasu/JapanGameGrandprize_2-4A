@@ -18,8 +18,8 @@ Title::Title()
 
 	background_image = LoadGraph("Images/Scene/title.png");
 
-	if ((background_music = LoadSoundMem("Sounds/BGM/title.mp3")) == -1) {
-		throw "Sounds/BGM/title.mp3";
+	if ((background_music = LoadSoundMem("Sounds/BGM/Title.wav")) == -1) {
+		throw "Sounds/BGM/Title.wav";
 	}
 
 	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {

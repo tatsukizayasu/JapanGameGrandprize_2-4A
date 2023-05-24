@@ -354,7 +354,7 @@ void Wyvern::Attack(const Location player_location)
 		TripleBless(player_location);
 		break;
 	case WYVERN_ATTACK::ASSAULT:
-		Assault(player_location);
+		Assault();
 		break;
 	case WYVERN_ATTACK::NONE:
 		break;
@@ -438,7 +438,7 @@ void Wyvern::TripleBless(const Location player_location)
 //-----------------------------------
 //‹­PUŒ‚
 //-----------------------------------
-void Wyvern::Assault(const Location)
+void Wyvern::Assault()
 {
 	float distance = 0; //‹­PUŒ‚‚ğn‚ß‚½ˆÊ’u‚©‚ç‚Ì‹——£
 	Location distance_location; //x‚Æy‚»‚ê‚¼‚ê‚Ì‹­PUŒ‚‚ğn‚ß‚½ˆÊ’u‚©‚ç‚Ì‹——£
