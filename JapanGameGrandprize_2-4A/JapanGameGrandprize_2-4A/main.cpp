@@ -56,6 +56,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return 0;
 	}
 
+	EnemyBase::LoadWeakness();
 	EnemySE::LoadSound();
 	// ƒQ[ƒ€ƒ‹[ƒv
 	while ((ProcessMessage() == 0) && (sceneMng->Update() != nullptr))

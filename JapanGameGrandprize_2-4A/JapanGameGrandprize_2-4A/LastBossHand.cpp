@@ -420,6 +420,7 @@ void LastBossHand::StartAttack()
 void LastBossHand::EndAttack()
 {
 	state = ENEMY_STATE::MOVE;
+	punch = false;
 	teleporting = true;
 	teleport = true;
 	teleport_time = 0;

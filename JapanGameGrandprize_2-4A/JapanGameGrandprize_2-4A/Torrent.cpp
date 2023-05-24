@@ -11,10 +11,10 @@
 #define TORRENT_IMAGES 27
 
 //移動速度
-#define TORRENT_SPEED 4
+#define TORRENT_SPEED 8
 
 //タックルのダメージ
-#define TORRENT_TACKLE_DAMAGE 10
+#define TORRENT_TACKLE_DAMAGE 20
 
 //体力
 #define TORRENT_HP 1000
@@ -86,7 +86,7 @@ Torrent::Torrent(Location spawn_location)
 	area.height = 300;
 	location = spawn_location;
 
-	location.x += MAP_CHIP_SIZE / 2;
+	location.x += (MAP_CHIP_SIZE * 2) + (MAP_CHIP_SIZE / 2);
 	location.y += MAP_CHIP_SIZE / 2;
 
 	kind = ENEMY_KIND::TORRENT;
@@ -159,6 +159,7 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	default:
 		break;
 	}
+
 	Animation();
 	UpdateDamageLog();
 	Poison();
@@ -198,7 +199,6 @@ void Torrent::Fall()
 void  Torrent::Attack(Location player_location)
 {
 
-	
 	leaf_cutter_interval--;
 	drop_nuts_interval--;
 
@@ -232,13 +232,9 @@ void Torrent::Tackle()
 	{
 		location.x += speed;
 
-		Location scroll; //画面スクロールを考慮した座標
-		Location camera = CameraWork::GetCamera(); //カメラ
-		scroll = location - camera;
-
 		if (left_move)
 		{
-			if (scroll.x <= tackle_end_point)
+			if (location.x <= tackle_end_point)
 			{
 				tackle_end = true;
 				left_move = !left_move;
@@ -246,7 +242,7 @@ void Torrent::Tackle()
 		}
 		else
 		{
-			if (tackle_end_point <= scroll.x)
+			if (tackle_end_point <= location.x)
 			{
 				tackle_end = true;
 				left_move = !left_move;
@@ -347,15 +343,17 @@ void Torrent::LeafCutter(const Location player_location)
 			attack_state = TORRENT_ATTACK::TACKLE; //タックル攻撃に移行
 			attack_time = TORRENT_TACKLE_PREPARATION;
 			tackle_end = false;
+			tackle_end_point = CameraWork::GetCamera().x;
+
 			if (left_move) //左に向いている
 			{
 				speed = -TORRENT_SPEED;
-				tackle_end_point = static_cast<int>(area.width / 2);
+				tackle_end_point += static_cast<int>(area.width / 2) + MAP_CHIP_SIZE;
 			}
 			else
 			{
 				speed = TORRENT_SPEED;
-				tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
+				tackle_end_point += static_cast<int>(SCREEN_WIDTH - area.width / 2) - MAP_CHIP_SIZE;
 			}
 			image_argument = 0;
 		}
@@ -402,15 +400,17 @@ void Torrent::DropNuts()
 				attack_state = TORRENT_ATTACK::TACKLE;
 				attack_time = TORRENT_TACKLE_PREPARATION;
 				tackle_end = false;
+				tackle_end_point = CameraWork::GetCamera().x;
+
 				if (left_move) //左に向いている
 				{
 					speed = -TORRENT_SPEED;
-					tackle_end_point = static_cast<int>(area.width / 2);
+					tackle_end_point += static_cast<int>(area.width / 2) + MAP_CHIP_SIZE;
 				}
 				else
 				{
 					speed = TORRENT_SPEED;
-					tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
+					tackle_end_point += static_cast<int>(SCREEN_WIDTH - area.width / 2) - MAP_CHIP_SIZE;
 				}
 				break;
 			case TORRENT_ATTACK::LEAF_CUTTER:
@@ -428,15 +428,17 @@ void Torrent::DropNuts()
 			attack_state = TORRENT_ATTACK::TACKLE; //タックル攻撃に移行
 			attack_time = TORRENT_TACKLE_PREPARATION;
 			tackle_end = false;
+			tackle_end_point = CameraWork::GetCamera().x;
+
 			if (left_move) //左に向いている
 			{
 				speed = -TORRENT_SPEED;
-				tackle_end_point = area.width / 2;
+				tackle_end_point += static_cast<int>(area.width / 2) + MAP_CHIP_SIZE;
 			}
 			else
 			{
 				speed = TORRENT_SPEED;
-				tackle_end_point = SCREEN_WIDTH - area.width / 2;
+				tackle_end_point += static_cast<int>(SCREEN_WIDTH - area.width / 2) - MAP_CHIP_SIZE;
 			}
 		}
 		image_argument = 0;
@@ -649,11 +651,11 @@ void Torrent::Draw() const
 		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 8], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::LEAF_CUTTER:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][(image_argument % 10) + 17], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 10 + 17], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::DROP_NUTS:
 		DrawRotaGraph3(SCREEN_WIDTH / 2, 50, 640, 640, 1, 0.05, 0, magic_circle_image, TRUE);
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][(image_argument % 9) + 8], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 9 + 8], TRUE, !left_move);
 		break;
 	case TORRENT_ATTACK::NONE:
 		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][0], TRUE, !left_move);
