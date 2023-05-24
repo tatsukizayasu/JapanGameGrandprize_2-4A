@@ -18,7 +18,7 @@ private:
     bool attack; //UŒ‚‚ª“–‚½‚Á‚½‚©
     bool now_assault; //‹­PUŒ‚‚©‚Ç‚¤‚©
     int animation; //ƒAƒjƒ[ƒVƒ‡ƒ“
-    int attack_angle;           //UŒ‚‚ÌŠp“x
+    float attack_angle;         //UŒ‚‚ÌŠp“x
     int attack_interval;        //Ÿ‚ÌUŒ‚‚Ü‚Å‚ÌŠÔ
     int bless_wait_time;        //ƒuƒŒƒX‚ğ‘Å‚Â‚Ü‚Å‚Ì‘Ò‹@ŠÔ
     int bless_interval;         //Ÿ‚ÌƒuƒŒƒXUŒ‚‚Ü‚Å‚ÌŠÔ
@@ -48,7 +48,7 @@ private:
     void TripleBless(const Location);
 
     //‹­PUŒ‚
-    void Assault(const Location);
+    void Assault();
 
     // UŒ‚‚µ‚Ä‚¢‚È‚¢
     void AttackNone();
