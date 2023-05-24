@@ -56,7 +56,7 @@
 Dragon::Dragon(Location spawn_location)
 {
 	location = spawn_location;
-	location.y = 450;
+	//location.y = 450;
 	location.x = 17680;
 	area.height = DRAGON_SIZE_Y;
 	area.width = DRAGON_SIZE_X;
@@ -217,27 +217,29 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 
 	}
 
-	//画面内座標
-	Location s_location = { location.x - CameraWork::GetCamera().x,location.y - CameraWork::GetCamera().y };
-
-	//画面外(横)に出たかの判定
-	bool is_out_screen = s_location.x - area.width / 2 < 0 || SCREEN_WIDTH < s_location.x + area.width / 2;
-
-	if (is_out_screen == true)
+	if (state != ENEMY_STATE::FALL)
 	{
-		location = old_location;
-		left_move = !left_move;
-		wall_hit = true;
+		//画面内座標
+		Location s_location = { location.x - CameraWork::GetCamera().x,location.y - CameraWork::GetCamera().y };
 
-		//state = ENEMY_STATE::MOVE;
+		//画面外(横)に出たかの判定
+		bool is_out_screen = s_location.x - area.width / 2 < 0 || SCREEN_WIDTH < s_location.x + area.width / 2;
+
+		if (is_out_screen == true)
+		{
+			location = old_location;
+			left_move = !left_move;
+			wall_hit = true;
+
+			//state = ENEMY_STATE::MOVE;
+		}
+
+		//画面上部から出たら元の位置に戻す
+		if (s_location.y - area.height / 2 < 0)
+		{
+			location = old_location;
+		}
 	}
-
-	//画面上部から出たら元の位置に戻す
-	if (s_location.y - area.height / 2 < 0)
-	{
-		location = old_location;
-	}
-
 
 	//毒のダメージ
 	if (poison == true)
@@ -261,18 +263,18 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 //-----------------------------------
 void Dragon::Draw() const
 {
-
-	if (state != ENEMY_STATE::DEATH)
-	{
-		DrawHPBar(HIT_POINTS);
-	}
-
-	DrawWeaknessIcon();
-
 	//スクロールに合わせて描画
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+
+	//画面内に映ってからHPを描画する
+	if (state != ENEMY_STATE::DEATH && 0 < draw_location.y - area.height / 2)
+	{
+		DrawHPBar(HIT_POINTS);
+		DrawWeaknessIcon();
+	}
+
 	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
 	switch (state)
