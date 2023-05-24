@@ -62,7 +62,6 @@ Harpy::Harpy(Location spawn_location)
 	animation_time = 0;
 	location = spawn_location;
 	//И╩ТuТ▓Ро
-	location.y += 9;
 	location.x -= 10;
 
 	standby_attack = 0;
