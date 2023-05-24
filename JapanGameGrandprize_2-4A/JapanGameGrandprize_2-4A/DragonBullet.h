@@ -4,7 +4,7 @@
 class DragonBullet :
     public EnemyBulletBase
 {
-    int image; //画像
+    int images; //画像
 
     int x_speed; //Xのスピード
     int y_speed; //Yのスピード

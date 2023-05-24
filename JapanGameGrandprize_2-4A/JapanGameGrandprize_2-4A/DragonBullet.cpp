@@ -19,6 +19,7 @@ DragonBullet::DragonBullet(Location spawn_location, Location player_location)
 	speed = BULLET_SPEED;
 	image = 0;
 	damage = BULLET_DAMAGE;
+
 	float radian; //Šp“x
 	radian = atan2f(player_location.y - location.y, player_location.x - location.x);
 	x_speed = static_cast<int>(speed * cosf(radian));
