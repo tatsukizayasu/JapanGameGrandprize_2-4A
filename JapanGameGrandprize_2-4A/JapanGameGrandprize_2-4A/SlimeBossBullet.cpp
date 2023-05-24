@@ -13,12 +13,14 @@
 //-----------------------------------
 SlimeBossBullet::SlimeBossBullet(Location spawn_location, Location player_location)
 {
+	LoadDivGraph("Images/Enemy/slimeboss_bullet.png", 12, 12, 1, 200, 200, image);
 
 	type = ENEMY_TYPE::WATER;
 	location = spawn_location;
 	location.y += 18;
 	radius = BULLET_RADIUS;
-	//speed = BULLET_SPEED;
+	image_change_time = 0;
+	image_change_no = 1;
 	damage = BULLET_DAMAGE;
 	float radian; //Šp“x
 	gravity_power = 0;
@@ -26,7 +28,7 @@ SlimeBossBullet::SlimeBossBullet(Location spawn_location, Location player_locati
 	x_speed = -((location.x - player_location.x) / 60);
 	y_speed = BULLET_SPEED;
 
-	color = GetColor(24, 168, 203);
+	image_type = 3;
 }
 
 //-----------------------------------
@@ -42,6 +44,13 @@ SlimeBossBullet::~SlimeBossBullet()
 //-----------------------------------
 void SlimeBossBullet::Update()
 {
+	if (++image_change_time >= 5)
+	{
+		image_type += image_change_no;
+		if (((image_type == 9) && (image_change_no == 1)) ||
+			((image_type == 5) && (image_change_no == -1)))image_change_no = -image_change_no;
+		image_change_time = 0;
+	}
 	gravity_power++;
 	y_speed = (-BULLET_SPEED + (gravity_power / 3));
 
@@ -59,6 +68,6 @@ void SlimeBossBullet::Draw() const
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
 
-	DrawCircle(x, y, radius, color, TRUE);
+	DrawRotaGraph(x, y, 0.5, 0, image[image_type], true, false);
 }
 
