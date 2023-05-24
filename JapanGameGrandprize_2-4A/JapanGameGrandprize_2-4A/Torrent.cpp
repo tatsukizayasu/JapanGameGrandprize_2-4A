@@ -86,7 +86,7 @@ Torrent::Torrent(Location spawn_location)
 	area.height = 300;
 	location = spawn_location;
 
-	location.x += MAP_CHIP_SIZE / 2;
+	location.x += MAP_CHIP_SIZE * 10;
 	location.y += MAP_CHIP_SIZE / 2;
 
 	type = new ENEMY_TYPE[1];
@@ -146,6 +146,19 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	Location old_location = location;	//前の座標
 
 
+	Location scroll; //画面スクロールを考慮した座標
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
+
+	if (SCREEN_WIDTH < scroll.x + area.width / 2 + speed)
+	{
+		state = ENEMY_STATE::MOVE;
+	}
+	else
+	{
+		state = ENEMY_STATE::ATTACK;
+	}
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -188,7 +201,7 @@ void Torrent::Idol()
 //-----------------------------------
 void Torrent::Move(const Location player_location)
 {
-
+	location.x += static_cast<float>(speed);
 }
 
 //-----------------------------------
