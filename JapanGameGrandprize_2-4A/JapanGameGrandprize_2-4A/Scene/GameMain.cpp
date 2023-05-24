@@ -193,7 +193,7 @@ AbstractScene* GameMain::Update()
 
 	if(!is_help_mode)camera_work->Update();
 
-	if (is_clear == false)
+	if (player->GetState() != PLAYER_STATE::DEATH && is_clear == false)
 	{
 		player->Update();
 	}
@@ -219,17 +219,20 @@ AbstractScene* GameMain::Update()
 			return new GameClear(stage_num, element_volume, player->GetPouch());
 		}
 	}
+
 	item_controller->Update(player);
+
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		Pouch* pouch;
-		pouch = player->GetPouch();
-		for (int i = 0; i < BULLET_KINDS; i++)
-		{
-			pouch->SetChemicalBullets(old_chemical_bullets[i]);
-		}
 		if (DelayAnimation(DELAY_ANIMATION_TYPE::FADE_OUT, 120.0f) == true)
 		{
+			Pouch* pouch;
+			pouch = player->GetPouch();
+			for (int i = 0; i < BULLET_KINDS; i++)
+			{
+				pouch->SetChemicalBullets(old_chemical_bullets[i]);
+			}
+
 			return new GameOver(stage_num, old_element_volume, pouch);
 		}
 		

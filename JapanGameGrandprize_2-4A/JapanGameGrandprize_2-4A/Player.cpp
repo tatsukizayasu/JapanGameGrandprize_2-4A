@@ -303,7 +303,7 @@ void Player::Draw() const
 	}
 
 	//ダメージを受けた時点滅する
-	if (damage_flg)
+	if (damage_flg && player_state != PLAYER_STATE::DEATH)
 	{
 		if (player_state == PLAYER_STATE::FLY)
 		{
