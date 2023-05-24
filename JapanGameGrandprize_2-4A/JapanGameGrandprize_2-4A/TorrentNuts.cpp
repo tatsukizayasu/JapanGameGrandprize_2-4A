@@ -18,7 +18,9 @@ TorrentNuts::TorrentNuts(const ENEMY_TYPE type, const Location spawn_location)
 	speed = TORRENT_NUTS_SPEED;
 	this->type = type;
 
-	image = 0;
+	LoadDivGraph("Images/Enemy/Torrent/fruit.png", 3, 3, 1, 240, 240, images);
+
+	argument = GetRand(2);
 	damage = TORRENT_NUTS_DAMAGE;
 }
 
@@ -49,6 +51,6 @@ void TorrentNuts::Draw() const
 	Location camera = CameraWork::GetCamera();
 
 	draw_location = draw_location - camera;
+	DrawRotaGraphF(draw_location.x, draw_location.y, 0.2, 0, images[argument], TRUE);
 
-	DrawCircle(draw_location.x, draw_location.y, radius, 0xff0000, TRUE);
 }

@@ -88,8 +88,6 @@ Dragon::Dragon(Location spawn_location)
 	magic = false;
 
 	kind = ENEMY_KIND::DRAGON;
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::FIRE;
 
 	state = ENEMY_STATE::IDOL;
 
@@ -108,16 +106,24 @@ Dragon::Dragon(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	image = LoadGraph("Images/Enemy/doragon.png"); //âÊëúì«çûÇ›
-	walk_image = LoadGraph("Images/Enemy/dragonwalk.png");
-	LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, fly_image); //í èÌ
+	
+	
+
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
+	if (images[num].empty())
+	{
+		images[num].resize(4);
+		images[num][0] = LoadGraph("Images/Enemy/doragon.png"); //âÊëúì«çûÇ›
+		images[num][1] = LoadGraph("Images/Enemy/dragonwalk.png");
+		LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, &images[num][2]); //í èÌ
+	}
 	LoadDivGraph("Images/Enemy/Doragon/tktk_Other_4L.png", 8, 2, 4, 375, 384, biting_effects);
 
 }
 
 Dragon::~Dragon()
 {
-	delete[] type;
 
 	for (int i = 0; i < FIRE_DROP; i++)
 	{
@@ -516,7 +522,7 @@ AttackResource Dragon::Hit()
 	if (attack_state == DRAGON_ATTACK::DITE)
 	{
 		attack = true;
-		ENEMY_TYPE attack_type[1] = { *type };
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::FIRE };
 		ret.damage = ATTACK_DITE;
 		ret.type = attack_type;
 		ret.type_count = 1;
@@ -525,7 +531,7 @@ AttackResource Dragon::Hit()
 	if (attack_state == DRAGON_ATTACK::TAIL_ATTACK && (!attack))
 	{
 		attack = true;
-		ENEMY_TYPE attack_type[1] = { *type };
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::FIRE };
 		ret.damage = ATTACK_TAIL;
 		ret.type = attack_type;
 		ret.type_count = 2;

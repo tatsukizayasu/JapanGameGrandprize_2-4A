@@ -5,7 +5,8 @@ class TorrentNuts :
 {
 private:
 
-    int image; //画像
+    int images[3]; //画像
+    int argument; //描画画像
 public:
 
     //コンストラクタ

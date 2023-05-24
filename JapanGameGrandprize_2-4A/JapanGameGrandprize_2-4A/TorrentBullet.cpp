@@ -81,5 +81,4 @@ void TorrentBullet::Draw() const
 	draw_location = draw_location - camera;
 
 	DrawRotaGraphF(draw_location.x, draw_location.y, 0.4, (M_PI / STRAIGHT_ANGLE) * angle, image, TRUE);
-	DrawCircle(draw_location.x, draw_location.y, radius, 0x77ff00, FALSE);
 }
