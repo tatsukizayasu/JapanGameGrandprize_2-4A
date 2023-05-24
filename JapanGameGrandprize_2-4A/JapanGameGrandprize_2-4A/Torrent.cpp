@@ -145,6 +145,7 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	animation++;
 	Location old_location = location;	//ëOÇÃç¿ïW
 
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -329,12 +330,12 @@ void Torrent::LeafCutter(const Location player_location)
 				if (left_move) //ç∂Ç…å¸Ç¢ÇƒÇ¢ÇÈ
 				{
 					speed = -TORRENT_SPEED;
-					tackle_end_point += static_cast<int>(area.width / 2) + MAP_CHIP_SIZE;
+					tackle_end_point = static_cast<int>(area.width / 2);
 				}
 				else
 				{
 					speed = TORRENT_SPEED;
-					tackle_end_point += static_cast<int>(SCREEN_WIDTH - area.width / 2) - MAP_CHIP_SIZE;
+					tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
 				}
 				break;
 			case TORRENT_ATTACK::DROP_NUTS:
