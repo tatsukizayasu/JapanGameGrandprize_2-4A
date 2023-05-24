@@ -50,6 +50,9 @@
 //テレポート時間
 #define TELEPORT_TIME 30
 
+//アニメーションの更新時間
+#define HAND_ANIMATION 5
+
 
 //-----------------------------------
 //コンストラクタ
@@ -74,13 +77,13 @@ LastBossHand::LastBossHand()
 	angle = 0;
 	radius = 0;
 	teleport_time = 0;
+	teleport_standby = 0;
 	attack_interval = 0;
 	punch_standby_time = 0;
 	standby_time = 0;
 	animation = 0;
 	image_argument = 0;
-	size = 0;
-
+	size = 1;
 
 	can_delete = false;
 	left_hand = false;
@@ -99,7 +102,7 @@ LastBossHand::LastBossHand()
 	drop_element = nullptr;
 
 	kind = ENEMY_KIND::LAST_BOSS;
-	state = ENEMY_STATE::IDOL;
+	state = ENEMY_STATE::MOVE;
 
 	move = HAND_MOVE::UP_DOWN;
 
@@ -130,12 +133,13 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 	angle = 0;
 	radius = 0;
 	teleport_time = 0;
+	teleport_standby = 0;
 	attack_interval = 0;
 	punch_standby_time = 0;
-	animation = 0; 
+	animation = 0;
 	image_argument = 0;
-	size = 0;
-
+	size = 1;
+	standby_time = 0;
 	can_delete = false;
 	this->left_hand = left_hand;
 	left_move = false;
@@ -153,12 +157,23 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 	drop_element = nullptr;
 
 	kind = ENEMY_KIND::LAST_BOSS;
-	state = ENEMY_STATE::IDOL;
+	state = ENEMY_STATE::MOVE;
 
 	move = HAND_MOVE::UP_DOWN;
 
 	hit_block.chip = nullptr;
 	hit_block.hit = false;
+
+	if (images[11].empty())
+	{
+		images[11].resize(7);
+		LoadDivGraph("Images/Enemy/lastbossleft.png", 6, 6, 1, 150, 150, &images[11][0]);
+		images[11][6] = LoadGraph("Images/Enemy/lastbossleftfist.png");
+	}
+
+	hit_block.chip = nullptr;
+	hit_block.hit = false;
+	old_stage_hit = hit_block.hit;
 }
 
 //-----------------------------------
@@ -187,6 +202,8 @@ void LastBossHand::Update(const Player* player, const Stage* stage)
 		break;
 	case ENEMY_STATE::MOVE:
 		Move(player->GetLocation());
+		Animation();
+
 		break;
 	case ENEMY_STATE::FALL:
 		Fall();
@@ -299,7 +316,7 @@ void LastBossHand::Teleport(const Location teleport_location)
 
 		area.width = HAND_WIDTH * size;
 		area.height = HAND_HEIGHT * size;
-
+		angle += 45;
 		if (size <= 0)
 		{
 			location = teleport_location;
@@ -313,10 +330,12 @@ void LastBossHand::Teleport(const Location teleport_location)
 
 		area.width = HAND_WIDTH * size;
 		area.height = HAND_HEIGHT * size;
+		angle += 45;
 
 		if (1 <= size)
 		{
 			teleporting = false;
+			angle = 0;
 		}
 	}
 }
@@ -451,8 +470,6 @@ void LastBossHand::Revival()
 	location = spawn_location;
 	state = ENEMY_STATE::MOVE;
 	move = static_cast<HAND_MOVE>(GetRand(2));
-	teleporting = true;
-	teleport = true;
 }
 
 //-----------------------------------
@@ -563,9 +580,14 @@ void LastBossHand::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 //移動時のアニメーション
 //-----------------------------------
-void LastBossHand::MoveAnimation()
+void LastBossHand::Animation()
 {
+	animation++;
 
+	if (animation % HAND_ANIMATION == 0)
+	{
+		image_argument++;
+	}
 }
 
 //-----------------------------------
@@ -579,20 +601,34 @@ void LastBossHand::Draw() const
 	{
 		draw_location = draw_location - camera;
 
+		if (teleporting)
+		{
+			DrawRotaGraphF(draw_location.x, draw_location.y,
+				0.1, M_PI / 180 * (angle / 45), magic_circle_image, TRUE);
+		}
 		DrawHPBar(HAND_HP);
 
 		DrawDamageLog();
 		DrawWeaknessIcon();
 
-		DrawBox(draw_location.x - area.width / 2, draw_location.y - area.height / 2,
-			draw_location.x + area.width / 2, draw_location.y + area.height / 2, 0xffffff, TRUE);
+		if (punch)
+		{
+			DrawRotaGraphF(draw_location.x, draw_location.y,
+				size, M_PI / 180 * angle, images[11][6], TRUE, left_hand);
+		}
+		else
+		{
+			DrawRotaGraphF(draw_location.x, draw_location.y,
+				size, M_PI / 180 * angle, images[11][image_argument % 6], TRUE, left_hand);
+		}
+		
 
 	}
 
 }
 
 //-----------------------------------
-//HPバーの表示
+//HPバーの描画
 //-----------------------------------
 void LastBossHand::DrawHPBar(const int)const
 {
@@ -614,7 +650,6 @@ void LastBossHand::DrawHPBar(const int)const
 	DrawBox(draw_location.x - bar_size, draw_location.y - 80,
 		draw_location.x + bar_size, draw_location.y - 70, 0x8f917f, FALSE);
 }
-
 //-----------------------------------
 //座標の取得
 //-----------------------------------

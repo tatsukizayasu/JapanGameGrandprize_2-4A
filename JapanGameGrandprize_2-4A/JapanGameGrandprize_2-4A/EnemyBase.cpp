@@ -5,11 +5,10 @@
 
 int EnemyBase::log_font[4];
 int* EnemyBase::icon_images = nullptr;
-int EnemyBase::weakness_num[12];
-ATTRIBUTE* EnemyBase::weakness[12];
-std::vector<std::vector<int>> EnemyBase::images(11);
-// = { nullptr,nullptr, nullptr, nullptr, nullptr,nullptr,nullptr, nullptr, nullptr, nullptr, nullptr, };//‰æ‘œ
-
+int EnemyBase::weakness_num[11];
+ATTRIBUTE* EnemyBase::weakness[11];
+std::vector<std::vector<int>> EnemyBase::images(12);
+int EnemyBase::magic_circle_image = 0;
 
 #define HP_BAR_Y1 20
 #define HP_BAR_Y2 10
@@ -46,6 +45,11 @@ EnemyBase::EnemyBase()
 		LoadDivGraph("Images/Enemy/Icon.png", 5, 5, 1, 23, 22, icon_images);
 	}
 
+	if (magic_circle_image == 0)
+	{
+		magic_circle_image = LoadGraph("Images/Enemy/Magic/MagicCircle.png");
+	}
+
 }
 
 //-----------------------------------
@@ -61,7 +65,7 @@ void EnemyBase::LoadWeakness()
 	int i = 0;
 	errno_t error;
 
-	for (int i = 0; i < 12; i++)
+	for (int i = 0; i < 11; i++)
 	{
 		weakness[i] = nullptr;
 	}
@@ -127,9 +131,9 @@ void EnemyBase::DeleteLogFont()
 //-----------------------------------
 void EnemyBase::DeleteWeakness()
 {
-	for (int i= 0; i < 12; i++)
+	for (int i = 0; i < 11; i++)
 	{
-		delete weakness[i];
+		delete[] weakness[i];
 	}
 
 	for (int i = 0; i < 5; i++)
@@ -145,7 +149,7 @@ void EnemyBase::DeleteImage()
 {
 	int size = 0;
 
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		if (!images[i].empty())
 		{

@@ -115,7 +115,6 @@ Torrent::Torrent(Location spawn_location)
 		LoadDivGraph("Images/Enemy/torrent_nut.png", 9, 9, 1, 500, 500, &images[num][8]);
 		LoadDivGraph("Images/Enemy/torrent_leaf.png", 10, 10, 1, 500, 500, &images[num][17]);
 	}
-	magic_circle_image = LoadGraph("Images/Enemy/Magic/MagicCircle.png");
 }
 
 //-----------------------------------

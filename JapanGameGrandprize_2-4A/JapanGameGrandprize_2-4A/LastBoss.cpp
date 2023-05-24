@@ -109,7 +109,7 @@ LastBoss::LastBoss(Location spawn_location)
 	if (images[num].empty())
 	{
 		images[num].resize(4);
-		LoadDivGraph("Images/Enemy/lastbossdown1.png", 4, 4, 1, 250, 250, &images[num][0]);
+		LoadDivGraph("Images/Enemy/lastbossdown1.png", 4, 4, 1, 500, 500, &images[num][0]);
 	}
 }
 
@@ -827,7 +827,7 @@ void LastBoss::Draw() const
 
 	if (down)
 	{
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, 0.0, images[num][image_argument], TRUE);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 1.0, M_PI /180 * 30, images[num][image_argument % 4], TRUE);
 	}
 	else
 	{

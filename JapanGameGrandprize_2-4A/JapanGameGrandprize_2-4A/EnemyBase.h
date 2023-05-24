@@ -192,7 +192,9 @@ protected:
 	bool paralysis; //麻痺状態
 	static std::vector<std::vector<int>> images; //画像
 	static int* icon_images; //アイコン画像
-	static int weakness_num[12]; //弱点の数
+	static int weakness_num[11]; //弱点の数
+	static int magic_circle_image; //魔法陣の画像
+
 	int hp;	//体力
 	int speed; //移動速度
 	int poison_time; //毒の効果時間
@@ -205,7 +207,7 @@ protected:
 
 	ENEMY_KIND kind; //エネミーの種類
 	ENEMY_STATE state; //エネミーの状態
-	static ATTRIBUTE* weakness[12]; //弱点
+	static ATTRIBUTE* weakness[11]; //弱点
 	DamageLog damage_log[LOG_NUM]; //ダメージログ
 protected:
 
