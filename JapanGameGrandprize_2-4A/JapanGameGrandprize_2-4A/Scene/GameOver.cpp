@@ -17,8 +17,8 @@ GameOver::GameOver(short stage_num, unsigned int old_element_volume[PLAYER_ELEME
 
 	background_image = LoadGraph("Images/Scene/game_over.png");
 
-	if ((background_music = LoadSoundMem("Sounds/BGM/game_over.mp3")) == -1) {
-		throw "Sounds/BGM/game_over.mp3";
+	if ((background_music = LoadSoundMem("Sounds/BGM/Gameover.wav")) == -1) {
+		throw "Sounds/BGM/Gameover.wav";
 	}
 
 	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {

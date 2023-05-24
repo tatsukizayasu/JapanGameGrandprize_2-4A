@@ -37,10 +37,10 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 
 	if (this->stage_num != 4)
 	{
-		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.mp3", this->stage_num);
+		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/Stage%d.wav", this->stage_num);
 
 		if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
-			background_music = LoadSoundMem("Sounds/BGM/stage1.mp3");
+			background_music = LoadSoundMem("Sounds/BGM/Stage1.wav");
 			if (background_music == -1) {
 				throw dis_stage_se;
 			}
@@ -93,7 +93,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	is_spawn_boss = false;
 	delay_animation_count = 0;
 
-	ChangeVolumeSoundMem(155, background_music);
+	ChangeVolumeSoundMem(200, background_music);
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);
 
 	old_chemical_bullets[0] = *pouch->GetExplosion();
