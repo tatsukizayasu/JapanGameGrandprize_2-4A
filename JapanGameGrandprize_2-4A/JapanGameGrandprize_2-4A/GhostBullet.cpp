@@ -12,7 +12,7 @@ GhostBullet::GhostBullet(const Location spawn_location, const Location player_lo
 
 	type = ENEMY_TYPE::WIND;
 	location = spawn_location;
-	radius = 5;
+	radius = 33;
 	frame = 0;
 	angle = 0;
 	Tick = 0;
@@ -80,5 +80,5 @@ void GhostBullet::Draw() const
 
 	DrawRotaGraph(x, y, 0.4, angle, image, TRUE, FALSE, FALSE);
 
-	DrawCircle(x, y, radius, GetColor(255,0,255), FALSE);
+	//DrawCircle(x, y, radius, GetColor(255,0,255), FALSE);
 }
