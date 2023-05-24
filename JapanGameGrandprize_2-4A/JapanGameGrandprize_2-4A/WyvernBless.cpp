@@ -17,13 +17,16 @@ WyvernBless::WyvernBless(const Location spawn_location, const Location player_lo
 	radius = 14;
 	speed = WYVERN_BULLET_SPEED;
 	type = ENEMY_TYPE::FIRE;
-
-	image = 0;
 	damage = WYVERN_BULLET_DAMAGE;
-	float radian; //Šp“x
-	radian = atan2f((player_location.y + 10) - location.y, (player_location.x + 10) - location.x);
-	x_speed = static_cast<int>(speed * cosf(radian));
-	y_speed = static_cast<int>(speed * sinf(radian));
+
+	direction = atan2f((player_location.y + 10) - location.y, (player_location.x + 10) - location.x);
+	x_speed = static_cast<int>(speed * cosf(direction));
+	y_speed = static_cast<int>(speed * sinf(direction));
+
+	LoadDivGraph("images/enemy/wyvern_bless.png", 9, 3, 3, 1200, 1200, images);
+	images_index = 0;
+	frame_count = 0;
+
 }
 
 //-----------------------------------
@@ -42,6 +45,16 @@ void WyvernBless::Update()
 
 	location.x += x_speed;
 	location.y += y_speed;
+
+	frame_count++;
+	if (frame_count % 3 == 0)
+	{
+		images_index++;
+		if (WYVERN_IMAGES_NUM <= images_index)
+		{
+			images_index = 0;
+		}
+	}
 }
 
 //-----------------------------------
@@ -55,6 +68,8 @@ void WyvernBless::Draw() const
 
 	draw_location = draw_location - camera;
 
-	DrawCircle(draw_location.x, draw_location.y, radius, 0xff0000, TRUE);
+	DrawRotaGraphF(draw_location.x, draw_location.y, WYVERN_BLESS_EXTEND_RATE, 
+		direction - M_PI_2, images[images_index], TRUE);
+	
 	
 }
