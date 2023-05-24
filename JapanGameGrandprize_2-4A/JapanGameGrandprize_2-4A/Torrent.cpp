@@ -663,23 +663,30 @@ void Torrent::Draw() const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
-	switch (attack_state)
+	if (state == ENEMY_STATE::MOVE)
 	{
-	case TORRENT_ATTACK::TACKLE:
 		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument % 8], TRUE, !left_move);
-		break;
-	case TORRENT_ATTACK::LEAF_CUTTER:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[(image_argument % 10) + 17], TRUE, !left_move);
-		break;
-	case TORRENT_ATTACK::DROP_NUTS:
-		DrawRotaGraph3(SCREEN_WIDTH / 2, 50, 640, 640, 1, 0.05, 0, magic_circle_image, TRUE);
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[(image_argument % 9) + 8], TRUE, !left_move);
-		break;
-	case TORRENT_ATTACK::NONE:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[0], TRUE, !left_move);
-		break;
-	default:
-		break;
+	}
+	else
+	{
+		switch (attack_state)
+		{
+		case TORRENT_ATTACK::TACKLE:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[image_argument % 8], TRUE, !left_move);
+			break;
+		case TORRENT_ATTACK::LEAF_CUTTER:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[(image_argument % 10) + 17], TRUE, !left_move);
+			break;
+		case TORRENT_ATTACK::DROP_NUTS:
+			DrawRotaGraph3(SCREEN_WIDTH / 2, 50, 640, 640, 1, 0.05, 0, magic_circle_image, TRUE);
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[(image_argument % 9) + 8], TRUE, !left_move);
+			break;
+		case TORRENT_ATTACK::NONE:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[0], TRUE, !left_move);
+			break;
+		default:
+			break;
+		}
 	}
 
 	if (state != ENEMY_STATE::DEATH)
