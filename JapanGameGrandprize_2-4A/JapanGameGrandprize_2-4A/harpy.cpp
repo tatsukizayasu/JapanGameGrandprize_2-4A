@@ -5,7 +5,7 @@
 
 //ハーピィの画像サイズ
 #define HARPY_SIZE_X 90
-#define HARPY_SIZE_Y 105
+#define HARPY_SIZE_Y 98
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 300
@@ -61,6 +61,9 @@ Harpy::Harpy(Location spawn_location)
 	animation = 0;
 	animation_time = 0;
 	location = spawn_location;
+	//位置調整
+	location.y += 9;
+	location.x -= 10;
 
 	standby_attack = 0;
 	travel = 0;

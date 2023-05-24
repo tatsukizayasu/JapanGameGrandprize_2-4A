@@ -1,6 +1,9 @@
 #pragma once
 #include"EnemyBulletBase.h"
 
+
+
+
 class HarpyBullet :public EnemyBulletBase
 {
 private:
@@ -9,6 +12,14 @@ private:
 
     int x_speed; //Xのスピード
     int y_speed; //Yのスピード
+
+      //エフェクト
+    int Tick;
+    int frame;
+    int PHASE;
+    float angle;
+    bool display_permit;
+
 public:
 
     //コンスタラクタ
