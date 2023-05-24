@@ -106,7 +106,7 @@ Harpy::Harpy(Location spawn_location)
 	if (images[num].empty())
 	{
 		images[num].resize(6);
-		LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 80, 80, &images[num][0]); //í èÌ
+		LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 250, 250, &images[num][0]); //í èÌ
 	}
 	GetGraphSizeF(images[num][0], &size.width, &size.height);
 }
@@ -441,6 +441,8 @@ void Harpy::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 	Area center;
 
 	if (left_move)
@@ -462,7 +464,7 @@ void Harpy::Draw()const
 	DrawWeaknessIcon();
 
 	DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
-		0.5, 0, images[animation], TRUE, !left_move);
+		0.5, 0, images[num][animation], TRUE, !left_move);
 }
 
 //-----------------------------------

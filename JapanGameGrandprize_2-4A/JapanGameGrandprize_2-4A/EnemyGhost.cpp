@@ -105,8 +105,8 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	if (images[num].empty())
 	{
 		images[num].resize(8);
-		LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, &images[num][0]); //í èÌ
-		LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 60, 60, &images[num][6]); //çUåÇ
+		LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 250, 250, &images[num][0]); //í èÌ
+		LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 250, 250, &images[num][6]); //çUåÇ
 	}
 	GetGraphSizeF(images[num][0], &size.width, &size.height);
 	GetGraphSizeF(images[num][6], &attack_size.width, &attack_size.height);
@@ -428,6 +428,8 @@ void EnemyGhost::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 	Area center;
 	Area center1;
 
@@ -454,12 +456,12 @@ void EnemyGhost::Draw()const
 	if (attack == false)
 	{
 		DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
-			0.4, 0, images[animation], TRUE, !left_move);
+			0.4, 0, images[num][animation], TRUE, !left_move);
 	}
 	else
 	{
 		DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
-			0.4, 0, attack_image[attack_anime], TRUE, !left_move);
+			0.4, 0, images[num][attack_anime], TRUE, !left_move);
 	}
 }
 
@@ -635,7 +637,7 @@ void EnemyGhost::DebugDraw()
 	else
 	{
 		DrawRotaGraphF(location.x, location.y, 1.3f,
-			M_PI / 180, images[num][animation % 2 + 6], TRUE, !left_move);
+			M_PI / 180, images[num][attack_anime + 6], TRUE, !left_move);
 	}
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
