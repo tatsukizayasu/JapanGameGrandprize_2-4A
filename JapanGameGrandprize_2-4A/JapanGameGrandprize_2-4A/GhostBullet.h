@@ -12,7 +12,7 @@ private:
     int y_speed; //Yのスピード
 
     //エフェクト
-    int Tick;
+    int tick;
     int frame;
     float angle;
 public:

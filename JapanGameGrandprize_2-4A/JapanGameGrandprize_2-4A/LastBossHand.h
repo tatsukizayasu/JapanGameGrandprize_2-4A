@@ -24,6 +24,7 @@ private:
     float angle; //角度
     int radius; //半径
     int teleport_time; //テレポート時間
+    int teleport_standby; //テレポートのスタンバイ時間
     int standby_time; //スタンバイ時間
     float size; //大きさ
     int attack_interval; //次の攻撃までの時間
@@ -47,7 +48,7 @@ private:
     void Punch();
 
     //移動時のアニメーション
-    void MoveAnimation();
+    void Animation();
 public:
 
     //コンストラクタ
@@ -95,7 +96,7 @@ public:
     //描画
     void Draw() const override;
 
-    //HPバーの表示
+    //HPバーの描画
     void DrawHPBar(const int)const override;
 
     //座標の取得

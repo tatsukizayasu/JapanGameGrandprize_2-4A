@@ -7,6 +7,7 @@
 #include "CameraWork.h"
 #include "EnemySE.h"
 
+
 //アニメーション
 #define WYVERN_ANIMATION 10
 
@@ -84,8 +85,6 @@ Wyvern::Wyvern(Location spawn_location)
 	image_argument = 0;
 	speed = 0;
 	kind = ENEMY_KIND::WYVERN;
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::FIRE;
 	state = ENEMY_STATE::IDOL;
 	attack_state = WYVERN_ATTACK::NONE;
 	now_assault = false;
@@ -108,7 +107,6 @@ Wyvern::Wyvern(Location spawn_location)
 	drop_type_volume = FIRE_DROP;
 
 	int volume = 0;
-
 	for (int i = 0; i < FIRE_DROP; i++)
 	{
 		volume = WYVERN_MIN_DROP + GetRand(WYVERN_DROP);
@@ -119,10 +117,16 @@ Wyvern::Wyvern(Location spawn_location)
 
 	hit_stage.hit = false;
 	hit_stage.chip = nullptr;
-	images = new int[4];
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
-	LoadDivGraph("Images/Enemy/Wyvern.png", 2, 2, 1, 250, 250, images);
-	LoadDivGraph("Images/Enemy/Wyvernattack.png", 2, 2, 1, 250, 250, &images[2]);
+	if (images[num].empty())
+	{
+	
+		images[num].resize(4);
+
+		LoadDivGraph("Images/Enemy/Wyvern.png", 2, 2, 1, 250, 250, &images[num][0]);
+		LoadDivGraph("Images/Enemy/Wyvernattack.png", 2, 2, 1, 250, 250, &images[num][2]);
+	}
 
 }
 
@@ -131,11 +135,12 @@ Wyvern::Wyvern(Location spawn_location)
 //-----------------------------------
 Wyvern::~Wyvern()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < WIND_DROP; i++)
 	{
-		DeleteGraph(images[i]);
+		delete drop_element[i];
 	}
-	delete[] images;
+	delete[] drop_element;
+
 }
 
 //-----------------------------------
@@ -599,6 +604,7 @@ void Wyvern::Draw() const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
 	if (state != ENEMY_STATE::DEATH)
 	{
@@ -612,19 +618,19 @@ void Wyvern::Draw() const
 		if (now_assault)
 		{
 			DrawRotaGraphF(draw_location.x, draw_location.y,
-				0.5, attack_angle, images[3], TRUE, !left_move);
+				0.5, attack_angle, images[num][3], TRUE, !left_move);
 		}
 		else
 		{
 			DrawRotaGraphF(draw_location.x, draw_location.y,
-				0.5, attack_angle, images[image_argument + 2], TRUE, !left_move);
+				0.5, attack_angle, images[num][image_argument + 2], TRUE, !left_move);
 		}
 		
 	}
 	else
 	{
 		DrawRotaGraphF(draw_location.x, draw_location.y,
-			0.5, 0, images[image_argument], TRUE, !left_move);
+			0.5, 0, images[num][image_argument], TRUE, !left_move);
 	}
 	
 

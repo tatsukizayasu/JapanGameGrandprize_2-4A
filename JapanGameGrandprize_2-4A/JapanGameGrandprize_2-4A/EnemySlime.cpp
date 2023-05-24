@@ -44,16 +44,14 @@ EnemySlime::EnemySlime(Location spawn_location)
 
 	slime_attack = SLIME_ATTACK::BEFORE_ATTACK;
 
-	type = new ENEMY_TYPE[1];
 
-	type[0] = static_cast<ENEMY_TYPE>(1 + GetRand(3));
 
 	state = ENEMY_STATE::IDOL;
-	images = new int[7];
-	 LoadDivGraph("Images/Enemy/mov_slime.png", 7, 7, 1, 102,61, images);
+	
 	slime_angle = 0;
 	//ドロップアイテムの設定
-	switch (type[0])
+	type = static_cast<ENEMY_TYPE>(GetRand(3) + 1);
+	switch (type)
 	{
 	case ENEMY_TYPE::FIRE:
 		drop_element = new ElementItem * [FIRE_DROP];
@@ -83,7 +81,7 @@ EnemySlime::EnemySlime(Location spawn_location)
 	{
 		volume = SLIME_MIN_DROP + GetRand(SLIME_DROP);
 
-		switch (type[0])
+		switch (type)
 		{
 		case ENEMY_TYPE::NORMAL:
 			break;
@@ -115,6 +113,15 @@ EnemySlime::EnemySlime(Location spawn_location)
 		drop_element[i]->SetVolume(volume);
 		drop_volume += volume;
 	}
+
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
+	if (images[num].empty())
+	{
+		images[num].resize(7);
+		LoadDivGraph("Images/Enemy/mov_slime.png", 7, 7, 1, 102, 61, &images[num][0]);
+	}
+	
 #ifdef _DEBUG
 	old_state  = ENEMY_STATE::IDOL;
 	attack_time = 0;
@@ -131,15 +138,6 @@ EnemySlime::~EnemySlime()
 	}
 
 	delete[] drop_element;
-
-	delete[] type;
-
-	for (int i = 0; i < 7; i++)
-	{
-		DeleteGraph(images[i]);
-	}
-
-	delete[] images;
 }
 
 void EnemySlime::Update(const Player* player, const Stage* stage)
@@ -299,6 +297,8 @@ void EnemySlime::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 
 	if (state != ENEMY_STATE::DEATH)
 	{
@@ -306,7 +306,7 @@ void EnemySlime::Draw()const
 	}
 	DrawDamageLog();
 	DrawWeaknessIcon();
-	DrawRotaGraphF(draw_location.x, draw_location.y, 0.85, M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
+	DrawRotaGraphF(draw_location.x, draw_location.y, 0.85, M_PI / 180 * slime_angle, images[num][image_type], TRUE, !left_move);
 }
 
 //-----------------------------------
@@ -423,7 +423,7 @@ AttackResource EnemySlime::Hit()
 		PlaySoundMem(EnemySE::GetEnemySE(kind).attack, DX_PLAYTYPE_BACK);
 		attack = true;
 		slime_attack = SLIME_ATTACK::AFTER_ATTACK;
-		ENEMY_TYPE attack_type[1] = { *type };
+		ENEMY_TYPE attack_type[1] = { type };
 		ret.damage = SLIME_ATTACK_DAMAGE;
 		ret.type = attack_type;
 		ret.type_count = 1;
@@ -595,8 +595,10 @@ void EnemySlime::Update(const ENEMY_STATE state)
 //-----------------------------------
 void EnemySlime::DebugDraw()
 {
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 	DrawRotaGraphF(location.x, location.y, 0.85,
-		M_PI / 180 * slime_angle, images[image_type], TRUE, !left_move);
+		M_PI / 180 * slime_angle, images[num][image_type], TRUE, !left_move);
 
 	DrawBox(location.x - area.width / 2, location.y - area.height / 2,
 		location.x + area.width / 2, location.y + area.height / 2,

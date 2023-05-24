@@ -44,8 +44,6 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	speed_y = 0;
 	speed = 0;
 
-	type = new ENEMY_TYPE;
-	*type = ENEMY_TYPE::WATER;
 
 	//ドロップアイテムの設定
 
@@ -66,7 +64,14 @@ EnemySlimeBoss::EnemySlimeBoss(Location spawn_location)
 	}
 	wait_time = 0;
 
-	slime_boss_image = LoadGraph("Images/Enemy/SlimeBoss3.png");
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
+	if (images[num].empty())
+	{
+		images[num].resize(1);
+		images[num][0] = LoadGraph("Images/Enemy/SlimeBoss3.png");
+	}
+
 	magic_circle_image = LoadGraph("Images/Enemy/cloud.png");
 
 	cloud_brightness = 0;
@@ -82,7 +87,6 @@ EnemySlimeBoss::~EnemySlimeBoss()
 
 	delete[] drop_element;
 
-	delete[] type;
 
 }
 
@@ -275,6 +279,8 @@ void EnemySlimeBoss::Draw()const
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
 
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
 	if (state != ENEMY_STATE::DEATH)
 	{
 		DrawHPBar(BOSS_SLIME_HP);
@@ -283,7 +289,7 @@ void EnemySlimeBoss::Draw()const
 	DrawWeaknessIcon();
 
 	//DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
-	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, slime_boss_image, true, !left_move);
+	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, images[num][0], true, !left_move);
 
 	//DrawGraph(100, 200, magic_circle_image, true);
 	//DrawModiGraph(100, 200, 300, 200, 300, 240, 100, 240, magic_circle_image, true);
@@ -383,7 +389,7 @@ AttackResource EnemySlimeBoss::Hit()
 {
 	AttackResource ret = { 0,nullptr,0 }; //戻り値
 
-	ENEMY_TYPE attack_type[1] = { *type };
+	ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::WATER };
 	ret.damage = SLIME_BOSS_ATTACK_DAMAGE;
 	ret.type = attack_type;
 	ret.type_count = 1;

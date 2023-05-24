@@ -18,7 +18,6 @@ class EnemySlimeBoss : public EnemyBase
 {
 private:
 
-	int slime_boss_image;
 	int slime_boss_jump_distance;
 	int speed_y;
 	int wait_time;
