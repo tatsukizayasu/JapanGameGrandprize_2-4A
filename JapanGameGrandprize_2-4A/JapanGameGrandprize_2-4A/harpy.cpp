@@ -3,9 +3,9 @@
 #include "BulletManager.h"
 #include "DxLib.h"
 
-//ハーピィの画像サイズ(未定、画像が出来次第調整）
-#define HARPY_SIZE_X 80
-#define HARPY_SIZE_Y 80
+//ハーピィの画像サイズ
+#define HARPY_SIZE_X 90
+#define HARPY_SIZE_Y 98
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 300
@@ -27,7 +27,7 @@
 #define Standby 2
 
 //移動スピード
-#define SPEED 2.5
+#define SPEED 2.5f
 
 //攻撃スピード
 #define ATTACK_SPEED 5
@@ -61,6 +61,8 @@ Harpy::Harpy(Location spawn_location)
 	animation = 0;
 	animation_time = 0;
 	location = spawn_location;
+	//位置調整
+	location.x -= 10;
 
 	standby_attack = 0;
 	travel = 0;
@@ -80,7 +82,8 @@ Harpy::Harpy(Location spawn_location)
 	magic_attack = false;
 	kind = ENEMY_KIND::HARPY;
 
-	LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 80, 80, images); //通常
+	LoadDivGraph("Images/Enemy/HarpleImage.png", 6, 6, 1, 250, 250, images); //通常
+	GetGraphSizeF(images[0], &size.width, &size.height);
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -122,6 +125,15 @@ Harpy::~Harpy()
 //-----------------------------------
 void Harpy::Update(const class Player* player, const class Stage* stage)
 {
+
+	if (paralysis == true)
+	{
+		speed = PARALYSIS_SPEED;
+	}
+	else
+	{
+		speed = SPEED;
+	}
 
 	//アニメーション
 	if (++animation_time % 10 == 0)
@@ -183,26 +195,30 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 		break;
 	}
 
-	hit_stage = HitStage(stage);
-	if (hit_stage.hit) //ステージとの当たり判定
+
+	if (state != ENEMY_STATE::IDOL)
 	{
-		STAGE_DIRECTION hit_direction; //当たったステージブロックの面
-		hit_direction = HitDirection(hit_stage.chip);
-
-		if (hit_direction == STAGE_DIRECTION::TOP)
+		hit_stage = HitStage(stage);
+		if (hit_stage.hit) //ステージとの当たり判定
 		{
-			location = old_location;
-		}
-		if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
-		{
-			location = old_location;
+			STAGE_DIRECTION hit_direction; //当たったステージブロックの面
+			hit_direction = HitDirection(hit_stage.chip);
 
-			if (state != ENEMY_STATE::ATTACK)
+			if (hit_direction == STAGE_DIRECTION::TOP)
 			{
-				left_move = !left_move;
+				location = old_location;
 			}
-		}
+			if ((hit_direction == STAGE_DIRECTION::RIGHT) || (hit_direction == STAGE_DIRECTION::LEFT))
+			{
+				location = old_location;
 
+				if (state != ENEMY_STATE::ATTACK)
+				{
+					left_move = !left_move;
+				}
+			}
+
+		}
 	}
 
 	if (CheckHp() && state != ENEMY_STATE::DEATH)
@@ -212,22 +228,16 @@ void Harpy::Update(const class Player* player, const class Stage* stage)
 
 	if (poison == true)
 	{
-		if (++time % 60 == 0)
-		{
-			if (--poison_time > 0)
-			{
-				hp -= poison_damage;
-			}
-			else
-			{
-				poison_damage = 0;
-				poison_time = 0;
-				poison = false;
-			}
-
-		}
+		Poison();
 	}
+
 	UpdateDamageLog();
+	Paralysis();
+
+	if (ScreenOut())
+	{
+		state = ENEMY_STATE::IDOL;
+	}
 
 }
 
@@ -428,6 +438,18 @@ void Harpy::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	Area center;
+
+	if (left_move)
+	{
+		center.width = (size.width / 3)+40;
+	}
+	else
+	{
+		center.width = (size.width / 3);
+	}
+	center.height = (size.height / 3)+20;
+
 
 	if (state != ENEMY_STATE::DEATH)
 	{
@@ -436,8 +458,8 @@ void Harpy::Draw()const
 	DrawDamageLog();
 	DrawWeaknessIcon();
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-		M_PI / 180, images[animation], TRUE, !left_move);
+	DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
+		0.5, 0, images[animation], TRUE, !left_move);
 }
 
 //-----------------------------------
@@ -459,6 +481,8 @@ void Harpy::Fall()
 //-----------------------------------
 void Harpy::HitBullet(const BulletBase* bullet)
 {
+	PlayHitBulletSound(bullet->GetAttribute());
+
 	int i = 0;
 	int damage = 0;
 
@@ -510,7 +534,7 @@ void Harpy::HitBullet(const BulletBase* bullet)
 		if (!paralysis)
 		{
 			paralysis = true;
-			paralysis_time = bullet->GetDebuffTime() * WEAKNESS_DEBUFF;  //弱点
+			paralysis_time = static_cast<int>(bullet->GetDebuffTime() * WEAKNESS_DEBUFF);
 		}
 		break;
 	case ATTRIBUTE::HEAL:

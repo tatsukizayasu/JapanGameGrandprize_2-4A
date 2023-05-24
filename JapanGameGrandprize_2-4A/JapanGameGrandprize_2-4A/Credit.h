@@ -16,9 +16,10 @@ public:
     ~Credit();
 
     //描画以外の更新を実行
-    virtual AbstractScene* Update() = 0;
+    AbstractScene* Update();
 
     //描画に関することを実装
-    virtual void Draw() const = 0;
+    void Draw() const;
+
 };
 

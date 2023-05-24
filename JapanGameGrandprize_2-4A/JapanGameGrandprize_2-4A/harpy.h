@@ -31,6 +31,7 @@ private:
 	int animation; 
 	int animation_time; 
 	float vector; //ベクトル
+	float speed;
 	int physical_time; //物理攻撃時間
 	float range; //プレイヤーとの距離	
 	float range_y; //プレイヤーとの距離Y座
@@ -45,6 +46,7 @@ private:
 
 	HARPY_STATE action_type; //行動パターン
 	HARPY_ATTACK attack_state; //攻撃状態
+	Area size;          //画像サイズ
 public:
 
 	//コンスタラクタ

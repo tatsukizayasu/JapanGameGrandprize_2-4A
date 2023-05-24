@@ -273,6 +273,12 @@ Player::~Player()
 		delete bullet[i];
 	}
 	delete[] bullet;
+
+	for (int i = 0; i < PLAYER_ELEMENT; i++)
+	{
+		delete element[i];
+	}
+	delete[] element;
 }
 
 //-----------------------------------

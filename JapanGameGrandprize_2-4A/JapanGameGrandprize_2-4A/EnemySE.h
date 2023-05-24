@@ -1,5 +1,6 @@
 #pragma once
 #include "EnemyKind.h"
+#include "Define.h"
 
 struct NomalEnemySE
 {
@@ -18,6 +19,10 @@ private:
 
    static int down_se; //ダウン時SE
 
+   static int explosion_se; //explosion被弾SE
+   static int melt_se;      //melt被弾SE
+   static int poison_se;    //poison被弾SE
+   static int paralyze_se;  //paralyze被弾SE
 
 private:
     EnemySE() = default;
@@ -37,5 +42,6 @@ public:
 
     //通常エネミーのSEの取得
     static NomalEnemySE GetEnemySE(const ENEMY_KIND);
+    static int GetBulletSE(const ATTRIBUTE);
 };
 

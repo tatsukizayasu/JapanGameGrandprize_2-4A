@@ -1,6 +1,7 @@
 #include "Title.h"
 #include "DxLib.h"
 #include "GameMain.h"
+#include"../Credit.h"
 #include "../PadInput.h"
 #include "DotByDot.h"
 
@@ -15,10 +16,10 @@ Title::Title()
 
 	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 4);
 
-	background_image = LoadGraph("Images/Scene/title.png");
+	background_image = LoadGraph("Images/Scene/Titleimage.png");
 
-	if ((background_music = LoadSoundMem("Sounds/BGM/title.mp3")) == -1) {
-		throw "Sounds/BGM/title.mp3";
+	if ((background_music = LoadSoundMem("Sounds/BGM/Title.wav")) == -1) {
+		throw "Sounds/BGM/Title.wav";
 	}
 
 	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {
@@ -132,7 +133,7 @@ AbstractScene* Title::Update()
 		input_margin = 0;
 		MENU current_selection = static_cast<MENU>(select_menu);
 
-		unsigned int element_volume[PLAYER_ELEMENT] = { 10,10,10,10,10,10,10 };
+		unsigned int element_volume[PLAYER_ELEMENT] = { 999,999,999,999,999,999,999 };
 		
 		Pouch* pouch;
 		pouch = new Pouch;
@@ -140,7 +141,7 @@ AbstractScene* Title::Update()
 		switch (current_selection)
 		{
 		case Title::MENU::PLAY:
-			return new GameMain(1, element_volume, pouch);
+			return new GameMain(4, element_volume, pouch);
 			break;
 			
 		case Title::MENU::HELP:
@@ -151,7 +152,7 @@ AbstractScene* Title::Update()
 			break;
 		}
 		case Title::MENU::EXIT:
-			return nullptr;
+			return new Credit();
 			break;
 
 		default:

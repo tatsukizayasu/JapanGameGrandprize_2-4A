@@ -104,6 +104,8 @@ void SlimeBossBody::Death()
 //-----------------------------------
 void SlimeBossBody::HitBullet(const BulletBase* bullet)
 {
+	PlayHitBulletSound(bullet->GetAttribute());
+
 	switch (bullet->GetAttribute())
 	{
 	case ATTRIBUTE::NORMAL:

@@ -5,7 +5,7 @@
 
 //ゴーストの画像サイズ
 #define GHOST_SIZE_X 80
-#define GHOST_SIZE_Y 88
+#define GHOST_SIZE_Y 94
 
 //プレイヤー発見距離
 #define DETECTION_DISTANCE 400
@@ -81,8 +81,10 @@ EnemyGhost::EnemyGhost(Location spawn_location)
 	kind = ENEMY_KIND::GHOST;
 
 	images = new int[7];
-	LoadDivGraph("Images/Enemy/ghostman3.png", 6, 6, 1, 60, 66, images); //通常
-	LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 60, 60, attack_image); //攻撃
+	LoadDivGraph("Images/Enemy/ghostman3 .png", 6, 6, 1, 250, 250, images); //通常
+	LoadDivGraph("Images/Enemy/ghostattack.png", 2, 2, 1, 250, 250, attack_image); //攻撃
+	GetGraphSizeF(images[0], &size.width, &size.height);
+	GetGraphSizeF(attack_image[0], &attack_size.width, &attack_size.height);
 
 	//ドロップアイテムの設定
 	drop_element = new ElementItem * [WIND_DROP];
@@ -423,6 +425,21 @@ void EnemyGhost::Draw()const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	Area center;
+	Area center1;
+
+	if (left_move)
+	{
+		center.width = (size.width / 3) + 40;
+		center1.width = (attack_size.width / 3) + 40;
+	}
+	else
+	{
+		center.width = (size.width / 3) - 10;
+		center1.width = (attack_size.width / 3) - 40;
+	}
+	center.height = (size.height / 3) + 20;
+	center1.height = (attack_size.width / 3) + 20;
 
 	if (state != ENEMY_STATE::DEATH)
 	{
@@ -430,15 +447,16 @@ void EnemyGhost::Draw()const
 	}
 	DrawDamageLog();
 	DrawWeaknessIcon();
+
 	if (attack == false)
 	{
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.3f,
-			M_PI / 180, images[animation], TRUE, !left_move);
+		DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
+			0.4, 0, images[animation], TRUE, !left_move);
 	}
 	else
 	{
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.3f,
-			M_PI / 180, attack_image[attack_anime], TRUE, !left_move);
+		DrawRotaGraph2F(draw_location.x, draw_location.y, center.width, center.height,
+			0.4, 0, attack_image[attack_anime], TRUE, !left_move);
 	}
 }
 
@@ -477,6 +495,8 @@ void EnemyGhost::Fall()
 //-----------------------------------
 void EnemyGhost::HitBullet(const BulletBase* bullet)
 {
+	
+	PlayHitBulletSound(bullet->GetAttribute());
 
 	int i = 0;
 	int damage = 0;

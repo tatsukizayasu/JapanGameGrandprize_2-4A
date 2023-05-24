@@ -21,6 +21,11 @@
 #define OPTION_THREE OPTION_TWO + STRING_DISTANCE
 #define OPTION_FOUR OPTION_THREE + STRING_DISTANCE
 
+#ifdef DEBUG_PV
+
+#endif // DEBUG_PV
+
+
 
 //コンストラクタ
 Pouch::Pouch()
@@ -196,7 +201,11 @@ Pouch::~Pouch()
 void Pouch::ExplosionTabDraw() const
 {
 	DrawGraph(x, y + 300, second_tab_image[0], TRUE);
+
+#ifdef DEBUG_PV
 	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_explosion[cursol].chemical_formula);
+#endif // DEBUG_PV
+
 	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_explosion[cursol].number_of_bullets);
 	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_explosion[cursol].damage);
 
@@ -243,7 +252,12 @@ void Pouch::ExplosionTabDraw() const
 void Pouch::MeltTabDraw() const
 {
 	DrawGraph(x, y + 300, second_tab_image[0], TRUE);
+
+
+#ifdef DEBUG_PV
 	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_melt[cursol].chemical_formula);
+#endif // DEBUG_PV
+	
 	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_melt[cursol].number_of_bullets);
 	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_melt[cursol].damage);
 
@@ -290,7 +304,12 @@ void Pouch::MeltTabDraw() const
 void Pouch::ParalysisTabDraw()const
 {
 	DrawGraph(x, y + 300, second_tab_image[2], TRUE);
+
+
+#ifdef DEBUG_PV
 	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_pararysis[cursol].chemical_formula);
+#endif // DEBUG_PV
+	
 	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_pararysis[cursol].number_of_bullets);
 	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_pararysis[cursol].damage);
 	DrawFormatString(x + 165, y + 440, 0xffffff, "%d", chemical_formula_pararysis[cursol].time / 60);
@@ -339,7 +358,11 @@ void Pouch::ParalysisTabDraw()const
 void Pouch::PoisonTabDraw()const
 {
 	DrawGraph(x, y + 300, second_tab_image[1], TRUE);
+
+#ifdef DEBUG_PV
 	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_poison[cursol].chemical_formula);
+#endif // DEBUG_PV
+	
 	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_poison[cursol].number_of_bullets);
 	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_poison[cursol].damage);
 	DrawFormatString(x + 165, y + 440, 0xffffff, "%d", chemical_formula_poison[cursol].damage_per_second);
@@ -387,7 +410,11 @@ void Pouch::PoisonTabDraw()const
 void Pouch::HealTabDraw()const
 {
 	DrawGraph(x, y + 300, second_tab_image[3], TRUE);
+
+#ifdef DEBUG_PV
 	DrawFormatString(x - 560, y, 0xffffff, "%s", chemical_formula_heal[cursol].chemical_formula);
+#endif // DEBUG_PV
+	
 	DrawFormatString(x + 165, y + 380, 0xffffff, "%d", chemical_formula_heal[cursol].number_of_bullets);
 	DrawFormatString(x + 165, y + 410, 0xffffff, "%d", chemical_formula_heal[cursol].damage);
 
@@ -920,7 +947,7 @@ void Pouch::SetElement(ElementItem* item, int i)
 
 void Pouch::SetElementConstruct(int i, unsigned int element_volume)
 {
-	int a = 10;
+	int a = 90;
 	a = element_volume;
 
 	switch (element[i]->GetType())

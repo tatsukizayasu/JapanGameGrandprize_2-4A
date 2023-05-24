@@ -161,10 +161,10 @@ bool EnemyBase::ScreenOut()
 	Location camera = CameraWork::GetCamera(); //カメラ
 	scroll = location - camera;
 
-	if ((scroll.x < (-(SCREEN_WIDTH * 2) + -area.width)) ||
-		(((SCREEN_WIDTH * 2) + area.width) < scroll.x) ||
-		(scroll.y < (-(SCREEN_HEIGHT * 2) + -area.height)) || 
-		(((SCREEN_HEIGHT * 2) + area.height) < scroll.y))
+	if ((scroll.x < (-(SCREEN_WIDTH) + -area.width)) ||
+		(((SCREEN_WIDTH) + area.width) < scroll.x) ||
+		(scroll.y < (-(SCREEN_HEIGHT) + -area.height)) || 
+		(((SCREEN_HEIGHT) + area.height) < scroll.y))
 	{
 		ret = true;
 	}
@@ -497,6 +497,20 @@ void EnemyBase::DrawWeaknessIcon() const
 
 	}
 }
+
+//---------------------------------
+// 被弾時のSE再生
+//---------------------------------
+void EnemyBase::PlayHitBulletSound(ATTRIBUTE attribute)const
+{
+	int se = EnemySE::GetBulletSE(attribute);
+
+	if (!se)return;
+
+	PlaySoundMem(EnemySE::GetBulletSE(attribute), DX_PLAYTYPE_BACK);
+	
+}
+
 //-----------------------------------
 //ドロップする種類の量の取得
 //-----------------------------------
