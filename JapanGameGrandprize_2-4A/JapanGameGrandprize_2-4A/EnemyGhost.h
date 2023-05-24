@@ -49,6 +49,8 @@ private:
 	bool attack_halt; //攻撃を停止する。
 	GHOST_STATE action_type; //行動パターン
 	GHOST_ATTACK attack_state; //攻撃状態
+	Area size;          //画像サイズ
+	Area attack_size;
 
 #ifdef _DEBUG
 	ENEMY_STATE old_state;
