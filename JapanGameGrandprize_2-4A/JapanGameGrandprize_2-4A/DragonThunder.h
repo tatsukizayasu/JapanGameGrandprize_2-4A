@@ -4,9 +4,14 @@
 class DragonThunder :
     public EnemyBulletBase
 {
-    int image; //画像
+    int image[20]; //画像
     int thunder_time; //雷落下待機時間
     bool attack; //攻撃開始
+
+    int tick;
+    int phase;
+    int frame;
+
 public:
 
     //コンスタラクタ

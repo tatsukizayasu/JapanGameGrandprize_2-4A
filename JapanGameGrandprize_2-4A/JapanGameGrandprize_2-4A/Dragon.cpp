@@ -273,12 +273,13 @@ void Dragon::Draw() const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
 	switch (state)
 	{
 	case ENEMY_STATE::MOVE:
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, image, TRUE, !left_move);
+			M_PI / 180, images[num][0], TRUE, !left_move);
 		break;
 	case ENEMY_STATE::ATTACK:
 	
@@ -286,7 +287,7 @@ void Dragon::Draw() const
 		{
 		case 0:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, image, TRUE, !left_move);
+				M_PI / 180, images[num][0], TRUE, !left_move);
 			if (left_move)
 			{
 				DrawRotaGraphF(draw_location.x-200, draw_location.y, 2,
@@ -300,18 +301,18 @@ void Dragon::Draw() const
 			break;
 		case 1:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, fly_image[animation], TRUE, !left_move);
+				M_PI / 180, images[num][animation], TRUE, !left_move);
 			break;
 		case 2:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, image, TRUE, !left_move);
+				M_PI / 180, images[num][0], TRUE, !left_move);
 			break;
 		}
 
 		break;
 	default:
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, image, TRUE, !left_move);
+			M_PI / 180, images[num][0], TRUE, !left_move);
 		break;
 	}
 
@@ -483,15 +484,15 @@ void Dragon::RoarMove(const Location player_location)
 		{
 		case 0:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x, 250));
+			(new DragonThunder(player_location.x, 300));
 			break;
 		case 1:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x-200, 250));
+			(new DragonThunder(player_location.x-200, 300));
 			break;
 		case 2:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x+200, 250));
+			(new DragonThunder(player_location.x+200,300));
 			break;
 		default:
 			break;
@@ -499,7 +500,7 @@ void Dragon::RoarMove(const Location player_location)
 	}
 
 
-
+	
 
 	attack_method = GetRand(2);
 
