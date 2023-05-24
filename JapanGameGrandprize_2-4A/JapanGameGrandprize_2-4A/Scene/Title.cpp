@@ -16,7 +16,7 @@ Title::Title()
 
 	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 4);
 
-	background_image = LoadGraph("Images/Scene/title.png");
+	background_image = LoadGraph("Images/Scene/Titleimage.png");
 
 	if ((background_music = LoadSoundMem("Sounds/BGM/Title.wav")) == -1) {
 		throw "Sounds/BGM/Title.wav";
@@ -133,7 +133,7 @@ AbstractScene* Title::Update()
 		input_margin = 0;
 		MENU current_selection = static_cast<MENU>(select_menu);
 
-		unsigned int element_volume[PLAYER_ELEMENT] = { 10,10,10,10,10,10,10 };
+		unsigned int element_volume[PLAYER_ELEMENT] = { 999,999,999,999,999,999,999 };
 		
 		Pouch* pouch;
 		pouch = new Pouch;

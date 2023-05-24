@@ -44,9 +44,8 @@ Mage::Mage(Location spawn_location)
 	attack_interval = 0;
 	speed = MAGE_SPEED;
 	kind = ENEMY_KIND::MAGE;
-	type = new ENEMY_TYPE[1];
 	
-	type[0] = static_cast<ENEMY_TYPE>(1 + GetRand(3));
+	type = static_cast<ENEMY_TYPE>(1 + GetRand(3));
 	state = ENEMY_STATE::IDOL;
 	drop_volume = 0;
 	image = 0xffffff;
@@ -61,7 +60,7 @@ Mage::Mage(Location spawn_location)
 	//ドロップアイテムの設定
 	drop = 0;
 
-	switch (type[0])
+	switch (type)
 	{
 	case ENEMY_TYPE::NORMAL:
 		break;
@@ -97,7 +96,7 @@ Mage::Mage(Location spawn_location)
 
 		volume = MAGE_MIN_DROP + GetRand(MAGE_DROP);
 
-		switch (type[0])
+		switch (type)
 		{
 		case ENEMY_TYPE::NORMAL:
 			break;
@@ -137,7 +136,6 @@ Mage::Mage(Location spawn_location)
 Mage::~Mage()
 {
 
-	delete[] type;
 
 	for (int i = 0; i < drop; i++)
 	{
@@ -352,7 +350,7 @@ void Mage::CreateBullet(Location player_location)
 	if (shot_rate % MAGE_SHOT_RATE == 0)
 	{
 		BulletManager::GetInstance()->CreateEnemyBullet
-		(new MageBullet(type[0], location, player_location));
+		(new MageBullet(type, location, player_location));
 
 		shot_count++;
 	}
