@@ -111,6 +111,7 @@ Dragon::Dragon(Location spawn_location)
 	image = LoadGraph("Images/Enemy/doragon.png"); //画像読込み
 	walk_image = LoadGraph("Images/Enemy/dragonwalk.png");
 	LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, fly_image); //通常
+	LoadDivGraph("Images/Enemy/Doragon/tktk_Other_4L.png", 8, 2, 4, 375, 384, biting_effects);
 
 }
 
@@ -280,6 +281,16 @@ void Dragon::Draw() const
 		case 0:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
 				M_PI / 180, image, TRUE, !left_move);
+			if (left_move)
+			{
+				DrawRotaGraphF(draw_location.x-200, draw_location.y, 2,
+					0, biting_effects[frame], TRUE, TRUE);
+			}
+			else
+			{
+				DrawRotaGraphF(draw_location.x + 200 , draw_location.y, 2,
+					0, biting_effects[frame], TRUE, FALSE);
+			}
 			break;
 		case 1:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
@@ -400,8 +411,23 @@ void Dragon::Attack(const Location player_location)
 //-----------------------------------
 void Dragon::DiteMove(const Location player_location)
 {
-	//4月7日現在、壁に当たるまで攻撃を続けるのか、←4月10日現在これ（ステージとの兼ね合いがあるため仮決定）
-	//攻撃開始直後のプレイヤーの座標を目指して移動するのか、
+
+
+	tick++;
+
+	if (tick == 1) 
+	{
+		frame = 0;
+	}
+	if (tick % 3 == 0) 
+	{
+		frame++;
+		if (frame > 7) 
+		{
+			tick = 0;
+		}
+	}
+
 	speed = ATTACK_SPEED;
 
 	if (left_move == true)

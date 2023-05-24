@@ -13,10 +13,10 @@
 HarpyBullet::HarpyBullet(const Location spawn_location, const Location player_location)
 {
 
-	Tick = 0;
+	tick = 0;
 	frame = 0;
 	angle = 0;
-	PHASE = 0;
+	phase = 0;
 	type = ENEMY_TYPE::WIND;
 	location = spawn_location;
 	radius = 5;
@@ -43,18 +43,18 @@ HarpyBullet::~HarpyBullet()
 //-----------------------------------
 void HarpyBullet::Update()
 {
-	Tick++;
+	tick++;
 
 	location.x += x_speed;
 	location.y += y_speed;
 
-	switch (PHASE) {
+	switch (phase) {
 	case 0:
-		if (Tick == 1) {
+		if (tick == 1) {
 			frame = 0;
 			display_permit = TRUE;
 		}
-		if (Tick % 2 == 0) {
+		if (tick % 2 == 0) {
 			//HIT
 			frame++;
 			if (frame > 19)
