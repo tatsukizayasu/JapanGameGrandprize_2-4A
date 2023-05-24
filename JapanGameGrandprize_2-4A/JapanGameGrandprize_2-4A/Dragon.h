@@ -49,6 +49,11 @@ private:
 	bool attack; //接近攻撃
 	bool magic; //魔法攻撃
 
+	//エフェクト
+	int tick;
+	int phase;
+	int frame;
+	int biting_effects[8]; //噛みつきエフェクト
 
 	DRAGON_ATTACK attack_state; //攻撃状態
 

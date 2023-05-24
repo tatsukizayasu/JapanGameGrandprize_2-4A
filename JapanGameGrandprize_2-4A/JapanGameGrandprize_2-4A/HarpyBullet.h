@@ -14,9 +14,9 @@ private:
     int y_speed; //Yのスピード
 
       //エフェクト
-    int Tick;
+    int tick;
     int frame;
-    int PHASE;
+    int phase;
     float angle;
     bool display_permit;
 
