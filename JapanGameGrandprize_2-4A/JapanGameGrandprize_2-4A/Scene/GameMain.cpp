@@ -192,7 +192,12 @@ AbstractScene* GameMain::Update()
 #endif
 
 	if(!is_help_mode)camera_work->Update();
-	player->Update();
+
+	if (is_clear == false)
+	{
+		player->Update();
+	}
+	
 	stage->Update(player);
 	EnemyUpdate();
 
@@ -297,6 +302,25 @@ void GameMain::EnemyUpdate()
 
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
+
+	//ボスを倒した際、プレイヤーの弾を削除	
+	if (is_clear == true)
+	{
+		for (int i = 0; i < BULLET_MAX; i++)
+		{
+			if (player_bullet[i] != nullptr)
+			{
+				delete player_bullet[i];
+				player_bullet[i] = nullptr;
+				player->SortBullet(i);
+				i--;
+				if (i < 0)
+				{
+					break;
+				}
+			}
+		}
+	}
 
 	//ステージ内に生存している敵の数
 	short enemy_count = 0;
@@ -439,11 +463,19 @@ void GameMain::EnemyUpdate()
 	//敵の弾とプレイヤーとの当たり判定
 	if (enemy_bullet != nullptr)
 	{
+		//ボスが倒れたら画面内にある弾を削除
+		
 		for (int i = 0; i < bullet_manager->EnemyGetBulletMax(); i++)
 		{
 			if (enemy_bullet[i] == nullptr)
 			{
 				break;
+			}
+			else if (is_clear == true)
+			{
+				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
+				i--;
+				continue;
 			}
 			if (enemy_bullet[i]->HitBox(player))
 			{
@@ -464,6 +496,16 @@ void GameMain::EnemyUpdate()
 			if (enemy_nuts[i] == nullptr)
 			{
 				break;
+			}
+			else if (is_clear == true)
+			{
+				bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
+				i--;
+				if (i < 0)
+				{
+					break;
+				}
+				continue;
 			}
 
 			if (enemy_nuts[i]->HitBox(player))
