@@ -131,17 +131,23 @@ void EnemyBase::DeleteLogFont()
 //-----------------------------------
 void EnemyBase::DeleteWeakness()
 {
-	for (int i = 0; i < 11; i++)
+	if (weakness != nullptr)
 	{
-		delete[] weakness[i];
+		for (int i = 0; i < 11; i++)
+		{
+			delete[] weakness[i];
+		}
 	}
 
-	for (int i = 0; i < 5; i++)
+	if (icon_images != nullptr)
 	{
-		DeleteGraph(icon_images[i]);
+		for (int i = 0; i < 5; i++)
+		{
+			DeleteGraph(icon_images[i]);
+		}
+		delete[] icon_images;
+		icon_images = nullptr;
 	}
-	delete[] icon_images;
-	icon_images = nullptr;
 }
 
 //‰æ‘œ‚Ìíœ
