@@ -54,4 +54,7 @@ public:
 	ATTRIBUTE GetAttribute() const;
 
 	virtual int GetDamageParSecond() const = 0 ;
+
+	virtual void SetDeleteFlag(const Location) = 0;
+	virtual bool GetDelete_flg() = 0;								//trueをSetした後にエネミーはfalse待ちの状態にしてほしいです
 };
