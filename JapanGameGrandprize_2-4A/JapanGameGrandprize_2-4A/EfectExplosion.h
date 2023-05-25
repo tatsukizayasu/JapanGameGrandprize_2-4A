@@ -1,7 +1,7 @@
 #pragma once
 #include "Define.h"
 
-class EfectExplosion
+class EffectExplosion
 {
 private:
 
@@ -13,9 +13,9 @@ private:
 	bool delete_flg;
 public:
 
-	EfectExplosion();
-	EfectExplosion(float,float);
-	~EfectExplosion() {};
+	EffectExplosion();
+	EffectExplosion(float,float);
+	~EffectExplosion() {};
 	void Draw() const;
 	void Update();
 
