@@ -687,12 +687,14 @@ void Torrent::Draw() const
 		}
 	}
 
-	if (state != ENEMY_STATE::DEATH)
+	//‰æ–Ê“à‚É‰f‚Á‚Ä‚©‚çHP‚ð•`‰æ‚·‚é
+	if (state != ENEMY_STATE::DEATH && draw_location.x + area.width / 2 < SCREEN_WIDTH + MAP_CHIP_SIZE)
 	{
 		DrawHPBar(TORRENT_HP);
+		DrawDamageLog();
+		DrawWeaknessIcon();
 	}
-	DrawDamageLog();
-	DrawWeaknessIcon();
+	
 }
 
 //-----------------------------------
