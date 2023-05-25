@@ -9,9 +9,9 @@
 BulletBase::BulletBase()
 {
 
-	efect_end = false;
+	effect_end = false;
 	delete_flg = false;
-	efect_explosion = nullptr;
+	effect_explosion = nullptr;
 }
 
 //-----------------------------------
@@ -21,13 +21,13 @@ BulletBase::BulletBase(float player_x, float player_y)
 {
 
 	delete_flg = false;
-	efect_explosion = nullptr;
+	effect_explosion = nullptr;
 }
 
 bool BulletBase::GetEfectFlg() const
 {
 
-	return efect_end;
+	return effect_end;
 }
 
 int BulletBase::GetDamage() const
