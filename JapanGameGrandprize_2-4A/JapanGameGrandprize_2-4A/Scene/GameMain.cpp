@@ -192,7 +192,12 @@ AbstractScene* GameMain::Update()
 #endif
 
 	if(!is_help_mode)camera_work->Update();
-	player->Update();
+
+	if (player->GetState() != PLAYER_STATE::DEATH && is_clear == false)
+	{
+		player->Update();
+	}
+	
 	stage->Update(player);
 	EnemyUpdate();
 
@@ -214,17 +219,20 @@ AbstractScene* GameMain::Update()
 			return new GameClear(stage_num, element_volume, player->GetPouch());
 		}
 	}
+
 	item_controller->Update(player);
+
 	if (player->GetState() == PLAYER_STATE::DEATH)
 	{
-		Pouch* pouch;
-		pouch = player->GetPouch();
-		for (int i = 0; i < BULLET_KINDS; i++)
-		{
-			pouch->SetChemicalBullets(old_chemical_bullets[i]);
-		}
 		if (DelayAnimation(DELAY_ANIMATION_TYPE::FADE_OUT, 120.0f) == true)
 		{
+			Pouch* pouch;
+			pouch = player->GetPouch();
+			for (int i = 0; i < BULLET_KINDS; i++)
+			{
+				pouch->SetChemicalBullets(old_chemical_bullets[i]);
+			}
+
 			return new GameOver(stage_num, old_element_volume, pouch);
 		}
 		
@@ -297,6 +305,25 @@ void GameMain::EnemyUpdate()
 
 	BulletBase** player_bullet;
 	player_bullet = player->GetBullet();
+
+	//ボスを倒した際、プレイヤーの弾を削除	
+	if (is_clear == true)
+	{
+		for (int i = 0; i < BULLET_MAX; i++)
+		{
+			if (player_bullet[i] != nullptr)
+			{
+				delete player_bullet[i];
+				player_bullet[i] = nullptr;
+				player->SortBullet(i);
+				i--;
+				if (i < 0)
+				{
+					break;
+				}
+			}
+		}
+	}
 
 	//ステージ内に生存している敵の数
 	short enemy_count = 0;
@@ -390,12 +417,9 @@ void GameMain::EnemyUpdate()
 					LastBoss* last_boss;
 					last_boss = dynamic_cast<LastBoss*>(enemy[i]);
 
-					if (last_boss->CheckHitBulelt(player_bullet[j]))
+					if (last_boss->CheckHitBullet(player_bullet[j]))
 					{
-						delete player_bullet[j];
-						player_bullet[j] = nullptr;
-						player->SortBullet(j);
-						j--;
+						player_bullet[j]->SetDeleteFlag(last_boss->GetLocation());
 					}
 				}
 				else
@@ -403,10 +427,7 @@ void GameMain::EnemyUpdate()
 					if (enemy[i]->HitSphere(player_bullet[j]))
 					{
 						enemy[i]->HitBullet(player_bullet[j]);
-						delete player_bullet[j];
-						player_bullet[j] = nullptr;
-						player->SortBullet(j);
-						j--;
+						player_bullet[j]->SetDeleteFlag(enemy[i]->GetLocation());
 					}
 				}
 			}
@@ -439,11 +460,19 @@ void GameMain::EnemyUpdate()
 	//敵の弾とプレイヤーとの当たり判定
 	if (enemy_bullet != nullptr)
 	{
+		//ボスが倒れたら画面内にある弾を削除
+		
 		for (int i = 0; i < bullet_manager->EnemyGetBulletMax(); i++)
 		{
 			if (enemy_bullet[i] == nullptr)
 			{
 				break;
+			}
+			else if (is_clear == true)
+			{
+				bullet_manager->DeleteEnemyBullet(enemy_bullet[i]);
+				i--;
+				continue;
 			}
 			if (enemy_bullet[i]->HitBox(player))
 			{
@@ -464,6 +493,16 @@ void GameMain::EnemyUpdate()
 			if (enemy_nuts[i] == nullptr)
 			{
 				break;
+			}
+			else if (is_clear == true)
+			{
+				bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
+				i--;
+				if (i < 0)
+				{
+					break;
+				}
+				continue;
 			}
 
 			if (enemy_nuts[i]->HitBox(player))
@@ -494,10 +533,7 @@ void GameMain::EnemyUpdate()
 					bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
 					i--;
 
-					delete player_bullet[j];
-					player_bullet[j] = nullptr;
-					player->SortBullet(j);
-					j--;
+					player_bullet[j]->SetDeleteFlag(enemy_nuts[i]->GetLocation());
 
 					if (i < 0)
 					{

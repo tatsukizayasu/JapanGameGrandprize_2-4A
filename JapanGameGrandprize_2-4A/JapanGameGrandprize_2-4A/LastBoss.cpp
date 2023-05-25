@@ -63,6 +63,9 @@ LastBoss::LastBoss(Location spawn_location)
 
 	spawn_hand.y += 100;
 
+	//ステージ開始時は画面外上部にいる
+	location.y -= MAP_CHIP_SIZE * 15;
+
 	hand = new EnemyBase * [HAND_NUM];
 
 	area.height = 200;
@@ -94,7 +97,7 @@ LastBoss::LastBoss(Location spawn_location)
 	animation = 0;
 	image_argument = 0;
 
-	state = ENEMY_STATE::ATTACK;
+	state = ENEMY_STATE::IDOL;
 	attack_state = LAST_BOSS_ATTACK::NONE;
 	hit_stage = { false,nullptr };
 
@@ -178,8 +181,17 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 	else
 	{
 		switch (state)
-		{
+		{//ステージ開始時
 		case ENEMY_STATE::IDOL:
+			Idol();
+
+			for (int i = 0; i < HAND_NUM; i++)
+			{
+				if (hand[i] != nullptr)
+				{
+					hand[i]->Update(player, stage);
+				}
+			}
 			break;
 		case ENEMY_STATE::MOVE:
 			break;
@@ -195,7 +207,7 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 			break;
 		}
 
-		if (barrier == nullptr)
+		if (barrier == nullptr && state != ENEMY_STATE::IDOL)
 		{
 			for (int i = 0; i < HAND_NUM; i++)
 			{
@@ -224,9 +236,12 @@ void LastBoss::Update(const class Player* player, const class Stage* stage)
 			}
 		}
 
-		punch_interval--;
-		magic_interval--;
-		sword_interval--;
+		if (state != ENEMY_STATE::IDOL)
+		{
+			punch_interval--;
+			magic_interval--;
+			sword_interval--;
+		}
 	}
 	hit_stage = HitStage(stage);
 
@@ -260,7 +275,16 @@ bool LastBoss::Revival()
 //-----------------------------------
 void LastBoss::Idol()
 {
+	if (location.y < spawn_location.y)
+	{
+		location.y += 2;
 
+		if (spawn_location.y <= location.y)
+		{
+			location.y = spawn_location.y;
+			state = ENEMY_STATE::ATTACK;
+		}
+	}
 }
 
 //-----------------------------------
@@ -758,7 +782,7 @@ void LastBoss::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-bool LastBoss::CheckHitBulelt(const BulletBase* bullet)
+bool LastBoss::CheckHitBullet(const BulletBase* bullet)
 {
 	bool ret = false; //戻り値
 
@@ -841,10 +865,11 @@ void LastBoss::Draw() const
 		barrier->DrawDurabilityBar();
 		barrier->Draw();
 	}
-	else
-	{
+	else if (state != ENEMY_STATE::IDOL)
+	{//画面内に映って初めてHPを描画する
 		DrawHPBar(LAST_BOSS_HP);
 	}
+
 	DrawDamageLog();
 	DrawWeaknessIcon();
 	for (int i = 0; i < HAND_NUM; i++)

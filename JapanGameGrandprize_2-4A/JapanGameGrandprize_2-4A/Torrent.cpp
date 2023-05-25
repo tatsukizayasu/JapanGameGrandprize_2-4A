@@ -78,7 +78,7 @@ Torrent::Torrent(Location spawn_location)
 	animation = 0;
 	image_argument = 0;
 	attack_time = 20;
-	state = ENEMY_STATE::ATTACK;
+	state = ENEMY_STATE::MOVE;
 	attack_state = TORRENT_ATTACK::NONE;
 
 	/*当たり判定の設定*/
@@ -86,7 +86,7 @@ Torrent::Torrent(Location spawn_location)
 	area.height = 300;
 	location = spawn_location;
 
-	location.x += (MAP_CHIP_SIZE * 2) + (MAP_CHIP_SIZE / 2);
+	location.x += MAP_CHIP_SIZE * 10;
 	location.y += MAP_CHIP_SIZE / 2;
 
 	kind = ENEMY_KIND::TORRENT;
@@ -139,6 +139,20 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	animation++;
 	Location old_location = location;	//前の座標
 
+
+	Location scroll; //画面スクロールを考慮した座標
+	Location camera = CameraWork::GetCamera(); //カメラ
+	scroll = location - camera;
+
+	if (SCREEN_WIDTH < scroll.x + area.width / 2 + speed)
+	{
+		state = ENEMY_STATE::MOVE;
+	}
+	else if (state != ENEMY_STATE::DEATH)
+	{
+		state = ENEMY_STATE::ATTACK;
+	}
+
 	switch (state)
 	{
 	case ENEMY_STATE::IDOL:
@@ -182,7 +196,7 @@ void Torrent::Idol()
 //-----------------------------------
 void Torrent::Move(const Location player_location)
 {
-
+	location.x += static_cast<float>(speed);
 }
 
 //-----------------------------------
@@ -319,12 +333,12 @@ void Torrent::LeafCutter(const Location player_location)
 				if (left_move) //左に向いている
 				{
 					speed = -TORRENT_SPEED;
-					tackle_end_point += static_cast<int>(area.width / 2) + MAP_CHIP_SIZE;
+					tackle_end_point = static_cast<int>(area.width / 2);
 				}
 				else
 				{
 					speed = TORRENT_SPEED;
-					tackle_end_point += static_cast<int>(SCREEN_WIDTH - area.width / 2) - MAP_CHIP_SIZE;
+					tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
 				}
 				break;
 			case TORRENT_ATTACK::DROP_NUTS:
@@ -647,31 +661,40 @@ void Torrent::Draw() const
 
 	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
-	switch (attack_state)
+	if (state == ENEMY_STATE::MOVE)
 	{
-	case TORRENT_ATTACK::TACKLE:
 		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 8], TRUE, !left_move);
-		break;
-	case TORRENT_ATTACK::LEAF_CUTTER:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 10 + 17], TRUE, !left_move);
-		break;
-	case TORRENT_ATTACK::DROP_NUTS:
-		DrawRotaGraph3(SCREEN_WIDTH / 2, 50, 640, 640, 1, 0.05, 0, magic_circle_image, TRUE);
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 9 + 8], TRUE, !left_move);
-		break;
-	case TORRENT_ATTACK::NONE:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][0], TRUE, !left_move);
-		break;
-	default:
-		break;
+	}
+	else
+	{
+		switch (attack_state)
+		{
+		case TORRENT_ATTACK::TACKLE:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 8], TRUE, !left_move);
+			break;
+		case TORRENT_ATTACK::LEAF_CUTTER:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 10 + 17], TRUE, !left_move);
+			break;
+		case TORRENT_ATTACK::DROP_NUTS:
+			DrawRotaGraph3(SCREEN_WIDTH / 2, 50, 640, 640, 1, 0.05, 0, magic_circle_image, TRUE);
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][image_argument % 9 + 8], TRUE, !left_move);
+			break;
+		case TORRENT_ATTACK::NONE:
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7, 0, images[num][0], TRUE, !left_move);
+			break;
+		default:
+			break;
+		}
 	}
 
-	if (state != ENEMY_STATE::DEATH)
+	//画面内に映ってからHPを描画する
+	if (state != ENEMY_STATE::DEATH && draw_location.x + area.width / 2 < SCREEN_WIDTH + MAP_CHIP_SIZE)
 	{
 		DrawHPBar(TORRENT_HP);
+		DrawDamageLog();
+		DrawWeaknessIcon();
 	}
-	DrawDamageLog();
-	DrawWeaknessIcon();
+	
 }
 
 //-----------------------------------
