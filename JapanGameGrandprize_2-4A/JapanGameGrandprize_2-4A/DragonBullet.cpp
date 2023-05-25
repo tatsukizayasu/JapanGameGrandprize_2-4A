@@ -1,6 +1,10 @@
 #include "DragonBullet.h"
 #include "CameraWork.h"
 int DragonBullet::images[DRAGON_BULLET_IMAGES_NUM] = {};
+const float DragonBullet::distance[DRAGON_BULLET_IMAGES_NUM] =
+{
+	62,38,19,4,-10,-20,-30,-37,-46 ,-54
+};
 
 //ドラゴンの遠距離攻撃の移動速度
 #define BULLET_SPEED 10
@@ -26,15 +30,25 @@ DragonBullet::DragonBullet(Location spawn_location, Location player_location)
 	if (images[0] == 0)
 	{
 		int* images_t = new int[20];
-		LoadDivGraph("images/enemy/doragon/tktk_Fire_10.png"
-			, 20, 5, 4, 192, 192, images);
-		for (int i = 0; i < DRAGON_BULLET_IMAGES_NUM; i++)
+		int ret = LoadDivGraph("images/enemy/doragon/tktk_Fire_10.png"
+			, 20
+			, 5
+			, 4
+			, DRAGON_BULLET_IMAGE_SIZE
+			, DRAGON_BULLET_IMAGE_SIZE
+			, images_t);
+		if (ret == 0)
 		{
-			images[i] = images_t[1 + i];
+			for (int i = 0; i < DRAGON_BULLET_IMAGES_NUM; i++)
+			{
+				images[i] = images_t[1 + i];
+			}
 		}
 		delete[] images_t;
 	}
 	
+	frame_count = 0;
+	images_index = 0;
 }
 
 //-----------------------------------
@@ -50,9 +64,18 @@ DragonBullet::~DragonBullet()
 //-----------------------------------
 void DragonBullet::Update()
 {
-
 	location.x += x_speed;
 	location.y += y_speed;
+
+	frame_count++;
+	if (frame_count % 6 == 0)
+	{
+		images_index++;
+		if (DRAGON_BULLET_IMAGES_NUM <= images_index)
+		{
+			images_index -= 4;		//後ろの画像四枚でループさせる
+		}
+	}
 }
 
 //-----------------------------------
@@ -62,10 +85,18 @@ void DragonBullet::Draw() const
 {
 
 	float x, y;
+	float shift_x;
+	float shift_y;
+
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
 
-	DrawCircle(x, y, radius, 0xffffff, TRUE);
-	DrawRotaGraphF(x, y, 1, direction - M_PI, images[7], TRUE);
+	DrawRotaGraph2F(
+		x
+		, y
+		, DRAGON_BULLET_IMAGE_CENTER + distance[images_index]
+		, DRAGON_BULLET_IMAGE_CENTER
+		, 1, direction - M_PI
+		, images[images_index], TRUE);
 }
 
