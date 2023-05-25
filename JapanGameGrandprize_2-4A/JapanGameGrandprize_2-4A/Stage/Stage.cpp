@@ -28,7 +28,7 @@ Stage::Stage(short stage_num)
 	this->camera_work = camera_work;
 
 	//”wŒi‰æ‘œ–‡”
-	int image_num = 3;
+	int image_num = 1;
 
 	switch (this->stage_num)
 	{
@@ -39,6 +39,10 @@ Stage::Stage(short stage_num)
 
 	case 2: 
 		image_num = 4;
+		break;
+
+	case 3:
+		image_num = 3;
 		break;
 
 	default:
