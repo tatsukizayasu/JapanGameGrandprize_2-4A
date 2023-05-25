@@ -33,7 +33,7 @@ public:
 	bool NormalBulletEfect();
 	
 	void SetDeleteFlag(const Location);
-	bool GetDelete_flg();								//trueをSetした後にエネミーはfalse待ちの状態にしてほしいです
+	bool GetDelete_flg()const;								//trueをSetした後にエネミーはfalse待ちの状態にしてほしいです
 														//falseが入った後にDeleteしてください
 	int GetDamageParSecond() const override ;
 };

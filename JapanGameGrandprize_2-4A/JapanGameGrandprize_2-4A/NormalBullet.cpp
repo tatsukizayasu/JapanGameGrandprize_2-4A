@@ -24,7 +24,7 @@ NormalBullet::NormalBullet()
 	scrool_x = 0.0;
 	scrool_y = 0.0;
 	delete_flg = false;
-	efect_end = false;
+	effect_end = false;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -115,7 +115,7 @@ NormalBullet::NormalBullet(float player_x, float player_y,
 
 	efect_count = 0;
 	delete_flg = false;
-	efect_end = false;
+	effect_end = false;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -144,7 +144,7 @@ void NormalBullet::Draw() const
 	case ATTRIBUTE::NORMAL:
 		if (delete_flg)
 		{
-			if (!efect_end)
+			if (!effect_end)
 			{
 				for (int i = 0; i < PIXEL_MAX; i++)
 				{
@@ -160,7 +160,7 @@ void NormalBullet::Draw() const
 	case ATTRIBUTE::EXPLOSION:
 		if (delete_flg ==TRUE)
 		{
-			if (!efect_end)
+			if (!effect_end)
 			{
 				for (int i = 0; i < PIXEL_MAX; i++)
 				{
@@ -215,7 +215,7 @@ void NormalBullet::Draw() const
 	case ATTRIBUTE::MELT:
 		if (delete_flg)
 		{
-			if (!efect_end)
+			if (!effect_end)
 			{
 				for (int i = 0; i < PIXEL_MAX; i++)
 				{
@@ -253,7 +253,7 @@ void NormalBullet::Draw() const
 	case ATTRIBUTE::POISON:
 		if (delete_flg)
 		{
-			if (!efect_end)
+			if (!effect_end)
 			{
 				for (int i = 0; i < PIXEL_MAX; i++)
 				{
@@ -291,7 +291,7 @@ void NormalBullet::Draw() const
 	case ATTRIBUTE::PARALYSIS:
 		if (delete_flg)
 		{
-			if (!efect_end)
+			if (!effect_end)
 			{
 				for (int i = 0; i < PIXEL_MAX; i++)
 				{
@@ -451,7 +451,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				else 
 				{
-					if (efect_end == FALSE) {
+					if (effect_end == FALSE) {
 						if (Tick % 2 == 0)
 						{
 							exp.Delete_frame++;
@@ -459,7 +459,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 						if (exp.Delete_frame > 8)
 						{
 							exp.Delete_display_permit = FALSE;
-							efect_end = TRUE;
+							effect_end = TRUE;
 						}
 					}
 				}
@@ -497,14 +497,14 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				else 
 				{
-					if (efect_end == false) {
+					if (effect_end == false) {
 						if (Tick % 3 == 0) {
 							mel.Delete_frame++;
 						}
 						if (mel.Delete_frame > 8) {
 							mel.Delete_display_permit = FALSE;
 							mel.Delete_frame = 0;
-							efect_end = TRUE;
+							effect_end = TRUE;
 							Tick = 0;
 						}
 					}
@@ -543,14 +543,14 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				else 
 				{
-					if (efect_end == false) {
+					if (effect_end == false) {
 						if (Tick % 3 == 0) {
 							poi.Delete_frame++;
 						}
 						if (poi.Delete_frame > 8) {
 							poi.Delete_display_permit = FALSE;
 							poi.Delete_frame = 0;
-							efect_end = TRUE;
+							effect_end = TRUE;
 							Tick = 0;
 						}
 					}
@@ -589,14 +589,14 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				else 
 				{
-					if (efect_end == false) {
+					if (effect_end == false) {
 						if (Tick % 3 == 0) {
 							par.Delete_frame++;
 						}
 						if (par.Delete_frame > 8) {
 							par.Delete_display_permit = FALSE;
 							par.Delete_frame = 0;
-							efect_end = TRUE;
+							effect_end = TRUE;
 							Tick = 0;
 						}
 					}
@@ -739,7 +739,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 				}
 				else 
 				{
-					if (efect_end == FALSE) {
+					if (effect_end == FALSE) {
 						if (Tick % 2 == 0)
 						{
 							exp.Delete_frame++;
@@ -747,7 +747,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 						if (exp.Delete_frame > 8)
 						{
 							exp.Delete_display_permit = FALSE;
-							efect_end = TRUE;
+							effect_end = TRUE;
 						}
 					}
 				}
@@ -905,7 +905,7 @@ void NormalBullet::Update(const Stage* stage_pointa)
 bool NormalBullet::NormalBulletEfect()		//着弾エフェクト
 {
 
-	if (!efect_end)
+	if (!effect_end)
 	{
 		if (++efect_count % 30 != 0)
 		{
@@ -929,14 +929,14 @@ bool NormalBullet::NormalBulletEfect()		//着弾エフェクト
 			{
 				location.x--;
 				location.y--;
-				efect_end = true;
+				effect_end = true;
 				return true;
 			}
 			else
 			{
 				location.x++;
 				location.y++;
-				efect_end = true;
+				effect_end = true;
 				return true;
 			}
 		}
@@ -949,7 +949,8 @@ int NormalBullet::GetDamageParSecond() const
 	return damage_second;
 }
 
-bool NormalBullet::GetDelete_flg() {
+bool NormalBullet::GetDelete_flg() const
+{
 
 	bool ret = false;
 	if (exp.Delete_display_permit ||
@@ -989,6 +990,7 @@ void NormalBullet::SetDeleteFlag(const Location hit_location)
 		par.Delete_y = hit_location.y;
 		break;
 	case ATTRIBUTE::NORMAL:
+		effect_end = true;
 		break;
 	case ATTRIBUTE::HEAL:
 		break;
