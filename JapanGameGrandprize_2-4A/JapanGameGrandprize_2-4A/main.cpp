@@ -19,7 +19,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	double dNextTime = GetNowCount();
 
-	SetMainWindowText("Elemental War");
+	SetMainWindowText("Science Revenge");
 
 	SetWindowIconID(01);
 

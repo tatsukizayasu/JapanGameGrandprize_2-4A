@@ -7,6 +7,7 @@ private:
     int display_time; //表示する時間
     int time; //時間
     unsigned int cr; //色
+
 public:
 
     //コンストラクタ

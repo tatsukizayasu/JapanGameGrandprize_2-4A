@@ -124,7 +124,7 @@ Wyvern::Wyvern(Location spawn_location)
 	
 		images[num].resize(4);
 
-		LoadDivGraph("Images/Enemy/Wyvern.png", 2, 2, 1, 250, 250, &images[num][0]);
+		LoadDivGraph("Images/Enemy/Wyvern1.png", 2, 2, 1, 250, 250, &images[num][0]);
 		LoadDivGraph("Images/Enemy/Wyvernattack.png", 2, 2, 1, 250, 250, &images[num][2]);
 	}
 
