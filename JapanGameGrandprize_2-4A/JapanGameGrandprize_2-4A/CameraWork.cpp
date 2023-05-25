@@ -107,6 +107,7 @@ void CameraWork::Update()
 
 		if (stage_size.x * MAP_CHIP_SIZE - SCREEN_WIDTH < camera.x)
 		{
+			camera.x = stage_size.x * MAP_CHIP_SIZE - SCREEN_WIDTH;
 			state = STATE::FIXED;
 		}
 		return;
