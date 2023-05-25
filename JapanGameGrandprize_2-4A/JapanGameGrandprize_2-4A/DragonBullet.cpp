@@ -85,8 +85,6 @@ void DragonBullet::Draw() const
 {
 
 	float x, y;
-	float shift_x;
-	float shift_y;
 
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
