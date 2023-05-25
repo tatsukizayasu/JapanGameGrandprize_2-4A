@@ -30,6 +30,8 @@ void EnemySE::LoadSound()
 	undead_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/undeadattack.wav");
 	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbreath.wav");
 	last_boss_se.punch = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/LastBossPunch.wav");
+	last_boss_se.special_attack[0] = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/SpecialAttackCharge.wav");
+	last_boss_se.special_attack[1] = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/specialattack.wav");
 
 	SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
 	explosion_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/explosion.wav",8);
@@ -48,6 +50,11 @@ void EnemySE::DeleteSound()
 	DeleteSoundMem(undead_se.attack);
 	DeleteSoundMem(wyvern_se.attack);
 	DeleteSoundMem(last_boss_se.punch);
+	for (int i = 0; i < 2; i++)
+	{
+		DeleteSoundMem(last_boss_se.special_attack[i]);
+
+	}
 }
 
 //-----------------------------------

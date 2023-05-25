@@ -11,6 +11,7 @@ struct NomalEnemySE
 struct LastBossSE
 {
     int punch;
+    int special_attack[2];
 };
 
 class EnemySE
