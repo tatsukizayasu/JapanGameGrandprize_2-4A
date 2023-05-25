@@ -232,42 +232,22 @@ void EnemySlime::Update(const Player* player, const Stage* stage)
 
 	case ENEMY_STATE::ATTACK:
 
-		if (state == ENEMY_STATE::ATTACK)
+		Attack(player->GetLocation());
+
+		location.y += speed_y;
+		location.x += speed_x;
+
+		hit_stage = HitStage(stage);
+		if (hit_stage.hit) //ステージとの当たり判定
 		{
-			location.y -= (jump_distance.y / 3);
-			jump_distance.y -= 1;
+			location = old_location;
+			attack = false;
+			state = ENEMY_STATE::FALL;
 
-			hit_stage = HitStage(stage);
-			if (hit_stage.hit) //ステージとの当たり判定
-			{
-				location.y = old_location.y;
-				attack = false;
-				state = ENEMY_STATE::FALL;
-
-				speed_x = 0;
-				speed_y = 0;
-			}
+			speed_x = 0;
+			speed_y = 0;
 		}
 
-		if (state == ENEMY_STATE::ATTACK)
-		{
-			if (left_move)speed_x = -SLIME_ATTACK_SPEED;
-			else speed_x = SLIME_ATTACK_SPEED;
-
-			location.x += speed_x;
-
-			hit_stage = HitStage(stage);
-
-			if (hit_stage.hit) //ステージとの当たり判定
-			{
-				location.x = old_location.x;
-				attack = false;
-				state = ENEMY_STATE::FALL;
-
-				speed_x = 0;
-				speed_y = 0;
-			}
-		}
 		break;
 
 	case ENEMY_STATE::DEATH:
@@ -395,19 +375,11 @@ void EnemySlime::Fall()
 //-----------------------------------
 void  EnemySlime::Attack(const Location player_location)
 {
-	location.y -= (jump_distance.y / 3);
+	speed_y = -(jump_distance.y / 3);
 	jump_distance.y -= 1;
 
-	if (left_move)
-	{
-		speed_x = -SLIME_ATTACK_SPEED;
-	}
-	else
-	{
-		speed_x = SLIME_ATTACK_SPEED;
-	}
-
-	location.x += speed_x;
+	if (left_move)speed_x = -SLIME_ATTACK_SPEED;
+	else speed_x = SLIME_ATTACK_SPEED;
 }
 
 //-----------------------------------
