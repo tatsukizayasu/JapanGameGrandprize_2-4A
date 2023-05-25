@@ -26,6 +26,7 @@ private:
 	int slime_angle;
 	int wait_time;
 	Location jump_distance;
+	ENEMY_TYPE type;
 private:
 #ifdef _DEBUG
 	ENEMY_STATE old_state; //ˆê‚Â‘O‚Ìó‘Ô

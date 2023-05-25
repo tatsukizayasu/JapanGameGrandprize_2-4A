@@ -22,10 +22,7 @@ enum class DRAGON_ATTACK
 class Dragon :public EnemyBase
 {
 private:
-	int image;
 	int animation; //画像のアニメーション
-	int fly_image[2]; //飛ぶ画像
-	int walk_image; //攻撃（這いつくばり）
 	int magic_num; //遠距離攻撃を使った回数
 	int attack_method; //攻撃方法
 	int switchover_time; //攻撃切り替え時間

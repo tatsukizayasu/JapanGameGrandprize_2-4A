@@ -15,8 +15,6 @@ SlimeBossBody::SlimeBossBody(int x, int y, int height, int width)
 	area.height = height;
 	area.width = width;
 
-	type = new ENEMY_TYPE;
-	*type = ENEMY_TYPE::WATER;
 }
 
 SlimeBossBody::~SlimeBossBody()
@@ -27,9 +25,6 @@ SlimeBossBody::~SlimeBossBody()
 	}
 
 	delete[] drop_element;
-
-	delete[] type;
-
 }
 
 void SlimeBossBody::Update(const Player* player, const Stage* stage)
@@ -83,7 +78,7 @@ AttackResource SlimeBossBody::Hit()
 	if (!attack)
 	{
 		attack = true;
-		ENEMY_TYPE attack_type[1] = { *type };
+		//ENEMY_TYPE attack_type[1] = { *type };
 		//ret.bless_se = SLIME_BOSS_ATTACK_DAMAGE;
 		//ret.type = attack_type;
 		ret.type_count = 1;

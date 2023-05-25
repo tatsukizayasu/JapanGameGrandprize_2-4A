@@ -88,8 +88,6 @@ Dragon::Dragon(Location spawn_location)
 	magic = false;
 
 	kind = ENEMY_KIND::DRAGON;
-	type = new ENEMY_TYPE[1];
-	type[0] = ENEMY_TYPE::FIRE;
 
 	state = ENEMY_STATE::IDOL;
 
@@ -108,16 +106,24 @@ Dragon::Dragon(Location spawn_location)
 		drop_volume += volume;
 	}
 
-	image = LoadGraph("Images/Enemy/doragon.png"); //âÊëúì«çûÇ›
-	walk_image = LoadGraph("Images/Enemy/dragonwalk.png");
-	LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, fly_image); //í èÌ
+	
+	
+
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
+
+	if (images[num].empty())
+	{
+		images[num].resize(4);
+		images[num][0] = LoadGraph("Images/Enemy/doragon.png"); //âÊëúì«çûÇ›
+		images[num][1] = LoadGraph("Images/Enemy/dragonwalk.png");
+		LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, &images[num][2]); //í èÌ
+	}
 	LoadDivGraph("Images/Enemy/Doragon/tktk_Other_4L.png", 8, 2, 4, 375, 384, biting_effects);
 
 }
 
 Dragon::~Dragon()
 {
-	delete[] type;
 
 	for (int i = 0; i < FIRE_DROP; i++)
 	{
@@ -267,12 +273,13 @@ void Dragon::Draw() const
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
 	switch (state)
 	{
 	case ENEMY_STATE::MOVE:
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, image, TRUE, !left_move);
+			M_PI / 180, images[num][0], TRUE, !left_move);
 		break;
 	case ENEMY_STATE::ATTACK:
 	
@@ -280,7 +287,7 @@ void Dragon::Draw() const
 		{
 		case 0:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, image, TRUE, !left_move);
+				M_PI / 180, images[num][0], TRUE, !left_move);
 			if (left_move)
 			{
 				DrawRotaGraphF(draw_location.x-200, draw_location.y, 2,
@@ -294,18 +301,18 @@ void Dragon::Draw() const
 			break;
 		case 1:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, fly_image[animation], TRUE, !left_move);
+				M_PI / 180, images[num][animation], TRUE, !left_move);
 			break;
 		case 2:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, image, TRUE, !left_move);
+				M_PI / 180, images[num][0], TRUE, !left_move);
 			break;
 		}
 
 		break;
 	default:
 		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, image, TRUE, !left_move);
+			M_PI / 180, images[num][0], TRUE, !left_move);
 		break;
 	}
 
@@ -477,15 +484,15 @@ void Dragon::RoarMove(const Location player_location)
 		{
 		case 0:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x, 250));
+			(new DragonThunder(player_location.x, 300));
 			break;
 		case 1:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x-200, 250));
+			(new DragonThunder(player_location.x-200, 300));
 			break;
 		case 2:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x+200, 250));
+			(new DragonThunder(player_location.x+200,300));
 			break;
 		default:
 			break;
@@ -493,7 +500,7 @@ void Dragon::RoarMove(const Location player_location)
 	}
 
 
-
+	
 
 	attack_method = GetRand(2);
 
@@ -516,7 +523,7 @@ AttackResource Dragon::Hit()
 	if (attack_state == DRAGON_ATTACK::DITE)
 	{
 		attack = true;
-		ENEMY_TYPE attack_type[1] = { *type };
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::FIRE };
 		ret.damage = ATTACK_DITE;
 		ret.type = attack_type;
 		ret.type_count = 1;
@@ -525,7 +532,7 @@ AttackResource Dragon::Hit()
 	if (attack_state == DRAGON_ATTACK::TAIL_ATTACK && (!attack))
 	{
 		attack = true;
-		ENEMY_TYPE attack_type[1] = { *type };
+		ENEMY_TYPE attack_type[1] = { ENEMY_TYPE::FIRE };
 		ret.damage = ATTACK_TAIL;
 		ret.type = attack_type;
 		ret.type_count = 2;

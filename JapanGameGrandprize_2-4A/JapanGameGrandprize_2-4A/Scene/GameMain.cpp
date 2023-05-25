@@ -74,7 +74,6 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	stage->SetPlayer(player);
 
 	EnemyBase::CreateLogFont();
-	EnemyBase::LoadWeakness();
 
 	SpawnEnemy();
 
@@ -123,13 +122,14 @@ GameMain::~GameMain()
 	delete player;
 	delete stage;
 
-	EnemyBase::DeleteWeakness();
 	EnemyBase::DeleteLogFont();
 	for (int i = 0; i < enemy_spawn_volume; i++)
 	{
 		delete enemy[i];
 	}
 	delete[] enemy;
+
+	EnemyBase::DeleteImage();
 
 	delete item_controller;
 	delete bullet_manager;
@@ -390,12 +390,9 @@ void GameMain::EnemyUpdate()
 					LastBoss* last_boss;
 					last_boss = dynamic_cast<LastBoss*>(enemy[i]);
 
-					if (last_boss->CheckHitBulelt(player_bullet[j]))
+					if (last_boss->CheckHitBullet(player_bullet[j]))
 					{
-						delete player_bullet[j];
-						player_bullet[j] = nullptr;
-						player->SortBullet(j);
-						j--;
+						player_bullet[j]->SetDeleteFlag(last_boss->GetLocation());
 					}
 				}
 				else
@@ -403,10 +400,7 @@ void GameMain::EnemyUpdate()
 					if (enemy[i]->HitSphere(player_bullet[j]))
 					{
 						enemy[i]->HitBullet(player_bullet[j]);
-						delete player_bullet[j];
-						player_bullet[j] = nullptr;
-						player->SortBullet(j);
-						j--;
+						player_bullet[j]->SetDeleteFlag(enemy[i]->GetLocation());
 					}
 				}
 			}
@@ -494,10 +488,7 @@ void GameMain::EnemyUpdate()
 					bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
 					i--;
 
-					delete player_bullet[j];
-					player_bullet[j] = nullptr;
-					player->SortBullet(j);
-					j--;
+					player_bullet[j]->SetDeleteFlag(enemy_nuts[i]->GetLocation());
 
 					if (i < 0)
 					{

@@ -950,41 +950,49 @@ int NormalBullet::GetDamageParSecond() const
 }
 
 bool NormalBullet::GetDelete_flg() {
-	if (exp.Delete_display_permit == TRUE) {
-		return true;
-	}
-	else if (mel.Delete_display_permit == TRUE) 
+
+	bool ret = false;
+	if (exp.Delete_display_permit ||
+		mel.Delete_display_permit ||
+		par.Delete_display_permit ||
+		poi.Delete_display_permit)
 	{
-		return true;
+		return ret;
 	}
-	else if (par.Delete_display_permit == TRUE) {
-		return true;
-	}
-	else if (poi.Delete_display_permit == TRUE) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	
+	return ret;
 }
 
-void NormalBullet::Set_exp_Delete_flg(bool b,int x,int y) {
-	exp.Delete_display_permit = b;
-	exp.Delete_x = x;
-	exp.Delete_y = y;
-}
-void NormalBullet::Set_mel_Delete_flg(bool b, int x, int y) {
-	mel.Delete_display_permit = b;
-	mel.Delete_x = x;
-	mel.Delete_y = y;
-}
-void NormalBullet::Set_poi_Delete_flg(bool b, int x, int y) {
-	poi.Delete_display_permit = b;
-	poi.Delete_x = x;
-	poi.Delete_y = y;
-}
-void NormalBullet::Set_par_Delete_flg(bool b, int x, int y) {
-	par.Delete_display_permit = b;
-	par.Delete_x = x;
-	par.Delete_y = y;
+void NormalBullet::SetDeleteFlag(const Location hit_location)
+{
+	switch (attribute)
+	{
+	
+	case ATTRIBUTE::EXPLOSION:
+		exp.Delete_display_permit = true;
+		exp.Delete_x = hit_location.x;
+		exp.Delete_y = hit_location.y;
+		break;
+	case ATTRIBUTE::MELT:
+		mel.Delete_display_permit = true;
+		mel.Delete_x = hit_location.x;
+		mel.Delete_y = hit_location.y;
+		break;
+	case ATTRIBUTE::POISON:
+		poi.Delete_display_permit = true;
+		poi.Delete_x = hit_location.x;
+		poi.Delete_y = hit_location.y;
+		break;
+	case ATTRIBUTE::PARALYSIS:
+		par.Delete_display_permit = true;
+		par.Delete_x = hit_location.x;
+		par.Delete_y = hit_location.y;
+		break;
+	case ATTRIBUTE::NORMAL:
+		break;
+	case ATTRIBUTE::HEAL:
+		break;
+	default:
+		break;
+	}
 }

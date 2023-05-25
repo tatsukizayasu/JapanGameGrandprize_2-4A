@@ -72,6 +72,9 @@ private:
 
     //攻撃しない
     void AttackNone();
+    
+    //アニメーション
+    void Animation();
 public:
 
     //コンストラクタ
@@ -108,7 +111,7 @@ public:
     void HitBullet(const BulletBase* bullet) override;
 
     //プレイヤーの弾との当たり判定
-    bool CheckHitBulelt(const BulletBase* bullet);
+    bool CheckHitBullet(const BulletBase* bullet);
 
     //プレイヤーとパンチとの当たり判定
     AttackResource PunchAttack(const BoxCollider*);

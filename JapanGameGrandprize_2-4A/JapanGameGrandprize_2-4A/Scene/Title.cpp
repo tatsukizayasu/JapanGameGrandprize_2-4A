@@ -141,7 +141,7 @@ AbstractScene* Title::Update()
 		switch (current_selection)
 		{
 		case Title::MENU::PLAY:
-			return new GameMain(4, element_volume, pouch);
+			return new GameMain(1, element_volume, pouch);
 			break;
 			
 		case Title::MENU::HELP:
