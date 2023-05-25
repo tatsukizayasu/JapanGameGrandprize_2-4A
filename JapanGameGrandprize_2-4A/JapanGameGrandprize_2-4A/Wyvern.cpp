@@ -1,7 +1,7 @@
 #include "Wyvern.h"
 #include "Player.h"
 #include "BulletManager.h"
-#include "WyvernBless.h"
+#include "WyvernBreath.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "CameraWork.h"
@@ -38,16 +38,16 @@
 #define WYVERN_SHOT_RATE 40
 
 //ブレスのインターバル
-#define BLESS_INTERVAL 300
+#define BREATH_INTERVAL 300
 
 //ブレスを打つまでの待機時間
-#define BLESS_WAIT_TIME 60
+#define BREATH_WAIT_TIME 60
 
 //攻撃が終わって移動するまでの待機時間
 #define MOVE_WAIT_TIME 60
 
 //三連ブレスのインターバル
-#define TRIPLE_BLESS_INTERVAL 600
+#define TRIPLE_BREATH_INTERVAL 600
 
 //強襲攻撃のインターバル
 #define ASSAULT_INTERVAL 480
@@ -71,10 +71,10 @@ Wyvern::Wyvern(Location spawn_location)
 
 	hp = WYVERN_HP;
 	attack_interval = WYVERN_ATTACK_INTERVAL;
-	bless_interval = BLESS_INTERVAL;
-	triple_bless_interval = TRIPLE_BLESS_INTERVAL;
+	breath_interval = BREATH_INTERVAL;
+	triple_breath_interval = TRIPLE_BREATH_INTERVAL;
 	assault_interval = ASSAULT_INTERVAL;
-	bless_wait_time = 0;
+	breath_wait_time = 0;
 	move_wait_time = 0;
 	animation = 0;
 	shot_rate = 0;
@@ -124,7 +124,7 @@ Wyvern::Wyvern(Location spawn_location)
 	
 		images[num].resize(4);
 
-		LoadDivGraph("Images/Enemy/Wyvern.png", 2, 2, 1, 250, 250, &images[num][0]);
+		LoadDivGraph("Images/Enemy/Wyvern1.png", 2, 2, 1, 250, 250, &images[num][0]);
 		LoadDivGraph("Images/Enemy/Wyvernattack.png", 2, 2, 1, 250, 250, &images[num][2]);
 	}
 
@@ -167,17 +167,17 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 		}
 
 		attack_interval--;
-		bless_interval--;
-		triple_bless_interval--;
+		breath_interval--;
+		triple_breath_interval--;
 		assault_interval--;
 
 		if (attack_interval < 0)
 		{
-			if (bless_interval < 0) //ブレスに移行
+			if (breath_interval < 0) //ブレスに移行
 			{
 				state = ENEMY_STATE::ATTACK;
-				attack_state = WYVERN_ATTACK::BLESS;
-				bless_wait_time = BLESS_WAIT_TIME;
+				attack_state = WYVERN_ATTACK::BREATH;
+				breath_wait_time = BREATH_WAIT_TIME;
 				if (location.x < player->GetLocation().x)
 				{
 					left_move = false;
@@ -189,11 +189,11 @@ void Wyvern::Update(const Player* player, const Stage* stage)
 				break;
 			}
 
-			if (triple_bless_interval < 0) //トリプルブレスに移行
+			if (triple_breath_interval < 0) //トリプルブレスに移行
 			{
 				state = ENEMY_STATE::ATTACK;
 				attack_state = WYVERN_ATTACK::TRIPLE_BRACE;
-				bless_wait_time = BLESS_WAIT_TIME;
+				breath_wait_time = BREATH_WAIT_TIME;
 				if (location.x < player->GetLocation().x)
 				{
 					left_move = false;
@@ -352,11 +352,11 @@ void Wyvern::Attack(const Location player_location)
 {
 	switch (attack_state)
 	{
-	case WYVERN_ATTACK::BLESS:
-		Bless(player_location);
+	case WYVERN_ATTACK::BREATH:
+		Breath(player_location);
 		break;
 	case WYVERN_ATTACK::TRIPLE_BRACE:
-		TripleBless(player_location);
+		TripleBreath(player_location);
 		break;
 	case WYVERN_ATTACK::ASSAULT:
 		Assault();
@@ -371,11 +371,11 @@ void Wyvern::Attack(const Location player_location)
 	{
 		switch (attack_state) //インターバルの設定
 		{
-		case WYVERN_ATTACK::BLESS:
-			bless_interval = BLESS_INTERVAL;
+		case WYVERN_ATTACK::BREATH:
+			breath_interval = BREATH_INTERVAL;
 			break;
 		case WYVERN_ATTACK::TRIPLE_BRACE:
-			triple_bless_interval = TRIPLE_BLESS_INTERVAL;
+			triple_breath_interval = TRIPLE_BREATH_INTERVAL;
 			shot_count = 0;
 			break;
 		case WYVERN_ATTACK::ASSAULT:
@@ -400,15 +400,15 @@ void Wyvern::Attack(const Location player_location)
 //-----------------------------------
 //ブレス
 //-----------------------------------
-void Wyvern::Bless(const Location player_location)
+void Wyvern::Breath(const Location player_location)
 {
-	bless_wait_time--;
+	breath_wait_time--;
 
-	if (bless_wait_time < 0) //発射待機時間終了
+	if (breath_wait_time < 0) //発射待機時間終了
 	{
 		PlaySoundMem(EnemySE::GetEnemySE(kind).attack, DX_PLAYTYPE_BACK);
 		BulletManager::GetInstance()->
-			CreateEnemyBullet(new WyvernBless(location, player_location));
+			CreateEnemyBullet(new WyvernBreath(location, player_location));
 		attack_end = true;
 	}
 }
@@ -416,11 +416,11 @@ void Wyvern::Bless(const Location player_location)
 //-----------------------------------
 //トリプルブレス
 //-----------------------------------
-void Wyvern::TripleBless(const Location player_location)
+void Wyvern::TripleBreath(const Location player_location)
 {
-	bless_wait_time--;
+	breath_wait_time--;
 
-	if (bless_wait_time < 0) //発射待機時間終了
+	if (breath_wait_time < 0) //発射待機時間終了
 	{
 		shot_rate++;
 
@@ -429,7 +429,7 @@ void Wyvern::TripleBless(const Location player_location)
 			PlaySoundMem(EnemySE::GetEnemySE(kind).attack, DX_PLAYTYPE_BACK);
 
 			BulletManager::GetInstance()->
-				CreateEnemyBullet(new WyvernBless(location, player_location));
+				CreateEnemyBullet(new WyvernBreath(location, player_location));
 			shot_count++;
 		}	
 	}
