@@ -488,15 +488,15 @@ void Dragon::RoarMove(const Location player_location)
 		{
 		case 0:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x, 300));
+			(new DragonThunder(player_location.x, 430));
 			break;
 		case 1:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x-200, 300));
+			(new DragonThunder(player_location.x-200, 430));
 			break;
 		case 2:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x+200,300));
+			(new DragonThunder(player_location.x+200,430));
 			break;
 		default:
 			break;
