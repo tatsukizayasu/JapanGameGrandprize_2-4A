@@ -1,8 +1,8 @@
 #pragma once
 #include "EnemyBulletBase.h"
-#define WYVERN_BLESS_EXTEND_RATE (0.2f)
+#define WYVERN_BREATH_EXTEND_RATE (0.2f)
 #define WYVERN_IMAGES_NUM (9)
-class WyvernBless :
+class WyvernBreath :
     public EnemyBulletBase
 {
 private:
@@ -19,10 +19,10 @@ private:
 public:
 
     //コンストラクタ
-    WyvernBless(const Location, const Location);
+    WyvernBreath(const Location, const Location);
 
     //デストラクタ
-    ~WyvernBless();
+    ~WyvernBreath();
 
     //更新
     void Update() override;

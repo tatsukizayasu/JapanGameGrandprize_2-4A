@@ -319,7 +319,7 @@ void Player::Draw() const
 	}
 
 	//ダメージを受けた時点滅する
-	if (damage_flg)
+	if (damage_flg && player_state != PLAYER_STATE::DEATH)
 	{
 		if (player_state == PLAYER_STATE::FLY)
 		{
@@ -1141,6 +1141,7 @@ void Player::Fly()
 //飛んでない
 void Player::NotFly()
 {
+	StopSoundMem(flysound);
 	float y = location.y - CameraWork::GetCamera().y;
 
 	player_state = PLAYER_STATE::DOWN;

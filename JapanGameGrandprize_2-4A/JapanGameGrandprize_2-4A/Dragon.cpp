@@ -56,7 +56,7 @@
 Dragon::Dragon(Location spawn_location)
 {
 	location = spawn_location;
-	location.y = 450;
+	//location.y = 450;
 	location.x = 17680;
 	area.height = DRAGON_SIZE_Y;
 	area.width = DRAGON_SIZE_X;
@@ -113,10 +113,9 @@ Dragon::Dragon(Location spawn_location)
 
 	if (images[num].empty())
 	{
-		images[num].resize(4);
-		images[num][0] = LoadGraph("Images/Enemy/doragon.png"); //画像読込み
-		images[num][1] = LoadGraph("Images/Enemy/dragonwalk.png");
-		LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, &images[num][2]); //通常
+		images[num].resize(2);
+		LoadDivGraph("Images/Enemy/doragonwlak.png", 2, 2, 1, 500, 500, &images[num][0]);
+		LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, &images[1][0]); //通常
 	}
 	LoadDivGraph("Images/Enemy/Doragon/tktk_Other_4L.png", 8, 2, 4, 375, 384, biting_effects);
 
@@ -141,7 +140,10 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	//アニメーション
 	if (++animation_time % 10 == 0)
 	{
-		++animation;
+		if (state == ENEMY_STATE::ATTACK)
+		{
+			++animation;
+		}
 	}
 
 	if (animation > 1)
@@ -217,27 +219,29 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 
 	}
 
-	//画面内座標
-	Location s_location = { location.x - CameraWork::GetCamera().x,location.y - CameraWork::GetCamera().y };
-
-	//画面外(横)に出たかの判定
-	bool is_out_screen = s_location.x - area.width / 2 < 0 || SCREEN_WIDTH < s_location.x + area.width / 2;
-
-	if (is_out_screen == true)
+	if (state != ENEMY_STATE::FALL)
 	{
-		location = old_location;
-		left_move = !left_move;
-		wall_hit = true;
+		//画面内座標
+		Location s_location = { location.x - CameraWork::GetCamera().x,location.y - CameraWork::GetCamera().y };
 
-		//state = ENEMY_STATE::MOVE;
+		//画面外(横)に出たかの判定
+		bool is_out_screen = s_location.x - area.width / 2 < 0 || SCREEN_WIDTH < s_location.x + area.width / 2;
+
+		if (is_out_screen == true)
+		{
+			location = old_location;
+			left_move = !left_move;
+			wall_hit = true;
+
+			//state = ENEMY_STATE::MOVE;
+		}
+
+		//画面上部から出たら元の位置に戻す
+		if (s_location.y - area.height / 2 < 0)
+		{
+			location = old_location;
+		}
 	}
-
-	//画面上部から出たら元の位置に戻す
-	if (s_location.y - area.height / 2 < 0)
-	{
-		location = old_location;
-	}
-
 
 	//毒のダメージ
 	if (poison == true)
@@ -261,33 +265,33 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 //-----------------------------------
 void Dragon::Draw() const
 {
-
-	if (state != ENEMY_STATE::DEATH)
-	{
-		DrawHPBar(HIT_POINTS);
-	}
-
-	DrawWeaknessIcon();
-
 	//スクロールに合わせて描画
 	Location draw_location = location;
 	Location camera = CameraWork::GetCamera();
 	draw_location = draw_location - camera;
+
+	//画面内に映ってからHPを描画する
+	if (state != ENEMY_STATE::DEATH && 0 < draw_location.y - area.height / 2)
+	{
+		DrawHPBar(HIT_POINTS);
+		DrawWeaknessIcon();
+	}
+
 	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
 	switch (state)
 	{
 	case ENEMY_STATE::MOVE:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, images[num][0], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7,
+			M_PI / 180, images[num][animation], TRUE, !left_move);
 		break;
 	case ENEMY_STATE::ATTACK:
 	
 		switch (attack_method)
 		{
 		case 0:
-			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, images[num][0], TRUE, !left_move);
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7f,
+				M_PI / 180, images[num][animation], TRUE, !left_move);
 			if (left_move)
 			{
 				DrawRotaGraphF(draw_location.x-200, draw_location.y, 2,
@@ -301,17 +305,17 @@ void Dragon::Draw() const
 			break;
 		case 1:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, images[num][animation], TRUE, !left_move);
+				M_PI / 180, images[1][animation], TRUE, !left_move);
 			break;
 		case 2:
-			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7f,
 				M_PI / 180, images[num][0], TRUE, !left_move);
 			break;
 		}
 
 		break;
 	default:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7f,
 			M_PI / 180, images[num][0], TRUE, !left_move);
 		break;
 	}
@@ -484,15 +488,15 @@ void Dragon::RoarMove(const Location player_location)
 		{
 		case 0:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x, 300));
+			(new DragonThunder(player_location.x, 430));
 			break;
 		case 1:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x-200, 300));
+			(new DragonThunder(player_location.x-200, 430));
 			break;
 		case 2:
 			BulletManager::GetInstance()->CreateEnemyBullet
-			(new DragonThunder(player_location.x+200,300));
+			(new DragonThunder(player_location.x+200,430));
 			break;
 		default:
 			break;

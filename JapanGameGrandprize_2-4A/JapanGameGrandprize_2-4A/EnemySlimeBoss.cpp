@@ -281,12 +281,14 @@ void EnemySlimeBoss::Draw()const
 
 	int num = static_cast<int>(kind) - static_cast<int>(ENEMY_KIND::SLIME);
 
-	if (state != ENEMY_STATE::DEATH)
+	//‰æ–Ê“à‚É‰f‚Á‚Ä‚©‚çHP‚ð•`‰æ‚·‚é
+	if (state != ENEMY_STATE::DEATH && -MAP_CHIP_SIZE < draw_location.y - area.height / 2)
 	{
 		DrawHPBar(BOSS_SLIME_HP);
+		DrawDamageLog();
+		DrawWeaknessIcon();
 	}
-	DrawDamageLog();
-	DrawWeaknessIcon();
+	
 
 	//DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
 	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, images[num][0], true, !left_move);
