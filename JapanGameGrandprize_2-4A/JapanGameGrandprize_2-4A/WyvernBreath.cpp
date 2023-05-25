@@ -1,4 +1,4 @@
-#include "WyvernBless.h"
+#include "WyvernBreath.h"
 #include "DxLib.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -10,7 +10,8 @@
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
-WyvernBless::WyvernBless(const Location spawn_location, const Location player_location)
+WyvernBreath
+::WyvernBreath(const Location spawn_location, const Location player_location)
 {
 
 	location = spawn_location;
@@ -23,7 +24,7 @@ WyvernBless::WyvernBless(const Location spawn_location, const Location player_lo
 	x_speed = static_cast<int>(speed * cosf(direction));
 	y_speed = static_cast<int>(speed * sinf(direction));
 
-	LoadDivGraph("images/enemy/wyvern_bless.png", 9, 3, 3, 1200, 1200, images);
+	LoadDivGraph("images/enemy/wyvern_breath.png", 9, 3, 3, 1200, 1200, images);
 	images_index = 0;
 	frame_count = 0;
 
@@ -32,7 +33,7 @@ WyvernBless::WyvernBless(const Location spawn_location, const Location player_lo
 //-----------------------------------
 //デストラクタ
 //-----------------------------------
-WyvernBless::~WyvernBless()
+WyvernBreath::~WyvernBreath()
 {
 
 }
@@ -40,7 +41,7 @@ WyvernBless::~WyvernBless()
 //-----------------------------------
 //更新
 //-----------------------------------
-void WyvernBless::Update()
+void WyvernBreath::Update()
 {
 
 	location.x += x_speed;
@@ -60,7 +61,7 @@ void WyvernBless::Update()
 //-----------------------------------
 //描画
 //-----------------------------------
-void WyvernBless::Draw() const
+void WyvernBreath::Draw() const
 {
 
 	Location draw_location = location; //描画座標
@@ -68,7 +69,7 @@ void WyvernBless::Draw() const
 
 	draw_location = draw_location - camera;
 
-	DrawRotaGraphF(draw_location.x, draw_location.y, WYVERN_BLESS_EXTEND_RATE, 
+	DrawRotaGraphF(draw_location.x, draw_location.y, WYVERN_BREATH_EXTEND_RATE, 
 		direction - M_PI_2, images[images_index], TRUE);
 	
 	

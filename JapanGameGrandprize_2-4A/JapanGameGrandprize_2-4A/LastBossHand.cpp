@@ -64,6 +64,7 @@ LastBossHand::LastBossHand()
 	spawn_location.y = 0;
 
 	location = spawn_location;
+
 	punch_start = location;
 
 	area.height = HAND_HEIGHT;
@@ -132,6 +133,9 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 {
 	this->spawn_location = spawn_location;
 	location = spawn_location;
+	//ステージ開始時は画面外上部にいる
+	location.y -= MAP_CHIP_SIZE * 15;
+
 	punch_start = location;
 
 	area.height = HAND_HEIGHT;
@@ -167,7 +171,7 @@ LastBossHand::LastBossHand(const Location spawn_location, const bool left_hand)
 	paralysis_time = 0;
 
 	kind = ENEMY_KIND::LAST_BOSS;
-	state = ENEMY_STATE::MOVE;
+	state = ENEMY_STATE::IDOL;
 
 	move = HAND_MOVE::UP_DOWN;
 
@@ -220,37 +224,41 @@ LastBossHand::~LastBossHand()
 //-----------------------------------
 void LastBossHand::Update(const Player* player, const Stage* stage)
 {
-	switch (state)
-	{
-	case ENEMY_STATE::IDOL:
-		Idol();
-		break;
-	case ENEMY_STATE::MOVE:
-		Move(player->GetLocation());
-		Animation();
+		switch (state)
+		{
+		case ENEMY_STATE::IDOL:
+			//ステージ開始時
+			Idol();
+			break;
+		case ENEMY_STATE::MOVE:
+			Move(player->GetLocation());
+			Animation();
 
-		break;
-	case ENEMY_STATE::FALL:
-		Fall();
-		break;
-	case ENEMY_STATE::ATTACK:
-		Attack(player->GetLocation());
-		break;
-	case ENEMY_STATE::DEATH:
-		Death();
-		break;
-	default:
-		break;
-	}
-	old_stage_hit = hit_block.hit;
+			break;
+		case ENEMY_STATE::FALL:
+			Fall();
+			break;
+		case ENEMY_STATE::ATTACK:
+			Attack(player->GetLocation());
+			break;
+		case ENEMY_STATE::DEATH:
+			Death();
+			break;
+		default:
+			break;
+		}
+		old_stage_hit = hit_block.hit;
 
-	hit_block = HitStage(stage);
+		hit_block = HitStage(stage);
 
-	attack_interval--;
+		if (state != ENEMY_STATE::IDOL)
+		{
+			attack_interval--;
+		}
 
-	if (CheckHp() && state != ENEMY_STATE::DEATH)
-	{
-		state = ENEMY_STATE::DEATH;
+		if (CheckHp() && state != ENEMY_STATE::DEATH)
+		{
+			state = ENEMY_STATE::DEATH;
 
 		location.x = -100;
 		location.y = -100;
@@ -259,7 +267,7 @@ void LastBossHand::Update(const Player* player, const Stage* stage)
 		ItemController::GetInstance()->SpawnItem(this);
 	}
 
-	UpdateDamageLog();
+		UpdateDamageLog();
 }
 
 //-----------------------------------
@@ -267,7 +275,18 @@ void LastBossHand::Update(const Player* player, const Stage* stage)
 //-----------------------------------
 void LastBossHand::Idol()
 {
+	//ステージ開始時、上から降りてくる
+	if (location.y < spawn_location.y)
+	{
+		location.y += 2;
+		if (spawn_location.y <= location.y)
+		{
+			location.y = spawn_location.y;
+			state = ENEMY_STATE::MOVE;
+		}
+	}
 
+	Animation();
 }
 
 //-----------------------------------
@@ -645,7 +664,11 @@ void LastBossHand::Draw() const
 			DrawRotaGraphF(draw_location.x, draw_location.y,
 				0.1, M_PI / 180 * (angle / 45), magic_circle_image, TRUE);
 		}
-		DrawHPBar(HAND_HP);
+
+		if (state != ENEMY_STATE::IDOL)
+		{//画面内に映って初めてHPを描画する
+			DrawHPBar(HAND_HP);
+		}
 
 		DrawDamageLog();
 		DrawWeaknessIcon();
