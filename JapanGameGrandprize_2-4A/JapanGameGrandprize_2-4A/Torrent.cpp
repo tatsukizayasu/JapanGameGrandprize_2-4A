@@ -59,6 +59,12 @@
 //アニメーション
 #define TORRENT_ANIMATION 5
 
+
+int Torrent::torrent_falling_nut_se = 0;   //木の実落ちる音
+int Torrent::torrent_tackle_se = 0;        //タックル
+int Torrent::torrent_leaves_cutter = 0;    //葉っぱ飛ばし
+
+
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -646,6 +652,20 @@ void Torrent::Animation()
 	{
 		image_argument++;
 	}
+}
+
+
+//----------------------------------------
+// SE読み込み
+//----------------------------------------
+void Torrent::LoadSounds()
+{
+	SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
+	torrent_falling_nut_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack4.wav", 8);
+	SetCreateSoundDataType(DX_SOUNDDATATYPE_FILE);
+
+	torrent_tackle_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack2.wav");
+	torrent_leaves_cutter = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack3.wav");
 }
 
 

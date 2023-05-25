@@ -1,6 +1,7 @@
 #include "BulletManager.h"
 #include "Stage/Stage.h"
 #include "CameraWork.h"
+int BulletManager::torrent_break_nut_se = 0;
 
 BulletManager* BulletManager::instance = nullptr;
 
@@ -22,6 +23,9 @@ BulletManager::BulletManager()
     enemy_nuts_count = 0;
     enemy_bullet_max = 0;
     enemy_nuts_max = 0;
+
+    torrent_break_nut_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack.wav", 8);
+
 }
 
 //-----------------------------------
@@ -136,6 +140,7 @@ void BulletManager::CreateEnemyBullet(class EnemyBulletBase* bullet)
                     enemy_bullets[i] = nullptr;
                 }
             }
+            PlaySoundMem(torrent_break_nut_se,DX_PLAYTYPE_BACK);
             delete[] temporary_bullets;
         }
     }
@@ -231,6 +236,10 @@ void BulletManager::CreateEnemyNuts(class EnemyBulletBase* nuts)
                     enemy_nuts[i] = nullptr;
                 }
             }
+            /// <summary>
+            /// ///////////////////////////////
+            /// </summary>
+            /// <param name="nuts"></param>
             delete[] temporary_nuts;
         }
     }
