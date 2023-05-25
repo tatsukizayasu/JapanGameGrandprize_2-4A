@@ -9,7 +9,7 @@ NomalEnemySE EnemySE::mage_se = { 0,0 }; //メイジSE
 NomalEnemySE EnemySE::ghost_se = { 0,0 }; //ゴーストSE
 NomalEnemySE EnemySE::wyvern_se = { 0,0 }; //ワイバーンSE
 LastBossSE EnemySE::last_boss_se = {};
-
+LastBossBarrierSE EnemySE::last_boss_barrier_se = {};
 int EnemySE::down_se = 0;		//ダウン時SE
 int EnemySE::explosion_se = 0;	//explosion被弾SE
 int EnemySE::melt_se = 0;		//melt被弾SE
@@ -31,6 +31,10 @@ void EnemySE::LoadSound()
 	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbreath.wav");
 	last_boss_se.punch = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/LastBossPunch.wav");
 
+	last_boss_barrier_se.appearance = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/shield_appearance.wav");
+	last_boss_barrier_se.breaked = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/shield_break.wav");
+	last_boss_barrier_se.hit = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/shield_get_damage.wav");
+
 	SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
 	explosion_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/explosion.wav",8);
 	melt_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/melt.wav",8);
@@ -48,6 +52,10 @@ void EnemySE::DeleteSound()
 	DeleteSoundMem(undead_se.attack);
 	DeleteSoundMem(wyvern_se.attack);
 	DeleteSoundMem(last_boss_se.punch);
+	DeleteSoundMem(last_boss_barrier_se.appearance);
+	DeleteSoundMem(last_boss_barrier_se.breaked);
+	DeleteSoundMem(last_boss_barrier_se.hit);
+
 }
 
 //-----------------------------------
@@ -59,6 +67,7 @@ void EnemySE::ChangeSoundVolume(const float volume)
 	ChangeVolumeSoundMem(255 * (volume / 100), undead_se.attack);
 	ChangeVolumeSoundMem(255 * (volume / 100), wyvern_se.attack);
 
+	ChangeVolumeSoundMem(255, last_boss_barrier_se.breaked);
 }
 
 //-----------------------------------
@@ -144,4 +153,9 @@ int EnemySE::GetBulletSE(const ATTRIBUTE attribute)
 LastBossSE EnemySE::GetLastBossSE()
 {
 	return last_boss_se;
+}
+
+LastBossBarrierSE EnemySE::GetBarrierSE() 
+{
+	return last_boss_barrier_se;
 }
