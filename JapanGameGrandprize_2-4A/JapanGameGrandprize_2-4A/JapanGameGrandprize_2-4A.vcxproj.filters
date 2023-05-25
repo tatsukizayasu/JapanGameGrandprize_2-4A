@@ -245,6 +245,7 @@
 
     <ClCompile Include="DeleteEffect.cpp">
       <Filter>ソースファイル</Filter>
+    </ClCompile>
     <ClCompile Include="WyvernBreath.cpp">
       <Filter>ソースファイル\Enemy\EnmeyBullet</Filter>
     </ClCompile>
@@ -502,10 +503,10 @@
 
     <ClInclude Include="DeleteEffect.h">
       <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
 
     <ClInclude Include="WyvernBreath.h">
       <Filter>ヘッダーファイル\Enemy\EnemyBullet</Filter>
-
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
