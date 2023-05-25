@@ -78,7 +78,7 @@ Torrent::Torrent(Location spawn_location)
 	animation = 0;
 	image_argument = 0;
 	attack_time = 20;
-	state = ENEMY_STATE::ATTACK;
+	state = ENEMY_STATE::MOVE;
 	attack_state = TORRENT_ATTACK::NONE;
 
 	/*ìñÇΩÇËîªíËÇÃê›íË*/
@@ -148,7 +148,7 @@ void Torrent::Update(const Player* player, const Stage* stage)
 	{
 		state = ENEMY_STATE::MOVE;
 	}
-	else
+	else if (state != ENEMY_STATE::DEATH)
 	{
 		state = ENEMY_STATE::ATTACK;
 	}
