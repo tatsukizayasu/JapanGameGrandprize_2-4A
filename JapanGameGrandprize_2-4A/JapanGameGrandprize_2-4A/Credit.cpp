@@ -2,7 +2,7 @@
 #include"DxLib.h"
 
 //表示する時間
-#define DISPLAY 60
+#define DISPLAY 240
 
 //-----------------------------------
 // コンストラクタ
@@ -28,7 +28,7 @@ Credit::~Credit()
 //-----------------------------------
 AbstractScene* Credit::Update()
 {
-	if (++time % 120 == 0)
+	if (++time % DISPLAY == 0)
 	{
 		if (++display_time > DISPLAY == 0)
 		{
@@ -43,11 +43,19 @@ AbstractScene* Credit::Update()
 //-----------------------------------
 void Credit::Draw()const
 {
-	DrawString(100,100,"使用したSE、BGM\n",cr);
-	DrawString(100,150,"無料効果音で遊ぼう！\n",cr);
-	DrawString(100,200,"DOVA-SYNDROME\n",cr);
-	DrawString(100,250,"フリー効果音素材 くらげ工匠\n",cr);
-	DrawString(100,300,"TAM Music Factory\n",cr);
-	DrawString(100,350,"効果音ラボ\n",cr);
+	SetFontSize(64);                             //サイズを64に変更
+	SetFontThickness(8);                         //太さを8に変更
+	ChangeFont("ＭＳ 明朝");                     //種類をMS明朝に変更
+	ChangeFontType(DX_FONTTYPE_ANTIALIASING);     //アンチエイリアスフォントに変更
+
+	DrawString(400,100,"使用したSE  BGM\n",cr);
+
+	SetFontSize(34);                             //サイズを35に変更
+
+	DrawString(400,200,"無料効果音で遊ぼう！\n",cr);
+	DrawString(400,250,"DOVA-SYNDROME\n",cr);
+	DrawString(400,300,"フリー効果音素材 くらげ工匠\n",cr);
+	DrawString(400,350,"TAM Music Factory\n",cr);
+	DrawString(400,400,"効果音ラボ\n",cr);
 	
 }

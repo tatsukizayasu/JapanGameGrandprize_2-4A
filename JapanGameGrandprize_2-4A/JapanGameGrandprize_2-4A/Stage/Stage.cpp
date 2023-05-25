@@ -28,7 +28,7 @@ Stage::Stage(short stage_num)
 	this->camera_work = camera_work;
 
 	//”wŒi‰æ‘œ–‡”
-	int image_num = 3;
+	int image_num = 1;
 
 	switch (this->stage_num)
 	{
@@ -39,6 +39,10 @@ Stage::Stage(short stage_num)
 
 	case 2: 
 		image_num = 4;
+		break;
+
+	case 3:
+		image_num = 3;
 		break;
 
 	default:
@@ -373,17 +377,26 @@ void Stage::DrawStageBackground() const
 
 		break;
 	case 3:
-		SetDrawBright(100, 100, 100);
+		/*SetDrawBright(100, 100, 100);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2), 0, background_image[0], TRUE);
 		DrawTurnGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH * 2) + SCREEN_WIDTH * 2, 0, background_image[0], TRUE);
-		SetDrawBright(200, 200, 200);
+		SetDrawBright(200, 200, 200);*/
+
+		DrawGraphF(-fmodf(background_location.x * 0.6, SCREEN_WIDTH), 0, background_image[2], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.6, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[2], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 
 		break;
 
 	case 4:
-		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[1], TRUE);
-		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[1], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH), 0, background_image[0], TRUE);
+		DrawGraphF(-fmodf(background_location.x * 0.8, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);
 
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH), 0, background_image[0], TRUE);
 		DrawGraphF(-fmodf(background_location.x, SCREEN_WIDTH) + SCREEN_WIDTH, 0, background_image[0], TRUE);

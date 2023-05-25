@@ -29,7 +29,7 @@ bool GameMain::is_help_mode = false;
 //-----------------------------------
 GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT], Pouch* pouch)
 {
-	this->stage_num = stage_num;
+	this->stage_num = 4;
 
 #undef DOT_BY_DOT
 
@@ -84,7 +84,7 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 	camera_work = new CameraWork(0, 0, player, stage, this->stage_num);
 
 	stage->SetCameraWork(camera_work);
-	item_controller = new ItemController();
+	item_controller = ItemController::GetInstance();
 
 	bullet_manager = BulletManager::GetInstance();
 
@@ -530,10 +530,10 @@ void GameMain::EnemyUpdate()
 
 				if (player_bullet[j]->HitSphere(enemy_nuts[i]))
 				{
+					player_bullet[j]->SetDeleteFlag(enemy_nuts[i]->GetLocation());
+
 					bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
 					i--;
-
-					player_bullet[j]->SetDeleteFlag(enemy_nuts[i]->GetLocation());
 
 					if (i < 0)
 					{
