@@ -2,19 +2,19 @@
 #include "DxLib.h"
 
 
-NomalEnemySE EnemySE::slime_se = { 0,0 };  //ƒXƒ‰ƒCƒ€SE
-NomalEnemySE EnemySE::undead_se = { 0,0 }; //ƒAƒ“ƒfƒbƒgSE
-NomalEnemySE EnemySE::harpy_se = { 0,0 }; //ƒn[ƒsƒBSE
-NomalEnemySE EnemySE::mage_se = { 0,0 }; //ƒƒCƒWSE
-NomalEnemySE EnemySE::ghost_se = { 0,0 }; //ƒS[ƒXƒgSE
-NomalEnemySE EnemySE::wyvern_se = { 0,0 }; //ƒƒCƒo[ƒ“SE
+NomalEnemySE EnemySE::slime_se = { 0,0 };  //ã‚¹ãƒ©ã‚¤ãƒ SE
+NomalEnemySE EnemySE::undead_se = { 0,0 }; //ã‚¢ãƒ³ãƒ‡ãƒƒãƒˆSE
+NomalEnemySE EnemySE::harpy_se = { 0,0 }; //ãƒãƒ¼ãƒ”ã‚£SE
+NomalEnemySE EnemySE::mage_se = { 0,0 }; //ãƒ¡ã‚¤ã‚¸SE
+NomalEnemySE EnemySE::ghost_se = { 0,0 }; //ã‚´ãƒ¼ã‚¹ãƒˆSE
+NomalEnemySE EnemySE::wyvern_se = { 0,0 }; //ãƒ¯ã‚¤ãƒãƒ¼ãƒ³SE
 LastBossSE EnemySE::last_boss_se = {};
 LastBossBarrierSE EnemySE::last_boss_barrier_se = {};
-int EnemySE::down_se = 0;		//ƒ_ƒEƒ“SE
-int EnemySE::explosion_se = 0;	//explosion”í’eSE
-int EnemySE::melt_se = 0;		//melt”í’eSE
-int EnemySE::poison_se = 0;		//poison”í’eSE
-int EnemySE::paralyze_se = 0;	//paralyze”í’eSE
+int EnemySE::down_se = 0;		//ãƒ€ã‚¦ãƒ³æ™‚SE
+int EnemySE::explosion_se = 0;	//explosionè¢«å¼¾SE
+int EnemySE::melt_se = 0;		//meltè¢«å¼¾SE
+int EnemySE::poison_se = 0;		//poisonè¢«å¼¾SE
+int EnemySE::paralyze_se = 0;	//paralyzeè¢«å¼¾SE
 
 EnemySE::~EnemySE()
 {
@@ -22,7 +22,7 @@ EnemySE::~EnemySE()
 }
 
 //-----------------------------------
-//ƒTƒEƒ“ƒh‚Ì“Ç‚İ‚İ
+//ã‚µã‚¦ãƒ³ãƒ‰ã®èª­ã¿è¾¼ã¿
 //-----------------------------------
 void EnemySE::LoadSound()
 {
@@ -30,6 +30,8 @@ void EnemySE::LoadSound()
 	undead_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/undeadattack.wav");
 	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbreath.wav");
 	last_boss_se.punch = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/LastBossPunch.wav");
+	last_boss_se.special_attack[0] = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/SpecialAttackCharge.wav");
+	last_boss_se.special_attack[1] = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/specialattack.wav");
 
 	last_boss_barrier_se.appearance = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/shield_appearance.wav");
 	last_boss_barrier_se.breaked = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/shield_break.wav");
@@ -44,7 +46,7 @@ void EnemySE::LoadSound()
 }
 
 //-----------------------------------
-//ƒTƒEƒ“ƒh‚Ìíœ
+//ã‚µã‚¦ãƒ³ãƒ‰ã®å‰Šé™¤
 //-----------------------------------
 void EnemySE::DeleteSound()
 {
@@ -52,14 +54,22 @@ void EnemySE::DeleteSound()
 	DeleteSoundMem(undead_se.attack);
 	DeleteSoundMem(wyvern_se.attack);
 	DeleteSoundMem(last_boss_se.punch);
+
 	DeleteSoundMem(last_boss_barrier_se.appearance);
 	DeleteSoundMem(last_boss_barrier_se.breaked);
 	DeleteSoundMem(last_boss_barrier_se.hit);
 
+
+	for (int i = 0; i < 2; i++)
+	{
+		DeleteSoundMem(last_boss_se.special_attack[i]);
+
+	}
+
 }
 
 //-----------------------------------
-//‰¹—Ê‚Ìİ’è
+//éŸ³é‡ã®è¨­å®š
 //-----------------------------------
 void EnemySE::ChangeSoundVolume(const float volume)
 {
@@ -71,7 +81,7 @@ void EnemySE::ChangeSoundVolume(const float volume)
 }
 
 //-----------------------------------
-//’ÊíƒGƒlƒ~[‚ÌSE‚Ìæ“¾
+//é€šå¸¸ã‚¨ãƒãƒŸãƒ¼ã®SEã®å–å¾—
 //-----------------------------------
 NomalEnemySE EnemySE::GetEnemySE(const ENEMY_KIND kind)
 {
@@ -108,7 +118,7 @@ NomalEnemySE EnemySE::GetEnemySE(const ENEMY_KIND kind)
 }
 
 //-----------------------------------------------
-// ”í’e‚ÌSE‚Ìæ“¾
+// è¢«å¼¾æ™‚ã®SEã®å–å¾—
 //-----------------------------------------------
 int EnemySE::GetBulletSE(const ATTRIBUTE attribute)
 {
@@ -149,7 +159,7 @@ int EnemySE::GetBulletSE(const ATTRIBUTE attribute)
 	return return_se;
 }
 
-//ƒ‰ƒXƒ{ƒX‚ÌSE‚Ìæ“¾
+//ãƒ©ã‚¹ãƒœã‚¹ã®SEã®å–å¾—
 LastBossSE EnemySE::GetLastBossSE()
 {
 	return last_boss_se;
