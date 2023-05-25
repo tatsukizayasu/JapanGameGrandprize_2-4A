@@ -1103,6 +1103,7 @@ void Player::Fly()
 //”ò‚ñ‚Å‚È‚¢
 void Player::NotFly()
 {
+	StopSoundMem(flysound);
 	float y = location.y - CameraWork::GetCamera().y;
 
 	player_state = PLAYER_STATE::DOWN;
