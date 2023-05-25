@@ -197,8 +197,8 @@ bool EnemyBase::ScreenOut()
 
 	if ((scroll.x < (-(SCREEN_WIDTH + area.width) * 2)) ||
 		(((SCREEN_WIDTH + area.width) * 2) < scroll.x) ||
-		(scroll.y < -(SCREEN_HEIGHT + area.height)) ||
-		((SCREEN_HEIGHT + area.height) < scroll.y))
+		(scroll.y < -(SCREEN_HEIGHT + area.height) * 2) ||
+		(((SCREEN_HEIGHT + area.height) * 2) < scroll.y))
 	{
 		ret = true;
 	}

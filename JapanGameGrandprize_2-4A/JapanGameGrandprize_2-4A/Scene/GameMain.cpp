@@ -29,7 +29,7 @@ bool GameMain::is_help_mode = false;
 //-----------------------------------
 GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT], Pouch* pouch)
 {
-	this->stage_num = stage_num;
+	this->stage_num = 4;
 
 #undef DOT_BY_DOT
 

@@ -5,6 +5,7 @@
 #include <math.h>
 #include "CameraWork.h"
 #include "ItemController.h"
+#include "EnemySE.h"
 
 #define HAND_IMAGES
 
@@ -491,6 +492,7 @@ void LastBossHand::Punch()
 
 		if (!old_stage_hit && hit_block.hit)
 		{
+			PlaySoundMem(EnemySE::GetLastBossSE().punch, DX_PLAYTYPE_BACK);
 			speed = -(PUNCH_SPEED / 3);
 			attack = false;
 			standby_time = PUNCH_END_STANDBY_TIME;
