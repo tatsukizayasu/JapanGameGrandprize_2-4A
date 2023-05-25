@@ -113,10 +113,9 @@ Dragon::Dragon(Location spawn_location)
 
 	if (images[num].empty())
 	{
-		images[num].resize(4);
-		images[num][0] = LoadGraph("Images/Enemy/doragon.png"); //画像読込み
-		images[num][1] = LoadGraph("Images/Enemy/dragonwalk.png");
-		LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, &images[num][2]); //通常
+		images[num].resize(2);
+		LoadDivGraph("Images/Enemy/doragonwlak.png", 2, 2, 1, 500, 500, &images[num][0]);
+		LoadDivGraph("Images/Enemy/dragonfly.png", 2, 2, 1, 260, 260, &images[1][0]); //通常
 	}
 	LoadDivGraph("Images/Enemy/Doragon/tktk_Other_4L.png", 8, 2, 4, 375, 384, biting_effects);
 
@@ -141,7 +140,10 @@ void Dragon::Update(const class Player* player, const class Stage* stage)
 	//アニメーション
 	if (++animation_time % 10 == 0)
 	{
-		++animation;
+		if (state == ENEMY_STATE::ATTACK)
+		{
+			++animation;
+		}
 	}
 
 	if (animation > 1)
@@ -280,16 +282,16 @@ void Dragon::Draw() const
 	switch (state)
 	{
 	case ENEMY_STATE::MOVE:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-			M_PI / 180, images[num][0], TRUE, !left_move);
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7,
+			M_PI / 180, images[num][animation], TRUE, !left_move);
 		break;
 	case ENEMY_STATE::ATTACK:
 	
 		switch (attack_method)
 		{
 		case 0:
-			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, images[num][0], TRUE, !left_move);
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7f,
+				M_PI / 180, images[num][animation], TRUE, !left_move);
 			if (left_move)
 			{
 				DrawRotaGraphF(draw_location.x-200, draw_location.y, 2,
@@ -303,17 +305,17 @@ void Dragon::Draw() const
 			break;
 		case 1:
 			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
-				M_PI / 180, images[num][animation], TRUE, !left_move);
+				M_PI / 180, images[1][animation], TRUE, !left_move);
 			break;
 		case 2:
-			DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+			DrawRotaGraphF(draw_location.x, draw_location.y, 0.7f,
 				M_PI / 180, images[num][0], TRUE, !left_move);
 			break;
 		}
 
 		break;
 	default:
-		DrawRotaGraphF(draw_location.x, draw_location.y, 1.4f,
+		DrawRotaGraphF(draw_location.x, draw_location.y, 0.7f,
 			M_PI / 180, images[num][0], TRUE, !left_move);
 		break;
 	}
