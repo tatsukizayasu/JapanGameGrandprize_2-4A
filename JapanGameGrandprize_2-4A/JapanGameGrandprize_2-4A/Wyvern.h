@@ -4,7 +4,7 @@
 
 enum class WYVERN_ATTACK
 {
-    BLESS,          //ブレス
+    BREATH,          //ブレス
     TRIPLE_BRACE,   //3連ブレス
     ASSAULT,        //強襲攻撃
     NONE
@@ -20,9 +20,9 @@ private:
     int animation; //アニメーション
     float attack_angle;         //攻撃時の角度
     int attack_interval;        //次の攻撃までの時間
-    int bless_wait_time;        //ブレスを打つまでの待機時間
-    int bless_interval;         //次のブレス攻撃までの時間
-    int triple_bless_interval;  //次の3連ブレス攻撃までの時間
+    int breath_wait_time;        //ブレスを打つまでの待機時間
+    int breath_interval;         //次のブレス攻撃までの時間
+    int triple_breath_interval;  //次の3連ブレス攻撃までの時間
     int assault_interval;       //次の強襲攻撃までの時間
     int assault_end_time;       //強襲攻撃が終わるまでの時間
     int move_wait_time;         //攻撃が終わって移動するまでの待機時間
@@ -42,10 +42,10 @@ private:
     void Animation();
 
     //ブレス
-    void Bless(const Location);
+    void Breath(const Location);
 
     //トリプルブレス
-    void TripleBless(const Location);
+    void TripleBreath(const Location);
 
     //強襲攻撃
     void Assault();

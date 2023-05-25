@@ -248,7 +248,7 @@
     <ClInclude Include="TorrentNuts.h" />
     <ClInclude Include="Undead.h" />
     <ClInclude Include="Wyvern.h" />
-    <ClInclude Include="WyvernBless.h" />
+    <ClInclude Include="WyvernBreath.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoxCollider.cpp" />
@@ -328,7 +328,7 @@
     <ClCompile Include="TorrentNuts.cpp" />
     <ClCompile Include="Undead.cpp" />
     <ClCompile Include="Wyvern.cpp" />
-    <ClCompile Include="WyvernBless.cpp" />
+    <ClCompile Include="WyvernBreath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\Resource.rc" />

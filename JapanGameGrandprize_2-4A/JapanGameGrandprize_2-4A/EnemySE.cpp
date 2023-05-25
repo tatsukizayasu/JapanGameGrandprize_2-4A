@@ -27,7 +27,7 @@ void EnemySE::LoadSound()
 {
 	slime_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/slimeattack.wav");
 	undead_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/undeadattack.wav");
-	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbless.wav");
+	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbreath.wav");
 
 	SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
 	explosion_se = LoadSoundMem("Sounds/SE/Stage/PlayerShot/explosion.wav",8);
