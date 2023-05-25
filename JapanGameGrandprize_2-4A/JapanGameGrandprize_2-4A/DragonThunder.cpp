@@ -56,10 +56,6 @@ void DragonThunder::Update()
 
 		if (tick % 2 == 0) {
 			frame++;
-			if (frame > 19) {
-				frame = 0;
-				tick = 0;
-			}
 		}
 
 	}
@@ -78,9 +74,6 @@ void DragonThunder::Update()
 
 }
 
-//-----------------------------------
-//•`‰æ‚Ì‚Ý
-//-----------------------------------
 void DragonThunder::Draw() const
 {
 
@@ -88,9 +81,11 @@ void DragonThunder::Draw() const
 	x = location.x - CameraWork::GetCamera().x;
 	y = location.y - CameraWork::GetCamera().y;
 
-	//DrawCircle(x, y, radius, 0xffffff, TRUE);
-	
-	
-	DrawRotaGraph(x, y, 0.5, 0, image[frame], TRUE, FALSE, FALSE);
+	//DrawCircle(0, 0, radius, 0xffffff, TRUE);
 
+
+	DrawRotaGraph(x, y, 0.5, 0, image[frame], TRUE, FALSE, FALSE);
 }
+
+
+

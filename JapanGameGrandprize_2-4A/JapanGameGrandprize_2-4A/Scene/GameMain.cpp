@@ -530,10 +530,10 @@ void GameMain::EnemyUpdate()
 
 				if (player_bullet[j]->HitSphere(enemy_nuts[i]))
 				{
+					player_bullet[j]->SetDeleteFlag(enemy_nuts[i]->GetLocation());
+
 					bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
 					i--;
-
-					player_bullet[j]->SetDeleteFlag(enemy_nuts[i]->GetLocation());
 
 					if (i < 0)
 					{
