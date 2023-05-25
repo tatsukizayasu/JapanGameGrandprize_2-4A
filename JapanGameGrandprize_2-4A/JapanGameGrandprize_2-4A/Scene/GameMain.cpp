@@ -417,12 +417,9 @@ void GameMain::EnemyUpdate()
 					LastBoss* last_boss;
 					last_boss = dynamic_cast<LastBoss*>(enemy[i]);
 
-					if (last_boss->CheckHitBulelt(player_bullet[j]))
+					if (last_boss->CheckHitBullet(player_bullet[j]))
 					{
-						delete player_bullet[j];
-						player_bullet[j] = nullptr;
-						player->SortBullet(j);
-						j--;
+						player_bullet[j]->SetDeleteFlag(last_boss->GetLocation());
 					}
 				}
 				else
@@ -430,10 +427,7 @@ void GameMain::EnemyUpdate()
 					if (enemy[i]->HitSphere(player_bullet[j]))
 					{
 						enemy[i]->HitBullet(player_bullet[j]);
-						delete player_bullet[j];
-						player_bullet[j] = nullptr;
-						player->SortBullet(j);
-						j--;
+						player_bullet[j]->SetDeleteFlag(enemy[i]->GetLocation());
 					}
 				}
 			}
@@ -539,10 +533,7 @@ void GameMain::EnemyUpdate()
 					bullet_manager->DeleteEnemyNuts(enemy_nuts[i]);
 					i--;
 
-					delete player_bullet[j];
-					player_bullet[j] = nullptr;
-					player->SortBullet(j);
-					j--;
+					player_bullet[j]->SetDeleteFlag(enemy_nuts[i]->GetLocation());
 
 					if (i < 0)
 					{

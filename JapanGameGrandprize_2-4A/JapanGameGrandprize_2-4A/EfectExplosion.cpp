@@ -5,7 +5,7 @@
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-EfectExplosion::EfectExplosion()
+EffectExplosion::EffectExplosion()
 {
 
 	location.x = 0.0;
@@ -21,7 +21,7 @@ EfectExplosion::EfectExplosion()
 //-----------------------------------
 // コンストラクタ
 //-----------------------------------
-EfectExplosion::EfectExplosion(float b_x, float b_y)
+EffectExplosion::EffectExplosion(float b_x, float b_y)
 {
 
 	location.x = b_x;
@@ -40,7 +40,7 @@ EfectExplosion::EfectExplosion(float b_x, float b_y)
 //-----------------------------------
 // 描画
 //-----------------------------------
-void EfectExplosion::Draw() const
+void EffectExplosion::Draw() const
 {
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, trance);
@@ -51,7 +51,7 @@ void EfectExplosion::Draw() const
 //-----------------------------------
 // 更新
 //-----------------------------------
-void EfectExplosion::Update()
+void EffectExplosion::Update()
 {
 
 	if (trance > 0)

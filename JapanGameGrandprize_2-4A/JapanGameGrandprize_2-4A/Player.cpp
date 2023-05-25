@@ -756,7 +756,7 @@ void Player::Update()
 	{
 		if (bullet[i] != nullptr)
 		{
-			if (bullet[i]->GetEfectFlg())
+			if (bullet[i]->GetEfectFlg() || bullet[i]->GetDelete_flg())
 			{
 				delete bullet[i];
 				bullet[i] = nullptr;

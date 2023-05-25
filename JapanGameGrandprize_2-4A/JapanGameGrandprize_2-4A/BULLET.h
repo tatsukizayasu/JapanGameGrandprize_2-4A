@@ -30,13 +30,13 @@ protected:
 	float scrool_x;      //弾のスクロールの値(X)
 	float scrool_y;		 //弾のスクロールの値(Y)
 	bool delete_flg;     //弾の削除フラグ
-	bool efect_end;		 //エフェクトの終わりフラグ
+	bool effect_end;		 //エフェクトの終わりフラグ
 	bool player_direction;//プレイヤーの向き
 	ChemicalFormulaParameter* chemical_formula;//化合物
 
 	PLAYER_STATE player_state;
 	ATTRIBUTE attribute;
-	EfectExplosion* efect_explosion;
+	EffectExplosion* effect_explosion;
 public:
 
 	BulletBase();
@@ -54,4 +54,7 @@ public:
 	ATTRIBUTE GetAttribute() const;
 
 	virtual int GetDamageParSecond() const = 0 ;
+
+	virtual void SetDeleteFlag(const Location) = 0;
+	virtual bool GetDelete_flg()const = 0;								//trueをSetした後にエネミーはfalse待ちの状態にしてほしいです
 };

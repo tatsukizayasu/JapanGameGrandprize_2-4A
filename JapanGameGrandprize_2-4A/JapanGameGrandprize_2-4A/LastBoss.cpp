@@ -782,7 +782,7 @@ void LastBoss::HitBullet(const BulletBase* bullet)
 //-----------------------------------
 //プレイヤーの弾との当たり判定
 //-----------------------------------
-bool LastBoss::CheckHitBulelt(const BulletBase* bullet)
+bool LastBoss::CheckHitBullet(const BulletBase* bullet)
 {
 	bool ret = false; //戻り値
 
