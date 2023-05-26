@@ -35,17 +35,15 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 
 	char dis_stage_se[30];
 
-	if (this->stage_num != 4)
-	{
-		sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/Stage%d.wav", this->stage_num);
+	sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/Stage%d.wav", this->stage_num);
 
-		if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
-			background_music = LoadSoundMem("Sounds/BGM/Stage1.wav");
-			if (background_music == -1) {
-				throw dis_stage_se;
-			}
+	if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
+		background_music = LoadSoundMem("Sounds/BGM/Stage1.wav");
+		if (background_music == -1) {
+			throw dis_stage_se;
 		}
 	}
+	
 
 	if ((help_image[0] = LoadGraph("Images/Help/Normal_Help.png")) == -1)
 	{

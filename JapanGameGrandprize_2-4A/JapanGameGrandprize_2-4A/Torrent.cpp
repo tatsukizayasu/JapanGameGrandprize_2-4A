@@ -30,7 +30,7 @@
 #define TORRENT_DROP 20
 
 //—t‚Á‚Ï‚ğ”ò‚Î‚µ‚Ä‚¢‚éŠÔ
-#define LEAF_CUTTER_TIME 1200
+#define LEAF_CUTTER_TIME 420
 
 //Ÿ‚Ì—t‚Á‚Ï‚ğ”ò‚Î‚·UŒ‚‚ÉˆÚ‚éŠÔ
 #define LEAF_CUTTER_INTERVAL 300
@@ -333,12 +333,12 @@ void Torrent::LeafCutter(const Location player_location)
 				if (left_move) //¶‚ÉŒü‚¢‚Ä‚¢‚é
 				{
 					speed = -TORRENT_SPEED;
-					tackle_end_point = static_cast<int>(area.width / 2);
+					tackle_end_point += static_cast<int>(area.width / 2) + MAP_CHIP_SIZE;
 				}
 				else
 				{
 					speed = TORRENT_SPEED;
-					tackle_end_point = static_cast<int>(SCREEN_WIDTH - area.width / 2);
+					tackle_end_point += static_cast<int>(SCREEN_WIDTH - area.width / 2) - MAP_CHIP_SIZE;
 				}
 				break;
 			case TORRENT_ATTACK::DROP_NUTS:
