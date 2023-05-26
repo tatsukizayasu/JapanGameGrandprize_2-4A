@@ -107,4 +107,7 @@ public:
 	
 	//’eŠÛ‘ã“ü—p
 	void SetChemicalBullets(ChemicalFormulaParameter chemical_bullet);
+
+	//‰æ‘œA‰¹ºíœŠÖ”
+	void DeleteResource();
 };

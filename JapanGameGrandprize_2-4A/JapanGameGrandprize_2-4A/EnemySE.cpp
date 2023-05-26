@@ -77,6 +77,11 @@ void EnemySE::DeleteSound()
 
 	}
 
+	DeleteSoundMem(explosion_se);
+	DeleteSoundMem(melt_se);
+	DeleteSoundMem(poison_se);
+	DeleteSoundMem(paralyze_se);
+
 }
 
 //-----------------------------------

@@ -279,8 +279,10 @@ Player::~Player()
 	for (int i = 0; i < BULLET_MAX; i++)
 	{
 		delete bullet[i];
+		delete effect[i];
 	}
 	delete[] bullet;
+	delete[] effect;
 
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
 	{
@@ -309,6 +311,30 @@ Player::~Player()
 
 	StopSoundMem(heal_sound);
 	DeleteSoundMem(heal_sound);
+
+	//‰æ‘œíœ
+	for (int i = 0; i < PLAYER_IMAGES; i++)
+	{
+		DeleteGraph(image[i]);
+	}
+
+	for (int i = 0; i < JUMP_ANIMATION; i++)
+	{
+		DeleteGraph(jump_image[i]);
+	}
+
+	for (int i = 0; i < ATTRIBUTE_IMAGES; i++)
+	{
+		DeleteGraph(attribute_images[i]);
+	}
+
+	for (auto& image : effect_heal.image_array)
+	{
+		DeleteGraph(image);
+	}
+;
+	DeleteGraph(hp_image);
+	DeleteGraph(hp_image_top);
 }
 
 //-----------------------------------

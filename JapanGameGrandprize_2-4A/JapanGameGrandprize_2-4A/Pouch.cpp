@@ -191,6 +191,61 @@ Pouch::Pouch()
 	element_char[6] = 'U';
 }
 
+void Pouch::DeleteResource()
+{
+	//âÊëúçÌèú
+	for (auto& tab : second_tab_image)
+	{
+		DeleteGraph(tab);
+	}
+
+	DeleteGraph(elemental_count);
+	DeleteGraph(window_image);
+	DeleteGraph(window_image_two);
+	DeleteGraph(stick_image_l);
+	DeleteGraph(stick_image_r);
+	DeleteGraph(text_window_image_lit);
+	DeleteGraph(text_window_image_dark);
+	DeleteGraph(cursor_image);
+
+	for (int i = 0; i < ATTRIBUTE_IMAGES; i++)
+	{
+		DeleteGraph(attribute_images[i]);
+		DeleteGraph(attribute_text_images[i]);
+	}
+
+	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
+	{
+		DeleteGraph(chemical_formula_explosion[i].name_image);
+		DeleteGraph(chemical_formula_explosion[i].dark_name_image);
+		DeleteGraph(chemical_formula_explosion[i].ui_name_image);
+
+		DeleteGraph(chemical_formula_melt[i].name_image);
+		DeleteGraph(chemical_formula_melt[i].dark_name_image);
+		DeleteGraph(chemical_formula_melt[i].ui_name_image);
+
+		DeleteGraph(chemical_formula_poison[i].name_image);
+		DeleteGraph(chemical_formula_poison[i].dark_name_image);
+		DeleteGraph(chemical_formula_poison[i].ui_name_image);
+
+		DeleteGraph(chemical_formula_pararysis[i].name_image);
+		DeleteGraph(chemical_formula_pararysis[i].dark_name_image);
+		DeleteGraph(chemical_formula_pararysis[i].ui_name_image);
+	}
+	
+	for (int i = 0; i < HEAL_MAX_NUM; i++)
+	{
+		DeleteGraph(chemical_formula_heal[i].name_image);
+		DeleteGraph(chemical_formula_heal[i].dark_name_image);
+		DeleteGraph(chemical_formula_heal[i].ui_name_image);
+	}
+
+	//âπê∫çÌèú
+	DeleteSoundMem(craft);
+	DeleteSoundMem(cancel);
+	DeleteSoundMem(cursor_move);
+}
+
 Pouch::~Pouch()
 {
 

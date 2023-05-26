@@ -111,6 +111,11 @@ GameMain::~GameMain()
 	StopSoundMem(background_music);
 	DeleteSoundMem(background_music);
 
+	for (auto& image : help_image)
+	{
+		DeleteGraph(image);
+	}
+
 	delete camera_work;
 #ifdef _DEBUG
 
@@ -131,6 +136,8 @@ GameMain::~GameMain()
 
 	delete item_controller;
 	delete bullet_manager;
+
+	
 }
 
 //-----------------------------------
