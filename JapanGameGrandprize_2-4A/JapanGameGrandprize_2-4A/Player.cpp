@@ -705,10 +705,10 @@ void Player::Update()
 					{
 						if (heal != nullptr)
 						{
-							effect_heal.Tick = 0;
-							effect_heal.display_permit = TRUE;
 							if (hp < HP_MAX)
 							{
+								effect_heal.Tick = 0;
+								effect_heal.display_permit = TRUE;
 								PlaySoundMem(heal_sound, DX_PLAYTYPE_BACK);
 								Hp_Heal(heal->damage);
 							}
