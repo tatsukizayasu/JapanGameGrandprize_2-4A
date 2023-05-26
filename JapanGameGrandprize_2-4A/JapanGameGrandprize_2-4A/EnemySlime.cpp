@@ -325,7 +325,7 @@ void EnemySlime::Move(const Location player_location)
 	//プレイヤーとの距離の計算
 	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
 
-	if (distance < 120 &&
+	if (distance < 120 && (location.y - player_location.y <= 25) &&
 	  ((left_move && player_location.x <= location.x) ||
 	  (!left_move && player_location.x >= location.x)))
 	{
