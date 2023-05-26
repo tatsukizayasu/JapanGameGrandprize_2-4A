@@ -87,7 +87,7 @@ EnemySlimeBoss::~EnemySlimeBoss()
 
 	delete[] drop_element;
 
-
+	DeleteGraph(magic_circle_image);
 }
 
 void EnemySlimeBoss::MagicBullet(const Location player_location)

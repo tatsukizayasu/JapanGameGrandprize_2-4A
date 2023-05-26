@@ -129,6 +129,12 @@ Dragon::~Dragon()
 		delete drop_element[i];
 	}
 	delete[] drop_element;
+
+	for (auto& effect : biting_effects)
+	{
+		DeleteGraph(effect);
+	}
+	
 }
 
 void Dragon::Update(const class Player* player, const class Stage* stage)
