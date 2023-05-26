@@ -571,7 +571,10 @@ AttackResource Torrent::Hit()
 //-----------------------------------
 void Torrent::Death()
 {
-
+	StopSoundMem(EnemySE::GetTorrentSE().break_nut_se);
+	StopSoundMem(EnemySE::GetTorrentSE().falling_nut_se);
+	StopSoundMem(EnemySE::GetTorrentSE().leaves_cutter);
+	StopSoundMem(EnemySE::GetTorrentSE().tackle_se);
 	can_delete = true;
 }
 
