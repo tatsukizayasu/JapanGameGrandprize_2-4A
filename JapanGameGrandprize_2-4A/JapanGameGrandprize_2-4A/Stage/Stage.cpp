@@ -153,6 +153,21 @@ Stage::~Stage()
 		DeleteGraph(block_images[i]);
 	}
 
+	if (stage_num != 2)
+	{
+		for (auto& image1 : stage1_block_images)
+		{
+			DeleteGraph(image1);
+		}
+	}
+	else
+	{
+		for (auto& image2 : stage2_block_images)
+		{
+			DeleteGraph(image2);
+		}
+	}
+
 	//vector‚Ì‰ð•ú
 
 	// map_data“à‚ÌŠevector‚ð‰ð•ú
