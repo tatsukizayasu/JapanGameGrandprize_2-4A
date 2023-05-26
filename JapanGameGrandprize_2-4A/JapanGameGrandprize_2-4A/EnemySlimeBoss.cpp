@@ -464,12 +464,12 @@ void EnemySlimeBoss::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NORMAL;
+		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NORMAL;
+		damage = bullet->GetDamage() * 0;
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::PARALYSIS:
 		damage = bullet->GetDamage();
