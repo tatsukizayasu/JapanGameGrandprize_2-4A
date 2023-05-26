@@ -1,6 +1,7 @@
 #include "BulletManager.h"
 #include "Stage/Stage.h"
 #include "CameraWork.h"
+#include "WyvernBreath.h"
 
 BulletManager* BulletManager::instance = nullptr;
 
@@ -43,6 +44,8 @@ BulletManager::~BulletManager()
     delete[] enemy_nuts;
 
     instance = nullptr;
+
+    WyvernBreath::DeleteImages();
 }
 
 //-----------------------------------
