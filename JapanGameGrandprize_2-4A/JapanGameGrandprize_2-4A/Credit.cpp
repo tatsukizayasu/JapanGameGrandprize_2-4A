@@ -48,7 +48,7 @@ void Credit::Draw()const
 	ChangeFont("ＭＳ 明朝");                     //種類をMS明朝に変更
 	ChangeFontType(DX_FONTTYPE_ANTIALIASING);     //アンチエイリアスフォントに変更
 
-	DrawString(400,100,"使用したSE  BGM\n",cr);
+	DrawString(550,100,"CREDIT\n",cr);
 
 	SetFontSize(34);                             //サイズを35に変更
 
