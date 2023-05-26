@@ -57,6 +57,8 @@ void Credit::Draw()const
 	DrawString(400,300,"–³—¿Œø‰Ê‰¹‚Å—V‚Ú‚¤I\n",cr); 
 	DrawString(400,350,"TAM Music Factory\n",cr);
 	DrawString(400,400,"DOVA-SYNDROME\n",cr);
-	DrawString(400, 450,"Œø‰Ê‰¹ƒ‰ƒ{\n", cr); 
+	DrawString(400,450,"Œø‰Ê‰¹ƒ‰ƒ{\n", cr); 
+	DrawString(400,500, "BOOTH\n", cr);
+
 	
 }
