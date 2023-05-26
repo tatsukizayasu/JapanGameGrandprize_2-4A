@@ -241,9 +241,12 @@ void  Torrent::Attack(Location player_location)
 //-----------------------------------
 void Torrent::Tackle()
 {
-
 	if (attack_time < 0)
 	{
+		if(CheckSoundMem(EnemySE::GetTorrentSE().tackle_se)==0)
+		{
+			PlaySoundMem(EnemySE::GetTorrentSE().tackle_se, DX_PLAYTYPE_LOOP);
+		}
 		location.x += speed;
 
 		if (left_move)
@@ -265,6 +268,7 @@ void Torrent::Tackle()
 
 		if (tackle_end) //ƒ^ƒbƒNƒ‹I—¹
 		{
+			StopSoundMem(EnemySE::GetTorrentSE().tackle_se);
 			attack = false;
 			int next_attack;	//ŽŸ‚ÌUŒ‚
 			next_attack = GetRand(10) + 1;  //ŽŸ‚ÌUŒ‚‚ÌÝ’è
@@ -312,7 +316,10 @@ void Torrent::Tackle()
 //-----------------------------------
 void Torrent::LeafCutter(const Location player_location)
 {
-
+	if (CheckSoundMem(EnemySE::GetTorrentSE().leaves_cutter) == 0)
+	{
+		PlaySoundMem(EnemySE::GetTorrentSE().leaves_cutter, DX_PLAYTYPE_BACK);
+	}
 	attack_time--;
 	CreateLeaf(player_location);
 	if (attack_time < 0) //UŒ‚‚ÌI—¹
@@ -647,8 +654,6 @@ void Torrent::Animation()
 		image_argument++;
 	}
 }
-
-
 
 //-----------------------------------
 //•`‰æ
