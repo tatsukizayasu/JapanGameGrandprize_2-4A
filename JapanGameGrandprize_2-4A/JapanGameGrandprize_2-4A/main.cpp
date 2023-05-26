@@ -67,10 +67,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		sceneMng->Draw();
 
 		//強制終了
-		if (PAD_INPUT::OnButton(XINPUT_BUTTON_BACK))
+		/*if (PAD_INPUT::OnButton(XINPUT_BUTTON_BACK))
 		{
 			break;
-		}
+		}*/
 #ifdef _DEBUG
 		//レイアウト設計用
 		if (PAD_INPUT::OnPressed(XINPUT_BUTTON_X))

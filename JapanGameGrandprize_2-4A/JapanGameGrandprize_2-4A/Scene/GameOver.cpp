@@ -17,17 +17,17 @@ GameOver::GameOver(short stage_num, unsigned int old_element_volume[PLAYER_ELEME
 
 	background_image = LoadGraph("Images/Scene/game_over.png");
 
-	if ((background_music = LoadSoundMem("Sounds/BGM/Gameover.wav")) == -1) {
-		throw "Sounds/BGM/Gameover.wav";
+	if ((background_music = LoadSoundMem("Sounds/BGM/game_over.wav")) == -1) {
+		throw "Sounds/BGM/game_over.wav";
 	}
 
-	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {
-		throw "Sounds/SE/enter.mp3";
+	if ((enter_se = LoadSoundMem("Sounds/SE/enter.wav")) == -1) {
+		throw "Sounds/SE/enter.wav";
 	}
 
-	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.mp3")) == -1)
+	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.wav")) == -1)
 	{
-		throw "Sounds/SE/cursor_move.mp3";
+		throw "Sounds/SE/cursor_move.wav";
 	}
 
 	this->stage_num = stage_num;

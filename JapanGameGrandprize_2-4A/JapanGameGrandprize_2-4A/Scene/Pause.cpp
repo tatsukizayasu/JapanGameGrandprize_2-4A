@@ -12,13 +12,13 @@ Pause::Pause()
 	title_font = CreateFontToHandle("Algerian", 100, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 8);
 	menu_font = CreateFontToHandle("Algerian", 60, 1, DX_FONTTYPE_ANTIALIASING_EDGE_8X8, -1, 4);
 
-	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {
-		throw "Sounds/SE/enter.mp3";
+	if ((enter_se = LoadSoundMem("Sounds/SE/enter.wav")) == -1) {
+		throw "Sounds/SE/enter.wav";
 	}
 
-	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.mp3")) == -1)
+	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.wav")) == -1)
 	{
-		throw "Sounds/SE/cursor_move.mp3";
+		throw "Sounds/SE/cursor_move.wav";
 	}
 
 	pause_graph = 0;

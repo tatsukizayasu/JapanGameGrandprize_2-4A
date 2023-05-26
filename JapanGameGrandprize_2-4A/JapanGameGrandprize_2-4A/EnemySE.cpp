@@ -28,23 +28,23 @@ EnemySE::~EnemySE()
 //-----------------------------------
 void EnemySE::LoadSound()
 {
-	slime_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/slimeattack.wav");
-	undead_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/undeadattack.wav");
-	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvernbreath.wav");
-	last_boss_se.punch = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/LastBossPunch.wav");
-	last_boss_se.special_attack[0] = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/SpecialAttackCharge.wav");
-	last_boss_se.special_attack[1] = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/specialattack.wav");
+	slime_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/slime_attack.wav");
+	undead_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/undead_attack.wav");
+	wyvern_se.attack = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/wyvern_breath.wav");
+	last_boss_se.punch = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/lastboss_punch.wav");
+	last_boss_se.special_attack[0] = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/special_attack_charge.wav");
+	last_boss_se.special_attack[1] = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/special_attack.wav");
 
 	last_boss_barrier_se.appearance = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/shield_appearance.wav");
 	last_boss_barrier_se.breaked = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/shield_break.wav");
 	last_boss_barrier_se.hit = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/shield_get_damage.wav");
 
 	SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
-	torrent_se.break_nut_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack.wav", 8);
-	torrent_se.falling_nut_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack4.wav", 8);
+	torrent_se.break_nut_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/torrent_attack.wav", 8);
+	torrent_se.falling_nut_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/torrent_attack4.wav", 8);
 	SetCreateSoundDataType(DX_SOUNDDATATYPE_FILE);
-	torrent_se.tackle_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/Torrentataack2.wav");
-	torrent_se.leaves_cutter = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack3.wav");
+	torrent_se.tackle_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/torren_tataack2.wav");
+	torrent_se.leaves_cutter = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/torrent_attack3.wav");
 
 
 
