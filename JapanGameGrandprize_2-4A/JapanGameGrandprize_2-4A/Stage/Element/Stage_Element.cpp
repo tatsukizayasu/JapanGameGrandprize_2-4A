@@ -341,7 +341,7 @@ std::vector<int> Stage_Element::GetSounds(short type)
 		break;
 
 	case TRAP:
-		filename = "explosion.mp3";
+		filename = "explosion.wav";
 		break;
 
 	case BARRICADE_UP:
