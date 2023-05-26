@@ -21,7 +21,7 @@
 #include "GameOver.h"
 #include "GameClear.h"
 #include "Title.h"
-#include "END.h"
+#include "End.h"
 
 bool GameMain::is_help_mode = false;
 //-----------------------------------
@@ -212,7 +212,7 @@ AbstractScene* GameMain::Update()
 
 
 		// 最後のステージをクリアした場合
-		if (stage_num == 4) { return new END(); }
+		if (stage_num == 4) { return new End(); }
 		if (DelayAnimation(DELAY_ANIMATION_TYPE::FADE_IN, 180.0f) == true) {
 			return new GameClear(stage_num, element_volume, player->GetPouch());
 		}
