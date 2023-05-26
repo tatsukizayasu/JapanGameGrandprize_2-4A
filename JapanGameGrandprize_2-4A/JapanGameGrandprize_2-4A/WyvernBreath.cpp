@@ -4,6 +4,8 @@
 #include <math.h>
 #include "CameraWork.h"
 
+int* WyvernBreath::images = nullptr;
+
 #define WYVERN_BULLET_SPEED 7
 #define WYVERN_BULLET_DAMAGE 5
 
@@ -24,7 +26,7 @@ WyvernBreath
 	x_speed = static_cast<int>(speed * cosf(direction));
 	y_speed = static_cast<int>(speed * sinf(direction));
 
-	LoadDivGraph("images/enemy/wyvern_breath.png", 9, 3, 3, 1200, 1200, images);
+	
 	images_index = 0;
 	frame_count = 0;
 
@@ -35,7 +37,7 @@ WyvernBreath
 //-----------------------------------
 WyvernBreath::~WyvernBreath()
 {
-
+	
 }
 
 //-----------------------------------
@@ -73,4 +75,33 @@ void WyvernBreath::Draw() const
 		direction - M_PI_2, images[images_index], TRUE);
 	
 	
+}
+
+//-----------------------------------
+//âÊëúÇÃì«Ç›çûÇ›
+//-----------------------------------
+void WyvernBreath::LoadImages()
+{
+	if (images == nullptr)
+	{
+		images = new int[9];
+		LoadDivGraph("images/enemy/wyvern_breath.png", 9, 3, 3, 1200, 1200, images);
+	}
+}
+
+//-----------------------------------
+//âÊëúÇÃçÌèú
+//-----------------------------------
+void WyvernBreath::DeleteImages()
+{
+	if (images != nullptr)
+	{
+		for (int i = 0; i < 9; i++)
+		{
+			DeleteGraph(images[i]);
+		}
+		delete[] images;
+
+		images = nullptr;
+	}
 }

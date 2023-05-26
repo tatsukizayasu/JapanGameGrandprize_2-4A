@@ -162,7 +162,7 @@ Pouch::Pouch()
 
 	craft = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craft.wav");
 	cancel = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/cancel.wav");
-	cursor_move = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menumove.wav");
+	cursor_move = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menu_move.wav");
 
 	//Œ³‘f‚Ì‰Šú‰»
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
@@ -189,6 +189,61 @@ Pouch::Pouch()
 	element_char[4] = 'S';
 	element_char[5] = 'Ch';
 	element_char[6] = 'U';
+}
+
+void Pouch::DeleteResource()
+{
+	//‰æ‘œíœ
+	for (auto& tab : second_tab_image)
+	{
+		DeleteGraph(tab);
+	}
+
+	DeleteGraph(elemental_count);
+	DeleteGraph(window_image);
+	DeleteGraph(window_image_two);
+	DeleteGraph(stick_image_l);
+	DeleteGraph(stick_image_r);
+	DeleteGraph(text_window_image_lit);
+	DeleteGraph(text_window_image_dark);
+	DeleteGraph(cursor_image);
+
+	for (int i = 0; i < ATTRIBUTE_IMAGES; i++)
+	{
+		DeleteGraph(attribute_images[i]);
+		DeleteGraph(attribute_text_images[i]);
+	}
+
+	for (int i = 0; i < EXPLOSION_MAX_NUM; i++)
+	{
+		DeleteGraph(chemical_formula_explosion[i].name_image);
+		DeleteGraph(chemical_formula_explosion[i].dark_name_image);
+		DeleteGraph(chemical_formula_explosion[i].ui_name_image);
+
+		DeleteGraph(chemical_formula_melt[i].name_image);
+		DeleteGraph(chemical_formula_melt[i].dark_name_image);
+		DeleteGraph(chemical_formula_melt[i].ui_name_image);
+
+		DeleteGraph(chemical_formula_poison[i].name_image);
+		DeleteGraph(chemical_formula_poison[i].dark_name_image);
+		DeleteGraph(chemical_formula_poison[i].ui_name_image);
+
+		DeleteGraph(chemical_formula_pararysis[i].name_image);
+		DeleteGraph(chemical_formula_pararysis[i].dark_name_image);
+		DeleteGraph(chemical_formula_pararysis[i].ui_name_image);
+	}
+	
+	for (int i = 0; i < HEAL_MAX_NUM; i++)
+	{
+		DeleteGraph(chemical_formula_heal[i].name_image);
+		DeleteGraph(chemical_formula_heal[i].dark_name_image);
+		DeleteGraph(chemical_formula_heal[i].ui_name_image);
+	}
+
+	//‰¹ºíœ
+	DeleteSoundMem(craft);
+	DeleteSoundMem(cancel);
+	DeleteSoundMem(cursor_move);
 }
 
 Pouch::~Pouch()

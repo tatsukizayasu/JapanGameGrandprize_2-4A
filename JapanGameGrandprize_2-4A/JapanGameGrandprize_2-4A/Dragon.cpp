@@ -129,6 +129,12 @@ Dragon::~Dragon()
 		delete drop_element[i];
 	}
 	delete[] drop_element;
+
+	for (auto& effect : biting_effects)
+	{
+		DeleteGraph(effect);
+	}
+	
 }
 
 void Dragon::Update(const class Player* player, const class Stage* stage)
@@ -653,7 +659,7 @@ void Dragon::HitBullet(const BulletBase* bullet)
 			poison = true;
 			poison_time = bullet->GetDebuffTime();
 			poison_damage = bullet->GetDamageParSecond();
-			damage_log[i].congeniality = CONGENIALITY::NOMAL;
+			damage_log[i].congeniality = CONGENIALITY::NORMAL;
 		}
 		break;
 	case ATTRIBUTE::PARALYSIS: //–ƒáƒ Žã“_
