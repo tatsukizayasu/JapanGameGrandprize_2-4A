@@ -26,11 +26,7 @@ WyvernBreath
 	x_speed = static_cast<int>(speed * cosf(direction));
 	y_speed = static_cast<int>(speed * sinf(direction));
 
-	if (images == nullptr)
-	{
-		images = new int[9];
-		LoadDivGraph("images/enemy/wyvern_breath.png", 9, 3, 3, 1200, 1200, images);
-	}
+	
 	images_index = 0;
 	frame_count = 0;
 
@@ -81,6 +77,21 @@ void WyvernBreath::Draw() const
 	
 }
 
+//-----------------------------------
+//‰æ‘œ‚Ì“Ç‚İ‚İ
+//-----------------------------------
+void WyvernBreath::LoadImages()
+{
+	if (images == nullptr)
+	{
+		images = new int[9];
+		LoadDivGraph("images/enemy/wyvern_breath.png", 9, 3, 3, 1200, 1200, images);
+	}
+}
+
+//-----------------------------------
+//‰æ‘œ‚Ìíœ
+//-----------------------------------
 void WyvernBreath::DeleteImages()
 {
 	if (images != nullptr)

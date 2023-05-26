@@ -30,6 +30,10 @@ public:
     //•`‰æ
     void Draw() const override;
 
+    //‰æ‘œ‚Ì“Ç‚İ‚İ
+    static void LoadImages();
+
+    //‰æ‘œ‚Ìíœ
     static void DeleteImages();
 
 };

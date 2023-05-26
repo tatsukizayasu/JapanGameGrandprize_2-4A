@@ -23,6 +23,8 @@ BulletManager::BulletManager()
     enemy_nuts_count = 0;
     enemy_bullet_max = 0;
     enemy_nuts_max = 0;
+
+    WyvernBreath::LoadImages();
 }
 
 //-----------------------------------
