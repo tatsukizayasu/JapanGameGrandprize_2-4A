@@ -101,5 +101,7 @@ void WyvernBreath::DeleteImages()
 			DeleteGraph(images[i]);
 		}
 		delete[] images;
+
+		images = nullptr;
 	}
 }
