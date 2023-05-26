@@ -12,7 +12,7 @@ private:
     double direction;    //is•ûŒü
     
     //•`‰æ—p•Ï”
-    int images[9];      //‰æ‘œ
+    static int* images;      //‰æ‘œ
     int images_index;
     int frame_count;
 
@@ -29,6 +29,12 @@ public:
 
     //•`‰æ
     void Draw() const override;
+
+    //‰æ‘œ‚Ì“Ç‚İ‚İ
+    static void LoadImages();
+
+    //‰æ‘œ‚Ìíœ
+    static void DeleteImages();
 
 };
 

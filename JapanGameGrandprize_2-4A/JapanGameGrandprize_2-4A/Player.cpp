@@ -385,18 +385,21 @@ void Player::Draw() const
 			}
 			else {}
 		}
-		if (flashing_count < 5)
+		else
 		{
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
-			DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
+			if (flashing_count < 5)
+			{
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0);
+				DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
 
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+			}
+			else if (flashing_count < 10)
+			{
+				DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
+			}
+			else {}
 		}
-		else if (flashing_count < 10)
-		{
-			DrawRotaGraphF(x, y, PLAYER_SIZE, 0, image[image_count], TRUE, move_left);
-		}
-		else {}
 	}
 	else
 	{
