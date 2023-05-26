@@ -22,17 +22,17 @@ End::End()
 
 	select_menu = static_cast<int>(MENU::TITLE);
 
-	if ((background_music = LoadSoundMem("Sounds/BGM/end.mp3")) == -1) {
-		throw "Sounds/BGM/end.mp3";
+	if ((background_music = LoadSoundMem("Sounds/BGM/end.wav")) == -1) {
+		throw "Sounds/BGM/end.wav";
 	}
 
-	if ((enter_se = LoadSoundMem("Sounds/SE/enter.mp3")) == -1) {
-		throw "Sounds/SE/enter.mp3";
+	if ((enter_se = LoadSoundMem("Sounds/SE/enter.wav")) == -1) {
+		throw "Sounds/SE/enter.wav";
 	}
 
-	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.mp3")) == -1)
+	if ((cursor_move_se = LoadSoundMem("Sounds/SE/cursor_move.wav")) == -1)
 	{
-		throw "Sounds/SE/cursor_move.mp3";
+		throw "Sounds/SE/cursor_move.wav";
 	}
 
 	PlaySoundMem(background_music, DX_PLAYTYPE_LOOP, FALSE);

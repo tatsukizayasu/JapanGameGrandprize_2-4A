@@ -162,7 +162,7 @@ Pouch::Pouch()
 
 	craft = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craft.wav");
 	cancel = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/cancel.wav");
-	cursor_move = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menumove.wav");
+	cursor_move = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menu_move.wav");
 
 	//Œ³‘f‚Ì‰Šú‰»
 	for (int i = 0; i < PLAYER_ELEMENT; i++)
