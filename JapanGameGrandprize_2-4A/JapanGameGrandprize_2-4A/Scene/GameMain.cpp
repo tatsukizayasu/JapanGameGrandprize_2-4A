@@ -21,7 +21,7 @@
 #include "GameOver.h"
 #include "GameClear.h"
 #include "Title.h"
-#include "END.h"
+#include "End.h"
 
 bool GameMain::is_help_mode = false;
 //-----------------------------------
@@ -35,10 +35,10 @@ GameMain::GameMain(short stage_num, unsigned int element_volume[PLAYER_ELEMENT],
 
 	char dis_stage_se[30];
 
-	sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/Stage%d.wav", this->stage_num);
+	sprintf_s(dis_stage_se, sizeof(dis_stage_se), "Sounds/BGM/stage%d.wav", this->stage_num);
 
 	if ((background_music = LoadSoundMem(dis_stage_se)) == -1) {
-		background_music = LoadSoundMem("Sounds/BGM/Stage1.wav");
+		background_music = LoadSoundMem("Sounds/BGM/stage1.wav");
 		if (background_music == -1) {
 			throw dis_stage_se;
 		}
@@ -219,7 +219,7 @@ AbstractScene* GameMain::Update()
 
 
 		// 最後のステージをクリアした場合
-		if (stage_num == 4) { return new END(); }
+		if (stage_num == 4) { return new End(); }
 		if (DelayAnimation(DELAY_ANIMATION_TYPE::FADE_IN, 180.0f) == true) {
 			return new GameClear(stage_num, element_volume, player->GetPouch());
 		}

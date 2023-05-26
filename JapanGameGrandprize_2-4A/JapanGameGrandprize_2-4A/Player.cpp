@@ -126,14 +126,14 @@ Player::Player(Stage* stage, unsigned int element_volume[PLAYER_ELEMENT], Pouch*
 	hp_image_top = LoadGraph("Images/Player/HP_Bar_Top.png");
 
 	//サウンド読み込み
-	bulletssound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/playershot.wav");
-	flysound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/fly.mp3");
-	healsound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/heal01.mp3");
-	deathsound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/se_enemy_down01.mp3");
-	open_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craftmenu.wav");
-	close_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menuclose.wav");
+	bulletssound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/player_shot.wav");
+	flysound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/fly.wav");
+	healsound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/heal.wav");
+	deathsound = LoadSoundMem("Sounds/SE/Stage/Playerbgm/enemy_down.wav");
+	open_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/craft_menu.wav");
+	close_menu = LoadSoundMem("Sounds/SE/Stage/PlayerCraft/menu_close.wav");
 
-	heal_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/playerheal.wav");
+	heal_sound = LoadSoundMem("Sounds/SE/Stage/PlayerShot/player_heal.wav");
 
 	//サウンド音量変更
 	ChangeVolumeSoundMem(255, flysound);
@@ -360,10 +360,11 @@ void Player::Draw() const
 
 	for (int i = 0; i < effect_count; i++)
 	{
-		if (effect[i] != nullptr)
+		if (effect[i] == nullptr)
 		{
-			effect[i]->Draw();
+			break;
 		}
+		effect[i]->Draw();
 	}
 
 	//ダメージを受けた時点滅する
@@ -840,18 +841,19 @@ void Player::Update()
 
 	for (int i = 0; i < effect_count; i++)
 	{
-		if (effect[i] != nullptr)
+		if (effect[i] == nullptr)
 		{
-			if (effect[i]->GetEffectEnd())
-			{
-				delete effect[i];
-				effect[i] = nullptr;
-				SortEffect(i);
-			}
-			else
-			{
-				effect[i]->Update();
-			}
+			break;
+		}
+
+		effect[i]->Update();
+
+		if (effect[i]->GetEffectEnd())
+		{
+			delete effect[i];
+			effect[i] = nullptr;
+			SortEffect(i);
+			i--;
 		}
 	}
 

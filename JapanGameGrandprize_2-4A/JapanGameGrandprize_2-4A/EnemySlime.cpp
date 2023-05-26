@@ -325,7 +325,7 @@ void EnemySlime::Move(const Location player_location)
 	//プレイヤーとの距離の計算
 	distance = sqrtf(powf(player_location.x - location.x, 2) + powf(player_location.y - location.y, 2));
 
-	if (distance < 120 &&
+	if (distance < 120 && (location.y - player_location.y <= 25) &&
 	  ((left_move && player_location.x <= location.x) ||
 	  (!left_move && player_location.x >= location.x)))
 	{
@@ -455,15 +455,10 @@ void EnemySlime::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::POISON:
-		if (!poison)
-		{
-			poison_damage = bullet->GetDamage() * 0;
-			poison_time = bullet->GetDebuffTime() * 0;
-		}
 		break;
 	case ATTRIBUTE::PARALYSIS:
 		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage_log[i].congeniality = CONGENIALITY::NORMAL;
 		if (!paralysis)
 		{
 			paralysis = true;

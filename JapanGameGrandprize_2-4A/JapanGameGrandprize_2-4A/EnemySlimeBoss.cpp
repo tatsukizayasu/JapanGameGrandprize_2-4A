@@ -289,15 +289,7 @@ void EnemySlimeBoss::Draw()const
 		DrawWeaknessIcon();
 	}
 	
-
-	//DrawBox(draw_location.x - (SLIME_BOSS_WIDTH / 2), draw_location.y - (SLIME_BOSS_HEIGHT / 2), draw_location.x + (SLIME_BOSS_WIDTH / 2), draw_location.y + (SLIME_BOSS_HEIGHT / 2), 0xffffff, FALSE);
 	DrawRotaGraph(draw_location.x, draw_location.y, 1, 0, images[num][0], true, !left_move);
-
-	//DrawGraph(100, 200, magic_circle_image, true);
-	//DrawModiGraph(100, 200, 300, 200, 300, 240, 100, 240, magic_circle_image, true);
-
-	//DrawFormatString(0, 0, 0xffffff, "%d", draw_location.x);
-
 	Draw_Cloud();
 }
 
@@ -464,19 +456,16 @@ void EnemySlimeBoss::HitBullet(const BulletBase* bullet)
 		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
 		break;
 	case ATTRIBUTE::MELT:
-		damage = bullet->GetDamage() * WEAKNESS_DAMAGE;
-		damage_log[i].congeniality = CONGENIALITY::WEAKNESS;
+		damage = bullet->GetDamage();
+		damage_log[i].congeniality = CONGENIALITY::NORMAL;
 		break;
 	case ATTRIBUTE::POISON:
-		if (!poison)
-		{
-			poison_damage = bullet->GetDamage() * 0;
-			poison_time = bullet->GetDebuffTime() * 0;
-		}
+		damage = bullet->GetDamage() * 0;
+		damage_log[i].congeniality = CONGENIALITY::INVALID;
 		break;
 	case ATTRIBUTE::PARALYSIS:
-		damage = bullet->GetDamage();
-		damage_log[i].congeniality = CONGENIALITY::NOMAL;
+		damage = bullet->GetDamage() * RESISTANCE_DAMAGE;
+		damage_log[i].congeniality = CONGENIALITY::RESISTANCE;
 		if (!paralysis)
 		{
 			paralysis = true;
