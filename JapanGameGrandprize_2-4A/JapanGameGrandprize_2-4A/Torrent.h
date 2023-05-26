@@ -28,10 +28,6 @@ private:
     int animation; //アニメーション
     int image_argument; //画像の引数
 
-    //SE
-    static int torrent_falling_nut_se;   //木の実落ちる音
-    static int torrent_tackle_se;        //タックル
-    static int torrent_leaves_cutter;    //葉っぱ飛ばし
 
     TORRENT_ATTACK attack_state; //攻撃の状態
 private:
@@ -57,8 +53,6 @@ private:
     //アニメーション
     void Animation();
 
-    //SE読み込み
-    void LoadSounds();
 public:
 
     //コンストラクタ

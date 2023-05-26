@@ -31,7 +31,6 @@ private:
     int enemy_bullet_max; //弾の生成可能数
     int enemy_nuts_max; //木の実の生成可能数
 
-    static int torrent_break_nut_se;     //木の実が何かに当たった音
 public:
 
     //デストラクタ

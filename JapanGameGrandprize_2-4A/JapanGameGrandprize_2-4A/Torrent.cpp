@@ -59,12 +59,6 @@
 //アニメーション
 #define TORRENT_ANIMATION 5
 
-
-int Torrent::torrent_falling_nut_se = 0;   //木の実落ちる音
-int Torrent::torrent_tackle_se = 0;        //タックル
-int Torrent::torrent_leaves_cutter = 0;    //葉っぱ飛ばし
-
-
 //-----------------------------------
 //コンストラクタ
 //-----------------------------------
@@ -247,9 +241,12 @@ void  Torrent::Attack(Location player_location)
 //-----------------------------------
 void Torrent::Tackle()
 {
-
 	if (attack_time < 0)
 	{
+		if(CheckSoundMem(EnemySE::GetTorrentSE().tackle_se)==0)
+		{
+			PlaySoundMem(EnemySE::GetTorrentSE().tackle_se, DX_PLAYTYPE_LOOP);
+		}
 		location.x += speed;
 
 		if (left_move)
@@ -271,6 +268,7 @@ void Torrent::Tackle()
 
 		if (tackle_end) //タックル終了
 		{
+			StopSoundMem(EnemySE::GetTorrentSE().tackle_se);
 			attack = false;
 			int next_attack;	//次の攻撃
 			next_attack = GetRand(10) + 1;  //次の攻撃の設定
@@ -318,7 +316,10 @@ void Torrent::Tackle()
 //-----------------------------------
 void Torrent::LeafCutter(const Location player_location)
 {
-
+	if (CheckSoundMem(EnemySE::GetTorrentSE().leaves_cutter) == 0)
+	{
+		PlaySoundMem(EnemySE::GetTorrentSE().leaves_cutter, DX_PLAYTYPE_BACK);
+	}
 	attack_time--;
 	CreateLeaf(player_location);
 	if (attack_time < 0) //攻撃の終了
@@ -653,22 +654,6 @@ void Torrent::Animation()
 		image_argument++;
 	}
 }
-
-
-//----------------------------------------
-// SE読み込み
-//----------------------------------------
-void Torrent::LoadSounds()
-{
-	SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
-	torrent_falling_nut_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack4.wav", 8);
-	SetCreateSoundDataType(DX_SOUNDDATATYPE_FILE);
-
-	torrent_tackle_se = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack2.wav");
-	torrent_leaves_cutter = LoadSoundMem("Sounds/SE/Stage/EnemyAttack/TorrentAttack3.wav");
-}
-
-
 
 //-----------------------------------
 //描画
